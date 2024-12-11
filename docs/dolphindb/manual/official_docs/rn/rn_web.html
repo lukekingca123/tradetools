@@ -1,0 +1,672 @@
+<!DOCTYPE html><html xmlns="http://www.w3.org/1999/xhtml" xml:lang="zh" lang="zh" data-whc_version="26.0">
+    <head><link rel="shortcut icon" href="../favicon.ico"/><link rel="icon" href="../favicon.ico"/><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><meta http-equiv="X-UA-Compatible" content="IE=edge"/><meta name="description" content="新增功能 左侧面板新增“功能设置”栏，用于开启或关闭金融库表向导或者物联网库表向导。当开启功能时，会在左侧面板中增加相应的库表向导栏及界面，用户可根据界面引导选择条件，便捷地创建库表。 配置管理 → 集群节点配置新增支持以下配置项： 系统：enableShellFunction, enablePKEYEngine 磁盘：PKEYMetaLogDir, PKEYRedoLogDir ..."/><meta name="DC.rights.owner" content="(C) 版权 2024"/><meta name="copyright" content="(C) 版权 2024"/><meta name="generator" content="DITA-OT"/><meta name="DC.type" content="topic"/><meta name="DC.coverage" content=""/><meta name="prodname" content="DolphinDB"/><meta name="brand" content="DolphinDB"/><meta name="DC.creator" content="DolphinDB"/><meta name="DC.publisher" content="DDB N/A DDB 200"/><meta name="DC.format" content="HTML5"/><meta name="DC.identifier" content="rn_web"/><title>Web 集群管理器</title><!--  Generated with Oxygen version 26.0, build number 2024012323.  --><meta name="wh-path2root" content="../"/><meta name="wh-toc-id" content="rn_web-d9529e104645"/><meta name="wh-source-relpath" content="rn/rn_web.dita"/><meta name="wh-out-relpath" content="rn/rn_web.html"/>
+
+    <link rel="stylesheet" type="text/css" href="../oxygen-webhelp/app/commons.css?buildId=2024012323"/>
+    <link rel="stylesheet" type="text/css" href="../oxygen-webhelp/app/topic.css?buildId=2024012323"/>
+
+    <script src="../oxygen-webhelp/app/options/properties.js?buildId=20240704100525"></script>
+    <script src="../oxygen-webhelp/app/localization/strings.js?buildId=2024012323"></script>
+    <script src="../oxygen-webhelp/app/search/index/keywords.js?buildId=20240704100525"></script>
+    <script defer="defer" src="../oxygen-webhelp/app/commons.js?buildId=2024012323"></script>
+    <script defer="defer" src="../oxygen-webhelp/app/topic.js?buildId=2024012323"></script>
+<link rel="stylesheet" type="text/css" href="../oxygen-webhelp/template/styles.css?buildId=2024012323"/><script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script><script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script></head>
+
+    <body id="rn_web" class="wh_topic_page frmBody">
+        <a href="#wh_topic_body" class="sr-only sr-only-focusable">
+            跳转到主要内容
+        </a>
+        
+        
+        
+        
+        <header class="navbar navbar-default wh_header">
+    <div class="container-fluid">
+        <div xmlns:whc="http://www.oxygenxml.com/webhelp/components" class="wh_header_flex_container navbar-nav navbar-expand-md navbar-dark">
+            <div class="wh_logo_and_publication_title_container">
+                <div class="wh_logo_and_publication_title">
+                    
+                    <a href="https://www.dolphindb.cn" class=" wh_logo d-none d-sm-block "><img src="../logo.png" alt="  DolphinDB 文档中心  "/></a>
+                    <div class=" wh_publication_title "><a href="../index.html"><span class="booktitle">  <span class="ph mainbooktitle">DolphinDB 文档中心</span>  </span></a></div>
+                    
+                </div>
+                
+                
+            </div>
+
+            <div class="wh_top_menu_and_indexterms_link collapse navbar-collapse" id="wh_top_menu_and_indexterms_link">
+                
+                
+                
+                
+            </div>
+        <div class=" wh_search_input navbar-form wh_topic_page_search search " role="form">
+            
+            
+            
+            <form id="searchForm" method="get" role="search" action="../search.html"><div><input type="search" placeholder="搜索 " class="wh_search_textfield" id="textToSearch" name="searchQuery" aria-label="搜索查询" required="required"/><button type="submit" class="wh_search_button" aria-label="搜索"><span class="search_input_text">搜索</span></button></div></form>
+            
+            <script src="/vendors/react/umd/react.production.min.js" defer="defer"></script>
+<script src="/vendors/react-dom/umd/react-dom.production.min.js" defer="defer"></script>
+<script src="/vendors/dayjs/dayjs.min.js" defer="defer"></script>
+<script src="/vendors/antd/dist/antd.min.js" defer="defer"></script>
+<script src="/vendors/@ant-design/icons/dist/index.umd.min.js" defer="defer"></script>
+<script src="/zh/index.js" type="module"></script>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js" defer="defer"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML" defer="defer"><!--
+
+
+--></script>
+
+            
+        </div></div>
+    </div>
+</header>
+        
+        
+         
+        
+        
+        
+        <div class="container-fluid" id="wh_topic_container">
+            <div class="row">
+
+                <nav class="wh_tools d-print-none navbar-expand-md" aria-label="Tools">
+                    
+                    <div data-tooltip-position="bottom" class=" wh_breadcrumb "><ol class="d-print-none"><li><span class="home"><a href="../index.html"><span>主页</span></a></span></li><li><div class="topicref"><div class="title"><a href="../rn/server/3_00_1.html">版本说明</a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 版本发布历史</p></div></div></div></li><li><div class="topicref"><div class="title"><a href="../rn/rn_web.html">客户端</a></div></div></li><li class="active"><div class="topicref" data-id="rn_web"><div class="title"><a href="../rn/rn_web.html">Web 集群管理器</a></div></div></li></ol></div>
+                    
+                    
+                    
+                    <div class="wh_right_tools">
+                        <button class="wh_hide_highlight" aria-label="切换搜索突出显示" title="切换搜索突出显示"></button>
+                        <button class="webhelp_expand_collapse_sections" data-next-state="collapsed" aria-label="折叠截面" title="折叠截面"></button>
+                        
+                        
+                        
+                        
+                        <div class=" wh_print_link print d-none d-md-inline-block "><button onClick="window.print()" title="打印此页" aria-label="打印此页"></button></div>
+                        
+                        <button type="button" id="wh_toc_button" class="custom-toggler navbar-toggler collapsed wh_toggle_button navbar-light" aria-expanded="false" aria-label="Toggle publishing table of content" aria-controls="wh_publication_toc">
+                            <span class="navbar-toggler-icon"></span>
+                        </button>
+                    </div>
+                    
+                </nav>
+            </div>
+            
+            
+            
+            
+            <div class="wh_content_area">
+                <div class="row">
+                    
+                        <nav id="wh_publication_toc" class="col-lg-3 col-md-3 col-sm-12 d-md-block d-none d-print-none" aria-label="Table of Contents Container">
+                            <div id="wh_publication_toc_content">
+		                        
+                            	<div class=" wh_publication_toc " data-tooltip-position="right"><span class="expand-button-action-labels"><span id="button-expand-action" role="button" aria-label="Expand"></span><span id="button-collapse-action" role="button" aria-label="Collapse"></span><span id="button-pending-action" role="button" aria-label="Pending"></span></span><ul role="tree" aria-label="Table of Contents"><li role="treeitem"><div data-tocid="new_chap_about_sect_ddb_docs_intro-d9529e87" class="topicref" data-id="new_chap_about_sect_ddb_docs_intro" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../about/ddb_docs_intro.html" id="new_chap_about_sect_ddb_docs_intro-d9529e87-link">文档使用说明</a><div class="wh-tooltip"><p class="shortdesc">如何获取 DolphinDB 帮助信息</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="chap1_getstarted-d9529e140" class="topicref" data-id="chap1_getstarted" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action chap1_getstarted-d9529e140-link" class="wh-expand-btn"></span><div class="title"><a href="../getstarted/chap1_getstarted.html" id="chap1_getstarted-d9529e140-link"><span class="keyword label">快速上手</span></a><div class="wh-tooltip"><p class="shortdesc">如何快速部署 DolphinDB、建库建表、写入和查询数据</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="sectionddb_deployment-d9529e335" class="topicref" data-id="sectionddb_deployment" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action sectionddb_deployment-d9529e335-link" class="wh-expand-btn"></span><div class="title"><a href="../deploy/deploy_intro.html" id="sectionddb_deployment-d9529e335-link"><span class="keyword label">部署</span></a><div class="wh-tooltip"><p class="shortdesc">如何在不同的场景中部署 DolphinDB</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="new_chap_database_manage_new_chap_dbmanage_landing_page-d9529e2313" class="topicref" data-id="new_chap_database_manage_new_chap_dbmanage_landing_page" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action new_chap_database_manage_new_chap_dbmanage_landing_page-d9529e2313-link" class="wh-expand-btn"></span><div class="title"><a href="../db_distr_comp/cfg/db_intro.html" id="new_chap_database_manage_new_chap_dbmanage_landing_page-d9529e2313-link"><span class="keyword label">数据库</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 数据库的基本概念</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="chap7_tutorials_streaming-d9529e3490" class="topicref" data-id="chap7_tutorials_streaming" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action chap7_tutorials_streaming-d9529e3490-link" class="wh-expand-btn"></span><div class="title"><a href="../stream/str_intro.html" id="chap7_tutorials_streaming-d9529e3490-link"><span class="keyword label">流数据</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 流数据引擎及流数据计算的基本概念</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="tocId-d9529e7385" class="topicref" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action tocId-d9529e7385-link" class="wh-expand-btn"></span><div class="title"><a href="../db_distr_comp/db_oper/import_data.html" id="tocId-d9529e7385-link">数据迁移</a><div class="wh-tooltip"><p class="shortdesc">如何从不同数据源向 DolphinDB 迁移数据</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="chap7_tutorials_system_management-d9529e7812" class="topicref" data-id="chap7_tutorials_system_management" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action chap7_tutorials_system_management-d9529e7812-link" class="wh-expand-btn"></span><div class="title"><a href="../sys_man/om_intro.html" id="chap7_tutorials_system_management-d9529e7812-link"><span class="keyword label">系统运维</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 的系统运维功能及方法</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="about_language_resources-d9529e16490" class="topicref" data-id="about_language_resources" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action about_language_resources-d9529e16490-link" class="wh-expand-btn"></span><div class="title"><a href="../progr/progr_intro.html" id="about_language_resources-d9529e16490-link"><span class="keyword label">编程语言</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 编程基本概念与方法、SQL 在 DolphinDB 的应用</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="functions_references-d9529e26503" class="topicref" data-id="functions_references" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action functions_references-d9529e26503-link" class="wh-expand-btn"></span><div class="title"><a href="../funcs/funcs_intro.html" id="functions_references-d9529e26503-link"><span class="keyword label">函数参考</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 函数分类、语法、详解及示例</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="api_protocol-d9529e86456" class="topicref" data-id="api_protocol" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action api_protocol-d9529e86456-link" class="wh-expand-btn"></span><div class="title"><a href="../api/connapi_intro.html" id="api_protocol-d9529e86456-link"><span class="keyword label">连接器 &amp; API</span></a><div class="wh-tooltip"><p class="shortdesc">面向不同编程语言的 DolphinDB API 及连接器，相关协议和用法</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="chap6_plugin-d9529e91976" class="topicref" data-id="chap6_plugin" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action chap6_plugin-d9529e91976-link" class="wh-expand-btn"></span><div class="title"><a href="../plugins/plg_intro.html" id="chap6_plugin-d9529e91976-link"><span class="keyword label">插件</span></a><div class="wh-tooltip"><p class="shortdesc">多个应用场景的插件使用说明和插件开发指导</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="third_party-d9529e94749" class="topicref" data-id="third_party" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action third_party-d9529e94749-link" class="wh-expand-btn"></span><div class="title"><a href="../third_party.html" id="third_party-d9529e94749-link">第三方工具</a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="about_tutorials-d9529e94980" class="topicref" data-id="about_tutorials" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action about_tutorials-d9529e94980-link" class="wh-expand-btn"></span><div class="title"><a href="../tutorials/about_tutorials.html" id="about_tutorials-d9529e94980-link"><span class="keyword label">教程</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 产品使用教程</p></div></div></div></li><li role="treeitem" aria-expanded="true"><div data-tocid="tocId-d9529e101769" class="topicref" data-state="expanded"><span role="button" tabindex="0" aria-labelledby="button-collapse-action tocId-d9529e101769-link" class="wh-expand-btn"></span><div class="title"><a href="../rn/server/3_00_1.html" id="tocId-d9529e101769-link">版本说明</a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 版本发布历史</p></div></div></div><ul role="group" class="navbar-nav nav-list"><li role="treeitem" aria-expanded="false"><div data-tocid="tocId-d9529e101834" class="topicref" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action tocId-d9529e101834-link" class="wh-expand-btn"></span><div class="title"><a href="../rn/server/3_00_1.html" id="tocId-d9529e101834-link">Server</a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="tocId-d9529e101927" class="topicref" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action tocId-d9529e101927-link" class="wh-expand-btn"></span><div class="title"><a href="../rn/api/rn_cpp.html" id="tocId-d9529e101927-link">连接器和 API</a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="tocId-d9529e104551" class="topicref" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action tocId-d9529e104551-link" class="wh-expand-btn"></span><div class="title"><a href="../rn/plugin/3_00_1.html" id="tocId-d9529e104551-link">插件</a></div></div></li><li role="treeitem" aria-expanded="true"><div data-tocid="tocId-d9529e104644" class="topicref" data-state="expanded"><span role="button" tabindex="0" aria-labelledby="button-collapse-action tocId-d9529e104644-link" class="wh-expand-btn"></span><div class="title"><a href="../rn/rn_web.html" id="tocId-d9529e104644-link">客户端</a></div></div><ul role="group" class="navbar-nav nav-list"><li role="treeitem" class="active"><div data-tocid="rn_web-d9529e104645" class="topicref" data-id="rn_web" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../rn/rn_web.html" id="rn_web-d9529e104645-link">Web 集群管理器</a></div></div></li><li role="treeitem"><div data-tocid="rn_gui-d9529e104691" class="topicref" data-id="rn_gui" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../rn/rn_gui.html" id="rn_gui-d9529e104691-link">GUI</a></div></div></li><li role="treeitem"><div data-tocid="rn_vscodeplg-d9529e104737" class="topicref" data-id="rn_vscodeplg" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../rn/rn_vscode.html" id="rn_vscodeplg-d9529e104737-link">VS Code 插件</a></div></div></li></ul></li><li role="treeitem" aria-expanded="false"><div data-tocid="third_party_rn-d9529e104783" class="topicref" data-id="third_party_rn" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action third_party_rn-d9529e104783-link" class="wh-expand-btn"></span><div class="title"><a href="../rn/server/third_party_rn.html" id="third_party_rn-d9529e104783-link">第三方工具</a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="compatibility_def-d9529e104921" class="topicref" data-id="compatibility_def" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action compatibility_def-d9529e104921-link" class="wh-expand-btn"></span><div class="title"><a href="../rn/compat_def.html" id="compatibility_def-d9529e104921-link">版本兼容性说明</a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="tocId-d9529e105243" class="topicref" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action tocId-d9529e105243-link" class="wh-expand-btn"></span><div class="title"><a href="../rn/compat_report_3001.html" id="tocId-d9529e105243-link">版本兼容性列表</a></div></div></li></ul></li></ul></div>
+		                        
+                            </div>
+                        </nav>
+                    
+                    
+                    <div class="col-lg-7 col-md-9 col-sm-12" id="wh_topic_body">
+                        <button id="wh_close_publication_toc_button" class="close-toc-button d-none" aria-label="Toggle publishing table of content" aria-controls="wh_publication_toc" aria-expanded="true">
+                            <span class="close-toc-icon-container">
+                                <span class="close-toc-icon"></span>     
+                            </span>
+                        </button>
+                        <button id="wh_close_topic_toc_button" class="close-toc-button d-none" aria-label="Toggle topic table of content" aria-controls="wh_topic_toc" aria-expanded="true">
+                            <span class="close-toc-icon-container">
+                                <span class="close-toc-icon"></span>     
+                            </span>
+                        </button>
+                        
+                        <div class=" wh_topic_content body "><main role="main"><article class="- topic/topic topic" role="article" aria-labelledby="ariaid-title1">
+    <h1 class="- topic/title title topictitle1" id="ariaid-title1">Web 集群管理器</h1>
+     <article class="- topic/topic topic nested1" aria-labelledby="ariaid-title2" id="topic_ml1_dvk_vbc">
+        <h2 class="- topic/title title topictitle2" id="ariaid-title2">3.00.1.0</h2>
+        <div class="- topic/body body">
+            <section class="- topic/section section" id="topic_ml1_dvk_vbc__section_fxp_bpf_xbc" data-ofbid="topic_ml1_dvk_vbc__section_fxp_bpf_xbc"><h3 class="- topic/title title sectiontitle">新增功能</h3>
+                
+                <ul class="- topic/ul ul" id="topic_ml1_dvk_vbc__ul_dgs_cpf_xbc" data-ofbid="topic_ml1_dvk_vbc__ul_dgs_cpf_xbc">
+                    <li class="- topic/li li">
+                        <p class="- topic/p p">左侧面板新增“功能设置”栏，用于开启或关闭金融库表向导或者物联网库表向导。当开启功能时，会在左侧面板中增加相应的库表向导栏及界面，用户可根据界面引导选择条件，便捷地创建库表。</p>
+                    </li>
+                    <li class="- topic/li li">
+                        <p class="- topic/p p">配置管理 → 集群节点配置新增支持以下配置项：</p>
+                        <ul class="- topic/ul ul" id="topic_ml1_dvk_vbc__ul_egs_cpf_xbc" data-ofbid="topic_ml1_dvk_vbc__ul_egs_cpf_xbc">
+                            <li class="- topic/li li">
+                                <p class="- topic/p p">系统：enableShellFunction, enablePKEYEngine</p>
+                            </li>
+                            <li class="- topic/li li">
+                                <p class="- topic/p p">磁盘：PKEYMetaLogDir, PKEYRedoLogDir</p>
+                            </li>
+                            <li class="- topic/li li">
+                                <p class="- topic/p p">内存：PKEYCacheEngineSize, PKEYBlockCacheSize。</p>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="- topic/li li">
+                        <p class="- topic/p p">权限管理新增支持以下权限：DB_WRITE, DB_OWNER, QUERY_RESULT_MEM_LIMIT,
+                            TASK_GROUP_MEM_LIMIT。</p>
+                    </li>
+                    <li class="- topic/li li">
+                        <p class="- topic/p p">数据库 → 表右侧新增悬浮的注释标签，支持设置表注释。</p>
+                    </li>
+                    <li class="- topic/li li">
+                        <p class="- topic/p p">支持创建 tensor 类型数据，并在变量面板中进行展示。 </p>
+                    </li>
+                    <li class="- topic/li li">
+                        <p class="- topic/p p">Web 英文界面新增 dashboard 界面。 </p>
+                    </li>
+                    <li class="- topic/li li">
+                        <p class="- topic/p p">数据面板 → 变量 → 变量 → 配置变量标签中新增 SQL 导入栏，支持通过 SQL 语句导入变量。 </p>
+                    </li>
+                    <li class="- topic/li li">
+                        <p class="- topic/p p">数据库 → 表 → 新建查询 → 添加查询条件 →
+                            分区列查询条件中的请选择运算符中新增”为空“和”非空“选项，支持分区列数据与空值进行比较。</p>
+                    </li>
+                    <li class="- topic/li li">
+                        <p class="- topic/p p">数据浏览器对表数据新增”下载“按钮，可以选择导出全部或部分数据到 csv 文件。</p>
+                    </li>
+                </ul>
+            </section>
+            <section class="- topic/section section" id="topic_ml1_dvk_vbc__section_pb3_2vk_vbc" data-ofbid="topic_ml1_dvk_vbc__section_pb3_2vk_vbc"><h3 class="- topic/title title sectiontitle">功能优化</h3>
+                
+                <ul class="- topic/ul ul" id="topic_ml1_dvk_vbc__ul_alb_gvk_vbc" data-ofbid="topic_ml1_dvk_vbc__ul_alb_gvk_vbc">
+                    <li class="- topic/li li">
+                        <p class="- topic/p p">浏览器语言设置为非中文时，Web 界面语言默认显示英文。</p>
+                    </li>
+                    <li class="- topic/li li">
+                        <p class="- topic/p p">为 Web 界面中的代码报错增加错误编码及相关的文档链接。</p>
+                    </li>
+                    <li class="- topic/li li">
+                        <p class="- topic/p p">数据浏览器支持将表数据导出为 CSV 格式文件。</p>
+                    </li>
+                    <li class="- topic/li li">
+                        <p class="- topic/p p">更新函数提示链接。</p>
+                    </li>
+                </ul>
+            </section>
+        </div>
+    </article>
+    <article class="- topic/topic topic nested1" aria-labelledby="ariaid-title3" id="id_x31_1qp_nbc">
+        <h2 class="- topic/title title topictitle2" id="ariaid-title3"><em class="+ topic/ph hi-d/i ph i">3.00.0.2</em></h2>
+        <div class="- topic/body body">
+            <section class="- topic/section section" id="id_x31_1qp_nbc__section_hcb_1qp_nbc" data-ofbid="id_x31_1qp_nbc__section_hcb_1qp_nbc"><h3 class="- topic/title title sectiontitle">功能优化</h3>
+                
+                <ul class="- topic/ul ul" id="id_x31_1qp_nbc__ul_icb_1qp_nbc" data-ofbid="id_x31_1qp_nbc__ul_icb_1qp_nbc">
+                    <li class="- topic/li li">
+                        <p class="- topic/p p">优化仪表盘数据变换的动画。</p>
+                    </li>
+                    <li class="- topic/li li">
+                        <p class="- topic/p p">配置集群节点时取消对主机名/IP 地址输入格式的限制。</p>
+                    </li>
+                </ul>
+            </section>
+            <section class="- topic/section section" id="id_x31_1qp_nbc__section_jcb_1qp_nbc" data-ofbid="id_x31_1qp_nbc__section_jcb_1qp_nbc"><h3 class="- topic/title title sectiontitle">故障修复</h3>
+                
+                <ul class="- topic/ul ul" id="id_x31_1qp_nbc__ul_xqk_gqp_nbc" data-ofbid="id_x31_1qp_nbc__ul_xqk_gqp_nbc">
+                    <li class="- topic/li li">
+                        <p class="- topic/p p">COMPRESSED 类型变量错误显示“&lt;undefined&gt;”。</p>
+                    </li>
+                    <li class="- topic/li li">
+                        <p class="- topic/p p">配置集群节点时多次修改同一配置框的端口号，相关配置赘余而非被覆盖。</p>
+                    </li>
+                </ul>
+            </section>
+        </div>
+    </article>
+    <article class="- topic/topic topic nested1" aria-labelledby="ariaid-title4" id="topic_jhn_dn5_x1c">
+        <h2 class="- topic/title title topictitle2" id="ariaid-title4"><em class="+ topic/ph hi-d/i ph i">2.00.12.0</em></h2>
+        <div class="- topic/body body">
+            <section class="- topic/section section" id="topic_jhn_dn5_x1c__section_zsn_fn5_x1c" data-ofbid="topic_jhn_dn5_x1c__section_zsn_fn5_x1c"><h3 class="- topic/title title sectiontitle">新功能</h3>
+                
+                <ul class="- topic/ul ul" id="topic_jhn_dn5_x1c__ul_exv_fn5_x1c" data-ofbid="topic_jhn_dn5_x1c__ul_exv_fn5_x1c">
+                    <li class="- topic/li li">
+                        <p class="- topic/p p">新增用户权限管理界面。管理员可以通过用户管理和组管理页面对用户、组设置不同应用范围的权限，并实现批量用户管理。</p>
+                    </li>
+                    <li class="- topic/li li">
+                        <p class="- topic/p p">新增配置管理界面。管理员可以通过控制节点上的配置管理界面对集群节点及配置项集中管理和设置。</p>
+                    </li>
+                </ul>
+            </section>
+            <section class="- topic/section section" id="topic_jhn_dn5_x1c__section_sq2_gn5_x1c" data-ofbid="topic_jhn_dn5_x1c__section_sq2_gn5_x1c"><h3 class="- topic/title title sectiontitle">功能优化</h3>
+                
+                <ul class="- topic/ul ul" id="topic_jhn_dn5_x1c__ul_xpc_hn5_x1c" data-ofbid="topic_jhn_dn5_x1c__ul_xpc_hn5_x1c">
+                    <li class="- topic/li li">
+                        <p class="- topic/p p">支持在交互编程界面的数据库表中查看用户权限。</p>
+                    </li>
+                    <li class="- topic/li li">
+                        <p class="- topic/p p">支持在数据面板中变量配置中自定义查询按钮。</p>
+                    </li>
+                    <li class="- topic/li li">
+                        <p class="- topic/p p">支持在数据面板中以热力图的形式显示矩阵。</p>
+                    </li>
+                    <li class="- topic/li li">
+                        <p class="- topic/p p">支持在数据面板的表格对 SHORT, INT, LONG, FLOAT, DOUBLE, DECIMAL 类型数据排序。</p>
+                    </li>
+                    <li class="- topic/li li">
+                        <p class="- topic/p p">优化了 plot 绘图后图像与显示边界之间的距离。</p>
+                    </li>
+                </ul>
+            </section>
+        </div>
+    </article>
+    <article class="- topic/topic topic nested1" aria-labelledby="ariaid-title5" id="topic_nnd_rws_h1c">
+        <h2 class="- topic/title title topictitle2" id="ariaid-title5"><em class="+ topic/ph hi-d/i ph i">2.00.11.2</em></h2>
+        <div class="- topic/body body">
+            <section class="- topic/section section" id="topic_nnd_rws_h1c__section_tkm_tws_h1c" data-ofbid="topic_nnd_rws_h1c__section_tkm_tws_h1c"><h3 class="- topic/title title sectiontitle">功能优化</h3>
+                
+                <ul class="- topic/ul ul" id="topic_nnd_rws_h1c__ul_rbl_5ws_h1c" data-ofbid="topic_nnd_rws_h1c__ul_rbl_5ws_h1c">
+                    <li class="- topic/li li">
+                        <p class="- topic/p p">将数据视图表头固定到表格顶部，将分页提示信息固定到底部。 </p>
+                    </li>
+                    <li class="- topic/li li">
+                        <p class="- topic/p p">通过 plot 函数绘图时关闭过渡动画。 </p>
+                    </li>
+                    <li class="- topic/li li">
+                        <p class="- topic/p p">增强了数据面板（Dashboard）中配置数据源窗口的颜色主题兼容性。</p>
+                    </li>
+                    <li class="- topic/li li">
+                        <p class="- topic/p p">节点状态中不再显示 <strong class="+ topic/ph hi-d/b ph b">executor 线程总数</strong> 信息。 </p>
+                    </li>
+                    <li class="- topic/li li">
+                        <p class="- topic/p p">改善了 dict 类型变量数据视图界面的视觉体验。 </p>
+                    </li>
+                </ul>
+            </section>
+            <section class="- topic/section section" id="topic_nnd_rws_h1c__section_lvr_5ws_h1c" data-ofbid="topic_nnd_rws_h1c__section_lvr_5ws_h1c"><h3 class="- topic/title title sectiontitle">故障修复</h3>
+                
+                <p class="- topic/p p">修复了数据面板（Dashboard）中点击保存按钮时偶发的卡顿问题。</p>
+            </section>
+        </div>
+    </article>
+    <article class="- topic/topic topic nested1" aria-labelledby="ariaid-title6" id="topic_ktg_gcd_zzb">
+        <h2 class="- topic/title title topictitle2" id="ariaid-title6"><em class="+ topic/ph hi-d/i ph i">2.00.11</em></h2>
+        <div class="- topic/body body">
+            <section class="- topic/section section" id="topic_ktg_gcd_zzb__section_b1v_3cd_zzb" data-ofbid="topic_ktg_gcd_zzb__section_b1v_3cd_zzb"><h3 class="- topic/title title sectiontitle">新增功能</h3>
+                
+                <div class="- topic/note note notice note_notice" id="topic_ktg_gcd_zzb__note_r2q_mhd_zzb" data-ofbid="topic_ktg_gcd_zzb__note_r2q_mhd_zzb"><span class="note__title">Notice：</span> 为提升用户体验，DolphinDB Web 集群管理器的版本号现已调整。新的版本号与
+                    DolphinDB Server 系列对齐。</div>
+                <ul class="- topic/ul ul" id="topic_ktg_gcd_zzb__ul_cvq_krd_zzb" data-ofbid="topic_ktg_gcd_zzb__ul_cvq_krd_zzb">
+                    <li class="- topic/li li">
+                        <p class="- topic/p p">功能面板中新增数据面板模块。</p>
+                    </li>
+                    <li class="- topic/li li">
+                        <p class="- topic/p p">功能面板中新增流计算状态监控模块。</p>
+                    </li>
+                    <li class="- topic/li li">
+                        <p class="- topic/p p">数据库浏览器中对数据表新增查询向导功能。</p>
+                    </li>
+                </ul>
+            </section>
+            <section class="- topic/section section" id="topic_ktg_gcd_zzb__section_jfl_kcd_zzb" data-ofbid="topic_ktg_gcd_zzb__section_jfl_kcd_zzb"><h3 class="- topic/title title sectiontitle">功能优化</h3>
+                
+                <ul class="- topic/ul ul" id="topic_ktg_gcd_zzb__ul_s3r_bgd_zzb" data-ofbid="topic_ktg_gcd_zzb__ul_s3r_bgd_zzb">
+                    <li class="- topic/li li">
+                        <p class="- topic/p p">建库建表的界面中增加了配置项相关的参考文档链接。 </p>
+                    </li>
+                    <li class="- topic/li li">
+                        <p class="- topic/p p">作业管理界面增加了悬浮提示信息。</p>
+                    </li>
+                    <li class="- topic/li li">优化了数据库浏览器和变量浏览器的显示样式。</li>
+                    <li class="- topic/li li">
+                        <p class="- topic/p p">在集群总览界面中，"State" 栏将根据节点的状态显示不同的颜色。 </p>
+                    </li>
+                    <li class="- topic/li li">
+                        <p class="- topic/p p">页面右上角版本信息栏中增加 web 集群管理界面的版本信息。 </p>
+                    </li>
+                </ul>
+            </section>
+        </div>
+    </article>
+    <article class="- topic/topic topic nested1" aria-labelledby="ariaid-title7" id="id_ypl_tfw_pzb">
+        <h2 class="- topic/title title topictitle2" id="ariaid-title7">
+            <em class="+ topic/ph hi-d/i ph i">1.30.22</em>
+        </h2>
+        <div class="- topic/body body">
+            <section class="- topic/section section" id="id_ypl_tfw_pzb__section_hjs_2zp_pyb" data-ofbid="id_ypl_tfw_pzb__section_hjs_2zp_pyb"><h3 class="- topic/title title sectiontitle">新增功能</h3>
+                
+                <ul class="- topic/ul ul" id="id_ypl_tfw_pzb__ul_mkq_wfw_pzb" data-ofbid="id_ypl_tfw_pzb__ul_mkq_wfw_pzb">
+                    <li class="- topic/li li">
+                        <p class="- topic/p p" id="id_ypl_tfw_pzb__p_ypc_hkj_qyb" data-ofbid="id_ypl_tfw_pzb__p_ypc_hkj_qyb">通过 WEB 连接数据库时，增加 DolphinDB License 过期预警的提示弹窗。</p>
+                    </li>
+                    <li class="- topic/li li">
+                        <p class="- topic/p p" id="id_ypl_tfw_pzb__p_zpc_hkj_qyb" data-ofbid="id_ypl_tfw_pzb__p_zpc_hkj_qyb">通过界面方式建表时，数据列的数据类型中增加 DECIMAL128 类型。</p>
+                    </li>
+                    <li class="- topic/li li">
+                        <p class="- topic/p p" id="id_ypl_tfw_pzb__p_aqc_hkj_qyb" data-ofbid="id_ypl_tfw_pzb__p_aqc_hkj_qyb">增加通过界面方式创建数据库、数据表的功能。</p>
+                    </li>
+                    <li class="- topic/li li">
+                        <p class="- topic/p p" id="id_ypl_tfw_pzb__p_bqc_hkj_qyb" data-ofbid="id_ypl_tfw_pzb__p_bqc_hkj_qyb">数据库界面可以展示系统中所有数据库、数据表（包含表结构，列、分区）等内容。</p>
+                    </li>
+                    <li class="- topic/li li">
+                        <p class="- topic/p p" id="id_ypl_tfw_pzb__p_cqc_hkj_qyb" data-ofbid="id_ypl_tfw_pzb__p_cqc_hkj_qyb">编辑器界面增加执行代码、代码地图和回车补全设置按键。</p>
+                    </li>
+                    <li class="- topic/li li">
+                        <p class="- topic/p p" id="id_ypl_tfw_pzb__p_dqc_hkj_qyb" data-ofbid="id_ypl_tfw_pzb__p_dqc_hkj_qyb">支持 <code class="+ topic/ph pr-d/codeph ph codeph">SELECT NULL</code> 语句。</p>
+                    </li>
+                    <li class="- topic/li li">
+                        <p class="- topic/p p" id="id_ypl_tfw_pzb__p_eqc_hkj_qyb" data-ofbid="id_ypl_tfw_pzb__p_eqc_hkj_qyb">支持 SQL 关键字以大写形式使用。</p>
+                    </li>
+                    <li class="- topic/li li">
+                        <p class="- topic/p p" id="id_ypl_tfw_pzb__p_fqc_hkj_qyb" data-ofbid="id_ypl_tfw_pzb__p_fqc_hkj_qyb">支持创建并显示 DECIMAL 数据类型。</p>
+                    </li>
+                </ul>
+            </section>
+            <section class="- topic/section section" id="id_ypl_tfw_pzb__section_q54_fzp_pyb" data-ofbid="id_ypl_tfw_pzb__section_q54_fzp_pyb"><h3 class="- topic/title title sectiontitle">功能优化</h3>
+                
+                <ul class="- topic/ul ul" id="id_ypl_tfw_pzb__ul_jw5_rtp_pyb" data-ofbid="id_ypl_tfw_pzb__ul_jw5_rtp_pyb">
+                    <li class="- topic/li li">
+                        <p class="- topic/p p">优化右上角版本信息/节点信息菜单的显示样式。</p>
+                    </li>
+                    <li class="- topic/li li">
+                        <p class="- topic/p p">在数据库浏览器面点击展开表的同时，在数据浏览界面展示表内容。</p>
+                    </li>
+                    <li class="- topic/li li">
+                        <p class="- topic/p p">数据浏览界面中限制表格、向量、字典中的字符串可显示的最大长度为10000 个。</p>
+                    </li>
+                    <li class="- topic/li li">
+                        <p class="- topic/p p">控制节点和数据节点配置界面补全了所有可用的配置选项。</p>
+                    </li>
+                    <li class="- topic/li li">
+                        <p class="- topic/p p">
+                            <code class="+ topic/ph pr-d/codeph ph codeph">regularArrayMemoryLimit</code> 配置参数的输入方式修改为输入框。</p>
+                    </li>
+                    <li class="- topic/li li">
+                        <p class="- topic/p p">取消参数配置界面对部分参数输入值的限制。</p>
+                    </li>
+                    <li class="- topic/li li">
+                        <p class="- topic/p p">在节点配置界面，若配置项的值为空，则不会将该配置写入配置文件。</p>
+                    </li>
+                    <li class="- topic/li li">
+                        <p class="- topic/p p">取消在功能面板中展示文件系统列表，并将文件系统功能整合到交互编程中的数据库中。</p>
+                    </li>
+                    <li class="- topic/li li">
+                        <p class="- topic/p p">日志浏览器调整至网页右边；数据浏览器调整至网页下方。</p>
+                    </li>
+                    <li class="- topic/li li">
+                        <p class="- topic/p p">日志浏览器中最多可显示 100000 行日志。</p>
+                    </li>
+                </ul>
+            </section>
+            <section class="- topic/section section" id="id_ypl_tfw_pzb__section_ezg_gzp_pyb" data-ofbid="id_ypl_tfw_pzb__section_ezg_gzp_pyb"><h3 class="- topic/title title sectiontitle">故障修复</h3>
+                
+                <ul class="- topic/ul ul">
+                    <li class="- topic/li li">
+                        <p class="- topic/p p">数据库浏览界面中的维度表菜单下会显示分区。</p>
+                    </li>
+                    <li class="- topic/li li">
+                        <p class="- topic/p p">在未登录状态下，启动数据节点却没有弹框提示需要登录。</p>
+                    </li>
+                    <li class="- topic/li li">
+                        <p class="- topic/p p">当查询包含 DATE 类型数据的表时，在数据浏览界面，DATE 类型的 NULL 显示为 'null' 而不是空。</p>
+                    </li>
+                    <li class="- topic/li li">
+                        <p class="- topic/p p">向量中若包含单独的符号 `，则编辑器中部分文本的颜色显示不正确。</p>
+                    </li>
+                    <li class="- topic/li li">
+                        <p class="- topic/p p">在数据库浏览界面下，array vector 类型的列不会在列菜单中显示。</p>
+                    </li>
+                    <li class="- topic/li li">
+                        <p class="- topic/p p">本地变量中点击空的 SYMBOL 变量，会报错。</p>
+                    </li>
+                    <li class="- topic/li li">
+                        <p class="- topic/p p">日志浏览器和编辑器中的字体显示非等宽。</p>
+                    </li>
+                    <li class="- topic/li li">
+                        <p class="- topic/p p">当本地变量过多时，由于本地变量界面没有滚动条，导致变量溢出到共享变量界面显示。</p>
+                    </li>
+                    <li class="- topic/li li">
+                        <p class="- topic/p p">异步复制相关配置项的名称不正确。</p>
+                    </li>
+                </ul>
+            </section>
+        </div>
+    </article>
+    <article class="- topic/topic topic nested1" aria-labelledby="ariaid-title8" id="id_j1l_5fw_pzb">
+        <h2 class="- topic/title title topictitle2" id="ariaid-title8">
+            <em class="+ topic/ph hi-d/i ph i">1.30.21</em>
+        </h2>
+        <div class="- topic/body body">
+            <section class="- topic/section section" id="id_j1l_5fw_pzb__section_c2l_5fw_pzb" data-ofbid="id_j1l_5fw_pzb__section_c2l_5fw_pzb"><h3 class="- topic/title title sectiontitle">功能优化</h3>
+                
+                <ul class="- topic/ul ul">
+                    <li class="- topic/li li" id="id_j1l_5fw_pzb__li_cq3_4g2_myb" data-ofbid="id_j1l_5fw_pzb__li_cq3_4g2_myb">
+                        <p class="- topic/p p" id="id_j1l_5fw_pzb__p_n4b_zf2_myb" data-ofbid="id_j1l_5fw_pzb__p_n4b_zf2_myb">布局优化，表格移至底部以显示更多列。</p>
+                    </li>
+                    <li class="- topic/li li" id="id_j1l_5fw_pzb__li_dq3_4g2_myb" data-ofbid="id_j1l_5fw_pzb__li_dq3_4g2_myb">
+                        <p class="- topic/p p" id="id_j1l_5fw_pzb__p_o4b_zf2_myb" data-ofbid="id_j1l_5fw_pzb__p_o4b_zf2_myb">代码编辑器统一改为自动保存，无需手动保存。</p>
+                    </li>
+                    <li class="- topic/li li" id="id_j1l_5fw_pzb__li_eq3_4g2_myb" data-ofbid="id_j1l_5fw_pzb__li_eq3_4g2_myb">
+                        <p class="- topic/p p" id="id_j1l_5fw_pzb__p_p4b_zf2_myb" data-ofbid="id_j1l_5fw_pzb__p_p4b_zf2_myb">优化了页面加载速度。</p>
+                    </li>
+                    <li class="- topic/li li" id="id_j1l_5fw_pzb__li_fq3_4g2_myb" data-ofbid="id_j1l_5fw_pzb__li_fq3_4g2_myb">
+                        <p class="- topic/p p" id="id_j1l_5fw_pzb__p_q4b_zf2_myb" data-ofbid="id_j1l_5fw_pzb__p_q4b_zf2_myb">用户需要先登录才能查看数据节点日志。</p>
+                    </li>
+                    <li class="- topic/li li" id="id_j1l_5fw_pzb__li_gq3_4g2_myb" data-ofbid="id_j1l_5fw_pzb__li_gq3_4g2_myb">
+                        <p class="- topic/p p" id="id_j1l_5fw_pzb__p_r4b_zf2_myb" data-ofbid="id_j1l_5fw_pzb__p_r4b_zf2_myb">优化数据视图显示：表格底部显示表的行、列、类型信息；当表内容高度溢出时，总是显示水平滚动条。</p>
+                    </li>
+                    <li class="- topic/li li" id="id_j1l_5fw_pzb__li_hq3_4g2_myb" data-ofbid="id_j1l_5fw_pzb__li_hq3_4g2_myb">
+                        <p class="- topic/p p" id="id_j1l_5fw_pzb__p_s4b_zf2_myb" data-ofbid="id_j1l_5fw_pzb__p_s4b_zf2_myb">优化字体，降低了文件大小。</p>
+                    </li>
+                    <li class="- topic/li li" id="id_j1l_5fw_pzb__li_iq3_4g2_myb" data-ofbid="id_j1l_5fw_pzb__li_iq3_4g2_myb">
+                        <p class="- topic/p p" id="id_j1l_5fw_pzb__p_t4b_zf2_myb" data-ofbid="id_j1l_5fw_pzb__p_t4b_zf2_myb">变量面板变量显示更紧凑。</p>
+                    </li>
+                    <li class="- topic/li li" id="id_j1l_5fw_pzb__li_jq3_4g2_myb" data-ofbid="id_j1l_5fw_pzb__li_jq3_4g2_myb">
+                        <p class="- topic/p p" id="id_j1l_5fw_pzb__p_u4b_zf2_myb" data-ofbid="id_j1l_5fw_pzb__p_u4b_zf2_myb">导航栏顶部显示节点类型。</p>
+                    </li>
+                    <li class="- topic/li li" id="id_j1l_5fw_pzb__li_kq3_4g2_myb" data-ofbid="id_j1l_5fw_pzb__li_kq3_4g2_myb">
+                        <p class="- topic/p p" id="id_j1l_5fw_pzb__p_v4b_zf2_myb" data-ofbid="id_j1l_5fw_pzb__p_v4b_zf2_myb">优化了数据库无权限的错误提示。</p>
+                    </li>
+                    <li class="- topic/li li" id="id_j1l_5fw_pzb__li_lq3_4g2_myb" data-ofbid="id_j1l_5fw_pzb__li_lq3_4g2_myb">
+                        <p class="- topic/p p" id="id_j1l_5fw_pzb__p_w4b_zf2_myb" data-ofbid="id_j1l_5fw_pzb__p_w4b_zf2_myb">路径中含有“.”的数据库支持分级展示，如 dfs://aaa.bbb.ccc。</p>
+                    </li>
+                    <li class="- topic/li li" id="id_j1l_5fw_pzb__li_mq3_4g2_myb" data-ofbid="id_j1l_5fw_pzb__li_mq3_4g2_myb">
+                        <p class="- topic/p p" id="id_j1l_5fw_pzb__p_x4b_zf2_myb" data-ofbid="id_j1l_5fw_pzb__p_x4b_zf2_myb">作业管理中任务状态汉化，支持根据状态搜索。</p>
+                    </li>
+                    <li class="- topic/li li" id="id_j1l_5fw_pzb__li_nq3_4g2_myb" data-ofbid="id_j1l_5fw_pzb__li_nq3_4g2_myb">
+                        <p class="- topic/p p" id="id_j1l_5fw_pzb__p_y4b_zf2_myb" data-ofbid="id_j1l_5fw_pzb__p_y4b_zf2_myb">官网文档的函数文档已同步至最新。</p>
+                    </li>
+                </ul>
+            </section>
+            <section class="- topic/section section" id="id_j1l_5fw_pzb__section_e2l_5fw_pzb" data-ofbid="id_j1l_5fw_pzb__section_e2l_5fw_pzb"><h3 class="- topic/title title sectiontitle">故障修复</h3>
+                
+                <ul class="- topic/ul ul" id="id_j1l_5fw_pzb__ul_f2l_5fw_pzb" data-ofbid="id_j1l_5fw_pzb__ul_f2l_5fw_pzb">
+                    <li class="- topic/li li">
+                        <p class="- topic/p p">修复鼠标悬浮在 append! 等函数时没有正确显示函数提示的问题。</p>
+                    </li>
+                    <li class="- topic/li li">
+                        <p class="- topic/p p">修复矩阵最后一页数据显示异常的问题。</p>
+                    </li>
+                    <li class="- topic/li li">
+                        <p class="- topic/p p">修复终端 refid 错误链接需要点击两次的问题。</p>
+                    </li>
+                    <li class="- topic/li li">
+                        <p class="- topic/p p">修复终端字体显示异常的问题。</p>
+                    </li>
+                    <li class="- topic/li li">
+                        <p class="- topic/p p">关键字高亮逻辑修改，解决了set(), values() 函数被高亮的问题。</p>
+                    </li>
+                    <li class="- topic/li li">
+                        <p class="- topic/p p">修复了绘制k线图时横坐标不对的问题。</p>
+                    </li>
+                    <li class="- topic/li li">
+                        <p class="- topic/p p">修复顶部导航栏样式泄漏到编辑器的函数文档区域的问题，修复后编辑器的函数文档顶部高度恢复正常。</p>
+                    </li>
+                    <li class="- topic/li li">
+                        <p class="- topic/p p">修复终端和数据视图中时间显示不正确的问题。</p>
+                    </li>
+                    <li class="- topic/li li">
+                        <p class="- topic/p p">优化了登录错误时显示的错误信息。</p>
+                    </li>
+                    <li class="- topic/li li">
+                        <p class="- topic/p p">数据库面板高度可调整。</p>
+                    </li>
+                    <li class="- topic/li li">
+                        <p class="- topic/p p">数据库列表解决了卡顿问题。</p>
+                    </li>
+                    <li class="- topic/li li">
+                        <p class="- topic/p p">修复了左侧数据库、变量、共享变量面板、高度、宽度及滚动操作相关的缺陷。</p>
+                    </li>
+                </ul>
+            </section>
+        </div>
+    </article>
+    <article class="- topic/topic topic nested1" aria-labelledby="ariaid-title9" id="id_sqx_5fw_pzb">
+        <h2 class="- topic/title title topictitle2" id="ariaid-title9">
+            <em class="+ topic/ph hi-d/i ph i">1.30.20</em>
+        </h2>
+        <div class="- topic/body body">
+            <section class="- topic/section section" id="id_sqx_5fw_pzb__section_j5x_5fw_pzb" data-ofbid="id_sqx_5fw_pzb__section_j5x_5fw_pzb"><h3 class="- topic/title title sectiontitle">新增功能</h3>
+                
+                <ul class="- topic/ul ul">
+                    <li class="- topic/li li" id="id_sqx_5fw_pzb__li_yp3_4g2_myb" data-ofbid="id_sqx_5fw_pzb__li_yp3_4g2_myb">
+                        <p class="- topic/p p" id="id_sqx_5fw_pzb__p_h4b_zf2_myb" data-ofbid="id_sqx_5fw_pzb__p_h4b_zf2_myb">交互编程：新增数据库管理，支持查看数据库及表。</p>
+                    </li>
+                    <li class="- topic/li li" id="id_sqx_5fw_pzb__li_zp3_4g2_myb" data-ofbid="id_sqx_5fw_pzb__li_zp3_4g2_myb">
+                        <p class="- topic/p p" id="id_sqx_5fw_pzb__p_i4b_zf2_myb" data-ofbid="id_sqx_5fw_pzb__p_i4b_zf2_myb">新增设置面板，支持自定义小数展示位数，如固定显示两位小数 1.00。</p>
+                    </li>
+                    <li class="- topic/li li" id="id_sqx_5fw_pzb__li_aq3_4g2_myb" data-ofbid="id_sqx_5fw_pzb__li_aq3_4g2_myb">
+                        <p class="- topic/p p" id="id_sqx_5fw_pzb__p_j4b_zf2_myb" data-ofbid="id_sqx_5fw_pzb__p_j4b_zf2_myb">支持词典 (dict) 的可视化展示。</p>
+                    </li>
+                    <li class="- topic/li li" id="id_sqx_5fw_pzb__li_bq3_4g2_myb" data-ofbid="id_sqx_5fw_pzb__li_bq3_4g2_myb">
+                        <p class="- topic/p p" id="id_sqx_5fw_pzb__p_k4b_zf2_myb" data-ofbid="id_sqx_5fw_pzb__p_k4b_zf2_myb">点击错误代码（例如 ‘RefId: S00001’） 可跳转至解释文档。</p>
+                    </li>
+                </ul>
+            </section>
+            <section class="- topic/section section" id="id_sqx_5fw_pzb__section_l5x_5fw_pzb" data-ofbid="id_sqx_5fw_pzb__section_l5x_5fw_pzb"><h3 class="- topic/title title sectiontitle">功能优化</h3>
+                
+                <ul class="- topic/ul ul" id="id_sqx_5fw_pzb__ul_m5x_5fw_pzb" data-ofbid="id_sqx_5fw_pzb__ul_m5x_5fw_pzb">
+                    <li class="- topic/li li" id="id_sqx_5fw_pzb__li_oq3_4g2_myb" data-ofbid="id_sqx_5fw_pzb__li_oq3_4g2_myb">
+                        <p class="- topic/p p" id="id_sqx_5fw_pzb__p_z4b_zf2_myb" data-ofbid="id_sqx_5fw_pzb__p_z4b_zf2_myb">优化代码高亮。</p>
+                    </li>
+                    <li class="- topic/li li" id="id_sqx_5fw_pzb__li_pq3_4g2_myb" data-ofbid="id_sqx_5fw_pzb__li_pq3_4g2_myb">
+                        <p class="- topic/p p" id="id_sqx_5fw_pzb__p_apb_zf2_myb" data-ofbid="id_sqx_5fw_pzb__p_apb_zf2_myb">数值支持千分位号（,）分隔，如 1,000,000,000。</p>
+                    </li>
+                    <li class="- topic/li li" id="id_sqx_5fw_pzb__li_qq3_4g2_myb" data-ofbid="id_sqx_5fw_pzb__li_qq3_4g2_myb">
+                        <p class="- topic/p p" id="id_sqx_5fw_pzb__p_bpb_zf2_myb" data-ofbid="id_sqx_5fw_pzb__p_bpb_zf2_myb">关键字、函数提示、函数文档更新。</p>
+                    </li>
+                    <li class="- topic/li li" id="id_sqx_5fw_pzb__li_rq3_4g2_myb" data-ofbid="id_sqx_5fw_pzb__li_rq3_4g2_myb">
+                        <p class="- topic/p p" id="id_sqx_5fw_pzb__p_cpb_zf2_myb" data-ofbid="id_sqx_5fw_pzb__p_cpb_zf2_myb">优化代码执行结果显示，使显示更紧凑。</p>
+                    </li>
+                    <li class="- topic/li li" id="id_sqx_5fw_pzb__li_sq3_4g2_myb" data-ofbid="id_sqx_5fw_pzb__li_sq3_4g2_myb">
+                        <p class="- topic/p p" id="id_sqx_5fw_pzb__p_dpb_zf2_myb" data-ofbid="id_sqx_5fw_pzb__p_dpb_zf2_myb">优化状态管理面板，可分类显示状态信息。</p>
+                    </li>
+                    <li class="- topic/li li" id="id_sqx_5fw_pzb__li_tq3_4g2_myb" data-ofbid="id_sqx_5fw_pzb__li_tq3_4g2_myb">
+                        <p class="- topic/p p" id="id_sqx_5fw_pzb__p_epb_zf2_myb" data-ofbid="id_sqx_5fw_pzb__p_epb_zf2_myb">优化了表格分页显示样式，并为新窗口打开等图标增加 tooltip。</p>
+                    </li>
+                    <li class="- topic/li li" id="id_sqx_5fw_pzb__li_uq3_4g2_myb" data-ofbid="id_sqx_5fw_pzb__li_uq3_4g2_myb">
+                        <p class="- topic/p p" id="id_sqx_5fw_pzb__p_fpb_zf2_myb" data-ofbid="id_sqx_5fw_pzb__p_fpb_zf2_myb">作业管理: 优化任务字段名称，支持根据客户端 IP 搜索任务。</p>
+                    </li>
+                </ul>
+            </section>
+            <section class="- topic/section section" id="id_sqx_5fw_pzb__section_n5x_5fw_pzb" data-ofbid="id_sqx_5fw_pzb__section_n5x_5fw_pzb"><h3 class="- topic/title title sectiontitle">故障修复</h3>
+                
+                <ul class="- topic/ul ul" id="id_sqx_5fw_pzb__ul_hcv_v2w_pzb" data-ofbid="id_sqx_5fw_pzb__ul_hcv_v2w_pzb">
+                    <li class="- topic/li li">
+                        <p class="- topic/p p" id="id_sqx_5fw_pzb__p_wpb_zf2_myb" data-ofbid="id_sqx_5fw_pzb__p_wpb_zf2_myb">修复通过 plot 画图传入时间类型的 labels 时，labels 未正确格式化的问题。</p>
+                    </li>
+                </ul>
+            </section>
+        </div>
+    </article>
+    <article class="- topic/topic topic nested1" aria-labelledby="ariaid-title10" id="id_mwg_vfw_pzb">
+        <h2 class="- topic/title title topictitle2" id="ariaid-title10">
+            <em class="+ topic/ph hi-d/i ph i">1.30.19</em>
+        </h2>
+        <div class="- topic/body body">
+            <section class="- topic/section section" id="id_mwg_vfw_pzb__section_l1h_vfw_pzb" data-ofbid="id_mwg_vfw_pzb__section_l1h_vfw_pzb"><h3 class="- topic/title title sectiontitle">功能优化</h3>
+                
+                <ul class="- topic/ul ul" id="id_mwg_vfw_pzb__ul_m1h_vfw_pzb" data-ofbid="id_mwg_vfw_pzb__ul_m1h_vfw_pzb">
+                    <li class="- topic/li li">在高可用集群环境下，通过 web 访问任意 controller 节点，会重定向到 leader 节点，能在 web 页面展示所有节点信息。</li>
+                </ul>
+            </section>
+        </div>
+    </article>
+    <article class="- topic/topic topic nested1" aria-labelledby="ariaid-title11" id="id_wgp_vfw_pzb">
+        <h2 class="- topic/title title topictitle2" id="ariaid-title11">
+            <em class="+ topic/ph hi-d/i ph i">1.30.18</em>
+        </h2>
+        <div class="- topic/body body">
+            <section class="- topic/section section" id="id_wgp_vfw_pzb__section_tlp_vfw_pzb" data-ofbid="id_wgp_vfw_pzb__section_tlp_vfw_pzb"><h3 class="- topic/title title sectiontitle">故障修复</h3>
+                
+                <ul class="- topic/ul ul">
+                    <li class="- topic/li li">web 界面启用数据节点或反复重启集群，代理节点会产生僵尸子进程。</li>
+                </ul>
+            </section>
+        </div>
+    </article>
+    <article class="- topic/topic topic nested1" aria-labelledby="ariaid-title12" id="id_upv_vfw_pzb">
+        <h2 class="- topic/title title topictitle2" id="ariaid-title12">
+            <em class="+ topic/ph hi-d/i ph i">1.30.16</em>
+        </h2>
+        <div class="- topic/body body">
+            <section class="- topic/section section" id="id_upv_vfw_pzb__section_f5v_vfw_pzb" data-ofbid="id_upv_vfw_pzb__section_f5v_vfw_pzb"><h3 class="- topic/title title sectiontitle">功能优化</h3>
+                
+                <ul class="- topic/ul ul" id="id_upv_vfw_pzb__ul_g5v_vfw_pzb" data-ofbid="id_upv_vfw_pzb__ul_g5v_vfw_pzb">
+                    <li class="- topic/li li">Web 任务管理界面优化：重新设计、整合了 Web 管理界面，增加了作业管理功能，支持查看、停止、取消 DolphinDB
+                        运行中、已提交和定时触发的作业。升级 server 版本后，需要同步更新 web 文件夹。 新版本使用了 WebSocket 协议，增加了对
+                        DolphinDB 二进制协议的支持，对浏览器的要求也随之提高，可能需要用户更新浏览器到最新的版本，推荐使用 Chrome 最新版或 Edge
+                        最新版。</li>
+                </ul>
+            </section>
+        </div>
+    </article>
+</article></main></div>
+                        
+                        
+                        
+                        
+                        
+                        
+                    </div>
+                    
+                        <nav role="navigation" id="wh_topic_toc" aria-label="On this page" class="col-lg-2 d-none d-lg-block navbar d-print-none"> 
+                            <div id="wh_topic_toc_content">
+		                        
+	                            <div class=" wh_topic_toc "><div class="wh_topic_label">在本页上</div><ul><li class="topic-item"><a href="#topic_ml1_dvk_vbc" data-tocid="topic_ml1_dvk_vbc">3.00.1.0</a><ul><li class="section-item"><div class="section-title"><a href="#topic_ml1_dvk_vbc__section_fxp_bpf_xbc" data-tocid="topic_ml1_dvk_vbc__section_fxp_bpf_xbc">新增功能</a></div></li><li class="section-item"><div class="section-title"><a href="#topic_ml1_dvk_vbc__section_pb3_2vk_vbc" data-tocid="topic_ml1_dvk_vbc__section_pb3_2vk_vbc">功能优化</a></div></li></ul></li><li class="topic-item"><a href="#id_x31_1qp_nbc" data-tocid="id_x31_1qp_nbc"><em class="+ topic/ph hi-d/i ph i">3.00.0.2</em></a><ul><li class="section-item"><div class="section-title"><a href="#id_x31_1qp_nbc__section_hcb_1qp_nbc" data-tocid="id_x31_1qp_nbc__section_hcb_1qp_nbc">功能优化</a></div></li><li class="section-item"><div class="section-title"><a href="#id_x31_1qp_nbc__section_jcb_1qp_nbc" data-tocid="id_x31_1qp_nbc__section_jcb_1qp_nbc">故障修复</a></div></li></ul></li><li class="topic-item"><a href="#topic_jhn_dn5_x1c" data-tocid="topic_jhn_dn5_x1c"><em class="+ topic/ph hi-d/i ph i">2.00.12.0</em></a><ul><li class="section-item"><div class="section-title"><a href="#topic_jhn_dn5_x1c__section_zsn_fn5_x1c" data-tocid="topic_jhn_dn5_x1c__section_zsn_fn5_x1c">新功能</a></div></li><li class="section-item"><div class="section-title"><a href="#topic_jhn_dn5_x1c__section_sq2_gn5_x1c" data-tocid="topic_jhn_dn5_x1c__section_sq2_gn5_x1c">功能优化</a></div></li></ul></li><li class="topic-item"><a href="#topic_nnd_rws_h1c" data-tocid="topic_nnd_rws_h1c"><em class="+ topic/ph hi-d/i ph i">2.00.11.2</em></a><ul><li class="section-item"><div class="section-title"><a href="#topic_nnd_rws_h1c__section_tkm_tws_h1c" data-tocid="topic_nnd_rws_h1c__section_tkm_tws_h1c">功能优化</a></div></li><li class="section-item"><div class="section-title"><a href="#topic_nnd_rws_h1c__section_lvr_5ws_h1c" data-tocid="topic_nnd_rws_h1c__section_lvr_5ws_h1c">故障修复</a></div></li></ul></li><li class="topic-item"><a href="#topic_ktg_gcd_zzb" data-tocid="topic_ktg_gcd_zzb"><em class="+ topic/ph hi-d/i ph i">2.00.11</em></a><ul><li class="section-item"><div class="section-title"><a href="#topic_ktg_gcd_zzb__section_b1v_3cd_zzb" data-tocid="topic_ktg_gcd_zzb__section_b1v_3cd_zzb">新增功能</a></div></li><li class="section-item"><div class="section-title"><a href="#topic_ktg_gcd_zzb__section_jfl_kcd_zzb" data-tocid="topic_ktg_gcd_zzb__section_jfl_kcd_zzb">功能优化</a></div></li></ul></li><li class="topic-item"><a href="#id_ypl_tfw_pzb" data-tocid="id_ypl_tfw_pzb">
+            <em class="+ topic/ph hi-d/i ph i">1.30.22</em>
+        </a><ul><li class="section-item"><div class="section-title"><a href="#id_ypl_tfw_pzb__section_hjs_2zp_pyb" data-tocid="id_ypl_tfw_pzb__section_hjs_2zp_pyb">新增功能</a></div></li><li class="section-item"><div class="section-title"><a href="#id_ypl_tfw_pzb__section_q54_fzp_pyb" data-tocid="id_ypl_tfw_pzb__section_q54_fzp_pyb">功能优化</a></div></li><li class="section-item"><div class="section-title"><a href="#id_ypl_tfw_pzb__section_ezg_gzp_pyb" data-tocid="id_ypl_tfw_pzb__section_ezg_gzp_pyb">故障修复</a></div></li></ul></li><li class="topic-item"><a href="#id_j1l_5fw_pzb" data-tocid="id_j1l_5fw_pzb">
+            <em class="+ topic/ph hi-d/i ph i">1.30.21</em>
+        </a><ul><li class="section-item"><div class="section-title"><a href="#id_j1l_5fw_pzb__section_c2l_5fw_pzb" data-tocid="id_j1l_5fw_pzb__section_c2l_5fw_pzb">功能优化</a></div></li><li class="section-item"><div class="section-title"><a href="#id_j1l_5fw_pzb__section_e2l_5fw_pzb" data-tocid="id_j1l_5fw_pzb__section_e2l_5fw_pzb">故障修复</a></div></li></ul></li><li class="topic-item"><a href="#id_sqx_5fw_pzb" data-tocid="id_sqx_5fw_pzb">
+            <em class="+ topic/ph hi-d/i ph i">1.30.20</em>
+        </a><ul><li class="section-item"><div class="section-title"><a href="#id_sqx_5fw_pzb__section_j5x_5fw_pzb" data-tocid="id_sqx_5fw_pzb__section_j5x_5fw_pzb">新增功能</a></div></li><li class="section-item"><div class="section-title"><a href="#id_sqx_5fw_pzb__section_l5x_5fw_pzb" data-tocid="id_sqx_5fw_pzb__section_l5x_5fw_pzb">功能优化</a></div></li><li class="section-item"><div class="section-title"><a href="#id_sqx_5fw_pzb__section_n5x_5fw_pzb" data-tocid="id_sqx_5fw_pzb__section_n5x_5fw_pzb">故障修复</a></div></li></ul></li><li class="topic-item"><a href="#id_mwg_vfw_pzb" data-tocid="id_mwg_vfw_pzb">
+            <em class="+ topic/ph hi-d/i ph i">1.30.19</em>
+        </a><ul><li class="section-item"><div class="section-title"><a href="#id_mwg_vfw_pzb__section_l1h_vfw_pzb" data-tocid="id_mwg_vfw_pzb__section_l1h_vfw_pzb">功能优化</a></div></li></ul></li><li class="topic-item"><a href="#id_wgp_vfw_pzb" data-tocid="id_wgp_vfw_pzb">
+            <em class="+ topic/ph hi-d/i ph i">1.30.18</em>
+        </a><ul><li class="section-item"><div class="section-title"><a href="#id_wgp_vfw_pzb__section_tlp_vfw_pzb" data-tocid="id_wgp_vfw_pzb__section_tlp_vfw_pzb">故障修复</a></div></li></ul></li><li class="topic-item"><a href="#id_upv_vfw_pzb" data-tocid="id_upv_vfw_pzb">
+            <em class="+ topic/ph hi-d/i ph i">1.30.16</em>
+        </a><ul><li class="section-item"><div class="section-title"><a href="#id_upv_vfw_pzb__section_f5v_vfw_pzb" data-tocid="id_upv_vfw_pzb__section_f5v_vfw_pzb">功能优化</a></div></li></ul></li></ul></div>
+	                        	
+                        	</div>
+                        </nav>
+                    
+                </div>
+            </div>
+            
+            
+            
+        </div> 
+        <footer class="navbar navbar-default wh_footer">
+  <div class=" footer-container mx-auto ">
+<title>Copyright</title><p><b> ©2024 浙江智臾科技有限公司 浙ICP备18048711号-3</b></p>
+  </div>
+</footer>
+        
+        <div id="go2top" class="d-print-none">
+            <span class="oxy-icon oxy-icon-up"></span>
+        </div>
+        
+        <div id="modal_img_large" class="modal">
+            <span class="close oxy-icon oxy-icon-remove"></span>
+            <div id="modal_img_container"></div>
+            <div id="caption"></div>
+        </div>
+        
+        
+        
+    </body>
+</html>

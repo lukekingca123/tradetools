@@ -1,0 +1,277 @@
+<!DOCTYPE html><html xmlns="http://www.w3.org/1999/xhtml" xml:lang="zh" lang="zh" data-whc_version="26.0">
+    <head><link rel="shortcut icon" href="../../favicon.ico"/><link rel="icon" href="../../favicon.ico"/><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><meta http-equiv="X-UA-Compatible" content="IE=edge"/><meta name="description" content="数据平衡是指在一个集群中，数据在各个节点之间存储均匀。数据平衡直接关系到系统的性能、可用性和稳定性，因此在分布式架构设计中需要充分考虑如何进行数据平衡。DolphinDB ..."/><meta name="DC.rights.owner" content="(C) 版权 2024"/><meta name="copyright" content="(C) 版权 2024"/><meta name="generator" content="DITA-OT"/><meta name="DC.type" content="topic"/><meta name="DC.coverage" content=""/><meta name="DC.relation" content="../../db_distr_comp/db/db_architecture.html"/><meta name="prodname" content="DolphinDB"/><meta name="brand" content="DolphinDB"/><meta name="DC.creator" content="DolphinDB"/><meta name="DC.publisher" content="DDB N/A DDB 200"/><meta name="DC.format" content="HTML5"/><meta name="DC.identifier" content="rebalance"/><title>数据平衡</title><!--  Generated with Oxygen version 26.0, build number 2024012323.  --><meta name="wh-path2root" content="../../"/><meta name="wh-toc-id" content="rebalance-d9529e3119"/><meta name="wh-source-relpath" content="db_distr_comp/db/rebalance.dita"/><meta name="wh-out-relpath" content="db_distr_comp/db/rebalance.html"/>
+
+    <link rel="stylesheet" type="text/css" href="../../oxygen-webhelp/app/commons.css?buildId=2024012323"/>
+    <link rel="stylesheet" type="text/css" href="../../oxygen-webhelp/app/topic.css?buildId=2024012323"/>
+
+    <script src="../../oxygen-webhelp/app/options/properties.js?buildId=20240704100525"></script>
+    <script src="../../oxygen-webhelp/app/localization/strings.js?buildId=2024012323"></script>
+    <script src="../../oxygen-webhelp/app/search/index/keywords.js?buildId=20240704100525"></script>
+    <script defer="defer" src="../../oxygen-webhelp/app/commons.js?buildId=2024012323"></script>
+    <script defer="defer" src="../../oxygen-webhelp/app/topic.js?buildId=2024012323"></script>
+<link rel="stylesheet" type="text/css" href="../../oxygen-webhelp/template/styles.css?buildId=2024012323"/><script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script><script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script></head>
+
+    <body id="rebalance" class="wh_topic_page frmBody">
+        <a href="#wh_topic_body" class="sr-only sr-only-focusable">
+            跳转到主要内容
+        </a>
+        
+        
+        
+        
+        <header class="navbar navbar-default wh_header">
+    <div class="container-fluid">
+        <div xmlns:whc="http://www.oxygenxml.com/webhelp/components" class="wh_header_flex_container navbar-nav navbar-expand-md navbar-dark">
+            <div class="wh_logo_and_publication_title_container">
+                <div class="wh_logo_and_publication_title">
+                    
+                    <a href="https://www.dolphindb.cn" class=" wh_logo d-none d-sm-block "><img src="../../logo.png" alt="  DolphinDB 文档中心  "/></a>
+                    <div class=" wh_publication_title "><a href="../../index.html"><span class="booktitle">  <span class="ph mainbooktitle">DolphinDB 文档中心</span>  </span></a></div>
+                    
+                </div>
+                
+                
+            </div>
+
+            <div class="wh_top_menu_and_indexterms_link collapse navbar-collapse" id="wh_top_menu_and_indexterms_link">
+                
+                
+                
+                
+            </div>
+        <div class=" wh_search_input navbar-form wh_topic_page_search search " role="form">
+            
+            
+            
+            <form id="searchForm" method="get" role="search" action="../../search.html"><div><input type="search" placeholder="搜索 " class="wh_search_textfield" id="textToSearch" name="searchQuery" aria-label="搜索查询" required="required"/><button type="submit" class="wh_search_button" aria-label="搜索"><span class="search_input_text">搜索</span></button></div></form>
+            
+            <script src="/vendors/react/umd/react.production.min.js" defer="defer"></script>
+<script src="/vendors/react-dom/umd/react-dom.production.min.js" defer="defer"></script>
+<script src="/vendors/dayjs/dayjs.min.js" defer="defer"></script>
+<script src="/vendors/antd/dist/antd.min.js" defer="defer"></script>
+<script src="/vendors/@ant-design/icons/dist/index.umd.min.js" defer="defer"></script>
+<script src="/zh/index.js" type="module"></script>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js" defer="defer"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML" defer="defer"><!--
+
+
+--></script>
+
+            
+        </div></div>
+    </div>
+</header>
+        
+        
+         
+        
+        
+        
+        <div class="container-fluid" id="wh_topic_container">
+            <div class="row">
+
+                <nav class="wh_tools d-print-none navbar-expand-md" aria-label="Tools">
+                    
+                    <div data-tooltip-position="bottom" class=" wh_breadcrumb "><ol class="d-print-none"><li><span class="home"><a href="../../index.html"><span>主页</span></a></span></li><li><div class="topicref" data-id="new_chap_database_manage_new_chap_dbmanage_landing_page"><div class="title"><a href="../../db_distr_comp/cfg/db_intro.html"><span class="keyword label">数据库</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 数据库的基本概念</p></div></div></div></li><li><div class="topicref" data-id="topic_pg3_22w_ryb"><div class="title"><a href="../../db_distr_comp/db/db_architecture.html"><span class="keyword label">分布式架构</span></a></div></div></li><li class="active"><div class="topicref" data-id="rebalance"><div class="title"><a href="../../db_distr_comp/db/rebalance.html">数据平衡</a></div></div></li></ol></div>
+                    
+                    
+                    
+                    <div class="wh_right_tools">
+                        <button class="wh_hide_highlight" aria-label="切换搜索突出显示" title="切换搜索突出显示"></button>
+                        <button class="webhelp_expand_collapse_sections" data-next-state="collapsed" aria-label="折叠截面" title="折叠截面"></button>
+                        
+                        
+                        
+                        
+                        <div class=" wh_print_link print d-none d-md-inline-block "><button onClick="window.print()" title="打印此页" aria-label="打印此页"></button></div>
+                        
+                        <button type="button" id="wh_toc_button" class="custom-toggler navbar-toggler collapsed wh_toggle_button navbar-light" aria-expanded="false" aria-label="Toggle publishing table of content" aria-controls="wh_publication_toc">
+                            <span class="navbar-toggler-icon"></span>
+                        </button>
+                    </div>
+                    
+                </nav>
+            </div>
+            
+            
+            
+            
+            <div class="wh_content_area">
+                <div class="row">
+                    
+                        <nav id="wh_publication_toc" class="col-lg-3 col-md-3 col-sm-12 d-md-block d-none d-print-none" aria-label="Table of Contents Container">
+                            <div id="wh_publication_toc_content">
+		                        
+                            	<div class=" wh_publication_toc " data-tooltip-position="right"><span class="expand-button-action-labels"><span id="button-expand-action" role="button" aria-label="Expand"></span><span id="button-collapse-action" role="button" aria-label="Collapse"></span><span id="button-pending-action" role="button" aria-label="Pending"></span></span><ul role="tree" aria-label="Table of Contents"><li role="treeitem"><div data-tocid="new_chap_about_sect_ddb_docs_intro-d9529e87" class="topicref" data-id="new_chap_about_sect_ddb_docs_intro" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../about/ddb_docs_intro.html" id="new_chap_about_sect_ddb_docs_intro-d9529e87-link">文档使用说明</a><div class="wh-tooltip"><p class="shortdesc">如何获取 DolphinDB 帮助信息</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="chap1_getstarted-d9529e140" class="topicref" data-id="chap1_getstarted" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action chap1_getstarted-d9529e140-link" class="wh-expand-btn"></span><div class="title"><a href="../../getstarted/chap1_getstarted.html" id="chap1_getstarted-d9529e140-link"><span class="keyword label">快速上手</span></a><div class="wh-tooltip"><p class="shortdesc">如何快速部署 DolphinDB、建库建表、写入和查询数据</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="sectionddb_deployment-d9529e335" class="topicref" data-id="sectionddb_deployment" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action sectionddb_deployment-d9529e335-link" class="wh-expand-btn"></span><div class="title"><a href="../../deploy/deploy_intro.html" id="sectionddb_deployment-d9529e335-link"><span class="keyword label">部署</span></a><div class="wh-tooltip"><p class="shortdesc">如何在不同的场景中部署 DolphinDB</p></div></div></div></li><li role="treeitem" aria-expanded="true"><div data-tocid="new_chap_database_manage_new_chap_dbmanage_landing_page-d9529e2313" class="topicref" data-id="new_chap_database_manage_new_chap_dbmanage_landing_page" data-state="expanded"><span role="button" tabindex="0" aria-labelledby="button-collapse-action new_chap_database_manage_new_chap_dbmanage_landing_page-d9529e2313-link" class="wh-expand-btn"></span><div class="title"><a href="../../db_distr_comp/cfg/db_intro.html" id="new_chap_database_manage_new_chap_dbmanage_landing_page-d9529e2313-link"><span class="keyword label">数据库</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 数据库的基本概念</p></div></div></div><ul role="group" class="navbar-nav nav-list"><li role="treeitem" aria-expanded="false"><div data-tocid="chap3_sect_database_distributed_computing-d9529e2366" class="topicref" data-id="chap3_sect_database_distributed_computing" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action chap3_sect_database_distributed_computing-d9529e2366-link" class="wh-expand-btn"></span><div class="title"><a href="../../db_distr_comp/db_distr_comp.html" id="chap3_sect_database_distributed_computing-d9529e2366-link"><span class="keyword label">数据库操作</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 数据库的基本操作，例如创建数据库、表，增加列、分区，数据查询，表连接等。</p></div></div></div></li><li role="treeitem" aria-expanded="true"><div data-tocid="topic_pg3_22w_ryb-d9529e2934" class="topicref" data-id="topic_pg3_22w_ryb" data-state="expanded"><span role="button" tabindex="0" aria-labelledby="button-collapse-action topic_pg3_22w_ryb-d9529e2934-link" class="wh-expand-btn"></span><div class="title"><a href="../../db_distr_comp/db/db_architecture.html" id="topic_pg3_22w_ryb-d9529e2934-link"><span class="keyword label">分布式架构</span></a></div></div><ul role="group" class="navbar-nav nav-list"><li role="treeitem"><div data-tocid="事务-d9529e2981" class="topicref" data-id="事务" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../db_distr_comp/db/transaction.html" id="事务-d9529e2981-link">分布式事务</a></div></div></li><li role="treeitem"><div data-tocid="数据库分区-d9529e3027" class="topicref" data-id="数据库分区" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../db_distr_comp/db/db_partitioning.html" id="数据库分区-d9529e3027-link">数据分区</a></div></div></li><li role="treeitem"><div data-tocid="recovery-d9529e3073" class="topicref" data-id="recovery" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../db_distr_comp/db/recovery.html" id="recovery-d9529e3073-link">在线恢复</a></div></div></li><li role="treeitem" class="active"><div data-tocid="rebalance-d9529e3119" class="topicref" data-id="rebalance" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../db_distr_comp/db/rebalance.html" id="rebalance-d9529e3119-link">数据平衡</a></div></div></li><li role="treeitem"><div data-tocid="ha-d9529e3165" class="topicref" data-id="ha" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../db_distr_comp/db/ha.html" id="ha-d9529e3165-link">高可用</a></div></div></li><li role="treeitem"><div data-tocid="分级存储-d9529e3211" class="topicref" data-id="分级存储" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../db_distr_comp/db/tiered_storage.html" id="分级存储-d9529e3211-link">分级存储</a></div></div></li><li role="treeitem"><div data-tocid="集群间异步复制-d9529e3257" class="topicref" data-id="集群间异步复制" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../sys_man/cluster_async_replc.html" id="集群间异步复制-d9529e3257-link">异步复制</a></div></div></li><li role="treeitem"><div data-tocid="multimodal_storage-d9529e3303" class="topicref" data-id="multimodal_storage" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../db_distr_comp/db/multimodal_storage.html" id="multimodal_storage-d9529e3303-link">多模态存储</a></div></div></li></ul></li><li role="treeitem"><div data-tocid="tsdb-d9529e3349" class="topicref" data-id="tsdb" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../db_distr_comp/db/tsdb.html" id="tsdb-d9529e3349-link"><span class="keyword label">TSDB 存储引擎</span></a></div></div></li><li role="treeitem"><div data-tocid="olap-d9529e3396" class="topicref" data-id="olap" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../db_distr_comp/db/olap.html" id="olap-d9529e3396-link"><span class="keyword label">OLAP 存储引擎</span></a></div></div></li><li role="treeitem"><div data-tocid="catalog-d9529e3443" class="topicref" data-id="catalog" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../db_distr_comp/db/catalog.html" id="catalog-d9529e3443-link">数据目录（catalog）</a></div></div></li></ul></li><li role="treeitem" aria-expanded="false"><div data-tocid="chap7_tutorials_streaming-d9529e3490" class="topicref" data-id="chap7_tutorials_streaming" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action chap7_tutorials_streaming-d9529e3490-link" class="wh-expand-btn"></span><div class="title"><a href="../../stream/str_intro.html" id="chap7_tutorials_streaming-d9529e3490-link"><span class="keyword label">流数据</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 流数据引擎及流数据计算的基本概念</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="tocId-d9529e7385" class="topicref" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action tocId-d9529e7385-link" class="wh-expand-btn"></span><div class="title"><a href="../../db_distr_comp/db_oper/import_data.html" id="tocId-d9529e7385-link">数据迁移</a><div class="wh-tooltip"><p class="shortdesc">如何从不同数据源向 DolphinDB 迁移数据</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="chap7_tutorials_system_management-d9529e7812" class="topicref" data-id="chap7_tutorials_system_management" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action chap7_tutorials_system_management-d9529e7812-link" class="wh-expand-btn"></span><div class="title"><a href="../../sys_man/om_intro.html" id="chap7_tutorials_system_management-d9529e7812-link"><span class="keyword label">系统运维</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 的系统运维功能及方法</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="about_language_resources-d9529e16490" class="topicref" data-id="about_language_resources" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action about_language_resources-d9529e16490-link" class="wh-expand-btn"></span><div class="title"><a href="../../progr/progr_intro.html" id="about_language_resources-d9529e16490-link"><span class="keyword label">编程语言</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 编程基本概念与方法、SQL 在 DolphinDB 的应用</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="functions_references-d9529e26503" class="topicref" data-id="functions_references" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action functions_references-d9529e26503-link" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/funcs_intro.html" id="functions_references-d9529e26503-link"><span class="keyword label">函数参考</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 函数分类、语法、详解及示例</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="api_protocol-d9529e86456" class="topicref" data-id="api_protocol" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action api_protocol-d9529e86456-link" class="wh-expand-btn"></span><div class="title"><a href="../../api/connapi_intro.html" id="api_protocol-d9529e86456-link"><span class="keyword label">连接器 &amp; API</span></a><div class="wh-tooltip"><p class="shortdesc">面向不同编程语言的 DolphinDB API 及连接器，相关协议和用法</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="chap6_plugin-d9529e91976" class="topicref" data-id="chap6_plugin" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action chap6_plugin-d9529e91976-link" class="wh-expand-btn"></span><div class="title"><a href="../../plugins/plg_intro.html" id="chap6_plugin-d9529e91976-link"><span class="keyword label">插件</span></a><div class="wh-tooltip"><p class="shortdesc">多个应用场景的插件使用说明和插件开发指导</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="third_party-d9529e94749" class="topicref" data-id="third_party" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action third_party-d9529e94749-link" class="wh-expand-btn"></span><div class="title"><a href="../../third_party.html" id="third_party-d9529e94749-link">第三方工具</a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="about_tutorials-d9529e94980" class="topicref" data-id="about_tutorials" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action about_tutorials-d9529e94980-link" class="wh-expand-btn"></span><div class="title"><a href="../../tutorials/about_tutorials.html" id="about_tutorials-d9529e94980-link"><span class="keyword label">教程</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 产品使用教程</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="tocId-d9529e101769" class="topicref" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action tocId-d9529e101769-link" class="wh-expand-btn"></span><div class="title"><a href="../../rn/server/3_00_1.html" id="tocId-d9529e101769-link">版本说明</a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 版本发布历史</p></div></div></div></li></ul></div>
+		                        
+                            </div>
+                        </nav>
+                    
+                    
+                    <div class="col-lg-7 col-md-9 col-sm-12" id="wh_topic_body">
+                        <button id="wh_close_publication_toc_button" class="close-toc-button d-none" aria-label="Toggle publishing table of content" aria-controls="wh_publication_toc" aria-expanded="true">
+                            <span class="close-toc-icon-container">
+                                <span class="close-toc-icon"></span>     
+                            </span>
+                        </button>
+                        <button id="wh_close_topic_toc_button" class="close-toc-button d-none" aria-label="Toggle topic table of content" aria-controls="wh_topic_toc" aria-expanded="true">
+                            <span class="close-toc-icon-container">
+                                <span class="close-toc-icon"></span>     
+                            </span>
+                        </button>
+                        
+                        <div class=" wh_topic_content body "><main role="main"><article class="- topic/topic topic" role="article" aria-labelledby="ariaid-title1">
+    <h1 class="- topic/title title topictitle1" id="ariaid-title1">数据平衡</h1>
+    <div class="- topic/body body">
+        <p class="- topic/p p">数据平衡是指在一个集群中，数据在各个节点之间存储均匀。数据平衡直接关系到系统的性能、可用性和稳定性，因此在分布式架构设计中需要充分考虑如何进行数据平衡。DolphinDB
+            的分布式架构对数据存储进行了全局优化，可以集群内的数据均匀地存储到不同地节点上，充分利用集群中的物理资源。但在某些情况下，例如集群中节点/磁盘数量发生了变化，这些变化可能导致数据在节点之间分布不均，进而使得部分节点负载沉重，而其他节点相对空闲。这可能导致集群无法充分利用新增节点的计算资源，无法充分利用新增磁盘的
+            I/O。为了解决数据不均衡导致的问题，DolphinDB提供了函数方便用户手动进行数据再平衡。</p>
+    </div>
+    <article class="- topic/topic topic nested1" aria-labelledby="ariaid-title2" id="topic_a3l_gbt_vzb">
+        <h2 class="- topic/title title topictitle2" id="ariaid-title2"><strong class="+ topic/ph hi-d/b ph b">数据再平衡场景</strong></h2>
+        <div class="- topic/body body">
+            <p class="- topic/p p">副本的位置对 I/O
+                性能、节点负载以及数据访问延迟都有着重要的影响。数据再平衡的主要目标是确保分区副本能够尽可能均衡地分布，从而更好地利用资源，提高集群性能。针对以下常见的场景，DolphinDB
+                提供了对应的数据再平衡方法：</p>
+            <ul class="- topic/ul ul" id="topic_a3l_gbt_vzb__ul_bhd_3bt_vzb" data-ofbid="topic_a3l_gbt_vzb__ul_bhd_3bt_vzb">
+                <li class="- topic/li li">
+                    <p class="- topic/p p">节点内数据再平衡：在节点内磁盘卷负载过高的情况下，通过增加新的磁盘卷来分担其他磁盘卷的负载是一种有效的性能优化手段。此时需要进行节点内数据再平衡，即将高负载磁盘卷上的分区数据向低负载的磁盘卷进行转移，从而提高节点的整体负载能力。</p>
+                </li>
+                <li class="- topic/li li">
+                    <p class="- topic/p p">节点间数据再平衡：指将磁盘负载重数据节点上的数据迁移至其他磁盘负载较低的节点上，以实现数据在节点上的均匀分布。这一优化手段有助于提高分布式计算的效率。以下两种情况需要进行节点间再平衡：</p>
+                    <ul class="- topic/ul ul" id="topic_a3l_gbt_vzb__ul_chd_3bt_vzb" data-ofbid="topic_a3l_gbt_vzb__ul_chd_3bt_vzb">
+                        <li class="- topic/li li">
+                            <p class="- topic/p p">副本的插入和删除操作涉及的分区数据均匀，导致部分数据节点磁盘负载过高，而部分节点磁盘负载过低。</p>
+                        </li>
+                        <li class="- topic/li li">
+                            <p class="- topic/p p">集群种新增了数据节点，考虑充分利用新增节点的存储和计算资源。</p>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+            <p class="- topic/p p">DolphinDB 数据再平衡算法基于以下的假设条件进行：</p>
+            <ul class="- topic/ul ul" id="topic_a3l_gbt_vzb__ul_dhd_3bt_vzb" data-ofbid="topic_a3l_gbt_vzb__ul_dhd_3bt_vzb">
+                <li class="- topic/li li">
+                    <p class="- topic/p p">所有分区数据都存储在旧磁盘上；</p>
+                </li>
+                <li class="- topic/li li">
+                    <p class="- topic/p p">所有新的磁盘都用来存储新的分区数据；</p>
+                </li>
+                <li class="- topic/li li">
+                    <p class="- topic/p p">所有分区数据的大小相同。</p>
+                </li>
+            </ul>
+        </div>
+    </article>
+    <article class="- topic/topic topic nested1" aria-labelledby="ariaid-title3" id="topic_jnr_mbt_vzb">
+        <h2 class="- topic/title title topictitle2" id="ariaid-title3">数据再平衡方法</h2>
+        <div class="- topic/body body">
+            <p class="- topic/p p">DolphinDB
+                提供了一系列函数，用于数据再平衡和检查再平衡状态。这些函数可以帮助用户有效管理和优化数据分布，并且对再平衡状态进行实时监测。下文提到的函数必须由管理员在控制节点上执行。</p>
+            <section class="- topic/section section" id="topic_jnr_mbt_vzb__系统生成再平衡计划" data-ofbid="topic_jnr_mbt_vzb__系统生成再平衡计划"><h3 class="- topic/title title sectiontitle">系统生成再平衡计划</h3>
+                
+                <ul class="- topic/ul ul" id="topic_jnr_mbt_vzb__ul_thw_4bt_vzb" data-ofbid="topic_jnr_mbt_vzb__ul_thw_4bt_vzb">
+                    <li class="- topic/li li">
+                        <p class="- topic/p p">节点内数据再平衡：调用 <a class="- topic/xref xref" href="https://docs.dolphindb.cn/zh/help/FunctionsandCommands/FunctionReferences/r/rebalanceChunksWithinDataNode.html" target="_blank" rel="external noopener">rebalanceChunksWithinDataNode</a>
+                            函数实现该功能。</p>
+                    </li>
+                    <li class="- topic/li li">
+                        <p class="- topic/p p">节点间数据再平衡：</p>
+                        <ol class="- topic/ol ol" id="topic_jnr_mbt_vzb__ol_uhw_4bt_vzb" data-ofbid="topic_jnr_mbt_vzb__ol_uhw_4bt_vzb">
+                            <li class="- topic/li li">
+                                <p class="- topic/p p">调用 <a class="- topic/xref xref" href="https://docs.dolphindb.cn/zh/help/FunctionsandCommands/FunctionReferences/r/rebalanceChunksAmongDataNodes.html" target="_blank" rel="external noopener">rebalanceChunksAmongDataNodes</a> 函数实现节点间数据再平衡。</p>
+                            </li>
+                            <li class="- topic/li li">
+                                <p class="- topic/p p">当配置分区粒度为表级分区时，同一个分区的所有表将分布在相同的节点下。当调用函数
+                                        <code class="+ topic/ph pr-d/codeph ph codeph">rebalanceChunksAmongDataNodes</code>
+                                    进行数据平衡时，若出现节点宕机或离线，可能出现同一个分区里部分表的数据转移成功，部分表的数据转移失败的情况，即同一个分区下的不同表会分布在不同的节点。此时需要调用
+                                    restoreDislocatedTablet 将同一个分区里的表转移到同一个节点下。</p>
+                            </li>
+                        </ol>
+                    </li>
+                </ul>
+                <p class="- topic/p p"><a class="- topic/xref xref" href="https://docs.dolphindb.cn/zh/help/FunctionsandCommands/FunctionReferences/r/rebalanceChunksWithinDataNode.html" target="_blank" rel="external noopener">rebalanceChunksWithinDataNode</a> 和 <a class="- topic/xref xref" href="https://docs.dolphindb.cn/zh/help/FunctionsandCommands/FunctionReferences/r/rebalanceChunksAmongDataNodes.html" target="_blank" rel="external noopener">rebalanceChunksAmongDataNodes</a> 都有参数
+                        <em class="+ topic/ph hi-d/i ph i">exec</em>，通过该参数控制在调用函数后是否执行平衡计划。当 <em class="+ topic/ph hi-d/i ph i">exec=</em>false
+                    时，调用函数后将只显示数据平衡计划，而不会自动进行数据平衡。用户可以查看该计划，确保其正确无误后，再次执行该函数，并指定
+                    exec=true，此时系统将按照平衡计划，进行数据平衡。</p>
+                <p class="- topic/p p">因为磁盘可能存储除 DolphinDB 数据库以外的数据，或者 DolphinDB
+                    数据分区大小不相等。这些差异可能会导致出现意想不到的再平衡结果。可以通过多次执行再平衡，进一步优化再平衡的效果。</p>
+                <p class="- topic/p p">为了提高再平衡衡任务的执行效率，也可以通过配置项 dfsRebalanceConcurrency 设置再平衡任务执行的并发度。</p>
+            </section>
+            <section class="- topic/section section" id="topic_jnr_mbt_vzb__自定义再平衡计划" data-ofbid="topic_jnr_mbt_vzb__自定义再平衡计划"><h3 class="- topic/title title sectiontitle">自定义再平衡计划</h3>
+                
+                <p class="- topic/p p">除系统生成的数据再平衡计划外，用户还可以根据实际需求手动输入源路径和目标路径，从而执行定制化的数据再平衡操作。</p>
+                <ul class="- topic/ul ul" id="topic_jnr_mbt_vzb__ul_vhw_4bt_vzb" data-ofbid="topic_jnr_mbt_vzb__ul_vhw_4bt_vzb">
+                    <li class="- topic/li li">
+                        <p class="- topic/p p">moveChunksAcrossVolume(srcPath, destPath, chunkIds,
+                            [isDelSrc=true])：将磁盘卷源路径下一个或多个分区文件转移至目标路径。</p>
+                    </li>
+                    <li class="- topic/li li">
+                        <p class="- topic/p p">moveReplicas(srcNode, destNode, chunkId)：将源节点上一个或多个分区副本迁移至目标节点。</p>
+                    </li>
+                </ul>
+                <p class="- topic/p p">通过以上方法执行数据平衡后，可以调用 <a class="- topic/xref xref" href="https://docs.dolphindb.cn/zh/help/FunctionsandCommands/FunctionReferences/g/getRecoveryTaskStatus.html" target="_blank" rel="external noopener">getRecoveryTaskStatus</a> 查看任务执行的状态。</p>
+            </section>
+        </div>
+    </article>
+    <article class="- topic/topic topic nested1" aria-labelledby="ariaid-title4" id="topic_bzz_qbt_vzb">
+        <h2 class="- topic/title title topictitle2" id="ariaid-title4">常见问题</h2>
+        <div class="- topic/body body">
+            <p class="- topic/p p">以下是在数据平衡过程中可能发生的常见情况：</p>
+            <ul class="- topic/ul ul" id="topic_bzz_qbt_vzb__ul_n5h_sbt_vzb" data-ofbid="topic_bzz_qbt_vzb__ul_n5h_sbt_vzb">
+                <li class="- topic/li li">
+                    <p class="- topic/p p">数据迁移和重新平衡任务可能会消耗大量资源，正在被写入、修改或删除的分区可能由于分区锁定而无法迁移。</p>
+                </li>
+                <li class="- topic/li li">
+                    <p class="- topic/p p">对于耗时的计算任务，当缓存指向旧分区路径时可能会抛出异常。</p>
+                </li>
+            </ul>
+            <p class="- topic/p p">因此，建议在没有执行写入或查询任务时执行数据再平衡操作，以避免潜在的失败。</p>
+            <p class="- topic/p p">有关数据再平衡的更多操作详情，请参考<a class="- topic/xref xref" href="../../tutorials/Data_Move_Rebalance.html">数据迁移与平衡</a> 和运维手册中的《数据迁移与平衡》。</p>
+        </div>
+    </article>
+</article></main></div>
+                        
+                        
+                        
+                        
+                        
+                        
+                    </div>
+                    
+                        <nav role="navigation" id="wh_topic_toc" aria-label="On this page" class="col-lg-2 d-none d-lg-block navbar d-print-none"> 
+                            <div id="wh_topic_toc_content">
+		                        
+	                            <div class=" wh_topic_toc "><div class="wh_topic_label">在本页上</div><ul><li class="topic-item"><a href="#topic_a3l_gbt_vzb" data-tocid="topic_a3l_gbt_vzb"><strong class="+ topic/ph hi-d/b ph b">数据再平衡场景</strong></a></li><li class="topic-item"><a href="#topic_jnr_mbt_vzb" data-tocid="topic_jnr_mbt_vzb">数据再平衡方法</a><ul><li class="section-item"><div class="section-title"><a href="#topic_jnr_mbt_vzb__%E7%B3%BB%E7%BB%9F%E7%94%9F%E6%88%90%E5%86%8D%E5%B9%B3%E8%A1%A1%E8%AE%A1%E5%88%92" data-tocid="topic_jnr_mbt_vzb__系统生成再平衡计划">系统生成再平衡计划</a></div></li><li class="section-item"><div class="section-title"><a href="#topic_jnr_mbt_vzb__%E8%87%AA%E5%AE%9A%E4%B9%89%E5%86%8D%E5%B9%B3%E8%A1%A1%E8%AE%A1%E5%88%92" data-tocid="topic_jnr_mbt_vzb__自定义再平衡计划">自定义再平衡计划</a></div></li></ul></li><li class="topic-item"><a href="#topic_bzz_qbt_vzb" data-tocid="topic_bzz_qbt_vzb">常见问题</a></li></ul></div>
+	                        	
+                        	</div>
+                        </nav>
+                    
+                </div>
+            </div>
+            
+            
+            
+        </div> 
+        <footer class="navbar navbar-default wh_footer">
+  <div class=" footer-container mx-auto ">
+<title>Copyright</title><p><b> ©2024 浙江智臾科技有限公司 浙ICP备18048711号-3</b></p>
+  </div>
+</footer>
+        
+        <div id="go2top" class="d-print-none">
+            <span class="oxy-icon oxy-icon-up"></span>
+        </div>
+        
+        <div id="modal_img_large" class="modal">
+            <span class="close oxy-icon oxy-icon-remove"></span>
+            <div id="modal_img_container"></div>
+            <div id="caption"></div>
+        </div>
+        
+        
+        
+    </body>
+</html>

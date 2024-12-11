@@ -1,0 +1,255 @@
+<!DOCTYPE html><html xmlns="http://www.w3.org/1999/xhtml" xml:lang="zh" lang="zh" data-whc_version="26.0">
+    <head><link rel="shortcut icon" href="../favicon.ico"/><link rel="icon" href="../favicon.ico"/><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><meta http-equiv="X-UA-Compatible" content="IE=edge"/><meta name="description" content="本节示例脚本中，内存表 t 和 分布式表 pt 及其数据由以下脚本生成： t = table(2023.10.01 + take(0..9,100) as date, take(['A','B','C','D'],100) as sym, 1..100 as val) db = database(&#34;dfs://olapdemo&#34;,VALUE,2023.10.01..2023.10.10) pt = ..."/><meta name="DC.rights.owner" content="(C) 版权 2024"/><meta name="copyright" content="(C) 版权 2024"/><meta name="generator" content="DITA-OT"/><meta name="DC.type" content="topic"/><meta name="DC.coverage" content=""/><meta name="DC.relation" content="../db_distr_comp/db_distr_comp.html"/><meta name="prodname" content="DolphinDB"/><meta name="brand" content="DolphinDB"/><meta name="DC.creator" content="DolphinDB"/><meta name="DC.publisher" content="DDB N/A DDB 200"/><meta name="DC.format" content="HTML5"/><meta name="DC.identifier" content="modify_table_structure"/><title>更新表结构</title><!--  Generated with Oxygen version 26.0, build number 2024012323.  --><meta name="wh-path2root" content="../"/><meta name="wh-toc-id" content="modify_table_structure-d9529e2558"/><meta name="wh-source-relpath" content="db_distr_comp/modify_table_structure.dita"/><meta name="wh-out-relpath" content="db_distr_comp/modify_table_structure.html"/>
+
+    <link rel="stylesheet" type="text/css" href="../oxygen-webhelp/app/commons.css?buildId=2024012323"/>
+    <link rel="stylesheet" type="text/css" href="../oxygen-webhelp/app/topic.css?buildId=2024012323"/>
+
+    <script src="../oxygen-webhelp/app/options/properties.js?buildId=20240704100525"></script>
+    <script src="../oxygen-webhelp/app/localization/strings.js?buildId=2024012323"></script>
+    <script src="../oxygen-webhelp/app/search/index/keywords.js?buildId=20240704100525"></script>
+    <script defer="defer" src="../oxygen-webhelp/app/commons.js?buildId=2024012323"></script>
+    <script defer="defer" src="../oxygen-webhelp/app/topic.js?buildId=2024012323"></script>
+<link rel="stylesheet" type="text/css" href="../oxygen-webhelp/template/styles.css?buildId=2024012323"/><script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script><script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script></head>
+
+    <body id="modify_table_structure" class="wh_topic_page frmBody">
+        <a href="#wh_topic_body" class="sr-only sr-only-focusable">
+            跳转到主要内容
+        </a>
+        
+        
+        
+        
+        <header class="navbar navbar-default wh_header">
+    <div class="container-fluid">
+        <div xmlns:whc="http://www.oxygenxml.com/webhelp/components" class="wh_header_flex_container navbar-nav navbar-expand-md navbar-dark">
+            <div class="wh_logo_and_publication_title_container">
+                <div class="wh_logo_and_publication_title">
+                    
+                    <a href="https://www.dolphindb.cn" class=" wh_logo d-none d-sm-block "><img src="../logo.png" alt="  DolphinDB 文档中心  "/></a>
+                    <div class=" wh_publication_title "><a href="../index.html"><span class="booktitle">  <span class="ph mainbooktitle">DolphinDB 文档中心</span>  </span></a></div>
+                    
+                </div>
+                
+                
+            </div>
+
+            <div class="wh_top_menu_and_indexterms_link collapse navbar-collapse" id="wh_top_menu_and_indexterms_link">
+                
+                
+                
+                
+            </div>
+        <div class=" wh_search_input navbar-form wh_topic_page_search search " role="form">
+            
+            
+            
+            <form id="searchForm" method="get" role="search" action="../search.html"><div><input type="search" placeholder="搜索 " class="wh_search_textfield" id="textToSearch" name="searchQuery" aria-label="搜索查询" required="required"/><button type="submit" class="wh_search_button" aria-label="搜索"><span class="search_input_text">搜索</span></button></div></form>
+            
+            <script src="/vendors/react/umd/react.production.min.js" defer="defer"></script>
+<script src="/vendors/react-dom/umd/react-dom.production.min.js" defer="defer"></script>
+<script src="/vendors/dayjs/dayjs.min.js" defer="defer"></script>
+<script src="/vendors/antd/dist/antd.min.js" defer="defer"></script>
+<script src="/vendors/@ant-design/icons/dist/index.umd.min.js" defer="defer"></script>
+<script src="/zh/index.js" type="module"></script>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js" defer="defer"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML" defer="defer"><!--
+
+
+--></script>
+
+            
+        </div></div>
+    </div>
+</header>
+        
+        
+         
+        
+        
+        
+        <div class="container-fluid" id="wh_topic_container">
+            <div class="row">
+
+                <nav class="wh_tools d-print-none navbar-expand-md" aria-label="Tools">
+                    
+                    <div data-tooltip-position="bottom" class=" wh_breadcrumb "><ol class="d-print-none"><li><span class="home"><a href="../index.html"><span>主页</span></a></span></li><li><div class="topicref" data-id="new_chap_database_manage_new_chap_dbmanage_landing_page"><div class="title"><a href="../db_distr_comp/cfg/db_intro.html"><span class="keyword label">数据库</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 数据库的基本概念</p></div></div></div></li><li><div class="topicref" data-id="chap3_sect_database_distributed_computing"><div class="title"><a href="../db_distr_comp/db_distr_comp.html"><span class="keyword label">数据库操作</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 数据库的基本操作，例如创建数据库、表，增加列、分区，数据查询，表连接等。</p></div></div></div></li><li class="active"><div class="topicref" data-id="modify_table_structure"><div class="title"><a href="../db_distr_comp/modify_table_structure.html"><span class="keyword label">更新表结构</span></a></div></div></li></ol></div>
+                    
+                    
+                    
+                    <div class="wh_right_tools">
+                        <button class="wh_hide_highlight" aria-label="切换搜索突出显示" title="切换搜索突出显示"></button>
+                        <button class="webhelp_expand_collapse_sections" data-next-state="collapsed" aria-label="折叠截面" title="折叠截面"></button>
+                        
+                        
+                        
+                        
+                        <div class=" wh_print_link print d-none d-md-inline-block "><button onClick="window.print()" title="打印此页" aria-label="打印此页"></button></div>
+                        
+                        <button type="button" id="wh_toc_button" class="custom-toggler navbar-toggler collapsed wh_toggle_button navbar-light" aria-expanded="false" aria-label="Toggle publishing table of content" aria-controls="wh_publication_toc">
+                            <span class="navbar-toggler-icon"></span>
+                        </button>
+                    </div>
+                    
+                </nav>
+            </div>
+            
+            
+            
+            
+            <div class="wh_content_area">
+                <div class="row">
+                    
+                        <nav id="wh_publication_toc" class="col-lg-3 col-md-3 col-sm-12 d-md-block d-none d-print-none" aria-label="Table of Contents Container">
+                            <div id="wh_publication_toc_content">
+		                        
+                            	<div class=" wh_publication_toc " data-tooltip-position="right"><span class="expand-button-action-labels"><span id="button-expand-action" role="button" aria-label="Expand"></span><span id="button-collapse-action" role="button" aria-label="Collapse"></span><span id="button-pending-action" role="button" aria-label="Pending"></span></span><ul role="tree" aria-label="Table of Contents"><li role="treeitem"><div data-tocid="new_chap_about_sect_ddb_docs_intro-d9529e87" class="topicref" data-id="new_chap_about_sect_ddb_docs_intro" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../about/ddb_docs_intro.html" id="new_chap_about_sect_ddb_docs_intro-d9529e87-link">文档使用说明</a><div class="wh-tooltip"><p class="shortdesc">如何获取 DolphinDB 帮助信息</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="chap1_getstarted-d9529e140" class="topicref" data-id="chap1_getstarted" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action chap1_getstarted-d9529e140-link" class="wh-expand-btn"></span><div class="title"><a href="../getstarted/chap1_getstarted.html" id="chap1_getstarted-d9529e140-link"><span class="keyword label">快速上手</span></a><div class="wh-tooltip"><p class="shortdesc">如何快速部署 DolphinDB、建库建表、写入和查询数据</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="sectionddb_deployment-d9529e335" class="topicref" data-id="sectionddb_deployment" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action sectionddb_deployment-d9529e335-link" class="wh-expand-btn"></span><div class="title"><a href="../deploy/deploy_intro.html" id="sectionddb_deployment-d9529e335-link"><span class="keyword label">部署</span></a><div class="wh-tooltip"><p class="shortdesc">如何在不同的场景中部署 DolphinDB</p></div></div></div></li><li role="treeitem" aria-expanded="true"><div data-tocid="new_chap_database_manage_new_chap_dbmanage_landing_page-d9529e2313" class="topicref" data-id="new_chap_database_manage_new_chap_dbmanage_landing_page" data-state="expanded"><span role="button" tabindex="0" aria-labelledby="button-collapse-action new_chap_database_manage_new_chap_dbmanage_landing_page-d9529e2313-link" class="wh-expand-btn"></span><div class="title"><a href="../db_distr_comp/cfg/db_intro.html" id="new_chap_database_manage_new_chap_dbmanage_landing_page-d9529e2313-link"><span class="keyword label">数据库</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 数据库的基本概念</p></div></div></div><ul role="group" class="navbar-nav nav-list"><li role="treeitem" aria-expanded="true"><div data-tocid="chap3_sect_database_distributed_computing-d9529e2366" class="topicref" data-id="chap3_sect_database_distributed_computing" data-state="expanded"><span role="button" tabindex="0" aria-labelledby="button-collapse-action chap3_sect_database_distributed_computing-d9529e2366-link" class="wh-expand-btn"></span><div class="title"><a href="../db_distr_comp/db_distr_comp.html" id="chap3_sect_database_distributed_computing-d9529e2366-link"><span class="keyword label">数据库操作</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 数据库的基本操作，例如创建数据库、表，增加列、分区，数据查询，表连接等。</p></div></div></div><ul role="group" class="navbar-nav nav-list"><li role="treeitem"><div data-tocid="创建数据库-d9529e2417" class="topicref" data-id="创建数据库" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../db_distr_comp/db_oper/create_db_tb.html" id="创建数据库-d9529e2417-link"><span class="keyword label">建库建表</span></a></div></div></li><li role="treeitem"><div data-tocid="插入数据-d9529e2464" class="topicref" data-id="插入数据" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../db_distr_comp/db_oper/insert_data.html" id="插入数据-d9529e2464-link"><span class="keyword label">插入数据</span></a></div></div></li><li role="treeitem"><div data-tocid="mod_data-d9529e2511" class="topicref" data-id="mod_data" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../db_distr_comp/mod_data.html" id="mod_data-d9529e2511-link"><span class="keyword label">更新数据</span></a></div></div></li><li role="treeitem" class="active"><div data-tocid="modify_table_structure-d9529e2558" class="topicref" data-id="modify_table_structure" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../db_distr_comp/modify_table_structure.html" id="modify_table_structure-d9529e2558-link"><span class="keyword label">更新表结构</span></a></div></div></li><li role="treeitem"><div data-tocid="增加分区-d9529e2605" class="topicref" data-id="增加分区" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../db_distr_comp/db_oper/add_partitions.html" id="增加分区-d9529e2605-link"><span class="keyword label">增加分区</span></a></div></div></li><li role="treeitem"><div data-tocid="查询数据-d9529e2652" class="topicref" data-id="查询数据" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../db_distr_comp/db_oper/queries.html" id="查询数据-d9529e2652-link"><span class="keyword label">查询数据</span></a></div></div></li><li role="treeitem"><div data-tocid="删除数据库和表-d9529e2699" class="topicref" data-id="删除数据库和表" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../db_distr_comp/db_oper/drop_db_tb.html" id="删除数据库和表-d9529e2699-link"><span class="keyword label">删除数据</span></a></div></div></li><li role="treeitem"><div data-tocid="drop_database_table-d9529e2746" class="topicref" data-id="drop_database_table" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../db_distr_comp/drop_database_table.html" id="drop_database_table-d9529e2746-link"><span class="keyword label">删除库表</span></a></div></div></li><li role="treeitem"><div data-tocid="删除分区-d9529e2793" class="topicref" data-id="删除分区" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../db_distr_comp/db_oper/drop_partitions.html" id="删除分区-d9529e2793-link"><span class="keyword label">删除分区</span></a></div></div></li><li role="treeitem"><div data-tocid="函数视图-d9529e2840" class="topicref" data-id="函数视图" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../db_distr_comp/db_oper/FunctionView.html" id="函数视图-d9529e2840-link"><span class="keyword label">函数视图</span></a></div></div></li><li role="treeitem"><div data-tocid="用户权限管理-d9529e2888" class="topicref" data-id="用户权限管理" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../tutorials/ACL_and_Security.html" id="用户权限管理-d9529e2888-link">用户权限管理</a></div></div></li></ul></li><li role="treeitem" aria-expanded="false"><div data-tocid="topic_pg3_22w_ryb-d9529e2934" class="topicref" data-id="topic_pg3_22w_ryb" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action topic_pg3_22w_ryb-d9529e2934-link" class="wh-expand-btn"></span><div class="title"><a href="../db_distr_comp/db/db_architecture.html" id="topic_pg3_22w_ryb-d9529e2934-link"><span class="keyword label">分布式架构</span></a></div></div></li><li role="treeitem"><div data-tocid="tsdb-d9529e3349" class="topicref" data-id="tsdb" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../db_distr_comp/db/tsdb.html" id="tsdb-d9529e3349-link"><span class="keyword label">TSDB 存储引擎</span></a></div></div></li><li role="treeitem"><div data-tocid="olap-d9529e3396" class="topicref" data-id="olap" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../db_distr_comp/db/olap.html" id="olap-d9529e3396-link"><span class="keyword label">OLAP 存储引擎</span></a></div></div></li><li role="treeitem"><div data-tocid="catalog-d9529e3443" class="topicref" data-id="catalog" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../db_distr_comp/db/catalog.html" id="catalog-d9529e3443-link">数据目录（catalog）</a></div></div></li></ul></li><li role="treeitem" aria-expanded="false"><div data-tocid="chap7_tutorials_streaming-d9529e3490" class="topicref" data-id="chap7_tutorials_streaming" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action chap7_tutorials_streaming-d9529e3490-link" class="wh-expand-btn"></span><div class="title"><a href="../stream/str_intro.html" id="chap7_tutorials_streaming-d9529e3490-link"><span class="keyword label">流数据</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 流数据引擎及流数据计算的基本概念</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="tocId-d9529e7385" class="topicref" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action tocId-d9529e7385-link" class="wh-expand-btn"></span><div class="title"><a href="../db_distr_comp/db_oper/import_data.html" id="tocId-d9529e7385-link">数据迁移</a><div class="wh-tooltip"><p class="shortdesc">如何从不同数据源向 DolphinDB 迁移数据</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="chap7_tutorials_system_management-d9529e7812" class="topicref" data-id="chap7_tutorials_system_management" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action chap7_tutorials_system_management-d9529e7812-link" class="wh-expand-btn"></span><div class="title"><a href="../sys_man/om_intro.html" id="chap7_tutorials_system_management-d9529e7812-link"><span class="keyword label">系统运维</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 的系统运维功能及方法</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="about_language_resources-d9529e16490" class="topicref" data-id="about_language_resources" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action about_language_resources-d9529e16490-link" class="wh-expand-btn"></span><div class="title"><a href="../progr/progr_intro.html" id="about_language_resources-d9529e16490-link"><span class="keyword label">编程语言</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 编程基本概念与方法、SQL 在 DolphinDB 的应用</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="functions_references-d9529e26503" class="topicref" data-id="functions_references" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action functions_references-d9529e26503-link" class="wh-expand-btn"></span><div class="title"><a href="../funcs/funcs_intro.html" id="functions_references-d9529e26503-link"><span class="keyword label">函数参考</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 函数分类、语法、详解及示例</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="api_protocol-d9529e86456" class="topicref" data-id="api_protocol" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action api_protocol-d9529e86456-link" class="wh-expand-btn"></span><div class="title"><a href="../api/connapi_intro.html" id="api_protocol-d9529e86456-link"><span class="keyword label">连接器 &amp; API</span></a><div class="wh-tooltip"><p class="shortdesc">面向不同编程语言的 DolphinDB API 及连接器，相关协议和用法</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="chap6_plugin-d9529e91976" class="topicref" data-id="chap6_plugin" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action chap6_plugin-d9529e91976-link" class="wh-expand-btn"></span><div class="title"><a href="../plugins/plg_intro.html" id="chap6_plugin-d9529e91976-link"><span class="keyword label">插件</span></a><div class="wh-tooltip"><p class="shortdesc">多个应用场景的插件使用说明和插件开发指导</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="third_party-d9529e94749" class="topicref" data-id="third_party" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action third_party-d9529e94749-link" class="wh-expand-btn"></span><div class="title"><a href="../third_party.html" id="third_party-d9529e94749-link">第三方工具</a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="about_tutorials-d9529e94980" class="topicref" data-id="about_tutorials" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action about_tutorials-d9529e94980-link" class="wh-expand-btn"></span><div class="title"><a href="../tutorials/about_tutorials.html" id="about_tutorials-d9529e94980-link"><span class="keyword label">教程</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 产品使用教程</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="tocId-d9529e101769" class="topicref" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action tocId-d9529e101769-link" class="wh-expand-btn"></span><div class="title"><a href="../rn/server/3_00_1.html" id="tocId-d9529e101769-link">版本说明</a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 版本发布历史</p></div></div></div></li></ul></div>
+		                        
+                            </div>
+                        </nav>
+                    
+                    
+                    <div class="col-lg-7 col-md-9 col-sm-12" id="wh_topic_body">
+                        <button id="wh_close_publication_toc_button" class="close-toc-button d-none" aria-label="Toggle publishing table of content" aria-controls="wh_publication_toc" aria-expanded="true">
+                            <span class="close-toc-icon-container">
+                                <span class="close-toc-icon"></span>     
+                            </span>
+                        </button>
+                        <button id="wh_close_topic_toc_button" class="close-toc-button d-none" aria-label="Toggle topic table of content" aria-controls="wh_topic_toc" aria-expanded="true">
+                            <span class="close-toc-icon-container">
+                                <span class="close-toc-icon"></span>     
+                            </span>
+                        </button>
+                        
+                        <div class=" wh_topic_content body "><main role="main"><article class="- topic/topic topic" role="article" aria-labelledby="ariaid-title1">
+    <h1 class="- topic/title title topictitle1" id="ariaid-title1"><span class="- topic/keyword keyword label">更新表结构</span></h1>
+    <div class="- topic/body body">
+        <p class="- topic/p p">本节示例脚本中，内存表 t 和 分布式表 pt 及其数据由以下脚本生成：</p>
+        <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="modify_table_structure__codeblock_vl1_k2x_wzb" data-ofbid="modify_table_structure__codeblock_vl1_k2x_wzb"><code>t = table(2023.10.01 + take(0..9,100) as date, take(['A','B','C','D'],100) as sym, 1..100 as val)
+
+db = database("dfs://olapdemo",VALUE,2023.10.01..2023.10.10)
+pt = db.createPartitionedTable(t,`pt,`date)
+pt.append!(t)</code></pre>
+    </div>
+    <article class="- topic/topic topic nested1" aria-labelledby="ariaid-title2" id="修改列顺序">
+        <h2 class="- topic/title title topictitle2" id="ariaid-title2">修改列顺序</h2>
+        <div class="- topic/body body">
+            <p class="- topic/p p">通过 <a class="- topic/xref xref" href="../funcs/r/reorderColumns_.html">reorderColumns</a>
+                函数可以将内存表的列重新排序，此方法只能用于非分区、非共享的内存表。</p>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="修改列顺序__codeblock_cm1_k2x_wzb" data-ofbid="修改列顺序__codeblock_cm1_k2x_wzb"><code>reorderColumns!(t,`date`val`sym)</code></pre>
+            <p class="- topic/p p">如果指定新的列顺序时，只指定了部分列，则这些列将按照指定顺序作为表的前几列，其余列按照原有先后顺序依次排列在后。</p>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="修改列顺序__codeblock_dm1_k2x_wzb" data-ofbid="修改列顺序__codeblock_dm1_k2x_wzb"><code>reorderColumns!(t,`date`val)</code></pre>
+        </div>
+    </article>
+    <article class="- topic/topic topic nested1" aria-labelledby="ariaid-title3" id="修改列名">
+        <h2 class="- topic/title title topictitle2" id="ariaid-title3">修改列名</h2>
+        <div class="- topic/body body">
+            <p class="- topic/p p">通过 <a class="- topic/xref xref" href="../funcs/r/rename_.html">rename!</a> 函数修改列名，可用于内存表和使用 OLAP
+                存储引擎的分布式表：</p>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="修改列名__codeblock_fm1_k2x_wzb" data-ofbid="修改列名__codeblock_fm1_k2x_wzb"><code>rename!(t,`sym,`sym_new)</code></pre>
+        </div>
+    </article>
+    <article class="- topic/topic topic nested1" aria-labelledby="ariaid-title4" id="修改列类型">
+        <h2 class="- topic/title title topictitle2" id="ariaid-title4">修改列类型</h2>
+        <div class="- topic/body body">
+            <p class="- topic/p p">通过 <a class="- topic/xref xref" href="../funcs/r/replaceColumn_.html">replaceColumn!</a>
+                函数替换整个列，从而实现修改列的数据类型，此方法适用于内存表和使用 OLAP 存储引擎的分布式表：</p>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="修改列类型__codeblock_hm1_k2x_wzb" data-ofbid="修改列类型__codeblock_hm1_k2x_wzb"><code>replaceColumn!(t,"val",double(t.val))</code></pre>
+            <p class="- topic/p p">如果分布式表的数据量很大，整列替换会对内存带来很大压力，甚至超出内存容量，此时可以采用以下方法：</p>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="修改列类型__codeblock_im1_k2x_wzb" data-ofbid="修改列类型__codeblock_im1_k2x_wzb"><code>newType = array(DOUBLE,0,1) 
+replaceColumn!(pt,"val",newType)</code></pre>
+        </div>
+        <article class="- topic/topic topic nested2" aria-labelledby="ariaid-title5" id="增加列">
+            <h3 class="- topic/title title topictitle3" id="ariaid-title5">增加列</h3>
+            <div class="- topic/body body">
+                <p class="- topic/p p">通过 <a class="- topic/xref xref" href="../progr/sql/alter.html">ALTER</a> 语句为内存表或分布式表增加列：</p>
+                <pre class="+ topic/pre pr-d/codeblock pre codeblock SQL" id="增加列__codeblock_jm1_k2x_wzb" data-ofbid="增加列__codeblock_jm1_k2x_wzb"><code>ALTER TABLE t ADD COLUMN new INT 
+
+ALTER TABLE pt ADD COLUMN new INT </code></pre>
+                <p class="- topic/p p">通过 <a class="- topic/xref xref" href="../funcs/a/addColumn.html">addColumn</a> 函数为内存表或分布式表增加列：</p>
+                <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="增加列__codeblock_km1_k2x_wzb" data-ofbid="增加列__codeblock_km1_k2x_wzb"><code>addColumn(t,`new_2,DOUBLE)
+
+addColumn(pt,`new_2,DOUBLE)</code></pre>
+                <p class="- topic/p p">通过 <a class="- topic/xref xref" href="../funcs/u/update_.html">update!</a> 函数为内存表增加列，指定一个新的列名：</p>
+                <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="增加列__codeblock_lm1_k2x_wzb" data-ofbid="增加列__codeblock_lm1_k2x_wzb"><code>update!(t,"new_3",1..100)</code></pre>
+                <p class="- topic/p p">通过赋值方法为内存表增加列（此方法不适用于分布式表）：</p>
+                <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="增加列__codeblock_mm1_k2x_wzb" data-ofbid="增加列__codeblock_mm1_k2x_wzb"><code>t[`new_4] = string(NULL)</code></pre>
+                <div class="- topic/note note note note_note" id="增加列__note_fml_4fx_wzb" data-ofbid="增加列__note_fml_4fx_wzb"><span class="note__title">注：</span> 
+                    <ul class="- topic/ul ul" id="增加列__ul_nm1_k2x_wzb" data-ofbid="增加列__ul_nm1_k2x_wzb">
+                        <li class="- topic/li li">增加列后，在插入新结构数据之前，仍然可以插入原来结构的数据。</li>
+                        <li class="- topic/li li">一旦插入了新结构的数据，就不能插入原来结构的数据。</li>
+                    </ul>
+                </div>
+            </div>
+        </article>
+        <article class="- topic/topic topic nested2" aria-labelledby="ariaid-title6" id="删除列">
+            <h3 class="- topic/title title topictitle3" id="ariaid-title6">删除列</h3>
+            <div class="- topic/body body">
+                <p class="- topic/p p">通过 <a class="- topic/xref xref" href="../funcs/d/dropColumns_.html">dropColumns!</a> 函数删除内存表或使用 OLAP
+                    存储引擎的分布式表的列 val：</p>
+                <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="删除列__codeblock_om1_k2x_wzb" data-ofbid="删除列__codeblock_om1_k2x_wzb"><code>dropColumns!(t,`val)
+dropColumns!(pt,`val)</code></pre>
+            </div>
+        </article>
+    </article>
+    <article class="- topic/topic topic nested1" aria-labelledby="ariaid-title7" id="修改表名">
+        <h2 class="- topic/title title topictitle2" id="ariaid-title7">修改表名</h2>
+        <div class="- topic/body body">
+            <p class="- topic/p p">对于分布式表，修改表名可以通过 <a class="- topic/xref xref" href="../funcs/r/renameTable.html">renameTable</a>
+                函数实现，修改后请执行 <a class="- topic/xref xref" href="../funcs/l/loadTable.html">loadTable</a> 重新加载表的元数据对象：</p>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="修改表名__codeblock_pm1_k2x_wzb" data-ofbid="修改表名__codeblock_pm1_k2x_wzb"><code>renameTable(db,"pt","pt_new") 
+pt = loadTable(db,"pt_new")</code></pre>
+            <div class="- topic/note note note note_note" id="修改表名__note_ajy_sfx_wzb" data-ofbid="修改表名__note_ajy_sfx_wzb"><span class="note__title">注：</span> 
+                <ul class="- topic/ul ul" id="修改表名__ul_qm1_k2x_wzb" data-ofbid="修改表名__ul_qm1_k2x_wzb">
+                    <li class="- topic/li li">使用函数 <a class="- topic/xref xref" href="../funcs/r/rename_.html">rename!</a>、<a class="- topic/xref xref" href="../funcs/d/dropColumns_.html">dropColumns!</a> 和 <a class="- topic/xref xref" href="../funcs/r/replaceColumn_.html">replaceColumn!</a>
+                        修改表名时，可能会遇到执行缓慢甚至超时报错的情况。这是由于在执行上述几个操作时，需要先将 cache engine 刷盘，并回收 redo
+                        log，再进行对应修改。所以在执行前，可以先执行 <a class="- topic/xref xref" href="../funcs/f/flushOLAPCache.html">flushOLAPCache</a> 或 <a class="- topic/xref xref" href="../funcs/f/flushTSDBCache.html">flushTSDBCache</a> 函数手动刷盘，减少等待时间。</li>
+                    <li class="- topic/li li">本节所提的修改方法，仅有 <a class="- topic/xref xref" href="../progr/sql/alter.html">ALTER</a> 语句和 <a class="- topic/xref xref" href="../funcs/a/addColumn.html">addColumn</a> 可应用于流数据表。</li>
+                </ul>
+            </div>
+        </div>
+    </article>
+</article></main></div>
+                        
+                        
+                        
+                        
+                        
+                        
+                    </div>
+                    
+                        <nav role="navigation" id="wh_topic_toc" aria-label="On this page" class="col-lg-2 d-none d-lg-block navbar d-print-none"> 
+                            <div id="wh_topic_toc_content">
+		                        
+	                            <div class=" wh_topic_toc "><div class="wh_topic_label">在本页上</div><ul><li class="topic-item"><a href="#%E4%BF%AE%E6%94%B9%E5%88%97%E9%A1%BA%E5%BA%8F" data-tocid="修改列顺序">修改列顺序</a></li><li class="topic-item"><a href="#%E4%BF%AE%E6%94%B9%E5%88%97%E5%90%8D" data-tocid="修改列名">修改列名</a></li><li class="topic-item"><a href="#%E4%BF%AE%E6%94%B9%E5%88%97%E7%B1%BB%E5%9E%8B" data-tocid="修改列类型">修改列类型</a><ul><li class="topic-item"><a href="#%E5%A2%9E%E5%8A%A0%E5%88%97" data-tocid="增加列">增加列</a></li><li class="topic-item"><a href="#%E5%88%A0%E9%99%A4%E5%88%97" data-tocid="删除列">删除列</a></li></ul></li><li class="topic-item"><a href="#%E4%BF%AE%E6%94%B9%E8%A1%A8%E5%90%8D" data-tocid="修改表名">修改表名</a></li></ul></div>
+	                        	
+                        	</div>
+                        </nav>
+                    
+                </div>
+            </div>
+            
+            
+            
+        </div> 
+        <footer class="navbar navbar-default wh_footer">
+  <div class=" footer-container mx-auto ">
+<title>Copyright</title><p><b> ©2024 浙江智臾科技有限公司 浙ICP备18048711号-3</b></p>
+  </div>
+</footer>
+        
+        <div id="go2top" class="d-print-none">
+            <span class="oxy-icon oxy-icon-up"></span>
+        </div>
+        
+        <div id="modal_img_large" class="modal">
+            <span class="close oxy-icon oxy-icon-remove"></span>
+            <div id="modal_img_container"></div>
+            <div id="caption"></div>
+        </div>
+        
+        
+        
+    </body>
+</html>

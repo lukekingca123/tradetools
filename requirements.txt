@@ -1,0 +1,33 @@
+numpy==1.24.3
+pandas==2.0.3
+dolphindb==1.30.21.1
+py_vollib==1.0.1  # 用于期权定价和Greeks计算
+futu-api==7.1.3308  # FUTU API
+vnpy==3.6.0
+vnpy_rest==1.0.4
+polygon-api-client==1.12.3  # Polygon.io API
+pymongo==4.5.0  # MongoDB支持
+motor==3.3.1    # MongoDB异步支持
+financetoolkit==1.3.0  # Financial Model Prep API封装
+python-dotenv==1.0.0   # 环境变量管理
+dash==2.11.1      # 用于Web界面展示
+dash-bootstrap-components==1.4.1
+plotly==5.15.0    # 用于图表展示
+QuantLib==1.31    # 量化金融库
+financialmodelingprep>=0.1.0
+
+# QLib Option Strategy Dependencies
+qlib>=0.8.0
+yfinance>=0.2.0
+py_vollib>=1.0.1
+pandas>=1.3.0
+numpy>=1.21.0
+scikit-learn>=0.24.0
+lightgbm>=3.3.5
+scikit-learn>=1.0.2
+yfinance>=0.2.18
+boto3>=1.34.0  # AWS S3支持
+
+# Twitter Tracker Dependencies
+tweepy>=4.14.0
+click>=8.1.0

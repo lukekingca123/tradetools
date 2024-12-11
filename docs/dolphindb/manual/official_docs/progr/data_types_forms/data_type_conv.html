@@ -1,0 +1,804 @@
+<!DOCTYPE html><html xmlns="http://www.w3.org/1999/xhtml" xml:lang="zh" lang="zh" data-whc_version="26.0">
+    <head><link rel="shortcut icon" href="../../favicon.ico"/><link rel="icon" href="../../favicon.ico"/><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><meta http-equiv="X-UA-Compatible" content="IE=edge"/><meta name="description" content="数据类型转换可以通过数据类型转换函数或函数 cast($) 来实现。 DolphinDB支持的数据类型转换函数包括 string , bool , char , short , int , long , double , date , month , time , second , minute , datetime , timestamp , symbol , nanotime , ..."/><meta name="DC.rights.owner" content="(C) 版权 2024"/><meta name="copyright" content="(C) 版权 2024"/><meta name="generator" content="DITA-OT"/><meta name="DC.type" content="topic"/><meta name="DC.coverage" content=""/><meta name="DC.subject" content="数据类型转换,转换数据类型"/><meta name="keywords" content="数据类型转换, 转换数据类型"/><meta name="indexterms" content="数据类型转换, 转换数据类型"/><meta name="DC.relation" content="../../progr/data_types.html"/><meta name="prodname" content="DolphinDB"/><meta name="brand" content="DolphinDB"/><meta name="DC.creator" content="DolphinDB"/><meta name="DC.publisher" content="DDB N/A DDB 200"/><meta name="DC.format" content="HTML5"/><meta name="DC.identifier" content="数据类型转换"/><title>数据类型转换</title><!--  Generated with Oxygen version 26.0, build number 2024012323.  --><meta name="wh-path2root" content="../../"/><meta name="wh-toc-id" content="数据类型转换-d9529e16710"/><meta name="wh-source-relpath" content="progr/data_types_forms/data_type_conv.dita"/><meta name="wh-out-relpath" content="progr/data_types_forms/data_type_conv.html"/>
+
+    <link rel="stylesheet" type="text/css" href="../../oxygen-webhelp/app/commons.css?buildId=2024012323"/>
+    <link rel="stylesheet" type="text/css" href="../../oxygen-webhelp/app/topic.css?buildId=2024012323"/>
+
+    <script src="../../oxygen-webhelp/app/options/properties.js?buildId=20240704100525"></script>
+    <script src="../../oxygen-webhelp/app/localization/strings.js?buildId=2024012323"></script>
+    <script src="../../oxygen-webhelp/app/search/index/keywords.js?buildId=20240704100525"></script>
+    <script defer="defer" src="../../oxygen-webhelp/app/commons.js?buildId=2024012323"></script>
+    <script defer="defer" src="../../oxygen-webhelp/app/topic.js?buildId=2024012323"></script>
+<link rel="stylesheet" type="text/css" href="../../oxygen-webhelp/template/styles.css?buildId=2024012323"/><script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script><script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script></head>
+
+    <body id="数据类型转换" class="wh_topic_page frmBody">
+        <a href="#wh_topic_body" class="sr-only sr-only-focusable">
+            跳转到主要内容
+        </a>
+        
+        
+        
+        
+        <header class="navbar navbar-default wh_header">
+    <div class="container-fluid">
+        <div xmlns:whc="http://www.oxygenxml.com/webhelp/components" class="wh_header_flex_container navbar-nav navbar-expand-md navbar-dark">
+            <div class="wh_logo_and_publication_title_container">
+                <div class="wh_logo_and_publication_title">
+                    
+                    <a href="https://www.dolphindb.cn" class=" wh_logo d-none d-sm-block "><img src="../../logo.png" alt="  DolphinDB 文档中心  "/></a>
+                    <div class=" wh_publication_title "><a href="../../index.html"><span class="booktitle">  <span class="ph mainbooktitle">DolphinDB 文档中心</span>  </span></a></div>
+                    
+                </div>
+                
+                
+            </div>
+
+            <div class="wh_top_menu_and_indexterms_link collapse navbar-collapse" id="wh_top_menu_and_indexterms_link">
+                
+                
+                
+                
+            </div>
+        <div class=" wh_search_input navbar-form wh_topic_page_search search " role="form">
+            
+            
+            
+            <form id="searchForm" method="get" role="search" action="../../search.html"><div><input type="search" placeholder="搜索 " class="wh_search_textfield" id="textToSearch" name="searchQuery" aria-label="搜索查询" required="required"/><button type="submit" class="wh_search_button" aria-label="搜索"><span class="search_input_text">搜索</span></button></div></form>
+            
+            <script src="/vendors/react/umd/react.production.min.js" defer="defer"></script>
+<script src="/vendors/react-dom/umd/react-dom.production.min.js" defer="defer"></script>
+<script src="/vendors/dayjs/dayjs.min.js" defer="defer"></script>
+<script src="/vendors/antd/dist/antd.min.js" defer="defer"></script>
+<script src="/vendors/@ant-design/icons/dist/index.umd.min.js" defer="defer"></script>
+<script src="/zh/index.js" type="module"></script>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js" defer="defer"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML" defer="defer"><!--
+
+
+--></script>
+
+            
+        </div></div>
+    </div>
+</header>
+        
+        
+         
+        
+        
+        
+        <div class="container-fluid" id="wh_topic_container">
+            <div class="row">
+
+                <nav class="wh_tools d-print-none navbar-expand-md" aria-label="Tools">
+                    
+                    <div data-tooltip-position="bottom" class=" wh_breadcrumb "><ol class="d-print-none"><li><span class="home"><a href="../../index.html"><span>主页</span></a></span></li><li><div class="topicref" data-id="about_language_resources"><div class="title"><a href="../../progr/progr_intro.html"><span class="keyword label">编程语言</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 编程基本概念与方法、SQL 在 DolphinDB 的应用</p></div></div></div></li><li><div class="topicref" data-id="chap4_db_programming"><div class="title"><a href="../../progr/lang_intro.html"><span class="keyword label">DolphinDB 脚本语言</span></a><div class="wh-tooltip"><p class="shortdesc"> 脚本编程相关概念参考，包括：数据类型与形式、对象、运算符、编程语句、数据操作、函数化编程、文件操作和 SQL 语句。 </p></div></div></div></li><li><div class="topicref" data-id="chap4_sect_datatypes_forms"><div class="title"><a href="../../progr/data_types_forms_intro.html"><span class="keyword">数据类型与形式</span></a></div></div></li><li><div class="topicref" data-id="chap4_sect_data_type_description"><div class="title"><a href="../../progr/data_types.html"><span class="keyword label">数据类型</span></a></div></div></li><li class="active"><div class="topicref" data-id="数据类型转换"><div class="title"><a href="../../progr/data_types_forms/data_type_conv.html"><span class="keyword">数据类型转换</span></a></div></div></li></ol></div>
+                    
+                    
+                    
+                    <div class="wh_right_tools">
+                        <button class="wh_hide_highlight" aria-label="切换搜索突出显示" title="切换搜索突出显示"></button>
+                        <button class="webhelp_expand_collapse_sections" data-next-state="collapsed" aria-label="折叠截面" title="折叠截面"></button>
+                        
+                        
+                        
+                        
+                        <div class=" wh_print_link print d-none d-md-inline-block "><button onClick="window.print()" title="打印此页" aria-label="打印此页"></button></div>
+                        
+                        <button type="button" id="wh_toc_button" class="custom-toggler navbar-toggler collapsed wh_toggle_button navbar-light" aria-expanded="false" aria-label="Toggle publishing table of content" aria-controls="wh_publication_toc">
+                            <span class="navbar-toggler-icon"></span>
+                        </button>
+                    </div>
+                    
+                </nav>
+            </div>
+            
+            
+            
+            
+            <div class="wh_content_area">
+                <div class="row">
+                    
+                        <nav id="wh_publication_toc" class="col-lg-3 col-md-3 col-sm-12 d-md-block d-none d-print-none" aria-label="Table of Contents Container">
+                            <div id="wh_publication_toc_content">
+		                        
+                            	<div class=" wh_publication_toc " data-tooltip-position="right"><span class="expand-button-action-labels"><span id="button-expand-action" role="button" aria-label="Expand"></span><span id="button-collapse-action" role="button" aria-label="Collapse"></span><span id="button-pending-action" role="button" aria-label="Pending"></span></span><ul role="tree" aria-label="Table of Contents"><li role="treeitem"><div data-tocid="new_chap_about_sect_ddb_docs_intro-d9529e87" class="topicref" data-id="new_chap_about_sect_ddb_docs_intro" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../about/ddb_docs_intro.html" id="new_chap_about_sect_ddb_docs_intro-d9529e87-link">文档使用说明</a><div class="wh-tooltip"><p class="shortdesc">如何获取 DolphinDB 帮助信息</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="chap1_getstarted-d9529e140" class="topicref" data-id="chap1_getstarted" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action chap1_getstarted-d9529e140-link" class="wh-expand-btn"></span><div class="title"><a href="../../getstarted/chap1_getstarted.html" id="chap1_getstarted-d9529e140-link"><span class="keyword label">快速上手</span></a><div class="wh-tooltip"><p class="shortdesc">如何快速部署 DolphinDB、建库建表、写入和查询数据</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="sectionddb_deployment-d9529e335" class="topicref" data-id="sectionddb_deployment" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action sectionddb_deployment-d9529e335-link" class="wh-expand-btn"></span><div class="title"><a href="../../deploy/deploy_intro.html" id="sectionddb_deployment-d9529e335-link"><span class="keyword label">部署</span></a><div class="wh-tooltip"><p class="shortdesc">如何在不同的场景中部署 DolphinDB</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="new_chap_database_manage_new_chap_dbmanage_landing_page-d9529e2313" class="topicref" data-id="new_chap_database_manage_new_chap_dbmanage_landing_page" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action new_chap_database_manage_new_chap_dbmanage_landing_page-d9529e2313-link" class="wh-expand-btn"></span><div class="title"><a href="../../db_distr_comp/cfg/db_intro.html" id="new_chap_database_manage_new_chap_dbmanage_landing_page-d9529e2313-link"><span class="keyword label">数据库</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 数据库的基本概念</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="chap7_tutorials_streaming-d9529e3490" class="topicref" data-id="chap7_tutorials_streaming" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action chap7_tutorials_streaming-d9529e3490-link" class="wh-expand-btn"></span><div class="title"><a href="../../stream/str_intro.html" id="chap7_tutorials_streaming-d9529e3490-link"><span class="keyword label">流数据</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 流数据引擎及流数据计算的基本概念</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="tocId-d9529e7385" class="topicref" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action tocId-d9529e7385-link" class="wh-expand-btn"></span><div class="title"><a href="../../db_distr_comp/db_oper/import_data.html" id="tocId-d9529e7385-link">数据迁移</a><div class="wh-tooltip"><p class="shortdesc">如何从不同数据源向 DolphinDB 迁移数据</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="chap7_tutorials_system_management-d9529e7812" class="topicref" data-id="chap7_tutorials_system_management" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action chap7_tutorials_system_management-d9529e7812-link" class="wh-expand-btn"></span><div class="title"><a href="../../sys_man/om_intro.html" id="chap7_tutorials_system_management-d9529e7812-link"><span class="keyword label">系统运维</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 的系统运维功能及方法</p></div></div></div></li><li role="treeitem" aria-expanded="true"><div data-tocid="about_language_resources-d9529e16490" class="topicref" data-id="about_language_resources" data-state="expanded"><span role="button" tabindex="0" aria-labelledby="button-collapse-action about_language_resources-d9529e16490-link" class="wh-expand-btn"></span><div class="title"><a href="../../progr/progr_intro.html" id="about_language_resources-d9529e16490-link"><span class="keyword label">编程语言</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 编程基本概念与方法、SQL 在 DolphinDB 的应用</p></div></div></div><ul role="group" class="navbar-nav nav-list"><li role="treeitem" aria-expanded="true"><div data-tocid="chap4_db_programming-d9529e16543" class="topicref" data-id="chap4_db_programming" data-state="expanded"><span role="button" tabindex="0" aria-labelledby="button-collapse-action chap4_db_programming-d9529e16543-link" class="wh-expand-btn"></span><div class="title"><a href="../../progr/lang_intro.html" id="chap4_db_programming-d9529e16543-link"><span class="keyword label">DolphinDB 脚本语言</span></a><div class="wh-tooltip"><p class="shortdesc"> 脚本编程相关概念参考，包括：数据类型与形式、对象、运算符、编程语句、数据操作、函数化编程、文件操作和 SQL 语句。 </p></div></div></div><ul role="group" class="navbar-nav nav-list"><li role="treeitem" aria-expanded="true"><div data-tocid="chap4_sect_datatypes_forms-d9529e16594" class="topicref" data-id="chap4_sect_datatypes_forms" data-state="expanded"><span role="button" tabindex="0" aria-labelledby="button-collapse-action chap4_sect_datatypes_forms-d9529e16594-link" class="wh-expand-btn"></span><div class="title"><a href="../../progr/data_types_forms_intro.html" id="chap4_sect_datatypes_forms-d9529e16594-link"><span class="keyword">数据类型与形式</span></a></div></div><ul role="group" class="navbar-nav nav-list"><li role="treeitem" aria-expanded="true"><div data-tocid="chap4_sect_data_type_description-d9529e16655" class="topicref" data-id="chap4_sect_data_type_description" data-state="expanded"><span role="button" tabindex="0" aria-labelledby="button-collapse-action chap4_sect_data_type_description-d9529e16655-link" class="wh-expand-btn"></span><div class="title"><a href="../../progr/data_types.html" id="chap4_sect_data_type_description-d9529e16655-link"><span class="keyword label">数据类型</span></a></div></div><ul role="group" class="navbar-nav nav-list"><li role="treeitem" class="active"><div data-tocid="数据类型转换-d9529e16710" class="topicref" data-id="数据类型转换" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../progr/data_types_forms/data_type_conv.html" id="数据类型转换-d9529e16710-link"><span class="keyword">数据类型转换</span></a></div></div></li></ul></li><li role="treeitem" aria-expanded="false"><div data-tocid="chap4_sect_dataforms-d9529e16771" class="topicref" data-id="chap4_sect_dataforms" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action chap4_sect_dataforms-d9529e16771-link" class="wh-expand-btn"></span><div class="title"><a href="../../progr/data_forms.html" id="chap4_sect_dataforms-d9529e16771-link"><span class="keyword label">数据形式</span></a></div></div></li></ul></li><li role="treeitem" aria-expanded="false"><div data-tocid="chap4_sect_objects-d9529e17632" class="topicref" data-id="chap4_sect_objects" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action chap4_sect_objects-d9529e17632-link" class="wh-expand-btn"></span><div class="title"><a href="../../progr/objs/objects.html" id="chap4_sect_objects-d9529e17632-link"><span class="keyword label">对象</span></a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="chap4_sect_operators-d9529e18069" class="topicref" data-id="chap4_sect_operators" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action chap4_sect_operators-d9529e18069-link" class="wh-expand-btn"></span><div class="title"><a href="../../progr/operators/operators.html" id="chap4_sect_operators-d9529e18069-link"><span class="keyword label">运算符</span></a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="chap4_sect_programming_statements-d9529e19654" class="topicref" data-id="chap4_sect_programming_statements" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action chap4_sect_programming_statements-d9529e19654-link" class="wh-expand-btn"></span><div class="title"><a href="../../progr/statements/statements_intro.html" id="chap4_sect_programming_statements-d9529e19654-link"><span class="keyword label">编程语句</span></a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="chap4_sect_data_manipulation-d9529e20900" class="topicref" data-id="chap4_sect_data_manipulation" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action chap4_sect_data_manipulation-d9529e20900-link" class="wh-expand-btn"></span><div class="title"><a href="../../progr/data_mani/dm_intro.html" id="chap4_sect_data_manipulation-d9529e20900-link"><span class="keyword label">数据操作</span></a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="chap4_sect_func_programming-d9529e21873" class="topicref" data-id="chap4_sect_func_programming" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action chap4_sect_func_programming-d9529e21873-link" class="wh-expand-btn"></span><div class="title"><a href="../../progr/func_progr.html" id="chap4_sect_func_programming-d9529e21873-link"><span class="keyword label">函数化编程</span></a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="元编程-d9529e22197" class="topicref" data-id="元编程" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action 元编程-d9529e22197-link" class="wh-expand-btn"></span><div class="title"><a href="../../progr/objs/meta_progr.html" id="元编程-d9529e22197-link"><span class="keyword label">元编程</span></a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="oop-d9529e22337" class="topicref" data-id="oop" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action oop-d9529e22337-link" class="wh-expand-btn"></span><div class="title"><a href="../../progr/oop.html" id="oop-d9529e22337-link">面向对象编程</a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="文件操作-d9529e22705" class="topicref" data-id="文件操作" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action 文件操作-d9529e22705-link" class="wh-expand-btn"></span><div class="title"><a href="../../progr/file_io/file_oper.html" id="文件操作-d9529e22705-link"><span class="keyword label">文件操作</span></a></div></div></li></ul></li><li role="treeitem" aria-expanded="false"><div data-tocid="chap4_sect_sql_statements-d9529e22890" class="topicref" data-id="chap4_sect_sql_statements" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action chap4_sect_sql_statements-d9529e22890-link" class="wh-expand-btn"></span><div class="title"><a href="../../progr/sql/sql_intro.html" id="chap4_sect_sql_statements-d9529e22890-link"><span class="keyword label">SQL 语句</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 中 SQL 语句的基本语法和用法</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="python-parser-简介-d9529e25535" class="topicref" data-id="python-parser-简介" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action python-parser-简介-d9529e25535-link" class="wh-expand-btn"></span><div class="title"><a href="../../progr/py_parser/py_par_intro.html" id="python-parser-简介-d9529e25535-link"><span class="keyword label">Python Parser</span></a></div></div></li></ul></li><li role="treeitem" aria-expanded="false"><div data-tocid="functions_references-d9529e26503" class="topicref" data-id="functions_references" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action functions_references-d9529e26503-link" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/funcs_intro.html" id="functions_references-d9529e26503-link"><span class="keyword label">函数参考</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 函数分类、语法、详解及示例</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="api_protocol-d9529e86456" class="topicref" data-id="api_protocol" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action api_protocol-d9529e86456-link" class="wh-expand-btn"></span><div class="title"><a href="../../api/connapi_intro.html" id="api_protocol-d9529e86456-link"><span class="keyword label">连接器 &amp; API</span></a><div class="wh-tooltip"><p class="shortdesc">面向不同编程语言的 DolphinDB API 及连接器，相关协议和用法</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="chap6_plugin-d9529e91976" class="topicref" data-id="chap6_plugin" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action chap6_plugin-d9529e91976-link" class="wh-expand-btn"></span><div class="title"><a href="../../plugins/plg_intro.html" id="chap6_plugin-d9529e91976-link"><span class="keyword label">插件</span></a><div class="wh-tooltip"><p class="shortdesc">多个应用场景的插件使用说明和插件开发指导</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="third_party-d9529e94749" class="topicref" data-id="third_party" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action third_party-d9529e94749-link" class="wh-expand-btn"></span><div class="title"><a href="../../third_party.html" id="third_party-d9529e94749-link">第三方工具</a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="about_tutorials-d9529e94980" class="topicref" data-id="about_tutorials" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action about_tutorials-d9529e94980-link" class="wh-expand-btn"></span><div class="title"><a href="../../tutorials/about_tutorials.html" id="about_tutorials-d9529e94980-link"><span class="keyword label">教程</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 产品使用教程</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="tocId-d9529e101769" class="topicref" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action tocId-d9529e101769-link" class="wh-expand-btn"></span><div class="title"><a href="../../rn/server/3_00_1.html" id="tocId-d9529e101769-link">版本说明</a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 版本发布历史</p></div></div></div></li></ul></div>
+		                        
+                            </div>
+                        </nav>
+                    
+                    
+                    <div class="col-lg-7 col-md-9 col-sm-12" id="wh_topic_body">
+                        <button id="wh_close_publication_toc_button" class="close-toc-button d-none" aria-label="Toggle publishing table of content" aria-controls="wh_publication_toc" aria-expanded="true">
+                            <span class="close-toc-icon-container">
+                                <span class="close-toc-icon"></span>     
+                            </span>
+                        </button>
+                        <button id="wh_close_topic_toc_button" class="close-toc-button d-none" aria-label="Toggle topic table of content" aria-controls="wh_topic_toc" aria-expanded="true">
+                            <span class="close-toc-icon-container">
+                                <span class="close-toc-icon"></span>     
+                            </span>
+                        </button>
+                        
+                        <div class=" wh_topic_content body "><main role="main"><article class="- topic/topic topic" role="article" aria-labelledby="ariaid-title1">
+    <h1 class="- topic/title title topictitle1" id="ariaid-title1"><span class="- topic/keyword keyword">数据类型转换</span></h1>
+    <div class="- topic/body body">
+        <p class="- topic/p p" id="数据类型转换__p_z55_5hn_ryb" data-ofbid="数据类型转换__p_z55_5hn_ryb">数据类型转换可以通过数据类型转换函数或函数 <a class="- topic/xref xref" href="../../funcs/c/cast.html">cast($)</a> 来实现。</p>
+        <p class="- topic/p p" id="数据类型转换__p_av5_5hn_ryb" data-ofbid="数据类型转换__p_av5_5hn_ryb">DolphinDB支持的数据类型转换函数包括 <a class="- topic/xref xref" href="../../funcs/s/string.html">string</a>, <a class="- topic/xref xref" href="../../funcs/b/bool.html">bool</a>, <a class="- topic/xref xref" href="../../funcs/c/char.html">char</a>, <a class="- topic/xref xref" href="../../funcs/s/short.html">short</a>, <a class="- topic/xref xref" href="../../funcs/i/int.html">int</a>, <a class="- topic/xref xref" href="../../funcs/l/long.html">long</a>, <a class="- topic/xref xref" href="../../funcs/d/double.html">double</a>, <a class="- topic/xref xref" href="../../funcs/d/date.html">date</a>, <a class="- topic/xref xref" href="../../funcs/m/month.html">month</a>, <a class="- topic/xref xref" href="../../funcs/t/time.html">time</a>, <a class="- topic/xref xref" href="../../funcs/s/second.html">second</a>, <a class="- topic/xref xref" href="../../funcs/m/minute.html">minute</a>, <a class="- topic/xref xref" href="../../funcs/d/datetime.html">datetime</a>, <a class="- topic/xref xref" href="../../funcs/t/timestamp.html">timestamp</a>, <a class="- topic/xref xref" href="../../funcs/s/symbol.html">symbol</a>, <a class="- topic/xref xref" href="../../funcs/n/nanotime.html">nanotime</a>, <a class="- topic/xref xref" href="../../funcs/n/nanotimestamp.html">nanotimestamp</a>, <a class="- topic/xref xref" href="../../funcs/d/datehour.html">datehour</a>, <a class="- topic/xref xref" href="../../funcs/u/uuid.html">uuid</a>, <a class="- topic/xref xref" href="../../funcs/i/ipaddr.html">ipaddr</a>, <a class="- topic/xref xref" href="../../funcs/i/int128.html">int128</a>, <a class="- topic/xref xref" href="../../funcs/b/blob.html">blob</a>, <a class="- topic/xref xref" href="../../funcs/c/complex.html">complex</a>, <a class="- topic/xref xref" href="../../funcs/p/point.html">point</a>, <a class="- topic/xref xref" href="../../funcs/d/duration.html">duration</a><span class="- topic/ph ph">, <a class="- topic/xref xref" href="../../funcs/d/decimal32.html">decimal32</a>, <a class="- topic/xref xref" href="../../funcs/d/decimal64.html">decimal64</a>, <a class="- topic/xref xref" href="../../funcs/d/decimal128.html">decimal128</a></span>。</p>
+        <p class="- topic/p p" id="数据类型转换__p_bv5_5hn_ryb" data-ofbid="数据类型转换__p_bv5_5hn_ryb">每个这样的函数都有如下三个用处：</p>
+        <ul class="- topic/ul ul" id="数据类型转换__ul_cv5_5hn_ryb" data-ofbid="数据类型转换__ul_cv5_5hn_ryb">
+            <li class="- topic/li li">
+                <p class="- topic/p p" id="数据类型转换__p_dv5_5hn_ryb" data-ofbid="数据类型转换__p_dv5_5hn_ryb">创建一个新的 NULL 值变量。</p>
+            </li>
+            <li class="- topic/li li">
+                <p class="- topic/p p" id="数据类型转换__p_ev5_5hn_ryb" data-ofbid="数据类型转换__p_ev5_5hn_ryb">转换字符串。</p>
+            </li>
+            <li class="- topic/li li">
+                <p class="- topic/p p" id="数据类型转换__p_fv5_5hn_ryb" data-ofbid="数据类型转换__p_fv5_5hn_ryb">转换其他数据类型。</p>
+            </li>
+        </ul>
+        <div class="- topic/note note note note_note" id="数据类型转换__note_ukg_523_5yb" data-ofbid="数据类型转换__note_ukg_523_5yb"><span class="note__title">注：</span> 
+            <ul class="- topic/ul ul" id="数据类型转换__ul_hv5_5hn_ryb" data-ofbid="数据类型转换__ul_hv5_5hn_ryb">
+                <li class="- topic/li li">
+                    <p class="- topic/p p" id="数据类型转换__p_iv5_5hn_ryb" data-ofbid="数据类型转换__p_iv5_5hn_ryb">除了 <em class="+ topic/ph hi-d/i ph i">symbol</em> 函数之外，所有这些函数都接受 0 或 1
+                        个参数。如果没有设定参数，将创建一个默认值的标量。如果参数是字符串或字符串向量，可将它转换为目标数据类型。其他类型数据，只要语义上与目标数据类型相容，也会被转换。</p>
+                </li>
+                <li class="- topic/li li">
+                    <p class="- topic/p p" id="数据类型转换__p_jv5_5hn_ryb" data-ofbid="数据类型转换__p_jv5_5hn_ryb"><a class="- topic/xref xref" href="../../funcs/s/short.html">short</a>, <a class="- topic/xref xref" href="../../funcs/i/int.html">int</a>, <a class="- topic/xref xref" href="../../funcs/l/long.html">long</a>
+                        函数采用四舍五入的方式将浮点数转换为整数。它们在转换字符串时，会逐位判断每个字符，并将数字保存到结果中，直到第一次遇到非数字字符，则立即返回结果。</p>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <article class="- topic/topic topic nested1" aria-labelledby="ariaid-title2" id="string">
+        <h2 class="- topic/title title topictitle2" id="ariaid-title2">string</h2>
+        <div class="- topic/body body">
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="string__codeblock_kv5_5hn_ryb" data-ofbid="string__codeblock_kv5_5hn_ryb"><code>string()=="";  // 创建一个新的字符串，默认值为""。</code></pre>
+            <p class="- topic/p p">返回：true</p>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="string__codeblock_omt_pzb_n1c" data-ofbid="string__codeblock_omt_pzb_n1c"><code>string(10);</code></pre>
+            <p class="- topic/p p">返回：10</p>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="string__codeblock_w33_wzb_n1c" data-ofbid="string__codeblock_w33_wzb_n1c"><code>typestr string(108.5);</code></pre>
+            <p class="- topic/p p">返回：STRING</p>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="string__codeblock_n2t_xzb_n1c" data-ofbid="string__codeblock_n2t_xzb_n1c"><code>string(now());</code></pre>
+            <p class="- topic/p p">返回：2024.02.22T15:09:40.931</p>
+            <div class="- topic/note note note note_note" id="string__note_hg4_b1c_n1c" data-ofbid="string__note_hg4_b1c_n1c"><span class="note__title">注：</span> 以 字符串形式返回当前系统时间。</div>
+        </div>
+    </article>
+    <article class="- topic/topic topic nested1" aria-labelledby="ariaid-title3" id="bool">
+        <h2 class="- topic/title title topictitle2" id="ariaid-title3">bool</h2>
+        <div class="- topic/body body">
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="bool__codeblock_lv5_5hn_ryb" data-ofbid="bool__codeblock_lv5_5hn_ryb"><code>x=bool();
+x;</code></pre>
+            <p class="- topic/p p">返回：null</p>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="bool__codeblock_tlh_f1c_n1c" data-ofbid="bool__codeblock_tlh_f1c_n1c"><code>typestr x;</code></pre>
+            <p class="- topic/p p">返回：BOOL</p>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="bool__codeblock_gyx_31c_n1c" data-ofbid="bool__codeblock_gyx_31c_n1c"><code>bool(`true);</code></pre>
+            <p class="- topic/p p">返回：true</p>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="bool__codeblock_bmv_q1c_n1c" data-ofbid="bool__codeblock_bmv_q1c_n1c"><code>bool(`false);</code></pre>
+            <p class="- topic/p p">返回：false</p>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="bool__codeblock_xrp_thn_ryb" data-ofbid="bool__codeblock_xrp_thn_ryb"><code>bool(`true`false)</code></pre>
+            <p class="- topic/p p">返回：[true, false]</p>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="bool__codeblock_fyb_s1c_n1c" data-ofbid="bool__codeblock_fyb_s1c_n1c"><code>bool(100.2);</code></pre>
+            <p class="- topic/p p">返回：true</p>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="bool__codeblock_orv_51c_n1c" data-ofbid="bool__codeblock_orv_51c_n1c"><code>bool(0);</code></pre>
+            <p class="- topic/p p">返回：false</p>
+        </div>
+    </article>
+    <article class="- topic/topic topic nested1" aria-labelledby="ariaid-title4" id="topic_oth_4ld_n1c">
+        <h2 class="- topic/title title topictitle2" id="ariaid-title4">decimal32</h2>
+        <div class="- topic/body body">
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="topic_oth_4ld_n1c__codeblock_ih5_thn_ryb" data-ofbid="topic_oth_4ld_n1c__codeblock_ih5_thn_ryb"><code>a=decimal32(142, 2)
+a</code></pre>
+            <p class="- topic/p p">返回：142.00</p>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="topic_oth_4ld_n1c__codeblock_bdt_5kd_n1c" data-ofbid="topic_oth_4ld_n1c__codeblock_bdt_5kd_n1c"><code>b=decimal32(1\7, 6)
+b</code></pre>
+            <p class="- topic/p p">返回：0.142857</p>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="topic_oth_4ld_n1c__codeblock_op5_vkd_n1c" data-ofbid="topic_oth_4ld_n1c__codeblock_op5_vkd_n1c"><code>a+b</code></pre>
+            <p class="- topic/p p">返回：142.142857</p>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="topic_oth_4ld_n1c__codeblock_mnq_wkd_n1c" data-ofbid="topic_oth_4ld_n1c__codeblock_mnq_wkd_n1c"><code>a*b</code></pre>
+            <p class="- topic/p p">返回：20.28569400</p>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="topic_oth_4ld_n1c__codeblock_bjn_xkd_n1c" data-ofbid="topic_oth_4ld_n1c__codeblock_bjn_xkd_n1c"><code>decimal32("3.1415926535", 4)</code></pre>
+            <p class="- topic/p p">返回：3.1415</p>
+            <p class="- topic/p p">一个 DECIMAL 类型向量里的所有元素的类型和 scale 必须相同，例如：</p>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="topic_oth_4ld_n1c__codeblock_z3m_1ld_n1c" data-ofbid="topic_oth_4ld_n1c__codeblock_z3m_1ld_n1c"><code>d1=[1.23$DECIMAL32(4), 3$DECIMAL32(4), 3.14$DECIMAL32(4)];</code></pre>
+            <p class="- topic/p p">返回：[1.2300,3.0000,3.1400]</p>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="topic_oth_4ld_n1c__codeblock_ygs_cld_n1c" data-ofbid="topic_oth_4ld_n1c__codeblock_ygs_cld_n1c"><code>typestr(d1);</code></pre>
+            <p class="- topic/p p">返回：FAST DECIMAL32 VECTOR</p>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="topic_oth_4ld_n1c__codeblock_wyc_2ld_n1c" data-ofbid="topic_oth_4ld_n1c__codeblock_wyc_2ld_n1c"><code>d2=[1.23$DECIMAL32(4), 3$DECIMAL32(4), 3.14$DECIMAL32(3)];</code></pre>
+            <p class="- topic/p p">返回：(1.2300,3.0000,3.140)</p>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="topic_oth_4ld_n1c__codeblock_q4j_fld_n1c" data-ofbid="topic_oth_4ld_n1c__codeblock_q4j_fld_n1c"><code>typestr(d2);</code></pre>
+            <p class="- topic/p p">返回：ANY VECTOR</p>
+            <p class="- topic/p p" id="topic_oth_4ld_n1c__p_jh5_thn_ryb" data-ofbid="topic_oth_4ld_n1c__p_jh5_thn_ryb">将 STRING 或 SYMBOL 类型转换为 DECIMAL 类型时，不同版本服务器的处理方式存在差别。2.00.10
+                之前版本会将超出 <em class="+ topic/ph hi-d/i ph i">scale</em> 的小数部分直接舍去。而 2.00.10 及之后的版本，会将超出 <em class="+ topic/ph hi-d/i ph i">scale</em>
+                的小数部分进行四舍五入。例如，对于以下的转换：</p>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="topic_oth_4ld_n1c__codeblock_kh5_thn_ryb" data-ofbid="topic_oth_4ld_n1c__codeblock_kh5_thn_ryb"><code>symbol(["1.341", "4.5677"])$DECIMAL32(2)</code></pre>
+            <p class="- topic/p p">2.00.10 之前的版本，结果为：[1.34,4.56]</p>
+            <p class="- topic/p p">2.00.10 及之后的版本，结果为：[1.34,4.57]</p>
+        </div>
+    </article>
+    <article class="- topic/topic topic nested1" aria-labelledby="ariaid-title5" id="topic_e1x_pld_n1c">
+        <h2 class="- topic/title title topictitle2" id="ariaid-title5">decimal64</h2>
+        <div class="- topic/body body">
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="topic_e1x_pld_n1c__codeblock_b35_thn_ryb" data-ofbid="topic_e1x_pld_n1c__codeblock_b35_thn_ryb"><code>a=decimal64(142, 2)
+a</code></pre>
+            <p class="- topic/p p">返回：142.00</p>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="topic_e1x_pld_n1c__codeblock_ahs_zjd_n1c" data-ofbid="topic_e1x_pld_n1c__codeblock_ahs_zjd_n1c"><code>b=decimal64(1\7, 6)
+b</code></pre>
+            <p class="- topic/p p">返回：0.142857</p>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="topic_e1x_pld_n1c__codeblock_nsc_bkd_n1c" data-ofbid="topic_e1x_pld_n1c__codeblock_nsc_bkd_n1c"><code>a+b</code></pre>
+            <p class="- topic/p p">返回：142.142857</p>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="topic_e1x_pld_n1c__codeblock_n43_ckd_n1c" data-ofbid="topic_e1x_pld_n1c__codeblock_n43_ckd_n1c"><code>a*b</code></pre>
+            <p class="- topic/p p">返回：20.28569400</p>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="topic_e1x_pld_n1c__codeblock_yzk_dkd_n1c" data-ofbid="topic_e1x_pld_n1c__codeblock_yzk_dkd_n1c"><code>decimal64("3.1415926535", 4)</code></pre>
+            <p class="- topic/p p">返回：3.1415</p>
+            <p class="- topic/p p">一个 DECIMAL 类型向量里的所有元素的类型和 scale 必须相同，例如：</p>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="topic_e1x_pld_n1c__codeblock_zbm_2kd_n1c" data-ofbid="topic_e1x_pld_n1c__codeblock_zbm_2kd_n1c"><code>d1=[1.23$DECIMAL64(4), 3$DECIMAL64(4), 3.14$DECIMAL64(4)];</code></pre>
+            <p class="- topic/p p">返回：[1.2300,3.0000,3.1400]</p>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="topic_e1x_pld_n1c__codeblock_a2p_gkd_n1c" data-ofbid="topic_e1x_pld_n1c__codeblock_a2p_gkd_n1c"><code>typestr(d1);</code></pre>
+            <p class="- topic/p p">返回：FAST DECIMAL64 VECTOR</p>
+            <p class="- topic/p p">如果元素的 scale 不同，则会创建并输出元组：</p>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="topic_e1x_pld_n1c__codeblock_vfw_hkd_n1c" data-ofbid="topic_e1x_pld_n1c__codeblock_vfw_hkd_n1c"><code>d2=[1.23$DECIMAL64(4), 3$DECIMAL64(4), 3.14$DECIMAL64(3)];</code></pre>
+            <p class="- topic/p p">返回：(1.2300,3.0000,3.140)</p>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="topic_e1x_pld_n1c__codeblock_fzz_jkd_n1c" data-ofbid="topic_e1x_pld_n1c__codeblock_fzz_jkd_n1c"><code>typestr(d2);</code></pre>
+            <p class="- topic/p p">返回：ANY VECTOR</p>
+            <p class="- topic/p p" id="topic_e1x_pld_n1c__p_c35_thn_ryb" data-ofbid="topic_e1x_pld_n1c__p_c35_thn_ryb">将 STRING 或 SYMBOL 类型转换为 DECIMAL 类型时，不同版本服务器的处理方式存在差别。2.00.10
+                之前版本会将超出 <em class="+ topic/ph hi-d/i ph i">scale</em> 的小数部分直接舍去。而 2.00.10 及之后的版本，会将超出 <em class="+ topic/ph hi-d/i ph i">scale</em>
+                的小数部分进行四舍五入。例如，对于以下的转换：</p>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="topic_e1x_pld_n1c__codeblock_d35_thn_ryb" data-ofbid="topic_e1x_pld_n1c__codeblock_d35_thn_ryb"><code>symbol(["1.341", "4.5677"])$DECIMAL64(2)</code></pre>
+            <p class="- topic/p p">2.00.10 之前的版本，结果为：[1.34,4.56]</p>
+            <p class="- topic/p p">2.00.10 及之后的版本，结果为：[1.34,4.57]</p>
+        </div>
+    </article>
+    <article class="- topic/topic topic nested1" aria-labelledby="ariaid-title6" id="topic_g4y_pld_n1c">
+        <h2 class="- topic/title title topictitle2" id="ariaid-title6">decimal128</h2>
+        <div class="- topic/body body">
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="topic_g4y_pld_n1c__codeblock_t35_thn_ryb" data-ofbid="topic_g4y_pld_n1c__codeblock_t35_thn_ryb"><code>a=decimal128(142, 2)
+a</code></pre>
+            <p class="- topic/p p">返回：142.00</p>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="topic_g4y_pld_n1c__codeblock_i1l_y3d_n1c" data-ofbid="topic_g4y_pld_n1c__codeblock_i1l_y3d_n1c"><code>b=decimal128(1\7, 6)
+b</code></pre>
+            <p class="- topic/p p">返回：0.142857</p>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="topic_g4y_pld_n1c__codeblock_xy3_1jd_n1c" data-ofbid="topic_g4y_pld_n1c__codeblock_xy3_1jd_n1c"><code>a+b</code></pre>
+            <p class="- topic/p p">返回：142.142857</p>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="topic_g4y_pld_n1c__codeblock_un2_cjd_n1c" data-ofbid="topic_g4y_pld_n1c__codeblock_un2_cjd_n1c"><code>a*b</code></pre>
+            <p class="- topic/p p">返回：20.28569400</p>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="topic_g4y_pld_n1c__codeblock_y4f_2jd_n1c" data-ofbid="topic_g4y_pld_n1c__codeblock_y4f_2jd_n1c"><code>decimal128("3.1415926535", 4)</code></pre>
+            <p class="- topic/p p">返回：3.1416</p>
+            <p class="- topic/p p">一个 DECIMAL 类型向量里的所有元素的类型和 scale 必须相同，例如：</p>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="topic_g4y_pld_n1c__codeblock_dm3_gjd_n1c" data-ofbid="topic_g4y_pld_n1c__codeblock_dm3_gjd_n1c"><code>d1=[1.23$DECIMAL128(4), 3$DECIMAL128(4), 3.14$DECIMAL128(4)]; </code></pre>
+            <p class="- topic/p p">返回：[1.2300,3.0000,3.1400]</p>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="topic_g4y_pld_n1c__codeblock_llf_kjd_n1c" data-ofbid="topic_g4y_pld_n1c__codeblock_llf_kjd_n1c"><code>typestr(d1);</code></pre>
+            <p class="- topic/p p">返回：FAST DECIMAL128 VECTOR</p>
+            <p class="- topic/p p">如果元素的 scale 不同，则会创建并输出元组：</p>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="topic_g4y_pld_n1c__codeblock_b43_4jd_n1c" data-ofbid="topic_g4y_pld_n1c__codeblock_b43_4jd_n1c"><code>d2=[1.23$DECIMAL128(4), 3$DECIMAL128(4), 3.14$DECIMAL128(3)];</code></pre>
+            <p class="- topic/p p">返回：(1.2300,3.0000,3.140)</p>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="topic_g4y_pld_n1c__codeblock_xtv_rjd_n1c" data-ofbid="topic_g4y_pld_n1c__codeblock_xtv_rjd_n1c"><code>typestr(d2);</code></pre>
+            <p class="- topic/p p">返回：ANY VECTOR</p>
+        </div>
+    </article>
+    <article class="- topic/topic topic nested1" aria-labelledby="ariaid-title7" id="int">
+        <h2 class="- topic/title title topictitle2" id="ariaid-title7">int</h2>
+        <div class="- topic/body body">
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="int__codeblock_mv5_5hn_ryb" data-ofbid="int__codeblock_mv5_5hn_ryb"><code>x=int();
+x;</code></pre>
+            <p class="- topic/p p">返回：null</p>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="int__codeblock_llw_x1c_n1c" data-ofbid="int__codeblock_llw_x1c_n1c"><code>typestr x;</code></pre>
+            <p class="- topic/p p">返回：INT</p>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="int__codeblock_uvj_z1c_n1c" data-ofbid="int__codeblock_uvj_z1c_n1c"><code>int(`10.9);</code></pre>
+            <p class="- topic/p p">返回：10</p>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="int__codeblock_w4s_1bc_n1c" data-ofbid="int__codeblock_w4s_1bc_n1c"><code>int(2147483647);</code></pre>
+            <p class="- topic/p p">返回：2,147,483,647</p>
+            <div class="- topic/note note note note_note" id="int__note_x25_dbc_n1c" data-ofbid="int__note_x25_dbc_n1c"><span class="note__title">注：</span> INT 数据类型的最大值为 2<sup class="+ topic/ph hi-d/sup ph sup">31</sup> -1 = 2,147,483,647。</div>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="int__codeblock_fwm_cbc_n1c" data-ofbid="int__codeblock_fwm_cbc_n1c"><code>int(2147483648);</code></pre>
+            <p class="- topic/p p">由于2,147,483,648 超出了 INT 数据类型的最大值，因此返回：null</p>
+        </div>
+    </article>
+    <article class="- topic/topic topic nested1" aria-labelledby="ariaid-title8" id="short">
+        <h2 class="- topic/title title topictitle2" id="ariaid-title8">short</h2>
+        <div class="- topic/body body">
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="short__codeblock_nv5_5hn_ryb" data-ofbid="short__codeblock_nv5_5hn_ryb"><code>x=short();
+x;</code></pre>
+            <p class="- topic/p p">返回：null</p>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="short__codeblock_lzl_mbc_n1c" data-ofbid="short__codeblock_lzl_mbc_n1c"><code>typestr x;</code></pre>
+            <p class="- topic/p p">返回：SHORT</p>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="short__codeblock_hf5_4bc_n1c" data-ofbid="short__codeblock_hf5_4bc_n1c"><code>short(`12.3);</code></pre>
+            <p class="- topic/p p">返回：12</p>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="short__codeblock_dqz_pbc_n1c" data-ofbid="short__codeblock_dqz_pbc_n1c"><code>short(`120.9c);</code></pre>
+            <p class="- topic/p p">返回：120</p>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="short__codeblock_ucy_rbc_n1c" data-ofbid="short__codeblock_ucy_rbc_n1c"><code>short(32767);</code></pre>
+            <p class="- topic/p p">返回：32,767</p>
+            <div class="- topic/note note note note_note" id="short__note_umd_5bc_n1c" data-ofbid="short__note_umd_5bc_n1c"><span class="note__title">注：</span> SHORT 数据类型的最大值是 2<sup class="+ topic/ph hi-d/sup ph sup">15</sup> -1 = 32,767。</div>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="short__codeblock_snx_sbc_n1c" data-ofbid="short__codeblock_snx_sbc_n1c"><code>short(32768);</code></pre>
+            <p class="- topic/p p">由于32,768 超出了 SHORT 数据类型的最大值，因此返回：null</p>
+        </div>
+    </article>
+    <article class="- topic/topic topic nested1" aria-labelledby="ariaid-title9" id="long">
+        <h2 class="- topic/title title topictitle2" id="ariaid-title9">long</h2>
+        <div class="- topic/body body">
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="long__codeblock_ov5_5hn_ryb" data-ofbid="long__codeblock_ov5_5hn_ryb"><code>x=long();
+x;</code></pre>
+            <p class="- topic/p p">返回：null</p>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="long__codeblock_chg_d2c_n1c" data-ofbid="long__codeblock_chg_d2c_n1c"><code>typestr x;</code></pre>
+            <p class="- topic/p p">返回：LONG</p>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="long__codeblock_uz5_22c_n1c" data-ofbid="long__codeblock_uz5_22c_n1c"><code>long(`10.9);</code></pre>
+            <p class="- topic/p p">返回：10</p>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="long__codeblock_d1g_g2c_n1c" data-ofbid="long__codeblock_d1g_g2c_n1c"><code>long(9223372036854775807l);</code></pre>
+            <p class="- topic/p p">返回：9,223,372,036,854,775,807</p>
+            <div class="- topic/note note note note_note" id="long__note_fnv_32c_n1c" data-ofbid="long__note_fnv_32c_n1c"><span class="note__title">注：</span> LONG 数据类型的最大值是2<sup class="+ topic/ph hi-d/sup ph sup">63</sup>-1 =
+                9,223,372,036,854,775,807。</div>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="long__codeblock_v5z_h2c_n1c" data-ofbid="long__codeblock_v5z_h2c_n1c"><code>long(9223372036854775808l);</code></pre>
+            <p class="- topic/p p">返回：9,223,372,036,854,775,807</p>
+        </div>
+    </article>
+    <article class="- topic/topic topic nested1" aria-labelledby="ariaid-title10" id="char">
+        <h2 class="- topic/title title topictitle2" id="ariaid-title10">char</h2>
+        <div class="- topic/body body">
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="char__codeblock_pv5_5hn_ryb" data-ofbid="char__codeblock_pv5_5hn_ryb"><code>x=char();
+x;</code></pre>
+            <p class="- topic/p p">返回：null</p>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="char__codeblock_ij5_42c_n1c" data-ofbid="char__codeblock_ij5_42c_n1c"><code>typestr x;</code></pre>
+            <p class="- topic/p p">返回：CHAR</p>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="char__codeblock_yk3_q2c_n1c" data-ofbid="char__codeblock_yk3_q2c_n1c"><code>a=char(99);
+a;</code></pre>
+            <p class="- topic/p p">返回：'c'</p>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="char__codeblock_hz1_s2c_n1c" data-ofbid="char__codeblock_hz1_s2c_n1c"><code>typestr a;</code></pre>
+            <p class="- topic/p p">返回：CHAR</p>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="char__codeblock_d3y_t2c_n1c" data-ofbid="char__codeblock_d3y_t2c_n1c"><code>char(a+5);</code></pre>
+            <p class="- topic/p p">返回：'h'</p>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="char__codeblock_ad4_z4c_n1c" data-ofbid="char__codeblock_ad4_z4c_n1c"><code>char("990");</code></pre>
+            <p class="- topic/p p">返回：<code class="+ topic/ph pr-d/codeph ph codeph">Failed to convert the string to CHAR</code></p>
+            <div class="- topic/note note note note_note" id="char__note_lkn_w4c_n1c" data-ofbid="char__note_lkn_w4c_n1c"><span class="note__title">注：</span> <code class="+ topic/ph pr-d/codeph ph codeph">char</code> 函数会把输入的字符串识别为 ASCII 码，超出 ASCII
+                码范围的输入字符无法转换。</div>
+        </div>
+    </article>
+    <article class="- topic/topic topic nested1" aria-labelledby="ariaid-title11" id="double">
+        <h2 class="- topic/title title topictitle2" id="ariaid-title11">double</h2>
+        <div class="- topic/body body">
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="double__codeblock_qv5_5hn_ryb" data-ofbid="double__codeblock_qv5_5hn_ryb"><code>x=double();  // 创建一个 DOUBLE 类型的变量，默认值为0。
+x;</code></pre>
+            <p class="- topic/p p">返回：null</p>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="double__codeblock_jtz_x2c_n1c" data-ofbid="double__codeblock_jtz_x2c_n1c"><code>typestr x;</code></pre>
+            <p class="- topic/p p">返回：DOUBLE</p>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="double__codeblock_ab1_z2c_n1c" data-ofbid="double__codeblock_ab1_z2c_n1c"><code>typestr double(`10);</code></pre>
+            <p class="- topic/p p">返回：DOUBLE</p>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="double__codeblock_s1l_1fc_n1c" data-ofbid="double__codeblock_s1l_1fc_n1c"><code>double(`10.9);</code></pre>
+            <p class="- topic/p p">返回：10.9</p>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="double__codeblock_fwm_bfc_n1c" data-ofbid="double__codeblock_fwm_bfc_n1c"><code>double(now());</code></pre>
+            <p class="- topic/p p">返回：1,708,616,927,949</p>
+            <div class="- topic/note note note note_note" id="double__note_upl_jfc_n1c" data-ofbid="double__note_upl_jfc_n1c"><span class="note__title">注：</span> 该例子首先使用 <code class="+ topic/ph pr-d/codeph ph codeph">now</code> 函数获得当前系统时间 2024.02.22
+                    15:50:15.528，<code class="+ topic/ph pr-d/codeph ph codeph">double</code> 函数将该时间转换为 1,708,616,927,949。</div>
+        </div>
+    </article>
+    <article class="- topic/topic topic nested1" aria-labelledby="ariaid-title12" id="date">
+        <h2 class="- topic/title title topictitle2" id="ariaid-title12">date</h2>
+        <div class="- topic/body body">
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="date__codeblock_rv5_5hn_ryb" data-ofbid="date__codeblock_rv5_5hn_ryb"><code>date();</code></pre>
+            <p class="- topic/p p">返回：null</p>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="date__codeblock_irf_cbd_n1c" data-ofbid="date__codeblock_irf_cbd_n1c"><code>date(1)</code></pre>
+            <p class="- topic/p p">返回：1970.01.02</p>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="date__codeblock_kcp_qfc_n1c" data-ofbid="date__codeblock_kcp_qfc_n1c"><code>date(`2011.10.12);</code></pre>
+            <p class="- topic/p p">返回：2011.10.12</p>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="date__codeblock_j4f_sfc_n1c" data-ofbid="date__codeblock_j4f_sfc_n1c"><code>date(now());</code></pre>
+            <p class="- topic/p p">返回：2024.02.22</p>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="date__codeblock_a25_thn_ryb" data-ofbid="date__codeblock_a25_thn_ryb"><code>date 2012.12.03 01:22:01;</code></pre>
+            <p class="- topic/p p">返回：2012.12.03</p>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="date__codeblock_r1j_b4c_n1c" data-ofbid="date__codeblock_r1j_b4c_n1c"><code>date(2016.03M);</code></pre>
+            <p class="- topic/p p">返回：2016.03.01</p>
+        </div>
+    </article>
+    <article class="- topic/topic topic nested1" aria-labelledby="ariaid-title13" id="datehour">
+        <h2 class="- topic/title title topictitle2" id="ariaid-title13">datehour</h2>
+        <div class="- topic/body body">
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="datehour__codeblock_j1r_z1d_n1c" data-ofbid="datehour__codeblock_j1r_z1d_n1c"><code>datehour(1)</code></pre>
+            <p class="- topic/p p">返回：1970.01.01T01</p>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="datehour__codeblock_bw5_5hn_ryb" data-ofbid="datehour__codeblock_bw5_5hn_ryb"><code>datehour(2012.06.13 13:30:10);</code></pre>
+            <p class="- topic/p p">返回：2012.06.13T13</p>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="datehour__codeblock_or1_1jc_n1c" data-ofbid="datehour__codeblock_or1_1jc_n1c"><code>datehour([2012.06.15 15:32:10.158,2012.06.15 17:30:10.008]);</code></pre>
+            <p class="- topic/p p">返回：[2012.06.15T15,2012.06.15T17]</p>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="datehour__codeblock_zxv_mt5_x1c" data-ofbid="datehour__codeblock_zxv_mt5_x1c"><code>datehour(2012.01M)</code></pre>
+            <p class="- topic/p p">返回：2012.01.01T00</p>
+        </div>
+    </article>
+    <article class="- topic/topic topic nested1" aria-labelledby="ariaid-title14" id="datetime">
+        <h2 class="- topic/title title topictitle2" id="ariaid-title14">datetime</h2>
+        <div class="- topic/body body">
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="datetime__codeblock_bln_jbd_n1c" data-ofbid="datetime__codeblock_bln_jbd_n1c"><code>datetime(1)</code></pre>
+            <p class="- topic/p p">返回：1970.01.01 00:00:01</p>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="datetime__codeblock_sv5_5hn_ryb" data-ofbid="datetime__codeblock_sv5_5hn_ryb"><code>datetime(2009.11.10);</code></pre>
+            <p class="- topic/p p">返回：2009.11.10 00:00:00</p>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="datetime__codeblock_ahz_wfc_n1c" data-ofbid="datetime__codeblock_ahz_wfc_n1c"><code>typestr datetime(2009.11.10);</code></pre>
+            <p class="- topic/p p">返回：DATETIME</p>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="datetime__codeblock_rxx_yfc_n1c" data-ofbid="datetime__codeblock_rxx_yfc_n1c"><code>datetime(now());</code></pre>
+            <p class="- topic/p p">返回：2024.02.22 15:55:39</p>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="datetime__codeblock_rzc_nz1_y1c" data-ofbid="datetime__codeblock_rzc_nz1_y1c"><code>datetime(2012.01M)</code></pre>
+            <p class="- topic/p p">返回：2012.01.01T00:00:00</p>
+        </div>
+    </article>
+    <article class="- topic/topic topic nested1" aria-labelledby="ariaid-title15" id="timestamp">
+        <h2 class="- topic/title title topictitle2" id="ariaid-title15">timestamp</h2>
+        <div class="- topic/body body">
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="timestamp__codeblock_pny_2fd_n1c" data-ofbid="timestamp__codeblock_pny_2fd_n1c"><code>timestamp(1)</code></pre>
+            <p class="- topic/p p">返回：1970.01.01 00:00:00.001</p>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="timestamp__codeblock_tv5_5hn_ryb" data-ofbid="timestamp__codeblock_tv5_5hn_ryb"><code>timestamp(2016.10.12);</code></pre>
+            <p class="- topic/p p">返回：2016.10.12 00:00:00.000</p>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="timestamp__codeblock_ank_cgc_n1c" data-ofbid="timestamp__codeblock_ank_cgc_n1c"><code>timestamp(2016.10.12)+1;</code></pre>
+            <p class="- topic/p p">返回：2016.10.12 00:00:00.001</p>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="timestamp__codeblock_npm_2gc_n1c" data-ofbid="timestamp__codeblock_npm_2gc_n1c"><code>timestamp(now());</code></pre>
+            <p class="- topic/p p">返回：2024.02.22 15:57:33.291</p>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="timestamp__codeblock_qlm_tkf_y1c" data-ofbid="timestamp__codeblock_qlm_tkf_y1c"><code>timestamp(2012.01M)</code></pre>
+            <p class="- topic/p p">返回：2012.01.01T00:00:00.000</p>
+        </div>
+    </article>
+    <article class="- topic/topic topic nested1" aria-labelledby="ariaid-title16" id="month">
+        <h2 class="- topic/title title topictitle2" id="ariaid-title16">month</h2>
+        <div class="- topic/body body">
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="month__codeblock_uv5_5hn_ryb" data-ofbid="month__codeblock_uv5_5hn_ryb"><code>month();</code></pre>
+            <p class="- topic/p p">返回：null</p>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="month__codeblock_wz1_jgc_n1c" data-ofbid="month__codeblock_wz1_jgc_n1c"><code>month(`2012.12);</code></pre>
+            <p class="- topic/p p">返回：2012.12M</p>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="month__codeblock_ww3_kgc_n1c" data-ofbid="month__codeblock_ww3_kgc_n1c"><code>month(2012.12.23);  // 把一个 DATE 类型的数据转换成 MONTH 类型。</code></pre>
+            <p class="- topic/p p">返回：2012.12M</p>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="month__codeblock_nhc_ngc_n1c" data-ofbid="month__codeblock_nhc_ngc_n1c"><code>month(now());  // 把一个 TIMESTAMP 类型的数据转换成 MONTH 类型。</code></pre>
+            <p class="- topic/p p">返回：2024.02M</p>
+        </div>
+    </article>
+    <article class="- topic/topic topic nested1" aria-labelledby="ariaid-title17" id="second">
+        <h2 class="- topic/title title topictitle2" id="ariaid-title17">second</h2>
+        <div class="- topic/body body">
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="second__codeblock_vv5_5hn_ryb" data-ofbid="second__codeblock_vv5_5hn_ryb"><code>second();</code></pre>
+            <p class="- topic/p p">返回：null</p>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="second__codeblock_zxh_kdd_n1c" data-ofbid="second__codeblock_zxh_kdd_n1c"><code>second(1)</code></pre>
+            <p class="- topic/p p">返回：00:00:01</p>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="second__codeblock_cs5_qgc_n1c" data-ofbid="second__codeblock_cs5_qgc_n1c"><code>second("19:36:12");</code></pre>
+            <p class="- topic/p p">返回：19:36:12</p>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="second__codeblock_oqb_tgc_n1c" data-ofbid="second__codeblock_oqb_tgc_n1c"><code>second(now());</code></pre>
+            <p class="- topic/p p">返回：16:01:32</p>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="second__codeblock_p3m_5hn_ryb" data-ofbid="second__codeblock_p3m_5hn_ryb"><code>second 2012.12.03 01:22:01;</code></pre>
+            <p class="- topic/p p">返回：01:22:01</p>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="second__codeblock_wyg_lnc_n1c" data-ofbid="second__codeblock_wyg_lnc_n1c"><code>second(61);</code></pre>
+            <p class="- topic/p p">返回：00:01:01</p>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="second__codeblock_yfx_mnc_n1c" data-ofbid="second__codeblock_yfx_mnc_n1c"><code>second("09:00:01")</code></pre>
+            <p class="- topic/p p">返回：09:00:01</p>
+        </div>
+    </article>
+    <article class="- topic/topic topic nested1" aria-labelledby="ariaid-title18" id="minute">
+        <h2 class="- topic/title title topictitle2" id="ariaid-title18">minute</h2>
+        <div class="- topic/body body">
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="minute__codeblock_wv5_5hn_ryb" data-ofbid="minute__codeblock_wv5_5hn_ryb"><code>minute();</code></pre>
+            <p class="- topic/p p">返回：null</p>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="minute__codeblock_ptx_2dd_n1c" data-ofbid="minute__codeblock_ptx_2dd_n1c"><code>minute(1)</code></pre>
+            <p class="- topic/p p">返回：00:01m</p>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="minute__codeblock_uyt_vgc_n1c" data-ofbid="minute__codeblock_uyt_vgc_n1c"><code>minute(now());</code></pre>
+            <p class="- topic/p p">返回：16:02m</p>
+        </div>
+    </article>
+    <article class="- topic/topic topic nested1" aria-labelledby="ariaid-title19" id="topic_lmb_xld_n1c">
+        <h2 class="- topic/title title topictitle2" id="ariaid-title19">hour</h2>
+        <div class="- topic/body body">
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="topic_lmb_xld_n1c__codeblock_dp1_5hn_ryb" data-ofbid="topic_lmb_xld_n1c__codeblock_dp1_5hn_ryb"><code>hour(2012.12.03 01:22:01);</code></pre>
+            <p class="- topic/p p">返回：1</p>
+        </div>
+    </article>
+    <article class="- topic/topic topic nested1" aria-labelledby="ariaid-title20" id="time">
+        <h2 class="- topic/title title topictitle2" id="ariaid-title20">time</h2>
+        <div class="- topic/body body">
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="time__codeblock_xv5_5hn_ryb" data-ofbid="time__codeblock_xv5_5hn_ryb"><code>time();</code></pre>
+            <p class="- topic/p p">返回：null</p>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="time__codeblock_fsn_tfd_n1c" data-ofbid="time__codeblock_fsn_tfd_n1c"><code>time(1)</code></pre>
+            <p class="- topic/p p">返回：00:00:00.001</p>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="time__codeblock_tc3_ygc_n1c" data-ofbid="time__codeblock_tc3_ygc_n1c"><code>time("12:32:56.356");</code></pre>
+            <p class="- topic/p p">返回：12:32:56.356</p>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="time__codeblock_jzh_1hc_n1c" data-ofbid="time__codeblock_jzh_1hc_n1c"><code>time(now());</code></pre>
+            <p class="- topic/p p">返回：16:03:36.529</p>
+        </div>
+    </article>
+    <article class="- topic/topic topic nested1" aria-labelledby="ariaid-title21" id="symbol">
+        <h2 class="- topic/title title topictitle2" id="ariaid-title21">symbol</h2>
+        <div class="- topic/body body">
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="symbol__codeblock_e2p_5hn_ryb" data-ofbid="symbol__codeblock_e2p_5hn_ryb"><code>x=`XOM`y;
+typestr(x);</code></pre>
+            <p class="- topic/p p">返回：STRING VECTOR</p>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="symbol__codeblock_dxc_tmc_n1c" data-ofbid="symbol__codeblock_dxc_tmc_n1c"><code>y=symbol(x);
+y;</code></pre>
+            <p class="- topic/p p">返回：["XOM","y"]</p>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="symbol__codeblock_jlr_5mc_n1c" data-ofbid="symbol__codeblock_jlr_5mc_n1c"><code>typestr(y);</code></pre>
+            <p class="- topic/p p">返回：FAST SYMBOL VECTOR</p>
+        </div>
+    </article>
+    <article class="- topic/topic topic nested1" aria-labelledby="ariaid-title22" id="nanotime">
+        <h2 class="- topic/title title topictitle2" id="ariaid-title22">nanotime</h2>
+        <div class="- topic/body body">
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="nanotime__codeblock_zv5_5hn_ryb" data-ofbid="nanotime__codeblock_zv5_5hn_ryb"><code>nanotime(1000000000);</code></pre>
+            <p class="- topic/p p">返回：00:00:01.000000000</p>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="nanotime__codeblock_nrc_nhc_n1c" data-ofbid="nanotime__codeblock_nrc_nhc_n1c"><code>nanotime(12:06:09 13:08:01);</code></pre>
+            <p class="- topic/p p">返回：[12:06:09.000000000,13:08:01.000000000]</p>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="nanotime__codeblock_erp_phc_n1c" data-ofbid="nanotime__codeblock_erp_phc_n1c"><code>nanotime(2012.12.03 01:22:01.123456789);</code></pre>
+            <p class="- topic/p p">返回：01:22:01.123456789</p>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="nanotime__codeblock_onh_rhc_n1c" data-ofbid="nanotime__codeblock_onh_rhc_n1c"><code>nanotime('13:30:10.008007006');</code></pre>
+            <p class="- topic/p p">返回：13:30:10.008007006</p>
+        </div>
+    </article>
+    <article class="- topic/topic topic nested1" aria-labelledby="ariaid-title23" id="nanotimestamp">
+        <h2 class="- topic/title title topictitle2" id="ariaid-title23">nanotimestamp</h2>
+        <div class="- topic/body body">
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="nanotimestamp__codeblock_zs1_sjc_n1c" data-ofbid="nanotimestamp__codeblock_zs1_sjc_n1c"><code>nanotimestamp(1);</code></pre>
+            <p class="- topic/p p">返回：1970.01.01 00:00:00.000000001</p>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="nanotimestamp__codeblock_aw5_5hn_ryb" data-ofbid="nanotimestamp__codeblock_aw5_5hn_ryb"><code>nanotimestamp(1000000000);</code></pre>
+            <p class="- topic/p p">返回：1970.01.01 00:00:01.000000000</p>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="nanotimestamp__codeblock_vlk_5hc_n1c" data-ofbid="nanotimestamp__codeblock_vlk_5hc_n1c"><code>nanotimestamp(2012.12.03 12:06:09 2012.12.03 13:08:01);</code></pre>
+            <p class="- topic/p p">返回：[2012.12.03 12:06:09.000000000,2012.12.03 13:08:01.000000000]</p>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="nanotimestamp__codeblock_oqp_d3c_n1c" data-ofbid="nanotimestamp__codeblock_oqp_d3c_n1c"><code>nanotimestamp(2012.12.03 01:22:01.123456789);</code></pre>
+            <p class="- topic/p p">返回：2012.12.03 01:22:01.123456789</p>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="nanotimestamp__codeblock_lhh_h3c_n1c" data-ofbid="nanotimestamp__codeblock_lhh_h3c_n1c"><code>nanotimestamp('2012.12.03 13:30:10.008007006');</code></pre>
+            <p class="- topic/p p">返回：2012.12.03 13:30:10.008007006</p>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="nanotimestamp__codeblock_hk4_k3c_n1c" data-ofbid="nanotimestamp__codeblock_hk4_k3c_n1c"><code>nanotimestamp(now());</code></pre>
+            <p class="- topic/p p">返回：2024.02.22 16:14:28.627000000</p>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="nanotimestamp__codeblock_hlv_qz1_y1c" data-ofbid="nanotimestamp__codeblock_hlv_qz1_y1c"><code>nanotimestamp(2012.01M)</code></pre>
+            <p class="- topic/p p">返回：2012.01.01T00:00:00.000000000</p>
+        </div>
+    </article>
+    <article class="- topic/topic topic nested1" aria-labelledby="ariaid-title24" id="uuid">
+        <h2 class="- topic/title title topictitle2" id="ariaid-title24">uuid</h2>
+        <div class="- topic/body body">
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="uuid__codeblock_cw5_5hn_ryb" data-ofbid="uuid__codeblock_cw5_5hn_ryb"><code>uuid("");</code></pre>
+            <p class="- topic/p p">返回：00000000-0000-0000-0000-000000000000</p>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="uuid__codeblock_wj1_xjc_n1c" data-ofbid="uuid__codeblock_wj1_xjc_n1c"><code>a=uuid("9d457e79-1bed-d6c2-3612-b0d31c1881f6");
+a;</code></pre>
+            <p class="- topic/p p">返回：9d457e79-1bed-d6c2-3612-b0d31c1881f6</p>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="uuid__codeblock_nys_zjc_n1c" data-ofbid="uuid__codeblock_nys_zjc_n1c"><code>typestr(a);</code></pre>
+            <p class="- topic/p p">返回：UUID</p>
+        </div>
+    </article>
+    <article class="- topic/topic topic nested1" aria-labelledby="ariaid-title25" id="ipaddr">
+        <h2 class="- topic/title title topictitle2" id="ariaid-title25">ipaddr</h2>
+        <div class="- topic/body body">
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="ipaddr__codeblock_dw5_5hn_ryb" data-ofbid="ipaddr__codeblock_dw5_5hn_ryb"><code>a=ipaddr("192.168.1.13");
+a;</code></pre>
+            <p class="- topic/p p">返回：192.168.1.13</p>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="ipaddr__codeblock_knp_gkc_n1c" data-ofbid="ipaddr__codeblock_knp_gkc_n1c"><code>typestr(a);</code></pre>
+            <p class="- topic/p p">返回：IPADDR</p>
+        </div>
+    </article>
+    <article class="- topic/topic topic nested1" aria-labelledby="ariaid-title26" id="int128">
+        <h2 class="- topic/title title topictitle2" id="ariaid-title26">int128</h2>
+        <div class="- topic/body body">
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="int128__codeblock_ew5_5hn_ryb" data-ofbid="int128__codeblock_ew5_5hn_ryb"><code>a=int128("e1671797c52e15f763380b45e841ec32")</code></pre>
+            <p class="- topic/p p">返回：e1671797c52e15f763380b45e841ec32</p>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="int128__codeblock_iwz_jkc_n1c" data-ofbid="int128__codeblock_iwz_jkc_n1c"><code>typestr(a);</code></pre>
+            <p class="- topic/p p">返回：INT128</p>
+        </div>
+    </article>
+    <article class="- topic/topic topic nested1" aria-labelledby="ariaid-title27" id="duration">
+        <h2 class="- topic/title title topictitle2" id="ariaid-title27">duration</h2>
+        <div class="- topic/body body">
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="duration__codeblock_zpv_thn_ryb" data-ofbid="duration__codeblock_zpv_thn_ryb"><code>y=duration("20H")
+y</code></pre>
+            <p class="- topic/p p">返回：20H</p>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="duration__codeblock_afk_3hd_n1c" data-ofbid="duration__codeblock_afk_3hd_n1c"><code>typestr(y)</code></pre>
+            <p class="- topic/p p">返回：DURATION</p>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="duration__codeblock_gzn_jhd_n1c" data-ofbid="duration__codeblock_gzn_jhd_n1c"><code>duration("3XNYS")</code></pre>
+            <p class="- topic/p p">返回：3XNYS</p>
+            <p class="- topic/p p">不指定时间单位，取时间列 time 的单位 s：</p>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="duration__codeblock_aqv_thn_ryb" data-ofbid="duration__codeblock_aqv_thn_ryb"><code>t=table(take(2018.01.01T01:00:00+1..10,10) join take(2018.01.01T02:00:00+1..10,10) join take(2018.01.01T08:00:00+1..10,10) as time, rand(1.0, 30) as x);
+select max(x) from t group by bar(time, 5);</code></pre>
+            <div class="table-container"><table class="- topic/table table" id="duration__table_bqv_thn_ryb" data-ofbid="duration__table_bqv_thn_ryb" data-cols="2"><caption></caption><colgroup><col/><col/></colgroup><thead class="- topic/thead thead">
+                        <tr class="- topic/row">
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="duration__table_bqv_thn_ryb__entry__1">bar_time</th>
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="duration__table_bqv_thn_ryb__entry__2">max_x</th>
+                        </tr>
+                    </thead><tbody class="- topic/tbody tbody">
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="duration__table_bqv_thn_ryb__entry__1">2018.01.01T01:00:00</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="duration__table_bqv_thn_ryb__entry__2">0.8824</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="duration__table_bqv_thn_ryb__entry__1">2018.01.01T01:00:05</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="duration__table_bqv_thn_ryb__entry__2">0.8027</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="duration__table_bqv_thn_ryb__entry__1">2018.01.01T01:00:10</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="duration__table_bqv_thn_ryb__entry__2">0.572</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="duration__table_bqv_thn_ryb__entry__1">2018.01.01T02:00:00</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="duration__table_bqv_thn_ryb__entry__2">0.8875</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="duration__table_bqv_thn_ryb__entry__1">2018.01.01T02:00:05</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="duration__table_bqv_thn_ryb__entry__2">0.8542</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="duration__table_bqv_thn_ryb__entry__1">2018.01.01T02:00:10</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="duration__table_bqv_thn_ryb__entry__2">0.4287</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="duration__table_bqv_thn_ryb__entry__1">2018.01.01T08:00:00</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="duration__table_bqv_thn_ryb__entry__2">0.9294</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="duration__table_bqv_thn_ryb__entry__1">2018.01.01T08:00:05</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="duration__table_bqv_thn_ryb__entry__2">0.9804</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="duration__table_bqv_thn_ryb__entry__1">2018.01.01T08:00:10</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="duration__table_bqv_thn_ryb__entry__2">0.2147</td>
+                        </tr>
+                    </tbody></table></div>
+            <p class="- topic/p p">指定单位为 m，对时间列按照1分钟进行分组：</p>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="duration__codeblock_cqv_thn_ryb" data-ofbid="duration__codeblock_cqv_thn_ryb"><code>select max(x) from t group by bar(time, 1m);</code></pre>
+            <div class="table-container"><table class="- topic/table table" id="duration__table_dqv_thn_ryb" data-ofbid="duration__table_dqv_thn_ryb" data-cols="2"><caption></caption><colgroup><col/><col/></colgroup><thead class="- topic/thead thead">
+                        <tr class="- topic/row">
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="duration__table_dqv_thn_ryb__entry__1">bar_time</th>
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="duration__table_dqv_thn_ryb__entry__2">max_x</th>
+                        </tr>
+                    </thead><tbody class="- topic/tbody tbody">
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="duration__table_dqv_thn_ryb__entry__1">2018.01.01T01:00:00</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="duration__table_dqv_thn_ryb__entry__2">0.8824</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="duration__table_dqv_thn_ryb__entry__1">2018.01.01T02:00:00</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="duration__table_dqv_thn_ryb__entry__2">0.8875</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="duration__table_dqv_thn_ryb__entry__1">2018.01.01T08:00:00</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="duration__table_dqv_thn_ryb__entry__2">0.9804</td>
+                        </tr>
+                    </tbody></table></div>
+        </div>
+    </article>
+    <article class="- topic/topic topic nested1" aria-labelledby="ariaid-title28" id="castx-datatypename--">
+        <h2 class="- topic/title title topictitle2" id="ariaid-title28">cast(X, dataTypeName) / $</h2>
+        <div class="- topic/body body">
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="castx-datatypename--__codeblock_rhq_thn_ryb" data-ofbid="castx-datatypename--__codeblock_rhq_thn_ryb"><code>x=8.9$INT;
+x;</code></pre>
+            <p class="- topic/p p">返回：9</p>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="castx-datatypename--__codeblock_zv1_whd_n1c" data-ofbid="castx-datatypename--__codeblock_zv1_whd_n1c"><code>x=1..10;
+x;</code></pre>
+            <p class="- topic/p p">返回：[1,2,3,4,5,6,7,8,9,10]</p>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="castx-datatypename--__codeblock_phd_yhd_n1c" data-ofbid="castx-datatypename--__codeblock_phd_yhd_n1c"><code>typestr x;</code></pre>
+            <p class="- topic/p p">返回：FAST INT VECTOR</p>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="castx-datatypename--__codeblock_qcq_zhd_n1c" data-ofbid="castx-datatypename--__codeblock_qcq_zhd_n1c"><code>x/2;</code></pre>
+            <p class="- topic/p p">返回：[0,1,1,2,2,3,3,4,4,5]</p>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="castx-datatypename--__codeblock_qhv_b3d_n1c" data-ofbid="castx-datatypename--__codeblock_qhv_b3d_n1c"><code>x=x$DOUBLE;
+typestr x;</code></pre>
+            <p class="- topic/p p">返回：FAST DOUBLE VECTOR</p>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="castx-datatypename--__codeblock_yqb_d3d_n1c" data-ofbid="castx-datatypename--__codeblock_yqb_d3d_n1c"><code>x/2;</code></pre>
+            <p class="- topic/p p">返回：[0.5,1,1.5,2,2.5,3,3.5,4,4.5,5]</p>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="castx-datatypename--__codeblock_oqw_23d_n1c" data-ofbid="castx-datatypename--__codeblock_oqw_23d_n1c"><code>x=`IBM`MS;
+typestr x;</code></pre>
+            <p class="- topic/p p">返回：STRING VECTOR</p>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="castx-datatypename--__codeblock_bgm_k3d_n1c" data-ofbid="castx-datatypename--__codeblock_bgm_k3d_n1c"><code>x=x$SYMBOL;
+typestr x;</code></pre>
+            <p class="- topic/p p">返回：FAST SYMBOL VECTOR</p>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="castx-datatypename--__codeblock_gwk_m3d_n1c" data-ofbid="castx-datatypename--__codeblock_gwk_m3d_n1c"><code>x=`128.9;
+typestr x;</code></pre>
+            <p class="- topic/p p">返回：STRING</p>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="castx-datatypename--__codeblock_nwc_43d_n1c" data-ofbid="castx-datatypename--__codeblock_nwc_43d_n1c"><code>x=x$INT;
+x;</code></pre>
+            <p class="- topic/p p">返回：128</p>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="castx-datatypename--__codeblock_gdk_p3d_n1c" data-ofbid="castx-datatypename--__codeblock_gdk_p3d_n1c"><code>typestr x;</code></pre>
+            <p class="- topic/p p">返回：INT</p>
+            <p class="- topic/p p">以下这个例子将向量转换为矩阵：</p>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="castx-datatypename--__codeblock_wbj_q3d_n1c" data-ofbid="castx-datatypename--__codeblock_wbj_q3d_n1c"><code>m=1..8$2:4;
+m;</code></pre>
+            <p class="- topic/p p">得到：</p>
+            <div class="table-container"><table class="- topic/table table" id="castx-datatypename--__table_shq_thn_ryb" data-ofbid="castx-datatypename--__table_shq_thn_ryb" data-cols="4"><caption></caption><colgroup><col/><col/><col/><col/></colgroup><thead class="- topic/thead thead">
+                        <tr class="- topic/row">
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="castx-datatypename--__table_shq_thn_ryb__entry__1">0</th>
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="castx-datatypename--__table_shq_thn_ryb__entry__2">1</th>
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="castx-datatypename--__table_shq_thn_ryb__entry__3">2</th>
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="castx-datatypename--__table_shq_thn_ryb__entry__4">3</th>
+                        </tr>
+                    </thead><tbody class="- topic/tbody tbody">
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="castx-datatypename--__table_shq_thn_ryb__entry__1">1</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="castx-datatypename--__table_shq_thn_ryb__entry__2">3</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="castx-datatypename--__table_shq_thn_ryb__entry__3">5</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="castx-datatypename--__table_shq_thn_ryb__entry__4">7</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="castx-datatypename--__table_shq_thn_ryb__entry__1">2</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="castx-datatypename--__table_shq_thn_ryb__entry__2">4</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="castx-datatypename--__table_shq_thn_ryb__entry__3">6</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="castx-datatypename--__table_shq_thn_ryb__entry__4">8</td>
+                        </tr>
+                    </tbody></table></div>
+            <p class="- topic/p p">以下例子改变一个矩阵的形状：</p>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="castx-datatypename--__codeblock_thq_thn_ryb" data-ofbid="castx-datatypename--__codeblock_thq_thn_ryb"><code>m$4:2;</code></pre>
+            <p class="- topic/p p">得到：</p>
+            <div class="table-container"><table class="- topic/table table" id="castx-datatypename--__table_uhq_thn_ryb" data-ofbid="castx-datatypename--__table_uhq_thn_ryb" data-cols="2"><caption></caption><colgroup><col/><col/></colgroup><thead class="- topic/thead thead">
+                        <tr class="- topic/row">
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="castx-datatypename--__table_uhq_thn_ryb__entry__1">0</th>
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="castx-datatypename--__table_uhq_thn_ryb__entry__2">1</th>
+                        </tr>
+                    </thead><tbody class="- topic/tbody tbody">
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="castx-datatypename--__table_uhq_thn_ryb__entry__1">1</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="castx-datatypename--__table_uhq_thn_ryb__entry__2">5</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="castx-datatypename--__table_uhq_thn_ryb__entry__1">2</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="castx-datatypename--__table_uhq_thn_ryb__entry__2">6</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="castx-datatypename--__table_uhq_thn_ryb__entry__1">3</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="castx-datatypename--__table_uhq_thn_ryb__entry__2">7</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="castx-datatypename--__table_uhq_thn_ryb__entry__1">4</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="castx-datatypename--__table_uhq_thn_ryb__entry__2">8</td>
+                        </tr>
+                    </tbody></table></div>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="castx-datatypename--__codeblock_vhq_thn_ryb" data-ofbid="castx-datatypename--__codeblock_vhq_thn_ryb"><code>m$1:size(m);</code></pre>
+            <p class="- topic/p p">得到：</p>
+            <div class="table-container"><table class="- topic/table table" id="castx-datatypename--__table_whq_thn_ryb" data-ofbid="castx-datatypename--__table_whq_thn_ryb" data-cols="8"><caption></caption><colgroup><col/><col/><col/><col/><col/><col/><col/><col/></colgroup><thead class="- topic/thead thead">
+                        <tr class="- topic/row">
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="castx-datatypename--__table_whq_thn_ryb__entry__1">0</th>
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="castx-datatypename--__table_whq_thn_ryb__entry__2">1</th>
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="castx-datatypename--__table_whq_thn_ryb__entry__3">2</th>
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="castx-datatypename--__table_whq_thn_ryb__entry__4">3</th>
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="castx-datatypename--__table_whq_thn_ryb__entry__5">4</th>
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="castx-datatypename--__table_whq_thn_ryb__entry__6">5</th>
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="castx-datatypename--__table_whq_thn_ryb__entry__7">6</th>
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="castx-datatypename--__table_whq_thn_ryb__entry__8">7</th>
+                        </tr>
+                    </thead><tbody class="- topic/tbody tbody">
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="castx-datatypename--__table_whq_thn_ryb__entry__1">1</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="castx-datatypename--__table_whq_thn_ryb__entry__2">2</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="castx-datatypename--__table_whq_thn_ryb__entry__3">3</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="castx-datatypename--__table_whq_thn_ryb__entry__4">4</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="castx-datatypename--__table_whq_thn_ryb__entry__5">5</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="castx-datatypename--__table_whq_thn_ryb__entry__6">6</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="castx-datatypename--__table_whq_thn_ryb__entry__7">7</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="castx-datatypename--__table_whq_thn_ryb__entry__8">8</td>
+                        </tr>
+                    </tbody></table></div>
+        </div>
+    </article>
+</article></main></div>
+                        
+                        
+                        
+                        
+                        
+                        
+                    </div>
+                    
+                        <nav role="navigation" id="wh_topic_toc" aria-label="On this page" class="col-lg-2 d-none d-lg-block navbar d-print-none"> 
+                            <div id="wh_topic_toc_content">
+		                        
+	                            <div class=" wh_topic_toc "><div class="wh_topic_label">在本页上</div><ul><li class="topic-item"><a href="#string" data-tocid="string">string</a></li><li class="topic-item"><a href="#bool" data-tocid="bool">bool</a></li><li class="topic-item"><a href="#topic_oth_4ld_n1c" data-tocid="topic_oth_4ld_n1c">decimal32</a></li><li class="topic-item"><a href="#topic_e1x_pld_n1c" data-tocid="topic_e1x_pld_n1c">decimal64</a></li><li class="topic-item"><a href="#topic_g4y_pld_n1c" data-tocid="topic_g4y_pld_n1c">decimal128</a></li><li class="topic-item"><a href="#int" data-tocid="int">int</a></li><li class="topic-item"><a href="#short" data-tocid="short">short</a></li><li class="topic-item"><a href="#long" data-tocid="long">long</a></li><li class="topic-item"><a href="#char" data-tocid="char">char</a></li><li class="topic-item"><a href="#double" data-tocid="double">double</a></li><li class="topic-item"><a href="#date" data-tocid="date">date</a></li><li class="topic-item"><a href="#datehour" data-tocid="datehour">datehour</a></li><li class="topic-item"><a href="#datetime" data-tocid="datetime">datetime</a></li><li class="topic-item"><a href="#timestamp" data-tocid="timestamp">timestamp</a></li><li class="topic-item"><a href="#month" data-tocid="month">month</a></li><li class="topic-item"><a href="#second" data-tocid="second">second</a></li><li class="topic-item"><a href="#minute" data-tocid="minute">minute</a></li><li class="topic-item"><a href="#topic_lmb_xld_n1c" data-tocid="topic_lmb_xld_n1c">hour</a></li><li class="topic-item"><a href="#time" data-tocid="time">time</a></li><li class="topic-item"><a href="#symbol" data-tocid="symbol">symbol</a></li><li class="topic-item"><a href="#nanotime" data-tocid="nanotime">nanotime</a></li><li class="topic-item"><a href="#nanotimestamp" data-tocid="nanotimestamp">nanotimestamp</a></li><li class="topic-item"><a href="#uuid" data-tocid="uuid">uuid</a></li><li class="topic-item"><a href="#ipaddr" data-tocid="ipaddr">ipaddr</a></li><li class="topic-item"><a href="#int128" data-tocid="int128">int128</a></li><li class="topic-item"><a href="#duration" data-tocid="duration">duration</a></li><li class="topic-item"><a href="#castx-datatypename--" data-tocid="castx-datatypename--">cast(X, dataTypeName) / $</a></li></ul></div>
+	                        	
+                        	</div>
+                        </nav>
+                    
+                </div>
+            </div>
+            
+            
+            
+        </div> 
+        <footer class="navbar navbar-default wh_footer">
+  <div class=" footer-container mx-auto ">
+<title>Copyright</title><p><b> ©2024 浙江智臾科技有限公司 浙ICP备18048711号-3</b></p>
+  </div>
+</footer>
+        
+        <div id="go2top" class="d-print-none">
+            <span class="oxy-icon oxy-icon-up"></span>
+        </div>
+        
+        <div id="modal_img_large" class="modal">
+            <span class="close oxy-icon oxy-icon-remove"></span>
+            <div id="modal_img_container"></div>
+            <div id="caption"></div>
+        </div>
+        
+        
+        
+    </body>
+</html>

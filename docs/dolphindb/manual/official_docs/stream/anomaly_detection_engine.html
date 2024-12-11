@@ -1,0 +1,724 @@
+<!DOCTYPE html><html xmlns="http://www.w3.org/1999/xhtml" xml:lang="zh" lang="zh" data-whc_version="26.0">
+    <head><link rel="shortcut icon" href="../favicon.ico"/><link rel="icon" href="../favicon.ico"/><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><meta http-equiv="X-UA-Compatible" content="IE=edge"/><meta name="description" content="DolphinDB 提供了多种轻量且使用方便的流式计算引擎。本文档讲述异常检测引擎。 物联网设备（如机床、锅炉、电梯、水表、气表等等）无时无刻不在产生海量的设备状态数据和业务消息数据，这些数据的在采集、计算、分析过程中又常常涉及异常数据的检测。 针对异常数据检测的需求，DolphinDB 提供基于流数据框架的异常检测引擎函数，用户只需指定异常指标，异常检测引擎就可以实时地进行异常数据检测。 ..."/><meta name="DC.rights.owner" content="(C) 版权 2024"/><meta name="copyright" content="(C) 版权 2024"/><meta name="generator" content="DITA-OT"/><meta name="DC.type" content="topic"/><meta name="DC.coverage" content=""/><meta name="DC.relation" content="../funcs/themes/streamingEngine.html"/><meta name="prodname" content="DolphinDB"/><meta name="brand" content="DolphinDB"/><meta name="DC.creator" content="DolphinDB"/><meta name="DC.publisher" content="DDB N/A DDB 200"/><meta name="DC.format" content="HTML5"/><meta name="DC.identifier" content="anomaly_detection_engine"/><title>异常检测引擎</title><!--  Generated with Oxygen version 26.0, build number 2024012323.  --><meta name="wh-path2root" content="../"/><meta name="wh-toc-id" content="anomaly_detection_engine-d9529e4330"/><meta name="wh-source-relpath" content="stream/anomaly_detection_engine.dita"/><meta name="wh-out-relpath" content="stream/anomaly_detection_engine.html"/>
+
+    <link rel="stylesheet" type="text/css" href="../oxygen-webhelp/app/commons.css?buildId=2024012323"/>
+    <link rel="stylesheet" type="text/css" href="../oxygen-webhelp/app/topic.css?buildId=2024012323"/>
+
+    <script src="../oxygen-webhelp/app/options/properties.js?buildId=20240704100525"></script>
+    <script src="../oxygen-webhelp/app/localization/strings.js?buildId=2024012323"></script>
+    <script src="../oxygen-webhelp/app/search/index/keywords.js?buildId=20240704100525"></script>
+    <script defer="defer" src="../oxygen-webhelp/app/commons.js?buildId=2024012323"></script>
+    <script defer="defer" src="../oxygen-webhelp/app/topic.js?buildId=2024012323"></script>
+<link rel="stylesheet" type="text/css" href="../oxygen-webhelp/template/styles.css?buildId=2024012323"/><script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script><script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script></head>
+
+    <body id="anomaly_detection_engine" class="wh_topic_page frmBody">
+        <a href="#wh_topic_body" class="sr-only sr-only-focusable">
+            跳转到主要内容
+        </a>
+        
+        
+        
+        
+        <header class="navbar navbar-default wh_header">
+    <div class="container-fluid">
+        <div xmlns:whc="http://www.oxygenxml.com/webhelp/components" class="wh_header_flex_container navbar-nav navbar-expand-md navbar-dark">
+            <div class="wh_logo_and_publication_title_container">
+                <div class="wh_logo_and_publication_title">
+                    
+                    <a href="https://www.dolphindb.cn" class=" wh_logo d-none d-sm-block "><img src="../logo.png" alt="  DolphinDB 文档中心  "/></a>
+                    <div class=" wh_publication_title "><a href="../index.html"><span class="booktitle">  <span class="ph mainbooktitle">DolphinDB 文档中心</span>  </span></a></div>
+                    
+                </div>
+                
+                
+            </div>
+
+            <div class="wh_top_menu_and_indexterms_link collapse navbar-collapse" id="wh_top_menu_and_indexterms_link">
+                
+                
+                
+                
+            </div>
+        <div class=" wh_search_input navbar-form wh_topic_page_search search " role="form">
+            
+            
+            
+            <form id="searchForm" method="get" role="search" action="../search.html"><div><input type="search" placeholder="搜索 " class="wh_search_textfield" id="textToSearch" name="searchQuery" aria-label="搜索查询" required="required"/><button type="submit" class="wh_search_button" aria-label="搜索"><span class="search_input_text">搜索</span></button></div></form>
+            
+            <script src="/vendors/react/umd/react.production.min.js" defer="defer"></script>
+<script src="/vendors/react-dom/umd/react-dom.production.min.js" defer="defer"></script>
+<script src="/vendors/dayjs/dayjs.min.js" defer="defer"></script>
+<script src="/vendors/antd/dist/antd.min.js" defer="defer"></script>
+<script src="/vendors/@ant-design/icons/dist/index.umd.min.js" defer="defer"></script>
+<script src="/zh/index.js" type="module"></script>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js" defer="defer"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML" defer="defer"><!--
+
+
+--></script>
+
+            
+        </div></div>
+    </div>
+</header>
+        
+        
+         
+        
+        
+        
+        <div class="container-fluid" id="wh_topic_container">
+            <div class="row">
+
+                <nav class="wh_tools d-print-none navbar-expand-md" aria-label="Tools">
+                    
+                    <div data-tooltip-position="bottom" class=" wh_breadcrumb "><ol class="d-print-none"><li><span class="home"><a href="../index.html"><span>主页</span></a></span></li><li><div class="topicref" data-id="chap7_tutorials_streaming"><div class="title"><a href="../stream/str_intro.html"><span class="keyword label">流数据</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 流数据引擎及流数据计算的基本概念</p></div></div></div></li><li><div class="topicref" data-id="streamingEngineTopic"><div class="title"><a href="../funcs/themes/streamingEngine.html"><span class="keyword label">内置流式计算引擎</span></a></div></div></li><li class="active"><div class="topicref" data-id="anomaly_detection_engine"><div class="title"><a href="../stream/anomaly_detection_engine.html">异常检测引擎</a></div></div></li></ol></div>
+                    
+                    
+                    
+                    <div class="wh_right_tools">
+                        <button class="wh_hide_highlight" aria-label="切换搜索突出显示" title="切换搜索突出显示"></button>
+                        <button class="webhelp_expand_collapse_sections" data-next-state="collapsed" aria-label="折叠截面" title="折叠截面"></button>
+                        
+                        
+                        
+                        
+                        <div class=" wh_print_link print d-none d-md-inline-block "><button onClick="window.print()" title="打印此页" aria-label="打印此页"></button></div>
+                        
+                        <button type="button" id="wh_toc_button" class="custom-toggler navbar-toggler collapsed wh_toggle_button navbar-light" aria-expanded="false" aria-label="Toggle publishing table of content" aria-controls="wh_publication_toc">
+                            <span class="navbar-toggler-icon"></span>
+                        </button>
+                    </div>
+                    
+                </nav>
+            </div>
+            
+            
+            
+            
+            <div class="wh_content_area">
+                <div class="row">
+                    
+                        <nav id="wh_publication_toc" class="col-lg-3 col-md-3 col-sm-12 d-md-block d-none d-print-none" aria-label="Table of Contents Container">
+                            <div id="wh_publication_toc_content">
+		                        
+                            	<div class=" wh_publication_toc " data-tooltip-position="right"><span class="expand-button-action-labels"><span id="button-expand-action" role="button" aria-label="Expand"></span><span id="button-collapse-action" role="button" aria-label="Collapse"></span><span id="button-pending-action" role="button" aria-label="Pending"></span></span><ul role="tree" aria-label="Table of Contents"><li role="treeitem"><div data-tocid="new_chap_about_sect_ddb_docs_intro-d9529e87" class="topicref" data-id="new_chap_about_sect_ddb_docs_intro" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../about/ddb_docs_intro.html" id="new_chap_about_sect_ddb_docs_intro-d9529e87-link">文档使用说明</a><div class="wh-tooltip"><p class="shortdesc">如何获取 DolphinDB 帮助信息</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="chap1_getstarted-d9529e140" class="topicref" data-id="chap1_getstarted" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action chap1_getstarted-d9529e140-link" class="wh-expand-btn"></span><div class="title"><a href="../getstarted/chap1_getstarted.html" id="chap1_getstarted-d9529e140-link"><span class="keyword label">快速上手</span></a><div class="wh-tooltip"><p class="shortdesc">如何快速部署 DolphinDB、建库建表、写入和查询数据</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="sectionddb_deployment-d9529e335" class="topicref" data-id="sectionddb_deployment" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action sectionddb_deployment-d9529e335-link" class="wh-expand-btn"></span><div class="title"><a href="../deploy/deploy_intro.html" id="sectionddb_deployment-d9529e335-link"><span class="keyword label">部署</span></a><div class="wh-tooltip"><p class="shortdesc">如何在不同的场景中部署 DolphinDB</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="new_chap_database_manage_new_chap_dbmanage_landing_page-d9529e2313" class="topicref" data-id="new_chap_database_manage_new_chap_dbmanage_landing_page" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action new_chap_database_manage_new_chap_dbmanage_landing_page-d9529e2313-link" class="wh-expand-btn"></span><div class="title"><a href="../db_distr_comp/cfg/db_intro.html" id="new_chap_database_manage_new_chap_dbmanage_landing_page-d9529e2313-link"><span class="keyword label">数据库</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 数据库的基本概念</p></div></div></div></li><li role="treeitem" aria-expanded="true"><div data-tocid="chap7_tutorials_streaming-d9529e3490" class="topicref" data-id="chap7_tutorials_streaming" data-state="expanded"><span role="button" tabindex="0" aria-labelledby="button-collapse-action chap7_tutorials_streaming-d9529e3490-link" class="wh-expand-btn"></span><div class="title"><a href="../stream/str_intro.html" id="chap7_tutorials_streaming-d9529e3490-link"><span class="keyword label">流数据</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 流数据引擎及流数据计算的基本概念</p></div></div></div><ul role="group" class="navbar-nav nav-list"><li role="treeitem" aria-expanded="false"><div data-tocid="streamfunctions-d9529e3543" class="topicref" data-id="streamfunctions" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action streamfunctions-d9529e3543-link" class="wh-expand-btn"></span><div class="title"><a href="../stream/str_funcs.html" id="streamfunctions-d9529e3543-link">功能简介</a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="tocId-d9529e3821" class="topicref" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action tocId-d9529e3821-link" class="wh-expand-btn"></span><div class="title"><a href="../stream/try_example1.html" id="tocId-d9529e3821-link">入门示例</a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="内置流式计算算子-d9529e3914" class="topicref" data-id="内置流式计算算子" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action 内置流式计算算子-d9529e3914-link" class="wh-expand-btn"></span><div class="title"><a href="../stream/str_operator.html" id="内置流式计算算子-d9529e3914-link"><span class="keyword label">内置流式计算算子</span></a></div></div></li><li role="treeitem" aria-expanded="true"><div data-tocid="streamingEngineTopic-d9529e4099" class="topicref" data-id="streamingEngineTopic" data-state="expanded"><span role="button" tabindex="0" aria-labelledby="button-collapse-action streamingEngineTopic-d9529e4099-link" class="wh-expand-btn"></span><div class="title"><a href="../funcs/themes/streamingEngine.html" id="streamingEngineTopic-d9529e4099-link"><span class="keyword label">内置流式计算引擎</span></a></div></div><ul role="group" class="navbar-nav nav-list"><li role="treeitem"><div data-tocid="时序聚合引擎-d9529e4146" class="topicref" data-id="时序聚合引擎" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../stream/time_series_engine.html" id="时序聚合引擎-d9529e4146-link">时序聚合引擎</a></div></div></li><li role="treeitem"><div data-tocid="cross_sectional_engine-d9529e4192" class="topicref" data-id="cross_sectional_engine" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../stream/cross_sectional_engine.html" id="cross_sectional_engine-d9529e4192-link">横截面引擎</a></div></div></li><li role="treeitem"><div data-tocid="reactive_state_engine-d9529e4238" class="topicref" data-id="reactive_state_engine" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../stream/reactive_state_engine.html" id="reactive_state_engine-d9529e4238-link">响应式状态引擎</a></div></div></li><li role="treeitem"><div data-tocid="session_window_engine-d9529e4284" class="topicref" data-id="session_window_engine" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../stream/session_window_engine.html" id="session_window_engine-d9529e4284-link">会话窗口引擎</a></div></div></li><li role="treeitem" class="active"><div data-tocid="anomaly_detection_engine-d9529e4330" class="topicref" data-id="anomaly_detection_engine" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../stream/anomaly_detection_engine.html" id="anomaly_detection_engine-d9529e4330-link">异常检测引擎</a></div></div></li></ul></li><li role="treeitem" aria-expanded="false"><div data-tocid="chap7_tutorials_streaming-d9529e4376" class="topicref" data-id="chap7_tutorials_streaming" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action chap7_tutorials_streaming-d9529e4376-link" class="wh-expand-btn"></span><div class="title"><a href="../stream/str_join_engine.html" id="chap7_tutorials_streaming-d9529e4376-link"><span class="keyword label">内置多数据源流式关联引擎</span></a></div></div></li><li role="treeitem"><div data-tocid="streamha-d9529e4653" class="topicref" data-id="streamha" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../stream/str_ha.html" id="streamha-d9529e4653-link"><span class="keyword label">流数据高可用</span></a></div></div></li><li role="treeitem"><div data-tocid="流计算状态监控-d9529e4700" class="topicref" data-id="流计算状态监控" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../stream/str_monitor.html" id="流计算状态监控-d9529e4700-link">流计算状态监控</a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="replay-d9529e4746" class="topicref" data-id="replay" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action replay-d9529e4746-link" class="wh-expand-btn"></span><div class="title"><a href="../stream/str_replay.html" id="replay-d9529e4746-link"><span class="keyword label">历史数据回放</span></a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="流批一体功能-d9529e4931" class="topicref" data-id="流批一体功能" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action 流批一体功能-d9529e4931-link" class="wh-expand-btn"></span><div class="title"><a href="../stream/str_batch.html" id="流批一体功能-d9529e4931-link"><span class="keyword label">流批一体</span></a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="tocId-d9529e5024" class="topicref" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action tocId-d9529e5024-link" class="wh-expand-btn"></span><div class="title"><a href="../stream/str_api_python.html" id="tocId-d9529e5024-link">实时流数据接入</a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="cep-d9529e5442" class="topicref" data-id="cep" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action cep-d9529e5442-link" class="wh-expand-btn"></span><div class="title"><a href="../stream/cep.html" id="cep-d9529e5442-link">复杂事件处理（CEP）引擎</a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="tocId-d9529e5995" class="topicref" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action tocId-d9529e5995-link" class="wh-expand-btn"></span><div class="title"><a href="../stream/local_sub.html" id="tocId-d9529e5995-link">流处理结果交互方式</a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="tocId-d9529e6184" class="topicref" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action tocId-d9529e6184-link" class="wh-expand-btn"></span><div class="title"><a href="../stream/str_altair.html" id="tocId-d9529e6184-link">数据可视化工具</a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="tocId-d9529e6277" class="topicref" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action tocId-d9529e6277-link" class="wh-expand-btn"></span><div class="title"><a href="../tutorials/streaming_auto_sub.html" id="tocId-d9529e6277-link">金融场景应用案例</a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="tocId-d9529e6969" class="topicref" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action tocId-d9529e6969-link" class="wh-expand-btn"></span><div class="title"><a href="../tutorials/ddb_str_app_iot.html" id="tocId-d9529e6969-link">物联网场景应用案例</a></div></div></li></ul></li><li role="treeitem" aria-expanded="false"><div data-tocid="tocId-d9529e7385" class="topicref" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action tocId-d9529e7385-link" class="wh-expand-btn"></span><div class="title"><a href="../db_distr_comp/db_oper/import_data.html" id="tocId-d9529e7385-link">数据迁移</a><div class="wh-tooltip"><p class="shortdesc">如何从不同数据源向 DolphinDB 迁移数据</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="chap7_tutorials_system_management-d9529e7812" class="topicref" data-id="chap7_tutorials_system_management" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action chap7_tutorials_system_management-d9529e7812-link" class="wh-expand-btn"></span><div class="title"><a href="../sys_man/om_intro.html" id="chap7_tutorials_system_management-d9529e7812-link"><span class="keyword label">系统运维</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 的系统运维功能及方法</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="about_language_resources-d9529e16490" class="topicref" data-id="about_language_resources" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action about_language_resources-d9529e16490-link" class="wh-expand-btn"></span><div class="title"><a href="../progr/progr_intro.html" id="about_language_resources-d9529e16490-link"><span class="keyword label">编程语言</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 编程基本概念与方法、SQL 在 DolphinDB 的应用</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="functions_references-d9529e26503" class="topicref" data-id="functions_references" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action functions_references-d9529e26503-link" class="wh-expand-btn"></span><div class="title"><a href="../funcs/funcs_intro.html" id="functions_references-d9529e26503-link"><span class="keyword label">函数参考</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 函数分类、语法、详解及示例</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="api_protocol-d9529e86456" class="topicref" data-id="api_protocol" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action api_protocol-d9529e86456-link" class="wh-expand-btn"></span><div class="title"><a href="../api/connapi_intro.html" id="api_protocol-d9529e86456-link"><span class="keyword label">连接器 &amp; API</span></a><div class="wh-tooltip"><p class="shortdesc">面向不同编程语言的 DolphinDB API 及连接器，相关协议和用法</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="chap6_plugin-d9529e91976" class="topicref" data-id="chap6_plugin" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action chap6_plugin-d9529e91976-link" class="wh-expand-btn"></span><div class="title"><a href="../plugins/plg_intro.html" id="chap6_plugin-d9529e91976-link"><span class="keyword label">插件</span></a><div class="wh-tooltip"><p class="shortdesc">多个应用场景的插件使用说明和插件开发指导</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="third_party-d9529e94749" class="topicref" data-id="third_party" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action third_party-d9529e94749-link" class="wh-expand-btn"></span><div class="title"><a href="../third_party.html" id="third_party-d9529e94749-link">第三方工具</a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="about_tutorials-d9529e94980" class="topicref" data-id="about_tutorials" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action about_tutorials-d9529e94980-link" class="wh-expand-btn"></span><div class="title"><a href="../tutorials/about_tutorials.html" id="about_tutorials-d9529e94980-link"><span class="keyword label">教程</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 产品使用教程</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="tocId-d9529e101769" class="topicref" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action tocId-d9529e101769-link" class="wh-expand-btn"></span><div class="title"><a href="../rn/server/3_00_1.html" id="tocId-d9529e101769-link">版本说明</a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 版本发布历史</p></div></div></div></li></ul></div>
+		                        
+                            </div>
+                        </nav>
+                    
+                    
+                    <div class="col-lg-7 col-md-9 col-sm-12" id="wh_topic_body">
+                        <button id="wh_close_publication_toc_button" class="close-toc-button d-none" aria-label="Toggle publishing table of content" aria-controls="wh_publication_toc" aria-expanded="true">
+                            <span class="close-toc-icon-container">
+                                <span class="close-toc-icon"></span>     
+                            </span>
+                        </button>
+                        <button id="wh_close_topic_toc_button" class="close-toc-button d-none" aria-label="Toggle topic table of content" aria-controls="wh_topic_toc" aria-expanded="true">
+                            <span class="close-toc-icon-container">
+                                <span class="close-toc-icon"></span>     
+                            </span>
+                        </button>
+                        
+                        <div class=" wh_topic_content body "><main role="main"><article class="- topic/topic topic" role="article" aria-labelledby="ariaid-title1">
+    <h1 class="- topic/title title topictitle1" id="ariaid-title1">异常检测引擎</h1>
+    <div class="- topic/body body">
+        <p class="- topic/p p">DolphinDB 提供了多种轻量且使用方便的流式计算引擎。本文档讲述异常检测引擎。</p>
+        <p class="- topic/p p">物联网设备（如机床、锅炉、电梯、水表、气表等等）无时无刻不在产生海量的设备状态数据和业务消息数据，这些数据的在采集、计算、分析过程中又常常涉及异常数据的检测。</p>
+        <p class="- topic/p p">针对异常数据检测的需求，DolphinDB 提供基于流数据框架的异常检测引擎函数，用户只需指定异常指标，异常检测引擎就可以实时地进行异常数据检测。</p>
+    </div>
+    <article class="- topic/topic topic nested1" aria-labelledby="ariaid-title2" id="topic_uxq_rzk_xzb">
+        <h2 class="- topic/title title topictitle2" id="ariaid-title2">概述</h2>
+        <div class="- topic/body body">
+            <p class="- topic/p p">异常检测引擎由 <code class="+ topic/ph pr-d/codeph ph codeph">createAnomalyDetectionEngine</code> 函数创建。</p>
+            <p class="- topic/p p">DolphinDB 的异常检测引擎建立在流数据的发布-订阅模型之上。下例中，通过
+                    <code class="+ topic/ph pr-d/codeph ph codeph">createAnomalyDetectionEngine</code> 创建异常检测引擎，并通过
+                    <code class="+ topic/ph pr-d/codeph ph codeph">subscribeTable</code>
+                    函数订阅流数据，每次有新数据流入就会按指定规则触发<code class="+ topic/ph pr-d/codeph ph codeph">append!{engine}</code>，将流数据持续输入聚合引擎（指定的数据表中）。异常检测引擎实时检测数据是否符合用户自定义的警报指标
+                temp&gt;65，如发现异常数据，将它们输出到表 <em class="+ topic/ph hi-d/i ph i">outputTable</em> 中。</p>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock language-python" id="topic_uxq_rzk_xzb__codeblock_zlk_szk_xzb" data-ofbid="topic_uxq_rzk_xzb__codeblock_zlk_szk_xzb">share streamTable(<span class="hl-number">1000</span>:<span class="hl-number">0</span>, `time`device`temp, [TIMESTAMP, SYMBOL, DOUBLE]) <strong class="hl-keyword">as</strong> sensor
+share streamTable(<span class="hl-number">1000</span>:<span class="hl-number">0</span>, `time`device`anomalyType`anomalyString, [TIMESTAMP, SYMBOL, INT, SYMBOL]) <strong class="hl-keyword">as</strong> outputTable
+engine = createAnomalyDetectionEngine(<span class="hl-string">"engine1"</span>, &lt;[temp &gt; <span class="hl-number">65</span>]&gt;, sensor, outputTable, `time, `device, <span class="hl-number">10</span>, <span class="hl-number">1</span>)
+subscribeTable(, <span class="hl-string">"sensor"</span>, <span class="hl-string">"sensorAnomalyDetection"</span>, <span class="hl-number">0</span>, append!{engine}, true)</pre>
+            <p class="- topic/p p">这里对异常处理引擎涉及到的一些概念做简要介绍：</p>
+            <ul class="- topic/ul ul" id="topic_uxq_rzk_xzb__ul_amk_szk_xzb" data-ofbid="topic_uxq_rzk_xzb__ul_amk_szk_xzb">
+                <li class="- topic/li li">
+                    <p class="- topic/p p">流数据表：DolphinDB
+                        为流式数据提供的一种特定的表对象，提供流式数据的发布功能。通过<code class="+ topic/ph pr-d/codeph ph codeph">subscribeTable</code>函数，其他的节点或应用可以订阅和消费流数据。</p>
+                </li>
+                <li class="- topic/li li">
+                    <p class="- topic/p p">异常处理引擎数据源：为异常处理引擎提供"原料"的通道。<code class="+ topic/ph pr-d/codeph ph codeph">createAnomalyDetectionEngine</code>函数返回一个抽象表，向这个抽象表写入数据，就意味着数据进入异常处理引擎进行计算。</p>
+                </li>
+                <li class="- topic/li li">
+                    <p class="- topic/p p">异常指标：以元代码的格式提供一组处理流数据的布尔表达式。其中可以包含聚合函数，以支持复杂的场景。</p>
+                </li>
+                <li class="- topic/li li">
+                    <p class="- topic/p p">数据窗口：每次计算时截取的流数据窗口长度。数据窗口仅在指标中包含聚合函数时有意义。</p>
+                </li>
+                <li class="- topic/li li">
+                    <p class="- topic/p p">输出表：异常检测引擎的输出表第一列必须是时间类型，用于存放检测到异常的时间戳，如果有指定分组列，那么第二列为分组列，之后的两列分别为 int 类型和
+                        string 或 symbol 类型，用于记录异常的类型（异常指标的表达式在 <em class="+ topic/ph hi-d/i ph i">metrics</em> 中的下标）和异常的内容。</p>
+                </li>
+            </ul>
+        </div>
+    </article>
+    <article class="- topic/topic topic nested1" aria-labelledby="ariaid-title3" id="topic_t45_vzk_xzb">
+        <h2 class="- topic/title title topictitle2" id="ariaid-title3">异常指标</h2>
+        <div class="- topic/body body">
+            <p class="- topic/p p">异常检测引擎中的指标均要求返回布尔值。一般是一个函数或一个表达式。当指标中包含聚合函数，必须指定窗口长度和计算的时间间隔，每隔一段时间，在固定长度的移动窗口中计算指标。异常指标一般有以下三种类型：</p>
+            <ul class="- topic/ul ul" id="topic_t45_vzk_xzb__ul_bn4_wzk_xzb" data-ofbid="topic_t45_vzk_xzb__ul_bn4_wzk_xzb">
+                <li class="- topic/li li">
+                    <p class="- topic/p p">只包含列名或非聚合函数，例如<code class="+ topic/ph pr-d/codeph ph codeph">qty&gt;10</code>, <code class="+ topic/ph pr-d/codeph ph codeph">lt(qty,
+                        prev(qty))</code>。对于这类指标，异常检测引擎会对每一条收到的数据进行计算，判断是否符合指标并决定是否输出。</p>
+                </li>
+                <li class="- topic/li li">
+                    <p class="- topic/p p">所有出现的列名都在聚合函数的参数中，例如<code class="+ topic/ph pr-d/codeph ph codeph">avg(qty-price)&gt;10</code>,
+                            <code class="+ topic/ph pr-d/codeph ph codeph">percentile(qty, 90)&lt;100</code>,
+                            <code class="+ topic/ph pr-d/codeph ph codeph">sum(qty)&gt;prev(sum(qty))</code>。对于这类指标，异常检测引擎只会在窗口发生移动时对数据进行聚合计算，和时间序列聚合引擎（Time
+                        Series Aggregator）类似。</p>
+                </li>
+                <li class="- topic/li li">
+                    <p class="- topic/p p">出现的列名中，既有作为聚合函数的参数的，又有不是聚合函数参数的，例如<code class="+ topic/ph pr-d/codeph ph codeph">avg(qty) &gt; qty</code>,
+                            <code class="+ topic/ph pr-d/codeph ph codeph">le(med(qty),
+                        price)</code>。对于这类指标，异常检测引擎会在在窗口发生移动时进行聚合计算。每一条数据到达时，使用最近一个窗口的聚合函数的返回值与非聚合函数参数的列进行计算。</p>
+                </li>
+            </ul>
+        </div>
+    </article>
+    <article class="- topic/topic topic nested1" aria-labelledby="ariaid-title4" id="topic_drv_yzk_xzb">
+        <h2 class="- topic/title title topictitle2" id="ariaid-title4">数据窗口</h2>
+        <div class="- topic/body body">
+            <p class="- topic/p p">当异常指标中包含聚合函数时，用户必须指定数据窗口。流数据聚合计算是每隔一段时间，在固定长度的移动窗口中进行。窗口长度由参数 <em class="+ topic/ph hi-d/i ph i">windowSize</em>
+                设定；计算的时间间隔由参数 <em class="+ topic/ph hi-d/i ph i">step</em> 设定。</p>
+            <p class="- topic/p p">在有多组数据的情况下，若每组都根据各自第一条数据进入系统的时间来构造数据窗口的边界，则一般无法将各组的计算结果在相同数据窗口中进行对比。考虑到这一点，系统按照参数
+                    <em class="+ topic/ph hi-d/i ph i">step</em> 值确定一个整型的规整尺度 <em class="+ topic/ph hi-d/i ph i">alignmentSize</em> ，以对各组第一个数据窗口的边界值进行规整处理。</p>
+            <p class="- topic/p p">（1）当数据时间类型为 MONTH 时，会以第一条数据对应年份的 1 月作为窗口的上边界。</p>
+            <p class="- topic/p p">（2）当数据的时间类型为 DATE 时，不对第一个数据窗口的边界值进行规整。</p>
+            <p class="- topic/p p">（3）当数据时间精度为秒或分钟时，如 MINUTE, DATETIME 或 SECOND类型，<em class="+ topic/ph hi-d/i ph i">alignmentSize</em> 取值规则如下表：</p>
+            <div class="table-container"><table class="- topic/table table" id="topic_drv_yzk_xzb__table_oqb_11l_xzb" data-ofbid="topic_drv_yzk_xzb__table_oqb_11l_xzb" data-cols="2"><caption></caption><colgroup><col/><col/></colgroup><thead class="- topic/thead thead">
+                        <tr class="- topic/row">
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="topic_drv_yzk_xzb__table_oqb_11l_xzb__entry__1">
+                                <p class="- topic/p p">step</p>
+                            </th>
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="topic_drv_yzk_xzb__table_oqb_11l_xzb__entry__2">
+                                <p class="- topic/p p">alignmentSize</p>
+                            </th>
+                        </tr>
+                    </thead><tbody class="- topic/tbody tbody">
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="topic_drv_yzk_xzb__table_oqb_11l_xzb__entry__1">0~2</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="topic_drv_yzk_xzb__table_oqb_11l_xzb__entry__2">2</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="topic_drv_yzk_xzb__table_oqb_11l_xzb__entry__1">3~5</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="topic_drv_yzk_xzb__table_oqb_11l_xzb__entry__2">5</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="topic_drv_yzk_xzb__table_oqb_11l_xzb__entry__1">6~10</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="topic_drv_yzk_xzb__table_oqb_11l_xzb__entry__2">10</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="topic_drv_yzk_xzb__table_oqb_11l_xzb__entry__1">11~15</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="topic_drv_yzk_xzb__table_oqb_11l_xzb__entry__2">15</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="topic_drv_yzk_xzb__table_oqb_11l_xzb__entry__1">16~20</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="topic_drv_yzk_xzb__table_oqb_11l_xzb__entry__2">20</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="topic_drv_yzk_xzb__table_oqb_11l_xzb__entry__1">21~30</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="topic_drv_yzk_xzb__table_oqb_11l_xzb__entry__2">30</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="topic_drv_yzk_xzb__table_oqb_11l_xzb__entry__1">31~60</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="topic_drv_yzk_xzb__table_oqb_11l_xzb__entry__2">60</td>
+                        </tr>
+                    </tbody></table></div>
+            <p class="- topic/p p">如果<em class="+ topic/ph hi-d/i ph i"> roundTime</em> = false，对于 <em class="+ topic/ph hi-d/i ph i">step</em> &gt; 60，<em class="+ topic/ph hi-d/i ph i">alignmentSize</em> 都为60。 如果
+                    <em class="+ topic/ph hi-d/i ph i">roundTime</em> = true，则 <em class="+ topic/ph hi-d/i ph i">alignmentSize</em> 取值规则如下表：</p>
+            <div class="table-container"><table class="- topic/table table" id="topic_drv_yzk_xzb__table_rqb_11l_xzb" data-ofbid="topic_drv_yzk_xzb__table_rqb_11l_xzb" data-cols="2"><caption></caption><colgroup><col/><col/></colgroup><thead class="- topic/thead thead">
+                        <tr class="- topic/row">
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="topic_drv_yzk_xzb__table_rqb_11l_xzb__entry__1">
+                                <p class="- topic/p p">step</p>
+                            </th>
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="topic_drv_yzk_xzb__table_rqb_11l_xzb__entry__2">
+                                <p class="- topic/p p">alignmentSize</p>
+                            </th>
+                        </tr>
+                    </thead><tbody class="- topic/tbody tbody">
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="topic_drv_yzk_xzb__table_rqb_11l_xzb__entry__1">61\～120</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="topic_drv_yzk_xzb__table_rqb_11l_xzb__entry__2">120（2 分钟）</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="topic_drv_yzk_xzb__table_rqb_11l_xzb__entry__1">121~180</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="topic_drv_yzk_xzb__table_rqb_11l_xzb__entry__2">180（3 分钟）</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="topic_drv_yzk_xzb__table_rqb_11l_xzb__entry__1">181~300</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="topic_drv_yzk_xzb__table_rqb_11l_xzb__entry__2">300（5 分钟）</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="topic_drv_yzk_xzb__table_rqb_11l_xzb__entry__1">301~600</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="topic_drv_yzk_xzb__table_rqb_11l_xzb__entry__2">600（10 分钟）</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="topic_drv_yzk_xzb__table_rqb_11l_xzb__entry__1">601~900</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="topic_drv_yzk_xzb__table_rqb_11l_xzb__entry__2">900（15 分钟）</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="topic_drv_yzk_xzb__table_rqb_11l_xzb__entry__1">901~1200</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="topic_drv_yzk_xzb__table_rqb_11l_xzb__entry__2">1200（20 分钟）</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="topic_drv_yzk_xzb__table_rqb_11l_xzb__entry__1">1201~1800</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="topic_drv_yzk_xzb__table_rqb_11l_xzb__entry__2">1800（30 分钟）</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="topic_drv_yzk_xzb__table_rqb_11l_xzb__entry__1">&gt;1800</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="topic_drv_yzk_xzb__table_rqb_11l_xzb__entry__2">3600（1 小时）</td>
+                        </tr>
+                    </tbody></table></div>
+            <p class="- topic/p p">（4）当数据时间精度为毫秒时，如 TIMESTAMP 或 TIME 类型，<em class="+ topic/ph hi-d/i ph i">alignmentSize</em> 取值规则如下表：</p>
+            <div class="table-container"><table class="- topic/table table" id="topic_drv_yzk_xzb__table_uqb_11l_xzb" data-ofbid="topic_drv_yzk_xzb__table_uqb_11l_xzb" data-cols="2"><caption></caption><colgroup><col/><col/></colgroup><thead class="- topic/thead thead">
+                        <tr class="- topic/row">
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="topic_drv_yzk_xzb__table_uqb_11l_xzb__entry__1">
+                                <p class="- topic/p p">step</p>
+                            </th>
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="topic_drv_yzk_xzb__table_uqb_11l_xzb__entry__2">
+                                <p class="- topic/p p">alignmentSize</p>
+                            </th>
+                        </tr>
+                    </thead><tbody class="- topic/tbody tbody">
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="topic_drv_yzk_xzb__table_uqb_11l_xzb__entry__1">0~2</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="topic_drv_yzk_xzb__table_uqb_11l_xzb__entry__2">2</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="topic_drv_yzk_xzb__table_uqb_11l_xzb__entry__1">3~5</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="topic_drv_yzk_xzb__table_uqb_11l_xzb__entry__2">5</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="topic_drv_yzk_xzb__table_uqb_11l_xzb__entry__1">6~10</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="topic_drv_yzk_xzb__table_uqb_11l_xzb__entry__2">10</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="topic_drv_yzk_xzb__table_uqb_11l_xzb__entry__1">11~20</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="topic_drv_yzk_xzb__table_uqb_11l_xzb__entry__2">20</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="topic_drv_yzk_xzb__table_uqb_11l_xzb__entry__1">21~25</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="topic_drv_yzk_xzb__table_uqb_11l_xzb__entry__2">25</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="topic_drv_yzk_xzb__table_uqb_11l_xzb__entry__1">26~50</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="topic_drv_yzk_xzb__table_uqb_11l_xzb__entry__2">50</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="topic_drv_yzk_xzb__table_uqb_11l_xzb__entry__1">51~100</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="topic_drv_yzk_xzb__table_uqb_11l_xzb__entry__2">100</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="topic_drv_yzk_xzb__table_uqb_11l_xzb__entry__1">101~200</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="topic_drv_yzk_xzb__table_uqb_11l_xzb__entry__2">200</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="topic_drv_yzk_xzb__table_uqb_11l_xzb__entry__1">201~250</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="topic_drv_yzk_xzb__table_uqb_11l_xzb__entry__2">250</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="topic_drv_yzk_xzb__table_uqb_11l_xzb__entry__1">251~500</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="topic_drv_yzk_xzb__table_uqb_11l_xzb__entry__2">500</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="topic_drv_yzk_xzb__table_uqb_11l_xzb__entry__1">501~1000</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="topic_drv_yzk_xzb__table_uqb_11l_xzb__entry__2">1000（1 秒）</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="topic_drv_yzk_xzb__table_uqb_11l_xzb__entry__1">1001~2000</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="topic_drv_yzk_xzb__table_uqb_11l_xzb__entry__2">2000（2 秒）</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="topic_drv_yzk_xzb__table_uqb_11l_xzb__entry__1">2001~3000</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="topic_drv_yzk_xzb__table_uqb_11l_xzb__entry__2">3000（3 秒）</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="topic_drv_yzk_xzb__table_uqb_11l_xzb__entry__1">3001~5000</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="topic_drv_yzk_xzb__table_uqb_11l_xzb__entry__2">5000（5 秒）</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="topic_drv_yzk_xzb__table_uqb_11l_xzb__entry__1">5001~10000</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="topic_drv_yzk_xzb__table_uqb_11l_xzb__entry__2">10000（10 秒）</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="topic_drv_yzk_xzb__table_uqb_11l_xzb__entry__1">10001~15000</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="topic_drv_yzk_xzb__table_uqb_11l_xzb__entry__2">15000（15 秒）</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="topic_drv_yzk_xzb__table_uqb_11l_xzb__entry__1">15001~20000</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="topic_drv_yzk_xzb__table_uqb_11l_xzb__entry__2">20000（20 秒）</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="topic_drv_yzk_xzb__table_uqb_11l_xzb__entry__1">20001~30000</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="topic_drv_yzk_xzb__table_uqb_11l_xzb__entry__2">30000（30 秒）</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="topic_drv_yzk_xzb__table_uqb_11l_xzb__entry__1">30001~60000</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="topic_drv_yzk_xzb__table_uqb_11l_xzb__entry__2">60000（1 分钟）</td>
+                        </tr>
+                    </tbody></table></div>
+            <p class="- topic/p p">如果 <em class="+ topic/ph hi-d/i ph i">roundTime</em> = false，对于 <em class="+ topic/ph hi-d/i ph i">step</em> &gt; 60000，<em class="+ topic/ph hi-d/i ph i">alignmentSize</em> 都为60000。 如果
+                    <em class="+ topic/ph hi-d/i ph i">roundTime </em>= true，则 <em class="+ topic/ph hi-d/i ph i">alignmentSize </em>取值规则如下表：</p>
+            <div class="table-container"><table class="- topic/table table" id="topic_drv_yzk_xzb__table_arb_11l_xzb" data-ofbid="topic_drv_yzk_xzb__table_arb_11l_xzb" data-cols="2"><caption></caption><colgroup><col/><col/></colgroup><thead class="- topic/thead thead">
+                        <tr class="- topic/row">
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="topic_drv_yzk_xzb__table_arb_11l_xzb__entry__1">
+                                <p class="- topic/p p">step</p>
+                            </th>
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="topic_drv_yzk_xzb__table_arb_11l_xzb__entry__2">
+                                <p class="- topic/p p">alignmentSize</p>
+                            </th>
+                        </tr>
+                    </thead><tbody class="- topic/tbody tbody">
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="topic_drv_yzk_xzb__table_arb_11l_xzb__entry__1">60001~120000</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="topic_drv_yzk_xzb__table_arb_11l_xzb__entry__2">120000（2分钟）</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="topic_drv_yzk_xzb__table_arb_11l_xzb__entry__1">120001~180000</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="topic_drv_yzk_xzb__table_arb_11l_xzb__entry__2">180000（3分钟）</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="topic_drv_yzk_xzb__table_arb_11l_xzb__entry__1">120001~300000</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="topic_drv_yzk_xzb__table_arb_11l_xzb__entry__2">300000（5分钟）</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="topic_drv_yzk_xzb__table_arb_11l_xzb__entry__1">300001~600000</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="topic_drv_yzk_xzb__table_arb_11l_xzb__entry__2">600000（10分钟）</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="topic_drv_yzk_xzb__table_arb_11l_xzb__entry__1">600001~900000</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="topic_drv_yzk_xzb__table_arb_11l_xzb__entry__2">900000（15分钟）</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="topic_drv_yzk_xzb__table_arb_11l_xzb__entry__1">900001~1200000</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="topic_drv_yzk_xzb__table_arb_11l_xzb__entry__2">1200000（20分钟）</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="topic_drv_yzk_xzb__table_arb_11l_xzb__entry__1">1200001~1800000</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="topic_drv_yzk_xzb__table_arb_11l_xzb__entry__2">1800000（30分钟）</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="topic_drv_yzk_xzb__table_arb_11l_xzb__entry__1">&gt;= 1800001</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="topic_drv_yzk_xzb__table_arb_11l_xzb__entry__2">3600000（1小时）</td>
+                        </tr>
+                    </tbody></table></div>
+            <p class="- topic/p p">假设第一条数据时间的最小精度值为
+                    x，那么第一个数据窗口的左边界最小精度经过规整后为<code class="+ topic/ph pr-d/codeph ph codeph">x/alignmentSize\*alignmentSize</code>，其中<code class="+ topic/ph pr-d/codeph ph codeph">/</code>代表相除后取整。举例来说，若第一条数据时间为
+                2018.10.08T01:01:01.365，则 x=365。若
+                <em class="+ topic/ph hi-d/i ph i">step</em>=100，根据上表，<em class="+ topic/ph hi-d/i ph i">alignmentSize</em>=100，可得出规整后的第一个数据窗口左边界最小精度为
+                365\100*100=300，因此规整后的第一个数据窗口范围为 2018.10.08T01:01:01.300 至
+                2018.10.08T01:01:01.400。</p>
+        </div>
+    </article>
+    <article class="- topic/topic topic nested1" aria-labelledby="ariaid-title5" id="topic_t1w_n1l_xzb">
+        <h2 class="- topic/title title topictitle2" id="ariaid-title5">应用例子 1</h2>
+        <div class="- topic/body body">
+            <div class="- topic/bodydiv bodydiv">
+                <p class="- topic/p p">现模拟传感器设备采集温度。假设窗口长度为 4ms，每隔 2ms 移动一次窗口，每隔 1ms 采集一次温度，规定以下异常指标：</p>
+                <ol class="- topic/ol ol" id="topic_t1w_n1l_xzb__ol_yky_41l_xzb" data-ofbid="topic_t1w_n1l_xzb__ol_yky_41l_xzb">
+                    <li class="- topic/li li">
+                        <p class="- topic/p p">单次采集的温度超过 65；</p>
+                    </li>
+                    <li class="- topic/li li">
+                        <p class="- topic/p p">单次采集的温度超过上一个窗口中 75% 的值；</p>
+                    </li>
+                </ol>
+                <p class="- topic/p p">采集的数据存放到流数据表中，异常检测引擎通过订阅流数据表来获取实时数据，并进行异常检测，符合异常指标的数据输出到另外一个表中。</p>
+                <p class="- topic/p p">实现步骤如下：</p>
+                <p class="- topic/p p">（1） 定义流数据表 <em class="+ topic/ph hi-d/i ph i">sensor </em>来存放采集的数据：</p>
+                <pre class="+ topic/pre pr-d/codeblock pre codeblock language-python" id="topic_t1w_n1l_xzb__codeblock_l4l_r1l_xzb" data-ofbid="topic_t1w_n1l_xzb__codeblock_l4l_r1l_xzb">share streamTable(<span class="hl-number">1000</span>:<span class="hl-number">0</span>, `time`temp, [TIMESTAMP, DOUBLE]) <strong class="hl-keyword">as</strong> sensor</pre>
+                <p class="- topic/p p">（2） 定义异常检测引擎和输出表 <em class="+ topic/ph hi-d/i ph i">outputTable</em>，输出表也是流数据表：</p>
+                <pre class="+ topic/pre pr-d/codeblock pre codeblock language-python" id="topic_t1w_n1l_xzb__codeblock_zky_41l_xzb" data-ofbid="topic_t1w_n1l_xzb__codeblock_zky_41l_xzb">share streamTable(<span class="hl-number">1000</span>:<span class="hl-number">0</span>, `time`anomalyType`anomalyString, [TIMESTAMP, INT, SYMBOL]) <strong class="hl-keyword">as</strong> outputTable
+engine = createAnomalyDetectionEngine(<span class="hl-string">"engine1"</span>, &lt;[temp &gt; <span class="hl-number">65</span>, temp &gt; percentile(temp, <span class="hl-number">75</span>)]&gt;, sensor, outputTable, `time, , <span class="hl-number">6</span>, <span class="hl-number">3</span>)</pre>
+                <p class="- topic/p p">（3） 异常检测引擎 engine 订阅流数据表 <em class="+ topic/ph hi-d/i ph i">sensor</em>：</p>
+                <pre class="+ topic/pre pr-d/codeblock pre codeblock language-python" id="topic_t1w_n1l_xzb__codeblock_arz_s1l_xzb" data-ofbid="topic_t1w_n1l_xzb__codeblock_arz_s1l_xzb">subscribeTable(, <span class="hl-string">"sensor"</span>, <span class="hl-string">"sensorAnomalyDetection"</span>, <span class="hl-number">0</span>, append!{engine}, true)</pre>
+                <p class="- topic/p p">（4） 向流数据表 <em class="+ topic/ph hi-d/i ph i">sensor</em> 中写入 10 次数据模拟采集温度：</p>
+                <pre class="+ topic/pre pr-d/codeblock pre codeblock language-python" id="topic_t1w_n1l_xzb__codeblock_fbv_t1l_xzb" data-ofbid="topic_t1w_n1l_xzb__codeblock_fbv_t1l_xzb">timev = <span class="hl-number">2018.10</span>.<span class="hl-number">08</span>T01:<span class="hl-number">01</span>:<span class="hl-number">01.001</span> + <span class="hl-number">1.</span><span class="hl-number">.10</span>
+tempv = <span class="hl-number">59</span> <span class="hl-number">66</span> <span class="hl-number">57</span> <span class="hl-number">60</span> <span class="hl-number">63</span> <span class="hl-number">51</span> <span class="hl-number">53</span> <span class="hl-number">52</span> <span class="hl-number">56</span> <span class="hl-number">55</span>
+insert into sensor values(timev, tempv)</pre>
+                <p class="- topic/p p">查看流数据表 <em class="+ topic/ph hi-d/i ph i">sensor</em> 的内容：</p>
+                <div class="table-container"><table class="- topic/table table" id="topic_t1w_n1l_xzb__table_aly_41l_xzb" data-ofbid="topic_t1w_n1l_xzb__table_aly_41l_xzb" data-cols="2"><caption></caption><colgroup><col/><col/></colgroup><thead class="- topic/thead thead">
+                            <tr class="- topic/row">
+                                <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="topic_t1w_n1l_xzb__table_aly_41l_xzb__entry__1">
+                                    <p class="- topic/p p">time</p>
+                                </th>
+                                <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="topic_t1w_n1l_xzb__table_aly_41l_xzb__entry__2">
+                                    <p class="- topic/p p">temp</p>
+                                </th>
+                            </tr>
+                        </thead><tbody class="- topic/tbody tbody">
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="topic_t1w_n1l_xzb__table_aly_41l_xzb__entry__1">2018.10.08T01:01:01.002</td>
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="topic_t1w_n1l_xzb__table_aly_41l_xzb__entry__2">59</td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="topic_t1w_n1l_xzb__table_aly_41l_xzb__entry__1">2018.10.08T01:01:01.003</td>
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="topic_t1w_n1l_xzb__table_aly_41l_xzb__entry__2">66</td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="topic_t1w_n1l_xzb__table_aly_41l_xzb__entry__1">2018.10.08T01:01:01.004</td>
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="topic_t1w_n1l_xzb__table_aly_41l_xzb__entry__2">57</td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="topic_t1w_n1l_xzb__table_aly_41l_xzb__entry__1">2018.10.08T01:01:01.005</td>
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="topic_t1w_n1l_xzb__table_aly_41l_xzb__entry__2">60</td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="topic_t1w_n1l_xzb__table_aly_41l_xzb__entry__1">2018.10.08T01:01:01.006</td>
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="topic_t1w_n1l_xzb__table_aly_41l_xzb__entry__2">63</td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="topic_t1w_n1l_xzb__table_aly_41l_xzb__entry__1">2018.10.08T01:01:01.007</td>
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="topic_t1w_n1l_xzb__table_aly_41l_xzb__entry__2">51</td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="topic_t1w_n1l_xzb__table_aly_41l_xzb__entry__1">2018.10.08T01:01:01.008</td>
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="topic_t1w_n1l_xzb__table_aly_41l_xzb__entry__2">53</td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="topic_t1w_n1l_xzb__table_aly_41l_xzb__entry__1">2018.10.08T01:01:01.009</td>
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="topic_t1w_n1l_xzb__table_aly_41l_xzb__entry__2">52</td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="topic_t1w_n1l_xzb__table_aly_41l_xzb__entry__1">2018.10.08T01:01:01.010</td>
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="topic_t1w_n1l_xzb__table_aly_41l_xzb__entry__2">56</td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="topic_t1w_n1l_xzb__table_aly_41l_xzb__entry__1">2018.10.08T01:01:01.011</td>
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="topic_t1w_n1l_xzb__table_aly_41l_xzb__entry__2">55</td>
+                            </tr>
+                        </tbody></table></div>
+                <p class="- topic/p p">再查看结果表<em class="+ topic/ph hi-d/i ph i"> outputTable</em> ：</p>
+                <div class="table-container"><table class="- topic/table table" id="topic_t1w_n1l_xzb__table_dly_41l_xzb" data-ofbid="topic_t1w_n1l_xzb__table_dly_41l_xzb" data-cols="3"><caption></caption><colgroup><col/><col/><col/></colgroup><thead class="- topic/thead thead">
+                            <tr class="- topic/row">
+                                <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="topic_t1w_n1l_xzb__table_dly_41l_xzb__entry__1">
+                                    <p class="- topic/p p">time</p>
+                                </th>
+                                <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="topic_t1w_n1l_xzb__table_dly_41l_xzb__entry__2">
+                                    <p class="- topic/p p">anomalyType</p>
+                                </th>
+                                <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="topic_t1w_n1l_xzb__table_dly_41l_xzb__entry__3">
+                                    <p class="- topic/p p">anomalyString</p>
+                                </th>
+                            </tr>
+                        </thead><tbody class="- topic/tbody tbody">
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="topic_t1w_n1l_xzb__table_dly_41l_xzb__entry__1">2018.10.08T01:01:01.003</td>
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="topic_t1w_n1l_xzb__table_dly_41l_xzb__entry__2">0</td>
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="topic_t1w_n1l_xzb__table_dly_41l_xzb__entry__3">temp &gt; 65</td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="topic_t1w_n1l_xzb__table_dly_41l_xzb__entry__1">2018.10.08T01:01:01.003</td>
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="topic_t1w_n1l_xzb__table_dly_41l_xzb__entry__2">1</td>
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="topic_t1w_n1l_xzb__table_dly_41l_xzb__entry__3">temp &gt; percentile(temp, 75)</td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="topic_t1w_n1l_xzb__table_dly_41l_xzb__entry__1">2018.10.08T01:01:01.005</td>
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="topic_t1w_n1l_xzb__table_dly_41l_xzb__entry__2">1</td>
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="topic_t1w_n1l_xzb__table_dly_41l_xzb__entry__3">temp &gt; percentile(temp, 75)</td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="topic_t1w_n1l_xzb__table_dly_41l_xzb__entry__1">2018.10.08T01:01:01.006</td>
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="topic_t1w_n1l_xzb__table_dly_41l_xzb__entry__2">1</td>
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="topic_t1w_n1l_xzb__table_dly_41l_xzb__entry__3">temp &gt; percentile(temp, 75)</td>
+                            </tr>
+                        </tbody></table></div>
+                <p class="- topic/p p">下面详细解释异常检测引擎的计算过程。为方便阅读，对时间的描述中省略相同的 2018.10.08T01:01:01 部分，只列出毫秒部分。</p>
+                <p class="- topic/p p">（1）指标<code class="+ topic/ph pr-d/codeph ph codeph">temp &gt; 65</code>只包含不作为函数参数的列 temp，因此会在每条数据到达时计算。模拟数据中只有 003
+                    时的温度满足检测异常的指标。</p>
+                <p class="- topic/p p">（2）指标<code class="+ topic/ph pr-d/codeph ph codeph">temp &gt; percentile(temp, 75)</code>中，temp
+                        列既作为聚合函数<code class="+ topic/ph pr-d/codeph ph codeph">percentile</code>的参数，又单独出现，因此会在每条数据到达时，将其中的<code class="+ topic/ph pr-d/codeph ph codeph">temp</code>与上一个窗口计算得到的<code class="+ topic/ph pr-d/codeph ph codeph">percentile(temp,
+                        75)</code>比较。第一个窗口基于第一行数据的时间 002 进行对齐，对齐后窗口起始边界为 000，第一个窗口是从 000 到 002，只包含
+                    002 一条记录，计算<code class="+ topic/ph pr-d/codeph ph codeph">percentile(temp, 75)</code>的结果是 59，数据 003 到 005
+                    与这个值比较，满足条件的有 003 和 005。第二个窗口是从 002 到 005，计算<code class="+ topic/ph pr-d/codeph ph codeph">percentile(temp,
+                        75)</code>的结果是 60，数据 006 到 008 与这个值比较，满足条件的有 006。第三个窗口是从 003 到
+                        008，计算<code class="+ topic/ph pr-d/codeph ph codeph">percentile(temp, 75)</code>的结果是 63，数据 009 到 011
+                    与这个值比较，其中没有满足条件的行。最后一条数据 011 到达后，尚未触发新的窗口计算。</p>
+                <p class="- topic/p p">监控异常检测引擎的状态</p>
+                <pre class="+ topic/pre pr-d/codeblock pre codeblock language-python" id="topic_t1w_n1l_xzb__codeblock_mcz_cbl_xzb" data-ofbid="topic_t1w_n1l_xzb__codeblock_mcz_cbl_xzb">getAggregatorStat().AnomalyDetectionEngine</pre>
+                <div class="table-container"><table class="- topic/table table" id="topic_t1w_n1l_xzb__table_ily_41l_xzb" data-ofbid="topic_t1w_n1l_xzb__table_ily_41l_xzb" data-cols="15"><caption></caption><colgroup><col/><col/><col/><col/><col/><col/><col/><col/><col/><col/><col/><col/><col/><col/><col/></colgroup><thead class="- topic/thead thead">
+                            <tr class="- topic/row">
+                                <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="topic_t1w_n1l_xzb__table_ily_41l_xzb__entry__1">
+                                    <p class="- topic/p p">name</p>
+                                </th>
+                                <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="topic_t1w_n1l_xzb__table_ily_41l_xzb__entry__2">
+                                    <p class="- topic/p p">user</p>
+                                </th>
+                                <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="topic_t1w_n1l_xzb__table_ily_41l_xzb__entry__3">
+                                    <p class="- topic/p p">status</p>
+                                </th>
+                                <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="topic_t1w_n1l_xzb__table_ily_41l_xzb__entry__4">
+                                    <p class="- topic/p p">lastErrMsg</p>
+                                </th>
+                                <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="topic_t1w_n1l_xzb__table_ily_41l_xzb__entry__5">
+                                    <p class="- topic/p p">numGroups</p>
+                                </th>
+                                <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="topic_t1w_n1l_xzb__table_ily_41l_xzb__entry__6">
+                                    <p class="- topic/p p">numRows</p>
+                                </th>
+                                <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="topic_t1w_n1l_xzb__table_ily_41l_xzb__entry__7">
+                                    <p class="- topic/p p">numMetrics</p>
+                                </th>
+                                <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="topic_t1w_n1l_xzb__table_ily_41l_xzb__entry__8">
+                                    <p class="- topic/p p">metrics</p>
+                                </th>
+                                <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="topic_t1w_n1l_xzb__table_ily_41l_xzb__entry__9">
+                                    <p class="- topic/p p">snapshotDir</p>
+                                </th>
+                                <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="topic_t1w_n1l_xzb__table_ily_41l_xzb__entry__10">
+                                    <p class="- topic/p p">snapshotInterval</p>
+                                </th>
+                                <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="topic_t1w_n1l_xzb__table_ily_41l_xzb__entry__11">
+                                    <p class="- topic/p p">snapshotMsgId</p>
+                                </th>
+                                <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="topic_t1w_n1l_xzb__table_ily_41l_xzb__entry__12">
+                                    <p class="- topic/p p">snapshotTimestamp</p>
+                                </th>
+                                <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="topic_t1w_n1l_xzb__table_ily_41l_xzb__entry__13">
+                                    <p class="- topic/p p">garbageSize</p>
+                                </th>
+                                <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="topic_t1w_n1l_xzb__table_ily_41l_xzb__entry__14">
+                                    <p class="- topic/p p">memoryUsed</p>
+                                </th>
+                                <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="topic_t1w_n1l_xzb__table_ily_41l_xzb__entry__15">
+                                    <p class="- topic/p p"> </p>
+                                </th>
+                            </tr>
+                        </thead><tbody class="- topic/tbody tbody">
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="topic_t1w_n1l_xzb__table_ily_41l_xzb__entry__1">engine1</td>
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="topic_t1w_n1l_xzb__table_ily_41l_xzb__entry__2">admin</td>
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="topic_t1w_n1l_xzb__table_ily_41l_xzb__entry__3">OK</td>
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="topic_t1w_n1l_xzb__table_ily_41l_xzb__entry__4"> </td>
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="topic_t1w_n1l_xzb__table_ily_41l_xzb__entry__5">1</td>
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="topic_t1w_n1l_xzb__table_ily_41l_xzb__entry__6">10</td>
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="topic_t1w_n1l_xzb__table_ily_41l_xzb__entry__7">2</td>
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="topic_t1w_n1l_xzb__table_ily_41l_xzb__entry__8">temp &gt; 65, temp &gt; percentile(temp, 75)</td>
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="topic_t1w_n1l_xzb__table_ily_41l_xzb__entry__9"> </td>
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="topic_t1w_n1l_xzb__table_ily_41l_xzb__entry__10"> </td>
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="topic_t1w_n1l_xzb__table_ily_41l_xzb__entry__11">-1</td>
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="topic_t1w_n1l_xzb__table_ily_41l_xzb__entry__12"> </td>
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="topic_t1w_n1l_xzb__table_ily_41l_xzb__entry__13">2,000</td>
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="topic_t1w_n1l_xzb__table_ily_41l_xzb__entry__14">8,524</td>
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="topic_t1w_n1l_xzb__table_ily_41l_xzb__entry__15"> </td>
+                            </tr>
+                        </tbody></table></div>
+            </div>
+        </div>
+    </article>
+    <article class="- topic/topic topic nested1" aria-labelledby="ariaid-title6" id="topic_nc2_fbl_xzb">
+        <h2 class="- topic/title title topictitle2" id="ariaid-title6">应用例子 2</h2>
+        <div class="- topic/body body">
+            <p class="- topic/p p">快照机制可以用于系统出现异常之后，对引擎进行恢复。通过以下这个例子，可以理解 <em class="+ topic/ph hi-d/i ph i">snapshotDir</em> 和
+                    <em class="+ topic/ph hi-d/i ph i">snapshotIntervalInMsgCount</em> 的作用。如果启用snapshot，引擎订阅流表时，<em class="+ topic/ph hi-d/i ph i">handler</em> 需是
+                    <code class="+ topic/ph pr-d/codeph ph codeph">appendMsg</code> 函数，需指定 <em class="+ topic/ph hi-d/i ph i">handlerNeedMsgId</em> =
+                true，用来记录快照的消息位置。</p>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock language-python" id="topic_nc2_fbl_xzb__codeblock_h4r_gbl_xzb" data-ofbid="topic_nc2_fbl_xzb__codeblock_h4r_gbl_xzb">WORK_DIR=<span class="hl-string">"/home/root/WORK_DIR"</span>
+mkdir(WORK_DIR+<span class="hl-string">"/snapshotDir"</span>)
+enableTableShareAndPersistence(table = streamTable(<span class="hl-number">10000</span>:<span class="hl-number">0</span>,`time`sym`price`qty, [TIMESTAMP,SYMBOL,DOUBLE,INT]) , tableName=<span class="hl-string">"trades"</span>, cacheSize=<span class="hl-number">1000000</span>)
+enableTableShareAndPersistence(table = streamTable(<span class="hl-number">10000</span>:<span class="hl-number">0</span>, `time`sym`type`metric, [TIMESTAMP,STRING,INT,STRING]), tableName = <span class="hl-string">"output"</span>, cacheSize=<span class="hl-number">1000000</span>)
+go
+
+adengine = createAnomalyDetectionEngine(name=<span class="hl-string">"test"</span>, metrics=&lt;[avg(qty)&gt;<span class="hl-number">1</span>]&gt;, dummyTable=trades, outputTable=output, timeColumn=`time, keyColumn=`sym, windowSize=<span class="hl-number">10</span>, step=<span class="hl-number">10</span>, snapshotDir=WORK_DIR+<span class="hl-string">"/snapshotDir"</span>, snapshotIntervalInMsgCount=<span class="hl-number">100</span>)
+subscribeTable(server=<span class="hl-string">""</span>, tableName=<span class="hl-string">"trades"</span>, actionName=<span class="hl-string">"adengine"</span>,offset= <span class="hl-number">0</span>, handler=appendMsg{adengine}, msgAsTable=true, handlerNeedMsgId=true)
+
+<strong class="hl-keyword">def</strong> writeData(mutable t){
+do{
+batch = <span class="hl-number">10</span>
+tmp = table(batch:batch, `time`sym`price`qty, [TIMESTAMP, SYMBOL, DOUBLE, DOUBLE])
+tmp[`time] = take(now(), batch)
+tmp[`sym] = <span class="hl-string">"A"</span>+string(<span class="hl-number">1.</span>.batch)
+tmp[`price] = round(rand(<span class="hl-number">100.0</span>, batch), <span class="hl-number">2</span>)
+tmp[`qty] = rand(<span class="hl-number">10</span>, batch)
+t.append!(tmp)
+sleep(<span class="hl-number">1000</span>)
+}<strong class="hl-keyword">while</strong>(true)
+}
+
+job1=submitJob(<span class="hl-string">"write"</span>, <span class="hl-string">""</span>, writeData, trades)
+//执行一段时间后重启server
+
+enableTableShareAndPersistence(table = streamTable(<span class="hl-number">10000</span>:<span class="hl-number">0</span>,`time`sym`price`qty, [TIMESTAMP,SYMBOL,DOUBLE,INT]) , tableName=<span class="hl-string">"trades"</span>, cacheSize=<span class="hl-number">1000000</span>)
+enableTableShareAndPersistence(table = streamTable(<span class="hl-number">10000</span>:<span class="hl-number">0</span>, `time`sym`type`metric, [TIMESTAMP,STRING,INT,STRING]), tableName = <span class="hl-string">"output"</span>, cacheSize=<span class="hl-number">1000000</span>)
+
+select last(time) <strong class="hl-keyword">from</strong> output
+&gt;<span class="hl-number">2021.03</span>.<span class="hl-number">16</span>T11:<span class="hl-number">59</span>:<span class="hl-number">10.920</span>
+
+select last(time) <strong class="hl-keyword">from</strong> trades
+&gt;<span class="hl-number">2021.03</span>.<span class="hl-number">16</span>T11:<span class="hl-number">59</span>:<span class="hl-number">13.916</span>
+
+WORK_DIR=<span class="hl-string">"/home/root/WORK_DIR"</span>
+adengine = createAnomalyDetectionEngine(name=<span class="hl-string">"test"</span>, metrics=&lt;[avg(qty)&gt;qty]&gt;, dummyTable=trades, outputTable=output, timeColumn=`time, keyColumn=`sym, windowSize=<span class="hl-number">10</span>, step=<span class="hl-number">10</span>, snapshotDir=WORK_DIR+<span class="hl-string">"/snapshotDir"</span>, snapshotIntervalInMsgCount=<span class="hl-number">100</span>)
+
+ofst = getSnapshotMsgId(adengine)
+<strong class="hl-keyword">print</strong>(ofst)
+&gt;<span class="hl-number">299</span>
+
+select count(*) <strong class="hl-keyword">from</strong> trades
+&gt;<span class="hl-number">390</span>
+
+//从第300条数据开始订阅
+subscribeTable(server=<span class="hl-string">""</span>, tableName=<span class="hl-string">"trades"</span>, actionName=<span class="hl-string">"adengine"</span>,offset=ofst+<span class="hl-number">1</span>, handler=appendMsg{adengine}, msgAsTable=true, handlerNeedMsgId=true) </pre>
+        </div>
+    </article>
+    <article class="- topic/topic topic nested1" aria-labelledby="ariaid-title7" id="topic_ak4_jbl_xzb">
+        <h2 class="- topic/title title topictitle2" id="ariaid-title7">总结</h2>
+        <div class="- topic/body body">
+            <p class="- topic/p p">DolphinDB 提供的异常检测引擎是一个轻量、使用方便的流数据引擎，它通过与流数据表合作来完成流数据的实时检测任务，能够满足物联网实时监控和预警的需求。</p>
+        </div>
+    </article>
+</article></main></div>
+                        
+                        
+                        
+                        
+                        
+                        
+                    </div>
+                    
+                        <nav role="navigation" id="wh_topic_toc" aria-label="On this page" class="col-lg-2 d-none d-lg-block navbar d-print-none"> 
+                            <div id="wh_topic_toc_content">
+		                        
+	                            <div class=" wh_topic_toc "><div class="wh_topic_label">在本页上</div><ul><li class="topic-item"><a href="#topic_uxq_rzk_xzb" data-tocid="topic_uxq_rzk_xzb">概述</a></li><li class="topic-item"><a href="#topic_t45_vzk_xzb" data-tocid="topic_t45_vzk_xzb">异常指标</a></li><li class="topic-item"><a href="#topic_drv_yzk_xzb" data-tocid="topic_drv_yzk_xzb">数据窗口</a></li><li class="topic-item"><a href="#topic_t1w_n1l_xzb" data-tocid="topic_t1w_n1l_xzb">应用例子 1</a></li><li class="topic-item"><a href="#topic_nc2_fbl_xzb" data-tocid="topic_nc2_fbl_xzb">应用例子 2</a></li><li class="topic-item"><a href="#topic_ak4_jbl_xzb" data-tocid="topic_ak4_jbl_xzb">总结</a></li></ul></div>
+	                        	
+                        	</div>
+                        </nav>
+                    
+                </div>
+            </div>
+            
+            
+            
+        </div> 
+        <footer class="navbar navbar-default wh_footer">
+  <div class=" footer-container mx-auto ">
+<title>Copyright</title><p><b> ©2024 浙江智臾科技有限公司 浙ICP备18048711号-3</b></p>
+  </div>
+</footer>
+        
+        <div id="go2top" class="d-print-none">
+            <span class="oxy-icon oxy-icon-up"></span>
+        </div>
+        
+        <div id="modal_img_large" class="modal">
+            <span class="close oxy-icon oxy-icon-remove"></span>
+            <div id="modal_img_container"></div>
+            <div id="caption"></div>
+        </div>
+        
+        
+        
+    </body>
+</html>

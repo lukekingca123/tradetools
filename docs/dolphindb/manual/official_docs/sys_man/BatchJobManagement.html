@@ -1,0 +1,336 @@
+<!DOCTYPE html><html xmlns="http://www.w3.org/1999/xhtml" xml:lang="zh" lang="zh" data-whc_version="26.0">
+    <head><link rel="shortcut icon" href="../favicon.ico"/><link rel="icon" href="../favicon.ico"/><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><meta http-equiv="X-UA-Compatible" content="IE=edge"/><meta name="description" content="针对某些特别耗时的任务，DolphinDB 支持批处理作业，在与常规交互作业独立的工作线程池中执行这些任务。批处理作业工作线程数的最大值是由配置参数 maxBatchJobWorker 设置的。如果批处理作业的数量超过了限制，新的批处理作业将会进入队列等待。批处理作业工作线程在闲置超过 60 秒后会自动销毁。 批处理作业的输出结果存于由配置参数 batchJobDir ..."/><meta name="DC.rights.owner" content="(C) 版权 2024"/><meta name="copyright" content="(C) 版权 2024"/><meta name="generator" content="DITA-OT"/><meta name="DC.type" content="topic"/><meta name="DC.coverage" content=""/><meta name="DC.relation" content="../sys_man/om_intro.html"/><meta name="prodname" content="DolphinDB"/><meta name="brand" content="DolphinDB"/><meta name="DC.creator" content="DolphinDB"/><meta name="DC.publisher" content="DDB N/A DDB 200"/><meta name="DC.format" content="HTML5"/><meta name="DC.identifier" content="批处理作业管理"/><title>批处理作业管理</title><!--  Generated with Oxygen version 26.0, build number 2024012323.  --><meta name="wh-path2root" content="../"/><meta name="wh-toc-id" content="批处理作业管理-d9529e8189"/><meta name="wh-source-relpath" content="sys_man/BatchJobManagement.dita"/><meta name="wh-out-relpath" content="sys_man/BatchJobManagement.html"/>
+
+    <link rel="stylesheet" type="text/css" href="../oxygen-webhelp/app/commons.css?buildId=2024012323"/>
+    <link rel="stylesheet" type="text/css" href="../oxygen-webhelp/app/topic.css?buildId=2024012323"/>
+
+    <script src="../oxygen-webhelp/app/options/properties.js?buildId=20240704100525"></script>
+    <script src="../oxygen-webhelp/app/localization/strings.js?buildId=2024012323"></script>
+    <script src="../oxygen-webhelp/app/search/index/keywords.js?buildId=20240704100525"></script>
+    <script defer="defer" src="../oxygen-webhelp/app/commons.js?buildId=2024012323"></script>
+    <script defer="defer" src="../oxygen-webhelp/app/topic.js?buildId=2024012323"></script>
+<link rel="stylesheet" type="text/css" href="../oxygen-webhelp/template/styles.css?buildId=2024012323"/><script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script><script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script></head>
+
+    <body id="批处理作业管理" class="wh_topic_page frmBody">
+        <a href="#wh_topic_body" class="sr-only sr-only-focusable">
+            跳转到主要内容
+        </a>
+        
+        
+        
+        
+        <header class="navbar navbar-default wh_header">
+    <div class="container-fluid">
+        <div xmlns:whc="http://www.oxygenxml.com/webhelp/components" class="wh_header_flex_container navbar-nav navbar-expand-md navbar-dark">
+            <div class="wh_logo_and_publication_title_container">
+                <div class="wh_logo_and_publication_title">
+                    
+                    <a href="https://www.dolphindb.cn" class=" wh_logo d-none d-sm-block "><img src="../logo.png" alt="  DolphinDB 文档中心  "/></a>
+                    <div class=" wh_publication_title "><a href="../index.html"><span class="booktitle">  <span class="ph mainbooktitle">DolphinDB 文档中心</span>  </span></a></div>
+                    
+                </div>
+                
+                
+            </div>
+
+            <div class="wh_top_menu_and_indexterms_link collapse navbar-collapse" id="wh_top_menu_and_indexterms_link">
+                
+                
+                
+                
+            </div>
+        <div class=" wh_search_input navbar-form wh_topic_page_search search " role="form">
+            
+            
+            
+            <form id="searchForm" method="get" role="search" action="../search.html"><div><input type="search" placeholder="搜索 " class="wh_search_textfield" id="textToSearch" name="searchQuery" aria-label="搜索查询" required="required"/><button type="submit" class="wh_search_button" aria-label="搜索"><span class="search_input_text">搜索</span></button></div></form>
+            
+            <script src="/vendors/react/umd/react.production.min.js" defer="defer"></script>
+<script src="/vendors/react-dom/umd/react-dom.production.min.js" defer="defer"></script>
+<script src="/vendors/dayjs/dayjs.min.js" defer="defer"></script>
+<script src="/vendors/antd/dist/antd.min.js" defer="defer"></script>
+<script src="/vendors/@ant-design/icons/dist/index.umd.min.js" defer="defer"></script>
+<script src="/zh/index.js" type="module"></script>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js" defer="defer"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML" defer="defer"><!--
+
+
+--></script>
+
+            
+        </div></div>
+    </div>
+</header>
+        
+        
+         
+        
+        
+        
+        <div class="container-fluid" id="wh_topic_container">
+            <div class="row">
+
+                <nav class="wh_tools d-print-none navbar-expand-md" aria-label="Tools">
+                    
+                    <div data-tooltip-position="bottom" class=" wh_breadcrumb "><ol class="d-print-none"><li><span class="home"><a href="../index.html"><span>主页</span></a></span></li><li><div class="topicref" data-id="chap7_tutorials_system_management"><div class="title"><a href="../sys_man/om_intro.html"><span class="keyword label">系统运维</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 的系统运维功能及方法</p></div></div></div></li><li><div class="topicref"><div class="title"><a href="../tutorials/thread_model_SQL.html">任务管理</a></div></div></li><li class="active"><div class="topicref" data-id="批处理作业管理"><div class="title"><a href="../sys_man/BatchJobManagement.html">批处理作业管理</a></div></div></li></ol></div>
+                    
+                    
+                    
+                    <div class="wh_right_tools">
+                        <button class="wh_hide_highlight" aria-label="切换搜索突出显示" title="切换搜索突出显示"></button>
+                        <button class="webhelp_expand_collapse_sections" data-next-state="collapsed" aria-label="折叠截面" title="折叠截面"></button>
+                        
+                        
+                        
+                        
+                        <div class=" wh_print_link print d-none d-md-inline-block "><button onClick="window.print()" title="打印此页" aria-label="打印此页"></button></div>
+                        
+                        <button type="button" id="wh_toc_button" class="custom-toggler navbar-toggler collapsed wh_toggle_button navbar-light" aria-expanded="false" aria-label="Toggle publishing table of content" aria-controls="wh_publication_toc">
+                            <span class="navbar-toggler-icon"></span>
+                        </button>
+                    </div>
+                    
+                </nav>
+            </div>
+            
+            
+            
+            
+            <div class="wh_content_area">
+                <div class="row">
+                    
+                        <nav id="wh_publication_toc" class="col-lg-3 col-md-3 col-sm-12 d-md-block d-none d-print-none" aria-label="Table of Contents Container">
+                            <div id="wh_publication_toc_content">
+		                        
+                            	<div class=" wh_publication_toc " data-tooltip-position="right"><span class="expand-button-action-labels"><span id="button-expand-action" role="button" aria-label="Expand"></span><span id="button-collapse-action" role="button" aria-label="Collapse"></span><span id="button-pending-action" role="button" aria-label="Pending"></span></span><ul role="tree" aria-label="Table of Contents"><li role="treeitem"><div data-tocid="new_chap_about_sect_ddb_docs_intro-d9529e87" class="topicref" data-id="new_chap_about_sect_ddb_docs_intro" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../about/ddb_docs_intro.html" id="new_chap_about_sect_ddb_docs_intro-d9529e87-link">文档使用说明</a><div class="wh-tooltip"><p class="shortdesc">如何获取 DolphinDB 帮助信息</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="chap1_getstarted-d9529e140" class="topicref" data-id="chap1_getstarted" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action chap1_getstarted-d9529e140-link" class="wh-expand-btn"></span><div class="title"><a href="../getstarted/chap1_getstarted.html" id="chap1_getstarted-d9529e140-link"><span class="keyword label">快速上手</span></a><div class="wh-tooltip"><p class="shortdesc">如何快速部署 DolphinDB、建库建表、写入和查询数据</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="sectionddb_deployment-d9529e335" class="topicref" data-id="sectionddb_deployment" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action sectionddb_deployment-d9529e335-link" class="wh-expand-btn"></span><div class="title"><a href="../deploy/deploy_intro.html" id="sectionddb_deployment-d9529e335-link"><span class="keyword label">部署</span></a><div class="wh-tooltip"><p class="shortdesc">如何在不同的场景中部署 DolphinDB</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="new_chap_database_manage_new_chap_dbmanage_landing_page-d9529e2313" class="topicref" data-id="new_chap_database_manage_new_chap_dbmanage_landing_page" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action new_chap_database_manage_new_chap_dbmanage_landing_page-d9529e2313-link" class="wh-expand-btn"></span><div class="title"><a href="../db_distr_comp/cfg/db_intro.html" id="new_chap_database_manage_new_chap_dbmanage_landing_page-d9529e2313-link"><span class="keyword label">数据库</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 数据库的基本概念</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="chap7_tutorials_streaming-d9529e3490" class="topicref" data-id="chap7_tutorials_streaming" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action chap7_tutorials_streaming-d9529e3490-link" class="wh-expand-btn"></span><div class="title"><a href="../stream/str_intro.html" id="chap7_tutorials_streaming-d9529e3490-link"><span class="keyword label">流数据</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 流数据引擎及流数据计算的基本概念</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="tocId-d9529e7385" class="topicref" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action tocId-d9529e7385-link" class="wh-expand-btn"></span><div class="title"><a href="../db_distr_comp/db_oper/import_data.html" id="tocId-d9529e7385-link">数据迁移</a><div class="wh-tooltip"><p class="shortdesc">如何从不同数据源向 DolphinDB 迁移数据</p></div></div></div></li><li role="treeitem" aria-expanded="true"><div data-tocid="chap7_tutorials_system_management-d9529e7812" class="topicref" data-id="chap7_tutorials_system_management" data-state="expanded"><span role="button" tabindex="0" aria-labelledby="button-collapse-action chap7_tutorials_system_management-d9529e7812-link" class="wh-expand-btn"></span><div class="title"><a href="../sys_man/om_intro.html" id="chap7_tutorials_system_management-d9529e7812-link"><span class="keyword label">系统运维</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 的系统运维功能及方法</p></div></div></div><ul role="group" class="navbar-nav nav-list"><li role="treeitem" aria-expanded="false"><div data-tocid="tocId-d9529e7865" class="topicref" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action tocId-d9529e7865-link" class="wh-expand-btn"></span><div class="title"><a href="../tutorials/scale_out_cluster.html" id="tocId-d9529e7865-link">集群管理</a></div></div></li><li role="treeitem" aria-expanded="true"><div data-tocid="tocId-d9529e8050" class="topicref" data-state="expanded"><span role="button" tabindex="0" aria-labelledby="button-collapse-action tocId-d9529e8050-link" class="wh-expand-btn"></span><div class="title"><a href="../tutorials/thread_model_SQL.html" id="tocId-d9529e8050-link">任务管理</a></div></div><ul role="group" class="navbar-nav nav-list"><li role="treeitem"><div data-tocid="线程模型-d9529e8051" class="topicref" data-id="线程模型" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../tutorials/thread_model_SQL.html" id="线程模型-d9529e8051-link">线程模型</a></div></div></li><li role="treeitem"><div data-tocid="作业管理-d9529e8097" class="topicref" data-id="作业管理" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../tutorials/job_management_tutorial.html" id="作业管理-d9529e8097-link">作业管理</a></div></div></li><li role="treeitem"><div data-tocid="定时作业-d9529e8143" class="topicref" data-id="定时作业" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../tutorials/scheduledJob.html" id="定时作业-d9529e8143-link">定时作业</a></div></div></li><li role="treeitem" class="active"><div data-tocid="批处理作业管理-d9529e8189" class="topicref" data-id="批处理作业管理" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../sys_man/BatchJobManagement.html" id="批处理作业管理-d9529e8189-link">批处理作业管理</a></div></div></li></ul></li><li role="treeitem" aria-expanded="false"><div data-tocid="性能监控-d9529e8235" class="topicref" data-id="性能监控" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action 性能监控-d9529e8235-link" class="wh-expand-btn"></span><div class="title"><a href="../sys_man/perf_man.html" id="性能监控-d9529e8235-link"><span class="keyword label">运维监控</span></a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="tocId-d9529e8328" class="topicref" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action tocId-d9529e8328-link" class="wh-expand-btn"></span><div class="title"><a href="../sys_man/bak_resto.html" id="tocId-d9529e8328-link">安全与容灾</a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="tocId-d9529e8468" class="topicref" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action tocId-d9529e8468-link" class="wh-expand-btn"></span><div class="title"><a href="../tutorials/how_to_handle_crash.html" id="tocId-d9529e8468-link">故障排查</a></div></div></li></ul></li><li role="treeitem" aria-expanded="false"><div data-tocid="about_language_resources-d9529e16490" class="topicref" data-id="about_language_resources" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action about_language_resources-d9529e16490-link" class="wh-expand-btn"></span><div class="title"><a href="../progr/progr_intro.html" id="about_language_resources-d9529e16490-link"><span class="keyword label">编程语言</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 编程基本概念与方法、SQL 在 DolphinDB 的应用</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="functions_references-d9529e26503" class="topicref" data-id="functions_references" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action functions_references-d9529e26503-link" class="wh-expand-btn"></span><div class="title"><a href="../funcs/funcs_intro.html" id="functions_references-d9529e26503-link"><span class="keyword label">函数参考</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 函数分类、语法、详解及示例</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="api_protocol-d9529e86456" class="topicref" data-id="api_protocol" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action api_protocol-d9529e86456-link" class="wh-expand-btn"></span><div class="title"><a href="../api/connapi_intro.html" id="api_protocol-d9529e86456-link"><span class="keyword label">连接器 &amp; API</span></a><div class="wh-tooltip"><p class="shortdesc">面向不同编程语言的 DolphinDB API 及连接器，相关协议和用法</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="chap6_plugin-d9529e91976" class="topicref" data-id="chap6_plugin" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action chap6_plugin-d9529e91976-link" class="wh-expand-btn"></span><div class="title"><a href="../plugins/plg_intro.html" id="chap6_plugin-d9529e91976-link"><span class="keyword label">插件</span></a><div class="wh-tooltip"><p class="shortdesc">多个应用场景的插件使用说明和插件开发指导</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="third_party-d9529e94749" class="topicref" data-id="third_party" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action third_party-d9529e94749-link" class="wh-expand-btn"></span><div class="title"><a href="../third_party.html" id="third_party-d9529e94749-link">第三方工具</a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="about_tutorials-d9529e94980" class="topicref" data-id="about_tutorials" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action about_tutorials-d9529e94980-link" class="wh-expand-btn"></span><div class="title"><a href="../tutorials/about_tutorials.html" id="about_tutorials-d9529e94980-link"><span class="keyword label">教程</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 产品使用教程</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="tocId-d9529e101769" class="topicref" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action tocId-d9529e101769-link" class="wh-expand-btn"></span><div class="title"><a href="../rn/server/3_00_1.html" id="tocId-d9529e101769-link">版本说明</a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 版本发布历史</p></div></div></div></li></ul></div>
+		                        
+                            </div>
+                        </nav>
+                    
+                    
+                    <div class="col-lg-7 col-md-9 col-sm-12" id="wh_topic_body">
+                        <button id="wh_close_publication_toc_button" class="close-toc-button d-none" aria-label="Toggle publishing table of content" aria-controls="wh_publication_toc" aria-expanded="true">
+                            <span class="close-toc-icon-container">
+                                <span class="close-toc-icon"></span>     
+                            </span>
+                        </button>
+                        <button id="wh_close_topic_toc_button" class="close-toc-button d-none" aria-label="Toggle topic table of content" aria-controls="wh_topic_toc" aria-expanded="true">
+                            <span class="close-toc-icon-container">
+                                <span class="close-toc-icon"></span>     
+                            </span>
+                        </button>
+                        
+                        <div class=" wh_topic_content body "><main role="main"><article class="- topic/topic topic" role="article" aria-labelledby="ariaid-title1">
+    <h1 class="- topic/title title topictitle1" id="ariaid-title1">批处理作业管理</h1>
+    <div class="- topic/body body">
+        <p class="- topic/p p" id="批处理作业管理__p_rqk_thn_ryb" data-ofbid="批处理作业管理__p_rqk_thn_ryb">针对某些特别耗时的任务，DolphinDB 支持批处理作业，在与常规交互作业独立的工作线程池中执行这些任务。批处理作业工作线程数的最大值是由配置参数
+            maxBatchJobWorker 设置的。如果批处理作业的数量超过了限制，新的批处理作业将会进入队列等待。批处理作业工作线程在闲置超过 60 秒后会自动销毁。</p>
+        <p class="- topic/p p" id="批处理作业管理__p_sqk_thn_ryb" data-ofbid="批处理作业管理__p_sqk_thn_ryb">批处理作业的输出结果存于由配置参数 batchJobDir 指定的文件夹。如果没有指定，默认路径是
+            &lt;HomeDir&gt;/batchJobs。每个批处理作业产生两个文件夹：&lt;job_id&gt;.msg 和 &lt;
+            Job_id&gt;.obj，分别存储中间消息和返回对象。另外，当系统接收、开始和完成批处理作业时，每个批处理作业会向 &lt;
+            BatchJobDir&gt;/batchJob.log 添加三条信息。</p>
+    </div>
+    <article class="- topic/topic topic nested1" aria-labelledby="ariaid-title2" id="相关函数">
+        <h2 class="- topic/title title topictitle2" id="ariaid-title2">相关函数</h2>
+        <div class="- topic/body body">
+            <ul class="- topic/ul ul" id="相关函数__ul_tqk_thn_ryb" data-ofbid="相关函数__ul_tqk_thn_ryb">
+                <li class="- topic/li li">
+                    <p class="- topic/p p" id="相关函数__p_uqk_thn_ryb" data-ofbid="相关函数__p_uqk_thn_ryb"><a class="- topic/xref xref" href="../funcs/s/submitJob.html">submitJob(jobId,
+                            jobDesc, jobDef, args...)</a>
+                    </p>
+                </li>
+                <li class="- topic/li li">
+                    <p class="- topic/p p" id="相关函数__p_vqk_thn_ryb" data-ofbid="相关函数__p_vqk_thn_ryb"><a class="- topic/xref xref" href="../funcs/s/submitJobEx.html">submitJobEx(jobId, jobDesc, priority, parallelism, jobDef,
+                            args...)</a>
+                    </p>
+                </li>
+            </ul>
+            <p class="- topic/p p" id="相关函数__p_wqk_thn_ryb" data-ofbid="相关函数__p_wqk_thn_ryb">以上两个函数将批处理作业提交到本地节点，并且返回作业的 ID。其中，<em class="+ topic/ph hi-d/i ph i">jobDesc</em>
+                为可选参数，如果没有指定，函数名就是作业的描述。</p>
+            <div class="- topic/p p">如需将批处理作业提交到远程节点，可以使用以下函数：<ul class="- topic/ul ul" id="相关函数__ul_ojd_mnh_rzb" data-ofbid="相关函数__ul_ojd_mnh_rzb">
+                    <li class="- topic/li li">
+                        <p class="- topic/p p"><a class="- topic/xref xref" href="../funcs/r/rpc.html">rpc</a></p>
+                    </li>
+                    <li class="- topic/li li">
+                        <p class="- topic/p p"><a class="- topic/xref xref" href="../funcs/r/remoteRun.html">remoteRun</a></p>
+                    </li>
+                    <li class="- topic/li li">
+                        <p class="- topic/p p"><a class="- topic/xref xref" href="../funcs/r/remoteRunWithCompression.html">remoteRunWithCompression</a></p>
+                    </li>
+                </ul></div>
+            <ul class="- topic/ul ul" id="相关函数__ul_xqk_thn_ryb" data-ofbid="相关函数__ul_xqk_thn_ryb">
+                <li class="- topic/li li">
+                    <p class="- topic/p p" id="相关函数__p_yqk_thn_ryb" data-ofbid="相关函数__p_yqk_thn_ryb"><a class="- topic/xref xref" href="../funcs/g/getJobStatus.html">getJobStatus(jobId)</a>：取得批处理作业的状态。</p>
+                </li>
+                <li class="- topic/li li">
+                    <p class="- topic/p p" id="相关函数__p_brk_thn_ryb" data-ofbid="相关函数__p_brk_thn_ryb"><a class="- topic/xref xref" href="../funcs/g/getRecentJobs.html">getRecentJobs([top])</a>：取得本地节点上最近 N 个作业的状态。</p>
+                </li>
+                <li class="- topic/li li">
+                    <p class="- topic/p p" id="相关函数__p_erk_thn_ryb" data-ofbid="相关函数__p_erk_thn_ryb"><a class="- topic/xref xref" href="../funcs/g/getJobMessage.html">getJobMessage(jobId)</a>：取得批处理作业返回的中间消息。</p>
+                </li>
+                <li class="- topic/li li">
+                    <p class="- topic/p p" id="相关函数__p_hrk_thn_ryb" data-ofbid="相关函数__p_hrk_thn_ryb"><a class="- topic/xref xref" href="../funcs/g/getJobReturn.html">getJobReturn(jobId)</a>：取得批处理作业返回的对象。</p>
+                </li>
+                <li class="- topic/li li">
+                    <p class="- topic/p p" id="相关函数__p_krk_thn_ryb" data-ofbid="相关函数__p_krk_thn_ryb"><a class="- topic/xref xref" href="../funcs/c/cancelJob.html">cancelJob(jobId)</a>：取消已经提交但尚未完成的批处理作业。</p>
+                </li>
+            </ul>
+        </div>
+    </article>
+    <article class="- topic/topic topic nested1" aria-labelledby="ariaid-title3" id="例子">
+        <h2 class="- topic/title title topictitle2" id="ariaid-title3">例子</h2>
+        <div class="- topic/body body">
+            <ul class="- topic/ul ul" id="例子__ul_mrk_thn_ryb" data-ofbid="例子__ul_mrk_thn_ryb">
+                <li class="- topic/li li">
+                    <p class="- topic/p p" id="例子__p_nrk_thn_ryb" data-ofbid="例子__p_nrk_thn_ryb">把作业提交到本地节点：</p>
+                    <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="例子__codeblock_ork_thn_ryb" data-ofbid="例子__codeblock_ork_thn_ryb"><code>def job1(n){
+    s = 0
+    for (x in 1 : n) {
+        s += sum(sin rand(1.0, 100000000)-0.5)
+        print("iteration" + x + " " + s)
+    }
+    return s
+};
+job1_ID=submitJob("job1_ID","", job1, 100);
+
+getJobStatus(job1_ID);</code></pre>
+                    <div class="table-container"><table class="- topic/table table" id="例子__table_prk_thn_ryb" data-ofbid="例子__table_prk_thn_ryb" data-cols="8"><caption></caption><colgroup><col/><col/><col/><col/><col/><col/><col/><col/></colgroup><thead class="- topic/thead thead">
+                                <tr class="- topic/row">
+                                    <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="例子__table_prk_thn_ryb__entry__1">node</th>
+                                    <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="例子__table_prk_thn_ryb__entry__2">userID</th>
+                                    <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="例子__table_prk_thn_ryb__entry__3">jobId</th>
+                                    <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="例子__table_prk_thn_ryb__entry__4">jobDesc</th>
+                                    <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="例子__table_prk_thn_ryb__entry__5">receivedTime</th>
+                                    <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="例子__table_prk_thn_ryb__entry__6">startTime</th>
+                                    <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="例子__table_prk_thn_ryb__entry__7">endTime</th>
+                                    <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="例子__table_prk_thn_ryb__entry__8">errorMsg</th>
+                                </tr>
+                            </thead><tbody class="- topic/tbody tbody">
+                                <tr class="- topic/row">
+                                    <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_prk_thn_ryb__entry__1">local8848</td>
+                                    <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_prk_thn_ryb__entry__2">root</td>
+                                    <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_prk_thn_ryb__entry__3">job1_ID</td>
+                                    <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_prk_thn_ryb__entry__4">job1</td>
+                                    <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_prk_thn_ryb__entry__5">2018.06.16T10:44:34.066</td>
+                                    <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_prk_thn_ryb__entry__6">2018.06.16T10:44:34.066</td>
+                                    <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_prk_thn_ryb__entry__7"> </td>
+                                    <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_prk_thn_ryb__entry__8"> </td>
+                                </tr>
+                            </tbody></table></div>
+                    <p class="- topic/p p" id="例子__p_qrk_thn_ryb" data-ofbid="例子__p_qrk_thn_ryb">在作业状态中，EndTime 是空的。这意味着作业还在执行中。作业完成后，就能在状态中看到 EndTime。</p>
+                    <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="例子__codeblock_rrk_thn_ryb" data-ofbid="例子__codeblock_rrk_thn_ryb"><code>getJobStatus(job1_ID);</code></pre>
+                    <div class="table-container"><table class="- topic/table table" id="例子__table_srk_thn_ryb" data-ofbid="例子__table_srk_thn_ryb" data-cols="8"><caption></caption><colgroup><col/><col/><col/><col/><col/><col/><col/><col/></colgroup><thead class="- topic/thead thead">
+                                <tr class="- topic/row">
+                                    <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="例子__table_srk_thn_ryb__entry__1">node</th>
+                                    <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="例子__table_srk_thn_ryb__entry__2">userID</th>
+                                    <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="例子__table_srk_thn_ryb__entry__3">jobId</th>
+                                    <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="例子__table_srk_thn_ryb__entry__4">jobDesc</th>
+                                    <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="例子__table_srk_thn_ryb__entry__5">receivedTime</th>
+                                    <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="例子__table_srk_thn_ryb__entry__6">startTime</th>
+                                    <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="例子__table_srk_thn_ryb__entry__7">endTime</th>
+                                    <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="例子__table_srk_thn_ryb__entry__8">errorMsg</th>
+                                </tr>
+                            </thead><tbody class="- topic/tbody tbody">
+                                <tr class="- topic/row">
+                                    <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_srk_thn_ryb__entry__1">local8848</td>
+                                    <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_srk_thn_ryb__entry__2">root</td>
+                                    <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_srk_thn_ryb__entry__3">job1_ID</td>
+                                    <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_srk_thn_ryb__entry__4">job1</td>
+                                    <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_srk_thn_ryb__entry__5">2018.06.16T10:44:34.066</td>
+                                    <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_srk_thn_ryb__entry__6">2018.06.16T10:44:34.066</td>
+                                    <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_srk_thn_ryb__entry__7">2018.06.16T10:46:10.389</td>
+                                    <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_srk_thn_ryb__entry__8"> </td>
+                                </tr>
+                            </tbody></table></div>
+                    <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="例子__codeblock_trk_thn_ryb" data-ofbid="例子__codeblock_trk_thn_ryb"><code>getJobMessage(job1_ID);
+2018-06-16 10:44:34.066064 Start the job [job1_ID]: job1
+2018-06-16 10:44:35.377095 iteration 1 1412.431451
+2018-06-16 10:44:36.624907 iteration 2 2328.917258
+2018-06-16 10:44:37.577107 iteration 3 5491.651822
+2018-06-16 10:44:38.530187 iteration 4 6332.907608
+2018-06-16 10:44:39.488295 iteration 5 8404.393113
+......
+2018-06-16 10:46:06.655519 iteration 95 -13124.624482
+2018-06-16 10:46:07.562855 iteration 96 -14878.269863
+2018-06-16 10:46:08.520555 iteration 97 -9842.451424
+2018-06-16 10:46:09.456576 iteration 98 -8149.660675
+2018-06-16 10:46:10.373218 iteration 99 -10639.329897
+2018-06-16 10:46:10.389147 The job is done.
+
+getJobReturn(job1_ID);
+// output
+-4291.91147</code></pre>
+                </li>
+                <li class="- topic/li li">
+                    <p class="- topic/p p" id="例子__p_vrk_thn_ryb" data-ofbid="例子__p_vrk_thn_ryb">把作业提交到远程节点：</p>
+                    <p class="- topic/p p" id="例子__p_wrk_thn_ryb" data-ofbid="例子__p_wrk_thn_ryb">使用 <em class="+ topic/ph hi-d/i ph i">rpc</em> 函数（"DFS_NODE2" 与本地节点在同一集群）：</p>
+                    <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="例子__codeblock_xrk_thn_ryb" data-ofbid="例子__codeblock_xrk_thn_ryb"><code>def jobDemo(n){
+    s = 0
+    for (x in 1 : n) {
+        s += sum(sin rand(1.0, 100000000)-0.5)
+        print("iteration" + x + " " + s)
+    }
+    return s
+};
+
+rpc("DFS_NODE2", submitJob, "job1_1", "", job1{10});
+
+rpc("DFS_NODE2", getJobReturn, "jobDemo3")
+// output
+Output: -3426.577521</code></pre>
+                    <p class="- topic/p p" id="例子__p_yrk_thn_ryb" data-ofbid="例子__p_yrk_thn_ryb">使用 <em class="+ topic/ph hi-d/i ph i">remoteRun</em> 函数：</p>
+                    <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="例子__codeblock_zrk_thn_ryb" data-ofbid="例子__codeblock_zrk_thn_ryb"><code>conn = xdb("DFS_NODE2")
+conn.remoteRun(submitJob, "job1_2", "", job1, 10);
+
+conn.remoteRun(getJobReturn, "job1_2");
+// output
+Output: 4238.832005</code></pre>
+                </li>
+            </ul>
+        </div>
+    </article>
+</article></main></div>
+                        
+                        
+                        
+                        
+                        
+                        
+                    </div>
+                    
+                        <nav role="navigation" id="wh_topic_toc" aria-label="On this page" class="col-lg-2 d-none d-lg-block navbar d-print-none"> 
+                            <div id="wh_topic_toc_content">
+		                        
+	                            <div class=" wh_topic_toc "><div class="wh_topic_label">在本页上</div><ul><li class="topic-item"><a href="#%E7%9B%B8%E5%85%B3%E5%87%BD%E6%95%B0" data-tocid="相关函数">相关函数</a></li><li class="topic-item"><a href="#%E4%BE%8B%E5%AD%90" data-tocid="例子">例子</a></li></ul></div>
+	                        	
+                        	</div>
+                        </nav>
+                    
+                </div>
+            </div>
+            
+            
+            
+        </div> 
+        <footer class="navbar navbar-default wh_footer">
+  <div class=" footer-container mx-auto ">
+<title>Copyright</title><p><b> ©2024 浙江智臾科技有限公司 浙ICP备18048711号-3</b></p>
+  </div>
+</footer>
+        
+        <div id="go2top" class="d-print-none">
+            <span class="oxy-icon oxy-icon-up"></span>
+        </div>
+        
+        <div id="modal_img_large" class="modal">
+            <span class="close oxy-icon oxy-icon-remove"></span>
+            <div id="modal_img_container"></div>
+            <div id="caption"></div>
+        </div>
+        
+        
+        
+    </body>
+</html>

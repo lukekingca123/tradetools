@@ -1,0 +1,525 @@
+<!DOCTYPE html><html xmlns="http://www.w3.org/1999/xhtml" xml:lang="zh" lang="zh" data-whc_version="26.0">
+    <head><link rel="shortcut icon" href="../../favicon.ico"/><link rel="icon" href="../../favicon.ico"/><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><meta http-equiv="X-UA-Compatible" content="IE=edge"/><meta name="description" content="DolphinDB 提供了一系列用于处理二进制文件的函数，包括原始字节读写以及高层次对象读写。 writeBytes 函数将整个缓冲区写到文件中，该缓冲区必须是 CHAR 标量或者 CHAR 向量。如果操作成功，函数将返回实际写入成功的字节数；否则抛出 IOException。 readBytes 函数从文件中读取指定数量的字节。如果到达文件尾或遇到了 I/O 错误，则抛出 ..."/><meta name="DC.rights.owner" content="(C) 版权 2024"/><meta name="copyright" content="(C) 版权 2024"/><meta name="generator" content="DITA-OT"/><meta name="DC.type" content="topic"/><meta name="DC.coverage" content=""/><meta name="DC.relation" content="../../progr/file_io/file_oper.html"/><meta name="prodname" content="DolphinDB"/><meta name="brand" content="DolphinDB"/><meta name="DC.creator" content="DolphinDB"/><meta name="DC.publisher" content="DDB N/A DDB 200"/><meta name="DC.format" content="HTML5"/><meta name="DC.identifier" content="二进制文件处理"/><title>二进制文件处理</title><!--  Generated with Oxygen version 26.0, build number 2024012323.  --><meta name="wh-path2root" content="../../"/><meta name="wh-toc-id" content="二进制文件处理-d9529e22752"/><meta name="wh-source-relpath" content="progr/file_io/process_bin.dita"/><meta name="wh-out-relpath" content="progr/file_io/process_bin.html"/>
+
+    <link rel="stylesheet" type="text/css" href="../../oxygen-webhelp/app/commons.css?buildId=2024012323"/>
+    <link rel="stylesheet" type="text/css" href="../../oxygen-webhelp/app/topic.css?buildId=2024012323"/>
+
+    <script src="../../oxygen-webhelp/app/options/properties.js?buildId=20240704100525"></script>
+    <script src="../../oxygen-webhelp/app/localization/strings.js?buildId=2024012323"></script>
+    <script src="../../oxygen-webhelp/app/search/index/keywords.js?buildId=20240704100525"></script>
+    <script defer="defer" src="../../oxygen-webhelp/app/commons.js?buildId=2024012323"></script>
+    <script defer="defer" src="../../oxygen-webhelp/app/topic.js?buildId=2024012323"></script>
+<link rel="stylesheet" type="text/css" href="../../oxygen-webhelp/template/styles.css?buildId=2024012323"/><script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script><script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script></head>
+
+    <body id="二进制文件处理" class="wh_topic_page frmBody">
+        <a href="#wh_topic_body" class="sr-only sr-only-focusable">
+            跳转到主要内容
+        </a>
+        
+        
+        
+        
+        <header class="navbar navbar-default wh_header">
+    <div class="container-fluid">
+        <div xmlns:whc="http://www.oxygenxml.com/webhelp/components" class="wh_header_flex_container navbar-nav navbar-expand-md navbar-dark">
+            <div class="wh_logo_and_publication_title_container">
+                <div class="wh_logo_and_publication_title">
+                    
+                    <a href="https://www.dolphindb.cn" class=" wh_logo d-none d-sm-block "><img src="../../logo.png" alt="  DolphinDB 文档中心  "/></a>
+                    <div class=" wh_publication_title "><a href="../../index.html"><span class="booktitle">  <span class="ph mainbooktitle">DolphinDB 文档中心</span>  </span></a></div>
+                    
+                </div>
+                
+                
+            </div>
+
+            <div class="wh_top_menu_and_indexterms_link collapse navbar-collapse" id="wh_top_menu_and_indexterms_link">
+                
+                
+                
+                
+            </div>
+        <div class=" wh_search_input navbar-form wh_topic_page_search search " role="form">
+            
+            
+            
+            <form id="searchForm" method="get" role="search" action="../../search.html"><div><input type="search" placeholder="搜索 " class="wh_search_textfield" id="textToSearch" name="searchQuery" aria-label="搜索查询" required="required"/><button type="submit" class="wh_search_button" aria-label="搜索"><span class="search_input_text">搜索</span></button></div></form>
+            
+            <script src="/vendors/react/umd/react.production.min.js" defer="defer"></script>
+<script src="/vendors/react-dom/umd/react-dom.production.min.js" defer="defer"></script>
+<script src="/vendors/dayjs/dayjs.min.js" defer="defer"></script>
+<script src="/vendors/antd/dist/antd.min.js" defer="defer"></script>
+<script src="/vendors/@ant-design/icons/dist/index.umd.min.js" defer="defer"></script>
+<script src="/zh/index.js" type="module"></script>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js" defer="defer"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML" defer="defer"><!--
+
+
+--></script>
+
+            
+        </div></div>
+    </div>
+</header>
+        
+        
+         
+        
+        
+        
+        <div class="container-fluid" id="wh_topic_container">
+            <div class="row">
+
+                <nav class="wh_tools d-print-none navbar-expand-md" aria-label="Tools">
+                    
+                    <div data-tooltip-position="bottom" class=" wh_breadcrumb "><ol class="d-print-none"><li><span class="home"><a href="../../index.html"><span>主页</span></a></span></li><li><div class="topicref" data-id="about_language_resources"><div class="title"><a href="../../progr/progr_intro.html"><span class="keyword label">编程语言</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 编程基本概念与方法、SQL 在 DolphinDB 的应用</p></div></div></div></li><li><div class="topicref" data-id="chap4_db_programming"><div class="title"><a href="../../progr/lang_intro.html"><span class="keyword label">DolphinDB 脚本语言</span></a><div class="wh-tooltip"><p class="shortdesc"> 脚本编程相关概念参考，包括：数据类型与形式、对象、运算符、编程语句、数据操作、函数化编程、文件操作和 SQL 语句。 </p></div></div></div></li><li><div class="topicref" data-id="文件操作"><div class="title"><a href="../../progr/file_io/file_oper.html"><span class="keyword label">文件操作</span></a></div></div></li><li class="active"><div class="topicref" data-id="二进制文件处理"><div class="title"><a href="../../progr/file_io/process_bin.html">二进制文件处理</a></div></div></li></ol></div>
+                    
+                    
+                    
+                    <div class="wh_right_tools">
+                        <button class="wh_hide_highlight" aria-label="切换搜索突出显示" title="切换搜索突出显示"></button>
+                        <button class="webhelp_expand_collapse_sections" data-next-state="collapsed" aria-label="折叠截面" title="折叠截面"></button>
+                        
+                        
+                        
+                        
+                        <div class=" wh_print_link print d-none d-md-inline-block "><button onClick="window.print()" title="打印此页" aria-label="打印此页"></button></div>
+                        
+                        <button type="button" id="wh_toc_button" class="custom-toggler navbar-toggler collapsed wh_toggle_button navbar-light" aria-expanded="false" aria-label="Toggle publishing table of content" aria-controls="wh_publication_toc">
+                            <span class="navbar-toggler-icon"></span>
+                        </button>
+                    </div>
+                    
+                </nav>
+            </div>
+            
+            
+            
+            
+            <div class="wh_content_area">
+                <div class="row">
+                    
+                        <nav id="wh_publication_toc" class="col-lg-3 col-md-3 col-sm-12 d-md-block d-none d-print-none" aria-label="Table of Contents Container">
+                            <div id="wh_publication_toc_content">
+		                        
+                            	<div class=" wh_publication_toc " data-tooltip-position="right"><span class="expand-button-action-labels"><span id="button-expand-action" role="button" aria-label="Expand"></span><span id="button-collapse-action" role="button" aria-label="Collapse"></span><span id="button-pending-action" role="button" aria-label="Pending"></span></span><ul role="tree" aria-label="Table of Contents"><li role="treeitem"><div data-tocid="new_chap_about_sect_ddb_docs_intro-d9529e87" class="topicref" data-id="new_chap_about_sect_ddb_docs_intro" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../about/ddb_docs_intro.html" id="new_chap_about_sect_ddb_docs_intro-d9529e87-link">文档使用说明</a><div class="wh-tooltip"><p class="shortdesc">如何获取 DolphinDB 帮助信息</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="chap1_getstarted-d9529e140" class="topicref" data-id="chap1_getstarted" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action chap1_getstarted-d9529e140-link" class="wh-expand-btn"></span><div class="title"><a href="../../getstarted/chap1_getstarted.html" id="chap1_getstarted-d9529e140-link"><span class="keyword label">快速上手</span></a><div class="wh-tooltip"><p class="shortdesc">如何快速部署 DolphinDB、建库建表、写入和查询数据</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="sectionddb_deployment-d9529e335" class="topicref" data-id="sectionddb_deployment" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action sectionddb_deployment-d9529e335-link" class="wh-expand-btn"></span><div class="title"><a href="../../deploy/deploy_intro.html" id="sectionddb_deployment-d9529e335-link"><span class="keyword label">部署</span></a><div class="wh-tooltip"><p class="shortdesc">如何在不同的场景中部署 DolphinDB</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="new_chap_database_manage_new_chap_dbmanage_landing_page-d9529e2313" class="topicref" data-id="new_chap_database_manage_new_chap_dbmanage_landing_page" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action new_chap_database_manage_new_chap_dbmanage_landing_page-d9529e2313-link" class="wh-expand-btn"></span><div class="title"><a href="../../db_distr_comp/cfg/db_intro.html" id="new_chap_database_manage_new_chap_dbmanage_landing_page-d9529e2313-link"><span class="keyword label">数据库</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 数据库的基本概念</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="chap7_tutorials_streaming-d9529e3490" class="topicref" data-id="chap7_tutorials_streaming" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action chap7_tutorials_streaming-d9529e3490-link" class="wh-expand-btn"></span><div class="title"><a href="../../stream/str_intro.html" id="chap7_tutorials_streaming-d9529e3490-link"><span class="keyword label">流数据</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 流数据引擎及流数据计算的基本概念</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="tocId-d9529e7385" class="topicref" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action tocId-d9529e7385-link" class="wh-expand-btn"></span><div class="title"><a href="../../db_distr_comp/db_oper/import_data.html" id="tocId-d9529e7385-link">数据迁移</a><div class="wh-tooltip"><p class="shortdesc">如何从不同数据源向 DolphinDB 迁移数据</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="chap7_tutorials_system_management-d9529e7812" class="topicref" data-id="chap7_tutorials_system_management" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action chap7_tutorials_system_management-d9529e7812-link" class="wh-expand-btn"></span><div class="title"><a href="../../sys_man/om_intro.html" id="chap7_tutorials_system_management-d9529e7812-link"><span class="keyword label">系统运维</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 的系统运维功能及方法</p></div></div></div></li><li role="treeitem" aria-expanded="true"><div data-tocid="about_language_resources-d9529e16490" class="topicref" data-id="about_language_resources" data-state="expanded"><span role="button" tabindex="0" aria-labelledby="button-collapse-action about_language_resources-d9529e16490-link" class="wh-expand-btn"></span><div class="title"><a href="../../progr/progr_intro.html" id="about_language_resources-d9529e16490-link"><span class="keyword label">编程语言</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 编程基本概念与方法、SQL 在 DolphinDB 的应用</p></div></div></div><ul role="group" class="navbar-nav nav-list"><li role="treeitem" aria-expanded="true"><div data-tocid="chap4_db_programming-d9529e16543" class="topicref" data-id="chap4_db_programming" data-state="expanded"><span role="button" tabindex="0" aria-labelledby="button-collapse-action chap4_db_programming-d9529e16543-link" class="wh-expand-btn"></span><div class="title"><a href="../../progr/lang_intro.html" id="chap4_db_programming-d9529e16543-link"><span class="keyword label">DolphinDB 脚本语言</span></a><div class="wh-tooltip"><p class="shortdesc"> 脚本编程相关概念参考，包括：数据类型与形式、对象、运算符、编程语句、数据操作、函数化编程、文件操作和 SQL 语句。 </p></div></div></div><ul role="group" class="navbar-nav nav-list"><li role="treeitem" aria-expanded="false"><div data-tocid="chap4_sect_datatypes_forms-d9529e16594" class="topicref" data-id="chap4_sect_datatypes_forms" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action chap4_sect_datatypes_forms-d9529e16594-link" class="wh-expand-btn"></span><div class="title"><a href="../../progr/data_types_forms_intro.html" id="chap4_sect_datatypes_forms-d9529e16594-link"><span class="keyword">数据类型与形式</span></a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="chap4_sect_objects-d9529e17632" class="topicref" data-id="chap4_sect_objects" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action chap4_sect_objects-d9529e17632-link" class="wh-expand-btn"></span><div class="title"><a href="../../progr/objs/objects.html" id="chap4_sect_objects-d9529e17632-link"><span class="keyword label">对象</span></a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="chap4_sect_operators-d9529e18069" class="topicref" data-id="chap4_sect_operators" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action chap4_sect_operators-d9529e18069-link" class="wh-expand-btn"></span><div class="title"><a href="../../progr/operators/operators.html" id="chap4_sect_operators-d9529e18069-link"><span class="keyword label">运算符</span></a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="chap4_sect_programming_statements-d9529e19654" class="topicref" data-id="chap4_sect_programming_statements" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action chap4_sect_programming_statements-d9529e19654-link" class="wh-expand-btn"></span><div class="title"><a href="../../progr/statements/statements_intro.html" id="chap4_sect_programming_statements-d9529e19654-link"><span class="keyword label">编程语句</span></a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="chap4_sect_data_manipulation-d9529e20900" class="topicref" data-id="chap4_sect_data_manipulation" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action chap4_sect_data_manipulation-d9529e20900-link" class="wh-expand-btn"></span><div class="title"><a href="../../progr/data_mani/dm_intro.html" id="chap4_sect_data_manipulation-d9529e20900-link"><span class="keyword label">数据操作</span></a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="chap4_sect_func_programming-d9529e21873" class="topicref" data-id="chap4_sect_func_programming" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action chap4_sect_func_programming-d9529e21873-link" class="wh-expand-btn"></span><div class="title"><a href="../../progr/func_progr.html" id="chap4_sect_func_programming-d9529e21873-link"><span class="keyword label">函数化编程</span></a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="元编程-d9529e22197" class="topicref" data-id="元编程" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action 元编程-d9529e22197-link" class="wh-expand-btn"></span><div class="title"><a href="../../progr/objs/meta_progr.html" id="元编程-d9529e22197-link"><span class="keyword label">元编程</span></a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="oop-d9529e22337" class="topicref" data-id="oop" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action oop-d9529e22337-link" class="wh-expand-btn"></span><div class="title"><a href="../../progr/oop.html" id="oop-d9529e22337-link">面向对象编程</a></div></div></li><li role="treeitem" aria-expanded="true"><div data-tocid="文件操作-d9529e22705" class="topicref" data-id="文件操作" data-state="expanded"><span role="button" tabindex="0" aria-labelledby="button-collapse-action 文件操作-d9529e22705-link" class="wh-expand-btn"></span><div class="title"><a href="../../progr/file_io/file_oper.html" id="文件操作-d9529e22705-link"><span class="keyword label">文件操作</span></a></div></div><ul role="group" class="navbar-nav nav-list"><li role="treeitem" class="active"><div data-tocid="二进制文件处理-d9529e22752" class="topicref" data-id="二进制文件处理" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../progr/file_io/process_bin.html" id="二进制文件处理-d9529e22752-link">二进制文件处理</a></div></div></li><li role="treeitem"><div data-tocid="表输入输出-d9529e22798" class="topicref" data-id="表输入输出" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../progr/file_io/tb_io.html" id="表输入输出-d9529e22798-link">表输入输出</a></div></div></li><li role="treeitem"><div data-tocid="文本文件处理-d9529e22844" class="topicref" data-id="文本文件处理" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../progr/file_io/process_txt.html" id="文本文件处理-d9529e22844-link">文本文件处理</a></div></div></li></ul></li></ul></li><li role="treeitem" aria-expanded="false"><div data-tocid="chap4_sect_sql_statements-d9529e22890" class="topicref" data-id="chap4_sect_sql_statements" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action chap4_sect_sql_statements-d9529e22890-link" class="wh-expand-btn"></span><div class="title"><a href="../../progr/sql/sql_intro.html" id="chap4_sect_sql_statements-d9529e22890-link"><span class="keyword label">SQL 语句</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 中 SQL 语句的基本语法和用法</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="python-parser-简介-d9529e25535" class="topicref" data-id="python-parser-简介" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action python-parser-简介-d9529e25535-link" class="wh-expand-btn"></span><div class="title"><a href="../../progr/py_parser/py_par_intro.html" id="python-parser-简介-d9529e25535-link"><span class="keyword label">Python Parser</span></a></div></div></li></ul></li><li role="treeitem" aria-expanded="false"><div data-tocid="functions_references-d9529e26503" class="topicref" data-id="functions_references" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action functions_references-d9529e26503-link" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/funcs_intro.html" id="functions_references-d9529e26503-link"><span class="keyword label">函数参考</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 函数分类、语法、详解及示例</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="api_protocol-d9529e86456" class="topicref" data-id="api_protocol" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action api_protocol-d9529e86456-link" class="wh-expand-btn"></span><div class="title"><a href="../../api/connapi_intro.html" id="api_protocol-d9529e86456-link"><span class="keyword label">连接器 &amp; API</span></a><div class="wh-tooltip"><p class="shortdesc">面向不同编程语言的 DolphinDB API 及连接器，相关协议和用法</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="chap6_plugin-d9529e91976" class="topicref" data-id="chap6_plugin" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action chap6_plugin-d9529e91976-link" class="wh-expand-btn"></span><div class="title"><a href="../../plugins/plg_intro.html" id="chap6_plugin-d9529e91976-link"><span class="keyword label">插件</span></a><div class="wh-tooltip"><p class="shortdesc">多个应用场景的插件使用说明和插件开发指导</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="third_party-d9529e94749" class="topicref" data-id="third_party" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action third_party-d9529e94749-link" class="wh-expand-btn"></span><div class="title"><a href="../../third_party.html" id="third_party-d9529e94749-link">第三方工具</a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="about_tutorials-d9529e94980" class="topicref" data-id="about_tutorials" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action about_tutorials-d9529e94980-link" class="wh-expand-btn"></span><div class="title"><a href="../../tutorials/about_tutorials.html" id="about_tutorials-d9529e94980-link"><span class="keyword label">教程</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 产品使用教程</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="tocId-d9529e101769" class="topicref" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action tocId-d9529e101769-link" class="wh-expand-btn"></span><div class="title"><a href="../../rn/server/3_00_1.html" id="tocId-d9529e101769-link">版本说明</a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 版本发布历史</p></div></div></div></li></ul></div>
+		                        
+                            </div>
+                        </nav>
+                    
+                    
+                    <div class="col-lg-7 col-md-9 col-sm-12" id="wh_topic_body">
+                        <button id="wh_close_publication_toc_button" class="close-toc-button d-none" aria-label="Toggle publishing table of content" aria-controls="wh_publication_toc" aria-expanded="true">
+                            <span class="close-toc-icon-container">
+                                <span class="close-toc-icon"></span>     
+                            </span>
+                        </button>
+                        <button id="wh_close_topic_toc_button" class="close-toc-button d-none" aria-label="Toggle topic table of content" aria-controls="wh_topic_toc" aria-expanded="true">
+                            <span class="close-toc-icon-container">
+                                <span class="close-toc-icon"></span>     
+                            </span>
+                        </button>
+                        
+                        <div class=" wh_topic_content body "><main role="main"><article class="- topic/topic topic" role="article" aria-labelledby="ariaid-title1">
+    <h1 class="- topic/title title topictitle1" id="ariaid-title1">二进制文件处理</h1>
+    <div class="- topic/body body">
+        <p class="- topic/p p" id="二进制文件处理__p_jvx_5hn_ryb" data-ofbid="二进制文件处理__p_jvx_5hn_ryb">DolphinDB 提供了一系列用于处理二进制文件的函数，包括原始字节读写以及高层次对象读写。</p>
+    </div>
+    <article class="- topic/topic topic nested1" aria-labelledby="ariaid-title2" id="读写原始字节">
+        <h2 class="- topic/title title topictitle2" id="ariaid-title2">读写原始字节</h2>
+        <div class="- topic/body body">
+            <p class="- topic/p p" id="读写原始字节__p_kvx_5hn_ryb" data-ofbid="读写原始字节__p_kvx_5hn_ryb"><code class="+ topic/ph pr-d/codeph ph codeph">writeBytes</code> 函数将整个缓冲区写到文件中，该缓冲区必须是 CHAR 标量或者 CHAR
+                向量。如果操作成功，函数将返回实际写入成功的字节数；否则抛出
+                IOException。<code class="+ topic/ph pr-d/codeph ph codeph">readBytes</code>函数从文件中读取指定数量的字节。如果到达文件尾或遇到了 I/O 错误，则抛出
+                IOException；否则函数返回包含指定数量字节的缓冲区。因此，编写代码时候首先要知道确定读取字节数。</p>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="读写原始字节__codeblock_lvx_5hn_ryb" data-ofbid="读写原始字节__codeblock_lvx_5hn_ryb"><code>// 定义一个文件拷贝函数
+def fileCopy(source, target){
+ s = file(source)
+ len = s.seek(0,TAIL)
+ s.seek(0,HEAD)
+ t = file(target,"w")
+ if(len==0) return
+ do{
+    buf = s.readBytes(min(len,1024))
+    t.writeBytes(buf)
+    len -= buf.size()
+ }while(len)
+
+}
+
+fileCopy("test.txt","testcopy.txt");</code></pre>
+            <p class="- topic/p p" id="读写原始字节__p_mvx_5hn_ryb" data-ofbid="读写原始字节__p_mvx_5hn_ryb"><code class="+ topic/ph pr-d/codeph ph codeph">readBytes</code>函数总是返回一个新的 CHAR
+                    向量。类似文本文件处理一节中讨论过的，创建新向量缓冲区需要花费时间，为了提高性能，可以创建一个缓冲区并反复重使用这个缓冲区，<code class="+ topic/ph pr-d/codeph ph codeph">read!</code>函数正是用于此目的。<code class="+ topic/ph pr-d/codeph ph codeph">read!</code>函数的另一个优点是不需要事先知道需要读取的字节数。如果到达文件尾或者指定数量的字节已经读取完毕，<code class="+ topic/ph pr-d/codeph ph codeph">read!</code>
+                直接返回。如果成功读取的字节数少于期望值，则表示已经到达文件尾。</p>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="读写原始字节__codeblock_nvx_5hn_ryb" data-ofbid="读写原始字节__codeblock_nvx_5hn_ryb"><code>// 用read!和write函数定义一个文件拷贝函数
+def fileCopy2(source, target){
+ s = file(source)
+ t = file(target,"w")
+ buf = array(CHAR,1024)
+ do{
+    numByte = s.read!(buf,0,1024)
+    t.write(buf,0, numByte)
+ }while(numByte==1024)
+}
+
+fileCopy2("test.txt","testcopy.txt");</code></pre>
+            <p class="- topic/p p" id="读写原始字节__p_ovx_5hn_ryb" data-ofbid="读写原始字节__p_ovx_5hn_ryb">文件复制函数的性能主要由写入部分决定的。为了比较 <em class="+ topic/ph hi-d/i ph i">readBytes</em> 和 <em class="+ topic/ph hi-d/i ph i">read!</em> 的性能，我们设计了以下例子进行对比：</p>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="读写原始字节__codeblock_pvx_5hn_ryb" data-ofbid="读写原始字节__codeblock_pvx_5hn_ryb"><code>fileLen = file("test.txt").seek(0, TAIL)
+timer(1000){
+   fin = file("test.txt")
+   len = fileLen
+   do{
+      buf = fin.readBytes(min(len,1024))
+      len -= buf.size()
+   }while(len)
+};
+
+Time elapsed: 210.593 ms
+
+timer(1000){
+   fin = file("test.txt")
+   buf = array(CHAR,1024)
+   do{numBytes = fin.read!(buf,0,1024)}while(numBytes==1024)
+};
+
+
+Time elapsed: 194.519 ms</code></pre>
+            <p class="- topic/p p" id="读写原始字节__p_qvx_5hn_ryb" data-ofbid="读写原始字节__p_qvx_5hn_ryb">由此可见，read! 的速度比 readBytes 要快。</p>
+            <p class="- topic/p p" id="读写原始字节__p_rvx_5hn_ryb" data-ofbid="读写原始字节__p_rvx_5hn_ryb"><em class="+ topic/ph hi-d/i ph i">readRecord!</em> 函数将二进制文件转换为 DolphinDB 的数据对象。read Record!
+                函数基于行读取二进制文件，每行包含的记录有相同的数据类型和固定的长度。如一个二进制文件包含了 5 个数据域，分别具有下述数据类型（长度）：CHAR(1),
+                BOOLEAN(1), SHORT(2), INT(4), LONG(8), 和 DOUBLE(8)，那么 readRecord! 函数将把每行视为 24
+                个字节。</p>
+            <p class="- topic/p p" id="读写原始字节__p_svx_5hn_ryb" data-ofbid="读写原始字节__p_svx_5hn_ryb">下例介绍 readRecord! 函数导入一个二进制文件：binSample.bin</p>
+            <p class="- topic/p p" id="读写原始字节__p_tvx_5hn_ryb" data-ofbid="读写原始字节__p_tvx_5hn_ryb">创建内存表</p>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="读写原始字节__codeblock_uvx_5hn_ryb" data-ofbid="读写原始字节__codeblock_uvx_5hn_ryb"><code>tb=table(1000:0, `id`date`time`last`volume`value`ask1`ask_size1`bid1`bid_size1, [INT,INT,INT,FLOAT,INT,FLOAT,FLOAT,INT,FLOAT,INT])</code></pre>
+            <p class="- topic/p p" id="读写原始字节__p_vvx_5hn_ryb" data-ofbid="读写原始字节__p_vvx_5hn_ryb">调用 file 函数打开文件，并通过 readRecord! 函数导入二进制文件，数据会被加载到 tb 表中。</p>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="读写原始字节__codeblock_wvx_5hn_ryb" data-ofbid="读写原始字节__codeblock_wvx_5hn_ryb"><code>dataFilePath="E:/DolphinDB/binSample.bin"
+f=file(dataFilePath)
+f.readRecord!(tb);
+select top 5 * from tb;</code></pre>
+            <div class="table-container"><table class="- topic/table table" id="读写原始字节__table_xvx_5hn_ryb" data-ofbid="读写原始字节__table_xvx_5hn_ryb" data-cols="10"><caption></caption><colgroup><col/><col/><col/><col/><col/><col/><col/><col/><col/><col/></colgroup><thead class="- topic/thead thead">
+                        <tr class="- topic/row">
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="读写原始字节__table_xvx_5hn_ryb__entry__1">id</th>
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="读写原始字节__table_xvx_5hn_ryb__entry__2">date</th>
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="读写原始字节__table_xvx_5hn_ryb__entry__3">time</th>
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="读写原始字节__table_xvx_5hn_ryb__entry__4">last</th>
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="读写原始字节__table_xvx_5hn_ryb__entry__5">volume</th>
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="读写原始字节__table_xvx_5hn_ryb__entry__6">value</th>
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="读写原始字节__table_xvx_5hn_ryb__entry__7">ask1</th>
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="读写原始字节__table_xvx_5hn_ryb__entry__8">ask_size1</th>
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="读写原始字节__table_xvx_5hn_ryb__entry__9">bid1</th>
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="读写原始字节__table_xvx_5hn_ryb__entry__10">bid_size1</th>
+                        </tr>
+                    </thead><tbody class="- topic/tbody tbody">
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="读写原始字节__table_xvx_5hn_ryb__entry__1">1</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="读写原始字节__table_xvx_5hn_ryb__entry__2">20190902</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="读写原始字节__table_xvx_5hn_ryb__entry__3">91804000</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="读写原始字节__table_xvx_5hn_ryb__entry__4">0</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="读写原始字节__table_xvx_5hn_ryb__entry__5">0</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="读写原始字节__table_xvx_5hn_ryb__entry__6">0</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="读写原始字节__table_xvx_5hn_ryb__entry__7">11.45</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="读写原始字节__table_xvx_5hn_ryb__entry__8">200</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="读写原始字节__table_xvx_5hn_ryb__entry__9">11.45</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="读写原始字节__table_xvx_5hn_ryb__entry__10">200</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="读写原始字节__table_xvx_5hn_ryb__entry__1">2</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="读写原始字节__table_xvx_5hn_ryb__entry__2">20190902</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="读写原始字节__table_xvx_5hn_ryb__entry__3">92007000</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="读写原始字节__table_xvx_5hn_ryb__entry__4">0</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="读写原始字节__table_xvx_5hn_ryb__entry__5">0</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="读写原始字节__table_xvx_5hn_ryb__entry__6">0</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="读写原始字节__table_xvx_5hn_ryb__entry__7">11.45</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="读写原始字节__table_xvx_5hn_ryb__entry__8">200</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="读写原始字节__table_xvx_5hn_ryb__entry__9">11.45</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="读写原始字节__table_xvx_5hn_ryb__entry__10">200</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="读写原始字节__table_xvx_5hn_ryb__entry__1">3</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="读写原始字节__table_xvx_5hn_ryb__entry__2">20190902</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="读写原始字节__table_xvx_5hn_ryb__entry__3">92046000</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="读写原始字节__table_xvx_5hn_ryb__entry__4">0</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="读写原始字节__table_xvx_5hn_ryb__entry__5">0</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="读写原始字节__table_xvx_5hn_ryb__entry__6">0</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="读写原始字节__table_xvx_5hn_ryb__entry__7">11.45</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="读写原始字节__table_xvx_5hn_ryb__entry__8">1200</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="读写原始字节__table_xvx_5hn_ryb__entry__9">11.45</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="读写原始字节__table_xvx_5hn_ryb__entry__10">1200</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="读写原始字节__table_xvx_5hn_ryb__entry__1">4</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="读写原始字节__table_xvx_5hn_ryb__entry__2">20190902</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="读写原始字节__table_xvx_5hn_ryb__entry__3">92346000</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="读写原始字节__table_xvx_5hn_ryb__entry__4">0</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="读写原始字节__table_xvx_5hn_ryb__entry__5">0</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="读写原始字节__table_xvx_5hn_ryb__entry__6">0</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="读写原始字节__table_xvx_5hn_ryb__entry__7">11.45</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="读写原始字节__table_xvx_5hn_ryb__entry__8">1200</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="读写原始字节__table_xvx_5hn_ryb__entry__9">11.45</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="读写原始字节__table_xvx_5hn_ryb__entry__10">1200</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="读写原始字节__table_xvx_5hn_ryb__entry__1">5</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="读写原始字节__table_xvx_5hn_ryb__entry__2">20190902</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="读写原始字节__table_xvx_5hn_ryb__entry__3">92349000</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="读写原始字节__table_xvx_5hn_ryb__entry__4">0</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="读写原始字节__table_xvx_5hn_ryb__entry__5">0</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="读写原始字节__table_xvx_5hn_ryb__entry__6">0</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="读写原始字节__table_xvx_5hn_ryb__entry__7">11.45</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="读写原始字节__table_xvx_5hn_ryb__entry__8">5100</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="读写原始字节__table_xvx_5hn_ryb__entry__9">11.45</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="读写原始字节__table_xvx_5hn_ryb__entry__10">5100</td>
+                        </tr>
+                    </tbody></table></div>
+            <p class="- topic/p p" id="读写原始字节__p_yvx_5hn_ryb" data-ofbid="读写原始字节__p_yvx_5hn_ryb">readRecord! 函数不支持字符串类型的数据，上表中 date 列和 time 列的数据类型为 INT。可以使用 temporalParse
+                函数进行日期和时间类型数据的格式转换，再使用 replaceColumn! 函数替换表中原有的列。</p>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="读写原始字节__codeblock_zvx_5hn_ryb" data-ofbid="读写原始字节__codeblock_zvx_5hn_ryb"><code>tb.replaceColumn!(`date, tb.date.string().temporalParse("yyyyMMdd"))
+tb.replaceColumn!(`time, tb.time.format("000000000").temporalParse("HHmmssSSS"))
+select top 5 * from tb;</code></pre>
+            <div class="table-container"><table class="- topic/table table" id="读写原始字节__table_awx_5hn_ryb" data-ofbid="读写原始字节__table_awx_5hn_ryb" data-cols="10"><caption></caption><colgroup><col/><col/><col/><col/><col/><col/><col/><col/><col/><col/></colgroup><thead class="- topic/thead thead">
+                        <tr class="- topic/row">
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="读写原始字节__table_awx_5hn_ryb__entry__1">id</th>
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="读写原始字节__table_awx_5hn_ryb__entry__2">date</th>
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="读写原始字节__table_awx_5hn_ryb__entry__3">time</th>
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="读写原始字节__table_awx_5hn_ryb__entry__4">last</th>
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="读写原始字节__table_awx_5hn_ryb__entry__5">volume</th>
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="读写原始字节__table_awx_5hn_ryb__entry__6">value</th>
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="读写原始字节__table_awx_5hn_ryb__entry__7">ask1</th>
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="读写原始字节__table_awx_5hn_ryb__entry__8">ask_size1</th>
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="读写原始字节__table_awx_5hn_ryb__entry__9">bid1</th>
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="读写原始字节__table_awx_5hn_ryb__entry__10">bid_size1</th>
+                        </tr>
+                    </thead><tbody class="- topic/tbody tbody">
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="读写原始字节__table_awx_5hn_ryb__entry__1">1</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="读写原始字节__table_awx_5hn_ryb__entry__2">2019.09.02</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="读写原始字节__table_awx_5hn_ryb__entry__3">09:18:04.000</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="读写原始字节__table_awx_5hn_ryb__entry__4">0</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="读写原始字节__table_awx_5hn_ryb__entry__5">0</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="读写原始字节__table_awx_5hn_ryb__entry__6">0</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="读写原始字节__table_awx_5hn_ryb__entry__7">11.45</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="读写原始字节__table_awx_5hn_ryb__entry__8">200</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="读写原始字节__table_awx_5hn_ryb__entry__9">11.45</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="读写原始字节__table_awx_5hn_ryb__entry__10">200</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="读写原始字节__table_awx_5hn_ryb__entry__1">2</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="读写原始字节__table_awx_5hn_ryb__entry__2">2019.09.02</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="读写原始字节__table_awx_5hn_ryb__entry__3">09:20:07.000</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="读写原始字节__table_awx_5hn_ryb__entry__4">0</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="读写原始字节__table_awx_5hn_ryb__entry__5">0</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="读写原始字节__table_awx_5hn_ryb__entry__6">0</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="读写原始字节__table_awx_5hn_ryb__entry__7">11.45</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="读写原始字节__table_awx_5hn_ryb__entry__8">200</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="读写原始字节__table_awx_5hn_ryb__entry__9">11.45</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="读写原始字节__table_awx_5hn_ryb__entry__10">200</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="读写原始字节__table_awx_5hn_ryb__entry__1">3</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="读写原始字节__table_awx_5hn_ryb__entry__2">2019.09.02</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="读写原始字节__table_awx_5hn_ryb__entry__3">09:20:46.000</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="读写原始字节__table_awx_5hn_ryb__entry__4">0</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="读写原始字节__table_awx_5hn_ryb__entry__5">0</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="读写原始字节__table_awx_5hn_ryb__entry__6">0</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="读写原始字节__table_awx_5hn_ryb__entry__7">11.45</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="读写原始字节__table_awx_5hn_ryb__entry__8">1200</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="读写原始字节__table_awx_5hn_ryb__entry__9">11.45</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="读写原始字节__table_awx_5hn_ryb__entry__10">1200</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="读写原始字节__table_awx_5hn_ryb__entry__1">4</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="读写原始字节__table_awx_5hn_ryb__entry__2">2019.09.02</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="读写原始字节__table_awx_5hn_ryb__entry__3">09:23:46.000</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="读写原始字节__table_awx_5hn_ryb__entry__4">0</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="读写原始字节__table_awx_5hn_ryb__entry__5">0</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="读写原始字节__table_awx_5hn_ryb__entry__6">0</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="读写原始字节__table_awx_5hn_ryb__entry__7">11.45</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="读写原始字节__table_awx_5hn_ryb__entry__8">1200</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="读写原始字节__table_awx_5hn_ryb__entry__9">11.45</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="读写原始字节__table_awx_5hn_ryb__entry__10">1200</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="读写原始字节__table_awx_5hn_ryb__entry__1">5</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="读写原始字节__table_awx_5hn_ryb__entry__2">2019.09.02</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="读写原始字节__table_awx_5hn_ryb__entry__3">09:23:49.000</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="读写原始字节__table_awx_5hn_ryb__entry__4">0</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="读写原始字节__table_awx_5hn_ryb__entry__5">0</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="读写原始字节__table_awx_5hn_ryb__entry__6">0</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="读写原始字节__table_awx_5hn_ryb__entry__7">11.45</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="读写原始字节__table_awx_5hn_ryb__entry__8">5100</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="读写原始字节__table_awx_5hn_ryb__entry__9">11.45</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="读写原始字节__table_awx_5hn_ryb__entry__10">5100</td>
+                        </tr>
+                    </tbody></table></div>
+        </div>
+    </article>
+    <article class="- topic/topic topic nested1" aria-labelledby="ariaid-title3" id="读写多字节整型和浮点数">
+        <h2 class="- topic/title title topictitle2" id="ariaid-title3">读写多字节整型和浮点数</h2>
+        <div class="- topic/body body">
+            <p class="- topic/p p" id="读写多字节整型和浮点数__p_bwx_5hn_ryb" data-ofbid="读写多字节整型和浮点数__p_bwx_5hn_ryb"><em class="+ topic/ph hi-d/i ph i">write</em> 函数把指定的缓冲区转换为字节流，并保存到文件中。缓冲区可以是各种数据类型的标量或向量。如果发生了错误，将抛出
+                    IOException；否则函数返回写入的元素的个数（而不是字节数）。<em class="+ topic/ph hi-d/i ph i">read!</em>
+                    函数将给定数量的元素读取到缓冲区。例如，如果缓冲区是INT向量，该函数将把文件中的字节转换为INT。<em class="+ topic/ph hi-d/i ph i">write</em> 和 <em class="+ topic/ph hi-d/i ph i">read</em>
+                    函数都涉及到流和字节之间的转换问题以及计算机科学中多字节的大小端问题。大端模式把数据的高字节保存在内存的低地址中，而小端模式把数据的低字节保存在内存的低地址中。<em class="+ topic/ph hi-d/i ph i">write</em>
+                    函数通常使用操作系统的大小端模式。如果文件的大小端模式和操作系统的大小端模式不同，<em class="+ topic/ph hi-d/i ph i">read!</em> 函数将转换大小端模式。在使用 <em class="+ topic/ph hi-d/i ph i">file</em>
+                函数打开文件时，有一个可选的布尔参数，用来表示文件是否采用小端模式。默认情况下，采用操作系统的大小端模式。</p>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="读写多字节整型和浮点数__codeblock_cwx_5hn_ryb" data-ofbid="读写多字节整型和浮点数__codeblock_cwx_5hn_ryb"><code>x=10h
+y=0h
+file("C:/DolphinDB/test.bin","w").write(x);
+
+1
+
+file("C:/DolphinDB/test.bin","r",true).read!(y);                // 假定文件是小端字节顺序
+
+1
+
+y;
+
+10
+
+file("C:/DolphinDB/test.bin","r",false).read!(y);                // 假定文件是大端字节顺序
+
+1
+
+y;
+
+2560</code></pre>
+            <p class="- topic/p p" id="读写多字节整型和浮点数__p_dwx_5hn_ryb" data-ofbid="读写多字节整型和浮点数__p_dwx_5hn_ryb">我们进行了一个简单的试验：写一个值为10的 SHORT 类型整数到文件中，然后通过两种字节顺序来把该整数读取到另一个 SHORT
+                整型变量中。与预期一致，两个值分别为10和2560。如果在同一台机器上执行所有的操作，那么不需要考虑大小端问题。但是在一个分布式系统中，必须要注意网络字节流和文件的大小端模式。上述例子使用了一个标量作为缓冲区用来读写。我们再给出一个使用INT向量作为缓冲区的例子。该例子生成100万个0-10000之间的随机整数，保存它们到一个文件中，然后将他们读到一个小缓冲区中并求和。</p>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="读写多字节整型和浮点数__codeblock_ewx_5hn_ryb" data-ofbid="读写多字节整型和浮点数__codeblock_ewx_5hn_ryb"><code>n=1000000
+x=rand(10000,n)
+file("test.bin","w").write(x,0,n)
+sum=0
+buf=array(INT,1024)
+fin=file("test.bin")
+do{
+   len = fin.read!(buf,0, 1024)
+   if(len==1024)
+      sum +=buf.sum()
+   else
+      sum += buf.subarray(0:len).sum()
+}while(len == 1024)
+fin.close()
+sum;
+
+
+4994363593</code></pre>
+            <p class="- topic/p p" id="读写多字节整型和浮点数__p_fwx_5hn_ryb" data-ofbid="读写多字节整型和浮点数__p_fwx_5hn_ryb">除了数字之外，字符串也可以以二进制形式保存到文件中。NULL 字符（值为0的字节）附加在字符串结尾作为字符串分隔符。所以如果一个字符串的长度为
+                n，那么实际写入文件的字节数为 n+1。下例展示了 <em class="+ topic/ph hi-d/i ph i">write</em> 和 <em class="+ topic/ph hi-d/i ph i">read!</em>
+                函数处理字符串读写。我们首先生成100万个随机股票号并以二进制格式保存到一个文件中。然后使用一个小缓冲区顺序地读出整个文件。在每一次读取之后，我们使用了
+                    <em class="+ topic/ph hi-d/i ph i">dictUpdate!</em> 函数来统计词频。</p>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="读写多字节整型和浮点数__codeblock_gwx_5hn_ryb" data-ofbid="读写多字节整型和浮点数__codeblock_gwx_5hn_ryb"><code>file("test.bin","w").write(rand(`IBM`MSFT`GOOG`YHOO`C`FORD`MS`GS`BIDU,1000000));
+
+1000000</code></pre>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="读写多字节整型和浮点数__codeblock_hwx_5hn_ryb" data-ofbid="读写多字节整型和浮点数__codeblock_hwx_5hn_ryb"><code>words=dict(STRING,LONG)
+buf=array(STRING,1024)
+counts=array(LONG,1024,0,1)
+fin=file("test.bin")
+do{
+   len = fin.read!(buf,0,1024)
+   if(len==1024)
+      dictUpdate!(words, +, buf, counts)
+   else
+      dictUpdate!(words, +, buf.subarray(0:len), counts.subarray(0:len))
+}while(len==1024)
+fin.close();
+
+words;
+
+
+MSFT-&gt;111294
+BIDU-&gt;110800
+FORD-&gt;110916
+GS-&gt;111233
+MS-&gt;110859
+C-&gt;110591
+YHOO-&gt;111069
+GOOG-&gt;111972
+IBM-&gt;111266
+
+words.values().sum();
+
+1000000</code></pre>
+        </div>
+    </article>
+    <article class="- topic/topic topic nested1" aria-labelledby="ariaid-title4" id="读写对象">
+        <h2 class="- topic/title title topictitle2" id="ariaid-title4">读写对象</h2>
+        <div class="- topic/body body">
+            <p class="- topic/p p" id="读写对象__p_iwx_5hn_ryb" data-ofbid="读写对象__p_iwx_5hn_ryb"><em class="+ topic/ph hi-d/i ph i">read!</em> 和 <em class="+ topic/ph hi-d/i ph i">write</em>
+                    函数操作二进制数据时提供了很大的灵活性，但是必须知道读写元素的准确个数以及数据类型，因此当处理复杂数据结构如矩阵、表或元组时，我们需要设计一种复杂的协议来协调读写操作。我们提供了两个高阶函数，<a class="- topic/xref xref" href="../../funcs/r/readObject.html">readObject</a> 和 <a class="- topic/xref xref" href="../../funcs/w/writeObject.html">writeObject</a>
+                用来处理对象的读写。所有数据结构包括标量、向量、集合、字典和表都可以使用这两个函数。</p>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="读写对象__codeblock_jwx_5hn_ryb" data-ofbid="读写对象__codeblock_jwx_5hn_ryb"><code>a1=10.5
+a2=1..10
+a3=cross(*,1..5,1..10)
+a4=set(`IBM`MSFT`GOOG`YHOO)
+a5=dict(a4.keys(),125.6 53.2 702.3 39.7)
+a6=table(1 2 3 as id, `Jenny`Tom`Jack as name)
+a7=(1 2 3, "hello world!", 25.6)
+
+fout=file("test.bin","w")
+fout.writeObject(a1)
+fout.writeObject(a2)
+fout.writeObject(a3)
+fout.writeObject(a4)
+fout.writeObject(a5)
+fout.writeObject(a6)fout.writeObject(a7)
+fout.close();</code></pre>
+            <p class="- topic/p p" id="读写对象__p_kwx_5hn_ryb" data-ofbid="读写对象__p_kwx_5hn_ryb">上面的脚本写了7种不同类型的对象到一个文件中。下面的脚本从文件中读出这7个对象并打印这些对象的简短描述：</p>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="读写对象__codeblock_lwx_5hn_ryb" data-ofbid="读写对象__codeblock_lwx_5hn_ryb"><code>fin = file("test.bin")
+for(i in 0:7) print typestr fin.readObject()
+fin.close();
+
+DOUBLE
+FAST INT VECTOR
+INT MATRIX
+STRING SET
+STRING-&gt;DOUBLE Dictionary
+TABLE
+ANY VECTOR</code></pre>
+        </div>
+    </article>
+</article></main></div>
+                        
+                        
+                        
+                        
+                        
+                        
+                    </div>
+                    
+                        <nav role="navigation" id="wh_topic_toc" aria-label="On this page" class="col-lg-2 d-none d-lg-block navbar d-print-none"> 
+                            <div id="wh_topic_toc_content">
+		                        
+	                            <div class=" wh_topic_toc "><div class="wh_topic_label">在本页上</div><ul><li class="topic-item"><a href="#%E8%AF%BB%E5%86%99%E5%8E%9F%E5%A7%8B%E5%AD%97%E8%8A%82" data-tocid="读写原始字节">读写原始字节</a></li><li class="topic-item"><a href="#%E8%AF%BB%E5%86%99%E5%A4%9A%E5%AD%97%E8%8A%82%E6%95%B4%E5%9E%8B%E5%92%8C%E6%B5%AE%E7%82%B9%E6%95%B0" data-tocid="读写多字节整型和浮点数">读写多字节整型和浮点数</a></li><li class="topic-item"><a href="#%E8%AF%BB%E5%86%99%E5%AF%B9%E8%B1%A1" data-tocid="读写对象">读写对象</a></li></ul></div>
+	                        	
+                        	</div>
+                        </nav>
+                    
+                </div>
+            </div>
+            
+            
+            
+        </div> 
+        <footer class="navbar navbar-default wh_footer">
+  <div class=" footer-container mx-auto ">
+<title>Copyright</title><p><b> ©2024 浙江智臾科技有限公司 浙ICP备18048711号-3</b></p>
+  </div>
+</footer>
+        
+        <div id="go2top" class="d-print-none">
+            <span class="oxy-icon oxy-icon-up"></span>
+        </div>
+        
+        <div id="modal_img_large" class="modal">
+            <span class="close oxy-icon oxy-icon-remove"></span>
+            <div id="modal_img_container"></div>
+            <div id="caption"></div>
+        </div>
+        
+        
+        
+    </body>
+</html>

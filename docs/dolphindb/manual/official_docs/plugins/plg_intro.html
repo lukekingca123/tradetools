@@ -1,0 +1,348 @@
+<!DOCTYPE html><html xmlns="http://www.w3.org/1999/xhtml" xml:lang="zh" lang="zh" data-whc_version="26.0">
+    <head><link rel="shortcut icon" href="../favicon.ico"/><link rel="icon" href="../favicon.ico"/><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><meta http-equiv="X-UA-Compatible" content="IE=edge"/><meta name="description" content="插件一览 类型 插件名称 图像 GP 数据存取 HBase Kdb+ MongoDB MySQL ODBC OPCUA OPC Redis Schemaless Writer HDFS LDAP 金融 amdQuote INSIGHT NSQ Matching Engine 模拟撮合引擎 Backtest CTP EFH DataFeed XTP SSEQuotationFile 消息队列 ..."/><meta name="DC.rights.owner" content="(C) 版权 2024"/><meta name="copyright" content="(C) 版权 2024"/><meta name="generator" content="DITA-OT"/><meta name="DC.type" content="topic"/><meta name="DC.coverage" content=""/><meta name="DC.relation" content="../api/r.md"/><meta name="DC.relation" content="../plugins/plg_howtos.md"/><meta name="DC.relation" content="../plugins/amdquote/amdquote_2.md"/><meta name="DC.relation" content="../plugins/Arrow/arrow.md"/><meta name="DC.relation" content="../plugins/aws/aws.md"/><meta name="DC.relation" content="../plugins/backtest.html"/><meta name="DC.relation" content="../plugins/ctp_2.md"/><meta name="DC.relation" content="../plugins/datafeed.md"/><meta name="DC.relation" content="../plugins/efh.md"/><meta name="DC.relation" content="../plugins/EncoderDecoder.md"/><meta name="DC.relation" content="../plugins/feather/feather.md"/><meta name="DC.relation" content="../plugins/gp/gp.md"/><meta name="DC.relation" content="../plugins/gurobi.md"/><meta name="DC.relation" content="../plugins/hbase/hbase.md"/><meta name="DC.relation" content="../plugins/hdf5/hdf5.md"/><meta name="DC.relation" content="../plugins/hdfs/hdfs.md"/><meta name="DC.relation" content="../plugins/httpClient/httpclient.md"/><meta name="DC.relation" content="../plugins/insight/insight_2.md"/><meta name="DC.relation" content="../plugins/kafka/kafka.md"/><meta name="DC.relation" content="../plugins/kdb/kdb.md"/><meta name="DC.relation" content="../plugins/LDAP.md"/><meta name="DC.relation" content="../plugins/mat/mat.md"/><meta name="DC.relation" content="../plugins/MatchingEngine/me.md"/><meta name="DC.relation" content="../plugins/matchingEngineSimulator/mes.html"/><meta name="DC.relation" content="../plugins/MDL.md"/><meta name="DC.relation" content="../plugins/mongodb/mongodb.md"/><meta name="DC.relation" content="../plugins/mqtt/mqtt.md"/><meta name="DC.relation" content="../plugins/mseed/mseed.md"/><meta name="DC.relation" content="../plugins/mysql/mysql.md"/><meta name="DC.relation" content="../plugins/nsq/nsq_2.md"/><meta name="DC.relation" content="../plugins/odbc/odbc.md"/><meta name="DC.relation" content="../plugins/opcua/opcua.md"/><meta name="DC.relation" content="../plugins/opc/opc.md"/><meta name="DC.relation" content="../plugins/orc.md"/><meta name="DC.relation" content="../plugins/parquet/parquet.md"/><meta name="DC.relation" content="../plugins/py/py.md"/><meta name="DC.relation" content="../plugins/rabbitMQ.md"/><meta name="DC.relation" content="../plugins/redis.md"/><meta name="DC.relation" content="../plugins/rocketMQ.md"/><meta name="DC.relation" content="../plugins/slwriter.md"/><meta name="DC.relation" content="../plugins/signal/signal.md"/><meta name="DC.relation" content="../plugins/SSEQuotationFile.md"/><meta name="DC.relation" content="../plugins/svm/svm.md"/><meta name="DC.relation" content="../plugins/tcpsocket.md"/><meta name="DC.relation" content="../plugins/websocket.md"/><meta name="DC.relation" content="../plugins/windtdf.md"/><meta name="DC.relation" content="../plugins/xgboost/xgboost.md"/><meta name="DC.relation" content="../plugins/xtp.md"/><meta name="DC.relation" content="../plugins/zip/zip.md"/><meta name="DC.relation" content="../plugins/zlib/zlib.md"/><meta name="DC.relation" content="../plugins/zmq/zmq.md"/><meta name="prodname" content="DolphinDB"/><meta name="brand" content="DolphinDB"/><meta name="DC.creator" content="DolphinDB"/><meta name="DC.publisher" content="DDB N/A DDB 200"/><meta name="DC.format" content="HTML5"/><meta name="DC.identifier" content="chap6_plugin"/><meta name="wh-search-title" content="插件"/><title>插件</title><!--  Generated with Oxygen version 26.0, build number 2024012323.  --><meta name="wh-path2root" content="../"/><meta name="wh-toc-id" content="chap6_plugin-d9529e91976"/><meta name="wh-source-relpath" content="plugins/plg_intro.dita"/><meta name="wh-out-relpath" content="plugins/plg_intro.html"/>
+
+    <link rel="stylesheet" type="text/css" href="../oxygen-webhelp/app/commons.css?buildId=2024012323"/>
+    <link rel="stylesheet" type="text/css" href="../oxygen-webhelp/app/topic.css?buildId=2024012323"/>
+
+    <script src="../oxygen-webhelp/app/options/properties.js?buildId=20240704100525"></script>
+    <script src="../oxygen-webhelp/app/localization/strings.js?buildId=2024012323"></script>
+    <script src="../oxygen-webhelp/app/search/index/keywords.js?buildId=20240704100525"></script>
+    <script defer="defer" src="../oxygen-webhelp/app/commons.js?buildId=2024012323"></script>
+    <script defer="defer" src="../oxygen-webhelp/app/topic.js?buildId=2024012323"></script>
+<link rel="stylesheet" type="text/css" href="../oxygen-webhelp/template/styles.css?buildId=2024012323"/><script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script><script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script></head>
+
+    <body id="chap6_plugin" class="wh_topic_page frmBody">
+        <a href="#wh_topic_body" class="sr-only sr-only-focusable">
+            跳转到主要内容
+        </a>
+        
+        
+        
+        
+        <header class="navbar navbar-default wh_header">
+    <div class="container-fluid">
+        <div xmlns:whc="http://www.oxygenxml.com/webhelp/components" class="wh_header_flex_container navbar-nav navbar-expand-md navbar-dark">
+            <div class="wh_logo_and_publication_title_container">
+                <div class="wh_logo_and_publication_title">
+                    
+                    <a href="https://www.dolphindb.cn" class=" wh_logo d-none d-sm-block "><img src="../logo.png" alt="  DolphinDB 文档中心  "/></a>
+                    <div class=" wh_publication_title "><a href="../index.html"><span class="booktitle">  <span class="ph mainbooktitle">DolphinDB 文档中心</span>  </span></a></div>
+                    
+                </div>
+                
+                
+            </div>
+
+            <div class="wh_top_menu_and_indexterms_link collapse navbar-collapse" id="wh_top_menu_and_indexterms_link">
+                
+                
+                
+                
+            </div>
+        <div class=" wh_search_input navbar-form wh_topic_page_search search " role="form">
+            
+            
+            
+            <form id="searchForm" method="get" role="search" action="../search.html"><div><input type="search" placeholder="搜索 " class="wh_search_textfield" id="textToSearch" name="searchQuery" aria-label="搜索查询" required="required"/><button type="submit" class="wh_search_button" aria-label="搜索"><span class="search_input_text">搜索</span></button></div></form>
+            
+            <script src="/vendors/react/umd/react.production.min.js" defer="defer"></script>
+<script src="/vendors/react-dom/umd/react-dom.production.min.js" defer="defer"></script>
+<script src="/vendors/dayjs/dayjs.min.js" defer="defer"></script>
+<script src="/vendors/antd/dist/antd.min.js" defer="defer"></script>
+<script src="/vendors/@ant-design/icons/dist/index.umd.min.js" defer="defer"></script>
+<script src="/zh/index.js" type="module"></script>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js" defer="defer"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML" defer="defer"><!--
+
+
+--></script>
+
+            
+        </div></div>
+    </div>
+</header>
+        
+        
+         
+        
+        
+        
+        <div class="container-fluid" id="wh_topic_container">
+            <div class="row">
+
+                <nav class="wh_tools d-print-none navbar-expand-md" aria-label="Tools">
+                    
+                    <div data-tooltip-position="bottom" class=" wh_breadcrumb "><ol class="d-print-none"><li><span class="home"><a href="../index.html"><span>主页</span></a></span></li><li class="active"><div class="topicref" data-id="chap6_plugin"><div class="title"><a href="../plugins/plg_intro.html"><span class="keyword label">插件</span></a><div class="wh-tooltip"><p class="shortdesc">多个应用场景的插件使用说明和插件开发指导</p></div></div></div></li></ol></div>
+                    
+                    
+                    
+                    <div class="wh_right_tools">
+                        <button class="wh_hide_highlight" aria-label="切换搜索突出显示" title="切换搜索突出显示"></button>
+                        <button class="webhelp_expand_collapse_sections" data-next-state="collapsed" aria-label="折叠截面" title="折叠截面"></button>
+                        <div class=" wh_navigation_links "><span id="topic_navigation_links" class="navheader">
+<span class="navprev"><a class="- topic/link link" href="../api/r.html" title="R API" aria-label="上一主题: R API" rel="prev"></a></span>  
+<span class="navnext"><a class="- topic/link link" href="../plugins/plg_howtos.html" title="插件介绍与使用" aria-label="下一主题: 插件介绍与使用" rel="next"></a></span>  </span></div>
+                        
+                        
+                        
+                        <div class=" wh_print_link print d-none d-md-inline-block "><button onClick="window.print()" title="打印此页" aria-label="打印此页"></button></div>
+                        
+                        <button type="button" id="wh_toc_button" class="custom-toggler navbar-toggler collapsed wh_toggle_button navbar-light" aria-expanded="false" aria-label="Toggle publishing table of content" aria-controls="wh_publication_toc">
+                            <span class="navbar-toggler-icon"></span>
+                        </button>
+                    </div>
+                    
+                </nav>
+            </div>
+            
+            
+            
+            
+            <div class="wh_content_area">
+                <div class="row">
+                    
+                        <nav id="wh_publication_toc" class="col-lg-3 col-md-3 col-sm-12 d-md-block d-none d-print-none" aria-label="Table of Contents Container">
+                            <div id="wh_publication_toc_content">
+		                        
+                            	<div class=" wh_publication_toc " data-tooltip-position="right"><span class="expand-button-action-labels"><span id="button-expand-action" role="button" aria-label="Expand"></span><span id="button-collapse-action" role="button" aria-label="Collapse"></span><span id="button-pending-action" role="button" aria-label="Pending"></span></span><ul role="tree" aria-label="Table of Contents"><li role="treeitem"><div data-tocid="new_chap_about_sect_ddb_docs_intro-d9529e87" class="topicref" data-id="new_chap_about_sect_ddb_docs_intro" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../about/ddb_docs_intro.html" id="new_chap_about_sect_ddb_docs_intro-d9529e87-link">文档使用说明</a><div class="wh-tooltip"><p class="shortdesc">如何获取 DolphinDB 帮助信息</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="chap1_getstarted-d9529e140" class="topicref" data-id="chap1_getstarted" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action chap1_getstarted-d9529e140-link" class="wh-expand-btn"></span><div class="title"><a href="../getstarted/chap1_getstarted.html" id="chap1_getstarted-d9529e140-link"><span class="keyword label">快速上手</span></a><div class="wh-tooltip"><p class="shortdesc">如何快速部署 DolphinDB、建库建表、写入和查询数据</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="sectionddb_deployment-d9529e335" class="topicref" data-id="sectionddb_deployment" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action sectionddb_deployment-d9529e335-link" class="wh-expand-btn"></span><div class="title"><a href="../deploy/deploy_intro.html" id="sectionddb_deployment-d9529e335-link"><span class="keyword label">部署</span></a><div class="wh-tooltip"><p class="shortdesc">如何在不同的场景中部署 DolphinDB</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="new_chap_database_manage_new_chap_dbmanage_landing_page-d9529e2313" class="topicref" data-id="new_chap_database_manage_new_chap_dbmanage_landing_page" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action new_chap_database_manage_new_chap_dbmanage_landing_page-d9529e2313-link" class="wh-expand-btn"></span><div class="title"><a href="../db_distr_comp/cfg/db_intro.html" id="new_chap_database_manage_new_chap_dbmanage_landing_page-d9529e2313-link"><span class="keyword label">数据库</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 数据库的基本概念</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="chap7_tutorials_streaming-d9529e3490" class="topicref" data-id="chap7_tutorials_streaming" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action chap7_tutorials_streaming-d9529e3490-link" class="wh-expand-btn"></span><div class="title"><a href="../stream/str_intro.html" id="chap7_tutorials_streaming-d9529e3490-link"><span class="keyword label">流数据</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 流数据引擎及流数据计算的基本概念</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="tocId-d9529e7385" class="topicref" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action tocId-d9529e7385-link" class="wh-expand-btn"></span><div class="title"><a href="../db_distr_comp/db_oper/import_data.html" id="tocId-d9529e7385-link">数据迁移</a><div class="wh-tooltip"><p class="shortdesc">如何从不同数据源向 DolphinDB 迁移数据</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="chap7_tutorials_system_management-d9529e7812" class="topicref" data-id="chap7_tutorials_system_management" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action chap7_tutorials_system_management-d9529e7812-link" class="wh-expand-btn"></span><div class="title"><a href="../sys_man/om_intro.html" id="chap7_tutorials_system_management-d9529e7812-link"><span class="keyword label">系统运维</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 的系统运维功能及方法</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="about_language_resources-d9529e16490" class="topicref" data-id="about_language_resources" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action about_language_resources-d9529e16490-link" class="wh-expand-btn"></span><div class="title"><a href="../progr/progr_intro.html" id="about_language_resources-d9529e16490-link"><span class="keyword label">编程语言</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 编程基本概念与方法、SQL 在 DolphinDB 的应用</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="functions_references-d9529e26503" class="topicref" data-id="functions_references" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action functions_references-d9529e26503-link" class="wh-expand-btn"></span><div class="title"><a href="../funcs/funcs_intro.html" id="functions_references-d9529e26503-link"><span class="keyword label">函数参考</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 函数分类、语法、详解及示例</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="api_protocol-d9529e86456" class="topicref" data-id="api_protocol" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action api_protocol-d9529e86456-link" class="wh-expand-btn"></span><div class="title"><a href="../api/connapi_intro.html" id="api_protocol-d9529e86456-link"><span class="keyword label">连接器 &amp; API</span></a><div class="wh-tooltip"><p class="shortdesc">面向不同编程语言的 DolphinDB API 及连接器，相关协议和用法</p></div></div></div></li><li role="treeitem" aria-expanded="true" class="active"><div data-tocid="chap6_plugin-d9529e91976" class="topicref" data-id="chap6_plugin" data-state="expanded"><span role="button" tabindex="0" aria-labelledby="button-collapse-action chap6_plugin-d9529e91976-link" class="wh-expand-btn"></span><div class="title"><a href="../plugins/plg_intro.html" id="chap6_plugin-d9529e91976-link"><span class="keyword label">插件</span></a><div class="wh-tooltip"><p class="shortdesc">多个应用场景的插件使用说明和插件开发指导</p></div></div></div><ul role="group" class="navbar-nav nav-list"><li role="treeitem" aria-expanded="false"><div data-tocid="tocId-d9529e92029" class="topicref" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action tocId-d9529e92029-link" class="wh-expand-btn"></span><div class="title"><a href="../plugins/plg_howtos.html" id="tocId-d9529e92029-link">插件使用与开发</a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="amdquote-d9529e92214" class="topicref" data-id="amdquote" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action amdquote-d9529e92214-link" class="wh-expand-btn"></span><div class="title"><a href="../plugins/amdquote/amdquote_2.html" id="amdquote-d9529e92214-link">amdQuote</a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="arrow-d9529e92306" class="topicref" data-id="arrow" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action arrow-d9529e92306-link" class="wh-expand-btn"></span><div class="title"><a href="../plugins/Arrow/arrow.html" id="arrow-d9529e92306-link">Arrow</a></div></div></li><li role="treeitem"><div data-tocid="awss3-d9529e92398" class="topicref" data-id="awss3" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../plugins/aws/aws.html" id="awss3-d9529e92398-link">AWSS3</a></div></div></li><li role="treeitem"><div data-tocid="backtest-d9529e92444" class="topicref" data-id="backtest" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../plugins/backtest.html" id="backtest-d9529e92444-link">Backtest</a></div></div></li><li role="treeitem"><div data-tocid="ctp-d9529e92490" class="topicref" data-id="ctp" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../plugins/ctp_2.html" id="ctp-d9529e92490-link">CTP</a></div></div></li><li role="treeitem"><div data-tocid="datafeed-d9529e92536" class="topicref" data-id="datafeed" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../plugins/datafeed.html" id="datafeed-d9529e92536-link">DataFeed</a></div></div></li><li role="treeitem"><div data-tocid="efh-d9529e92582" class="topicref" data-id="efh" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../plugins/efh.html" id="efh-d9529e92582-link">EFH</a></div></div></li><li role="treeitem"><div data-tocid="encoderdecoder-d9529e92628" class="topicref" data-id="encoderdecoder" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../plugins/EncoderDecoder.html" id="encoderdecoder-d9529e92628-link">EncoderDecoder</a></div></div></li><li role="treeitem"><div data-tocid="feather-d9529e92674" class="topicref" data-id="feather" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../plugins/feather/feather.html" id="feather-d9529e92674-link">Feather</a></div></div></li><li role="treeitem"><div data-tocid="gp-d9529e92721" class="topicref" data-id="gp" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../plugins/gp/gp.html" id="gp-d9529e92721-link">GP</a></div></div></li><li role="treeitem"><div data-tocid="gurobi-d9529e92767" class="topicref" data-id="gurobi" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../plugins/gurobi.html" id="gurobi-d9529e92767-link">gurobi</a></div></div></li><li role="treeitem"><div data-tocid="hbase-d9529e92813" class="topicref" data-id="hbase" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../plugins/hbase/hbase.html" id="hbase-d9529e92813-link">HBase</a></div></div></li><li role="treeitem"><div data-tocid="hdf5-d9529e92859" class="topicref" data-id="hdf5" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../plugins/hdf5/hdf5.html" id="hdf5-d9529e92859-link">HDF5</a></div></div></li><li role="treeitem"><div data-tocid="hdfs-d9529e92905" class="topicref" data-id="hdfs" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../plugins/hdfs/hdfs.html" id="hdfs-d9529e92905-link">HDFS</a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="httpclient-d9529e92951" class="topicref" data-id="httpclient" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action httpclient-d9529e92951-link" class="wh-expand-btn"></span><div class="title"><a href="../plugins/httpClient/httpclient.html" id="httpclient-d9529e92951-link">HttpClient</a></div></div></li><li role="treeitem"><div data-tocid="insight-d9529e93043" class="topicref" data-id="insight" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../plugins/insight/insight_2.html" id="insight-d9529e93043-link">INSIGHT</a></div></div></li><li role="treeitem"><div data-tocid="kafka-d9529e93089" class="topicref" data-id="kafka" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../plugins/kafka/kafka.html" id="kafka-d9529e93089-link">Kafka</a></div></div></li><li role="treeitem"><div data-tocid="kdb-d9529e93135" class="topicref" data-id="kdb" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../plugins/kdb/kdb.html" id="kdb-d9529e93135-link">Kdb+</a></div></div></li><li role="treeitem"><div data-tocid="ldap-d9529e93181" class="topicref" data-id="ldap" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../plugins/LDAP.html" id="ldap-d9529e93181-link">LDAP</a></div></div></li><li role="treeitem"><div data-tocid="mat-d9529e93227" class="topicref" data-id="mat" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../plugins/mat/mat.html" id="mat-d9529e93227-link">mat</a></div></div></li><li role="treeitem"><div data-tocid="matchingengine-d9529e93274" class="topicref" data-id="matchingengine" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../plugins/MatchingEngine/me.html" id="matchingengine-d9529e93274-link">MatchingEngine</a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="mes-d9529e93320" class="topicref" data-id="mes" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action mes-d9529e93320-link" class="wh-expand-btn"></span><div class="title"><a href="../plugins/matchingEngineSimulator/mes.html" id="mes-d9529e93320-link">MatchingEngineSimulator</a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="mdl-d9529e93412" class="topicref" data-id="mdl" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action mdl-d9529e93412-link" class="wh-expand-btn"></span><div class="title"><a href="../plugins/MDL.html" id="mdl-d9529e93412-link">MDL</a></div></div></li><li role="treeitem"><div data-tocid="mongodb-d9529e93504" class="topicref" data-id="mongodb" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../plugins/mongodb/mongodb.html" id="mongodb-d9529e93504-link">MongoDB</a></div></div></li><li role="treeitem"><div data-tocid="mqtt-d9529e93550" class="topicref" data-id="mqtt" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../plugins/mqtt/mqtt.html" id="mqtt-d9529e93550-link">mqtt</a></div></div></li><li role="treeitem"><div data-tocid="mseed-d9529e93596" class="topicref" data-id="mseed" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../plugins/mseed/mseed.html" id="mseed-d9529e93596-link">mseed</a></div></div></li><li role="treeitem"><div data-tocid="mysql-d9529e93642" class="topicref" data-id="mysql" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../plugins/mysql/mysql.html" id="mysql-d9529e93642-link">MySQL</a></div></div></li><li role="treeitem"><div data-tocid="nsq-d9529e93688" class="topicref" data-id="nsq" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../plugins/nsq/nsq_2.html" id="nsq-d9529e93688-link">NSQ</a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="odbc-d9529e93734" class="topicref" data-id="odbc" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action odbc-d9529e93734-link" class="wh-expand-btn"></span><div class="title"><a href="../plugins/odbc/odbc.html" id="odbc-d9529e93734-link">ODBC</a></div></div></li><li role="treeitem"><div data-tocid="opcua-d9529e93826" class="topicref" data-id="opcua" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../plugins/opcua/opcua.html" id="opcua-d9529e93826-link">OPCUA</a></div></div></li><li role="treeitem"><div data-tocid="opc-d9529e93872" class="topicref" data-id="opc" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../plugins/opc/opc.html" id="opc-d9529e93872-link">OPC</a></div></div></li><li role="treeitem"><div data-tocid="orc-d9529e93919" class="topicref" data-id="orc" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../plugins/orc.html" id="orc-d9529e93919-link">ORC</a></div></div></li><li role="treeitem"><div data-tocid="parquet-d9529e93965" class="topicref" data-id="parquet" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../plugins/parquet/parquet.html" id="parquet-d9529e93965-link">Parquet</a></div></div></li><li role="treeitem"><div data-tocid="py-d9529e94011" class="topicref" data-id="py" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../plugins/py/py.html" id="py-d9529e94011-link">Py</a></div></div></li><li role="treeitem"><div data-tocid="rabbitmq-d9529e94057" class="topicref" data-id="rabbitmq" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../plugins/rabbitMQ.html" id="rabbitmq-d9529e94057-link">RabbitMQ</a></div></div></li><li role="treeitem"><div data-tocid="redis-d9529e94103" class="topicref" data-id="redis" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../plugins/redis.html" id="redis-d9529e94103-link">Redis</a></div></div></li><li role="treeitem"><div data-tocid="rocketmq-d9529e94149" class="topicref" data-id="rocketmq" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../plugins/rocketMQ.html" id="rocketmq-d9529e94149-link">RocketMQ</a></div></div></li><li role="treeitem"><div data-tocid="schemalesswriter-d9529e94195" class="topicref" data-id="schemalesswriter" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../plugins/slwriter.html" id="schemalesswriter-d9529e94195-link">SchemalessWriter</a></div></div></li><li role="treeitem"><div data-tocid="signal-d9529e94241" class="topicref" data-id="signal" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../plugins/signal/signal.html" id="signal-d9529e94241-link">signal</a></div></div></li><li role="treeitem"><div data-tocid="ssequotationfile-d9529e94287" class="topicref" data-id="ssequotationfile" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../plugins/SSEQuotationFile.html" id="ssequotationfile-d9529e94287-link">SSEQuotationFile</a></div></div></li><li role="treeitem"><div data-tocid="svm-d9529e94333" class="topicref" data-id="svm" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../plugins/svm/svm.html" id="svm-d9529e94333-link">SVM</a></div></div></li><li role="treeitem"><div data-tocid="tcpsocket-d9529e94379" class="topicref" data-id="tcpsocket" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../plugins/tcpsocket.html" id="tcpsocket-d9529e94379-link">TCPSocket</a></div></div></li><li role="treeitem"><div data-tocid="websocket-d9529e94426" class="topicref" data-id="websocket" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../plugins/websocket.html" id="websocket-d9529e94426-link">WebSocket</a></div></div></li><li role="treeitem"><div data-tocid="windtdf-d9529e94472" class="topicref" data-id="windtdf" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../plugins/windtdf.html" id="windtdf-d9529e94472-link">WindTDF</a></div></div></li><li role="treeitem"><div data-tocid="xgboost-d9529e94518" class="topicref" data-id="xgboost" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../plugins/xgboost/xgboost.html" id="xgboost-d9529e94518-link">xgboost</a></div></div></li><li role="treeitem"><div data-tocid="xtp-d9529e94564" class="topicref" data-id="xtp" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../plugins/xtp.html" id="xtp-d9529e94564-link">XTP</a></div></div></li><li role="treeitem"><div data-tocid="zip-d9529e94610" class="topicref" data-id="zip" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../plugins/zip/zip.html" id="zip-d9529e94610-link">zip</a></div></div></li><li role="treeitem"><div data-tocid="zlib-d9529e94656" class="topicref" data-id="zlib" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../plugins/zlib/zlib.html" id="zlib-d9529e94656-link">Zlib</a></div></div></li><li role="treeitem"><div data-tocid="zmq-d9529e94702" class="topicref" data-id="zmq" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../plugins/zmq/zmq.html" id="zmq-d9529e94702-link">zmq</a></div></div></li></ul></li><li role="treeitem" aria-expanded="false"><div data-tocid="third_party-d9529e94749" class="topicref" data-id="third_party" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action third_party-d9529e94749-link" class="wh-expand-btn"></span><div class="title"><a href="../third_party.html" id="third_party-d9529e94749-link">第三方工具</a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="about_tutorials-d9529e94980" class="topicref" data-id="about_tutorials" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action about_tutorials-d9529e94980-link" class="wh-expand-btn"></span><div class="title"><a href="../tutorials/about_tutorials.html" id="about_tutorials-d9529e94980-link"><span class="keyword label">教程</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 产品使用教程</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="tocId-d9529e101769" class="topicref" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action tocId-d9529e101769-link" class="wh-expand-btn"></span><div class="title"><a href="../rn/server/3_00_1.html" id="tocId-d9529e101769-link">版本说明</a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 版本发布历史</p></div></div></div></li></ul></div>
+		                        
+                            </div>
+                        </nav>
+                    
+                    
+                    <div class="col-lg-7 col-md-9 col-sm-12" id="wh_topic_body">
+                        <button id="wh_close_publication_toc_button" class="close-toc-button d-none" aria-label="Toggle publishing table of content" aria-controls="wh_publication_toc" aria-expanded="true">
+                            <span class="close-toc-icon-container">
+                                <span class="close-toc-icon"></span>     
+                            </span>
+                        </button>
+                        <button id="wh_close_topic_toc_button" class="close-toc-button d-none" aria-label="Toggle topic table of content" aria-controls="wh_topic_toc" aria-expanded="true">
+                            <span class="close-toc-icon-container">
+                                <span class="close-toc-icon"></span>     
+                            </span>
+                        </button>
+                        
+                        <div class=" wh_topic_content body "><main role="main"><article class="- topic/topic topic" role="article" aria-labelledby="chap6_plugin__title_rx5_s4v_nyb">
+    <h1 class="- topic/title title topictitle1" id="chap6_plugin__title_rx5_s4v_nyb"><span class="- topic/keyword keyword label">插件</span></h1>
+    <div class="- topic/body body">
+        <section class="- topic/section section" id="chap6_plugin__section_ykr_fms_xyb" data-ofbid="chap6_plugin__section_ykr_fms_xyb"><h2 class="- topic/title title sectiontitle">插件一览</h2>
+            
+            <div class="table-container"><table class="- topic/table table frame-all" id="chap6_plugin__table_mky_nz5_tyb" data-ofbid="chap6_plugin__table_mky_nz5_tyb" data-cols="2"><caption></caption><colgroup><col style="width:25.125628140703515%"/><col style="width:74.87437185929649%"/></colgroup><thead class="- topic/thead thead">
+                        <tr class="- topic/row">
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="chap6_plugin__table_mky_nz5_tyb__entry__1">类型</th>
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="chap6_plugin__table_mky_nz5_tyb__entry__2">插件名称</th>
+                        </tr>
+                    </thead><tbody class="- topic/tbody tbody">
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="chap6_plugin__table_mky_nz5_tyb__entry__1">图像</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="chap6_plugin__table_mky_nz5_tyb__entry__2"><a class="- topic/xref xref" href="gp/gp.html">GP</a></td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="chap6_plugin__table_mky_nz5_tyb__entry__1">数据存取</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="chap6_plugin__table_mky_nz5_tyb__entry__2">
+                                <ul class="- topic/ul ul" id="chap6_plugin__ul_uxy_vz5_tyb" data-ofbid="chap6_plugin__ul_uxy_vz5_tyb">
+                                    <li class="- topic/li li"><a class="- topic/xref xref" href="hbase/hbase.html">HBase</a></li>
+                                    <li class="- topic/li li"><a class="- topic/xref xref" href="kdb/kdb.html">Kdb+</a></li>
+                                    <li class="- topic/li li"><a class="- topic/xref xref" href="mongodb/mongodb.html">MongoDB</a></li>
+                                    <li class="- topic/li li"><a class="- topic/xref xref" href="mysql/mysql.html">MySQL</a></li>
+                                    <li class="- topic/li li"><a class="- topic/xref xref" href="odbc/odbc.html">ODBC</a></li>
+                                    <li class="- topic/li li"><a class="- topic/xref xref" href="opcua/opcua.html">OPCUA</a></li>
+                                    <li class="- topic/li li"><a class="- topic/xref xref" href="opc/opc.html">OPC</a></li>
+                                    <li class="- topic/li li"><a class="- topic/xref xref" href="redis.html">Redis</a></li>
+                                    <li class="- topic/li li"><a class="- topic/xref xref" href="slwriter.html">Schemaless
+                                            Writer</a></li>
+                                    <li class="- topic/li li"><a class="- topic/xref xref" href="hdfs/hdfs.html">HDFS</a></li>
+                                    <li class="- topic/li li"><a class="- topic/xref xref" href="LDAP.html">LDAP</a></li>
+                                </ul>
+                            </td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="chap6_plugin__table_mky_nz5_tyb__entry__1">金融</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="chap6_plugin__table_mky_nz5_tyb__entry__2">
+                                <ul class="- topic/ul ul" id="chap6_plugin__ul_v1z_j1v_tyb" data-ofbid="chap6_plugin__ul_v1z_j1v_tyb">
+                                    <li class="- topic/li li"><a class="- topic/xref xref" href="amdquote/amdquote.html">amdQuote</a></li>
+                                    <li class="- topic/li li"><a class="- topic/xref xref" href="insight/insight.html">INSIGHT</a></li>
+                                    <li class="- topic/li li"><a class="- topic/xref xref" href="nsq/nsq.html">NSQ</a></li>
+                                    <li class="- topic/li li"><a class="- topic/xref xref" href="MatchingEngine/me.html">Matching
+                                            Engine</a></li>
+                                    <li class="- topic/li li"><a class="- topic/xref xref" href="matchingEngineSimulator/mes.html">模拟撮合引擎</a></li>
+                                    <li class="- topic/li li"><a class="- topic/xref xref" href="backtest.html">Backtest</a></li>
+                                    <li class="- topic/li li"><a class="- topic/xref xref" href="ctp.html">CTP</a></li>
+                                    <li class="- topic/li li"><a class="- topic/xref xref" href="efh.html">EFH</a></li>
+                                    <li class="- topic/li li"><a class="- topic/xref xref" href="datafeed.html">DataFeed</a></li>
+                                    <li class="- topic/li li"><a class="- topic/xref xref" href="xtp.html">XTP</a></li>
+                                    <li class="- topic/li li"><a class="- topic/xref xref" href="SSEQuotationFile.html">SSEQuotationFile</a></li>
+                                </ul>
+                            </td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="chap6_plugin__table_mky_nz5_tyb__entry__1">消息队列</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="chap6_plugin__table_mky_nz5_tyb__entry__2">
+                                <ul class="- topic/ul ul" id="chap6_plugin__ul_dbv_q1v_tyb" data-ofbid="chap6_plugin__ul_dbv_q1v_tyb">
+                                    <li class="- topic/li li"><a class="- topic/xref xref" href="kafka/kafka.html">Kafka</a></li>
+                                    <li class="- topic/li li"><a class="- topic/xref xref" href="zmq/zmq.html">zmq</a></li>
+                                    <li class="- topic/li li"><a class="- topic/xref xref" href="mqtt/mqtt.html">mqtt</a></li>
+                                    <li class="- topic/li li"><a class="- topic/xref xref" href="rabbitMQ.html">RabbitMQ</a></li>
+                                    <li class="- topic/li li"><a class="- topic/xref xref" href="rocketMQ.html">RocketMQ</a></li>
+                                </ul>
+                            </td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="chap6_plugin__table_mky_nz5_tyb__entry__1">数值计算</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="chap6_plugin__table_mky_nz5_tyb__entry__2">
+                                <ul class="- topic/ul ul" id="chap6_plugin__ul_s2n_1bv_tyb" data-ofbid="chap6_plugin__ul_s2n_1bv_tyb">
+                                    <li class="- topic/li li"><a class="- topic/xref xref" href="signal/signal.html">Signal</a></li>
+                                    <li class="- topic/li li"><a class="- topic/xref xref" href="gurobi.html">gurobi</a></li>
+                                </ul>
+                            </td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="chap6_plugin__table_mky_nz5_tyb__entry__1">网络</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="chap6_plugin__table_mky_nz5_tyb__entry__2">
+                                <ul class="- topic/ul ul" id="chap6_plugin__ul_fnn_345_kbc" data-ofbid="chap6_plugin__ul_fnn_345_kbc">
+                                    <li class="- topic/li li"><a class="- topic/xref xref" href="httpClient/httpclient.html">HTTP
+                                            Client</a></li>
+                                    <li class="- topic/li li"><a class="- topic/xref xref" href="tcpsocket.html">TCPSocket</a></li>
+                                    <li class="- topic/li li"><a class="- topic/xref xref" href="websocket.html">WebSocket</a></li>
+                                </ul>
+                            </td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="chap6_plugin__table_mky_nz5_tyb__entry__1">云存储</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="chap6_plugin__table_mky_nz5_tyb__entry__2"><a class="- topic/xref xref" href="aws/aws.html">AWS</a></td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="chap6_plugin__table_mky_nz5_tyb__entry__1">机器学习</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="chap6_plugin__table_mky_nz5_tyb__entry__2">
+                                <ul class="- topic/ul ul" id="chap6_plugin__ul_pdg_pbv_tyb" data-ofbid="chap6_plugin__ul_pdg_pbv_tyb">
+                                    <li class="- topic/li li"><a class="- topic/xref xref" href="xgboost/xgboost.html">XGBoost</a></li>
+                                    <li class="- topic/li li"><a class="- topic/xref xref" href="svm/svm.html">SVM</a></li>
+                                </ul>
+                            </td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="chap6_plugin__table_mky_nz5_tyb__entry__1">扩展接口</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="chap6_plugin__table_mky_nz5_tyb__entry__2"><a class="- topic/xref xref" href="py/py.html">Py</a></td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="chap6_plugin__table_mky_nz5_tyb__entry__1">格式处理</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="chap6_plugin__table_mky_nz5_tyb__entry__2">
+                                <ul class="- topic/ul ul" id="chap6_plugin__ul_whc_wbv_tyb" data-ofbid="chap6_plugin__ul_whc_wbv_tyb">
+                                    <li class="- topic/li li"><a class="- topic/xref xref" href="feather/feather.html">Feather</a></li>
+                                    <li class="- topic/li li"><a class="- topic/xref xref" href="Arrow/arrow.html">Arrow</a></li>
+                                    <li class="- topic/li li"><a class="- topic/xref xref" href="mseed/mseed.html">mseed</a></li>
+                                    <li class="- topic/li li"><a class="- topic/xref xref" href="mat/mat.html">mat</a></li>
+                                    <li class="- topic/li li"><a class="- topic/xref xref" href="parquet/parquet.html">Parquet</a></li>
+                                    <li class="- topic/li li"><a class="- topic/xref xref" href="hdf5/hdf5.html">HDF5</a></li>
+                                    <li class="- topic/li li"><a class="- topic/xref xref" href="EncoderDecoder.html">EncoderDecoder</a></li>
+                                    <li class="- topic/li li"><a class="- topic/xref xref" href="orc.html">ORC</a></li>
+                                    <li class="- topic/li li"><a class="- topic/xref xref" href="zip/zip.html">Zip</a></li>
+                                    <li class="- topic/li li"><a class="- topic/xref xref" href="zlib/zlib.html">Zlib</a></li>
+                                </ul>
+                            </td>
+                        </tr>
+                    </tbody></table></div>
+            <div class="- topic/note note note note_note" id="chap6_plugin__note_jfb_qcv_tyb" data-ofbid="chap6_plugin__note_jfb_qcv_tyb"><span class="note__title">注：</span> 有关插件使用的一般规则、插件开发的相关介绍，参考：<a class="- topic/xref xref" href="plg_dev_tutorial.html">插件开发教程</a>。</div>
+        </section>
+        <section class="- topic/section section" id="chap6_plugin__section_vvb_yvr_g1c" data-ofbid="chap6_plugin__section_vvb_yvr_g1c"><h2 class="- topic/title title sectiontitle">插件下载</h2>
+            
+            <div class="table-container"><table class="- topic/table table frame-all" id="chap6_plugin__table_ymn_rw2_1bc" data-ofbid="chap6_plugin__table_ymn_rw2_1bc" data-cols="2"><caption></caption><colgroup><col style="width:14.880952380952381%"/><col style="width:85.11904761904762%"/></colgroup><thead class="- topic/thead thead">
+                        <tr class="- topic/row">
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="chap6_plugin__table_ymn_rw2_1bc__entry__1">下载途径</th>
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="chap6_plugin__table_ymn_rw2_1bc__entry__2">安装方法</th>
+                        </tr>
+                    </thead><tbody class="- topic/tbody tbody">
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="chap6_plugin__table_ymn_rw2_1bc__entry__1">官网插件市场</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="chap6_plugin__table_ymn_rw2_1bc__entry__2">
+                                <ol class="- topic/ol ol" id="chap6_plugin__ol_o2y_dx2_1bc" data-ofbid="chap6_plugin__ol_o2y_dx2_1bc">
+                                    <li class="- topic/li li">前往<a class="- topic/xref xref" href="https://marketplace.dolphindb.cn/" target="_blank" rel="external noopener">https://marketplace.dolphindb.cn/</a>
+                                            注册个人用户。<em class="+ topic/ph hi-d/i ph i">如已创建，跳过此步。</em></li>
+                                    <li class="- topic/li li">在<a class="- topic/xref xref" href="https://marketplace.dolphindb.cn/" target="_blank" rel="external noopener">https://marketplace.dolphindb.cn/</a>中选择所需插件。</li>
+                                    <li class="- topic/li li">点击<strong class="+ topic/ph hi-d/b ph b">下载安装包</strong>。</li>
+                                    <li class="- topic/li li">选择 <strong class="+ topic/ph hi-d/b ph b">DolphinDB 版本</strong>以及面向<strong class="+ topic/ph hi-d/b ph b">不同操作系统</strong>的插件安装包后下载。<br/><img class="- topic/image image" id="chap6_plugin__image_zmx_tx2_1bc" src="images/pluginmarket.png" height="201" width="232"/><br/></li>
+                                    <li class="- topic/li li">解压下载的插件压缩包到 <span class="+ topic/ph sw-d/filepath ph filepath">/server/plugins/</span> 目录下。</li>
+                                    <li class="- topic/li li">在客户端中使用 <code class="+ topic/ph pr-d/codeph ph codeph">loadPlugin</code> 命令加载插件。以下载 MySQL
+                                            插件为例，加载方法为：<code class="+ topic/ph pr-d/codeph ph codeph">loadPlugin("mysql")</code>。</li>
+                                </ol>
+                            </td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="chap6_plugin__table_ymn_rw2_1bc__entry__1">客户端</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="chap6_plugin__table_ymn_rw2_1bc__entry__2">参考：<a class="- topic/xref xref" href="#chap6_plugin__install_over_plugin_warehouse">通过插件仓库安装插件</a></td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="chap6_plugin__table_ymn_rw2_1bc__entry__1">Gitee</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="chap6_plugin__table_ymn_rw2_1bc__entry__2">由于某些插件尚未上线插件仓库，您可以访问 <a class="- topic/xref xref" href="https://gitee.com/dolphindb/DolphinDBPlugin/tree/release200.11/" target="_blank" rel="external noopener">DolphinDB
+                                插件</a>，选择版本分支，在以插件名称命名的插件目录下载插件的安装文件。例如：与 DolphinDB server
+                                2.00.11 版本对齐的插件可通过选择 release200.11 分支。下载后，将插件包放置在
+                                    <span class="+ topic/ph sw-d/filepath ph filepath">/server/plugins/</span> 目录下，在客户端中使用
+                                    <code class="+ topic/ph pr-d/codeph ph codeph">loadPlugin</code> 命令加载插件。</td>
+                        </tr>
+                    </tbody></table></div>
+        </section>
+        <section class="- topic/section section" id="chap6_plugin__install_over_plugin_warehouse" data-ofbid="chap6_plugin__install_over_plugin_warehouse"><h2 class="- topic/title title sectiontitle">通过插件仓库安装插件</h2>
+            
+            <p class="- topic/p p">以安装 MySQL 插件为例，从插件仓库中获取并安装插件的步骤如下：</p>
+            <ol class="- topic/ol ol" id="chap6_plugin__ol_ly1_pms_xyb" data-ofbid="chap6_plugin__ol_ly1_pms_xyb">
+                <li class="- topic/li li">在 DolphinDB 客户端中使用 <a class="- topic/xref xref" href="../funcs/l/listRemotePlugins.html">listRemotePlugins</a>
+                        命令查看插件仓库中的插件信息。<pre class="+ topic/pre pr-d/codeblock pre codeblock" id="chap6_plugin__codeblock_mv1_tms_xyb" data-ofbid="chap6_plugin__codeblock_mv1_tms_xyb"><code>login("admin", "123456")
+listRemotePlugins()</code></pre><div class="- topic/note note note note_note" id="chap6_plugin__note_gbx_5b5_h1c" data-ofbid="chap6_plugin__note_gbx_5b5_h1c"><span class="note__title">注：</span> 本步骤中使用的登录账号为初始管理员账号。请根据实际的管理员账号和密码相应调整。</div></li>
+                <li class="- topic/li li">使用 <a class="- topic/xref xref" href="../funcs/i/installPlugin.html">installPlugin</a> 命令完成插件安装。以
+                    MySQL
+                        插件为例：<pre class="+ topic/pre pr-d/codeblock pre codeblock" id="chap6_plugin__codeblock_pxl_fns_xyb" data-ofbid="chap6_plugin__codeblock_pxl_fns_xyb"><code>installPlugin("mysql")</code></pre><div class="- topic/note note note note_note" id="chap6_plugin__note_erc_pcw_w1c" data-ofbid="chap6_plugin__note_erc_pcw_w1c"><span class="note__title">注：</span> 某些插件存在多个版本，例如 amdQuote，此时需要在使用
+                            <code class="+ topic/ph pr-d/codeph ph codeph">installPlugin</code>
+                            命令指定包含了版本号的插件名称。例如：<code class="+ topic/ph pr-d/codeph ph codeph">installPlugin("amdQuote401")</code>。其中，
+                        "401" 对应华锐 AMD 平台 SDK 的版本号，以此类推。</div></li>
+                <li class="- topic/li li">使用 <a class="- topic/xref xref" href="../funcs/l/loadPlugin.html">loadPlugin</a> 命令加载插件。依然以 MySQL
+                        插件为例：<pre class="+ topic/pre pr-d/codeblock pre codeblock" id="chap6_plugin__codeblock_snj_cc5_h1c" data-ofbid="chap6_plugin__codeblock_snj_cc5_h1c"><code>loadPlugin("mysql")</code></pre><div class="- topic/note note note note_note" id="chap6_plugin__note_znk_bw2_1bc" data-ofbid="chap6_plugin__note_znk_bw2_1bc"><span class="note__title">注：</span> 部分插件存在多个版本号时，例如 amdQuote，此时需要在使用
+                            <code class="+ topic/ph pr-d/codeph ph codeph">loadPlugin</code>
+                            命令指定包含了版本号的插件名称。例如：<code class="+ topic/ph pr-d/codeph ph codeph">loadPlugin("amdQuote401")</code></div></li>
+            </ol>
+        </section>
+    </div>
+</article></main></div>
+                        
+                        
+                        
+                        
+                        
+                        
+                    </div>
+                    
+                        <nav role="navigation" id="wh_topic_toc" aria-label="On this page" class="col-lg-2 d-none d-lg-block navbar d-print-none"> 
+                            <div id="wh_topic_toc_content">
+		                        
+	                            <div class=" wh_topic_toc "><div class="wh_topic_label">在本页上</div><ul><li class="section-item"><div class="section-title"><a href="#chap6_plugin__section_ykr_fms_xyb" data-tocid="chap6_plugin__section_ykr_fms_xyb">插件一览</a></div></li><li class="section-item"><div class="section-title"><a href="#chap6_plugin__section_vvb_yvr_g1c" data-tocid="chap6_plugin__section_vvb_yvr_g1c">插件下载</a></div></li><li class="section-item"><div class="section-title"><a href="#chap6_plugin__install_over_plugin_warehouse" data-tocid="chap6_plugin__install_over_plugin_warehouse">通过插件仓库安装插件</a></div></li></ul></div>
+	                        	
+                        	</div>
+                        </nav>
+                    
+                </div>
+            </div>
+            
+            
+            
+        </div> 
+        <footer class="navbar navbar-default wh_footer">
+  <div class=" footer-container mx-auto ">
+<title>Copyright</title><p><b> ©2024 浙江智臾科技有限公司 浙ICP备18048711号-3</b></p>
+  </div>
+</footer>
+        
+        <div id="go2top" class="d-print-none">
+            <span class="oxy-icon oxy-icon-up"></span>
+        </div>
+        
+        <div id="modal_img_large" class="modal">
+            <span class="close oxy-icon oxy-icon-remove"></span>
+            <div id="modal_img_container"></div>
+            <div id="caption"></div>
+        </div>
+        
+        
+        
+    </body>
+</html>

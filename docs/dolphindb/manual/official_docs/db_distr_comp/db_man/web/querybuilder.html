@@ -1,0 +1,674 @@
+<!DOCTYPE html><html xmlns="http://www.w3.org/1999/xhtml" xml:lang="zh" lang="zh" data-whc_version="26.0">
+    <head><link rel="shortcut icon" href="../../../favicon.ico"/><link rel="icon" href="../../../favicon.ico"/><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><meta http-equiv="X-UA-Compatible" content="IE=edge"/><meta name="description" content="Web 提供查询向导功能。用户可使用向导查询或脚本查询两种方式，并在查询成功后预览、导出结果数据。 向导查询是指用户可通过填写表单的方式针对某表设置查询条件，该操作等同于对 where 条件和筛选字段进行界面化定义，其动态生成的 SQL 语句将展示在编辑器中。成功查询后，用户可预览并直接下载 CSV 文件的结果数据。 脚本查询则是指用户可直接在界面中编写 SQL 脚本，在成功执行后预览并导出数据。 ..."/><meta name="DC.rights.owner" content="(C) 版权 2024"/><meta name="copyright" content="(C) 版权 2024"/><meta name="generator" content="DITA-OT"/><meta name="DC.type" content="topic"/><meta name="DC.coverage" content=""/><meta name="DC.relation" content="../../../db_distr_comp/db_man/web/intro.html"/><meta name="prodname" content="DolphinDB"/><meta name="brand" content="DolphinDB"/><meta name="DC.creator" content="DolphinDB"/><meta name="DC.publisher" content="DDB N/A DDB 200"/><meta name="DC.format" content="HTML5"/><meta name="DC.identifier" content="querybuilder"/><title>查询向导</title><!--  Generated with Oxygen version 26.0, build number 2024012323.  --><meta name="wh-path2root" content="../../../"/><meta name="wh-toc-id" content="querybuilder-d9529e1335"/><meta name="wh-source-relpath" content="db_distr_comp/db_man/web/querybuilder.dita"/><meta name="wh-out-relpath" content="db_distr_comp/db_man/web/querybuilder.html"/>
+
+    <link rel="stylesheet" type="text/css" href="../../../oxygen-webhelp/app/commons.css?buildId=2024012323"/>
+    <link rel="stylesheet" type="text/css" href="../../../oxygen-webhelp/app/topic.css?buildId=2024012323"/>
+
+    <script src="../../../oxygen-webhelp/app/options/properties.js?buildId=20240704100525"></script>
+    <script src="../../../oxygen-webhelp/app/localization/strings.js?buildId=2024012323"></script>
+    <script src="../../../oxygen-webhelp/app/search/index/keywords.js?buildId=20240704100525"></script>
+    <script defer="defer" src="../../../oxygen-webhelp/app/commons.js?buildId=2024012323"></script>
+    <script defer="defer" src="../../../oxygen-webhelp/app/topic.js?buildId=2024012323"></script>
+<link rel="stylesheet" type="text/css" href="../../../oxygen-webhelp/template/styles.css?buildId=2024012323"/><script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script><script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script></head>
+
+    <body id="querybuilder" class="wh_topic_page frmBody">
+        <a href="#wh_topic_body" class="sr-only sr-only-focusable">
+            跳转到主要内容
+        </a>
+        
+        
+        
+        
+        <header class="navbar navbar-default wh_header">
+    <div class="container-fluid">
+        <div xmlns:whc="http://www.oxygenxml.com/webhelp/components" class="wh_header_flex_container navbar-nav navbar-expand-md navbar-dark">
+            <div class="wh_logo_and_publication_title_container">
+                <div class="wh_logo_and_publication_title">
+                    
+                    <a href="https://www.dolphindb.cn" class=" wh_logo d-none d-sm-block "><img src="../../../logo.png" alt="  DolphinDB 文档中心  "/></a>
+                    <div class=" wh_publication_title "><a href="../../../index.html"><span class="booktitle">  <span class="ph mainbooktitle">DolphinDB 文档中心</span>  </span></a></div>
+                    
+                </div>
+                
+                
+            </div>
+
+            <div class="wh_top_menu_and_indexterms_link collapse navbar-collapse" id="wh_top_menu_and_indexterms_link">
+                
+                
+                
+                
+            </div>
+        <div class=" wh_search_input navbar-form wh_topic_page_search search " role="form">
+            
+            
+            
+            <form id="searchForm" method="get" role="search" action="../../../search.html"><div><input type="search" placeholder="搜索 " class="wh_search_textfield" id="textToSearch" name="searchQuery" aria-label="搜索查询" required="required"/><button type="submit" class="wh_search_button" aria-label="搜索"><span class="search_input_text">搜索</span></button></div></form>
+            
+            <script src="/vendors/react/umd/react.production.min.js" defer="defer"></script>
+<script src="/vendors/react-dom/umd/react-dom.production.min.js" defer="defer"></script>
+<script src="/vendors/dayjs/dayjs.min.js" defer="defer"></script>
+<script src="/vendors/antd/dist/antd.min.js" defer="defer"></script>
+<script src="/vendors/@ant-design/icons/dist/index.umd.min.js" defer="defer"></script>
+<script src="/zh/index.js" type="module"></script>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js" defer="defer"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML" defer="defer"><!--
+
+
+--></script>
+
+            
+        </div></div>
+    </div>
+</header>
+        
+        
+         
+        
+        
+        
+        <div class="container-fluid" id="wh_topic_container">
+            <div class="row">
+
+                <nav class="wh_tools d-print-none navbar-expand-md" aria-label="Tools">
+                    
+                    <div data-tooltip-position="bottom" class=" wh_breadcrumb "><ol class="d-print-none"><li><span class="home"><a href="../../../index.html"><span>主页</span></a></span></li><li><div class="topicref" data-id="sectionddb_deployment"><div class="title"><a href="../../../deploy/deploy_intro.html"><span class="keyword label">部署</span></a><div class="wh-tooltip"><p class="shortdesc">如何在不同的场景中部署 DolphinDB</p></div></div></div></li><li><div class="topicref" data-id="chap1_sect_using_clients"><div class="title"><a href="../../../db_distr_comp/clients.html">数据库管理工具</a></div></div></li><li><div class="topicref" data-id="intro"><div class="title"><a href="../../../db_distr_comp/db_man/web/intro.html"><span class="keyword label">Web 集群管理器</span></a></div></div></li><li class="active"><div class="topicref" data-id="querybuilder"><div class="title"><a href="../../../db_distr_comp/db_man/web/querybuilder.html"><span class="keyword">查询向导</span></a></div></div></li></ol></div>
+                    
+                    
+                    
+                    <div class="wh_right_tools">
+                        <button class="wh_hide_highlight" aria-label="切换搜索突出显示" title="切换搜索突出显示"></button>
+                        <button class="webhelp_expand_collapse_sections" data-next-state="collapsed" aria-label="折叠截面" title="折叠截面"></button>
+                        
+                        
+                        
+                        
+                        <div class=" wh_print_link print d-none d-md-inline-block "><button onClick="window.print()" title="打印此页" aria-label="打印此页"></button></div>
+                        
+                        <button type="button" id="wh_toc_button" class="custom-toggler navbar-toggler collapsed wh_toggle_button navbar-light" aria-expanded="false" aria-label="Toggle publishing table of content" aria-controls="wh_publication_toc">
+                            <span class="navbar-toggler-icon"></span>
+                        </button>
+                    </div>
+                    
+                </nav>
+            </div>
+            
+            
+            
+            
+            <div class="wh_content_area">
+                <div class="row">
+                    
+                        <nav id="wh_publication_toc" class="col-lg-3 col-md-3 col-sm-12 d-md-block d-none d-print-none" aria-label="Table of Contents Container">
+                            <div id="wh_publication_toc_content">
+		                        
+                            	<div class=" wh_publication_toc " data-tooltip-position="right"><span class="expand-button-action-labels"><span id="button-expand-action" role="button" aria-label="Expand"></span><span id="button-collapse-action" role="button" aria-label="Collapse"></span><span id="button-pending-action" role="button" aria-label="Pending"></span></span><ul role="tree" aria-label="Table of Contents"><li role="treeitem"><div data-tocid="new_chap_about_sect_ddb_docs_intro-d9529e87" class="topicref" data-id="new_chap_about_sect_ddb_docs_intro" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../../about/ddb_docs_intro.html" id="new_chap_about_sect_ddb_docs_intro-d9529e87-link">文档使用说明</a><div class="wh-tooltip"><p class="shortdesc">如何获取 DolphinDB 帮助信息</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="chap1_getstarted-d9529e140" class="topicref" data-id="chap1_getstarted" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action chap1_getstarted-d9529e140-link" class="wh-expand-btn"></span><div class="title"><a href="../../../getstarted/chap1_getstarted.html" id="chap1_getstarted-d9529e140-link"><span class="keyword label">快速上手</span></a><div class="wh-tooltip"><p class="shortdesc">如何快速部署 DolphinDB、建库建表、写入和查询数据</p></div></div></div></li><li role="treeitem" aria-expanded="true"><div data-tocid="sectionddb_deployment-d9529e335" class="topicref" data-id="sectionddb_deployment" data-state="expanded"><span role="button" tabindex="0" aria-labelledby="button-collapse-action sectionddb_deployment-d9529e335-link" class="wh-expand-btn"></span><div class="title"><a href="../../../deploy/deploy_intro.html" id="sectionddb_deployment-d9529e335-link"><span class="keyword label">部署</span></a><div class="wh-tooltip"><p class="shortdesc">如何在不同的场景中部署 DolphinDB</p></div></div></div><ul role="group" class="navbar-nav nav-list"><li role="treeitem" aria-expanded="false"><div data-tocid="tocId-d9529e388" class="topicref" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action tocId-d9529e388-link" class="wh-expand-btn"></span><div class="title"><a href="../../../tutorials/standalone_server.html" id="tocId-d9529e388-link">单节点部署与升级</a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="tocId-d9529e481" class="topicref" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action tocId-d9529e481-link" class="wh-expand-btn"></span><div class="title"><a href="../../../tutorials/single_machine_cluster_deploy.html" id="tocId-d9529e481-link">集群部署与升级</a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="tocId-d9529e666" class="topicref" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action tocId-d9529e666-link" class="wh-expand-btn"></span><div class="title"><a href="../../../tutorials/docker_single_deployment.html" id="tocId-d9529e666-link">云环境部署</a></div></div></li><li role="treeitem"><div data-tocid="linux-系统部署准备-d9529e943" class="topicref" data-id="linux-系统部署准备" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../../tutorials/prep_linux_for_deploy.html" id="linux-系统部署准备-d9529e943-link">Linux 系统部署准备</a></div></div></li><li role="treeitem" aria-expanded="true"><div data-tocid="chap1_sect_using_clients-d9529e989" class="topicref" data-id="chap1_sect_using_clients" data-state="expanded"><span role="button" tabindex="0" aria-labelledby="button-collapse-action chap1_sect_using_clients-d9529e989-link" class="wh-expand-btn"></span><div class="title"><a href="../../../db_distr_comp/clients.html" id="chap1_sect_using_clients-d9529e989-link">数据库管理工具</a></div></div><ul role="group" class="navbar-nav nav-list"><li role="treeitem" aria-expanded="true"><div data-tocid="intro-d9529e1062" class="topicref" data-id="intro" data-state="expanded"><span role="button" tabindex="0" aria-labelledby="button-collapse-action intro-d9529e1062-link" class="wh-expand-btn"></span><div class="title"><a href="../../../db_distr_comp/db_man/web/intro.html" id="intro-d9529e1062-link"><span class="keyword label">Web 集群管理器</span></a></div></div><ul role="group" class="navbar-nav nav-list"><li role="treeitem"><div data-tocid="getting_start-d9529e1136" class="topicref" data-id="getting_start" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../../db_distr_comp/db_man/web/GettingStart.html" id="getting_start-d9529e1136-link">如何开始</a></div></div></li><li role="treeitem"><div data-tocid="cluster_overview-d9529e1182" class="topicref" data-id="cluster_overview" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../../db_distr_comp/db_man/web/cluster_overview.html" id="cluster_overview-d9529e1182-link"><span class="keyword">集群总览</span></a></div></div></li><li role="treeitem"><div data-tocid="cfg_man-d9529e1229" class="topicref" data-id="cfg_man" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../../db_distr_comp/db_man/web/cfg_man.html" id="cfg_man-d9529e1229-link">配置管理</a></div></div></li><li role="treeitem"><div data-tocid="module_introduction-d9529e1275" class="topicref" data-id="module_introduction" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../../db_distr_comp/db_man/web/Shell.html" id="module_introduction-d9529e1275-link">交互编程</a></div></div></li><li role="treeitem" class="active"><div data-tocid="querybuilder-d9529e1335" class="topicref" data-id="querybuilder" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../../db_distr_comp/db_man/web/querybuilder.html" id="querybuilder-d9529e1335-link"><span class="keyword">查询向导</span></a></div></div></li><li role="treeitem"><div data-tocid="dashboard-使用教程-d9529e1382" class="topicref" data-id="dashboard-使用教程" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../../tutorials/dashboard_tutorial.html" id="dashboard-使用教程-d9529e1382-link"><span class="keyword label">数据面板</span></a><div class="wh-tooltip"><p class="shortdesc">数据面板</p></div></div></div></li><li role="treeitem"><div data-tocid="job_management-d9529e1498" class="topicref" data-id="job_management" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../../db_distr_comp/db_man/web/job_man.html" id="job_management-d9529e1498-link"><span class="keyword">作业管理</span></a></div></div></li><li role="treeitem"><div data-tocid="stream_monitor-d9529e1545" class="topicref" data-id="stream_monitor" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../../db_distr_comp/db_man/web/stream_monitor.html" id="stream_monitor-d9529e1545-link"><span class="keyword label">流计算监控</span></a><div class="wh-tooltip"><p class="shortdesc">流计算监控</p></div></div></div></li><li role="treeitem"><div data-tocid="cep-d9529e1661" class="topicref" data-id="cep" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../../db_distr_comp/db_man/web/cep.html" id="cep-d9529e1661-link">CEP 流计算引擎状态</a></div></div></li><li role="treeitem"><div data-tocid="access_man-d9529e1707" class="topicref" data-id="access_man" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../../db_distr_comp/db_man/web/access_man.html" id="access_man-d9529e1707-link">权限管理</a></div></div></li><li role="treeitem"><div data-tocid="function_panel-d9529e1754" class="topicref" data-id="function_panel" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../../db_distr_comp/db_man/web/log.html" id="function_panel-d9529e1754-link"><span class="keyword">日志查看</span></a></div></div></li><li role="treeitem"><div data-tocid="function_panel-d9529e1801" class="topicref" data-id="function_panel" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../../db_distr_comp/db_man/web/feature_settings.html" id="function_panel-d9529e1801-link"><span class="keyword">功能设置</span></a></div></div></li></ul></li><li role="treeitem"><div data-tocid="vscode_client-d9529e1848" class="topicref" data-id="vscode_client" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../../db_distr_comp/vscode.html" id="vscode_client-d9529e1848-link"><span class="keyword label">VS Code 插件</span></a></div></div></li><li role="treeitem"><div data-tocid="gui_client-d9529e1922" class="topicref" data-id="gui_client" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../../db_distr_comp/gui.html" id="gui_client-d9529e1922-link"><span class="keyword label">GUI 客户端</span></a></div></div></li><li role="treeitem"><div data-tocid="notebook_client-d9529e1983" class="topicref" data-id="notebook_client" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../../db_distr_comp/jupyter.html" id="notebook_client-d9529e1983-link">Jupyter Notebook 客户端</a></div></div></li><li role="treeitem"><div data-tocid="terminal_client-d9529e2029" class="topicref" data-id="terminal_client" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../../db_distr_comp/terminal.html" id="terminal_client-d9529e2029-link"><span class="keyword">DolphinDB 终端</span></a></div></div></li></ul></li><li role="treeitem" aria-expanded="false"><div data-tocid="parameters_configuration-d9529e2076" class="topicref" data-id="parameters_configuration" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action parameters_configuration-d9529e2076-link" class="wh-expand-btn"></span><div class="title"><a href="../../../db_distr_comp/cfg/para_cfg.html" id="parameters_configuration-d9529e2076-link"><span class="keyword label">参数配置</span></a></div></div></li></ul></li><li role="treeitem" aria-expanded="false"><div data-tocid="new_chap_database_manage_new_chap_dbmanage_landing_page-d9529e2313" class="topicref" data-id="new_chap_database_manage_new_chap_dbmanage_landing_page" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action new_chap_database_manage_new_chap_dbmanage_landing_page-d9529e2313-link" class="wh-expand-btn"></span><div class="title"><a href="../../../db_distr_comp/cfg/db_intro.html" id="new_chap_database_manage_new_chap_dbmanage_landing_page-d9529e2313-link"><span class="keyword label">数据库</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 数据库的基本概念</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="chap7_tutorials_streaming-d9529e3490" class="topicref" data-id="chap7_tutorials_streaming" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action chap7_tutorials_streaming-d9529e3490-link" class="wh-expand-btn"></span><div class="title"><a href="../../../stream/str_intro.html" id="chap7_tutorials_streaming-d9529e3490-link"><span class="keyword label">流数据</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 流数据引擎及流数据计算的基本概念</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="tocId-d9529e7385" class="topicref" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action tocId-d9529e7385-link" class="wh-expand-btn"></span><div class="title"><a href="../../../db_distr_comp/db_oper/import_data.html" id="tocId-d9529e7385-link">数据迁移</a><div class="wh-tooltip"><p class="shortdesc">如何从不同数据源向 DolphinDB 迁移数据</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="chap7_tutorials_system_management-d9529e7812" class="topicref" data-id="chap7_tutorials_system_management" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action chap7_tutorials_system_management-d9529e7812-link" class="wh-expand-btn"></span><div class="title"><a href="../../../sys_man/om_intro.html" id="chap7_tutorials_system_management-d9529e7812-link"><span class="keyword label">系统运维</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 的系统运维功能及方法</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="about_language_resources-d9529e16490" class="topicref" data-id="about_language_resources" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action about_language_resources-d9529e16490-link" class="wh-expand-btn"></span><div class="title"><a href="../../../progr/progr_intro.html" id="about_language_resources-d9529e16490-link"><span class="keyword label">编程语言</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 编程基本概念与方法、SQL 在 DolphinDB 的应用</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="functions_references-d9529e26503" class="topicref" data-id="functions_references" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action functions_references-d9529e26503-link" class="wh-expand-btn"></span><div class="title"><a href="../../../funcs/funcs_intro.html" id="functions_references-d9529e26503-link"><span class="keyword label">函数参考</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 函数分类、语法、详解及示例</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="api_protocol-d9529e86456" class="topicref" data-id="api_protocol" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action api_protocol-d9529e86456-link" class="wh-expand-btn"></span><div class="title"><a href="../../../api/connapi_intro.html" id="api_protocol-d9529e86456-link"><span class="keyword label">连接器 &amp; API</span></a><div class="wh-tooltip"><p class="shortdesc">面向不同编程语言的 DolphinDB API 及连接器，相关协议和用法</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="chap6_plugin-d9529e91976" class="topicref" data-id="chap6_plugin" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action chap6_plugin-d9529e91976-link" class="wh-expand-btn"></span><div class="title"><a href="../../../plugins/plg_intro.html" id="chap6_plugin-d9529e91976-link"><span class="keyword label">插件</span></a><div class="wh-tooltip"><p class="shortdesc">多个应用场景的插件使用说明和插件开发指导</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="third_party-d9529e94749" class="topicref" data-id="third_party" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action third_party-d9529e94749-link" class="wh-expand-btn"></span><div class="title"><a href="../../../third_party.html" id="third_party-d9529e94749-link">第三方工具</a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="about_tutorials-d9529e94980" class="topicref" data-id="about_tutorials" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action about_tutorials-d9529e94980-link" class="wh-expand-btn"></span><div class="title"><a href="../../../tutorials/about_tutorials.html" id="about_tutorials-d9529e94980-link"><span class="keyword label">教程</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 产品使用教程</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="tocId-d9529e101769" class="topicref" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action tocId-d9529e101769-link" class="wh-expand-btn"></span><div class="title"><a href="../../../rn/server/3_00_1.html" id="tocId-d9529e101769-link">版本说明</a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 版本发布历史</p></div></div></div></li></ul></div>
+		                        
+                            </div>
+                        </nav>
+                    
+                    
+                    <div class="col-lg-7 col-md-9 col-sm-12" id="wh_topic_body">
+                        <button id="wh_close_publication_toc_button" class="close-toc-button d-none" aria-label="Toggle publishing table of content" aria-controls="wh_publication_toc" aria-expanded="true">
+                            <span class="close-toc-icon-container">
+                                <span class="close-toc-icon"></span>     
+                            </span>
+                        </button>
+                        <button id="wh_close_topic_toc_button" class="close-toc-button d-none" aria-label="Toggle topic table of content" aria-controls="wh_topic_toc" aria-expanded="true">
+                            <span class="close-toc-icon-container">
+                                <span class="close-toc-icon"></span>     
+                            </span>
+                        </button>
+                        
+                        <div class=" wh_topic_content body "><main role="main"><article class="- topic/topic topic" role="article" aria-labelledby="ariaid-title1">
+    <h1 class="- topic/title title topictitle1" id="ariaid-title1"><span class="- topic/keyword keyword">查询向导</span></h1>
+    <div class="- topic/body body">
+        <p class="- topic/p p">Web 提供查询向导功能。用户可使用向导查询或脚本查询两种方式，并在查询成功后预览、导出结果数据。</p>
+        <ul class="- topic/ul ul" id="querybuilder__ul_owf_j4t_yzb" data-ofbid="querybuilder__ul_owf_j4t_yzb">
+            <li class="- topic/li li">
+                <p class="- topic/p p">向导查询是指用户可通过填写表单的方式针对某表设置查询条件，该操作等同于对 where 条件和筛选字段进行界面化定义，其动态生成的 SQL
+                    语句将展示在编辑器中。成功查询后，用户可预览并直接下载 CSV 文件的结果数据。</p>
+            </li>
+            <li class="- topic/li li">
+                <p class="- topic/p p">脚本查询则是指用户可直接在界面中编写 SQL 脚本，在成功执行后预览并导出数据。</p>
+            </li>
+        </ul>
+    </div>
+    <article class="- topic/topic topic nested1" aria-labelledby="ariaid-title2" id="topic_tw2_f15_yzb">
+        <h2 class="- topic/title title topictitle2" id="ariaid-title2">新建查询</h2>
+        <div class="- topic/body body">
+            <section class="- topic/section section" id="topic_tw2_f15_yzb__section_zwb_h15_yzb" data-ofbid="topic_tw2_f15_yzb__section_zwb_h15_yzb">
+                <p class="- topic/p p">点击图 1 红框中位于表名同行最右方的图标以打开弹窗。</p>
+                <div class="- topic/p p">
+                    <figure class="- topic/fig fig fignone" id="topic_tw2_f15_yzb__fig_axb_h15_yzb" data-ofbid="topic_tw2_f15_yzb__fig_axb_h15_yzb"><figcaption data-caption-side="top" class="- topic/title title figcap"><span class="figtitleprefix fig--title-label">图<span class="fig--title-label-number"> 1</span><span class="fig--title-label-punctuation">. </span></span><span class="fig--title">图1 点击图标以进入界面</span></figcaption>
+                        
+                        <img class="- topic/image image" id="topic_tw2_f15_yzb__image_bxb_h15_yzb" src="../images/querybuilder_1.png"/>
+                    </figure>
+                </div>
+                <p class="- topic/p p">弹窗界面如图 2 所示。</p>
+                <div class="- topic/p p">
+                    <figure class="- topic/fig fig fignone" id="topic_tw2_f15_yzb__fig_cxb_h15_yzb" data-ofbid="topic_tw2_f15_yzb__fig_cxb_h15_yzb"><figcaption data-caption-side="top" class="- topic/title title figcap"><span class="figtitleprefix fig--title-label">图<span class="fig--title-label-number"> 2</span><span class="fig--title-label-punctuation">. </span></span><span class="fig--title">图2 查询界面</span></figcaption>
+                        
+                        <img class="- topic/image image" id="topic_tw2_f15_yzb__image_dxb_h15_yzb" src="../images/querybuilder_2.png"/>
+                    </figure>
+                </div>
+                <p class="- topic/p p">用户可单击图 3 中红框的对应文本以切换查询方式。</p>
+                <div class="- topic/p p">
+                    <figure class="- topic/fig fig fignone" id="topic_tw2_f15_yzb__fig_exb_h15_yzb" data-ofbid="topic_tw2_f15_yzb__fig_exb_h15_yzb"><figcaption data-caption-side="top" class="- topic/title title figcap"><span class="figtitleprefix fig--title-label">图<span class="fig--title-label-number"> 3</span><span class="fig--title-label-punctuation">. </span></span><span class="fig--title">图3 两种查询方式</span></figcaption>
+                        
+                        <img class="- topic/image image" id="topic_tw2_f15_yzb__image_fxb_h15_yzb" src="../images/querybuilder_3.png"/>
+                    </figure>
+                </div>
+                <p class="- topic/p p">接下来将依次介绍两种查询方式的具体使用。</p>
+            </section>
+        </div>
+    </article>
+    <article class="- topic/topic topic nested1" aria-labelledby="ariaid-title3" id="id_g5x_xdv_yzb">
+        <h2 class="- topic/title title topictitle2" id="ariaid-title3">向导查询</h2>
+        <div class="- topic/body body">
+            <p class="- topic/p p">如图 4 所示，向导查询界面中主要包括两个模块——“筛选查询列”和“添加查询条件”。</p>
+            <figure class="- topic/fig fig fignone" id="id_g5x_xdv_yzb__fig_ihs_5fv_yzb" data-ofbid="id_g5x_xdv_yzb__fig_ihs_5fv_yzb"><figcaption data-caption-side="top" class="- topic/title title figcap"><span class="figtitleprefix fig--title-label">图<span class="fig--title-label-number"> 4</span><span class="fig--title-label-punctuation">. </span></span><span class="fig--title">图4 向导查询界面</span></figcaption>
+                
+                <img class="- topic/image image" id="id_g5x_xdv_yzb__image_jhs_5fv_yzb" src="../images/querybuilder_4.png"/>
+            </figure>
+        </div>
+        <article class="- topic/topic topic nested2" aria-labelledby="ariaid-title4" id="topic_nqy_22v_yzb">
+            <h3 class="- topic/title title topictitle3" id="ariaid-title4"> 查询列</h3>
+            <div class="- topic/body body">
+                <p class="- topic/p p">该模块主要分为左右两个选择框和中间的动作按钮。</p>
+                <p class="- topic/p p">如图
+                    5，左边为非查询列的选择框，用户可在此勾选指定列以增加查询列；右边为查询列的选择框，用户可在此勾选指定列以删除查询列。中间为“增加查询列”和“删除查询列”的动作按钮，其功能如名。</p>
+                <figure class="- topic/fig fig fignone" id="topic_nqy_22v_yzb__fig_il1_h2v_yzb" data-ofbid="topic_nqy_22v_yzb__fig_il1_h2v_yzb"><figcaption data-caption-side="top" class="- topic/title title figcap"><span class="figtitleprefix fig--title-label">图<span class="fig--title-label-number"> 5</span><span class="fig--title-label-punctuation">. </span></span><span class="fig--title">图5 筛选查询列的主要模块</span></figcaption>
+                    
+                    <img class="- topic/image image" id="topic_nqy_22v_yzb__image_jl1_h2v_yzb" src="../images/querybuilder_5.png"/>
+                </figure>
+                <section class="- topic/section section" id="topic_nqy_22v_yzb__section_sqy_22v_yzb" data-ofbid="topic_nqy_22v_yzb__section_sqy_22v_yzb"><h4 class="- topic/title title sectiontitle">增加查询列</h4>
+                    
+                    <p class="- topic/p p">如图 6 所示</p>
+                    <ul class="- topic/ul ul" id="topic_nqy_22v_yzb__ul_nzy_32v_yzb" data-ofbid="topic_nqy_22v_yzb__ul_nzy_32v_yzb">
+                        <li class="- topic/li li">
+                            <p class="- topic/p p">在左边的非查询列中，用户可勾选列名前的方框以选择一个或多个列；亦可点击项目数前的方框以实现全选；</p>
+                        </li>
+                        <li class="- topic/li li">
+                            <p class="- topic/p p">选中列后再点击“增加查询列”按钮；</p>
+                        </li>
+                        <li class="- topic/li li">
+                            <p class="- topic/p p">操作成功后，非查询列中的指定列将移动到查询列中，且两边的统计列数将发生对应变化。</p>
+                        </li>
+                    </ul>
+                    <div class="- topic/p p">
+                        <figure class="- topic/fig fig fignone" id="topic_nqy_22v_yzb__fig_ozy_32v_yzb" data-ofbid="topic_nqy_22v_yzb__fig_ozy_32v_yzb"><figcaption data-caption-side="top" class="- topic/title title figcap"><span class="figtitleprefix fig--title-label">图<span class="fig--title-label-number"> 6</span><span class="fig--title-label-punctuation">. </span></span><span class="fig--title">图6 增加查询列</span></figcaption>
+                            
+                            <img class="- topic/image image" id="topic_nqy_22v_yzb__image_pzy_32v_yzb" src="../images/querybuilder_6.png"/>
+                        </figure>
+                    </div>
+                </section>
+                <section class="- topic/section section"><h4 class="- topic/title title sectiontitle">删除查询列</h4>
+                    
+                    <p class="- topic/p p">如图 7 所示</p>
+                    <ul class="- topic/ul ul" id="topic_nqy_22v_yzb__ul_wfx_l2v_yzb" data-ofbid="topic_nqy_22v_yzb__ul_wfx_l2v_yzb">
+                        <li class="- topic/li li">
+                            <p class="- topic/p p">在右边的查询列中，用户可勾选列名前的方框以选择一个或多个列；亦可点击项目数前的方框以实现全选；</p>
+                        </li>
+                        <li class="- topic/li li">
+                            <p class="- topic/p p">选中列后点击“删除查询列”按钮；</p>
+                        </li>
+                        <li class="- topic/li li">
+                            <p class="- topic/p p">操作成功后，查询列中的指定列将移动到非查询列中，且两边的统计列数将发生对应变化。</p>
+                        </li>
+                    </ul>
+                    <div class="- topic/p p">
+                        <figure class="- topic/fig fig fignone" id="topic_nqy_22v_yzb__fig_xfx_l2v_yzb" data-ofbid="topic_nqy_22v_yzb__fig_xfx_l2v_yzb"><figcaption data-caption-side="top" class="- topic/title title figcap"><span class="figtitleprefix fig--title-label">图<span class="fig--title-label-number"> 7</span><span class="fig--title-label-punctuation">. </span></span><span class="fig--title">图7 删除查询列</span></figcaption>
+                            
+                            <img class="- topic/image image" id="topic_nqy_22v_yzb__image_yfx_l2v_yzb" src="../images/querybuilder_7.png"/>
+                        </figure>
+                    </div>
+                </section>
+            </div>
+        </article>
+        <article class="- topic/topic topic nested2" aria-labelledby="yhp_srx_nyb__title_a44_hwc_4yb" id="yhp_srx_nyb">
+            <h3 class="- topic/title title topictitle3" id="yhp_srx_nyb__title_a44_hwc_4yb"> 查询条件</h3>
+            <div class="- topic/body body">
+                <p class="- topic/p p">查询条件包含三个必填项——“列名”、“运算符”和“对比值”。用户可设置一个或多个查询条件，条件之间存在“且”、“或”的逻辑关系。</p>
+                <p class="- topic/p p">如图 8 所示，该模块主要分为分区列查询条件和其他查询条件，其逻辑关系为“且”。</p>
+                <div class="- topic/p p">
+                    <figure class="- topic/fig fig fignone" id="yhp_srx_nyb__fig_zdm_p2v_yzb" data-ofbid="yhp_srx_nyb__fig_zdm_p2v_yzb"><figcaption data-caption-side="top" class="- topic/title title figcap"><span class="figtitleprefix fig--title-label">图<span class="fig--title-label-number"> 8</span><span class="fig--title-label-punctuation">. </span></span><span class="fig--title">图8 添加查询条件的主要模块</span></figcaption>
+                        
+                        <img class="- topic/image image" id="yhp_srx_nyb__image_a2m_p2v_yzb" src="../images/querybuilder_8.png"/>
+                    </figure>
+                </div>
+                <section class="- topic/section section" id="yhp_srx_nyb__section_wvr_pgv_yzb" data-ofbid="yhp_srx_nyb__section_wvr_pgv_yzb"><h4 class="- topic/title title sectiontitle">分区列查询条件</h4>
+                    
+                    <p class="- topic/p p">若当前表中存在分区列，则用户须至少填写一个分区列查询条件。分区列的查询条件间只支持“且”的逻辑关系。</p>
+                    <p class="- topic/p p">若当前表中不存在分区列，则将不显示此模块。</p>
+                    <p class="- topic/p p"><strong class="+ topic/ph hi-d/b ph b">新增分区条件</strong></p>
+                    <p class="- topic/p p">下拉框中将显示当前表支持查询的所有分区条件列。如图 9 所示，单击下拉框，选择分区条件列。</p>
+                    <div class="- topic/note note note note_note" id="yhp_srx_nyb__note_wzr_fhv_yzb" data-ofbid="yhp_srx_nyb__note_wzr_fhv_yzb"><span class="note__title">注：</span> 目前已支持大多数列类型，可参考本文<a class="- topic/xref xref" href="#yhp_srx_nyb__section_dbz_vjv_yzb">支持列小节</a>。</div>
+                    <div class="- topic/p p">
+                        <figure class="- topic/fig fig fignone" id="yhp_srx_nyb__fig_xzr_fhv_yzb" data-ofbid="yhp_srx_nyb__fig_xzr_fhv_yzb"><figcaption data-caption-side="top" class="- topic/title title figcap"><span class="figtitleprefix fig--title-label">图<span class="fig--title-label-number"> 9</span><span class="fig--title-label-punctuation">. </span></span><span class="fig--title">图9 新增分区列</span></figcaption>
+                            
+                            <img class="- topic/image image" id="yhp_srx_nyb__image_yzr_fhv_yzb" src="../images/querybuilder_9.png"/>
+                        </figure>
+                    </div>
+                    <p class="- topic/p p"><strong class="+ topic/ph hi-d/b ph b">新增条件运算符</strong></p>
+                    <p class="- topic/p p">下拉框中将显示当前类型的分区条件列所支持的所有运算符。如图 10 所示，单击下拉框，选择条件运算符。</p>
+                    <div class="- topic/p p">
+                        <figure class="- topic/fig fig fignone" id="yhp_srx_nyb__fig_jzd_nhv_yzb" data-ofbid="yhp_srx_nyb__fig_jzd_nhv_yzb"><figcaption data-caption-side="top" class="- topic/title title figcap"><span class="figtitleprefix fig--title-label">图<span class="fig--title-label-number"> 10</span><span class="fig--title-label-punctuation">. </span></span><span class="fig--title">图10 新增条件运算符</span></figcaption>
+                            
+                            <img class="- topic/image image" id="yhp_srx_nyb__image_kzd_nhv_yzb" src="../images/querybuilder_10.png"/>
+                        </figure>
+                    </div>
+                    <p class="- topic/p p"><strong class="+ topic/ph hi-d/b ph b">新增条件对比值</strong></p>
+                    <p class="- topic/p p">根据运算符的不同，对比值会出现下拉框、日期表等，也可能需要用户手动输入。<a class="- topic/xref xref" href="#yhp_srx_nyb__section_dbz_vjv_yzb">列类型和运算符的说明小节</a>中将对此进行详细说明。</p>
+                    <p class="- topic/p p"><strong class="+ topic/ph hi-d/b ph b">新增条件项</strong></p>
+                    <p class="- topic/p p">如图 11 所示，用户可单击图标，增加条件项。新增条件项与已增条件项为“且”的逻辑关系。</p>
+                    <div class="- topic/p p">
+                        <figure class="- topic/fig fig fignone" id="yhp_srx_nyb__fig_ysw_fst_yzb" data-ofbid="yhp_srx_nyb__fig_ysw_fst_yzb"><figcaption data-caption-side="top" class="- topic/title title figcap"><span class="figtitleprefix fig--title-label">图<span class="fig--title-label-number"> 11</span><span class="fig--title-label-punctuation">. </span></span><span class="fig--title">图11 新增条件项</span></figcaption>
+                            
+                            <img class="- topic/image image" id="yhp_srx_nyb__image_zsw_fst_yzb" src="../images/querybuilder_11.png"/>
+                        </figure>
+                    </div>
+                    <p class="- topic/p p"><strong class="+ topic/ph hi-d/b ph b">删除条件项</strong></p>
+                    <p class="- topic/p p">如图 12 所示，用户可单击图标，删除条件项。</p>
+                    <div class="- topic/p p">
+                        <figure class="- topic/fig fig fignone" id="yhp_srx_nyb__fig_qch_hst_yzb" data-ofbid="yhp_srx_nyb__fig_qch_hst_yzb"><figcaption data-caption-side="top" class="- topic/title title figcap"><span class="figtitleprefix fig--title-label">图<span class="fig--title-label-number"> 12</span><span class="fig--title-label-punctuation">. </span></span><span class="fig--title">图12 删除条件项</span></figcaption>
+                            
+                            <img class="- topic/image image" id="yhp_srx_nyb__image_rch_hst_yzb" src="../images/querybuilder_12.png"/>
+                        </figure>
+                    </div>
+                </section>
+                <section class="- topic/section section" id="yhp_srx_nyb__section_fk1_3s5_pyb" data-ofbid="yhp_srx_nyb__section_fk1_3s5_pyb"><h4 class="- topic/title title sectiontitle">其他查询条件</h4>
+                    
+                    <p class="- topic/p p">此处可填写当前表支持查询的列中除分区列以外的所有列构成的查询条件。查询条件间支持“且、“或”的逻辑关系。</p>
+                    <div class="- topic/note note note note_note" id="yhp_srx_nyb__note_uh2_45t_yzb" data-ofbid="yhp_srx_nyb__note_uh2_45t_yzb"><span class="note__title">注：</span> 目前已支持大多数列类型，可参考本文<a class="- topic/xref xref" href="#yhp_srx_nyb__section_dbz_vjv_yzb">支持列小节</a>。</div>
+                    <div class="- topic/p p">
+                        <figure class="- topic/fig fig fignone" id="yhp_srx_nyb__fig_spj_jst_yzb" data-ofbid="yhp_srx_nyb__fig_spj_jst_yzb"><figcaption data-caption-side="top" class="- topic/title title figcap"><span class="figtitleprefix fig--title-label">图<span class="fig--title-label-number"> 13</span><span class="fig--title-label-punctuation">. </span></span><span class="fig--title">图13 其他查询条件初始状态</span></figcaption>
+                            
+                            <img class="- topic/image image" id="yhp_srx_nyb__image_tpj_jst_yzb" src="../images/querybuilder_13.png"/>
+                        </figure>
+                    </div>
+                    <div class="- topic/p p">
+                        <figure class="- topic/fig fig fignone" id="yhp_srx_nyb__fig_ttd_kst_yzb" data-ofbid="yhp_srx_nyb__fig_ttd_kst_yzb"><figcaption data-caption-side="top" class="- topic/title title figcap"><span class="figtitleprefix fig--title-label">图<span class="fig--title-label-number"> 14</span><span class="fig--title-label-punctuation">. </span></span><span class="fig--title">图14 条件块与条件项</span></figcaption>
+                            
+                            <img class="- topic/image image" id="yhp_srx_nyb__image_utd_kst_yzb" src="../images/querybuilder_14.png"/>
+                        </figure>
+                    </div>
+                    <p class="- topic/p p">如图14 所示，其他查询条件中包含“条件块”与“条件项”。</p>
+                    <p class="- topic/p p">条件块与条件块间的逻辑关系为“或”，用户可创建一个或多个条件块。</p>
+                    <p class="- topic/p p">条件块由条件项组成，一个条件块中可以包含一个或多个条件项，条件项的逻辑关系为“且”。</p>
+                    <p class="- topic/p p"><strong class="+ topic/ph hi-d/b ph b">新增条件块</strong></p>
+                    <p class="- topic/p p">如图 15 所示，用户可单击图标，增加条件块。新增条件块与已增条件块为“或”的逻辑关系。</p>
+                    <div class="- topic/p p">
+                        <figure class="- topic/fig fig fignone" id="yhp_srx_nyb__fig_af4_lst_yzb" data-ofbid="yhp_srx_nyb__fig_af4_lst_yzb"><figcaption data-caption-side="top" class="- topic/title title figcap"><span class="figtitleprefix fig--title-label">图<span class="fig--title-label-number"> 15</span><span class="fig--title-label-punctuation">. </span></span><span class="fig--title">图15 新增条件块</span></figcaption>
+                            
+                            <img class="- topic/image image" id="yhp_srx_nyb__image_bf4_lst_yzb" src="../images/querybuilder_15.png"/>
+                        </figure>
+                    </div>
+                    <p class="- topic/p p"><strong class="+ topic/ph hi-d/b ph b">删除条件块</strong></p>
+                    <p class="- topic/p p">如图 16 所示，用户可单击图标，删除条件项。</p>
+                    <div class="- topic/p p">
+                        <figure class="- topic/fig fig fignone" id="yhp_srx_nyb__fig_q3p_mst_yzb" data-ofbid="yhp_srx_nyb__fig_q3p_mst_yzb"><figcaption data-caption-side="top" class="- topic/title title figcap"><span class="figtitleprefix fig--title-label">图<span class="fig--title-label-number"> 16</span><span class="fig--title-label-punctuation">. </span></span><span class="fig--title">图16 删除条件块</span></figcaption>
+                            
+                            <img class="- topic/image image" id="yhp_srx_nyb__image_r3p_mst_yzb" src="../images/querybuilder_16.png"/>
+                        </figure>
+                    </div>
+                    <p class="- topic/p p"><strong class="+ topic/ph hi-d/b ph b">新增条件项</strong></p>
+                    <p class="- topic/p p">如图 17 所示，用户可单击图标，增加条件项。新增条件项与同条件块中的已增条件项为“且”的逻辑关系。</p>
+                    <div class="- topic/p p">
+                        <figure class="- topic/fig fig fignone" id="yhp_srx_nyb__fig_pzc_4st_yzb" data-ofbid="yhp_srx_nyb__fig_pzc_4st_yzb"><figcaption data-caption-side="top" class="- topic/title title figcap"><span class="figtitleprefix fig--title-label">图<span class="fig--title-label-number"> 17</span><span class="fig--title-label-punctuation">. </span></span><span class="fig--title">图17 新增条件项</span></figcaption>
+                            
+                            <img class="- topic/image image" id="yhp_srx_nyb__image_qzc_4st_yzb" src="../images/querybuilder_17.png"/>
+                        </figure>
+                    </div>
+                    <p class="- topic/p p"><strong class="+ topic/ph hi-d/b ph b">删除条件项</strong></p>
+                    <p class="- topic/p p">如图 18 所示，用户可单击图标，删除条件项。</p>
+                    <figure class="- topic/fig fig fignone" id="yhp_srx_nyb__fig_afd_pst_yzb" data-ofbid="yhp_srx_nyb__fig_afd_pst_yzb"><figcaption data-caption-side="top" class="- topic/title title figcap"><span class="figtitleprefix fig--title-label">图<span class="fig--title-label-number"> 18</span><span class="fig--title-label-punctuation">. </span></span><span class="fig--title">图18 删除条件项</span></figcaption>
+                        
+                        <img class="- topic/image image" id="yhp_srx_nyb__image_bfd_pst_yzb" src="../images/querybuilder_18.png"/>
+                    </figure>
+                    <p class="- topic/p p"><strong class="+ topic/ph hi-d/b ph b">新增条件列</strong></p>
+                    <p class="- topic/p p">下拉框中将显示当前表支持查询的条件列。如图 19 所示，单击下拉框，选择条件列。</p>
+                    <figure class="- topic/fig fig fignone" id="yhp_srx_nyb__fig_mnm_qst_yzb" data-ofbid="yhp_srx_nyb__fig_mnm_qst_yzb"><figcaption data-caption-side="top" class="- topic/title title figcap"><span class="figtitleprefix fig--title-label">图<span class="fig--title-label-number"> 19</span><span class="fig--title-label-punctuation">. </span></span><span class="fig--title">图19 新增查询列</span></figcaption>
+                        
+                        <img class="- topic/image image" id="yhp_srx_nyb__image_nnm_qst_yzb" src="../images/querybuilder_19.png"/>
+                    </figure>
+                    <p class="- topic/p p"><strong class="+ topic/ph hi-d/b ph b">新增条件运算符</strong></p>
+                    <p class="- topic/p p">下拉框中将显示当前类型的条件列所支持的所有运算符。如图 20 所示，单击下拉框，选择条件运算符。</p>
+                    <div class="- topic/p p">
+                        <figure class="- topic/fig fig fignone" id="yhp_srx_nyb__fig_yn5_rst_yzb" data-ofbid="yhp_srx_nyb__fig_yn5_rst_yzb"><figcaption data-caption-side="top" class="- topic/title title figcap"><span class="figtitleprefix fig--title-label">图<span class="fig--title-label-number"> 20</span><span class="fig--title-label-punctuation">. </span></span><span class="fig--title">图20 新增条件运算符</span></figcaption>
+                            
+                            <img class="- topic/image image" id="yhp_srx_nyb__image_zn5_rst_yzb" src="../images/querybuilder_20.png"/>
+                        </figure>
+                    </div>
+                    <p class="- topic/p p"><strong class="+ topic/ph hi-d/b ph b">新增条件对比值</strong></p>
+                    <p class="- topic/p p">根据运算符的不同，对比值会出现下拉框、日期表等，也可能需要用户手动输入。<a class="- topic/xref xref" href="#yhp_srx_nyb__section_dbz_vjv_yzb">列类型和运算符的说明小节</a>中将对此进行详细说明。</p>
+                </section>
+                <section class="- topic/section section" id="yhp_srx_nyb__section_dbz_vjv_yzb" data-ofbid="yhp_srx_nyb__section_dbz_vjv_yzb"><h4 class="- topic/title title sectiontitle">列类型与预算符的说明</h4>以下为支持的列类型。<div class="table-container"><table class="- topic/table table frame-all" id="yhp_srx_nyb__table_xwf_j4t_yzb" data-ofbid="yhp_srx_nyb__table_xwf_j4t_yzb" data-cols="4"><caption></caption><colgroup><col/><col/><col/><col/></colgroup><tbody class="- topic/tbody tbody">
+                                <tr class="- topic/row">
+                                    <td class="- topic/entry entry colsep-1 rowsep-1">
+                                        <p class="- topic/p p"><strong class="+ topic/ph hi-d/b ph b">列类型</strong></p>
+                                    </td>
+                                    <td class="- topic/entry entry colsep-1 rowsep-1">
+                                        <p class="- topic/p p"><strong class="+ topic/ph hi-d/b ph b">示例</strong></p>
+                                    </td>
+                                    <td class="- topic/entry entry colsep-1 rowsep-1">
+                                        <p class="- topic/p p"><strong class="+ topic/ph hi-d/b ph b">分类</strong></p>
+                                    </td>
+                                    <td class="- topic/entry entry colsep-0 rowsep-1">
+                                        <p class="- topic/p p"><strong class="+ topic/ph hi-d/b ph b">范围</strong></p>
+                                    </td>
+                                </tr>
+                                <tr class="- topic/row">
+                                    <td class="- topic/entry entry colsep-1 rowsep-1">BOOL</td>
+                                    <td class="- topic/entry entry colsep-1 rowsep-1">1b, 0b, true, false</td>
+                                    <td class="- topic/entry entry colsep-1 rowsep-1">Logical</td>
+                                    <td class="- topic/entry entry colsep-0 rowsep-1">0~1</td>
+                                </tr>
+                                <tr class="- topic/row">
+                                    <td class="- topic/entry entry colsep-1 rowsep-1">SHORT</td>
+                                    <td class="- topic/entry entry colsep-1 rowsep-1">122h</td>
+                                    <td class="- topic/entry entry colsep-1 rowsep-1">Integral</td>
+                                    <td class="- topic/entry entry colsep-0 rowsep-1">-2 <sup class="+ topic/ph hi-d/sup ph sup">15</sup> +1~2 <sup class="+ topic/ph hi-d/sup ph sup">15</sup> -1</td>
+                                </tr>
+                                <tr class="- topic/row">
+                                    <td class="- topic/entry entry colsep-1 rowsep-1">INT</td>
+                                    <td class="- topic/entry entry colsep-1 rowsep-1">21</td>
+                                    <td class="- topic/entry entry colsep-1 rowsep-1">Integral</td>
+                                    <td class="- topic/entry entry colsep-0 rowsep-1">-2 <sup class="+ topic/ph hi-d/sup ph sup">31</sup> +1~2 <sup class="+ topic/ph hi-d/sup ph sup">31</sup> -1</td>
+                                </tr>
+                                <tr class="- topic/row">
+                                    <td class="- topic/entry entry colsep-1 rowsep-1">LONG</td>
+                                    <td class="- topic/entry entry colsep-1 rowsep-1">22l</td>
+                                    <td class="- topic/entry entry colsep-1 rowsep-1">Integral</td>
+                                    <td class="- topic/entry entry colsep-0 rowsep-1">-2 <sup class="+ topic/ph hi-d/sup ph sup">63</sup> +1~2 <sup class="+ topic/ph hi-d/sup ph sup">63</sup> -1</td>
+                                </tr>
+                                <tr class="- topic/row">
+                                    <td class="- topic/entry entry colsep-1 rowsep-1">DATE</td>
+                                    <td class="- topic/entry entry colsep-1 rowsep-1">2013.06.13</td>
+                                    <td class="- topic/entry entry colsep-1 rowsep-1">Temporal</td>
+                                    <td class="- topic/entry entry colsep-0 rowsep-1"> </td>
+                                </tr>
+                                <tr class="- topic/row">
+                                    <td class="- topic/entry entry colsep-1 rowsep-1">MONTH</td>
+                                    <td class="- topic/entry entry colsep-1 rowsep-1">2012.06M</td>
+                                    <td class="- topic/entry entry colsep-1 rowsep-1">Temporal</td>
+                                    <td class="- topic/entry entry colsep-0 rowsep-1"> </td>
+                                </tr>
+                                <tr class="- topic/row">
+                                    <td class="- topic/entry entry colsep-1 rowsep-1">TIME</td>
+                                    <td class="- topic/entry entry colsep-1 rowsep-1">13:30:10.008</td>
+                                    <td class="- topic/entry entry colsep-1 rowsep-1">Temporal</td>
+                                    <td class="- topic/entry entry colsep-0 rowsep-1"> </td>
+                                </tr>
+                                <tr class="- topic/row">
+                                    <td class="- topic/entry entry colsep-1 rowsep-1">MINUTE</td>
+                                    <td class="- topic/entry entry colsep-1 rowsep-1">13:30m</td>
+                                    <td class="- topic/entry entry colsep-1 rowsep-1">Temporal</td>
+                                    <td class="- topic/entry entry colsep-0 rowsep-1"> </td>
+                                </tr>
+                                <tr class="- topic/row">
+                                    <td class="- topic/entry entry colsep-1 rowsep-1">SECOND</td>
+                                    <td class="- topic/entry entry colsep-1 rowsep-1">13:30:10</td>
+                                    <td class="- topic/entry entry colsep-1 rowsep-1">Temporal</td>
+                                    <td class="- topic/entry entry colsep-0 rowsep-1"> </td>
+                                </tr>
+                                <tr class="- topic/row">
+                                    <td class="- topic/entry entry colsep-1 rowsep-1">DATETIME</td>
+                                    <td class="- topic/entry entry colsep-1 rowsep-1">2012.06.13 13:30:10 or 2012.06.13T13:30:10</td>
+                                    <td class="- topic/entry entry colsep-1 rowsep-1">Temporal</td>
+                                    <td class="- topic/entry entry colsep-0 rowsep-1">[1901.12.13T20:45:53, 2038.01.19T03:14:07]</td>
+                                </tr>
+                                <tr class="- topic/row">
+                                    <td class="- topic/entry entry colsep-1 rowsep-1">TIMESTAMP</td>
+                                    <td class="- topic/entry entry colsep-1 rowsep-1">2012.06.13 13:30:10.008 or
+                                        2012.06.13T13:30:10.008</td>
+                                    <td class="- topic/entry entry colsep-1 rowsep-1">Temporal</td>
+                                    <td class="- topic/entry entry colsep-0 rowsep-1"> </td>
+                                </tr>
+                                <tr class="- topic/row">
+                                    <td class="- topic/entry entry colsep-1 rowsep-1">NANOTIME</td>
+                                    <td class="- topic/entry entry colsep-1 rowsep-1">13:30:10.008007006</td>
+                                    <td class="- topic/entry entry colsep-1 rowsep-1">Temporal</td>
+                                    <td class="- topic/entry entry colsep-0 rowsep-1"> </td>
+                                </tr>
+                                <tr class="- topic/row">
+                                    <td class="- topic/entry entry colsep-1 rowsep-1">NANOTIMESTAMP</td>
+                                    <td class="- topic/entry entry colsep-1 rowsep-1">2012.06.13 13:30:10.008007006 or
+                                        2012.06.13T13:30:10.008007006</td>
+                                    <td class="- topic/entry entry colsep-1 rowsep-1">Temporal</td>
+                                    <td class="- topic/entry entry colsep-0 rowsep-1">[1677.09.21T00:12:43.145224193,
+                                        2262.04.11T23:47:16.854775807]</td>
+                                </tr>
+                                <tr class="- topic/row">
+                                    <td class="- topic/entry entry colsep-1 rowsep-1">FLOAT</td>
+                                    <td class="- topic/entry entry colsep-1 rowsep-1">2.1f</td>
+                                    <td class="- topic/entry entry colsep-1 rowsep-1">Floating</td>
+                                    <td class="- topic/entry entry colsep-0 rowsep-1">有效位数: 06~09 位</td>
+                                </tr>
+                                <tr class="- topic/row">
+                                    <td class="- topic/entry entry colsep-1 rowsep-1">DOUBLE</td>
+                                    <td class="- topic/entry entry colsep-1 rowsep-1">2.1</td>
+                                    <td class="- topic/entry entry colsep-1 rowsep-1">Floating</td>
+                                    <td class="- topic/entry entry colsep-0 rowsep-1">有效位数: 15~17 位</td>
+                                </tr>
+                                <tr class="- topic/row">
+                                    <td class="- topic/entry entry colsep-1 rowsep-1">SYMBOL</td>
+                                    <td class="- topic/entry entry colsep-1 rowsep-1"> </td>
+                                    <td class="- topic/entry entry colsep-1 rowsep-1">Literal</td>
+                                    <td class="- topic/entry entry colsep-0 rowsep-1"> </td>
+                                </tr>
+                                <tr class="- topic/row">
+                                    <td class="- topic/entry entry colsep-1 rowsep-1">STRING</td>
+                                    <td class="- topic/entry entry colsep-1 rowsep-1">“Hello” or ‘Hello’ or `Hello</td>
+                                    <td class="- topic/entry entry colsep-1 rowsep-1">Literal</td>
+                                    <td class="- topic/entry entry colsep-0 rowsep-1"> </td>
+                                </tr>
+                                <tr class="- topic/row">
+                                    <td class="- topic/entry entry colsep-1 rowsep-1">DATEHOUR</td>
+                                    <td class="- topic/entry entry colsep-1 rowsep-1">2012.06.13T13</td>
+                                    <td class="- topic/entry entry colsep-1 rowsep-1">Temporal</td>
+                                    <td class="- topic/entry entry colsep-0 rowsep-1"> </td>
+                                </tr>
+                                <tr class="- topic/row">
+                                    <td class="- topic/entry entry colsep-1 rowsep-1">DECIMAL32(S)</td>
+                                    <td class="- topic/entry entry colsep-1 rowsep-1">3.1415926$DECIMAL32(3)</td>
+                                    <td class="- topic/entry entry colsep-1 rowsep-1">Decimal</td>
+                                    <td class="- topic/entry entry colsep-0 rowsep-1">(-1*10^(9-S), 1*10^(9-S))</td>
+                                </tr>
+                                <tr class="- topic/row">
+                                    <td class="- topic/entry entry colsep-1 rowsep-1">DECIMAL64(S)</td>
+                                    <td class="- topic/entry entry colsep-1 rowsep-1">3.1415926$DECIMAL64(3), , 3.141P</td>
+                                    <td class="- topic/entry entry colsep-1 rowsep-1">Decimal</td>
+                                    <td class="- topic/entry entry colsep-0 rowsep-1">(-1*10^(18-S), 1*10^(18-S))</td>
+                                </tr>
+                                <tr class="- topic/row">
+                                    <td class="- topic/entry entry colsep-1 rowsep-0">DECIMAL128(S)</td>
+                                    <td class="- topic/entry entry colsep-1 rowsep-0">3.1415926$DECIMAL128(3)</td>
+                                    <td class="- topic/entry entry colsep-1 rowsep-0">Decimal</td>
+                                    <td class="- topic/entry entry colsep-0 rowsep-0">(-1*10^(38-S), 1*10^(38-S))</td>
+                                </tr>
+                            </tbody></table></div><p class="- topic/p p">注意：</p><ul class="- topic/ul ul" id="yhp_srx_nyb__ul_cxf_j4t_yzb" data-ofbid="yhp_srx_nyb__ul_cxf_j4t_yzb">
+                        <li class="- topic/li li">
+                            <p class="- topic/p p">在查询 SYMBOL 和 STRING 类型列时须避免使用单引号（'），否则会导致查询失败。</p>
+                        </li>
+                        <li class="- topic/li li">
+                            <p class="- topic/p p">暂不支持筛选各类型列的空值，如有需要请自行编写 SQL 查询。</p>
+                        </li>
+                    </ul><p class="- topic/p p">更多可参考 <a class="- topic/xref xref" href="https://docs.dolphindb.cn/zh/progr/data_types.html" target="_blank" rel="external noopener">DolphinDB-数据类型</a>。以下为支持的运算符。</p><div class="table-container"><table class="- topic/table table frame-all" id="yhp_srx_nyb__table_dxf_j4t_yzb" data-ofbid="yhp_srx_nyb__table_dxf_j4t_yzb" data-cols="2"><caption></caption><colgroup><col/><col/></colgroup><thead class="- topic/thead thead">
+                                <tr class="- topic/row">
+                                    <th class="- topic/entry entry colsep-1 rowsep-1" id="yhp_srx_nyb__table_dxf_j4t_yzb__entry__1">列类型</th>
+                                    <th class="- topic/entry entry colsep-0 rowsep-1" id="yhp_srx_nyb__table_dxf_j4t_yzb__entry__2">支持的运算符</th>
+                                </tr>
+                            </thead><tbody class="- topic/tbody tbody">
+                                <tr class="- topic/row">
+                                    <td class="- topic/entry entry colsep-1 rowsep-1" headers="yhp_srx_nyb__table_dxf_j4t_yzb__entry__1">时间类型、数值类型</td>
+                                    <td class="- topic/entry entry colsep-0 rowsep-1" headers="yhp_srx_nyb__table_dxf_j4t_yzb__entry__2">=, !=, &gt;, &lt;, &gt;=, &lt;=</td>
+                                </tr>
+                                <tr class="- topic/row">
+                                    <td class="- topic/entry entry colsep-1 rowsep-1" headers="yhp_srx_nyb__table_dxf_j4t_yzb__entry__1">SYMBOL, STRING</td>
+                                    <td class="- topic/entry entry colsep-0 rowsep-1" headers="yhp_srx_nyb__table_dxf_j4t_yzb__entry__2">like, not like, in, not in, =, !=</td>
+                                </tr>
+                                <tr class="- topic/row">
+                                    <td class="- topic/entry entry colsep-1 rowsep-0" headers="yhp_srx_nyb__table_dxf_j4t_yzb__entry__1">其他类型</td>
+                                    <td class="- topic/entry entry colsep-0 rowsep-0" headers="yhp_srx_nyb__table_dxf_j4t_yzb__entry__2">=, !=</td>
+                                </tr>
+                            </tbody></table></div><div class="- topic/sectiondiv sectiondiv">
+                        <p class="- topic/p p"><strong class="+ topic/ph hi-d/b ph b"><dfn class="- topic/term term">匹配（like）或 不匹配（not like）的使用说明：</dfn></strong>输入对比值时须带有通配符 “%”。“%”
+                                表示任意 0 个或者多个字符，可匹配任意类型和长度的字符。</p>
+                        <div class="- topic/note note note note_note" id="yhp_srx_nyb__note_b54_nwc_zzb" data-ofbid="yhp_srx_nyb__note_b54_nwc_zzb"><span class="note__title">注：</span> 使用时请注意区分大小写。更多可参考 <a class="- topic/xref xref" href="../../../progr/sql/like.html">DolphinDB-like</a>。</div><p class="- topic/p p">以下为使用示例：</p><ul class="- topic/ul ul" id="yhp_srx_nyb__ul_gxf_j4t_yzb" data-ofbid="yhp_srx_nyb__ul_gxf_j4t_yzb">
+                                <li class="- topic/li li">
+                                    <p class="- topic/p p">688%（匹配以 “688” 开头的字符串，能够匹配例如 “688101.SH”、”688101”的字符串）</p>
+                                </li>
+                                <li class="- topic/li li">
+                                    <p class="- topic/p p">%SZ%（匹配包含 “SZ” 的字符串， 能够匹配例如 “300951.SZ”、 “SZ.300951”的字符串）</p>
+                                </li>
+                                <li class="- topic/li li">
+                                    <p class="- topic/p p">%6（匹配以 “6” 结尾的字符串，能够匹配例如 “abcd6” 的字符串）</p>
+                                </li>
+                            </ul><p class="- topic/p p">包含（in）或者不包含（not
+                                in）的使用说明：</p><p class="- topic/p p">用户可在对比值的下拉框中选择一个或多个枚举值。注意，下拉框中仅展示部分枚举值，且存在响应延时。用户可手动输入未显示的枚举值，单击回车键以完成操作。更多可参考
+                                    <a class="- topic/xref xref" href="../../../progr/sql/in.html">DolphinDB-in</a>。</p><p class="- topic/p p">关于其他运算符的更多说明可参考： <a class="- topic/xref xref" href="../../../progr/operators/operators.html">运算符</a>。</p>
+                    </div></section>
+            </div>
+        </article>
+        <article class="- topic/topic topic nested2" aria-labelledby="ariaid-title6" id="topic_gfk_xjv_yzb">
+            <h3 class="- topic/title title topictitle3" id="ariaid-title6">预览 SQL 语句</h3>
+            <div class="- topic/body body">
+                <p class="- topic/p p">在填写完查询列与查询条件后，即可点击图 21 红框中的“查看 SQL 语句”以查看动态生成的 SQL 语句。</p>
+                <div class="- topic/p p">
+                    <figure class="- topic/fig fig fignone" id="topic_gfk_xjv_yzb__fig_qj3_2tt_yzb" data-ofbid="topic_gfk_xjv_yzb__fig_qj3_2tt_yzb"><figcaption data-caption-side="top" class="- topic/title title figcap"><span class="figtitleprefix fig--title-label">图<span class="fig--title-label-number"> 21</span><span class="fig--title-label-punctuation">. </span></span><span class="fig--title">图21 预览 SQL 语句</span></figcaption>
+                        
+                        <img class="- topic/image image" id="topic_gfk_xjv_yzb__image_rj3_2tt_yzb" src="../images/querybuilder_21.png"/>
+                    </figure>
+                </div>
+                <p class="- topic/p p">若需要清空当前页面的写入内容，则可点击“重置条件”。</p>
+                <div class="- topic/p p">
+                    <figure class="- topic/fig fig fignone" id="topic_gfk_xjv_yzb__fig_gsg_ftt_yzb" data-ofbid="topic_gfk_xjv_yzb__fig_gsg_ftt_yzb"><figcaption data-caption-side="top" class="- topic/title title figcap"><span class="figtitleprefix fig--title-label">图<span class="fig--title-label-number"> 22</span><span class="fig--title-label-punctuation">. </span></span><span class="fig--title">图22 动态生成的 SQL 语句示例</span></figcaption>
+                        
+                        <img class="- topic/image image" id="topic_gfk_xjv_yzb__image_hsg_ftt_yzb" src="../images/querybuilder_22.png"/>
+                    </figure>
+                </div>
+                <p class="- topic/p p">注意，该页面不支持修改。若需要修改，则点击“返回修改”。</p>
+                <p class="- topic/p p">如图 23 所示，用户可点击代码框右上角的符号以复制代码。</p>
+                <div class="- topic/p p">
+                    <figure class="- topic/fig fig fignone" id="topic_gfk_xjv_yzb__fig_vfs_gtt_yzb" data-ofbid="topic_gfk_xjv_yzb__fig_vfs_gtt_yzb"><figcaption data-caption-side="top" class="- topic/title title figcap"><span class="figtitleprefix fig--title-label">图<span class="fig--title-label-number"> 23</span><span class="fig--title-label-punctuation">. </span></span><span class="fig--title">图 23 复制 SQL 语句</span></figcaption>
+                        
+                        <img class="- topic/image image" id="topic_gfk_xjv_yzb__image_wfs_gtt_yzb" src="../images/querybuilder_23.png"/>
+                    </figure>
+                </div>
+            </div>
+        </article>
+        <article class="- topic/topic topic nested2" aria-labelledby="ariaid-title7" id="topic_ebz_vjv_yzb">
+            <h3 class="- topic/title title topictitle3" id="ariaid-title7">预览数据</h3>
+            <div class="- topic/body body">
+                <p class="- topic/p p">如图 24 所示，在生成的 SQL 语句页面点击“预览数据”。</p>
+                <div class="- topic/p p">
+                    <figure class="- topic/fig fig fignone" id="topic_ebz_vjv_yzb__fig_mcz_vjv_yzb" data-ofbid="topic_ebz_vjv_yzb__fig_mcz_vjv_yzb"><figcaption data-caption-side="top" class="- topic/title title figcap"><span class="figtitleprefix fig--title-label">图<span class="fig--title-label-number"> 24</span><span class="fig--title-label-punctuation">. </span></span><span class="fig--title">图24 预览数据</span></figcaption>
+                        
+                        <img class="- topic/image image" id="topic_ebz_vjv_yzb__image_ncz_vjv_yzb" src="../images/querybuilder_24.png"/>
+                    </figure>
+                </div>
+                <p class="- topic/p p">如图 25，预览数据页面将显示结果表格。</p>
+                <p class="- topic/p p">注意：预览数据最多可显示 2000 万行数据。若当前数据总量大于 2000 万行，则页面将显示截断后的数据。</p>
+                <div class="- topic/p p">
+                    <figure class="- topic/fig fig fignone" id="topic_ebz_vjv_yzb__fig_ocz_vjv_yzb" data-ofbid="topic_ebz_vjv_yzb__fig_ocz_vjv_yzb"><figcaption data-caption-side="top" class="- topic/title title figcap"><span class="figtitleprefix fig--title-label">图<span class="fig--title-label-number"> 25</span><span class="fig--title-label-punctuation">. </span></span><span class="fig--title">图25 预览数据的结果示例</span></figcaption>
+                        
+                        <img class="- topic/image image" id="topic_ebz_vjv_yzb__image_pcz_vjv_yzb" src="../images/querybuilder_25.png"/>
+                    </figure>
+                </div>
+            </div>
+        </article>
+        <article class="- topic/topic topic nested2" aria-labelledby="ariaid-title8" id="topic_tlc_ljv_yzb">
+            <h3 class="- topic/title title topictitle3" id="ariaid-title8">导出数据</h3>
+            <div class="- topic/body body">
+                <p class="- topic/p p">如图 26，若需导出数据，则点击“导出数据”。将导出一个 CSV 文件。</p>
+                <p class="- topic/p p">注意：若当前数据总量大于 50 万行或结果为空，则不支持导出数据功能。</p>
+                <div class="- topic/p p">
+                    <figure class="- topic/fig fig fignone" id="topic_tlc_ljv_yzb__fig_stl_ktt_yzb" data-ofbid="topic_tlc_ljv_yzb__fig_stl_ktt_yzb"><figcaption data-caption-side="top" class="- topic/title title figcap"><span class="figtitleprefix fig--title-label">图<span class="fig--title-label-number"> 26</span><span class="fig--title-label-punctuation">. </span></span><span class="fig--title">图26 导出数据</span></figcaption>
+                        
+                        <img class="- topic/image image" id="topic_tlc_ljv_yzb__image_ttl_ktt_yzb" src="../images/querybuilder_26.png"/>
+                    </figure>
+                </div>
+                <p class="- topic/p p">点击后即会弹出一个窗口，在此输入将导出的文件名。</p>
+                <div class="- topic/p p">
+                    <figure class="- topic/fig fig fignone" id="topic_tlc_ljv_yzb__fig_vn3_ltt_yzb" data-ofbid="topic_tlc_ljv_yzb__fig_vn3_ltt_yzb"><figcaption data-caption-side="top" class="- topic/title title figcap"><span class="figtitleprefix fig--title-label">图<span class="fig--title-label-number"> 27</span><span class="fig--title-label-punctuation">. </span></span><span class="fig--title">图27 填写导出数据的文件名</span></figcaption>
+                        
+                        <img class="- topic/image image" id="topic_tlc_ljv_yzb__image_wn3_ltt_yzb" src="../images/querybuilder_27.png"/>
+                    </figure>
+                </div>
+                <p class="- topic/p p">导出成功后，会显示一个“导出成功”的弹窗。用户可在下载队列中查看导出文件。</p>
+                <div class="- topic/p p">
+                    <figure class="- topic/fig fig fignone" id="topic_tlc_ljv_yzb__fig_rcl_mtt_yzb" data-ofbid="topic_tlc_ljv_yzb__fig_rcl_mtt_yzb"><figcaption data-caption-side="top" class="- topic/title title figcap"><span class="figtitleprefix fig--title-label">图<span class="fig--title-label-number"> 28</span><span class="fig--title-label-punctuation">. </span></span><span class="fig--title">图28 导出成功的弹窗</span></figcaption>
+                        
+                        <img class="- topic/image image" id="topic_tlc_ljv_yzb__image_scl_mtt_yzb" src="../images/querybuilder_28.png"/>
+                    </figure>
+                </div>
+            </div>
+        </article>
+    </article>
+    <article class="- topic/topic topic nested1" aria-labelledby="ariaid-title9" id="topic_wx3_nzt_yzb">
+        <h2 class="- topic/title title topictitle2" id="ariaid-title9">脚本查询</h2>
+        <div class="- topic/body body">
+            <p class="- topic/p p">用户亦可在编辑界面中直接输入 SQL 语句以建立查询，在成功执行脚本后预览并导出数据。</p>
+            <section class="- topic/section section" id="topic_wx3_nzt_yzb__section_vrl_pzt_yzb" data-ofbid="topic_wx3_nzt_yzb__section_vrl_pzt_yzb"><h3 class="- topic/title title sectiontitle">输入脚本</h3>
+                
+                <p class="- topic/p p">进入界面后，会自动生成一个当前表的示例脚本。</p>
+                <p class="- topic/p p">如图 29 所示，用户可直接输入脚本。</p>
+                <div class="- topic/p p">
+                    <figure class="- topic/fig fig fignone" id="topic_wx3_nzt_yzb__fig_pzs_qzt_yzb" data-ofbid="topic_wx3_nzt_yzb__fig_pzs_qzt_yzb"><figcaption data-caption-side="top" class="- topic/title title figcap"><span class="figtitleprefix fig--title-label">图<span class="fig--title-label-number"> 29</span><span class="fig--title-label-punctuation">. </span></span><span class="fig--title">图29 脚本查询界面</span></figcaption>
+                        
+                        <img class="- topic/image image" id="topic_wx3_nzt_yzb__image_qzs_qzt_yzb" src="../images/querybuilder_29.png"/>
+                    </figure>
+                </div>
+            </section>
+            <section class="- topic/section section"><h3 class="- topic/title title sectiontitle">导出数据</h3>
+                
+                <p class="- topic/p p">导出数据可参考向导查询小节中的<a class="- topic/xref xref" href="#topic_tlc_ljv_yzb">对应内容</a>。</p>
+            </section>
+        </div>
+    </article>
+</article></main></div>
+                        
+                        
+                        
+                        
+                        
+                        
+                    </div>
+                    
+                        <nav role="navigation" id="wh_topic_toc" aria-label="On this page" class="col-lg-2 d-none d-lg-block navbar d-print-none"> 
+                            <div id="wh_topic_toc_content">
+		                        
+	                            <div class=" wh_topic_toc "><div class="wh_topic_label">在本页上</div><ul><li class="topic-item"><a href="#topic_tw2_f15_yzb" data-tocid="topic_tw2_f15_yzb">新建查询</a></li><li class="topic-item"><a href="#id_g5x_xdv_yzb" data-tocid="id_g5x_xdv_yzb">向导查询</a><ul><li class="topic-item"><a href="#topic_nqy_22v_yzb" data-tocid="topic_nqy_22v_yzb"> 查询列</a><ul><li class="section-item"><div class="section-title"><a href="#topic_nqy_22v_yzb__section_sqy_22v_yzb" data-tocid="topic_nqy_22v_yzb__section_sqy_22v_yzb">增加查询列</a></div></li></ul></li><li class="topic-item"><a href="#yhp_srx_nyb" data-tocid="yhp_srx_nyb"> 查询条件</a><ul><li class="section-item"><div class="section-title"><a href="#yhp_srx_nyb__section_wvr_pgv_yzb" data-tocid="yhp_srx_nyb__section_wvr_pgv_yzb">分区列查询条件</a></div></li><li class="section-item"><div class="section-title"><a href="#yhp_srx_nyb__section_fk1_3s5_pyb" data-tocid="yhp_srx_nyb__section_fk1_3s5_pyb">其他查询条件</a></div></li><li class="section-item"><div class="section-title"><a href="#yhp_srx_nyb__section_dbz_vjv_yzb" data-tocid="yhp_srx_nyb__section_dbz_vjv_yzb">列类型与预算符的说明</a></div></li></ul></li><li class="topic-item"><a href="#topic_gfk_xjv_yzb" data-tocid="topic_gfk_xjv_yzb">预览 SQL 语句</a></li><li class="topic-item"><a href="#topic_ebz_vjv_yzb" data-tocid="topic_ebz_vjv_yzb">预览数据</a></li><li class="topic-item"><a href="#topic_tlc_ljv_yzb" data-tocid="topic_tlc_ljv_yzb">导出数据</a></li></ul></li><li class="topic-item"><a href="#topic_wx3_nzt_yzb" data-tocid="topic_wx3_nzt_yzb">脚本查询</a><ul><li class="section-item"><div class="section-title"><a href="#topic_wx3_nzt_yzb__section_vrl_pzt_yzb" data-tocid="topic_wx3_nzt_yzb__section_vrl_pzt_yzb">输入脚本</a></div></li></ul></li></ul></div>
+	                        	
+                        	</div>
+                        </nav>
+                    
+                </div>
+            </div>
+            
+            
+            
+        </div> 
+        <footer class="navbar navbar-default wh_footer">
+  <div class=" footer-container mx-auto ">
+<title>Copyright</title><p><b> ©2024 浙江智臾科技有限公司 浙ICP备18048711号-3</b></p>
+  </div>
+</footer>
+        
+        <div id="go2top" class="d-print-none">
+            <span class="oxy-icon oxy-icon-up"></span>
+        </div>
+        
+        <div id="modal_img_large" class="modal">
+            <span class="close oxy-icon oxy-icon-remove"></span>
+            <div id="modal_img_container"></div>
+            <div id="caption"></div>
+        </div>
+        
+        
+        
+    </body>
+</html>

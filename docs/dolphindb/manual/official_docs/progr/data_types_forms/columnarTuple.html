@@ -1,0 +1,392 @@
+<!DOCTYPE html><html xmlns="http://www.w3.org/1999/xhtml" xml:lang="zh" lang="zh" data-whc_version="26.0">
+    <head><link rel="shortcut icon" href="../../favicon.ico"/><link rel="icon" href="../../favicon.ico"/><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><meta http-equiv="X-UA-Compatible" content="IE=edge"/><meta name="description" content="列式元组是一种特殊的元组类型，列式元组的元素可以是标量也可以是向量，且其值的类型必须保持一致。列式元组的取数规则和数组向量一致。 注： 2.00.9 版本后，DolphinDB 支持将列式元组存储为表的一列（分布式表暂不支持）。 通过函数 setColumnarTuple! 可以将一个普通元组转换成列式元组。 通过函数 isColumnarTuple 可以判断一个元组是否为列式元组。 tp = ..."/><meta name="DC.rights.owner" content="(C) 版权 2024"/><meta name="copyright" content="(C) 版权 2024"/><meta name="generator" content="DITA-OT"/><meta name="DC.type" content="topic"/><meta name="DC.coverage" content=""/><meta name="DC.subject" content="列式元组,columnar tuple,columnartuple"/><meta name="keywords" content="列式元组, columnar tuple, columnartuple"/><meta name="indexterms" content="列式元组, columnar tuple, columnartuple"/><meta name="DC.relation" content="../../progr/data_types_forms/vector.html"/><meta name="prodname" content="DolphinDB"/><meta name="brand" content="DolphinDB"/><meta name="DC.creator" content="DolphinDB"/><meta name="DC.publisher" content="DDB N/A DDB 200"/><meta name="DC.format" content="HTML5"/><meta name="DC.identifier" content="列式元组columnar-tuple"/><title>列式元组（columnar tuple）</title><!--  Generated with Oxygen version 26.0, build number 2024012323.  --><meta name="wh-path2root" content="../../"/><meta name="wh-toc-id" content="列式元组columnar-tuple-d9529e17267"/><meta name="wh-source-relpath" content="progr/data_types_forms/columnarTuple.dita"/><meta name="wh-out-relpath" content="progr/data_types_forms/columnarTuple.html"/>
+
+    <link rel="stylesheet" type="text/css" href="../../oxygen-webhelp/app/commons.css?buildId=2024012323"/>
+    <link rel="stylesheet" type="text/css" href="../../oxygen-webhelp/app/topic.css?buildId=2024012323"/>
+
+    <script src="../../oxygen-webhelp/app/options/properties.js?buildId=20240704100525"></script>
+    <script src="../../oxygen-webhelp/app/localization/strings.js?buildId=2024012323"></script>
+    <script src="../../oxygen-webhelp/app/search/index/keywords.js?buildId=20240704100525"></script>
+    <script defer="defer" src="../../oxygen-webhelp/app/commons.js?buildId=2024012323"></script>
+    <script defer="defer" src="../../oxygen-webhelp/app/topic.js?buildId=2024012323"></script>
+<link rel="stylesheet" type="text/css" href="../../oxygen-webhelp/template/styles.css?buildId=2024012323"/><script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script><script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script></head>
+
+    <body id="列式元组columnar-tuple" class="wh_topic_page frmBody">
+        <a href="#wh_topic_body" class="sr-only sr-only-focusable">
+            跳转到主要内容
+        </a>
+        
+        
+        
+        
+        <header class="navbar navbar-default wh_header">
+    <div class="container-fluid">
+        <div xmlns:whc="http://www.oxygenxml.com/webhelp/components" class="wh_header_flex_container navbar-nav navbar-expand-md navbar-dark">
+            <div class="wh_logo_and_publication_title_container">
+                <div class="wh_logo_and_publication_title">
+                    
+                    <a href="https://www.dolphindb.cn" class=" wh_logo d-none d-sm-block "><img src="../../logo.png" alt="  DolphinDB 文档中心  "/></a>
+                    <div class=" wh_publication_title "><a href="../../index.html"><span class="booktitle">  <span class="ph mainbooktitle">DolphinDB 文档中心</span>  </span></a></div>
+                    
+                </div>
+                
+                
+            </div>
+
+            <div class="wh_top_menu_and_indexterms_link collapse navbar-collapse" id="wh_top_menu_and_indexterms_link">
+                
+                
+                
+                
+            </div>
+        <div class=" wh_search_input navbar-form wh_topic_page_search search " role="form">
+            
+            
+            
+            <form id="searchForm" method="get" role="search" action="../../search.html"><div><input type="search" placeholder="搜索 " class="wh_search_textfield" id="textToSearch" name="searchQuery" aria-label="搜索查询" required="required"/><button type="submit" class="wh_search_button" aria-label="搜索"><span class="search_input_text">搜索</span></button></div></form>
+            
+            <script src="/vendors/react/umd/react.production.min.js" defer="defer"></script>
+<script src="/vendors/react-dom/umd/react-dom.production.min.js" defer="defer"></script>
+<script src="/vendors/dayjs/dayjs.min.js" defer="defer"></script>
+<script src="/vendors/antd/dist/antd.min.js" defer="defer"></script>
+<script src="/vendors/@ant-design/icons/dist/index.umd.min.js" defer="defer"></script>
+<script src="/zh/index.js" type="module"></script>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js" defer="defer"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML" defer="defer"><!--
+
+
+--></script>
+
+            
+        </div></div>
+    </div>
+</header>
+        
+        
+         
+        
+        
+        
+        <div class="container-fluid" id="wh_topic_container">
+            <div class="row">
+
+                <nav class="wh_tools d-print-none navbar-expand-md" aria-label="Tools">
+                    
+                    <div data-tooltip-position="bottom" class=" wh_breadcrumb "><ol class="d-print-none"><li><span class="home"><a href="../../index.html"><span>主页</span></a></span></li><li><div class="topicref" data-id="about_language_resources"><div class="title"><a href="../../progr/progr_intro.html"><span class="keyword label">编程语言</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 编程基本概念与方法、SQL 在 DolphinDB 的应用</p></div></div></div></li><li><div class="topicref" data-id="chap4_db_programming"><div class="title"><a href="../../progr/lang_intro.html"><span class="keyword label">DolphinDB 脚本语言</span></a><div class="wh-tooltip"><p class="shortdesc"> 脚本编程相关概念参考，包括：数据类型与形式、对象、运算符、编程语句、数据操作、函数化编程、文件操作和 SQL 语句。 </p></div></div></div></li><li><div class="topicref" data-id="chap4_sect_datatypes_forms"><div class="title"><a href="../../progr/data_types_forms_intro.html"><span class="keyword">数据类型与形式</span></a></div></div></li><li><div class="topicref" data-id="chap4_sect_dataforms"><div class="title"><a href="../../progr/data_forms.html"><span class="keyword label">数据形式</span></a></div></div></li><li><div class="topicref" data-id="向量"><div class="title"><a href="../../progr/data_types_forms/vector.html"><span class="keyword label">向量</span></a></div></div></li><li class="active"><div class="topicref" data-id="列式元组columnar-tuple"><div class="title"><a href="../../progr/data_types_forms/columnarTuple.html"><span class="keyword label">列式元组（columnar tuple）</span></a></div></div></li></ol></div>
+                    
+                    
+                    
+                    <div class="wh_right_tools">
+                        <button class="wh_hide_highlight" aria-label="切换搜索突出显示" title="切换搜索突出显示"></button>
+                        <button class="webhelp_expand_collapse_sections" data-next-state="collapsed" aria-label="折叠截面" title="折叠截面"></button>
+                        
+                        
+                        
+                        
+                        <div class=" wh_print_link print d-none d-md-inline-block "><button onClick="window.print()" title="打印此页" aria-label="打印此页"></button></div>
+                        
+                        <button type="button" id="wh_toc_button" class="custom-toggler navbar-toggler collapsed wh_toggle_button navbar-light" aria-expanded="false" aria-label="Toggle publishing table of content" aria-controls="wh_publication_toc">
+                            <span class="navbar-toggler-icon"></span>
+                        </button>
+                    </div>
+                    
+                </nav>
+            </div>
+            
+            
+            
+            
+            <div class="wh_content_area">
+                <div class="row">
+                    
+                        <nav id="wh_publication_toc" class="col-lg-3 col-md-3 col-sm-12 d-md-block d-none d-print-none" aria-label="Table of Contents Container">
+                            <div id="wh_publication_toc_content">
+		                        
+                            	<div class=" wh_publication_toc " data-tooltip-position="right"><span class="expand-button-action-labels"><span id="button-expand-action" role="button" aria-label="Expand"></span><span id="button-collapse-action" role="button" aria-label="Collapse"></span><span id="button-pending-action" role="button" aria-label="Pending"></span></span><ul role="tree" aria-label="Table of Contents"><li role="treeitem"><div data-tocid="new_chap_about_sect_ddb_docs_intro-d9529e87" class="topicref" data-id="new_chap_about_sect_ddb_docs_intro" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../about/ddb_docs_intro.html" id="new_chap_about_sect_ddb_docs_intro-d9529e87-link">文档使用说明</a><div class="wh-tooltip"><p class="shortdesc">如何获取 DolphinDB 帮助信息</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="chap1_getstarted-d9529e140" class="topicref" data-id="chap1_getstarted" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action chap1_getstarted-d9529e140-link" class="wh-expand-btn"></span><div class="title"><a href="../../getstarted/chap1_getstarted.html" id="chap1_getstarted-d9529e140-link"><span class="keyword label">快速上手</span></a><div class="wh-tooltip"><p class="shortdesc">如何快速部署 DolphinDB、建库建表、写入和查询数据</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="sectionddb_deployment-d9529e335" class="topicref" data-id="sectionddb_deployment" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action sectionddb_deployment-d9529e335-link" class="wh-expand-btn"></span><div class="title"><a href="../../deploy/deploy_intro.html" id="sectionddb_deployment-d9529e335-link"><span class="keyword label">部署</span></a><div class="wh-tooltip"><p class="shortdesc">如何在不同的场景中部署 DolphinDB</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="new_chap_database_manage_new_chap_dbmanage_landing_page-d9529e2313" class="topicref" data-id="new_chap_database_manage_new_chap_dbmanage_landing_page" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action new_chap_database_manage_new_chap_dbmanage_landing_page-d9529e2313-link" class="wh-expand-btn"></span><div class="title"><a href="../../db_distr_comp/cfg/db_intro.html" id="new_chap_database_manage_new_chap_dbmanage_landing_page-d9529e2313-link"><span class="keyword label">数据库</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 数据库的基本概念</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="chap7_tutorials_streaming-d9529e3490" class="topicref" data-id="chap7_tutorials_streaming" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action chap7_tutorials_streaming-d9529e3490-link" class="wh-expand-btn"></span><div class="title"><a href="../../stream/str_intro.html" id="chap7_tutorials_streaming-d9529e3490-link"><span class="keyword label">流数据</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 流数据引擎及流数据计算的基本概念</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="tocId-d9529e7385" class="topicref" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action tocId-d9529e7385-link" class="wh-expand-btn"></span><div class="title"><a href="../../db_distr_comp/db_oper/import_data.html" id="tocId-d9529e7385-link">数据迁移</a><div class="wh-tooltip"><p class="shortdesc">如何从不同数据源向 DolphinDB 迁移数据</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="chap7_tutorials_system_management-d9529e7812" class="topicref" data-id="chap7_tutorials_system_management" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action chap7_tutorials_system_management-d9529e7812-link" class="wh-expand-btn"></span><div class="title"><a href="../../sys_man/om_intro.html" id="chap7_tutorials_system_management-d9529e7812-link"><span class="keyword label">系统运维</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 的系统运维功能及方法</p></div></div></div></li><li role="treeitem" aria-expanded="true"><div data-tocid="about_language_resources-d9529e16490" class="topicref" data-id="about_language_resources" data-state="expanded"><span role="button" tabindex="0" aria-labelledby="button-collapse-action about_language_resources-d9529e16490-link" class="wh-expand-btn"></span><div class="title"><a href="../../progr/progr_intro.html" id="about_language_resources-d9529e16490-link"><span class="keyword label">编程语言</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 编程基本概念与方法、SQL 在 DolphinDB 的应用</p></div></div></div><ul role="group" class="navbar-nav nav-list"><li role="treeitem" aria-expanded="true"><div data-tocid="chap4_db_programming-d9529e16543" class="topicref" data-id="chap4_db_programming" data-state="expanded"><span role="button" tabindex="0" aria-labelledby="button-collapse-action chap4_db_programming-d9529e16543-link" class="wh-expand-btn"></span><div class="title"><a href="../../progr/lang_intro.html" id="chap4_db_programming-d9529e16543-link"><span class="keyword label">DolphinDB 脚本语言</span></a><div class="wh-tooltip"><p class="shortdesc"> 脚本编程相关概念参考，包括：数据类型与形式、对象、运算符、编程语句、数据操作、函数化编程、文件操作和 SQL 语句。 </p></div></div></div><ul role="group" class="navbar-nav nav-list"><li role="treeitem" aria-expanded="true"><div data-tocid="chap4_sect_datatypes_forms-d9529e16594" class="topicref" data-id="chap4_sect_datatypes_forms" data-state="expanded"><span role="button" tabindex="0" aria-labelledby="button-collapse-action chap4_sect_datatypes_forms-d9529e16594-link" class="wh-expand-btn"></span><div class="title"><a href="../../progr/data_types_forms_intro.html" id="chap4_sect_datatypes_forms-d9529e16594-link"><span class="keyword">数据类型与形式</span></a></div></div><ul role="group" class="navbar-nav nav-list"><li role="treeitem" aria-expanded="false"><div data-tocid="chap4_sect_data_type_description-d9529e16655" class="topicref" data-id="chap4_sect_data_type_description" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action chap4_sect_data_type_description-d9529e16655-link" class="wh-expand-btn"></span><div class="title"><a href="../../progr/data_types.html" id="chap4_sect_data_type_description-d9529e16655-link"><span class="keyword label">数据类型</span></a></div></div></li><li role="treeitem" aria-expanded="true"><div data-tocid="chap4_sect_dataforms-d9529e16771" class="topicref" data-id="chap4_sect_dataforms" data-state="expanded"><span role="button" tabindex="0" aria-labelledby="button-collapse-action chap4_sect_dataforms-d9529e16771-link" class="wh-expand-btn"></span><div class="title"><a href="../../progr/data_forms.html" id="chap4_sect_dataforms-d9529e16771-link"><span class="keyword label">数据形式</span></a></div></div><ul role="group" class="navbar-nav nav-list"><li role="treeitem"><div data-tocid="标量-d9529e16826" class="topicref" data-id="标量" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../progr/data_types_forms/Scalar.html" id="标量-d9529e16826-link"><span class="keyword label">标量</span></a></div></div></li><li role="treeitem"><div data-tocid="数据对-d9529e16887" class="topicref" data-id="数据对" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../progr/data_types_forms/Pair.html" id="数据对-d9529e16887-link"><span class="keyword label">数据对</span></a></div></div></li><li role="treeitem" aria-expanded="true"><div data-tocid="向量-d9529e16948" class="topicref" data-id="向量" data-state="expanded"><span role="button" tabindex="0" aria-labelledby="button-collapse-action 向量-d9529e16948-link" class="wh-expand-btn"></span><div class="title"><a href="../../progr/data_types_forms/vector.html" id="向量-d9529e16948-link"><span class="keyword label">向量</span></a></div></div><ul role="group" class="navbar-nav nav-list"><li role="treeitem"><div data-tocid="元组tuple-d9529e17009" class="topicref" data-id="元组tuple" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../progr/data_types_forms/TupleANYVector.html" id="元组tuple-d9529e17009-link"><span class="keyword label">元组 (tuple)</span></a></div></div></li><li role="treeitem"><div data-tocid="subarray-d9529e17070" class="topicref" data-id="subarray" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../progr/data_types_forms/subarray.html" id="subarray-d9529e17070-link"><span class="keyword label">子数组（subarray）</span></a></div></div></li><li role="treeitem"><div data-tocid="数组向量array-vector-d9529e17131" class="topicref" data-id="数组向量array-vector" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../progr/data_types_forms/arrayVector.html" id="数组向量array-vector-d9529e17131-link"><span class="keyword label">数组向量（array vector）</span></a></div></div></li><li role="treeitem"><div data-tocid="大数组bigarray-d9529e17199" class="topicref" data-id="大数组bigarray" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../progr/data_types_forms/BigArray.html" id="大数组bigarray-d9529e17199-link"><span class="keyword label">大数组 (bigarray)</span></a></div></div></li><li role="treeitem" class="active"><div data-tocid="列式元组columnar-tuple-d9529e17267" class="topicref" data-id="列式元组columnar-tuple" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../progr/data_types_forms/columnarTuple.html" id="列式元组columnar-tuple-d9529e17267-link"><span class="keyword label">列式元组（columnar tuple）</span></a></div></div></li></ul></li><li role="treeitem"><div data-tocid="矩阵-d9529e17335" class="topicref" data-id="矩阵" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../progr/data_types_forms/Matrix.html" id="矩阵-d9529e17335-link"><span class="keyword label">矩阵</span></a></div></div></li><li role="treeitem"><div data-tocid="集合-d9529e17396" class="topicref" data-id="集合" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../progr/data_types_forms/Set.html" id="集合-d9529e17396-link"><span class="keyword label">集合</span></a></div></div></li><li role="treeitem"><div data-tocid="字典-d9529e17457" class="topicref" data-id="字典" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../progr/data_types_forms/Dictionary.html" id="字典-d9529e17457-link"><span class="keyword label">字典</span></a></div></div></li><li role="treeitem"><div data-tocid="表-d9529e17518" class="topicref" data-id="表" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../progr/data_types_forms/Table.html" id="表-d9529e17518-link"><span class="keyword label">表</span></a></div></div></li><li role="treeitem"><div data-tocid="tensor-d9529e17586" class="topicref" data-id="tensor" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../progr/tensor.html" id="tensor-d9529e17586-link">tensor</a></div></div></li></ul></li></ul></li><li role="treeitem" aria-expanded="false"><div data-tocid="chap4_sect_objects-d9529e17632" class="topicref" data-id="chap4_sect_objects" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action chap4_sect_objects-d9529e17632-link" class="wh-expand-btn"></span><div class="title"><a href="../../progr/objs/objects.html" id="chap4_sect_objects-d9529e17632-link"><span class="keyword label">对象</span></a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="chap4_sect_operators-d9529e18069" class="topicref" data-id="chap4_sect_operators" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action chap4_sect_operators-d9529e18069-link" class="wh-expand-btn"></span><div class="title"><a href="../../progr/operators/operators.html" id="chap4_sect_operators-d9529e18069-link"><span class="keyword label">运算符</span></a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="chap4_sect_programming_statements-d9529e19654" class="topicref" data-id="chap4_sect_programming_statements" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action chap4_sect_programming_statements-d9529e19654-link" class="wh-expand-btn"></span><div class="title"><a href="../../progr/statements/statements_intro.html" id="chap4_sect_programming_statements-d9529e19654-link"><span class="keyword label">编程语句</span></a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="chap4_sect_data_manipulation-d9529e20900" class="topicref" data-id="chap4_sect_data_manipulation" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action chap4_sect_data_manipulation-d9529e20900-link" class="wh-expand-btn"></span><div class="title"><a href="../../progr/data_mani/dm_intro.html" id="chap4_sect_data_manipulation-d9529e20900-link"><span class="keyword label">数据操作</span></a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="chap4_sect_func_programming-d9529e21873" class="topicref" data-id="chap4_sect_func_programming" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action chap4_sect_func_programming-d9529e21873-link" class="wh-expand-btn"></span><div class="title"><a href="../../progr/func_progr.html" id="chap4_sect_func_programming-d9529e21873-link"><span class="keyword label">函数化编程</span></a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="元编程-d9529e22197" class="topicref" data-id="元编程" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action 元编程-d9529e22197-link" class="wh-expand-btn"></span><div class="title"><a href="../../progr/objs/meta_progr.html" id="元编程-d9529e22197-link"><span class="keyword label">元编程</span></a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="oop-d9529e22337" class="topicref" data-id="oop" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action oop-d9529e22337-link" class="wh-expand-btn"></span><div class="title"><a href="../../progr/oop.html" id="oop-d9529e22337-link">面向对象编程</a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="文件操作-d9529e22705" class="topicref" data-id="文件操作" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action 文件操作-d9529e22705-link" class="wh-expand-btn"></span><div class="title"><a href="../../progr/file_io/file_oper.html" id="文件操作-d9529e22705-link"><span class="keyword label">文件操作</span></a></div></div></li></ul></li><li role="treeitem" aria-expanded="false"><div data-tocid="chap4_sect_sql_statements-d9529e22890" class="topicref" data-id="chap4_sect_sql_statements" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action chap4_sect_sql_statements-d9529e22890-link" class="wh-expand-btn"></span><div class="title"><a href="../../progr/sql/sql_intro.html" id="chap4_sect_sql_statements-d9529e22890-link"><span class="keyword label">SQL 语句</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 中 SQL 语句的基本语法和用法</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="python-parser-简介-d9529e25535" class="topicref" data-id="python-parser-简介" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action python-parser-简介-d9529e25535-link" class="wh-expand-btn"></span><div class="title"><a href="../../progr/py_parser/py_par_intro.html" id="python-parser-简介-d9529e25535-link"><span class="keyword label">Python Parser</span></a></div></div></li></ul></li><li role="treeitem" aria-expanded="false"><div data-tocid="functions_references-d9529e26503" class="topicref" data-id="functions_references" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action functions_references-d9529e26503-link" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/funcs_intro.html" id="functions_references-d9529e26503-link"><span class="keyword label">函数参考</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 函数分类、语法、详解及示例</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="api_protocol-d9529e86456" class="topicref" data-id="api_protocol" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action api_protocol-d9529e86456-link" class="wh-expand-btn"></span><div class="title"><a href="../../api/connapi_intro.html" id="api_protocol-d9529e86456-link"><span class="keyword label">连接器 &amp; API</span></a><div class="wh-tooltip"><p class="shortdesc">面向不同编程语言的 DolphinDB API 及连接器，相关协议和用法</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="chap6_plugin-d9529e91976" class="topicref" data-id="chap6_plugin" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action chap6_plugin-d9529e91976-link" class="wh-expand-btn"></span><div class="title"><a href="../../plugins/plg_intro.html" id="chap6_plugin-d9529e91976-link"><span class="keyword label">插件</span></a><div class="wh-tooltip"><p class="shortdesc">多个应用场景的插件使用说明和插件开发指导</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="third_party-d9529e94749" class="topicref" data-id="third_party" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action third_party-d9529e94749-link" class="wh-expand-btn"></span><div class="title"><a href="../../third_party.html" id="third_party-d9529e94749-link">第三方工具</a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="about_tutorials-d9529e94980" class="topicref" data-id="about_tutorials" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action about_tutorials-d9529e94980-link" class="wh-expand-btn"></span><div class="title"><a href="../../tutorials/about_tutorials.html" id="about_tutorials-d9529e94980-link"><span class="keyword label">教程</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 产品使用教程</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="tocId-d9529e101769" class="topicref" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action tocId-d9529e101769-link" class="wh-expand-btn"></span><div class="title"><a href="../../rn/server/3_00_1.html" id="tocId-d9529e101769-link">版本说明</a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 版本发布历史</p></div></div></div></li></ul></div>
+		                        
+                            </div>
+                        </nav>
+                    
+                    
+                    <div class="col-lg-7 col-md-9 col-sm-12" id="wh_topic_body">
+                        <button id="wh_close_publication_toc_button" class="close-toc-button d-none" aria-label="Toggle publishing table of content" aria-controls="wh_publication_toc" aria-expanded="true">
+                            <span class="close-toc-icon-container">
+                                <span class="close-toc-icon"></span>     
+                            </span>
+                        </button>
+                        <button id="wh_close_topic_toc_button" class="close-toc-button d-none" aria-label="Toggle topic table of content" aria-controls="wh_topic_toc" aria-expanded="true">
+                            <span class="close-toc-icon-container">
+                                <span class="close-toc-icon"></span>     
+                            </span>
+                        </button>
+                        
+                        <div class=" wh_topic_content body "><main role="main"><article class="- topic/topic topic" role="article" aria-labelledby="ariaid-title1">
+    <h1 class="- topic/title title topictitle1" id="ariaid-title1"><span class="- topic/keyword keyword label">列式元组（columnar tuple）</span></h1>
+    <article class="- topic/topic topic nested1" aria-labelledby="ariaid-title2" id="概述">
+        <h2 class="- topic/title title topictitle2" id="ariaid-title2">概述</h2>
+        <div class="- topic/body body">
+            <p class="- topic/p p" id="概述__p_chv_5hn_ryb" data-ofbid="概述__p_chv_5hn_ryb">列式元组是一种特殊的元组类型，列式元组的元素可以是标量也可以是向量，且其值的类型必须保持一致。列式元组的取数规则和数组向量一致。</p>
+            <div class="- topic/note note note note_note" id="概述__note_u1h_mmr_c1c" data-ofbid="概述__note_u1h_mmr_c1c"><span class="note__title">注：</span> 2.00.9 版本后，DolphinDB 支持将列式元组存储为表的一列（分布式表暂不支持）。</div>
+        </div>
+    </article>
+    <article class="- topic/topic topic nested1" aria-labelledby="ariaid-title3" id="创建列式元组">
+        <h2 class="- topic/title title topictitle2" id="ariaid-title3">创建列式元组</h2>
+        <div class="- topic/body body">
+            <ul class="- topic/ul ul" id="创建列式元组__ul_ehv_5hn_ryb" data-ofbid="创建列式元组__ul_ehv_5hn_ryb">
+                <li class="- topic/li li">
+                    <p class="- topic/p p" id="创建列式元组__p_fhv_5hn_ryb" data-ofbid="创建列式元组__p_fhv_5hn_ryb">通过函数 <a class="- topic/xref xref" href="../../funcs/s/setColumnarTuple_.html">setColumnarTuple!</a> 可以将一个普通元组转换成列式元组。</p>
+                </li>
+                <li class="- topic/li li">
+                    <p class="- topic/p p" id="创建列式元组__p_ghv_5hn_ryb" data-ofbid="创建列式元组__p_ghv_5hn_ryb">通过函数 <a class="- topic/xref xref" href="../../funcs/i/isColumnarTuple.html">isColumnarTuple</a> 可以判断一个元组是否为列式元组。</p>
+                    <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="创建列式元组__codeblock_hhv_5hn_ryb" data-ofbid="创建列式元组__codeblock_hhv_5hn_ryb"><code>tp = [[1.3,2.5,2.3], [4.1,5.3], 6.3]
+isColumnarTuple(tp)
+// output
+false
+
+tp.setColumnarTuple!()
+isColumnarTuple(tp)
+// output
+true</code></pre>
+                </li>
+            </ul>
+        </div>
+    </article>
+    <article class="- topic/topic topic nested1" aria-labelledby="ariaid-title4" id="访问列式元组">
+        <h2 class="- topic/title title topictitle2" id="ariaid-title4">访问列式元组</h2>
+        <div class="- topic/body body">
+            <p class="- topic/p p" id="访问列式元组__p_ihv_5hn_ryb" data-ofbid="访问列式元组__p_ihv_5hn_ryb">普通元组按索引取出的是对应下标的元素值，而列式元组和数组向量则是返回每个元素对应下标的值组成的向量。</p>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="访问列式元组__codeblock_jhv_5hn_ryb" data-ofbid="访问列式元组__codeblock_jhv_5hn_ryb"><code>tp = [[1.3,2.5,2.3], [4.1,5.3], 6.3]
+ctp = [[1.3,2.5,2.3], [4.1,5.3], 6.3].setColumnarTuple!()
+av = array(DOUBLE[], 0, 20).append!([[1.3,2.5,2.3], [4.1,5.3], 6.3])
+
+// 按索引取数
+tp[0]
+// output
+[1.3,2.5,2.3]
+
+ctp[0]
+// output
+[1.3,4.1,6.3]
+
+av[0]
+// output
+[1.3,4.1,6.3]</code></pre>
+            <p class="- topic/p p" id="访问列式元组__p_khv_5hn_ryb" data-ofbid="访问列式元组__p_khv_5hn_ryb">按 slice 取数时（即 x[start:end]），若 slice 范围超过了列式元组中元素的长度，会自动填充空值。</p>
+            <p class="- topic/p p" id="访问列式元组__p_lhv_5hn_ryb" data-ofbid="访问列式元组__p_lhv_5hn_ryb">当元素类型不为 STRING, SYMBOL 且 slice 的 end 不为空时，列式元组 slice 后的返回结果是一个数组向量，否则返回的仍然时列式元组。</p>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="访问列式元组__codeblock_mhv_5hn_ryb" data-ofbid="访问列式元组__codeblock_mhv_5hn_ryb"><code>//按 slice 取数
+a = ctp[0:3]
+a
+// output
+[[1.3,2.5,2.3],[4.1,5.3,00F],[6.3,6.3,6.3]]
+
+b = ctp[0:]
+b
+// output
+([1.3,2.5,2.3],[4.1,5.3],6.3)</code></pre>
+            <p class="- topic/p p" id="访问列式元组__p_nhv_5hn_ryb" data-ofbid="访问列式元组__p_nhv_5hn_ryb">和数组向量一致，若要单独取出每个元素的值可以通过 <code class="+ topic/ph pr-d/codeph ph codeph">row</code> 函数实现。</p>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="访问列式元组__codeblock_ohv_5hn_ryb" data-ofbid="访问列式元组__codeblock_ohv_5hn_ryb"><code>ctp.row(0)
+// output
+[1.3,2.5,2.3]</code></pre>
+        </div>
+    </article>
+    <article class="- topic/topic topic nested1" aria-labelledby="ariaid-title5" id="追加数据到列式元组">
+        <h2 class="- topic/title title topictitle2" id="ariaid-title5">追加数据到列式元组</h2>
+        <div class="- topic/body body">
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="追加数据到列式元组__codeblock_phv_5hn_ryb" data-ofbid="追加数据到列式元组__codeblock_phv_5hn_ryb"><code>ctp = [[1.3,2.5,2.3], [4.1,5.3], 6.3].setColumnarTuple!()
+ctp.append!([3.3,2.1])
+ctp
+// output
+([1.3,2.5,2.3],[4.1,5.3],6.3,[3.3,2.1])</code></pre>
+        </div>
+    </article>
+    <article class="- topic/topic topic nested1" aria-labelledby="ariaid-title6" id="topic_lzy_hy5_h1c">
+        <h2 class="- topic/title title topictitle2" id="ariaid-title6">修改列式元组中的数据</h2>
+        <div class="- topic/body body">
+            <p class="- topic/p p">列式元组中的数据可以通过指定行和列的方式进行修改：<code class="+ topic/ph pr-d/codeph ph codeph">obj[rowIndex, colIndex] = newValue</code></p>
+            <p class="- topic/p p">rowIndex 是标量或数据对，若是数据对，当不指定开始的索引时，表示第 0 行开始；当结束的索引不指定时，表示到最后一行结束。rowIndex
+                可以省略。省略时代表所有行中对应的 colIndex 位置的数据都要修改。</p>
+            <p class="- topic/p p">colIndex 是标量或数据对，不可省略。当是数据对时，数据对的开始和结束索引不可省略。</p>
+            <p class="- topic/p p">newValue 是标量、向量或元组：</p>
+            <ul class="- topic/ul ul" id="topic_lzy_hy5_h1c__ul_ewl_jy5_h1c" data-ofbid="topic_lzy_hy5_h1c__ul_ewl_jy5_h1c">
+                <li class="- topic/li li">
+                    <p class="- topic/p p">newValue 是一个标量时，所有通过 rowIndex 和 colIndex 指定的数据都会修改为 newValue；</p>
+                </li>
+                <li class="- topic/li li">
+                    <p class="- topic/p p">newValue 是与 colIndex 相同长度的标量或元组时，每一行中由 colIndex 指定的数据都会对应替换为该向量或元组的值；</p>
+                </li>
+                <li class="- topic/li li">
+                    <p class="- topic/p p">newValue 是长度与 rowIndex 相同的向量或元组时，其中 newValue 的元素为标量或者长度与 colIndex
+                        相同的数组，每一行中的数据会替换为 newValue 中对应位置的元素。</p>
+                </li>
+            </ul>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="topic_lzy_hy5_h1c__codeblock_nzh_ly5_h1c" data-ofbid="topic_lzy_hy5_h1c__codeblock_nzh_ly5_h1c"><code>// 创建列式元组 ctp
+ctp = [1 2 3 4, 5 6 7 8 , 9 10 11 12].setColumnarTuple!()
+print ctp 
+// output
+([1,2,3,4],[5,6,7,8],[9,10,11,12])
+
+// 修改第0行、第1列的数据为 50
+ctp[0,1] = 50
+print ctp 
+// output
+([1,50,3,4],[5,6,7,8],[9,10,11,12])
+
+// 修改第0到1行中第1到2列的数据为 100 200
+ctp[0:2, 1:3] = 100 200
+print ctp
+// output
+([1,100,200,4],[5,100,200,8],[9,10,11,12])
+
+// 修改第0到1行中第1到2列的数据为 300 400，省略行索引的起始索引值
+ctp[:2, 1:3] = 300 400
+print ctp
+// output
+([1,300,400,4],[5,300,400,8],[9,10,11,12])
+
+// 修改第0行中第1到2列的数据为 500 600，修改第1行中第1到2列的数据为 700 800
+ctp[0:2, 1:3] = (500 600, 700 800)
+print ctp
+// output
+([1,500,600,4],[5,700,800,8],[9,10,11,12])
+
+// 修改所有行中第1到2列的数据为 900 1000
+ctp[, 1:3] = 900 1000
+print ctp
+// output
+([1,900,1000,4],[5,900,1000,8],[9,900,1000,12])</code></pre>
+        </div>
+    </article>
+    <article class="- topic/topic topic nested1" aria-labelledby="ariaid-title7" id="列式元组按行计算">
+        <h2 class="- topic/title title topictitle2" id="ariaid-title7">列式元组按行计算</h2>
+        <div class="- topic/body body">
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="列式元组按行计算__codeblock_qhv_5hn_ryb" data-ofbid="列式元组按行计算__codeblock_qhv_5hn_ryb"><code>ctp = [[1.3,2.5,2.3], [4.1,5.3], 6.3].setColumnarTuple!()
+rowSum(ctp)
+// output
+[6.1,9.4,6.3]</code></pre>
+        </div>
+    </article>
+    <article class="- topic/topic topic nested1" aria-labelledby="ariaid-title8" id="创建一个列为列式元组的内存表">
+        <h2 class="- topic/title title topictitle2" id="ariaid-title8">创建一个列为列式元组的内存表</h2>
+        <div class="- topic/body body">
+            <p class="- topic/p p" id="创建一个列为列式元组的内存表__p_rhv_5hn_ryb" data-ofbid="创建一个列为列式元组的内存表__p_rhv_5hn_ryb">创建内存表时，DolphinDB 支持将元素不等长的普通元组存储为列式元组。</p>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="创建一个列为列式元组的内存表__codeblock_shv_5hn_ryb" data-ofbid="创建一个列为列式元组的内存表__codeblock_shv_5hn_ryb"><code>sym = `st1`st2`st3
+price = [[3.1,2.5,2.8], [3.1,3.3], [3.2,2.9,3.3]]
+t = table(sym, price)
+t;</code></pre>
+            <div class="table-container"><table class="- topic/table table frame-all" id="创建一个列为列式元组的内存表__table_ft3_vsz_h1c" data-ofbid="创建一个列为列式元组的内存表__table_ft3_vsz_h1c" data-cols="2"><caption></caption><colgroup><col style="width:50%"/><col style="width:50%"/></colgroup><thead class="- topic/thead thead">
+                        <tr class="- topic/row">
+                            <th class="- topic/entry entry align-left colsep-1 rowsep-1" id="创建一个列为列式元组的内存表__table_ft3_vsz_h1c__entry__1">sym</th>
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-1" id="创建一个列为列式元组的内存表__table_ft3_vsz_h1c__entry__2">price</th>
+                        </tr>
+                    </thead><tbody class="- topic/tbody tbody">
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-1 rowsep-1" headers="创建一个列为列式元组的内存表__table_ft3_vsz_h1c__entry__1">st1</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-1" headers="创建一个列为列式元组的内存表__table_ft3_vsz_h1c__entry__2">[3.1,2.5,2.8]</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-1 rowsep-1" headers="创建一个列为列式元组的内存表__table_ft3_vsz_h1c__entry__1">st2</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-1" headers="创建一个列为列式元组的内存表__table_ft3_vsz_h1c__entry__2">[3.1,3.3]</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-1 rowsep-0" headers="创建一个列为列式元组的内存表__table_ft3_vsz_h1c__entry__1">st3</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="创建一个列为列式元组的内存表__table_ft3_vsz_h1c__entry__2">[3.2,2.9,3.3]</td>
+                        </tr>
+                    </tbody></table></div>
+            <div class="- topic/note note note note_note" id="创建一个列为列式元组的内存表__note_y5k_5g3_5yb" data-ofbid="创建一个列为列式元组的内存表__note_y5k_5g3_5yb"><span class="note__title">注：</span> 对于元素等长的普通元组，必须调用 setColumnarTuple!() 转换为列式元组 。</div>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="创建一个列为列式元组的内存表__codeblock_uhv_5hn_ryb" data-ofbid="创建一个列为列式元组的内存表__codeblock_uhv_5hn_ryb"><code>id = 1 2 3
+val = [[1,2,3], [4,5,6],[7,8,9]]
+table(id, val)</code></pre>
+            <div class="table-container"><table class="- topic/table table frame-all" id="创建一个列为列式元组的内存表__table_bxv_1tz_h1c" data-ofbid="创建一个列为列式元组的内存表__table_bxv_1tz_h1c" data-cols="4"><caption class="- topic/title title tablecap" data-caption-side="top" data-is-repeated="true"><span class="table--title-label">表<span class="table--title-label-number"> 1</span><span class="table--title-label-punctuation">. </span></span><span class="table--title"></span></caption><colgroup><col style="width:25%"/><col style="width:25%"/><col style="width:25%"/><col style="width:25%"/></colgroup><thead class="- topic/thead thead">
+                        <tr class="- topic/row">
+                            <th class="- topic/entry entry align-left colsep-1 rowsep-1" id="创建一个列为列式元组的内存表__table_bxv_1tz_h1c__entry__1">id</th>
+                            <th class="- topic/entry entry align-left colsep-1 rowsep-1" id="创建一个列为列式元组的内存表__table_bxv_1tz_h1c__entry__2">col1</th>
+                            <th class="- topic/entry entry align-left colsep-1 rowsep-1" id="创建一个列为列式元组的内存表__table_bxv_1tz_h1c__entry__3">col2</th>
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-1" id="创建一个列为列式元组的内存表__table_bxv_1tz_h1c__entry__4">col3</th>
+                        </tr>
+                    </thead><tbody class="- topic/tbody tbody">
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-1 rowsep-1" headers="创建一个列为列式元组的内存表__table_bxv_1tz_h1c__entry__1">1</td>
+                            <td class="- topic/entry entry align-left colsep-1 rowsep-1" headers="创建一个列为列式元组的内存表__table_bxv_1tz_h1c__entry__2">1</td>
+                            <td class="- topic/entry entry align-left colsep-1 rowsep-1" headers="创建一个列为列式元组的内存表__table_bxv_1tz_h1c__entry__3">4</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-1" headers="创建一个列为列式元组的内存表__table_bxv_1tz_h1c__entry__4">7</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-1 rowsep-1" headers="创建一个列为列式元组的内存表__table_bxv_1tz_h1c__entry__1">2</td>
+                            <td class="- topic/entry entry align-left colsep-1 rowsep-1" headers="创建一个列为列式元组的内存表__table_bxv_1tz_h1c__entry__2">2</td>
+                            <td class="- topic/entry entry align-left colsep-1 rowsep-1" headers="创建一个列为列式元组的内存表__table_bxv_1tz_h1c__entry__3">5</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-1" headers="创建一个列为列式元组的内存表__table_bxv_1tz_h1c__entry__4">8</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-1 rowsep-0" headers="创建一个列为列式元组的内存表__table_bxv_1tz_h1c__entry__1">3</td>
+                            <td class="- topic/entry entry align-left colsep-1 rowsep-0" headers="创建一个列为列式元组的内存表__table_bxv_1tz_h1c__entry__2">3</td>
+                            <td class="- topic/entry entry align-left colsep-1 rowsep-0" headers="创建一个列为列式元组的内存表__table_bxv_1tz_h1c__entry__3">6</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="创建一个列为列式元组的内存表__table_bxv_1tz_h1c__entry__4">9</td>
+                        </tr>
+                    </tbody></table></div>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="创建一个列为列式元组的内存表__codeblock_ypw_ysz_h1c" data-ofbid="创建一个列为列式元组的内存表__codeblock_ypw_ysz_h1c"><code>table(id, val.setColumnarTuple!())</code></pre>
+            <div class="table-container"><table class="- topic/table table frame-all" id="创建一个列为列式元组的内存表__table_ipf_2tz_h1c" data-ofbid="创建一个列为列式元组的内存表__table_ipf_2tz_h1c" data-cols="2"><caption class="- topic/title title tablecap" data-caption-side="top" data-is-repeated="true"><span class="table--title-label">表<span class="table--title-label-number"> 2</span><span class="table--title-label-punctuation">. </span></span><span class="table--title"></span></caption><colgroup><col style="width:50%"/><col style="width:50%"/></colgroup><thead class="- topic/thead thead">
+                        <tr class="- topic/row">
+                            <th class="- topic/entry entry align-left colsep-1 rowsep-1" id="创建一个列为列式元组的内存表__table_ipf_2tz_h1c__entry__1">id</th>
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-1" id="创建一个列为列式元组的内存表__table_ipf_2tz_h1c__entry__2">val</th>
+                        </tr>
+                    </thead><tbody class="- topic/tbody tbody">
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-1 rowsep-1" headers="创建一个列为列式元组的内存表__table_ipf_2tz_h1c__entry__1">1</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-1" headers="创建一个列为列式元组的内存表__table_ipf_2tz_h1c__entry__2">[1,2,3]</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-1 rowsep-1" headers="创建一个列为列式元组的内存表__table_ipf_2tz_h1c__entry__1">2</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-1" headers="创建一个列为列式元组的内存表__table_ipf_2tz_h1c__entry__2">[4,5,6]</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-1 rowsep-0" headers="创建一个列为列式元组的内存表__table_ipf_2tz_h1c__entry__1">3</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="创建一个列为列式元组的内存表__table_ipf_2tz_h1c__entry__2">[7,8,9]</td>
+                        </tr>
+                    </tbody></table></div>
+        </div>
+    </article>
+</article></main></div>
+                        
+                        
+                        
+                        
+                        
+                        
+                    </div>
+                    
+                        <nav role="navigation" id="wh_topic_toc" aria-label="On this page" class="col-lg-2 d-none d-lg-block navbar d-print-none"> 
+                            <div id="wh_topic_toc_content">
+		                        
+	                            <div class=" wh_topic_toc "><div class="wh_topic_label">在本页上</div><ul><li class="topic-item"><a href="#%E6%A6%82%E8%BF%B0" data-tocid="概述">概述</a></li><li class="topic-item"><a href="#%E5%88%9B%E5%BB%BA%E5%88%97%E5%BC%8F%E5%85%83%E7%BB%84" data-tocid="创建列式元组">创建列式元组</a></li><li class="topic-item"><a href="#%E8%AE%BF%E9%97%AE%E5%88%97%E5%BC%8F%E5%85%83%E7%BB%84" data-tocid="访问列式元组">访问列式元组</a></li><li class="topic-item"><a href="#%E8%BF%BD%E5%8A%A0%E6%95%B0%E6%8D%AE%E5%88%B0%E5%88%97%E5%BC%8F%E5%85%83%E7%BB%84" data-tocid="追加数据到列式元组">追加数据到列式元组</a></li><li class="topic-item"><a href="#topic_lzy_hy5_h1c" data-tocid="topic_lzy_hy5_h1c">修改列式元组中的数据</a></li><li class="topic-item"><a href="#%E5%88%97%E5%BC%8F%E5%85%83%E7%BB%84%E6%8C%89%E8%A1%8C%E8%AE%A1%E7%AE%97" data-tocid="列式元组按行计算">列式元组按行计算</a></li><li class="topic-item"><a href="#%E5%88%9B%E5%BB%BA%E4%B8%80%E4%B8%AA%E5%88%97%E4%B8%BA%E5%88%97%E5%BC%8F%E5%85%83%E7%BB%84%E7%9A%84%E5%86%85%E5%AD%98%E8%A1%A8" data-tocid="创建一个列为列式元组的内存表">创建一个列为列式元组的内存表</a></li></ul></div>
+	                        	
+                        	</div>
+                        </nav>
+                    
+                </div>
+            </div>
+            
+            
+            
+        </div> 
+        <footer class="navbar navbar-default wh_footer">
+  <div class=" footer-container mx-auto ">
+<title>Copyright</title><p><b> ©2024 浙江智臾科技有限公司 浙ICP备18048711号-3</b></p>
+  </div>
+</footer>
+        
+        <div id="go2top" class="d-print-none">
+            <span class="oxy-icon oxy-icon-up"></span>
+        </div>
+        
+        <div id="modal_img_large" class="modal">
+            <span class="close oxy-icon oxy-icon-remove"></span>
+            <div id="modal_img_container"></div>
+            <div id="caption"></div>
+        </div>
+        
+        
+        
+    </body>
+</html>

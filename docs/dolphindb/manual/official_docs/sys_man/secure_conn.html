@@ -1,0 +1,242 @@
+<!DOCTYPE html><html xmlns="http://www.w3.org/1999/xhtml" xml:lang="zh" lang="zh" data-whc_version="26.0">
+    <head><link rel="shortcut icon" href="../favicon.ico"/><link rel="icon" href="../favicon.ico"/><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><meta http-equiv="X-UA-Compatible" content="IE=edge"/><meta name="description" content="DolphinDB 支持 Web 上 HTTPS 安全通信。 DolphinDB 可以设置 Web 集群管理器的访问权限。DolphinDB 第一次启动时，系统会自动创建用户名称为 &#34;admin&#34;，密码为 &#34;123456&#34; 的管理员账号。 有关用户权限设置，请参考 用户权限管理 。 有两种方式启用 HTTPS： ..."/><meta name="DC.rights.owner" content="(C) 版权 2024"/><meta name="copyright" content="(C) 版权 2024"/><meta name="generator" content="DITA-OT"/><meta name="DC.type" content="topic"/><meta name="DC.coverage" content=""/><meta name="DC.relation" content="../sys_man/om_intro.html"/><meta name="prodname" content="DolphinDB"/><meta name="brand" content="DolphinDB"/><meta name="DC.creator" content="DolphinDB"/><meta name="DC.publisher" content="DDB N/A DDB 200"/><meta name="DC.format" content="HTML5"/><meta name="DC.identifier" content="安全通信"/><title>安全通信</title><!--  Generated with Oxygen version 26.0, build number 2024012323.  --><meta name="wh-path2root" content="../"/><meta name="wh-toc-id" content="安全通信-d9529e8376"/><meta name="wh-source-relpath" content="sys_man/secure_conn.dita"/><meta name="wh-out-relpath" content="sys_man/secure_conn.html"/>
+
+    <link rel="stylesheet" type="text/css" href="../oxygen-webhelp/app/commons.css?buildId=2024012323"/>
+    <link rel="stylesheet" type="text/css" href="../oxygen-webhelp/app/topic.css?buildId=2024012323"/>
+
+    <script src="../oxygen-webhelp/app/options/properties.js?buildId=20240704100525"></script>
+    <script src="../oxygen-webhelp/app/localization/strings.js?buildId=2024012323"></script>
+    <script src="../oxygen-webhelp/app/search/index/keywords.js?buildId=20240704100525"></script>
+    <script defer="defer" src="../oxygen-webhelp/app/commons.js?buildId=2024012323"></script>
+    <script defer="defer" src="../oxygen-webhelp/app/topic.js?buildId=2024012323"></script>
+<link rel="stylesheet" type="text/css" href="../oxygen-webhelp/template/styles.css?buildId=2024012323"/><script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script><script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script></head>
+
+    <body id="安全通信" class="wh_topic_page frmBody">
+        <a href="#wh_topic_body" class="sr-only sr-only-focusable">
+            跳转到主要内容
+        </a>
+        
+        
+        
+        
+        <header class="navbar navbar-default wh_header">
+    <div class="container-fluid">
+        <div xmlns:whc="http://www.oxygenxml.com/webhelp/components" class="wh_header_flex_container navbar-nav navbar-expand-md navbar-dark">
+            <div class="wh_logo_and_publication_title_container">
+                <div class="wh_logo_and_publication_title">
+                    
+                    <a href="https://www.dolphindb.cn" class=" wh_logo d-none d-sm-block "><img src="../logo.png" alt="  DolphinDB 文档中心  "/></a>
+                    <div class=" wh_publication_title "><a href="../index.html"><span class="booktitle">  <span class="ph mainbooktitle">DolphinDB 文档中心</span>  </span></a></div>
+                    
+                </div>
+                
+                
+            </div>
+
+            <div class="wh_top_menu_and_indexterms_link collapse navbar-collapse" id="wh_top_menu_and_indexterms_link">
+                
+                
+                
+                
+            </div>
+        <div class=" wh_search_input navbar-form wh_topic_page_search search " role="form">
+            
+            
+            
+            <form id="searchForm" method="get" role="search" action="../search.html"><div><input type="search" placeholder="搜索 " class="wh_search_textfield" id="textToSearch" name="searchQuery" aria-label="搜索查询" required="required"/><button type="submit" class="wh_search_button" aria-label="搜索"><span class="search_input_text">搜索</span></button></div></form>
+            
+            <script src="/vendors/react/umd/react.production.min.js" defer="defer"></script>
+<script src="/vendors/react-dom/umd/react-dom.production.min.js" defer="defer"></script>
+<script src="/vendors/dayjs/dayjs.min.js" defer="defer"></script>
+<script src="/vendors/antd/dist/antd.min.js" defer="defer"></script>
+<script src="/vendors/@ant-design/icons/dist/index.umd.min.js" defer="defer"></script>
+<script src="/zh/index.js" type="module"></script>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js" defer="defer"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML" defer="defer"><!--
+
+
+--></script>
+
+            
+        </div></div>
+    </div>
+</header>
+        
+        
+         
+        
+        
+        
+        <div class="container-fluid" id="wh_topic_container">
+            <div class="row">
+
+                <nav class="wh_tools d-print-none navbar-expand-md" aria-label="Tools">
+                    
+                    <div data-tooltip-position="bottom" class=" wh_breadcrumb "><ol class="d-print-none"><li><span class="home"><a href="../index.html"><span>主页</span></a></span></li><li><div class="topicref" data-id="chap7_tutorials_system_management"><div class="title"><a href="../sys_man/om_intro.html"><span class="keyword label">系统运维</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 的系统运维功能及方法</p></div></div></div></li><li><div class="topicref"><div class="title"><a href="../sys_man/bak_resto.html">安全与容灾</a></div></div></li><li class="active"><div class="topicref" data-id="安全通信"><div class="title"><a href="../sys_man/secure_conn.html">安全通信</a></div></div></li></ol></div>
+                    
+                    
+                    
+                    <div class="wh_right_tools">
+                        <button class="wh_hide_highlight" aria-label="切换搜索突出显示" title="切换搜索突出显示"></button>
+                        <button class="webhelp_expand_collapse_sections" data-next-state="collapsed" aria-label="折叠截面" title="折叠截面"></button>
+                        
+                        
+                        
+                        
+                        <div class=" wh_print_link print d-none d-md-inline-block "><button onClick="window.print()" title="打印此页" aria-label="打印此页"></button></div>
+                        
+                        <button type="button" id="wh_toc_button" class="custom-toggler navbar-toggler collapsed wh_toggle_button navbar-light" aria-expanded="false" aria-label="Toggle publishing table of content" aria-controls="wh_publication_toc">
+                            <span class="navbar-toggler-icon"></span>
+                        </button>
+                    </div>
+                    
+                </nav>
+            </div>
+            
+            
+            
+            
+            <div class="wh_content_area">
+                <div class="row">
+                    
+                        <nav id="wh_publication_toc" class="col-lg-3 col-md-3 col-sm-12 d-md-block d-none d-print-none" aria-label="Table of Contents Container">
+                            <div id="wh_publication_toc_content">
+		                        
+                            	<div class=" wh_publication_toc " data-tooltip-position="right"><span class="expand-button-action-labels"><span id="button-expand-action" role="button" aria-label="Expand"></span><span id="button-collapse-action" role="button" aria-label="Collapse"></span><span id="button-pending-action" role="button" aria-label="Pending"></span></span><ul role="tree" aria-label="Table of Contents"><li role="treeitem"><div data-tocid="new_chap_about_sect_ddb_docs_intro-d9529e87" class="topicref" data-id="new_chap_about_sect_ddb_docs_intro" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../about/ddb_docs_intro.html" id="new_chap_about_sect_ddb_docs_intro-d9529e87-link">文档使用说明</a><div class="wh-tooltip"><p class="shortdesc">如何获取 DolphinDB 帮助信息</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="chap1_getstarted-d9529e140" class="topicref" data-id="chap1_getstarted" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action chap1_getstarted-d9529e140-link" class="wh-expand-btn"></span><div class="title"><a href="../getstarted/chap1_getstarted.html" id="chap1_getstarted-d9529e140-link"><span class="keyword label">快速上手</span></a><div class="wh-tooltip"><p class="shortdesc">如何快速部署 DolphinDB、建库建表、写入和查询数据</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="sectionddb_deployment-d9529e335" class="topicref" data-id="sectionddb_deployment" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action sectionddb_deployment-d9529e335-link" class="wh-expand-btn"></span><div class="title"><a href="../deploy/deploy_intro.html" id="sectionddb_deployment-d9529e335-link"><span class="keyword label">部署</span></a><div class="wh-tooltip"><p class="shortdesc">如何在不同的场景中部署 DolphinDB</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="new_chap_database_manage_new_chap_dbmanage_landing_page-d9529e2313" class="topicref" data-id="new_chap_database_manage_new_chap_dbmanage_landing_page" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action new_chap_database_manage_new_chap_dbmanage_landing_page-d9529e2313-link" class="wh-expand-btn"></span><div class="title"><a href="../db_distr_comp/cfg/db_intro.html" id="new_chap_database_manage_new_chap_dbmanage_landing_page-d9529e2313-link"><span class="keyword label">数据库</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 数据库的基本概念</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="chap7_tutorials_streaming-d9529e3490" class="topicref" data-id="chap7_tutorials_streaming" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action chap7_tutorials_streaming-d9529e3490-link" class="wh-expand-btn"></span><div class="title"><a href="../stream/str_intro.html" id="chap7_tutorials_streaming-d9529e3490-link"><span class="keyword label">流数据</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 流数据引擎及流数据计算的基本概念</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="tocId-d9529e7385" class="topicref" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action tocId-d9529e7385-link" class="wh-expand-btn"></span><div class="title"><a href="../db_distr_comp/db_oper/import_data.html" id="tocId-d9529e7385-link">数据迁移</a><div class="wh-tooltip"><p class="shortdesc">如何从不同数据源向 DolphinDB 迁移数据</p></div></div></div></li><li role="treeitem" aria-expanded="true"><div data-tocid="chap7_tutorials_system_management-d9529e7812" class="topicref" data-id="chap7_tutorials_system_management" data-state="expanded"><span role="button" tabindex="0" aria-labelledby="button-collapse-action chap7_tutorials_system_management-d9529e7812-link" class="wh-expand-btn"></span><div class="title"><a href="../sys_man/om_intro.html" id="chap7_tutorials_system_management-d9529e7812-link"><span class="keyword label">系统运维</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 的系统运维功能及方法</p></div></div></div><ul role="group" class="navbar-nav nav-list"><li role="treeitem" aria-expanded="false"><div data-tocid="tocId-d9529e7865" class="topicref" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action tocId-d9529e7865-link" class="wh-expand-btn"></span><div class="title"><a href="../tutorials/scale_out_cluster.html" id="tocId-d9529e7865-link">集群管理</a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="tocId-d9529e8050" class="topicref" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action tocId-d9529e8050-link" class="wh-expand-btn"></span><div class="title"><a href="../tutorials/thread_model_SQL.html" id="tocId-d9529e8050-link">任务管理</a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="性能监控-d9529e8235" class="topicref" data-id="性能监控" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action 性能监控-d9529e8235-link" class="wh-expand-btn"></span><div class="title"><a href="../sys_man/perf_man.html" id="性能监控-d9529e8235-link"><span class="keyword label">运维监控</span></a></div></div></li><li role="treeitem" aria-expanded="true"><div data-tocid="tocId-d9529e8328" class="topicref" data-state="expanded"><span role="button" tabindex="0" aria-labelledby="button-collapse-action tocId-d9529e8328-link" class="wh-expand-btn"></span><div class="title"><a href="../sys_man/bak_resto.html" id="tocId-d9529e8328-link">安全与容灾</a></div></div><ul role="group" class="navbar-nav nav-list"><li role="treeitem"><div data-tocid="数据备份与恢复-d9529e8329" class="topicref" data-id="数据备份与恢复" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../sys_man/bak_resto.html" id="数据备份与恢复-d9529e8329-link"><span class="keyword label">数据备份与恢复</span></a></div></div></li><li role="treeitem" class="active"><div data-tocid="安全通信-d9529e8376" class="topicref" data-id="安全通信" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../sys_man/secure_conn.html" id="安全通信-d9529e8376-link">安全通信</a></div></div></li><li role="treeitem"><div data-tocid="安全关机-d9529e8422" class="topicref" data-id="安全关机" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../sys_man/shutdown.html" id="安全关机-d9529e8422-link">安全关机</a></div></div></li></ul></li><li role="treeitem" aria-expanded="false"><div data-tocid="tocId-d9529e8468" class="topicref" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action tocId-d9529e8468-link" class="wh-expand-btn"></span><div class="title"><a href="../tutorials/how_to_handle_crash.html" id="tocId-d9529e8468-link">故障排查</a></div></div></li></ul></li><li role="treeitem" aria-expanded="false"><div data-tocid="about_language_resources-d9529e16490" class="topicref" data-id="about_language_resources" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action about_language_resources-d9529e16490-link" class="wh-expand-btn"></span><div class="title"><a href="../progr/progr_intro.html" id="about_language_resources-d9529e16490-link"><span class="keyword label">编程语言</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 编程基本概念与方法、SQL 在 DolphinDB 的应用</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="functions_references-d9529e26503" class="topicref" data-id="functions_references" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action functions_references-d9529e26503-link" class="wh-expand-btn"></span><div class="title"><a href="../funcs/funcs_intro.html" id="functions_references-d9529e26503-link"><span class="keyword label">函数参考</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 函数分类、语法、详解及示例</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="api_protocol-d9529e86456" class="topicref" data-id="api_protocol" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action api_protocol-d9529e86456-link" class="wh-expand-btn"></span><div class="title"><a href="../api/connapi_intro.html" id="api_protocol-d9529e86456-link"><span class="keyword label">连接器 &amp; API</span></a><div class="wh-tooltip"><p class="shortdesc">面向不同编程语言的 DolphinDB API 及连接器，相关协议和用法</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="chap6_plugin-d9529e91976" class="topicref" data-id="chap6_plugin" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action chap6_plugin-d9529e91976-link" class="wh-expand-btn"></span><div class="title"><a href="../plugins/plg_intro.html" id="chap6_plugin-d9529e91976-link"><span class="keyword label">插件</span></a><div class="wh-tooltip"><p class="shortdesc">多个应用场景的插件使用说明和插件开发指导</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="third_party-d9529e94749" class="topicref" data-id="third_party" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action third_party-d9529e94749-link" class="wh-expand-btn"></span><div class="title"><a href="../third_party.html" id="third_party-d9529e94749-link">第三方工具</a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="about_tutorials-d9529e94980" class="topicref" data-id="about_tutorials" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action about_tutorials-d9529e94980-link" class="wh-expand-btn"></span><div class="title"><a href="../tutorials/about_tutorials.html" id="about_tutorials-d9529e94980-link"><span class="keyword label">教程</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 产品使用教程</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="tocId-d9529e101769" class="topicref" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action tocId-d9529e101769-link" class="wh-expand-btn"></span><div class="title"><a href="../rn/server/3_00_1.html" id="tocId-d9529e101769-link">版本说明</a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 版本发布历史</p></div></div></div></li></ul></div>
+		                        
+                            </div>
+                        </nav>
+                    
+                    
+                    <div class="col-lg-7 col-md-9 col-sm-12" id="wh_topic_body">
+                        <button id="wh_close_publication_toc_button" class="close-toc-button d-none" aria-label="Toggle publishing table of content" aria-controls="wh_publication_toc" aria-expanded="true">
+                            <span class="close-toc-icon-container">
+                                <span class="close-toc-icon"></span>     
+                            </span>
+                        </button>
+                        <button id="wh_close_topic_toc_button" class="close-toc-button d-none" aria-label="Toggle topic table of content" aria-controls="wh_topic_toc" aria-expanded="true">
+                            <span class="close-toc-icon-container">
+                                <span class="close-toc-icon"></span>     
+                            </span>
+                        </button>
+                        
+                        <div class=" wh_topic_content body "><main role="main"><article class="- topic/topic topic" role="article" aria-labelledby="ariaid-title1">
+    <h1 class="- topic/title title topictitle1" id="ariaid-title1">安全通信</h1>
+    <div class="- topic/body body">
+        <p class="- topic/p p" id="安全通信__p_t5k_thn_ryb" data-ofbid="安全通信__p_t5k_thn_ryb">DolphinDB 支持 Web 上 HTTPS 安全通信。</p>
+    </div>
+    <article class="- topic/topic topic nested1" aria-labelledby="ariaid-title2" id="web访问权限">
+        <h2 class="- topic/title title topictitle2" id="ariaid-title2">Web访问权限</h2>
+        <div class="- topic/body body">
+            <p class="- topic/p p" id="web访问权限__p_u5k_thn_ryb" data-ofbid="web访问权限__p_u5k_thn_ryb">DolphinDB 可以设置 Web 集群管理器的访问权限。DolphinDB 第一次启动时，系统会自动创建用户名称为
+                "admin"，密码为 "123456" 的管理员账号。</p>
+            <p class="- topic/p p">有关用户权限设置，请参考 <a class="- topic/xref xref" href="../tutorials/ACL_and_Security.html">用户权限管理</a>。</p>
+        </div>
+    </article>
+    <article class="- topic/topic topic nested1" aria-labelledby="ariaid-title3" id="启用https">
+        <h2 class="- topic/title title topictitle2" id="ariaid-title3">启用 HTTPS</h2>
+        <div class="- topic/body body">
+            <p class="- topic/p p" id="启用https__p_v5k_thn_ryb" data-ofbid="启用https__p_v5k_thn_ryb">有两种方式启用 HTTPS：</p>
+            <ul class="- topic/ul ul" id="启用https__ul_w5k_thn_ryb" data-ofbid="启用https__ul_w5k_thn_ryb">
+                <li class="- topic/li li">
+                    <p class="- topic/p p" id="启用https__p_x5k_thn_ryb" data-ofbid="启用https__p_x5k_thn_ryb">在集群控制节点的配置文件（controller.cfg）中，加上"enableHTTPS=true"。</p>
+                </li>
+                <li class="- topic/li li">
+                    <p class="- topic/p p" id="启用https__p_y5k_thn_ryb" data-ofbid="启用https__p_y5k_thn_ryb">使用命令行启动集群控制节点时，加上"-enableHTTPS true"。</p>
+                    <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="启用https__codeblock_z5k_thn_ryb" data-ofbid="启用https__codeblock_z5k_thn_ryb"><code>./dolphindb -enableHTTPS true -home master -publicName www.psui.com -mode controller -localSite 192.168.1.30:8500:rh8500 -logFile ./log/master.log</code></pre>
+                </li>
+            </ul>
+        </div>
+    </article>
+    <article class="- topic/topic topic nested1" aria-labelledby="ariaid-title4" id="https证书">
+        <h2 class="- topic/title title topictitle2" id="ariaid-title4">HTTPS 证书</h2>
+        <div class="- topic/body body">
+            <p class="- topic/p p" id="https证书__p_avk_thn_ryb" data-ofbid="https证书__p_avk_thn_ryb">我们需要在DolphinDB的每台服务器上安装服务器身份验证证书来进行安全连接。控制节点和每个代理节点都需要安装证书。数据节点/计算节点使用同一台服务器上的代理节点的证书。</p>
+            <p class="- topic/p p" id="https证书__p_bvk_thn_ryb" data-ofbid="https证书__p_bvk_thn_ryb">
+                <em class="+ topic/ph hi-d/i ph i">使用证书颁发机构的身份验证证书：</em>
+            </p>
+            <p class="- topic/p p" id="https证书__p_cvk_thn_ryb" data-ofbid="https证书__p_cvk_thn_ryb">从证书颁发机构获取证书，把它重命名为server.crt，然后复制到控制节点主目录下的"keys"目录。如果"keys"目录不存在，我们需要手动创建。从证书颁发机构获取的证书不需要安装。</p>
+            <p class="- topic/p p" id="https证书__p_dvk_thn_ryb" data-ofbid="https证书__p_dvk_thn_ryb">
+                <em class="+ topic/ph hi-d/i ph i">按照以下步骤安装自签名证书：</em>
+            </p>
+            <ol class="- topic/ol ol" id="https证书__ol_xhz_dsc_nzb" data-ofbid="https证书__ol_xhz_dsc_nzb">
+                <li class="- topic/li li">
+                    <p class="- topic/p p" id="https证书__p_evk_thn_ryb" data-ofbid="https证书__p_evk_thn_ryb">把publicName设置为计算机的域名。</p>
+                    <p class="- topic/p p" id="https证书__p_fvk_thn_ryb" data-ofbid="https证书__p_fvk_thn_ryb">在集群控制节点的配置文件(controller.cfg)中加上"publicName=www.ABCD.com"，或者在命令行窗口启动控制节点时加上"-publicName
+                        www.ABCD.com"。</p>
+                </li>
+                <li class="- topic/li li">
+                    <p class="- topic/p p" id="https证书__p_gvk_thn_ryb" data-ofbid="https证书__p_gvk_thn_ryb">检查证书是否生成。</p>
+                    <p class="- topic/p p" id="https证书__p_hvk_thn_ryb" data-ofbid="https证书__p_hvk_thn_ryb">启动控制节点，并且检查证书文件server.crt和服务器的独立密钥serverPrivate.key是否存在主目录的“keys”目录下。</p>
+                </li>
+                <li class="- topic/li li">
+                    <p class="- topic/p p" id="https证书__p_ivk_thn_ryb" data-ofbid="https证书__p_ivk_thn_ryb">把自签名证书安装到浏览器的证书颁发机构。</p>
+                    <p class="- topic/p p" id="https证书__p_jvk_thn_ryb" data-ofbid="https证书__p_jvk_thn_ryb">在Google Chrome，选择 设置 -&gt; 高级 -&gt; 管理证书 -&gt; 颁发机构 -&gt;
+                        导入，把server.crt导入。</p>
+                    <p class="- topic/p p" id="https证书__p_kvk_thn_ryb" data-ofbid="https证书__p_kvk_thn_ryb">在浏览器地址栏中输入 <em class="+ topic/ph hi-d/i ph i">https://www.ABCD.com:8500/</em>
+                        连接到DolphinDB集群管理器，其中8500是控制节点的端口</p>
+                </li>
+            </ol>
+        </div>
+    </article>
+    <article class="- topic/topic topic nested1" aria-labelledby="ariaid-title5" id="sso单点登录">
+        <h2 class="- topic/title title topictitle2" id="ariaid-title5">SSO（单点登录）</h2>
+        <div class="- topic/body body">
+            <p class="- topic/p p" id="sso单点登录__p_mvk_thn_ryb" data-ofbid="sso单点登录__p_mvk_thn_ryb">DolphinDB 提供了两个用于 SSO 的函数：</p>
+            <ul class="- topic/ul ul" id="sso单点登录__ul_zsh_jsc_nzb" data-ofbid="sso单点登录__ul_zsh_jsc_nzb">
+                <li class="- topic/li li">
+                    <p class="- topic/p p" id="sso单点登录__p_nvk_thn_ryb" data-ofbid="sso单点登录__p_nvk_thn_ryb"><code class="+ topic/ph pr-d/codeph ph codeph">getAuthenticatedUserTicket()</code>：发行当前用户的加密
+                        ticket。</p>
+                </li>
+                <li class="- topic/li li">
+                    <p class="- topic/p p" id="sso单点登录__p_ovk_thn_ryb" data-ofbid="sso单点登录__p_ovk_thn_ryb"><code class="+ topic/ph pr-d/codeph ph codeph">authenticateByTicket(ticket)</code>：使用
+                            <code class="+ topic/ph pr-d/codeph ph codeph">getAuthenticatedUserTicket</code> 生成的 ticket 登录系统。</p>
+                </li>
+            </ul>
+        </div>
+    </article>
+</article></main></div>
+                        
+                        
+                        
+                        
+                        
+                        
+                    </div>
+                    
+                        <nav role="navigation" id="wh_topic_toc" aria-label="On this page" class="col-lg-2 d-none d-lg-block navbar d-print-none"> 
+                            <div id="wh_topic_toc_content">
+		                        
+	                            <div class=" wh_topic_toc "><div class="wh_topic_label">在本页上</div><ul><li class="topic-item"><a href="#web%E8%AE%BF%E9%97%AE%E6%9D%83%E9%99%90" data-tocid="web访问权限">Web访问权限</a></li><li class="topic-item"><a href="#%E5%90%AF%E7%94%A8https" data-tocid="启用https">启用 HTTPS</a></li><li class="topic-item"><a href="#https%E8%AF%81%E4%B9%A6" data-tocid="https证书">HTTPS 证书</a></li><li class="topic-item"><a href="#sso%E5%8D%95%E7%82%B9%E7%99%BB%E5%BD%95" data-tocid="sso单点登录">SSO（单点登录）</a></li></ul></div>
+	                        	
+                        	</div>
+                        </nav>
+                    
+                </div>
+            </div>
+            
+            
+            
+        </div> 
+        <footer class="navbar navbar-default wh_footer">
+  <div class=" footer-container mx-auto ">
+<title>Copyright</title><p><b> ©2024 浙江智臾科技有限公司 浙ICP备18048711号-3</b></p>
+  </div>
+</footer>
+        
+        <div id="go2top" class="d-print-none">
+            <span class="oxy-icon oxy-icon-up"></span>
+        </div>
+        
+        <div id="modal_img_large" class="modal">
+            <span class="close oxy-icon oxy-icon-remove"></span>
+            <div id="modal_img_container"></div>
+            <div id="caption"></div>
+        </div>
+        
+        
+        
+    </body>
+</html>

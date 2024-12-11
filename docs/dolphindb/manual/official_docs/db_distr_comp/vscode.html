@@ -1,0 +1,838 @@
+<!DOCTYPE html><html xmlns="http://www.w3.org/1999/xhtml" xml:lang="zh" lang="zh" data-whc_version="26.0">
+    <head><link rel="shortcut icon" href="../favicon.ico"/><link rel="icon" href="../favicon.ico"/><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><meta http-equiv="X-UA-Compatible" content="IE=edge"/><meta name="description" content="VS Code 是微软开发的一款轻便又有极强扩展性的代码编辑器。它提供强大的插件框架，可通过插件支持不同编程语言，达到语法高亮、智能语法提示以及代码运行等效果。 DolphinDB 开发了针对 Dolphin Script 的 VS Code 插件。用户可以通过该插件编写并执行脚本来操作 DolphinDB 数据库，或查看数据库中的数据。该插件具备以下主要功能： 代码高亮。 ..."/><meta name="DC.rights.owner" content="(C) 版权 2024"/><meta name="copyright" content="(C) 版权 2024"/><meta name="generator" content="DITA-OT"/><meta name="DC.type" content="topic"/><meta name="DC.coverage" content=""/><meta name="DC.subject" content="VSCode,VS Code,VSCode插件,VS Code 插件"/><meta name="keywords" content="VSCode, VS Code, VSCode插件, VS Code 插件"/><meta name="indexterms" content="VSCode, VS Code, VSCode插件, VS Code 插件"/><meta name="DC.relation" content="../db_distr_comp/clients.html"/><meta name="prodname" content="DolphinDB"/><meta name="brand" content="DolphinDB"/><meta name="DC.creator" content="DolphinDB"/><meta name="DC.publisher" content="DDB N/A DDB 200"/><meta name="DC.format" content="HTML5"/><meta name="DC.identifier" content="vscode_client"/><title>VS Code 插件</title><!--  Generated with Oxygen version 26.0, build number 2024012323.  --><meta name="wh-path2root" content="../"/><meta name="wh-toc-id" content="vscode_client-d9529e1848"/><meta name="wh-source-relpath" content="db_distr_comp/vscode.dita"/><meta name="wh-out-relpath" content="db_distr_comp/vscode.html"/>
+
+    <link rel="stylesheet" type="text/css" href="../oxygen-webhelp/app/commons.css?buildId=2024012323"/>
+    <link rel="stylesheet" type="text/css" href="../oxygen-webhelp/app/topic.css?buildId=2024012323"/>
+
+    <script src="../oxygen-webhelp/app/options/properties.js?buildId=20240704100525"></script>
+    <script src="../oxygen-webhelp/app/localization/strings.js?buildId=2024012323"></script>
+    <script src="../oxygen-webhelp/app/search/index/keywords.js?buildId=20240704100525"></script>
+    <script defer="defer" src="../oxygen-webhelp/app/commons.js?buildId=2024012323"></script>
+    <script defer="defer" src="../oxygen-webhelp/app/topic.js?buildId=2024012323"></script>
+<link rel="stylesheet" type="text/css" href="../oxygen-webhelp/template/styles.css?buildId=2024012323"/><script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script><script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script></head>
+
+    <body id="vscode_client" class="wh_topic_page frmBody">
+        <a href="#wh_topic_body" class="sr-only sr-only-focusable">
+            跳转到主要内容
+        </a>
+        
+        
+        
+        
+        <header class="navbar navbar-default wh_header">
+    <div class="container-fluid">
+        <div xmlns:whc="http://www.oxygenxml.com/webhelp/components" class="wh_header_flex_container navbar-nav navbar-expand-md navbar-dark">
+            <div class="wh_logo_and_publication_title_container">
+                <div class="wh_logo_and_publication_title">
+                    
+                    <a href="https://www.dolphindb.cn" class=" wh_logo d-none d-sm-block "><img src="../logo.png" alt="  DolphinDB 文档中心  "/></a>
+                    <div class=" wh_publication_title "><a href="../index.html"><span class="booktitle">  <span class="ph mainbooktitle">DolphinDB 文档中心</span>  </span></a></div>
+                    
+                </div>
+                
+                
+            </div>
+
+            <div class="wh_top_menu_and_indexterms_link collapse navbar-collapse" id="wh_top_menu_and_indexterms_link">
+                
+                
+                
+                
+            </div>
+        <div class=" wh_search_input navbar-form wh_topic_page_search search " role="form">
+            
+            
+            
+            <form id="searchForm" method="get" role="search" action="../search.html"><div><input type="search" placeholder="搜索 " class="wh_search_textfield" id="textToSearch" name="searchQuery" aria-label="搜索查询" required="required"/><button type="submit" class="wh_search_button" aria-label="搜索"><span class="search_input_text">搜索</span></button></div></form>
+            
+            <script src="/vendors/react/umd/react.production.min.js" defer="defer"></script>
+<script src="/vendors/react-dom/umd/react-dom.production.min.js" defer="defer"></script>
+<script src="/vendors/dayjs/dayjs.min.js" defer="defer"></script>
+<script src="/vendors/antd/dist/antd.min.js" defer="defer"></script>
+<script src="/vendors/@ant-design/icons/dist/index.umd.min.js" defer="defer"></script>
+<script src="/zh/index.js" type="module"></script>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js" defer="defer"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML" defer="defer"><!--
+
+
+--></script>
+
+            
+        </div></div>
+    </div>
+</header>
+        
+        
+         
+        
+        
+        
+        <div class="container-fluid" id="wh_topic_container">
+            <div class="row">
+
+                <nav class="wh_tools d-print-none navbar-expand-md" aria-label="Tools">
+                    
+                    <div data-tooltip-position="bottom" class=" wh_breadcrumb "><ol class="d-print-none"><li><span class="home"><a href="../index.html"><span>主页</span></a></span></li><li><div class="topicref" data-id="sectionddb_deployment"><div class="title"><a href="../deploy/deploy_intro.html"><span class="keyword label">部署</span></a><div class="wh-tooltip"><p class="shortdesc">如何在不同的场景中部署 DolphinDB</p></div></div></div></li><li><div class="topicref" data-id="chap1_sect_using_clients"><div class="title"><a href="../db_distr_comp/clients.html">数据库管理工具</a></div></div></li><li class="active"><div class="topicref" data-id="vscode_client"><div class="title"><a href="../db_distr_comp/vscode.html"><span class="keyword label">VS Code 插件</span></a></div></div></li></ol></div>
+                    
+                    
+                    
+                    <div class="wh_right_tools">
+                        <button class="wh_hide_highlight" aria-label="切换搜索突出显示" title="切换搜索突出显示"></button>
+                        <button class="webhelp_expand_collapse_sections" data-next-state="collapsed" aria-label="折叠截面" title="折叠截面"></button>
+                        
+                        
+                        
+                        
+                        <div class=" wh_print_link print d-none d-md-inline-block "><button onClick="window.print()" title="打印此页" aria-label="打印此页"></button></div>
+                        
+                        <button type="button" id="wh_toc_button" class="custom-toggler navbar-toggler collapsed wh_toggle_button navbar-light" aria-expanded="false" aria-label="Toggle publishing table of content" aria-controls="wh_publication_toc">
+                            <span class="navbar-toggler-icon"></span>
+                        </button>
+                    </div>
+                    
+                </nav>
+            </div>
+            
+            
+            
+            
+            <div class="wh_content_area">
+                <div class="row">
+                    
+                        <nav id="wh_publication_toc" class="col-lg-3 col-md-3 col-sm-12 d-md-block d-none d-print-none" aria-label="Table of Contents Container">
+                            <div id="wh_publication_toc_content">
+		                        
+                            	<div class=" wh_publication_toc " data-tooltip-position="right"><span class="expand-button-action-labels"><span id="button-expand-action" role="button" aria-label="Expand"></span><span id="button-collapse-action" role="button" aria-label="Collapse"></span><span id="button-pending-action" role="button" aria-label="Pending"></span></span><ul role="tree" aria-label="Table of Contents"><li role="treeitem"><div data-tocid="new_chap_about_sect_ddb_docs_intro-d9529e87" class="topicref" data-id="new_chap_about_sect_ddb_docs_intro" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../about/ddb_docs_intro.html" id="new_chap_about_sect_ddb_docs_intro-d9529e87-link">文档使用说明</a><div class="wh-tooltip"><p class="shortdesc">如何获取 DolphinDB 帮助信息</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="chap1_getstarted-d9529e140" class="topicref" data-id="chap1_getstarted" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action chap1_getstarted-d9529e140-link" class="wh-expand-btn"></span><div class="title"><a href="../getstarted/chap1_getstarted.html" id="chap1_getstarted-d9529e140-link"><span class="keyword label">快速上手</span></a><div class="wh-tooltip"><p class="shortdesc">如何快速部署 DolphinDB、建库建表、写入和查询数据</p></div></div></div></li><li role="treeitem" aria-expanded="true"><div data-tocid="sectionddb_deployment-d9529e335" class="topicref" data-id="sectionddb_deployment" data-state="expanded"><span role="button" tabindex="0" aria-labelledby="button-collapse-action sectionddb_deployment-d9529e335-link" class="wh-expand-btn"></span><div class="title"><a href="../deploy/deploy_intro.html" id="sectionddb_deployment-d9529e335-link"><span class="keyword label">部署</span></a><div class="wh-tooltip"><p class="shortdesc">如何在不同的场景中部署 DolphinDB</p></div></div></div><ul role="group" class="navbar-nav nav-list"><li role="treeitem" aria-expanded="false"><div data-tocid="tocId-d9529e388" class="topicref" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action tocId-d9529e388-link" class="wh-expand-btn"></span><div class="title"><a href="../tutorials/standalone_server.html" id="tocId-d9529e388-link">单节点部署与升级</a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="tocId-d9529e481" class="topicref" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action tocId-d9529e481-link" class="wh-expand-btn"></span><div class="title"><a href="../tutorials/single_machine_cluster_deploy.html" id="tocId-d9529e481-link">集群部署与升级</a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="tocId-d9529e666" class="topicref" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action tocId-d9529e666-link" class="wh-expand-btn"></span><div class="title"><a href="../tutorials/docker_single_deployment.html" id="tocId-d9529e666-link">云环境部署</a></div></div></li><li role="treeitem"><div data-tocid="linux-系统部署准备-d9529e943" class="topicref" data-id="linux-系统部署准备" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../tutorials/prep_linux_for_deploy.html" id="linux-系统部署准备-d9529e943-link">Linux 系统部署准备</a></div></div></li><li role="treeitem" aria-expanded="true"><div data-tocid="chap1_sect_using_clients-d9529e989" class="topicref" data-id="chap1_sect_using_clients" data-state="expanded"><span role="button" tabindex="0" aria-labelledby="button-collapse-action chap1_sect_using_clients-d9529e989-link" class="wh-expand-btn"></span><div class="title"><a href="../db_distr_comp/clients.html" id="chap1_sect_using_clients-d9529e989-link">数据库管理工具</a></div></div><ul role="group" class="navbar-nav nav-list"><li role="treeitem" aria-expanded="false"><div data-tocid="intro-d9529e1062" class="topicref" data-id="intro" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action intro-d9529e1062-link" class="wh-expand-btn"></span><div class="title"><a href="../db_distr_comp/db_man/web/intro.html" id="intro-d9529e1062-link"><span class="keyword label">Web 集群管理器</span></a></div></div></li><li role="treeitem" class="active"><div data-tocid="vscode_client-d9529e1848" class="topicref" data-id="vscode_client" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../db_distr_comp/vscode.html" id="vscode_client-d9529e1848-link"><span class="keyword label">VS Code 插件</span></a></div></div></li><li role="treeitem"><div data-tocid="gui_client-d9529e1922" class="topicref" data-id="gui_client" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../db_distr_comp/gui.html" id="gui_client-d9529e1922-link"><span class="keyword label">GUI 客户端</span></a></div></div></li><li role="treeitem"><div data-tocid="notebook_client-d9529e1983" class="topicref" data-id="notebook_client" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../db_distr_comp/jupyter.html" id="notebook_client-d9529e1983-link">Jupyter Notebook 客户端</a></div></div></li><li role="treeitem"><div data-tocid="terminal_client-d9529e2029" class="topicref" data-id="terminal_client" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../db_distr_comp/terminal.html" id="terminal_client-d9529e2029-link"><span class="keyword">DolphinDB 终端</span></a></div></div></li></ul></li><li role="treeitem" aria-expanded="false"><div data-tocid="parameters_configuration-d9529e2076" class="topicref" data-id="parameters_configuration" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action parameters_configuration-d9529e2076-link" class="wh-expand-btn"></span><div class="title"><a href="../db_distr_comp/cfg/para_cfg.html" id="parameters_configuration-d9529e2076-link"><span class="keyword label">参数配置</span></a></div></div></li></ul></li><li role="treeitem" aria-expanded="false"><div data-tocid="new_chap_database_manage_new_chap_dbmanage_landing_page-d9529e2313" class="topicref" data-id="new_chap_database_manage_new_chap_dbmanage_landing_page" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action new_chap_database_manage_new_chap_dbmanage_landing_page-d9529e2313-link" class="wh-expand-btn"></span><div class="title"><a href="../db_distr_comp/cfg/db_intro.html" id="new_chap_database_manage_new_chap_dbmanage_landing_page-d9529e2313-link"><span class="keyword label">数据库</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 数据库的基本概念</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="chap7_tutorials_streaming-d9529e3490" class="topicref" data-id="chap7_tutorials_streaming" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action chap7_tutorials_streaming-d9529e3490-link" class="wh-expand-btn"></span><div class="title"><a href="../stream/str_intro.html" id="chap7_tutorials_streaming-d9529e3490-link"><span class="keyword label">流数据</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 流数据引擎及流数据计算的基本概念</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="tocId-d9529e7385" class="topicref" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action tocId-d9529e7385-link" class="wh-expand-btn"></span><div class="title"><a href="../db_distr_comp/db_oper/import_data.html" id="tocId-d9529e7385-link">数据迁移</a><div class="wh-tooltip"><p class="shortdesc">如何从不同数据源向 DolphinDB 迁移数据</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="chap7_tutorials_system_management-d9529e7812" class="topicref" data-id="chap7_tutorials_system_management" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action chap7_tutorials_system_management-d9529e7812-link" class="wh-expand-btn"></span><div class="title"><a href="../sys_man/om_intro.html" id="chap7_tutorials_system_management-d9529e7812-link"><span class="keyword label">系统运维</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 的系统运维功能及方法</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="about_language_resources-d9529e16490" class="topicref" data-id="about_language_resources" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action about_language_resources-d9529e16490-link" class="wh-expand-btn"></span><div class="title"><a href="../progr/progr_intro.html" id="about_language_resources-d9529e16490-link"><span class="keyword label">编程语言</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 编程基本概念与方法、SQL 在 DolphinDB 的应用</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="functions_references-d9529e26503" class="topicref" data-id="functions_references" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action functions_references-d9529e26503-link" class="wh-expand-btn"></span><div class="title"><a href="../funcs/funcs_intro.html" id="functions_references-d9529e26503-link"><span class="keyword label">函数参考</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 函数分类、语法、详解及示例</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="api_protocol-d9529e86456" class="topicref" data-id="api_protocol" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action api_protocol-d9529e86456-link" class="wh-expand-btn"></span><div class="title"><a href="../api/connapi_intro.html" id="api_protocol-d9529e86456-link"><span class="keyword label">连接器 &amp; API</span></a><div class="wh-tooltip"><p class="shortdesc">面向不同编程语言的 DolphinDB API 及连接器，相关协议和用法</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="chap6_plugin-d9529e91976" class="topicref" data-id="chap6_plugin" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action chap6_plugin-d9529e91976-link" class="wh-expand-btn"></span><div class="title"><a href="../plugins/plg_intro.html" id="chap6_plugin-d9529e91976-link"><span class="keyword label">插件</span></a><div class="wh-tooltip"><p class="shortdesc">多个应用场景的插件使用说明和插件开发指导</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="third_party-d9529e94749" class="topicref" data-id="third_party" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action third_party-d9529e94749-link" class="wh-expand-btn"></span><div class="title"><a href="../third_party.html" id="third_party-d9529e94749-link">第三方工具</a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="about_tutorials-d9529e94980" class="topicref" data-id="about_tutorials" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action about_tutorials-d9529e94980-link" class="wh-expand-btn"></span><div class="title"><a href="../tutorials/about_tutorials.html" id="about_tutorials-d9529e94980-link"><span class="keyword label">教程</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 产品使用教程</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="tocId-d9529e101769" class="topicref" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action tocId-d9529e101769-link" class="wh-expand-btn"></span><div class="title"><a href="../rn/server/3_00_1.html" id="tocId-d9529e101769-link">版本说明</a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 版本发布历史</p></div></div></div></li></ul></div>
+		                        
+                            </div>
+                        </nav>
+                    
+                    
+                    <div class="col-lg-7 col-md-9 col-sm-12" id="wh_topic_body">
+                        <button id="wh_close_publication_toc_button" class="close-toc-button d-none" aria-label="Toggle publishing table of content" aria-controls="wh_publication_toc" aria-expanded="true">
+                            <span class="close-toc-icon-container">
+                                <span class="close-toc-icon"></span>     
+                            </span>
+                        </button>
+                        <button id="wh_close_topic_toc_button" class="close-toc-button d-none" aria-label="Toggle topic table of content" aria-controls="wh_topic_toc" aria-expanded="true">
+                            <span class="close-toc-icon-container">
+                                <span class="close-toc-icon"></span>     
+                            </span>
+                        </button>
+                        
+                        <div class=" wh_topic_content body "><main role="main"><article class="- topic/topic topic" role="article" aria-labelledby="ariaid-title1">
+    <h1 class="- topic/title title topictitle1" id="ariaid-title1"><span class="- topic/keyword keyword label">VS Code 插件</span></h1>
+    <div class="- topic/body body">
+        <p class="- topic/p p" id="vscode_client__p_hwl_54d_syb" data-ofbid="vscode_client__p_hwl_54d_syb">VS Code 是微软开发的一款轻便又有极强扩展性的代码编辑器。它提供强大的插件框架，可通过插件支持不同编程语言，达到语法高亮、智能语法提示以及代码运行等效果。</p>
+        <p class="- topic/p p">DolphinDB 开发了针对 Dolphin Script 的 VS Code 插件。用户可以通过该插件编写并执行脚本来操作 DolphinDB
+            数据库，或查看数据库中的数据。该插件具备以下主要功能：</p>
+        <ul class="- topic/ul ul" id="vscode_client__ul_il1_1k4_ryb" data-ofbid="vscode_client__ul_il1_1k4_ryb">
+            <li class="- topic/li li" id="vscode_client__li_jwl_54d_syb" data-ofbid="vscode_client__li_jwl_54d_syb">
+                <p class="- topic/p p" id="vscode_client__p_kwl_54d_syb" data-ofbid="vscode_client__p_kwl_54d_syb">代码高亮。</p>
+            </li>
+            <li class="- topic/li li" id="vscode_client__li_lwl_54d_syb" data-ofbid="vscode_client__li_lwl_54d_syb">
+                <p class="- topic/p p" id="vscode_client__p_mwl_54d_syb" data-ofbid="vscode_client__p_mwl_54d_syb">关键字、常量、内置函数的代码补全。</p>
+            </li>
+            <li class="- topic/li li" id="vscode_client__li_nwl_54d_syb" data-ofbid="vscode_client__li_nwl_54d_syb">
+                <p class="- topic/p p" id="vscode_client__p_owl_54d_syb" data-ofbid="vscode_client__p_owl_54d_syb">内置函数的文档提示、参数提示。</p>
+            </li>
+            <li class="- topic/li li" id="vscode_client__li_pwl_54d_syb" data-ofbid="vscode_client__li_pwl_54d_syb">
+                <p class="- topic/p p" id="vscode_client__p_qwl_54d_syb" data-ofbid="vscode_client__p_qwl_54d_syb">终端可以展示代码执行结果以及 <code class="+ topic/ph pr-d/codeph ph codeph">print</code> 函数输出的消息。</p>
+            </li>
+            <li class="- topic/li li" id="vscode_client__li_rwl_54d_syb" data-ofbid="vscode_client__li_rwl_54d_syb">
+                <p class="- topic/p p" id="vscode_client__p_swl_54d_syb" data-ofbid="vscode_client__p_swl_54d_syb">在底栏中展示执行状态，点击后可取消作业。</p>
+            </li>
+            <li class="- topic/li li" id="vscode_client__li_twl_54d_syb" data-ofbid="vscode_client__li_twl_54d_syb">
+                <p class="- topic/p p" id="vscode_client__p_uwl_54d_syb" data-ofbid="vscode_client__p_uwl_54d_syb">在底部面板中以表格的形式展示表格、向量、矩阵等数据结构。</p>
+            </li>
+            <li class="- topic/li li" id="vscode_client__li_vwl_54d_syb" data-ofbid="vscode_client__li_vwl_54d_syb">
+                <p class="- topic/p p" id="vscode_client__p_wwl_54d_syb" data-ofbid="vscode_client__p_wwl_54d_syb">在侧边面板中管理多个数据库连接，展示数据库表及会话变量。</p>
+            </li>
+            <li class="- topic/li li" id="vscode_client__li_xwl_54d_syb" data-ofbid="vscode_client__li_xwl_54d_syb">
+                <p class="- topic/p p" id="vscode_client__p_ywl_54d_syb" data-ofbid="vscode_client__p_ywl_54d_syb">在浏览器弹窗中显示表格、向量、矩阵等数据结构。</p>
+            </li>
+            <li class="- topic/li li">支持从 DolphinDB 导出表数据到磁盘（.csv 格式 文件）。</li>
+        </ul>
+        <figure class="- topic/fig fig fignone" id="vscode_client__fig_sqs_1k4_ryb" data-ofbid="vscode_client__fig_sqs_1k4_ryb"><figcaption data-caption-side="top" class="- topic/title title figcap"><span class="figtitleprefix fig--title-label">图<span class="fig--title-label-number"> 1</span><span class="fig--title-label-punctuation">. </span></span><span class="fig--title">界面</span></figcaption>
+            
+            <img class="- topic/image image" id="vscode_client__image_y15_bk4_ryb" height="400" src="../images/vscodeext/demo.png" width="680"/>
+        </figure>
+        <section class="- topic/section section" id="vscode_client__section_lc4_gk4_ryb" data-ofbid="vscode_client__section_lc4_gk4_ryb"><h2 class="- topic/title title sectiontitle">使用方法</h2>
+            
+            <div class="- topic/p p" id="vscode_client__p_zwl_54d_syb" data-ofbid="vscode_client__p_zwl_54d_syb">安装如下：<ol class="- topic/ol ol" id="vscode_client__ol_uvq_jk4_ryb" data-ofbid="vscode_client__ol_uvq_jk4_ryb">
+                    <li class="- topic/li li" id="vscode_client__li_axl_54d_syb" data-ofbid="vscode_client__li_axl_54d_syb">
+                        <p class="- topic/p p" id="vscode_client__p_bxl_54d_syb" data-ofbid="vscode_client__p_bxl_54d_syb">前往<a class="- topic/xref xref" href="https://code.visualstudio.com" target="_blank" rel="external noopener">下载页面</a>安装或升级 VS Code 到最新版 (v1.68.0 以上)</p>
+                    </li>
+                    <li class="- topic/li li" id="vscode_client__li_cxl_54d_syb" data-ofbid="vscode_client__li_cxl_54d_syb">
+                        <p class="- topic/p p" id="vscode_client__p_dxl_54d_syb" data-ofbid="vscode_client__p_dxl_54d_syb">在 VS Code 插件面板中搜索 dolphindb, 点击 Install
+                                安装插件。如因网络原因安装遇阻，可以前往<a class="- topic/xref xref" href="https://marketplace.visualstudio.com/items?itemName=dolphindb.dolphindb-vscode" target="_blank" rel="external noopener">下载链接</a>手动下载后缀为 <code class="+ topic/ph pr-d/codeph ph codeph">.vsix</code> 的插件，下载后拖到
+                            VS Code 插件面板中。</p>
+                    </li>
+                    <li class="- topic/li li" id="vscode_client__li_exl_54d_syb" data-ofbid="vscode_client__li_exl_54d_syb">
+                        <p class="- topic/p p" id="vscode_client__p_fxl_54d_syb" data-ofbid="vscode_client__p_fxl_54d_syb">点击 Version History 下载最新的版本到本地。安装插件后，退出 VS Code
+                            所有窗口并重新打开 VS Code，否则可能无法在浏览器中查看变量（见后文）。</p>
+                    </li>
+                </ol></div>
+            <div class="- topic/p p"><strong class="+ topic/ph hi-d/b ph b">查看、编辑服务器连接配置方法</strong><ol class="- topic/ol ol" id="vscode_client__ol_egh_lk4_ryb" data-ofbid="vscode_client__ol_egh_lk4_ryb">
+                    <li class="- topic/li li" id="vscode_client__li_gxl_54d_syb" data-ofbid="vscode_client__li_gxl_54d_syb">
+                        <p class="- topic/p p" id="vscode_client__p_hxl_54d_syb" data-ofbid="vscode_client__p_hxl_54d_syb">成功安装插件后，在 VS Code 编辑器的活动栏（Activity Bar）中会显示一个表示
+                            DolphinDB 数据库管理面板的图标。点击该图标可以在左侧边栏中看到 DolphinDB
+                            面板，包含连接、数据库、变量管理三个子面板。</p>
+                        <figure class="- topic/fig fig fignone" id="vscode_client__fig_ytl_zk4_ryb" data-ofbid="vscode_client__fig_ytl_zk4_ryb"><figcaption data-caption-side="top" class="- topic/title title figcap"><span class="figtitleprefix fig--title-label">图<span class="fig--title-label-number"> 2</span><span class="fig--title-label-punctuation">. </span></span><span class="fig--title">连接管理</span></figcaption>
+                            
+                            <img class="- topic/image image" id="vscode_client__image_fgh_lk4_ryb" src="../images/vscodeext/connections.png" width="400"/>
+                        </figure>
+                    </li>
+                    <li class="- topic/li li" id="vscode_client__li_ixl_54d_syb" data-ofbid="vscode_client__li_ixl_54d_syb">
+                        <p class="- topic/p p" id="vscode_client__p_jxl_54d_syb" data-ofbid="vscode_client__p_jxl_54d_syb">点击右上角的 <code class="+ topic/ph pr-d/codeph ph codeph">settings</code> 按钮。</p>
+                    </li>
+                    <li class="- topic/li li" id="vscode_client__li_kxl_54d_syb" data-ofbid="vscode_client__li_kxl_54d_syb">
+                        <p class="- topic/p p" id="vscode_client__p_lxl_54d_syb" data-ofbid="vscode_client__p_lxl_54d_syb">在 <code class="+ topic/ph pr-d/codeph ph codeph">settings.json</code> 配置文件中编辑
+                                <code class="+ topic/ph pr-d/codeph ph codeph">dolphindb.connections</code> 配置项。</p>
+                        <ul class="- topic/ul ul" id="vscode_client__ul_ggh_lk4_ryb" data-ofbid="vscode_client__ul_ggh_lk4_ryb">
+                            <li class="- topic/li li" id="vscode_client__li_mxl_54d_syb" data-ofbid="vscode_client__li_mxl_54d_syb">
+                                <p class="- topic/p p" id="vscode_client__p_nxl_54d_syb" data-ofbid="vscode_client__p_nxl_54d_syb">
+                                    <code class="+ topic/ph pr-d/codeph ph codeph">name</code> 和 <code class="+ topic/ph pr-d/codeph ph codeph">url</code> 属性是必填的
+                                    (不同的连接对象必须有不同的 <code class="+ topic/ph pr-d/codeph ph codeph">name</code>), 默认自动登录 admin 账号
+                                    ("autologin": true)。将光标移动到属性上可以查看对应属性的说明。</p>
+                            </li>
+                            <li class="- topic/li li" id="vscode_client__li_oxl_54d_syb" data-ofbid="vscode_client__li_oxl_54d_syb">
+                                <p class="- topic/p p" id="vscode_client__p_pxl_54d_syb" data-ofbid="vscode_client__p_pxl_54d_syb">
+                                    <code class="+ topic/ph pr-d/codeph ph codeph">dolphindb.connections</code>
+                                    配置项是一个对象数组，默认有四个连接配置，可按情况修改或增加连接对象。</p>
+                            </li>
+                        </ul>
+                    </li>
+                </ol></div>
+            <div class="- topic/p p"><strong class="+ topic/ph hi-d/b ph b">打开或新建一个 DolphinDB 脚本文件</strong><ol class="- topic/ol ol" id="vscode_client__ol_m5m_nk4_ryb" data-ofbid="vscode_client__ol_m5m_nk4_ryb">
+                    <li class="- topic/li li" id="vscode_client__li_uxl_54d_syb" data-ofbid="vscode_client__li_uxl_54d_syb">
+                        <p class="- topic/p p" id="vscode_client__p_vxl_54d_syb" data-ofbid="vscode_client__p_vxl_54d_syb">点击 VS Code 编辑器右下角状态栏的语言选择按钮，如下图</p>
+                        <figure class="- topic/fig fig fignone" id="vscode_client__fig_jtr_wk4_ryb" data-ofbid="vscode_client__fig_jtr_wk4_ryb"><figcaption data-caption-side="top" class="- topic/title title figcap"><span class="figtitleprefix fig--title-label">图<span class="fig--title-label-number"> 3</span><span class="fig--title-label-punctuation">. </span></span><span class="fig--title">语言选择</span></figcaption>
+                            
+                            <img class="- topic/image image" id="vscode_client__image_n5m_nk4_ryb" src="../images/vscodeext/language-mode.png" width="600"/>
+                        </figure>
+                    </li>
+                    <li class="- topic/li li" id="vscode_client__li_wxl_54d_syb" data-ofbid="vscode_client__li_wxl_54d_syb">
+                        <p class="- topic/p p" id="vscode_client__p_xxl_54d_syb" data-ofbid="vscode_client__p_xxl_54d_syb">在语言选择弹框中输入 <code class="+ topic/ph pr-d/codeph ph codeph">dolphindb</code>,
+                            按回车键将当前文件关联的语言切换为 DolphinDB 语言。</p>
+                        <figure class="- topic/fig fig fignone" id="vscode_client__fig_tjf_yk4_ryb" data-ofbid="vscode_client__fig_tjf_yk4_ryb"><figcaption data-caption-side="top" class="- topic/title title figcap"><span class="figtitleprefix fig--title-label">图<span class="fig--title-label-number"> 4</span><span class="fig--title-label-punctuation">. </span></span><span class="fig--title">语言切换</span></figcaption>
+                            
+                            <img class="- topic/image image" id="vscode_client__image_o5m_nk4_ryb" src="../images/vscodeext/select-language.png" width="600"/>
+                        </figure>
+                    </li>
+                </ol></div>
+            <div class="- topic/note note note note_note" id="vscode_client__note_u5n_4k4_ryb" data-ofbid="vscode_client__note_u5n_4k4_ryb"><span class="note__title">注：</span> 
+                <ul class="- topic/ul ul" id="vscode_client__ul_l5m_nk4_ryb" data-ofbid="vscode_client__ul_l5m_nk4_ryb">
+                    <li class="- topic/li li" id="vscode_client__li_qxl_54d_syb" data-ofbid="vscode_client__li_qxl_54d_syb">
+                        <p class="- topic/p p" id="vscode_client__p_rxl_54d_syb" data-ofbid="vscode_client__p_rxl_54d_syb">如果脚本文件名是 <code class="+ topic/ph pr-d/codeph ph codeph">.dos</code> 后缀 (DolphinDB Script
+                            的缩写)，插件会自动识别为 DolphinDB 语言，自动启用语法高亮及代码补全、提示</p>
+                    </li>
+                    <li class="- topic/li li" id="vscode_client__li_sxl_54d_syb" data-ofbid="vscode_client__li_sxl_54d_syb">
+                        <p class="- topic/p p" id="vscode_client__p_txl_54d_syb" data-ofbid="vscode_client__p_txl_54d_syb">如果脚本文件名不是 <code class="+ topic/ph pr-d/codeph ph codeph">.dos</code> 后缀, 比如
+                                <code class="+ topic/ph pr-d/codeph ph codeph">.txt</code> 后缀，则需要手动关联 DolphinDB 语言，方法如下：</p>
+                    </li>
+                </ul>
+            </div>
+            <p class="- topic/p p"><strong class="+ topic/ph hi-d/b ph b">执行代码</strong></p>
+            <p class="- topic/p p" id="vscode_client__p_yxl_54d_syb" data-ofbid="vscode_client__p_yxl_54d_syb">在打开的 DolphinDB 脚本文件中，按快捷键 <strong class="+ topic/ph hi-d/b ph b">Ctrl + E</strong> 将代码发送到 DolphinDB Server
+                执行。第一次执行代码时会自动连接到 DOLPHINDB 区域中选中的连接。</p>
+            <ul class="- topic/ul ul" id="vscode_client__ul_lhk_tk4_ryb" data-ofbid="vscode_client__ul_lhk_tk4_ryb">
+                <li class="- topic/li li" id="vscode_client__li_zxl_54d_syb" data-ofbid="vscode_client__li_zxl_54d_syb">
+                    <p class="- topic/p p" id="vscode_client__p_ayl_54d_syb" data-ofbid="vscode_client__p_ayl_54d_syb">如果当前有选中的代码，会将选中的代码发送至 DolphinDB Server 执行</p>
+                </li>
+                <li class="- topic/li li" id="vscode_client__li_byl_54d_syb" data-ofbid="vscode_client__li_byl_54d_syb">
+                    <p class="- topic/p p" id="vscode_client__p_cyl_54d_syb" data-ofbid="vscode_client__p_cyl_54d_syb">如果当前无选中的代码，会将当前光标所在的行发送至 DolphinDB Server 执行</p>
+                </li>
+            </ul>
+            <p class="- topic/p p" id="vscode_client__p_dyl_54d_syb" data-ofbid="vscode_client__p_dyl_54d_syb">执行代码后，VS Code 编辑器下方的终端内会有基于文本的输出，如果执行的代码最后一条语句返回了表格、数组、矩阵，则会自动切换到
+                VS Code 编辑器下方面板的 DolphinDB 区域中以表格的形式展示表格、向量、矩阵等数据结构。</p>
+            <div class="- topic/note note tip note_tip" id="vscode_client__note_kpv_vk4_ryb" data-ofbid="vscode_client__note_kpv_vk4_ryb"><span class="note__title">提示：</span> 将 DolphinDB 标签页的内容拖动到终端的右侧，如下图<figure class="- topic/fig fig fignone" id="vscode_client__fig_cqz_tk4_ryb" data-ofbid="vscode_client__fig_cqz_tk4_ryb"><figcaption data-caption-side="top" class="- topic/title title figcap"><span class="figtitleprefix fig--title-label">图<span class="fig--title-label-number"> 5</span><span class="fig--title-label-punctuation">. </span></span><span class="fig--title">代码执行</span></figcaption>
+                    
+                    <img class="- topic/image image" id="vscode_client__image_mhk_tk4_ryb" src="../images/vscodeext/drag-dataview.png" width="600"/>
+                    <img class="- topic/image image" id="vscode_client__image_nhk_tk4_ryb" src="../images/vscodeext/with-dataview.png" width="600"/>
+                </figure></div>
+            <p class="- topic/p p" id="vscode_client__p_eyl_54d_syb" data-ofbid="vscode_client__p_eyl_54d_syb"><strong class="+ topic/ph hi-d/b ph b">查看变量</strong></p>
+            <ul class="- topic/ul ul" id="vscode_client__ul_acs_cl4_ryb" data-ofbid="vscode_client__ul_acs_cl4_ryb">
+                <li class="- topic/li li" id="vscode_client__li_fyl_54d_syb" data-ofbid="vscode_client__li_fyl_54d_syb">
+                    <p class="- topic/p p" id="vscode_client__p_gyl_54d_syb" data-ofbid="vscode_client__p_gyl_54d_syb">切换执行代码所用的连接 (原有连接不会断开)</p>
+                </li>
+                <li class="- topic/li li" id="vscode_client__li_hyl_54d_syb" data-ofbid="vscode_client__li_hyl_54d_syb">
+                    <p class="- topic/p p" id="vscode_client__p_iyl_54d_syb" data-ofbid="vscode_client__p_iyl_54d_syb">点击连接右侧的按钮手动断开连接</p>
+                </li>
+                <li class="- topic/li li" id="vscode_client__li_jyl_54d_syb" data-ofbid="vscode_client__li_jyl_54d_syb">
+                    <p class="- topic/p p" id="vscode_client__p_kyl_54d_syb" data-ofbid="vscode_client__p_kyl_54d_syb">查看会话变量的值</p>
+                </li>
+                <li class="- topic/li li" id="vscode_client__li_lyl_54d_syb" data-ofbid="vscode_client__li_lyl_54d_syb">
+                    <p class="- topic/p p" id="vscode_client__p_myl_54d_syb" data-ofbid="vscode_client__p_myl_54d_syb">非 scalar, pair 类型的变量右侧有两个图标</p>
+                    <ul class="- topic/ul ul" id="vscode_client__ul_bcs_cl4_ryb" data-ofbid="vscode_client__ul_bcs_cl4_ryb">
+                        <li class="- topic/li li" id="vscode_client__li_nyl_54d_syb" data-ofbid="vscode_client__li_nyl_54d_syb">
+                            <p class="- topic/p p" id="vscode_client__p_oyl_54d_syb" data-ofbid="vscode_client__p_oyl_54d_syb">点击左边的图标，在编辑器下方面板的 DolphinDB 区域中查看变量</p>
+                        </li>
+                        <li class="- topic/li li" id="vscode_client__li_pyl_54d_syb" data-ofbid="vscode_client__li_pyl_54d_syb">
+                            <p class="- topic/p p" id="vscode_client__p_qyl_54d_syb" data-ofbid="vscode_client__p_qyl_54d_syb">点击右边的图标，在浏览器弹窗中查看变量 (需要配置浏览器允许弹窗,
+                                见后文)。弹窗功能需要浏览器中有一个打开的 <code class="+ topic/ph pr-d/codeph ph codeph">DolphinDB Data Browser</code> 标签页
+                                (URL 可能是 http://localhost:8321/)，如果缺少这个标签页，插件会先自动打开这个页面：</p>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+            <p class="- topic/p p" id="vscode_client__p_ryl_54d_syb" data-ofbid="vscode_client__p_ryl_54d_syb">如下图所示：</p>
+            <figure class="- topic/fig fig fignone" id="vscode_client__fig_an2_fl4_ryb" data-ofbid="vscode_client__fig_an2_fl4_ryb"><figcaption data-caption-side="top" class="- topic/title title figcap"><span class="figtitleprefix fig--title-label">图<span class="fig--title-label-number"> 6</span><span class="fig--title-label-punctuation">. </span></span><span class="fig--title">数据浏览器</span></figcaption>
+                
+                <img class="- topic/image image" id="vscode_client__image_ccs_cl4_ryb" src="../images/vscodeext/explorer.png" width="400"/>
+            </figure>
+            <div class="- topic/note note note note_note" id="vscode_client__note_tpl_2l4_ryb" data-ofbid="vscode_client__note_tpl_2l4_ryb"><span class="note__title">注：</span> 请使用近两年的浏览器版本，例如 Chrome 100+ 或 Edge 100+ 或 Firefox
+                100+，并配置浏览器允许该网站弹窗显示。</div>
+            <figure class="- topic/fig fig fignone" id="vscode_client__fig_v4y_cl4_ryb" data-ofbid="vscode_client__fig_v4y_cl4_ryb"><figcaption data-caption-side="top" class="- topic/title title figcap"><span class="figtitleprefix fig--title-label">图<span class="fig--title-label-number"> 7</span><span class="fig--title-label-punctuation">. </span></span><span class="fig--title">弹窗显示设置</span></figcaption>
+                
+                <img class="- topic/image image" id="vscode_client__image_dcs_cl4_ryb" src="../images/vscodeext/allow-browser-popup.png" width="600"/>
+            </figure>
+            <p class="- topic/p p"><strong class="+ topic/ph hi-d/b ph b">查看函数</strong></p>
+            <p class="- topic/p p" id="vscode_client__p_syl_54d_syb" data-ofbid="vscode_client__p_syl_54d_syb">在 VS Code 编辑器中输入 DolphinDB 内置函数时，点击函数右侧的箭头可以展开函数的文档：</p>
+            <figure class="- topic/fig fig fignone" id="vscode_client__fig_g4s_3l4_ryb" data-ofbid="vscode_client__fig_g4s_3l4_ryb"><figcaption data-caption-side="top" class="- topic/title title figcap"><span class="figtitleprefix fig--title-label">图<span class="fig--title-label-number"> 8</span><span class="fig--title-label-punctuation">. </span></span><span class="fig--title">查看函数说明</span></figcaption>
+                
+                <img class="- topic/image image" id="vscode_client__image_k1f_3l4_ryb" src="../images/vscodeext/expand-doc.png" width="800"/>
+            </figure>
+            <p class="- topic/p p" id="vscode_client__p_tyl_54d_syb" data-ofbid="vscode_client__p_tyl_54d_syb">函数输入完成后，将鼠标悬浮于函数名称上，也可查看函数文档。</p>
+            <div class="- topic/p p">如果需要将函数名高亮显示，可在 VS Code 配置文件 <em class="+ topic/ph hi-d/i ph i">settings.json</em> 中加上下面的 textmate
+                规则：<pre class="+ topic/pre pr-d/codeblock pre codeblock language-json" id="vscode_client__codeblock_yxx_phj_xzb" data-ofbid="vscode_client__codeblock_yxx_phj_xzb"><span class="hl-json_key">"editor.tokenColorCustomizations"</span>: {
+    <span class="hl-json_key">"textMateRules"</span>: [        
+        <em class="hl-comment">// function: bold</em>
+        { <span class="hl-json_key">"scope"</span>: <span class="hl-string">"entity.name.function"</span>, <span class="hl-json_key">"settings"</span>: { <span class="hl-json_key">"fontStyle"</span>: <span class="hl-string">"bold"</span> }},
+        { <span class="hl-json_key">"scope"</span>: <span class="hl-string">"support.function"</span>, <span class="hl-json_key">"settings"</span>: { <span class="hl-json_key">"fontStyle"</span>: <span class="hl-string">"bold"</span> }} ,
+    ]
+},</pre></div>
+            <p class="- topic/p p"><strong class="+ topic/ph hi-d/b ph b">上传文件</strong></p>
+            <p class="- topic/p p" id="vscode_client__p_uyl_54d_syb" data-ofbid="vscode_client__p_uyl_54d_syb">用户可以通过 DolphinDB 的 VS Code 插件以下述两种方式上传文件：</p>
+            <ol class="- topic/ol ol" id="vscode_client__ol_j1f_pl4_ryb" data-ofbid="vscode_client__ol_j1f_pl4_ryb">
+                <li class="- topic/li li" id="vscode_client__li_vyl_54d_syb" data-ofbid="vscode_client__li_vyl_54d_syb">
+                    <p class="- topic/p p" id="vscode_client__p_wyl_54d_syb" data-ofbid="vscode_client__p_wyl_54d_syb">在 VS Code 的资源管理器中选中需要上传的文件并右击，在右键菜单中选择 <strong class="+ topic/ph hi-d/b ph b">DolphinDB:
+                            上传到服务</strong>。</p>
+                </li>
+                <li class="- topic/li li" id="vscode_client__li_xyl_54d_syb" data-ofbid="vscode_client__li_xyl_54d_syb">
+                    <p class="- topic/p p" id="vscode_client__p_yyl_54d_syb" data-ofbid="vscode_client__p_yyl_54d_syb">打开需要上传的文件后，在 VS Code 界面的右上角单击上传按钮。之后，需要用户输入上传到 server
+                        的文件路径（不能为空）。回车后，等待提示 <em class="+ topic/ph hi-d/i ph i">文件成功上传</em> 即可。</p>
+                </li>
+            </ol>
+            <p class="- topic/p p" id="vscode_client__p_zyl_54d_syb" data-ofbid="vscode_client__p_zyl_54d_syb">此外，用户可以通过配置 <code class="+ topic/ph pr-d/codeph ph codeph">dolphindb.connections</code> 的
+                    <code class="+ topic/ph pr-d/codeph ph codeph">mappings</code> 属性来自定义本地路径和 server 路径的映射关系，方便插件在后续文件上传过程根据 mappings 映射
+                server 路径。在 VS Code 设置界面，选中扩展下的 DolphinDB，打开 <em class="+ topic/ph hi-d/i ph i">setting.json</em> 文件，在需要配置的
+                connection 中添加或修改 <code class="+ topic/ph pr-d/codeph ph codeph">mappings</code>中的键值对 ，左侧 "键" 为本地地址，右侧 "值" 为服务器地址。</p>
+            <figure class="- topic/fig fig fignone" id="vscode_client__fig_s52_ql4_ryb" data-ofbid="vscode_client__fig_s52_ql4_ryb"><figcaption data-caption-side="top" class="- topic/title title figcap"><span class="figtitleprefix fig--title-label">图<span class="fig--title-label-number"> 9</span><span class="fig--title-label-punctuation">. </span></span><span class="fig--title">配置项</span></figcaption>
+                
+                <img class="- topic/image image" id="vscode_client__image_k1f_pl4_ryb" src="../images/vscodeext/mappings.png" width="500"/>
+            </figure>
+            <p class="- topic/p p" id="vscode_client__p_azl_54d_syb" data-ofbid="vscode_client__p_azl_54d_syb">添加完成后，插件会根据当前连接中用户配置的 <code class="+ topic/ph pr-d/codeph ph codeph">mappings</code> 对路径进行映射。</p>
+            <p class="- topic/p p" id="vscode_client__p_bzl_54d_syb" data-ofbid="vscode_client__p_bzl_54d_syb">例如，用户当前连接中配置的 <code class="+ topic/ph pr-d/codeph ph codeph">mappings</code> 为：</p>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock language-xml" id="vscode_client__codeblock_l1f_pl4_ryb" data-ofbid="vscode_client__codeblock_l1f_pl4_ryb">{
+    "/path/to/local/": "/path/at/remote/",
+    "/path/to/local/dir1/": "/data/server/dir1/",
+    "D:/path/to/local/": "/data/server/",
+    "default": "/data/server/"
+}</pre>
+            <p class="- topic/p p" id="vscode_client__p_czl_54d_syb" data-ofbid="vscode_client__p_czl_54d_syb">文件上传时路径映射的规则如下：</p>
+            <ol class="- topic/ol ol" id="vscode_client__ol_k5l_tl4_ryb" data-ofbid="vscode_client__ol_k5l_tl4_ryb">
+                <li class="- topic/li li" id="vscode_client__li_dzl_54d_syb" data-ofbid="vscode_client__li_dzl_54d_syb">
+                    <p class="- topic/p p" id="vscode_client__p_ezl_54d_syb" data-ofbid="vscode_client__p_ezl_54d_syb">以自动的方式进行映射，<code class="+ topic/ph pr-d/codeph ph codeph">key</code>
+                            代表本地路径，<code class="+ topic/ph pr-d/codeph ph codeph">value</code> 代表 server
+                        路径，配置完成后，会选择最长匹配项作为上传路径。例如，用户上传的文件路径为 <em class="+ topic/ph hi-d/i ph i">/path/to/local/dir1/file.dos</em>
+                        ，此时，同时存在 <em class="+ topic/ph hi-d/i ph i">/path/to/local/</em> 和 <em class="+ topic/ph hi-d/i ph i">/path/to/local/dir1/</em>
+                        均可匹配用户路径，但以最长匹配项 <em class="+ topic/ph hi-d/i ph i">/path/to/local/dir1/</em> 优先匹配。</p>
+                </li>
+                <li class="- topic/li li" id="vscode_client__li_fzl_54d_syb" data-ofbid="vscode_client__li_fzl_54d_syb">
+                    <p class="- topic/p p" id="vscode_client__p_gzl_54d_syb" data-ofbid="vscode_client__p_gzl_54d_syb">可配置 <code class="+ topic/ph pr-d/codeph ph codeph">defalut</code> 字段作为默认匹配。如果当前路径没有匹配
+                            <code class="+ topic/ph pr-d/codeph ph codeph">dolphindb.mappings</code> 中的其余项，则以 <code class="+ topic/ph pr-d/codeph ph codeph">default</code>
+                        对应的 server 路径作为上传路径。例如，用户上传的文件路径为 <em class="+ topic/ph hi-d/i ph i">/user/dosuments/file.dos</em>，此时匹配不到
+                            <code class="+ topic/ph pr-d/codeph ph codeph">mappings</code> 的其余项，则以 <code class="+ topic/ph pr-d/codeph ph codeph">default</code> 字段映射的 server
+                        路径作为上传路径，即 <em class="+ topic/ph hi-d/i ph i">/data/server/file.dos</em>。</p>
+                </li>
+                <li class="- topic/li li" id="vscode_client__li_hzl_54d_syb" data-ofbid="vscode_client__li_hzl_54d_syb">
+                    <p class="- topic/p p" id="vscode_client__p_izl_54d_syb" data-ofbid="vscode_client__p_izl_54d_syb">若 <code class="+ topic/ph pr-d/codeph ph codeph">dolphindb.mappings</code> 中没有匹配项，则以
+                            <code class="+ topic/ph pr-d/codeph ph codeph">getHomeDir()</code> + <code class="+ topic/ph pr-d/codeph ph codeph">/uploads/</code> +
+                            <code class="+ topic/ph pr-d/codeph ph codeph">文件名</code> 作为上传路径。</p>
+                </li>
+            </ol>
+            <p class="- topic/p p"><strong class="+ topic/ph hi-d/b ph b">导出文件</strong></p>
+            <p class="- topic/p p">注意，该功能要求 server 版本不小于 2.00.11。导出步骤如下：</p>
+            <ol class="- topic/ol ol" id="vscode_client__ol_bs4_hdz_jbc" data-ofbid="vscode_client__ol_bs4_hdz_jbc">
+                <li class="- topic/li li">
+                    <p class="- topic/p p">运行需要保存的表，使其展示在数据视图中。</p>
+                </li>
+                <li class="- topic/li li">
+                    <p class="- topic/p p">点击数据视图左上角的“DolphinDB：导出表格”的图标。</p>
+                </li>
+                <li class="- topic/li li">
+                    <p class="- topic/p p">选择保存路径，编辑文件的名称后，点击保存按钮，将表数据保存至指定路径。此时在右下角会显示“文件成功导出到 xxxx”。</p>
+                </li>
+            </ol>
+        </section>
+        <section class="- topic/section section" id="vscode_client__section_s3r_ll4_ryb" data-ofbid="vscode_client__section_s3r_ll4_ryb"><h2 class="- topic/title title sectiontitle">调试脚本</h2>
+            
+            <p class="- topic/p p" id="vscode_client__p_jzl_54d_syb" data-ofbid="vscode_client__p_jzl_54d_syb">DolphinDB 的 VS Code
+                插件可用于调试用户脚本，用户可以使用实时追踪运行脚本、显示中间变量的值以及展示函数调用栈信息等功能，从而写出更快更好的脚本。</p>
+            <div class="- topic/note note note note_note" id="vscode_client__note_e2t_ml4_ryb" data-ofbid="vscode_client__note_e2t_ml4_ryb"><span class="note__title">注：</span> 
+                <ul class="- topic/ul ul" id="vscode_client__ul_vt3_4x4_wbc" data-ofbid="vscode_client__ul_vt3_4x4_wbc">
+                    <li class="- topic/li li">Python Parse 不支持调试功能。</li>
+                    <li class="- topic/li li">使用调试功能之前，请确保 DolphinDB Server 版本不低于 2.00.10.1 或 1.30.22.1。</li>
+                </ul>
+            </div>
+            <p class="- topic/p p" id="vscode_client__p_kzl_54d_syb" data-ofbid="vscode_client__p_kzl_54d_syb">具体调试方法如下：</p>
+            <figure class="- topic/fig fig fignone" id="vscode_client__fig_qlf_mm4_ryb" data-ofbid="vscode_client__fig_qlf_mm4_ryb"><figcaption data-caption-side="top" class="- topic/title title figcap"><span class="figtitleprefix fig--title-label">图<span class="fig--title-label-number"> 10</span><span class="fig--title-label-punctuation">. </span></span><span class="fig--title">调试方法</span></figcaption>
+                
+                <img class="- topic/image image" id="vscode_client__image_khw_lm4_ryb" src="../images/vscodeext/debug/zh/components.png" height="241" width="776"/>
+            </figure>
+            <p class="- topic/p p" id="vscode_client__p_lzl_54d_syb" data-ofbid="vscode_client__p_lzl_54d_syb">其中，</p>
+            <ul class="- topic/ul ul" id="vscode_client__ul_lhw_lm4_ryb" data-ofbid="vscode_client__ul_lhw_lm4_ryb">
+                <li class="- topic/li li" id="vscode_client__li_mzl_54d_syb" data-ofbid="vscode_client__li_mzl_54d_syb">
+                    <p class="- topic/p p" id="vscode_client__p_nzl_54d_syb" data-ofbid="vscode_client__p_nzl_54d_syb">Debug Server（DolphinDB Server）：真正执行中断、挂起、数据查询操作的数据库进程</p>
+                </li>
+                <li class="- topic/li li" id="vscode_client__li_ozl_54d_syb" data-ofbid="vscode_client__li_ozl_54d_syb">
+                    <p class="- topic/p p" id="vscode_client__p_pzl_54d_syb" data-ofbid="vscode_client__p_pzl_54d_syb">Debug Adapter：处理两侧的交互信息</p>
+                </li>
+                <li class="- topic/li li" id="vscode_client__li_qzl_54d_syb" data-ofbid="vscode_client__li_qzl_54d_syb">
+                    <p class="- topic/p p" id="vscode_client__p_rzl_54d_syb" data-ofbid="vscode_client__p_rzl_54d_syb">DAP：Debug Adapter Protocol，由 Microsoft 提出的一种通用的 Debug 信息交互协议</p>
+                </li>
+                <li class="- topic/li li" id="vscode_client__li_szl_54d_syb" data-ofbid="vscode_client__li_szl_54d_syb">
+                    <p class="- topic/p p" id="vscode_client__p_tzl_54d_syb" data-ofbid="vscode_client__p_tzl_54d_syb">Debug Client：VS Code 调试界面，主要负责与用户交互。下图是该界面的主要部件及功能概览：</p>
+                </li>
+            </ul>
+            <figure class="- topic/fig fig fignone" id="vscode_client__fig_brn_nm4_ryb" data-ofbid="vscode_client__fig_brn_nm4_ryb"><figcaption data-caption-side="top" class="- topic/title title figcap"><span class="figtitleprefix fig--title-label">图<span class="fig--title-label-number"> 11</span><span class="fig--title-label-punctuation">. </span></span><span class="fig--title">调试界面</span></figcaption>
+                
+                <img class="- topic/image image" id="vscode_client__image_mhw_lm4_ryb" src="../images/vscodeext/debug/zh/all-header.png" height="518" width="961"/>
+            </figure>
+            <p class="- topic/p p">编写脚本的方法如下：</p>
+            <p class="- topic/p p" id="vscode_client__p_uzl_54d_syb" data-ofbid="vscode_client__p_uzl_54d_syb">后续步骤介绍基于以下例子脚本。出于调试目的以及代码可读性，我们建议每行只写一条语句。</p>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="vscode_client__codeblock_crs_qm4_ryb" data-ofbid="vscode_client__codeblock_crs_qm4_ryb"><code>  use ta
+
+  close = 1..20
+  bret = bBands(close)
+  print(bret)
+
+  close = randNormal(50, 1, 20)
+  rret = rsi(close)
+  print(rret)</code></pre>
+            <p class="- topic/p p">设置断点的方法如下：</p>
+            <ol class="- topic/ol ol" id="vscode_client__ol_yjl_sm4_ryb" data-ofbid="vscode_client__ol_yjl_sm4_ryb">
+                <li class="- topic/li li" id="vscode_client__li_vzl_54d_syb" data-ofbid="vscode_client__li_vzl_54d_syb">
+                    <p class="- topic/p p" id="vscode_client__p_wzl_54d_syb" data-ofbid="vscode_client__p_wzl_54d_syb">在选定行左侧空白处单击鼠标左键设置断点。</p>
+                    <figure class="- topic/fig fig fignone" id="vscode_client__fig_rdb_tm4_ryb" data-ofbid="vscode_client__fig_rdb_tm4_ryb"><figcaption data-caption-side="top" class="- topic/title title figcap"><span class="figtitleprefix fig--title-label">图<span class="fig--title-label-number"> 12</span><span class="fig--title-label-punctuation">. </span></span><span class="fig--title">设置断点</span></figcaption>
+                        
+                        <img class="- topic/image image" id="vscode_client__image_zjl_sm4_ryb" src="../images/vscodeext/debug/zh/set-breakpoint1.png" width="400"/>
+                    </figure>
+                </li>
+                <li class="- topic/li li" id="vscode_client__li_xzl_54d_syb" data-ofbid="vscode_client__li_xzl_54d_syb">
+                    <p class="- topic/p p" id="vscode_client__p_yzl_54d_syb" data-ofbid="vscode_client__p_yzl_54d_syb">为了接下来的调试演示，我们在第 4 行和第 8 行分别设置了断点，设置断点后，编辑器区的左侧空白区域处会出现红色的圆点，表示断点设置成功。</p>
+                    <figure class="- topic/fig fig fignone" id="vscode_client__fig_qv3_5m4_ryb" data-ofbid="vscode_client__fig_qv3_5m4_ryb"><figcaption data-caption-side="top" class="- topic/title title figcap"><span class="figtitleprefix fig--title-label">图<span class="fig--title-label-number"> 13</span><span class="fig--title-label-punctuation">. </span></span><span class="fig--title">断点设置成功</span></figcaption>
+                        
+                        <img class="- topic/image image" id="vscode_client__image_akl_sm4_ryb" src="../images/vscodeext/debug/zh/set-breakpoint2.png" width="400"/>
+                    </figure>
+                </li>
+            </ol>
+            <p class="- topic/p p">启动调试的方法如下：</p>
+            <ol class="- topic/ol ol" id="vscode_client__ol_vd5_wm4_ryb" data-ofbid="vscode_client__ol_vd5_wm4_ryb">
+                <li class="- topic/li li" id="vscode_client__li_zzl_54d_syb" data-ofbid="vscode_client__li_zzl_54d_syb">
+                    <p class="- topic/p p" id="vscode_client__p_a1m_54d_syb" data-ofbid="vscode_client__p_a1m_54d_syb">在左下角的连接管理面板中选择用于调试的服务器。</p>
+                    <figure class="- topic/fig fig fignone" id="vscode_client__fig_fkf_xm4_ryb" data-ofbid="vscode_client__fig_fkf_xm4_ryb"><figcaption data-caption-side="top" class="- topic/title title figcap"><span class="figtitleprefix fig--title-label">图<span class="fig--title-label-number"> 14</span><span class="fig--title-label-punctuation">. </span></span><span class="fig--title">选择调试服务器</span></figcaption>
+                        
+                        <img class="- topic/image image" id="vscode_client__image_wd5_wm4_ryb" src="../images/vscodeext/debug/zh/server.png" width="400"/>
+                    </figure>
+                </li>
+                <li class="- topic/li li" id="vscode_client__li_b1m_54d_syb" data-ofbid="vscode_client__li_b1m_54d_syb">
+                    <p class="- topic/p p" id="vscode_client__p_c1m_54d_syb" data-ofbid="vscode_client__p_c1m_54d_syb">在底部状态栏中设置语言模式为 <code class="+ topic/ph pr-d/codeph ph codeph">DolphinDB</code>。</p>
+                    <figure class="- topic/fig fig fignone" id="vscode_client__fig_rlz_ym4_ryb" data-ofbid="vscode_client__fig_rlz_ym4_ryb"><figcaption data-caption-side="top" class="- topic/title title figcap"><span class="figtitleprefix fig--title-label">图<span class="fig--title-label-number"> 15</span><span class="fig--title-label-punctuation">. </span></span><span class="fig--title">设置语言模式</span></figcaption>
+                        
+                        <img class="- topic/image image" id="vscode_client__image_xd5_wm4_ryb" src="../images/vscodeext/debug/zh/language.png" width="400"/>
+                    </figure>
+                </li>
+                <li class="- topic/li li" id="vscode_client__li_d1m_54d_syb" data-ofbid="vscode_client__li_d1m_54d_syb">
+                    <p class="- topic/p p" id="vscode_client__p_e1m_54d_syb" data-ofbid="vscode_client__p_e1m_54d_syb">按 <strong class="+ topic/ph hi-d/b ph b">F5</strong> 或通过左侧边栏的运行和调试打开主边栏，点击 <strong class="+ topic/ph hi-d/b ph b">运行和调试</strong>。</p>
+                    <figure class="- topic/fig fig fignone" id="vscode_client__fig_znd_1n4_ryb" data-ofbid="vscode_client__fig_znd_1n4_ryb"><figcaption data-caption-side="top" class="- topic/title title figcap"><span class="figtitleprefix fig--title-label">图<span class="fig--title-label-number"> 16</span><span class="fig--title-label-punctuation">. </span></span><span class="fig--title">运行和调试</span></figcaption>
+                        
+                        <img class="- topic/image image" id="vscode_client__image_yd5_wm4_ryb" src="../images/vscodeext/debug/zh/primary-sidebar.png" width="400"/>
+                    </figure>
+                </li>
+            </ol>
+            <p class="- topic/p p" id="vscode_client__p_f1m_54d_syb" data-ofbid="vscode_client__p_f1m_54d_syb">启动后的界面如下图所示，</p>
+            <figure class="- topic/fig fig fignone" id="vscode_client__fig_tck_bn4_ryb" data-ofbid="vscode_client__fig_tck_bn4_ryb"><figcaption data-caption-side="top" class="- topic/title title figcap"><span class="figtitleprefix fig--title-label">图<span class="fig--title-label-number"> 17</span><span class="fig--title-label-punctuation">. </span></span><span class="fig--title">启动后界面</span></figcaption>
+                
+                <img class="- topic/image image" id="vscode_client__image_zd5_wm4_ryb" src="../images/vscodeext/debug/zh/launched.png" width="800"/>
+            </figure>
+            <p class="- topic/p p" id="vscode_client__p_g1m_54d_syb" data-ofbid="vscode_client__p_g1m_54d_syb">其中，</p>
+            <ul class="- topic/ul ul" id="vscode_client__ul_a25_wm4_ryb" data-ofbid="vscode_client__ul_a25_wm4_ryb">
+                <li class="- topic/li li" id="vscode_client__li_h1m_54d_syb" data-ofbid="vscode_client__li_h1m_54d_syb">
+                    <p class="- topic/p p" id="vscode_client__p_i1m_54d_syb" data-ofbid="vscode_client__p_i1m_54d_syb">调试界面的左侧是调试信息区，右侧是编辑器区，下方是调试控制台。</p>
+                </li>
+                <li class="- topic/li li" id="vscode_client__li_j1m_54d_syb" data-ofbid="vscode_client__li_j1m_54d_syb">
+                    <p class="- topic/p p" id="vscode_client__p_k1m_54d_syb" data-ofbid="vscode_client__p_k1m_54d_syb">调试信息区展示变量的值、函数调用栈等信息。</p>
+                </li>
+                <li class="- topic/li li" id="vscode_client__li_l1m_54d_syb" data-ofbid="vscode_client__li_l1m_54d_syb">
+                    <p class="- topic/p p" id="vscode_client__p_m1m_54d_syb" data-ofbid="vscode_client__p_m1m_54d_syb">编辑器区用黄色的背景标出了将要执行的行。</p>
+                </li>
+                <li class="- topic/li li" id="vscode_client__li_n1m_54d_syb" data-ofbid="vscode_client__li_n1m_54d_syb">
+                    <p class="- topic/p p" id="vscode_client__p_o1m_54d_syb" data-ofbid="vscode_client__p_o1m_54d_syb">调试控制台用于显示输出信息和异常信息。</p>
+                </li>
+            </ul>
+            <div class="- topic/note note note note_note" id="vscode_client__note_zbt_cn4_ryb" data-ofbid="vscode_client__note_zbt_cn4_ryb"><span class="note__title">注：</span> 
+                <p class="- topic/p p">调试过程如果无法启动，打开调试控制台，通过错误信息检查排查错误原因。可能的错误原因包括：</p>
+                <ul class="- topic/ul ul" id="vscode_client__ul_b25_wm4_ryb" data-ofbid="vscode_client__ul_b25_wm4_ryb">
+                    <li class="- topic/li li" id="vscode_client__li_p1m_54d_syb" data-ofbid="vscode_client__li_p1m_54d_syb">
+                        <p class="- topic/p p" id="vscode_client__p_q1m_54d_syb" data-ofbid="vscode_client__p_q1m_54d_syb">DolphinDB Server 版本太低会报错 <code class="+ topic/ph pr-d/codeph ph codeph">Server sent no
+                                subprotocol</code>，调试服务器连接失败，请确保 DolphinDB Server 版本不低于 2.00.10.1
+                            或 1.30.22.1。</p>
+                    </li>
+                </ul>
+            </div>
+            <p class="- topic/p p">调试方法如下：</p>
+            <p class="- topic/p p" id="vscode_client__p_r1m_54d_syb" data-ofbid="vscode_client__p_r1m_54d_syb">启动调试后，VS Code 的界面上方会出现如下图所示的调试工具栏：</p>
+            <figure class="- topic/fig fig fignone" id="vscode_client__fig_p4k_fn4_ryb" data-ofbid="vscode_client__fig_p4k_fn4_ryb"><figcaption data-caption-side="top" class="- topic/title title figcap"><span class="figtitleprefix fig--title-label">图<span class="fig--title-label-number"> 18</span><span class="fig--title-label-punctuation">. </span></span><span class="fig--title">调试工具栏</span></figcaption>
+                
+                <img class="- topic/image image" id="vscode_client__image_i2t_2n4_ryb" src="../images/vscodeext/debug/zh/debug-bar.png" width="400"/>
+            </figure>
+            <p class="- topic/p p" id="vscode_client__p_s1m_54d_syb" data-ofbid="vscode_client__p_s1m_54d_syb">从左到右的名称及对应的键盘快捷键分别为：</p>
+            <ul class="- topic/ul ul" id="vscode_client__ul_j2t_2n4_ryb" data-ofbid="vscode_client__ul_j2t_2n4_ryb">
+                <li class="- topic/li li" id="vscode_client__li_t1m_54d_syb" data-ofbid="vscode_client__li_t1m_54d_syb">
+                    <p class="- topic/p p" id="vscode_client__p_u1m_54d_syb" data-ofbid="vscode_client__p_u1m_54d_syb">继续（F5）</p>
+                </li>
+                <li class="- topic/li li" id="vscode_client__li_v1m_54d_syb" data-ofbid="vscode_client__li_v1m_54d_syb">
+                    <p class="- topic/p p" id="vscode_client__p_w1m_54d_syb" data-ofbid="vscode_client__p_w1m_54d_syb">逐过程（F10）</p>
+                </li>
+                <li class="- topic/li li" id="vscode_client__li_x1m_54d_syb" data-ofbid="vscode_client__li_x1m_54d_syb">
+                    <p class="- topic/p p" id="vscode_client__p_y1m_54d_syb" data-ofbid="vscode_client__p_y1m_54d_syb">单步调试（F11）</p>
+                </li>
+                <li class="- topic/li li" id="vscode_client__li_z1m_54d_syb" data-ofbid="vscode_client__li_z1m_54d_syb">
+                    <p class="- topic/p p" id="vscode_client__p_abm_54d_syb" data-ofbid="vscode_client__p_abm_54d_syb">单步跳出（Shift + F11）</p>
+                </li>
+                <li class="- topic/li li" id="vscode_client__li_bbm_54d_syb" data-ofbid="vscode_client__li_bbm_54d_syb">
+                    <p class="- topic/p p" id="vscode_client__p_cbm_54d_syb" data-ofbid="vscode_client__p_cbm_54d_syb">重启（Ctrl + Shift + F5）</p>
+                </li>
+                <li class="- topic/li li" id="vscode_client__li_dbm_54d_syb" data-ofbid="vscode_client__li_dbm_54d_syb">
+                    <p class="- topic/p p" id="vscode_client__p_ebm_54d_syb" data-ofbid="vscode_client__p_ebm_54d_syb">停止（Shift + F5）</p>
+                </li>
+            </ul>
+            <div class="- topic/note note tip note_tip" id="vscode_client__note_gjl_gn4_ryb" data-ofbid="vscode_client__note_gjl_gn4_ryb"><span class="note__title">提示：</span> 继续、逐过程和单步调试是调试中最常用的三个功能，推荐使用快捷键来操作。</div>
+            <p class="- topic/p p" id="vscode_client__p_fbm_54d_syb" data-ofbid="vscode_client__p_fbm_54d_syb">用于调试的按钮功能和使用方法如下：</p>
+            <ul class="- topic/ul ul" id="vscode_client__ul_k2t_2n4_ryb" data-ofbid="vscode_client__ul_k2t_2n4_ryb">
+                <li class="- topic/li li" id="vscode_client__li_gbm_54d_syb" data-ofbid="vscode_client__li_gbm_54d_syb">
+                    <p class="- topic/p p" id="vscode_client__p_hbm_54d_syb" data-ofbid="vscode_client__p_hbm_54d_syb">逐过程（F10）：在上个调试界面中，黄色的背景标出了即将被 Server 执行的第 4 行代码所对应的语句。我们按下 F10，让 Server
+                        程序执行完第 4 行代码。此时的调试界面如下图所示，黄色的背景变成了第 5 行代码所对应的语句。</p>
+                    <figure class="- topic/fig fig fignone" id="vscode_client__fig_ov4_hn4_ryb" data-ofbid="vscode_client__fig_ov4_hn4_ryb"><figcaption data-caption-side="top" class="- topic/title title figcap"><span class="figtitleprefix fig--title-label">图<span class="fig--title-label-number"> 19</span><span class="fig--title-label-punctuation">. </span></span><span class="fig--title">逐过程</span></figcaption>
+                        
+                        <img class="- topic/image image" id="vscode_client__image_l2t_2n4_ryb" src="../images/vscodeext/debug/zh/F10.png" width="400"/>
+                    </figure>
+                </li>
+                <li class="- topic/li li" id="vscode_client__li_ibm_54d_syb" data-ofbid="vscode_client__li_ibm_54d_syb">
+                    <p class="- topic/p p" id="vscode_client__p_jbm_54d_syb" data-ofbid="vscode_client__p_jbm_54d_syb">继续（F5）：我们可以利用逐过程的方式一条语句一条语句地执行脚本，但是这样做的效率较低。着重关注断点所在的语句有助于提升执行调试效率。在这里，我们关心的是第
+                        8 行代码所对应的语句，按下 F5 后，Server 程序会一直执行到第 8 行代码。此时的调试界面如下图所示，黄色的背景变成了第 8
+                        行代码所对应的语句。</p>
+                    <figure class="- topic/fig fig fignone" id="vscode_client__fig_pw2_jn4_ryb" data-ofbid="vscode_client__fig_pw2_jn4_ryb"><figcaption data-caption-side="top" class="- topic/title title figcap"><span class="figtitleprefix fig--title-label">图<span class="fig--title-label-number"> 20</span><span class="fig--title-label-punctuation">. </span></span><span class="fig--title">继续</span></figcaption>
+                        
+                        <img class="- topic/image image" id="vscode_client__image_m2t_2n4_ryb" src="../images/vscodeext/debug/zh/F5.png" width="400"/>
+                    </figure>
+                </li>
+                <li class="- topic/li li" id="vscode_client__li_kbm_54d_syb" data-ofbid="vscode_client__li_kbm_54d_syb">
+                    <p class="- topic/p p" id="vscode_client__p_lbm_54d_syb" data-ofbid="vscode_client__p_lbm_54d_syb">查看变量：在调试界面的左侧，即调试主边栏中，我们可以在略上方的位置看到变量的值，如下图所示：</p>
+                    <figure class="- topic/fig fig fignone" id="vscode_client__fig_xvy_jn4_ryb" data-ofbid="vscode_client__fig_xvy_jn4_ryb"><figcaption data-caption-side="top" class="- topic/title title figcap"><span class="figtitleprefix fig--title-label">图<span class="fig--title-label-number"> 21</span><span class="fig--title-label-punctuation">. </span></span><span class="fig--title">查看变量</span></figcaption>
+                        
+                        <img class="- topic/image image" id="vscode_client__image_n2t_2n4_ryb" src="../images/vscodeext/debug/zh/var.png" width="400"/>
+                    </figure>
+                    <p class="- topic/p p" id="vscode_client__p_mbm_54d_syb" data-ofbid="vscode_client__p_mbm_54d_syb">在这里，<code class="+ topic/ph pr-d/codeph ph codeph">close</code> 和 <code class="+ topic/ph pr-d/codeph ph codeph">bret</code>
+                        这两个变量因为过长而导致显示不全，我们可以将光标悬浮在变量的值上方，即可看到完整的值。</p>
+                    <figure class="- topic/fig fig fignone" id="vscode_client__fig_oqv_kn4_ryb" data-ofbid="vscode_client__fig_oqv_kn4_ryb"><figcaption data-caption-side="top" class="- topic/title title figcap"><span class="figtitleprefix fig--title-label">图<span class="fig--title-label-number"> 22</span><span class="fig--title-label-punctuation">. </span></span><span class="fig--title">变量完整值</span></figcaption>
+                        
+                        <img class="- topic/image image" id="vscode_client__image_o2t_2n4_ryb" src="../images/vscodeext/debug/zh/var-hover.png" width="400"/>
+                    </figure>
+                    <p class="- topic/p p">右键点击变量，选择”查看变量“，在数据视图中会展示该变量的详细信息。</p>
+                    <figure class="- topic/fig fig fignone" id="vscode_client__fig_bjf_kx4_wbc" data-ofbid="vscode_client__fig_bjf_kx4_wbc">
+                        <div class="- topic/p p">
+                            <figure class="- topic/fig fig fignone" id="vscode_client__fig_k3m_mx4_wbc" data-ofbid="vscode_client__fig_k3m_mx4_wbc"><figcaption data-caption-side="top" class="- topic/title title figcap"><span class="figtitleprefix fig--title-label">图<span class="fig--title-label-number"> 23</span><span class="fig--title-label-punctuation">. </span></span><span class="fig--title">查看变量</span></figcaption>
+                                
+                                <img class="- topic/image image" id="vscode_client__image_l3m_mx4_wbc" src="../images/vscodeext/debug_var.png"/>
+                            </figure>
+                        </div>
+                    </figure>
+                </li>
+                <li class="- topic/li li" id="vscode_client__li_nbm_54d_syb" data-ofbid="vscode_client__li_nbm_54d_syb">
+                    <p class="- topic/p p" id="vscode_client__p_obm_54d_syb" data-ofbid="vscode_client__p_obm_54d_syb">单步调试（F11）：单步调试用于进入函数内部，查看函数内部的执行情况。在上一步，我们运行到了第8行代码，即 <code class="+ topic/ph pr-d/codeph ph codeph">rsi</code>
+                        函数的调用语句。按下 F11 后，Server程序会进入 <code class="+ topic/ph pr-d/codeph ph codeph">rsi</code>
+                        内。此时对应的调试界面如下图所示，黄色的背景标示程序已经运行到该函数内部，且即将执行第一条语句。</p>
+                    <figure class="- topic/fig fig fignone" id="vscode_client__fig_isx_ln4_ryb" data-ofbid="vscode_client__fig_isx_ln4_ryb"><figcaption data-caption-side="top" class="- topic/title title figcap"><span class="figtitleprefix fig--title-label">图<span class="fig--title-label-number"> 24</span><span class="fig--title-label-punctuation">. </span></span><span class="fig--title">单步调试</span></figcaption>
+                        
+                        <img class="- topic/image image" id="vscode_client__image_p2t_2n4_ryb" src="../images/vscodeext/debug/zh/F11.png" width="400"/>
+                    </figure>
+                </li>
+                <li class="- topic/li li" id="vscode_client__li_pbm_54d_syb" data-ofbid="vscode_client__li_pbm_54d_syb">
+                    <p class="- topic/p p" id="vscode_client__p_qbm_54d_syb" data-ofbid="vscode_client__p_qbm_54d_syb">查看调用堆栈：我们将目光再次移动到调试主边栏中。在略下方的位置，可以看到当前的函数调用栈，如下图所示。</p>
+                    <figure class="- topic/fig fig fignone" id="vscode_client__fig_zpt_mn4_ryb" data-ofbid="vscode_client__fig_zpt_mn4_ryb"><figcaption data-caption-side="top" class="- topic/title title figcap"><span class="figtitleprefix fig--title-label">图<span class="fig--title-label-number"> 25</span><span class="fig--title-label-punctuation">. </span></span><span class="fig--title">查看调用堆栈</span></figcaption>
+                        
+                        <img class="- topic/image image" id="vscode_client__image_q2t_2n4_ryb" src="../images/vscodeext/debug/zh/call-stack.png" width="400"/>
+                    </figure>
+                    <p class="- topic/p p" id="vscode_client__p_rbm_54d_syb" data-ofbid="vscode_client__p_rbm_54d_syb">单击调用栈的某一行，就能在上游函数和下游函数之间切换。此时，调试主边栏上方的变量部分也会显示该层函数所对应的变量的值。</p>
+                </li>
+                <li class="- topic/li li" id="vscode_client__li_sbm_54d_syb" data-ofbid="vscode_client__li_sbm_54d_syb">
+                    <p class="- topic/p p" id="vscode_client__p_tbm_54d_syb" data-ofbid="vscode_client__p_tbm_54d_syb">动态更新断点：在脚本执行的过程中，我们可以动态地更新断点。例如，我们可以在 152 行和 153
+                        行的位置新增两个断点，如下图所示，编辑器区的左侧空白区域处会出现两个红色的圆点，表示断点已经新增成功。</p><figure class="- topic/fig fig fignone" id="vscode_client__fig_r2n_4n4_ryb" data-ofbid="vscode_client__fig_r2n_4n4_ryb"><figcaption data-caption-side="top" class="- topic/title title figcap"><span class="figtitleprefix fig--title-label">图<span class="fig--title-label-number"> 26</span><span class="fig--title-label-punctuation">. </span></span><span class="fig--title">动态更新断点</span></figcaption>
+                        
+                        <img class="- topic/image image" id="vscode_client__image_r2t_2n4_ryb" src="../images/vscodeext/debug/zh/set-breakpoint3.png" width="400"/>
+                    </figure>
+                    <p class="- topic/p p" id="vscode_client__p_ubm_54d_syb" data-ofbid="vscode_client__p_ubm_54d_syb">当然，我们也可以取消断点。例如，我们单击 152 行左侧空白处来删除 152 行对应的断点。如下图所示，编辑器区左侧空白区域处 152
+                        行对应的红色圆点消失，表示 152 行处的断点已经取消成功。</p>
+                    <img class="- topic/image image" id="vscode_client__image_s2t_2n4_ryb" src="../images/vscodeext/debug/zh/cancel-breakpoint.png" width="400"/>
+                </li>
+                <li class="- topic/li li" id="vscode_client__li_vbm_54d_syb" data-ofbid="vscode_client__li_vbm_54d_syb">
+                    <p class="- topic/p p" id="vscode_client__p_wbm_54d_syb" data-ofbid="vscode_client__p_wbm_54d_syb">跳出函数：实际过程中，我们经常需要执行完这个函数并返回上层函数。例如，我们点击调试工具栏中的单步跳出按钮
+                            <img class="- topic/image image" id="vscode_client__image_bq3_3kj_xzb" src="../images/vscodeext/debug/zh/step-out-icon.png"/>，即可执行完当前函数体的所有内容并返回到上一层函数。此时，如下图所示，我们已经返回到
+                            <code class="+ topic/ph pr-d/codeph ph codeph">test.dos</code>中的第9行代码所对应的语句，代表执行完第8行对应的 <code class="+ topic/ph pr-d/codeph ph codeph">rsi</code>
+                        函数。</p>
+                    <figure class="- topic/fig fig fignone" id="vscode_client__fig_cgv_pn4_ryb" data-ofbid="vscode_client__fig_cgv_pn4_ryb"><figcaption data-caption-side="top" class="- topic/title title figcap"><span class="figtitleprefix fig--title-label">图<span class="fig--title-label-number"> 27</span><span class="fig--title-label-punctuation">. </span></span><span class="fig--title">跳出函数</span></figcaption>
+                        
+                        <img class="- topic/image image" id="vscode_client__image_t2t_2n4_ryb" src="../images/vscodeext/debug/zh/step-out.png" width="400"/>
+                    </figure>
+                </li>
+                <li class="- topic/li li" id="vscode_client__li_xbm_54d_syb" data-ofbid="vscode_client__li_xbm_54d_syb">
+                    <p class="- topic/p p" id="vscode_client__p_ybm_54d_syb" data-ofbid="vscode_client__p_ybm_54d_syb">重启以及停止：重启和停止按钮的功能与其名字相符。例如，我们点击调试工具栏中的重启按钮 <img class="- topic/image image" id="vscode_client__image_ety_dkj_xzb" src="../images/vscodeext/debug/zh/restart-icon.png"/>，即可重启调试；相应地，点击停止按钮 <img class="- topic/image image" id="vscode_client__image_ph3_fkj_xzb" src="../images/vscodeext/debug/zh/stop-icon.png"/>，即可停止调试。</p>
+                </li>
+            </ul>
+            <p class="- topic/p p">语法解析的方法如下：</p>
+            <p class="- topic/p p" id="vscode_client__p_zbm_54d_syb" data-ofbid="vscode_client__p_zbm_54d_syb">调试开始时, DolphinDB 会对代码进行初步检测, 如果代码有语法错误, 不会进入调试状态, 并且调试控制台会输出错误信息。</p>
+            <figure class="- topic/fig fig fignone" id="vscode_client__fig_mkm_tn4_ryb" data-ofbid="vscode_client__fig_mkm_tn4_ryb"><figcaption data-caption-side="top" class="- topic/title title figcap"><span class="figtitleprefix fig--title-label">图<span class="fig--title-label-number"> 28</span><span class="fig--title-label-punctuation">. </span></span><span class="fig--title">语法解析</span></figcaption>
+                
+                <img class="- topic/image image" id="vscode_client__image_ssj_sn4_ryb" src="../images/vscodeext/debug/zh/debug-errmsg.png" width="500"/>
+            </figure>
+            <p class="- topic/p p">断点管理的方法如下：</p>
+            <p class="- topic/p p" id="vscode_client__p_acm_54d_syb" data-ofbid="vscode_client__p_acm_54d_syb">如下图所示，在调试主边栏的下方，可以看到所有断点的信息，包括断点的状态、断点的文件名和文件路径以及行号。值得注意的是右上方有两个按钮，禁用所有断点 <img class="- topic/image image" id="vscode_client__image_ehj_bkj_xzb" src="../images/vscodeext/debug/zh/disable-breakpoints.png"/> 以及删除所有断点 <img class="- topic/image image" id="vscode_client__image_bwj_ckj_xzb" src="../images/vscodeext/debug/zh/delete-breakpoints.png"/>。</p>
+            <ul class="- topic/ul ul" id="vscode_client__ul_bh4_vn4_ryb" data-ofbid="vscode_client__ul_bh4_vn4_ryb">
+                <li class="- topic/li li" id="vscode_client__li_bcm_54d_syb" data-ofbid="vscode_client__li_bcm_54d_syb">
+                    <p class="- topic/p p" id="vscode_client__p_ccm_54d_syb" data-ofbid="vscode_client__p_ccm_54d_syb">点击禁用所有断点 <img class="- topic/image image" id="vscode_client__image_qvh_yjj_xzb" src="../images/vscodeext/debug/zh/disable-breakpoints.png"/>
+                        可以暂时关闭所有断点，恢复正常程序的执行；再次点击此按钮或者手动添加新断点时，会自动开启所有断点。</p>
+                </li>
+                <li class="- topic/li li" id="vscode_client__li_dcm_54d_syb" data-ofbid="vscode_client__li_dcm_54d_syb">
+                    <p class="- topic/p p" id="vscode_client__p_ecm_54d_syb" data-ofbid="vscode_client__p_ecm_54d_syb">点击删除所有断点 <img class="- topic/image image" id="vscode_client__image_qf5_zjj_xzb" src="../images/vscodeext/debug/zh/delete-breakpoints.png"/> 可以删除所有断点，包括已经禁用的断点。</p>
+                </li>
+            </ul>
+            <figure class="- topic/fig fig fignone" id="vscode_client__fig_hvz_vn4_ryb" data-ofbid="vscode_client__fig_hvz_vn4_ryb"><figcaption data-caption-side="top" class="- topic/title title figcap"><span class="figtitleprefix fig--title-label">图<span class="fig--title-label-number"> 29</span><span class="fig--title-label-punctuation">. </span></span><span class="fig--title">断点管理</span></figcaption>
+                
+                <img class="- topic/image image" id="vscode_client__image_ch4_vn4_ryb" src="../images/vscodeext/debug/zh/breakpoints-manager.png" width="400"/>
+            </figure>
+            <p class="- topic/p p">多目标调试的方法如下：</p>
+            <p class="- topic/p p" id="vscode_client__p_fcm_54d_syb" data-ofbid="vscode_client__p_fcm_54d_syb">在启动一个调试会话的同时, 启动另一个调试会话，VS Code 即可自动切换到多目标模式：</p>
+            <ul class="- topic/ul ul" id="vscode_client__ul_kmy_xn4_ryb" data-ofbid="vscode_client__ul_kmy_xn4_ryb">
+                <li class="- topic/li li" id="vscode_client__li_gcm_54d_syb" data-ofbid="vscode_client__li_gcm_54d_syb">
+                    <p class="- topic/p p" id="vscode_client__p_hcm_54d_syb" data-ofbid="vscode_client__p_hcm_54d_syb">各个会话现在在 <strong class="+ topic/ph hi-d/b ph b">调用堆栈</strong> 视图中显示为顶级元素。</p>
+                    <figure class="- topic/fig fig fignone" id="vscode_client__fig_nnj_yn4_ryb" data-ofbid="vscode_client__fig_nnj_yn4_ryb"><figcaption data-caption-side="top" class="- topic/title title figcap"><span class="figtitleprefix fig--title-label">图<span class="fig--title-label-number"> 30</span><span class="fig--title-label-punctuation">. </span></span><span class="fig--title">调用堆栈</span></figcaption>
+                        
+                        <img class="- topic/image image" id="vscode_client__image_lmy_xn4_ryb" src="../images/vscodeext/debug/zh/callstack-view.png" width="400"/>
+                    </figure>
+                </li>
+                <li class="- topic/li li" id="vscode_client__li_icm_54d_syb" data-ofbid="vscode_client__li_icm_54d_syb">
+                    <p class="- topic/p p" id="vscode_client__p_jcm_54d_syb" data-ofbid="vscode_client__p_jcm_54d_syb">调试工具栏显示当前活动的会话（所有其他会话在下拉菜单中可用）。</p>
+                    <figure class="- topic/fig fig fignone" id="vscode_client__fig_lwj_zn4_ryb" data-ofbid="vscode_client__fig_lwj_zn4_ryb"><figcaption data-caption-side="top" class="- topic/title title figcap"><span class="figtitleprefix fig--title-label">图<span class="fig--title-label-number"> 31</span><span class="fig--title-label-punctuation">. </span></span><span class="fig--title">会话列表</span></figcaption>
+                        
+                        <img class="- topic/image image" id="vscode_client__image_mmy_xn4_ryb" src="../images/vscodeext/debug/zh/multi-server.png" width="400"/>
+                    </figure>
+                </li>
+                <li class="- topic/li li" id="vscode_client__li_kcm_54d_syb" data-ofbid="vscode_client__li_kcm_54d_syb">
+                    <p class="- topic/p p" id="vscode_client__p_lcm_54d_syb" data-ofbid="vscode_client__p_lcm_54d_syb">调试操作（例如, 调试工具栏中的所有操作）在活动会话上执行可以使用调试工具栏中的下拉菜单或在 <strong class="+ topic/ph hi-d/b ph b">调用堆栈</strong>
+                        视图中选择其他元素来更改活动会话。</p>
+                </li>
+            </ul>
+            <p class="- topic/p p" id="vscode_client__p_mcm_54d_syb" data-ofbid="vscode_client__p_mcm_54d_syb">以下脚本语法存在使用上的局限性：</p>
+            <ul class="- topic/ul ul" id="vscode_client__ul_hgk_244_ryb" data-ofbid="vscode_client__ul_hgk_244_ryb">
+                <li class="- topic/li li" id="vscode_client__li_ncm_54d_syb" data-ofbid="vscode_client__li_ncm_54d_syb">
+                    <p class="- topic/p p" id="vscode_client__p_ocm_54d_syb" data-ofbid="vscode_client__p_ocm_54d_syb">
+                        <code class="+ topic/ph pr-d/codeph ph codeph">functionview</code> 能够通过初步语法检查, 但使用此类语法在调试时会出错。</p>
+                </li>
+                <li class="- topic/li li" id="vscode_client__li_pcm_54d_syb" data-ofbid="vscode_client__li_pcm_54d_syb">
+                    <p class="- topic/p p" id="vscode_client__p_qcm_54d_syb" data-ofbid="vscode_client__p_qcm_54d_syb">含有 <code class="+ topic/ph pr-d/codeph ph codeph">include</code> 语句的脚本调试会报错“Does not support Debug mode when using
+                        include”。可以考虑用 <code class="+ topic/ph pr-d/codeph ph codeph">use</code> 替代。</p>
+                </li>
+                <li class="- topic/li li" id="vscode_client__li_rcm_54d_syb" data-ofbid="vscode_client__li_rcm_54d_syb">
+                    <p class="- topic/p p" id="vscode_client__p_scm_54d_syb" data-ofbid="vscode_client__p_scm_54d_syb">
+                        <code class="+ topic/ph pr-d/codeph ph codeph">submitJob</code>, <code class="+ topic/ph pr-d/codeph ph codeph">remoteRun</code>
+                        等远程调用类函数不能跟踪函数栈调用。</p>
+                </li>
+                <li class="- topic/li li" id="vscode_client__li_tcm_54d_syb" data-ofbid="vscode_client__li_tcm_54d_syb">
+                    <p class="- topic/p p" id="vscode_client__p_ucm_54d_syb" data-ofbid="vscode_client__p_ucm_54d_syb">匿名函数、lambda 表达式、闭包的用法。</p>
+                </li>
+            </ul>
+            <p class="- topic/p p" id="vscode_client__p_vcm_54d_syb" data-ofbid="vscode_client__p_vcm_54d_syb">暂不支持以下调试方法</p>
+            <ul class="- topic/ul ul" id="vscode_client__ul_t4g_f44_ryb" data-ofbid="vscode_client__ul_t4g_f44_ryb">
+                <li class="- topic/li li" id="vscode_client__li_wcm_54d_syb" data-ofbid="vscode_client__li_wcm_54d_syb">
+                    <p class="- topic/p p" id="vscode_client__p_xcm_54d_syb" data-ofbid="vscode_client__p_xcm_54d_syb">内联断点、条件断点、记录点、监视</p>
+                </li>
+                <li class="- topic/li li" id="vscode_client__li_ycm_54d_syb" data-ofbid="vscode_client__li_ycm_54d_syb">
+                    <p class="- topic/p p" id="vscode_client__p_zcm_54d_syb" data-ofbid="vscode_client__p_zcm_54d_syb">查看长度较大的变量</p>
+                    <figure class="- topic/fig fig fignone" id="vscode_client__fig_j34_f44_ryb" data-ofbid="vscode_client__fig_j34_f44_ryb"><figcaption data-caption-side="top" class="- topic/title title figcap"><span class="figtitleprefix fig--title-label">图<span class="fig--title-label-number"> 32</span><span class="fig--title-label-punctuation">. </span></span><span class="fig--title">长度较大变量</span></figcaption>
+                        
+                        <img class="- topic/image image" id="vscode_client__image_u4g_f44_ryb" src="../images/vscodeext/debug/zh/long-var.png" height="107" width="2338"/>
+                    </figure>
+                </li>
+            </ul>
+        </section>
+        <section class="- topic/section section" id="vscode_client__section_vzc_5l4_ryb" data-ofbid="vscode_client__section_vzc_5l4_ryb"><h2 class="- topic/title title sectiontitle">常见问题</h2>
+            
+            <div class="- topic/p p">
+                <ul class="- topic/ul ul" id="vscode_client__ul_d5y_zfx_pbc" data-ofbid="vscode_client__ul_d5y_zfx_pbc">
+                    <li class="- topic/li li">
+                        <p class="- topic/p p">如果按 <strong class="+ topic/ph hi-d/b ph b">Ctrl + E</strong> 快捷键无反应：</p>
+                        <ul class="- topic/ul ul" id="vscode_client__ul_mz1_1gx_pbc" data-ofbid="vscode_client__ul_mz1_1gx_pbc">
+                            <li class="- topic/li li">
+                                <p class="- topic/p p">可能是由于未关联 DolphinDB 语言（此时语法高亮也未生效）</p>
+                            </li>
+                            <li class="- topic/li li">
+                                <p class="- topic/p p">也可能由于快捷键与其他插件冲突，需要在 VS Code 的 <strong class="+ topic/ph hi-d/b ph b">文件</strong> &gt; <strong class="+ topic/ph hi-d/b ph b">首选项</strong> &gt;
+                                        <strong class="+ topic/ph hi-d/b ph b">键盘快捷方式</strong> (<strong class="+ topic/ph hi-d/b ph b">File</strong> &gt; <strong class="+ topic/ph hi-d/b ph b">Preferences</strong> &gt;
+                                        <strong class="+ topic/ph hi-d/b ph b">Keyboard Shortcuts</strong>`) 中自定义快捷键，在搜索框中输入 <strong class="+ topic/ph hi-d/b ph b">CTRL+E</strong>,
+                                    删除和 <strong class="+ topic/ph hi-d/b ph b">DolphinDB: 执行代码</strong> （DolphinDB: Execute Code）
+                                    冲突的其他插件的快捷键。</p>
+                                <figure class="- topic/fig fig fignone" id="vscode_client__fig_nz1_1gx_pbc" data-ofbid="vscode_client__fig_nz1_1gx_pbc">
+                                    <img class="- topic/image image" id="vscode_client__image_oz1_1gx_pbc" src="../images/vscodeext/key-bindings.png" width="500"/>
+                                </figure>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="- topic/li li">如果出现执行代码后一直卡在执行中，打开 vscode 顶部的 <code class="+ topic/ph pr-d/codeph ph codeph">帮助 (Help)</code> &gt; <code class="+ topic/ph pr-d/codeph ph codeph">切换开发人员工具
+                            (DevTools)</code> 在弹出的窗口中切换到控制台标签页查看，如果存在如下内容：<code class="+ topic/ph pr-d/codeph ph codeph">Webview fatal
+                            error: Error: Could not register service workers: InvalidStateError:
+                            Failed to register a ServiceWorker: The document is in an invalid
+                            state..</code>，则按下面的步骤操作：<ol class="- topic/ol ol" id="vscode_client__ol_dlp_jgx_pbc" data-ofbid="vscode_client__ol_dlp_jgx_pbc">
+                            <li class="- topic/li li">先更新 VS Code 到最新版本。</li>
+                            <li class="- topic/li li">如果还不能解决，尝试下面的方法结束所有的 <code class="+ topic/ph pr-d/codeph ph codeph">Code.exe</code> 进程，并删除 service worker
+                                    缓存：<ul class="- topic/ul ul" id="vscode_client__ul_f1m_pgx_pbc" data-ofbid="vscode_client__ul_f1m_pgx_pbc">
+                                    <li class="- topic/li li">linux:
+                                        <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="vscode_client__codeblock_isv_pgx_pbc" data-ofbid="vscode_client__codeblock_isv_pgx_pbc"><code>pkill code &amp;&amp; rm -rf .config/Code/Service\
+      Worker/{CacheStorage,ScriptCache}</code></pre></li>
+                                    <li class="- topic/li li">windows: <ol class="- topic/ol ol" type="a" id="vscode_client__ol_a2t_qgx_pbc" data-ofbid="vscode_client__ol_a2t_qgx_pbc">
+                                            <li class="- topic/li li">退出 vscode 之后，打开任务管理器，结束所有残留的 vscode 僵尸进程
+                                                <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="vscode_client__codeblock_b2t_qgx_pbc" data-ofbid="vscode_client__codeblock_b2t_qgx_pbc"><code>taskkill
+              /F /IM Code.exe</code></pre></li>
+                                            <li class="- topic/li li">在文件管理器中打开
+                                                  <code class="+ topic/ph pr-d/codeph ph codeph">C:/Users/你的用户名/AppData/Roaming/Code/Service
+                                                  Worker/</code></li>
+                                            <li class="- topic/li li">删除 <code class="+ topic/ph pr-d/codeph ph codeph">CacheStorage</code> 和
+                                                  <code class="+ topic/ph pr-d/codeph ph codeph">ScriptCache</code> 两个文件夹</li>
+                                        </ol></li>
+                                </ul></li>
+                            <li class="- topic/li li">如果操作以上内容后仍存在问题，则重启电脑。参考 <a class="- topic/xref xref" href="https://github.com/microsoft/vscode/issues/125993" target="_blank" rel="external noopener">https://github.com/microsoft/vscode/issues/125993</a></li>
+                        </ol></li>
+                </ul>
+            </div>
+            <ul class="- topic/ul ul" id="vscode_client__ul_vlh_vl4_ryb" data-ofbid="vscode_client__ul_vlh_vl4_ryb">
+                <li class="- topic/li li" id="vscode_client__li_ddm_54d_syb" data-ofbid="vscode_client__li_ddm_54d_syb">
+                    <p class="- topic/p p" id="vscode_client__p_edm_54d_syb" data-ofbid="vscode_client__p_edm_54d_syb">如果出现执行代码并返回表格后，底部没有自动切换到 DolphinDB 视图的情况，需要重置 DolphinDB 视图的位置，如下图所示</p>
+                    <figure class="- topic/fig fig fignone" id="vscode_client__fig_olj_wl4_ryb" data-ofbid="vscode_client__fig_olj_wl4_ryb"><figcaption data-caption-side="top" class="- topic/title title figcap"><span class="figtitleprefix fig--title-label">图<span class="fig--title-label-number"> 33</span><span class="fig--title-label-punctuation">. </span></span><span class="fig--title"></span></figcaption>
+                        
+                        <img class="- topic/image image" id="vscode_client__image_wlh_vl4_ryb" src="../images/vscodeext/reset-location.png" width="500"/>
+                    </figure>
+                </li>
+                <li class="- topic/li li" id="vscode_client__li_qdm_54d_syb" data-ofbid="vscode_client__li_qdm_54d_syb">
+                    <p class="- topic/p p" id="vscode_client__p_rdm_54d_syb" data-ofbid="vscode_client__p_rdm_54d_syb">如果出现 dataview (数据视图)
+                        面板右键隐藏后无法再次显示，且执行脚本一直卡在执行中的情况，尝试以下方法解决：</p>
+                    <ol class="- topic/ol ol" id="vscode_client__ol_zlh_vl4_ryb" data-ofbid="vscode_client__ol_zlh_vl4_ryb">
+                        <li class="- topic/li li" id="vscode_client__li_sdm_54d_syb" data-ofbid="vscode_client__li_sdm_54d_syb">
+                            <p class="- topic/p p" id="vscode_client__p_tdm_54d_syb" data-ofbid="vscode_client__p_tdm_54d_syb">执行 <code class="+ topic/ph pr-d/codeph ph codeph">defs()</code> 函数</p>
+                        </li>
+                        <li class="- topic/li li" id="vscode_client__li_udm_54d_syb" data-ofbid="vscode_client__li_udm_54d_syb">
+                            <p class="- topic/p p" id="vscode_client__p_vdm_54d_syb" data-ofbid="vscode_client__p_vdm_54d_syb">按 <strong class="+ topic/ph hi-d/b ph b">CTRL + SHIFT + P</strong> 呼出命令面板，搜索 <strong class="+ topic/ph hi-d/b ph b">open
+                                    view</strong>
+                            </p>
+                        </li>
+                        <li class="- topic/li li" id="vscode_client__li_wdm_54d_syb" data-ofbid="vscode_client__li_wdm_54d_syb">
+                            <p class="- topic/p p" id="vscode_client__p_xdm_54d_syb" data-ofbid="vscode_client__p_xdm_54d_syb">点击打开视图</p>
+                        </li>
+                        <li class="- topic/li li" id="vscode_client__li_ydm_54d_syb" data-ofbid="vscode_client__li_ydm_54d_syb">
+                            <p class="- topic/p p" id="vscode_client__p_zdm_54d_syb" data-ofbid="vscode_client__p_zdm_54d_syb">搜索数据视图（英文名是 dataview）</p>
+                        </li>
+                        <li class="- topic/li li" id="vscode_client__li_a2m_54d_syb" data-ofbid="vscode_client__li_a2m_54d_syb">
+                            <p class="- topic/p p" id="vscode_client__p_b2m_54d_syb" data-ofbid="vscode_client__p_b2m_54d_syb">点击后即可打开。</p>
+                        </li>
+                    </ol>
+                </li>
+                <li class="- topic/li li" id="vscode_client__li_mdm_54d_syb" data-ofbid="vscode_client__li_mdm_54d_syb">
+                    <p class="- topic/p p" id="vscode_client__p_ndm_54d_syb" data-ofbid="vscode_client__p_ndm_54d_syb">VS Code 有大约为 <code class="+ topic/ph pr-d/codeph ph codeph">1 GB</code> 的内存限制。建议使用 <code class="+ topic/ph pr-d/codeph ph codeph">limit</code>
+                        限制返回记录数；或者将结果赋给某个变量，如 <code class="+ topic/ph pr-d/codeph ph codeph">a = select *
+                        from</code>，后续通过点击侧边栏变量旁边的按钮进行分页懒加载，按需取回单页数据。</p>
+                </li>
+                <li class="- topic/li li" id="vscode_client__li_odm_54d_syb" data-ofbid="vscode_client__li_odm_54d_syb">
+                    <p class="- topic/p p" id="vscode_client__p_pdm_54d_syb" data-ofbid="vscode_client__p_pdm_54d_syb">为了在浏览器中展示表格等数据，每个 VS Code 窗口会启动一个本地 HTTP 服务器，其可用端口范围可以通过
+                            <code class="+ topic/ph pr-d/codeph ph codeph">dolphindb.ports</code> 配置，默认为 <code class="+ topic/ph pr-d/codeph ph codeph">8321-8420</code>，鼠标悬浮在
+                        ports 上可查看详细解释。在浏览器中弹窗展示的功能，要求近两年的版本，如 Chrome 100+ 或 Edge 100+ 或 Firefox
+                        100+</p>
+                </li>
+                <li class="- topic/li li">若连接数据库时出现报错无法连接的报错，可参考下图关闭代理：<figure class="- topic/fig fig fignone" id="vscode_client__fig_xdb_rcp_wbc" data-ofbid="vscode_client__fig_xdb_rcp_wbc"><figcaption data-caption-side="top" class="- topic/title title figcap"><span class="figtitleprefix fig--title-label">图<span class="fig--title-label-number"> 34</span><span class="fig--title-label-punctuation">. </span></span><span class="fig--title">关闭代理</span></figcaption>
+                        
+                        <img class="- topic/image image" id="vscode_client__image_ydb_rcp_wbc" src="../images/vscodeext/close-proxy.png"/>
+                    </figure></li>
+            </ul>
+        </section>
+        <section class="- topic/section section" id="vscode_client__section_kvl_bm4_ryb" data-ofbid="vscode_client__section_kvl_bm4_ryb"><h2 class="- topic/title title sectiontitle">开发说明</h2>
+            
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock language-bourne" id="vscode_client__codeblock_gbv_bm4_ryb" data-ofbid="vscode_client__codeblock_gbv_bm4_ryb"><em class="hl-comment"># 安装最新版的 nodejs</em>
+<em class="hl-comment"># https://nodejs.org/en/download/current/</em>
+
+<em class="hl-comment"># 安装 pnpm 包管理器</em>
+corepack enable
+corepack prepare pnpm@latest --activate
+
+git clone https://github.com/dolphindb/vscode-extension.git
+
+<strong class="hl-keyword">cd</strong> vscode-extension
+
+<em class="hl-comment"># 安装项目依赖</em>
+pnpm install
+
+<em class="hl-comment"># 将 .vscode/settings.template.json 复制为 .vscode/settings.json</em>
+cp .vscode/settings.template.json .vscode/settings.json
+
+<em class="hl-comment"># 参考 package.json 中的 scripts</em>
+
+<em class="hl-comment"># 构建开发版本</em>
+pnpm run dev
+
+<em class="hl-comment"># 在 VS Code 中切换到调试面板，启动 ddb.ext 调试任务（需要先禁用或卸载已安装的 dolphindb 插件）</em></pre>
+        </section>
+    </div>
+</article></main></div>
+                        
+                        
+                        
+                        
+                        
+                        
+                    </div>
+                    
+                        <nav role="navigation" id="wh_topic_toc" aria-label="On this page" class="col-lg-2 d-none d-lg-block navbar d-print-none"> 
+                            <div id="wh_topic_toc_content">
+		                        
+	                            <div class=" wh_topic_toc "><div class="wh_topic_label">在本页上</div><ul><li class="section-item"><div class="section-title"><a href="#vscode_client__section_lc4_gk4_ryb" data-tocid="vscode_client__section_lc4_gk4_ryb">使用方法</a></div></li><li class="section-item"><div class="section-title"><a href="#vscode_client__section_s3r_ll4_ryb" data-tocid="vscode_client__section_s3r_ll4_ryb">调试脚本</a></div></li><li class="section-item"><div class="section-title"><a href="#vscode_client__section_vzc_5l4_ryb" data-tocid="vscode_client__section_vzc_5l4_ryb">常见问题</a></div></li><li class="section-item"><div class="section-title"><a href="#vscode_client__section_kvl_bm4_ryb" data-tocid="vscode_client__section_kvl_bm4_ryb">开发说明</a></div></li></ul></div>
+	                        	
+                        	</div>
+                        </nav>
+                    
+                </div>
+            </div>
+            
+            
+            
+        </div> 
+        <footer class="navbar navbar-default wh_footer">
+  <div class=" footer-container mx-auto ">
+<title>Copyright</title><p><b> ©2024 浙江智臾科技有限公司 浙ICP备18048711号-3</b></p>
+  </div>
+</footer>
+        
+        <div id="go2top" class="d-print-none">
+            <span class="oxy-icon oxy-icon-up"></span>
+        </div>
+        
+        <div id="modal_img_large" class="modal">
+            <span class="close oxy-icon oxy-icon-remove"></span>
+            <div id="modal_img_container"></div>
+            <div id="caption"></div>
+        </div>
+        
+        
+        
+    </body>
+</html>

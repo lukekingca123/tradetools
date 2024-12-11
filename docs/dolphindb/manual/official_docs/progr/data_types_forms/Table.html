@@ -1,0 +1,702 @@
+<!DOCTYPE html><html xmlns="http://www.w3.org/1999/xhtml" xml:lang="zh" lang="zh" data-whc_version="26.0">
+    <head><link rel="shortcut icon" href="../../favicon.ico"/><link rel="icon" href="../../favicon.ico"/><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><meta http-equiv="X-UA-Compatible" content="IE=edge"/><meta name="description" content="表是数据库的重要组成部分，用于表达数据以及这些数据之间的联系。表由许多列组成，每一列都必须指定列名和数据类型，并且存储了对应类型的数据。可以对表中的数据进行增加，删除，更新和查询操作。 DolphinDB 中数据表有以下几类： 内存表 普通内存表（ table ），最基础的表结构，常用于临时数据存储。 索引内存表（ indexedTable ），适用于存取键值对数据的场景，范围查询性能更优。 ..."/><meta name="DC.rights.owner" content="(C) 版权 2024"/><meta name="copyright" content="(C) 版权 2024"/><meta name="generator" content="DITA-OT"/><meta name="DC.type" content="topic"/><meta name="DC.coverage" content=""/><meta name="DC.subject" content="表,数据表,table"/><meta name="keywords" content="表, 数据表, table"/><meta name="indexterms" content="表, 数据表, table"/><meta name="DC.relation" content="../../progr/data_forms.html"/><meta name="prodname" content="DolphinDB"/><meta name="brand" content="DolphinDB"/><meta name="DC.creator" content="DolphinDB"/><meta name="DC.publisher" content="DDB N/A DDB 200"/><meta name="DC.format" content="HTML5"/><meta name="DC.identifier" content="表"/><title>表</title><!--  Generated with Oxygen version 26.0, build number 2024012323.  --><meta name="wh-path2root" content="../../"/><meta name="wh-toc-id" content="表-d9529e17518"/><meta name="wh-source-relpath" content="progr/data_types_forms/Table.dita"/><meta name="wh-out-relpath" content="progr/data_types_forms/Table.html"/>
+
+    <link rel="stylesheet" type="text/css" href="../../oxygen-webhelp/app/commons.css?buildId=2024012323"/>
+    <link rel="stylesheet" type="text/css" href="../../oxygen-webhelp/app/topic.css?buildId=2024012323"/>
+
+    <script src="../../oxygen-webhelp/app/options/properties.js?buildId=20240704100525"></script>
+    <script src="../../oxygen-webhelp/app/localization/strings.js?buildId=2024012323"></script>
+    <script src="../../oxygen-webhelp/app/search/index/keywords.js?buildId=20240704100525"></script>
+    <script defer="defer" src="../../oxygen-webhelp/app/commons.js?buildId=2024012323"></script>
+    <script defer="defer" src="../../oxygen-webhelp/app/topic.js?buildId=2024012323"></script>
+<link rel="stylesheet" type="text/css" href="../../oxygen-webhelp/template/styles.css?buildId=2024012323"/><script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script><script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script></head>
+
+    <body id="表" class="wh_topic_page frmBody">
+        <a href="#wh_topic_body" class="sr-only sr-only-focusable">
+            跳转到主要内容
+        </a>
+        
+        
+        
+        
+        <header class="navbar navbar-default wh_header">
+    <div class="container-fluid">
+        <div xmlns:whc="http://www.oxygenxml.com/webhelp/components" class="wh_header_flex_container navbar-nav navbar-expand-md navbar-dark">
+            <div class="wh_logo_and_publication_title_container">
+                <div class="wh_logo_and_publication_title">
+                    
+                    <a href="https://www.dolphindb.cn" class=" wh_logo d-none d-sm-block "><img src="../../logo.png" alt="  DolphinDB 文档中心  "/></a>
+                    <div class=" wh_publication_title "><a href="../../index.html"><span class="booktitle">  <span class="ph mainbooktitle">DolphinDB 文档中心</span>  </span></a></div>
+                    
+                </div>
+                
+                
+            </div>
+
+            <div class="wh_top_menu_and_indexterms_link collapse navbar-collapse" id="wh_top_menu_and_indexterms_link">
+                
+                
+                
+                
+            </div>
+        <div class=" wh_search_input navbar-form wh_topic_page_search search " role="form">
+            
+            
+            
+            <form id="searchForm" method="get" role="search" action="../../search.html"><div><input type="search" placeholder="搜索 " class="wh_search_textfield" id="textToSearch" name="searchQuery" aria-label="搜索查询" required="required"/><button type="submit" class="wh_search_button" aria-label="搜索"><span class="search_input_text">搜索</span></button></div></form>
+            
+            <script src="/vendors/react/umd/react.production.min.js" defer="defer"></script>
+<script src="/vendors/react-dom/umd/react-dom.production.min.js" defer="defer"></script>
+<script src="/vendors/dayjs/dayjs.min.js" defer="defer"></script>
+<script src="/vendors/antd/dist/antd.min.js" defer="defer"></script>
+<script src="/vendors/@ant-design/icons/dist/index.umd.min.js" defer="defer"></script>
+<script src="/zh/index.js" type="module"></script>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js" defer="defer"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML" defer="defer"><!--
+
+
+--></script>
+
+            
+        </div></div>
+    </div>
+</header>
+        
+        
+         
+        
+        
+        
+        <div class="container-fluid" id="wh_topic_container">
+            <div class="row">
+
+                <nav class="wh_tools d-print-none navbar-expand-md" aria-label="Tools">
+                    
+                    <div data-tooltip-position="bottom" class=" wh_breadcrumb "><ol class="d-print-none"><li><span class="home"><a href="../../index.html"><span>主页</span></a></span></li><li><div class="topicref" data-id="about_language_resources"><div class="title"><a href="../../progr/progr_intro.html"><span class="keyword label">编程语言</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 编程基本概念与方法、SQL 在 DolphinDB 的应用</p></div></div></div></li><li><div class="topicref" data-id="chap4_db_programming"><div class="title"><a href="../../progr/lang_intro.html"><span class="keyword label">DolphinDB 脚本语言</span></a><div class="wh-tooltip"><p class="shortdesc"> 脚本编程相关概念参考，包括：数据类型与形式、对象、运算符、编程语句、数据操作、函数化编程、文件操作和 SQL 语句。 </p></div></div></div></li><li><div class="topicref" data-id="chap4_sect_datatypes_forms"><div class="title"><a href="../../progr/data_types_forms_intro.html"><span class="keyword">数据类型与形式</span></a></div></div></li><li><div class="topicref" data-id="chap4_sect_dataforms"><div class="title"><a href="../../progr/data_forms.html"><span class="keyword label">数据形式</span></a></div></div></li><li class="active"><div class="topicref" data-id="表"><div class="title"><a href="../../progr/data_types_forms/Table.html"><span class="keyword label">表</span></a></div></div></li></ol></div>
+                    
+                    
+                    
+                    <div class="wh_right_tools">
+                        <button class="wh_hide_highlight" aria-label="切换搜索突出显示" title="切换搜索突出显示"></button>
+                        <button class="webhelp_expand_collapse_sections" data-next-state="collapsed" aria-label="折叠截面" title="折叠截面"></button>
+                        
+                        
+                        
+                        
+                        <div class=" wh_print_link print d-none d-md-inline-block "><button onClick="window.print()" title="打印此页" aria-label="打印此页"></button></div>
+                        
+                        <button type="button" id="wh_toc_button" class="custom-toggler navbar-toggler collapsed wh_toggle_button navbar-light" aria-expanded="false" aria-label="Toggle publishing table of content" aria-controls="wh_publication_toc">
+                            <span class="navbar-toggler-icon"></span>
+                        </button>
+                    </div>
+                    
+                </nav>
+            </div>
+            
+            
+            
+            
+            <div class="wh_content_area">
+                <div class="row">
+                    
+                        <nav id="wh_publication_toc" class="col-lg-3 col-md-3 col-sm-12 d-md-block d-none d-print-none" aria-label="Table of Contents Container">
+                            <div id="wh_publication_toc_content">
+		                        
+                            	<div class=" wh_publication_toc " data-tooltip-position="right"><span class="expand-button-action-labels"><span id="button-expand-action" role="button" aria-label="Expand"></span><span id="button-collapse-action" role="button" aria-label="Collapse"></span><span id="button-pending-action" role="button" aria-label="Pending"></span></span><ul role="tree" aria-label="Table of Contents"><li role="treeitem"><div data-tocid="new_chap_about_sect_ddb_docs_intro-d9529e87" class="topicref" data-id="new_chap_about_sect_ddb_docs_intro" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../about/ddb_docs_intro.html" id="new_chap_about_sect_ddb_docs_intro-d9529e87-link">文档使用说明</a><div class="wh-tooltip"><p class="shortdesc">如何获取 DolphinDB 帮助信息</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="chap1_getstarted-d9529e140" class="topicref" data-id="chap1_getstarted" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action chap1_getstarted-d9529e140-link" class="wh-expand-btn"></span><div class="title"><a href="../../getstarted/chap1_getstarted.html" id="chap1_getstarted-d9529e140-link"><span class="keyword label">快速上手</span></a><div class="wh-tooltip"><p class="shortdesc">如何快速部署 DolphinDB、建库建表、写入和查询数据</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="sectionddb_deployment-d9529e335" class="topicref" data-id="sectionddb_deployment" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action sectionddb_deployment-d9529e335-link" class="wh-expand-btn"></span><div class="title"><a href="../../deploy/deploy_intro.html" id="sectionddb_deployment-d9529e335-link"><span class="keyword label">部署</span></a><div class="wh-tooltip"><p class="shortdesc">如何在不同的场景中部署 DolphinDB</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="new_chap_database_manage_new_chap_dbmanage_landing_page-d9529e2313" class="topicref" data-id="new_chap_database_manage_new_chap_dbmanage_landing_page" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action new_chap_database_manage_new_chap_dbmanage_landing_page-d9529e2313-link" class="wh-expand-btn"></span><div class="title"><a href="../../db_distr_comp/cfg/db_intro.html" id="new_chap_database_manage_new_chap_dbmanage_landing_page-d9529e2313-link"><span class="keyword label">数据库</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 数据库的基本概念</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="chap7_tutorials_streaming-d9529e3490" class="topicref" data-id="chap7_tutorials_streaming" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action chap7_tutorials_streaming-d9529e3490-link" class="wh-expand-btn"></span><div class="title"><a href="../../stream/str_intro.html" id="chap7_tutorials_streaming-d9529e3490-link"><span class="keyword label">流数据</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 流数据引擎及流数据计算的基本概念</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="tocId-d9529e7385" class="topicref" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action tocId-d9529e7385-link" class="wh-expand-btn"></span><div class="title"><a href="../../db_distr_comp/db_oper/import_data.html" id="tocId-d9529e7385-link">数据迁移</a><div class="wh-tooltip"><p class="shortdesc">如何从不同数据源向 DolphinDB 迁移数据</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="chap7_tutorials_system_management-d9529e7812" class="topicref" data-id="chap7_tutorials_system_management" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action chap7_tutorials_system_management-d9529e7812-link" class="wh-expand-btn"></span><div class="title"><a href="../../sys_man/om_intro.html" id="chap7_tutorials_system_management-d9529e7812-link"><span class="keyword label">系统运维</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 的系统运维功能及方法</p></div></div></div></li><li role="treeitem" aria-expanded="true"><div data-tocid="about_language_resources-d9529e16490" class="topicref" data-id="about_language_resources" data-state="expanded"><span role="button" tabindex="0" aria-labelledby="button-collapse-action about_language_resources-d9529e16490-link" class="wh-expand-btn"></span><div class="title"><a href="../../progr/progr_intro.html" id="about_language_resources-d9529e16490-link"><span class="keyword label">编程语言</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 编程基本概念与方法、SQL 在 DolphinDB 的应用</p></div></div></div><ul role="group" class="navbar-nav nav-list"><li role="treeitem" aria-expanded="true"><div data-tocid="chap4_db_programming-d9529e16543" class="topicref" data-id="chap4_db_programming" data-state="expanded"><span role="button" tabindex="0" aria-labelledby="button-collapse-action chap4_db_programming-d9529e16543-link" class="wh-expand-btn"></span><div class="title"><a href="../../progr/lang_intro.html" id="chap4_db_programming-d9529e16543-link"><span class="keyword label">DolphinDB 脚本语言</span></a><div class="wh-tooltip"><p class="shortdesc"> 脚本编程相关概念参考，包括：数据类型与形式、对象、运算符、编程语句、数据操作、函数化编程、文件操作和 SQL 语句。 </p></div></div></div><ul role="group" class="navbar-nav nav-list"><li role="treeitem" aria-expanded="true"><div data-tocid="chap4_sect_datatypes_forms-d9529e16594" class="topicref" data-id="chap4_sect_datatypes_forms" data-state="expanded"><span role="button" tabindex="0" aria-labelledby="button-collapse-action chap4_sect_datatypes_forms-d9529e16594-link" class="wh-expand-btn"></span><div class="title"><a href="../../progr/data_types_forms_intro.html" id="chap4_sect_datatypes_forms-d9529e16594-link"><span class="keyword">数据类型与形式</span></a></div></div><ul role="group" class="navbar-nav nav-list"><li role="treeitem" aria-expanded="false"><div data-tocid="chap4_sect_data_type_description-d9529e16655" class="topicref" data-id="chap4_sect_data_type_description" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action chap4_sect_data_type_description-d9529e16655-link" class="wh-expand-btn"></span><div class="title"><a href="../../progr/data_types.html" id="chap4_sect_data_type_description-d9529e16655-link"><span class="keyword label">数据类型</span></a></div></div></li><li role="treeitem" aria-expanded="true"><div data-tocid="chap4_sect_dataforms-d9529e16771" class="topicref" data-id="chap4_sect_dataforms" data-state="expanded"><span role="button" tabindex="0" aria-labelledby="button-collapse-action chap4_sect_dataforms-d9529e16771-link" class="wh-expand-btn"></span><div class="title"><a href="../../progr/data_forms.html" id="chap4_sect_dataforms-d9529e16771-link"><span class="keyword label">数据形式</span></a></div></div><ul role="group" class="navbar-nav nav-list"><li role="treeitem"><div data-tocid="标量-d9529e16826" class="topicref" data-id="标量" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../progr/data_types_forms/Scalar.html" id="标量-d9529e16826-link"><span class="keyword label">标量</span></a></div></div></li><li role="treeitem"><div data-tocid="数据对-d9529e16887" class="topicref" data-id="数据对" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../progr/data_types_forms/Pair.html" id="数据对-d9529e16887-link"><span class="keyword label">数据对</span></a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="向量-d9529e16948" class="topicref" data-id="向量" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action 向量-d9529e16948-link" class="wh-expand-btn"></span><div class="title"><a href="../../progr/data_types_forms/vector.html" id="向量-d9529e16948-link"><span class="keyword label">向量</span></a></div></div></li><li role="treeitem"><div data-tocid="矩阵-d9529e17335" class="topicref" data-id="矩阵" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../progr/data_types_forms/Matrix.html" id="矩阵-d9529e17335-link"><span class="keyword label">矩阵</span></a></div></div></li><li role="treeitem"><div data-tocid="集合-d9529e17396" class="topicref" data-id="集合" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../progr/data_types_forms/Set.html" id="集合-d9529e17396-link"><span class="keyword label">集合</span></a></div></div></li><li role="treeitem"><div data-tocid="字典-d9529e17457" class="topicref" data-id="字典" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../progr/data_types_forms/Dictionary.html" id="字典-d9529e17457-link"><span class="keyword label">字典</span></a></div></div></li><li role="treeitem" class="active"><div data-tocid="表-d9529e17518" class="topicref" data-id="表" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../progr/data_types_forms/Table.html" id="表-d9529e17518-link"><span class="keyword label">表</span></a></div></div></li><li role="treeitem"><div data-tocid="tensor-d9529e17586" class="topicref" data-id="tensor" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../progr/tensor.html" id="tensor-d9529e17586-link">tensor</a></div></div></li></ul></li></ul></li><li role="treeitem" aria-expanded="false"><div data-tocid="chap4_sect_objects-d9529e17632" class="topicref" data-id="chap4_sect_objects" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action chap4_sect_objects-d9529e17632-link" class="wh-expand-btn"></span><div class="title"><a href="../../progr/objs/objects.html" id="chap4_sect_objects-d9529e17632-link"><span class="keyword label">对象</span></a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="chap4_sect_operators-d9529e18069" class="topicref" data-id="chap4_sect_operators" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action chap4_sect_operators-d9529e18069-link" class="wh-expand-btn"></span><div class="title"><a href="../../progr/operators/operators.html" id="chap4_sect_operators-d9529e18069-link"><span class="keyword label">运算符</span></a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="chap4_sect_programming_statements-d9529e19654" class="topicref" data-id="chap4_sect_programming_statements" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action chap4_sect_programming_statements-d9529e19654-link" class="wh-expand-btn"></span><div class="title"><a href="../../progr/statements/statements_intro.html" id="chap4_sect_programming_statements-d9529e19654-link"><span class="keyword label">编程语句</span></a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="chap4_sect_data_manipulation-d9529e20900" class="topicref" data-id="chap4_sect_data_manipulation" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action chap4_sect_data_manipulation-d9529e20900-link" class="wh-expand-btn"></span><div class="title"><a href="../../progr/data_mani/dm_intro.html" id="chap4_sect_data_manipulation-d9529e20900-link"><span class="keyword label">数据操作</span></a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="chap4_sect_func_programming-d9529e21873" class="topicref" data-id="chap4_sect_func_programming" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action chap4_sect_func_programming-d9529e21873-link" class="wh-expand-btn"></span><div class="title"><a href="../../progr/func_progr.html" id="chap4_sect_func_programming-d9529e21873-link"><span class="keyword label">函数化编程</span></a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="元编程-d9529e22197" class="topicref" data-id="元编程" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action 元编程-d9529e22197-link" class="wh-expand-btn"></span><div class="title"><a href="../../progr/objs/meta_progr.html" id="元编程-d9529e22197-link"><span class="keyword label">元编程</span></a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="oop-d9529e22337" class="topicref" data-id="oop" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action oop-d9529e22337-link" class="wh-expand-btn"></span><div class="title"><a href="../../progr/oop.html" id="oop-d9529e22337-link">面向对象编程</a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="文件操作-d9529e22705" class="topicref" data-id="文件操作" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action 文件操作-d9529e22705-link" class="wh-expand-btn"></span><div class="title"><a href="../../progr/file_io/file_oper.html" id="文件操作-d9529e22705-link"><span class="keyword label">文件操作</span></a></div></div></li></ul></li><li role="treeitem" aria-expanded="false"><div data-tocid="chap4_sect_sql_statements-d9529e22890" class="topicref" data-id="chap4_sect_sql_statements" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action chap4_sect_sql_statements-d9529e22890-link" class="wh-expand-btn"></span><div class="title"><a href="../../progr/sql/sql_intro.html" id="chap4_sect_sql_statements-d9529e22890-link"><span class="keyword label">SQL 语句</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 中 SQL 语句的基本语法和用法</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="python-parser-简介-d9529e25535" class="topicref" data-id="python-parser-简介" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action python-parser-简介-d9529e25535-link" class="wh-expand-btn"></span><div class="title"><a href="../../progr/py_parser/py_par_intro.html" id="python-parser-简介-d9529e25535-link"><span class="keyword label">Python Parser</span></a></div></div></li></ul></li><li role="treeitem" aria-expanded="false"><div data-tocid="functions_references-d9529e26503" class="topicref" data-id="functions_references" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action functions_references-d9529e26503-link" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/funcs_intro.html" id="functions_references-d9529e26503-link"><span class="keyword label">函数参考</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 函数分类、语法、详解及示例</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="api_protocol-d9529e86456" class="topicref" data-id="api_protocol" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action api_protocol-d9529e86456-link" class="wh-expand-btn"></span><div class="title"><a href="../../api/connapi_intro.html" id="api_protocol-d9529e86456-link"><span class="keyword label">连接器 &amp; API</span></a><div class="wh-tooltip"><p class="shortdesc">面向不同编程语言的 DolphinDB API 及连接器，相关协议和用法</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="chap6_plugin-d9529e91976" class="topicref" data-id="chap6_plugin" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action chap6_plugin-d9529e91976-link" class="wh-expand-btn"></span><div class="title"><a href="../../plugins/plg_intro.html" id="chap6_plugin-d9529e91976-link"><span class="keyword label">插件</span></a><div class="wh-tooltip"><p class="shortdesc">多个应用场景的插件使用说明和插件开发指导</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="third_party-d9529e94749" class="topicref" data-id="third_party" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action third_party-d9529e94749-link" class="wh-expand-btn"></span><div class="title"><a href="../../third_party.html" id="third_party-d9529e94749-link">第三方工具</a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="about_tutorials-d9529e94980" class="topicref" data-id="about_tutorials" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action about_tutorials-d9529e94980-link" class="wh-expand-btn"></span><div class="title"><a href="../../tutorials/about_tutorials.html" id="about_tutorials-d9529e94980-link"><span class="keyword label">教程</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 产品使用教程</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="tocId-d9529e101769" class="topicref" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action tocId-d9529e101769-link" class="wh-expand-btn"></span><div class="title"><a href="../../rn/server/3_00_1.html" id="tocId-d9529e101769-link">版本说明</a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 版本发布历史</p></div></div></div></li></ul></div>
+		                        
+                            </div>
+                        </nav>
+                    
+                    
+                    <div class="col-lg-7 col-md-9 col-sm-12" id="wh_topic_body">
+                        <button id="wh_close_publication_toc_button" class="close-toc-button d-none" aria-label="Toggle publishing table of content" aria-controls="wh_publication_toc" aria-expanded="true">
+                            <span class="close-toc-icon-container">
+                                <span class="close-toc-icon"></span>     
+                            </span>
+                        </button>
+                        <button id="wh_close_topic_toc_button" class="close-toc-button d-none" aria-label="Toggle topic table of content" aria-controls="wh_topic_toc" aria-expanded="true">
+                            <span class="close-toc-icon-container">
+                                <span class="close-toc-icon"></span>     
+                            </span>
+                        </button>
+                        
+                        <div class=" wh_topic_content body "><main role="main"><article class="- topic/topic topic" role="article" aria-labelledby="ariaid-title1">
+    <h1 class="- topic/title title topictitle1" id="ariaid-title1"><span class="- topic/keyword keyword label">表</span></h1>
+    
+    <div class="- topic/body body">
+        <p class="- topic/p p" id="表__p_urv_5hn_ryb" data-ofbid="表__p_urv_5hn_ryb">表是数据库的重要组成部分，用于表达数据以及这些数据之间的联系。表由许多列组成，每一列都必须指定列名和数据类型，并且存储了对应类型的数据。可以对表中的数据进行增加，删除，更新和查询操作。</p>
+        <p class="- topic/p p" id="表__p_vrv_5hn_ryb" data-ofbid="表__p_vrv_5hn_ryb">DolphinDB 中数据表有以下几类：</p>
+        <ul class="- topic/ul ul" id="表__ul_wrv_5hn_ryb" data-ofbid="表__ul_wrv_5hn_ryb">
+            <li class="- topic/li li">
+                <p class="- topic/p p" id="表__p_xrv_5hn_ryb" data-ofbid="表__p_xrv_5hn_ryb">内存表</p>
+                <ul class="- topic/ul ul" id="表__ul_yrv_5hn_ryb" data-ofbid="表__ul_yrv_5hn_ryb">
+                    <li class="- topic/li li">
+                        <p class="- topic/p p" id="表__p_zrv_5hn_ryb" data-ofbid="表__p_zrv_5hn_ryb">普通内存表（<a class="- topic/xref xref" href="../../funcs/t/table.html">table</a>），最基础的表结构，常用于临时数据存储。</p>
+                    </li>
+                    <li class="- topic/li li">
+                        <p class="- topic/p p" id="表__p_asv_5hn_ryb" data-ofbid="表__p_asv_5hn_ryb">索引内存表（<a class="- topic/xref xref" href="../../funcs/i/indexedTable.html">indexedTable</a>），适用于存取键值对数据的场景，范围查询性能更优。</p>
+                    </li>
+                    <li class="- topic/li li">
+                        <p class="- topic/p p" id="表__p_bsv_5hn_ryb" data-ofbid="表__p_bsv_5hn_ryb">键值内存表（<a class="- topic/xref xref" href="../../funcs/k/keyedTable.html">keyedTable</a>），适用于存取键值对数据的场景，单点查性性能更优。</p>
+                    </li>
+                    <li class="- topic/li li">
+                        <p class="- topic/p p" id="表__p_csv_5hn_ryb" data-ofbid="表__p_csv_5hn_ryb">流数据表（<a class="- topic/xref xref" href="../../funcs/s/streamTable.html">streamTable</a>, <a class="- topic/xref xref" href="../../funcs/h/haStreamTable.html">haStreamTable</a>），用于流数据的实时接收和存储。</p>
+                    </li>
+                    <li class="- topic/li li">
+                        <p class="- topic/p p" id="表__p_dsv_5hn_ryb" data-ofbid="表__p_dsv_5hn_ryb">mvcc 内存表（<a class="- topic/xref xref" href="../../funcs/m/mvccTable.html">mvccTable</a>），适用于频繁查询，但写入、更新、删除频率不高的场景。</p>
+                    </li>
+                    <li class="- topic/li li">
+                        <p class="- topic/p p" id="表__p_esv_5hn_ryb" data-ofbid="表__p_esv_5hn_ryb">分区内存表（<a class="- topic/xref xref" href="../../funcs/c/createPartitionedTable.html">createPartitionedTable</a>），各分区可并行计算，适用于数据量较大且对性能有要求的场景。</p>
+                    </li>
+                    <li class="- topic/li li">
+                        <p class="- topic/p p" id="表__p_fsv_5hn_ryb" data-ofbid="表__p_fsv_5hn_ryb">缓存表（<a class="- topic/xref xref" href="../../funcs/c/cachedTable.html">cachedTable</a>），提供了缓存并定时更新数据的功能，适用于同步实时性要求不高的数据。</p>
+                    </li>
+                    <li class="- topic/li li">
+                        <p class="- topic/p p" id="表__p_lqd_pv2_jbc" data-ofbid="表__p_lqd_pv2_jbc">内存在线事务处理表（<a class="- topic/xref xref" href="../../funcs/c/createIMOLTPTable.html">createIMOLTPTable</a>），通过主键和索引加速查询，适用于对响应时间有严格要求的低延时场景。</p>
+                    </li>
+                </ul>
+            </li>
+            <li class="- topic/li li">
+                <p class="- topic/p p" id="表__p_gsv_5hn_ryb" data-ofbid="表__p_gsv_5hn_ryb">分布式表</p>
+                <ul class="- topic/ul ul" id="表__ul_hsv_5hn_ryb" data-ofbid="表__ul_hsv_5hn_ryb">
+                    <li class="- topic/li li">
+                        <p class="- topic/p p" id="表__p_isv_5hn_ryb" data-ofbid="表__p_isv_5hn_ryb">分布式分区表（<a class="- topic/xref xref" href="../../funcs/c/createPartitionedTable.html">createPartitionedTable</a>），最常见的分布式表结构，多用于大规模数据存储和高并发请求的场景。</p>
+                    </li>
+                    <li class="- topic/li li">
+                        <p class="- topic/p p" id="表__p_jsv_5hn_ryb" data-ofbid="表__p_jsv_5hn_ryb">维度表（<a class="- topic/xref xref" href="../../funcs/c/createdimensiontable.html">createDimensionTable</a>），在分布式数据库中没有分区的表，适用于存储不频繁更新的小数据集。</p>
+                    </li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+    <article class="- topic/topic topic nested1" aria-labelledby="ariaid-title2" id="创建表">
+        <h2 class="- topic/title title topictitle2" id="ariaid-title2">创建表</h2>
+        <div class="- topic/body body">
+            <p class="- topic/p p" id="创建表__p_ksv_5hn_ryb" data-ofbid="创建表__p_ksv_5hn_ryb">本节介绍内存表的创建。创建内存表时，列名必须由中文或英文字母、数字或下划线 (_)，且必须以中文或英文字母开头。</p>
+            <p class="- topic/p p" id="创建表__p_lsv_5hn_ryb" data-ofbid="创建表__p_lsv_5hn_ryb"><span class="- topic/ph ph">2.00.2 </span>版本开始，由 <a class="- topic/xref xref" href="../sql/pivotBy.html">pivot by</a>, <a class="- topic/xref xref" href="../../funcs/a/addColumn.html">addColumn</a>
+                操作产生的列名，支持包含特殊字符，或以数字开头。</p>
+            <p class="- topic/p p" id="创建表__p_msv_5hn_ryb" data-ofbid="创建表__p_msv_5hn_ryb">请注意：</p>
+            <ul class="- topic/ul ul" id="创建表__ul_nsv_5hn_ryb" data-ofbid="创建表__ul_nsv_5hn_ryb">
+                <li class="- topic/li li">
+                    <p class="- topic/p p" id="创建表__p_osv_5hn_ryb" data-ofbid="创建表__p_osv_5hn_ryb">包含特殊符号或以数字开头的列名在 SQL 中引用时，需将列名用双引号引用，并在其之前使用下划线作为标识，例如：_"IBM.N",
+                        _"000001.SH"；</p>
+                </li>
+                <li class="- topic/li li">
+                    <p class="- topic/p p" id="创建表__p_psv_5hn_ryb" data-ofbid="创建表__p_psv_5hn_ryb">列名包含特殊符号或以数字开头的列亦可通过 tb["col"]，tb."col" 的方式访问。</p>
+                </li>
+                <li class="- topic/li li">
+                    <p class="- topic/p p" id="创建表__p_qsv_5hn_ryb" data-ofbid="创建表__p_qsv_5hn_ryb">进行 pivot by 需要对空数据赋予列名时，会赋予列名"NULL"，引用时需要遵循上述第一条规则（_"NULL")。</p>
+                </li>
+            </ul>
+            <p class="- topic/p p" id="创建表__p_rsv_5hn_ryb" data-ofbid="创建表__p_rsv_5hn_ryb">为了与之前版本的代码兼容，引入了配置项 <em class="+ topic/ph hi-d/i ph i">removeSpecialCharInColumnName</em>，默认值是
+                false，表示允许列名包含特殊字符。如果要跟以前兼容，可以将该变量配置为 true。</p>
+            <p class="- topic/p p" id="创建表__p_ssv_5hn_ryb" data-ofbid="创建表__p_ssv_5hn_ryb">例1：创建内存表的三种方式。</p>
+            <p class="- topic/p p" id="创建表__p_tsv_5hn_ryb" data-ofbid="创建表__p_tsv_5hn_ryb">（1）<code class="+ topic/ph pr-d/codeph ph codeph">table(X as col, [X1 as col1], [X2 as col2],
+                    .....)</code></p>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="创建表__codeblock_usv_5hn_ryb" data-ofbid="创建表__codeblock_usv_5hn_ryb"><code>t0=table(1 2 3 as a, `x`y`z as b, 10.8 7.6 3.5 as c);
+t0;</code></pre>
+            <div class="table-container"><table class="- topic/table table" id="创建表__table_vsv_5hn_ryb" data-ofbid="创建表__table_vsv_5hn_ryb" data-cols="3"><caption></caption><colgroup><col/><col/><col/></colgroup><thead class="- topic/thead thead">
+                        <tr class="- topic/row">
+                            <th class="- topic/entry entry colsep-0 rowsep-0" id="创建表__table_vsv_5hn_ryb__entry__1">a</th>
+                            <th class="- topic/entry entry colsep-0 rowsep-0" id="创建表__table_vsv_5hn_ryb__entry__2">b</th>
+                            <th class="- topic/entry entry colsep-0 rowsep-0" id="创建表__table_vsv_5hn_ryb__entry__3">c</th>
+                        </tr>
+                    </thead><tbody class="- topic/tbody tbody">
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry colsep-0 rowsep-0" headers="创建表__table_vsv_5hn_ryb__entry__1">1</td>
+                            <td class="- topic/entry entry colsep-0 rowsep-0" headers="创建表__table_vsv_5hn_ryb__entry__2">x</td>
+                            <td class="- topic/entry entry colsep-0 rowsep-0" headers="创建表__table_vsv_5hn_ryb__entry__3">10.8</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry colsep-0 rowsep-0" headers="创建表__table_vsv_5hn_ryb__entry__1">2</td>
+                            <td class="- topic/entry entry colsep-0 rowsep-0" headers="创建表__table_vsv_5hn_ryb__entry__2">y</td>
+                            <td class="- topic/entry entry colsep-0 rowsep-0" headers="创建表__table_vsv_5hn_ryb__entry__3">7.6</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry colsep-0 rowsep-0" headers="创建表__table_vsv_5hn_ryb__entry__1">3</td>
+                            <td class="- topic/entry entry colsep-0 rowsep-0" headers="创建表__table_vsv_5hn_ryb__entry__2">z</td>
+                            <td class="- topic/entry entry colsep-0 rowsep-0" headers="创建表__table_vsv_5hn_ryb__entry__3">3.5</td>
+                        </tr>
+                    </tbody></table></div>
+            <p class="- topic/p p" id="创建表__p_wsv_5hn_ryb" data-ofbid="创建表__p_wsv_5hn_ryb">（2）<code class="+ topic/ph pr-d/codeph ph codeph">table(X, [X1], [X2], .....)</code></p>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="创建表__codeblock_xsv_5hn_ryb" data-ofbid="创建表__codeblock_xsv_5hn_ryb"><code>x=1 2 3;
+y=4 5 6;
+t1=table(x,y);
+t1;</code></pre>
+            <div class="table-container"><table class="- topic/table table" id="创建表__table_ysv_5hn_ryb" data-ofbid="创建表__table_ysv_5hn_ryb" data-cols="2"><caption></caption><colgroup><col/><col/></colgroup><thead class="- topic/thead thead">
+                        <tr class="- topic/row">
+                            <th class="- topic/entry entry colsep-0 rowsep-0" id="创建表__table_ysv_5hn_ryb__entry__1">x</th>
+                            <th class="- topic/entry entry colsep-0 rowsep-0" id="创建表__table_ysv_5hn_ryb__entry__2">y</th>
+                        </tr>
+                    </thead><tbody class="- topic/tbody tbody">
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry colsep-0 rowsep-0" headers="创建表__table_ysv_5hn_ryb__entry__1">1</td>
+                            <td class="- topic/entry entry colsep-0 rowsep-0" headers="创建表__table_ysv_5hn_ryb__entry__2">4</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry colsep-0 rowsep-0" headers="创建表__table_ysv_5hn_ryb__entry__1">2</td>
+                            <td class="- topic/entry entry colsep-0 rowsep-0" headers="创建表__table_ysv_5hn_ryb__entry__2">5</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry colsep-0 rowsep-0" headers="创建表__table_ysv_5hn_ryb__entry__1">3</td>
+                            <td class="- topic/entry entry colsep-0 rowsep-0" headers="创建表__table_ysv_5hn_ryb__entry__2">6</td>
+                        </tr>
+                    </tbody></table></div>
+            <p class="- topic/p p" id="创建表__p_zsv_5hn_ryb" data-ofbid="创建表__p_zsv_5hn_ryb">（3）<code class="+ topic/ph pr-d/codeph ph codeph">table(capacity:size, colNames, colTypes)</code></p>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="创建表__codeblock_atv_5hn_ryb" data-ofbid="创建表__codeblock_atv_5hn_ryb"><code>t2=table(200:10, `name`id`value, [STRING,INT,DOUBLE]);
+t2;</code></pre>
+            <div class="table-container"><table class="- topic/table table" id="创建表__table_btv_5hn_ryb" data-ofbid="创建表__table_btv_5hn_ryb" data-cols="3"><caption></caption><colgroup><col/><col/><col/></colgroup><thead class="- topic/thead thead">
+                        <tr class="- topic/row">
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="创建表__table_btv_5hn_ryb__entry__1">name</th>
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="创建表__table_btv_5hn_ryb__entry__2">id</th>
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="创建表__table_btv_5hn_ryb__entry__3">value</th>
+                        </tr>
+                    </thead><tbody class="- topic/tbody tbody">
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="创建表__table_btv_5hn_ryb__entry__1"> </td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="创建表__table_btv_5hn_ryb__entry__2">0</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="创建表__table_btv_5hn_ryb__entry__3">0</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="创建表__table_btv_5hn_ryb__entry__1"> </td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="创建表__table_btv_5hn_ryb__entry__2">0</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="创建表__table_btv_5hn_ryb__entry__3">0</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="创建表__table_btv_5hn_ryb__entry__1"> </td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="创建表__table_btv_5hn_ryb__entry__2">0</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="创建表__table_btv_5hn_ryb__entry__3">0</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="创建表__table_btv_5hn_ryb__entry__1"> </td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="创建表__table_btv_5hn_ryb__entry__2">0</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="创建表__table_btv_5hn_ryb__entry__3">0</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="创建表__table_btv_5hn_ryb__entry__1"> </td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="创建表__table_btv_5hn_ryb__entry__2">0</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="创建表__table_btv_5hn_ryb__entry__3">0</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="创建表__table_btv_5hn_ryb__entry__1"> </td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="创建表__table_btv_5hn_ryb__entry__2">0</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="创建表__table_btv_5hn_ryb__entry__3">0</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="创建表__table_btv_5hn_ryb__entry__1"> </td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="创建表__table_btv_5hn_ryb__entry__2">0</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="创建表__table_btv_5hn_ryb__entry__3">0</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="创建表__table_btv_5hn_ryb__entry__1"> </td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="创建表__table_btv_5hn_ryb__entry__2">0</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="创建表__table_btv_5hn_ryb__entry__3">0</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="创建表__table_btv_5hn_ryb__entry__1"> </td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="创建表__table_btv_5hn_ryb__entry__2">0</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="创建表__table_btv_5hn_ryb__entry__3">0</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="创建表__table_btv_5hn_ryb__entry__1"> </td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="创建表__table_btv_5hn_ryb__entry__2">0</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="创建表__table_btv_5hn_ryb__entry__3">0</td>
+                        </tr>
+                    </tbody></table></div>
+            <p class="- topic/p p" id="创建表__p_ctv_5hn_ryb" data-ofbid="创建表__p_ctv_5hn_ryb">例2：列名包含特殊符号的内存表创建与查询。</p>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="创建表__codeblock_dtv_5hn_ryb" data-ofbid="创建表__codeblock_dtv_5hn_ryb"><code>t3=table(1 2 3 as `_a, 4 5 6 as "2 ab");
+t3;</code></pre>
+            <div class="table-container"><table class="- topic/table table" id="创建表__table_etv_5hn_ryb" data-ofbid="创建表__table_etv_5hn_ryb" data-cols="2"><caption></caption><colgroup><col/><col/></colgroup><thead class="- topic/thead thead">
+                        <tr class="- topic/row">
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="创建表__table_etv_5hn_ryb__entry__1">_a</th>
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="创建表__table_etv_5hn_ryb__entry__2">2 ab</th>
+                        </tr>
+                    </thead><tbody class="- topic/tbody tbody">
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="创建表__table_etv_5hn_ryb__entry__1">1</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="创建表__table_etv_5hn_ryb__entry__2">4</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="创建表__table_etv_5hn_ryb__entry__1">2</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="创建表__table_etv_5hn_ryb__entry__2">5</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="创建表__table_etv_5hn_ryb__entry__1">3</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="创建表__table_etv_5hn_ryb__entry__2">6</td>
+                        </tr>
+                    </tbody></table></div>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="创建表__codeblock_ftv_5hn_ryb" data-ofbid="创建表__codeblock_ftv_5hn_ryb"><code>select _"_a" as "_aa", _"2 ab" as "2ab" from t3;</code></pre>
+            <div class="table-container"><table class="- topic/table table" id="创建表__table_gtv_5hn_ryb" data-ofbid="创建表__table_gtv_5hn_ryb" data-cols="2"><caption></caption><colgroup><col/><col/></colgroup><thead class="- topic/thead thead">
+                        <tr class="- topic/row">
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="创建表__table_gtv_5hn_ryb__entry__1">_aa</th>
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="创建表__table_gtv_5hn_ryb__entry__2">2ab</th>
+                        </tr>
+                    </thead><tbody class="- topic/tbody tbody">
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="创建表__table_gtv_5hn_ryb__entry__1">1</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="创建表__table_gtv_5hn_ryb__entry__2">4</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="创建表__table_gtv_5hn_ryb__entry__1">2</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="创建表__table_gtv_5hn_ryb__entry__2">5</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="创建表__table_gtv_5hn_ryb__entry__1">3</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="创建表__table_gtv_5hn_ryb__entry__2">6</td>
+                        </tr>
+                    </tbody></table></div>
+            <p class="- topic/p p" id="创建表__p_htv_5hn_ryb" data-ofbid="创建表__p_htv_5hn_ryb">例3：将向量或矩阵转换为表。</p>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="创建表__codeblock_itv_5hn_ryb" data-ofbid="创建表__codeblock_itv_5hn_ryb"><code>a=([1,2],[3.2,4.3],[2019.01.02,2019.05.03]);
+table(a);</code></pre>
+            <div class="table-container"><table class="- topic/table table" id="创建表__table_jtv_5hn_ryb" data-ofbid="创建表__table_jtv_5hn_ryb" data-cols="3"><caption></caption><colgroup><col/><col/><col/></colgroup><thead class="- topic/thead thead">
+                        <tr class="- topic/row">
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="创建表__table_jtv_5hn_ryb__entry__1">C0</th>
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="创建表__table_jtv_5hn_ryb__entry__2">C1</th>
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="创建表__table_jtv_5hn_ryb__entry__3">C2</th>
+                        </tr>
+                    </thead><tbody class="- topic/tbody tbody">
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="创建表__table_jtv_5hn_ryb__entry__1">1</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="创建表__table_jtv_5hn_ryb__entry__2">3.2</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="创建表__table_jtv_5hn_ryb__entry__3">2019.01.02</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="创建表__table_jtv_5hn_ryb__entry__1">2</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="创建表__table_jtv_5hn_ryb__entry__2">4.3</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="创建表__table_jtv_5hn_ryb__entry__3">2019.05.03</td>
+                        </tr>
+                    </tbody></table></div>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="创建表__codeblock_ktv_5hn_ryb" data-ofbid="创建表__codeblock_ktv_5hn_ryb"><code>m=1..12$3:4;
+table(m);</code></pre>
+            <div class="table-container"><table class="- topic/table table" id="创建表__table_ltv_5hn_ryb" data-ofbid="创建表__table_ltv_5hn_ryb" data-cols="4"><caption></caption><colgroup><col/><col/><col/><col/></colgroup><thead class="- topic/thead thead">
+                        <tr class="- topic/row">
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="创建表__table_ltv_5hn_ryb__entry__1">C0</th>
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="创建表__table_ltv_5hn_ryb__entry__2">C1</th>
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="创建表__table_ltv_5hn_ryb__entry__3">C2</th>
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="创建表__table_ltv_5hn_ryb__entry__4">C3</th>
+                        </tr>
+                    </thead><tbody class="- topic/tbody tbody">
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="创建表__table_ltv_5hn_ryb__entry__1">1</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="创建表__table_ltv_5hn_ryb__entry__2">4</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="创建表__table_ltv_5hn_ryb__entry__3">7</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="创建表__table_ltv_5hn_ryb__entry__4">10</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="创建表__table_ltv_5hn_ryb__entry__1">2</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="创建表__table_ltv_5hn_ryb__entry__2">5</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="创建表__table_ltv_5hn_ryb__entry__3">8</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="创建表__table_ltv_5hn_ryb__entry__4">11</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="创建表__table_ltv_5hn_ryb__entry__1">3</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="创建表__table_ltv_5hn_ryb__entry__2">6</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="创建表__table_ltv_5hn_ryb__entry__3">9</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="创建表__table_ltv_5hn_ryb__entry__4">12</td>
+                        </tr>
+                    </tbody></table></div>
+        </div>
+    </article>
+    <article class="- topic/topic topic nested1" aria-labelledby="ariaid-title3" id="访问表">
+        <h2 class="- topic/title title topictitle2" id="ariaid-title3">访问表</h2>
+        <div class="- topic/body body">
+            <p class="- topic/p p" id="访问表__p_mtv_5hn_ryb" data-ofbid="访问表__p_mtv_5hn_ryb">DolphinDB 访问表的方式很灵活，既可以使用 SQL 语句，也可以使用类似 python 的语法。SQL 访问表的具体例子详见 <a class="- topic/xref xref" href="../sql/sql_intro.html" title="DolphinDB 中 SQL 语句的基本语法和用法">SQL语句</a>，下例主要说明如何通过类似 python
+                的语法读取表数据。</p>
+            <p class="- topic/p p" id="访问表__p_ntv_5hn_ryb" data-ofbid="访问表__p_ntv_5hn_ryb">例1：可使用 &lt;tableName&gt;[X,Y] 访问表，其中 X 和 Y 可以是标量或数据对。X 用于选择行，Y 用于选择列。表索引的范围从 0
+                开始，不包含上限值。例如，1:3 包括 1 和 2。类似地，2:0 表示 1 和 0。</p>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="访问表__codeblock_otv_5hn_ryb" data-ofbid="访问表__codeblock_otv_5hn_ryb"><code>t1[1:3, 1];</code></pre>
+            <div class="table-container"><table class="- topic/table table" id="访问表__table_ptv_5hn_ryb" data-ofbid="访问表__table_ptv_5hn_ryb" data-cols="1"><caption></caption><colgroup><col/></colgroup><thead class="- topic/thead thead">
+                        <tr class="- topic/row">
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="访问表__table_ptv_5hn_ryb__entry__1">y</th>
+                        </tr>
+                    </thead><tbody class="- topic/tbody tbody">
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="访问表__table_ptv_5hn_ryb__entry__1">5</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="访问表__table_ptv_5hn_ryb__entry__1">6</td>
+                        </tr>
+                    </tbody></table></div>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="访问表__codeblock_qtv_5hn_ryb" data-ofbid="访问表__codeblock_qtv_5hn_ryb"><code>t1[,t1.columns()-1];</code></pre>
+            <div class="table-container"><table class="- topic/table table" id="访问表__table_rtv_5hn_ryb" data-ofbid="访问表__table_rtv_5hn_ryb" data-cols="1"><caption></caption><colgroup><col/></colgroup><thead class="- topic/thead thead">
+                        <tr class="- topic/row">
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="访问表__table_rtv_5hn_ryb__entry__1">y</th>
+                        </tr>
+                    </thead><tbody class="- topic/tbody tbody">
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="访问表__table_rtv_5hn_ryb__entry__1">4</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="访问表__table_rtv_5hn_ryb__entry__1">5</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="访问表__table_rtv_5hn_ryb__entry__1">6</td>
+                        </tr>
+                    </tbody></table></div>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="访问表__codeblock_stv_5hn_ryb" data-ofbid="访问表__codeblock_stv_5hn_ryb"><code>t1.keys();
+
+["x","y"]
+
+t1.values();
+
+([1,2,3],[4,5,6])</code></pre>
+            <p class="- topic/p p" id="访问表__p_ttv_5hn_ryb" data-ofbid="访问表__p_ttv_5hn_ryb">例2：条件访问数据表。</p>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="访问表__codeblock_utv_5hn_ryb" data-ofbid="访问表__codeblock_utv_5hn_ryb"><code>t1[t1.x&gt;2];      // 查询 x&gt;2 的行
+
+or
+t1[t1[`x]&gt;2];</code></pre>
+            <div class="table-container"><table class="- topic/table table" id="访问表__table_vtv_5hn_ryb" data-ofbid="访问表__table_vtv_5hn_ryb" data-cols="2"><caption></caption><colgroup><col/><col/></colgroup><thead class="- topic/thead thead">
+                        <tr class="- topic/row">
+                            <th class="- topic/entry entry colsep-0 rowsep-0" id="访问表__table_vtv_5hn_ryb__entry__1">x</th>
+                            <th class="- topic/entry entry colsep-0 rowsep-0" id="访问表__table_vtv_5hn_ryb__entry__2">y</th>
+                        </tr>
+                    </thead><tbody class="- topic/tbody tbody">
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry colsep-0 rowsep-0" headers="访问表__table_vtv_5hn_ryb__entry__1">3</td>
+                            <td class="- topic/entry entry colsep-0 rowsep-0" headers="访问表__table_vtv_5hn_ryb__entry__2">6</td>
+                        </tr>
+                    </tbody></table></div>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="访问表__codeblock_wtv_5hn_ryb" data-ofbid="访问表__codeblock_wtv_5hn_ryb"><code>t1[t1.x in (1 3)];       // 查询 x=1 或 x=3 的行</code></pre>
+            <div class="table-container"><table class="- topic/table table" id="访问表__table_xtv_5hn_ryb" data-ofbid="访问表__table_xtv_5hn_ryb" data-cols="2"><caption></caption><colgroup><col/><col/></colgroup><thead class="- topic/thead thead">
+                        <tr class="- topic/row">
+                            <th class="- topic/entry entry colsep-0 rowsep-0" id="访问表__table_xtv_5hn_ryb__entry__1">x</th>
+                            <th class="- topic/entry entry colsep-0 rowsep-0" id="访问表__table_xtv_5hn_ryb__entry__2">y</th>
+                        </tr>
+                    </thead><tbody class="- topic/tbody tbody">
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry colsep-0 rowsep-0" headers="访问表__table_xtv_5hn_ryb__entry__1">1</td>
+                            <td class="- topic/entry entry colsep-0 rowsep-0" headers="访问表__table_xtv_5hn_ryb__entry__2">4</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry colsep-0 rowsep-0" headers="访问表__table_xtv_5hn_ryb__entry__1">3</td>
+                            <td class="- topic/entry entry colsep-0 rowsep-0" headers="访问表__table_xtv_5hn_ryb__entry__2">6</td>
+                        </tr>
+                    </tbody></table></div>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="访问表__codeblock_ytv_5hn_ryb" data-ofbid="访问表__codeblock_ytv_5hn_ryb"><code>t1[t1.x&gt;1 &amp;&amp; t1.y&lt;6];       // 查询 x&gt;1 和 y&lt;6 的行</code></pre>
+            <div class="table-container"><table class="- topic/table table" id="访问表__table_ztv_5hn_ryb" data-ofbid="访问表__table_ztv_5hn_ryb" data-cols="2"><caption></caption><colgroup><col/><col/></colgroup><thead class="- topic/thead thead">
+                        <tr class="- topic/row">
+                            <th class="- topic/entry entry colsep-0 rowsep-0" id="访问表__table_ztv_5hn_ryb__entry__1">x</th>
+                            <th class="- topic/entry entry colsep-0 rowsep-0" id="访问表__table_ztv_5hn_ryb__entry__2">y</th>
+                        </tr>
+                    </thead><tbody class="- topic/tbody tbody">
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry colsep-0 rowsep-0" headers="访问表__table_ztv_5hn_ryb__entry__1">2</td>
+                            <td class="- topic/entry entry colsep-0 rowsep-0" headers="访问表__table_ztv_5hn_ryb__entry__2">5</td>
+                        </tr>
+                    </tbody></table></div>
+        </div>
+    </article>
+    <article class="- topic/topic topic nested1" aria-labelledby="ariaid-title4" id="更新表">
+        <h2 class="- topic/title title topictitle2" id="ariaid-title4">更新表</h2>
+        <div class="- topic/body body">
+            <p class="- topic/p p" id="更新表__p_a5v_5hn_ryb" data-ofbid="更新表__p_a5v_5hn_ryb">例1：根据条件更新内存表。</p>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="更新表__codeblock_b5v_5hn_ryb" data-ofbid="更新表__codeblock_b5v_5hn_ryb"><code>t1[`x, t1[`x] &lt; 2] = 3
+
+or
+t1[`x, &lt;x &lt; 2&gt;] = 3</code></pre>
+            <div class="table-container"><table class="- topic/table table" id="更新表__table_c5v_5hn_ryb" data-ofbid="更新表__table_c5v_5hn_ryb" data-cols="2"><caption></caption><colgroup><col/><col/></colgroup><thead class="- topic/thead thead">
+                        <tr class="- topic/row">
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="更新表__table_c5v_5hn_ryb__entry__1">x</th>
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="更新表__table_c5v_5hn_ryb__entry__2">y</th>
+                        </tr>
+                    </thead><tbody class="- topic/tbody tbody">
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="更新表__table_c5v_5hn_ryb__entry__1">3</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="更新表__table_c5v_5hn_ryb__entry__2">4</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="更新表__table_c5v_5hn_ryb__entry__1">2</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="更新表__table_c5v_5hn_ryb__entry__2">5</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="更新表__table_c5v_5hn_ryb__entry__1">3</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="更新表__table_c5v_5hn_ryb__entry__2">6</td>
+                        </tr>
+                    </tbody></table></div>
+            <p class="- topic/p p" id="更新表__p_d5v_5hn_ryb" data-ofbid="更新表__p_d5v_5hn_ryb">例2：通过赋值语句添加或更新表。</p>
+            <p class="- topic/p p" id="更新表__p_e5v_5hn_ryb" data-ofbid="更新表__p_e5v_5hn_ryb">创建一个空表并插入数据：</p>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="更新表__codeblock_f5v_5hn_ryb" data-ofbid="更新表__codeblock_f5v_5hn_ryb"><code>t = table(100:0, `x`y`z, `STRING`DATE`DOUBLE);
+// 创建一个具有三列 x, y, z 的表，数据类型分别为 STRING, DATE, DOUBLE。表的容量为 100，初始长度为 0。
+
+t;</code></pre>
+            <div class="table-container"><table class="- topic/table table" id="更新表__table_g5v_5hn_ryb" data-ofbid="更新表__table_g5v_5hn_ryb" data-cols="3"><caption></caption><colgroup><col/><col/><col/></colgroup><thead class="- topic/thead thead">
+                        <tr class="- topic/row">
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="更新表__table_g5v_5hn_ryb__entry__1">x</th>
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="更新表__table_g5v_5hn_ryb__entry__2">y</th>
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="更新表__table_g5v_5hn_ryb__entry__3">z</th>
+                        </tr>
+                    </thead><tbody class="- topic/tbody tbody">
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="更新表__table_g5v_5hn_ryb__entry__1"> </td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="更新表__table_g5v_5hn_ryb__entry__2"> </td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="更新表__table_g5v_5hn_ryb__entry__3"> </td>
+                        </tr>
+                    </tbody></table></div>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="更新表__codeblock_h5v_5hn_ryb" data-ofbid="更新表__codeblock_h5v_5hn_ryb"><code>insert into t values(take(`MS,3),2010.01.01 2010.01.02 2010.01.03, 1 2 3);
+t;</code></pre>
+            <div class="table-container"><table class="- topic/table table" id="更新表__table_i5v_5hn_ryb" data-ofbid="更新表__table_i5v_5hn_ryb" data-cols="3"><caption></caption><colgroup><col/><col/><col/></colgroup><thead class="- topic/thead thead">
+                        <tr class="- topic/row">
+                            <th class="- topic/entry entry colsep-0 rowsep-0" id="更新表__table_i5v_5hn_ryb__entry__1">x</th>
+                            <th class="- topic/entry entry colsep-0 rowsep-0" id="更新表__table_i5v_5hn_ryb__entry__2">y</th>
+                            <th class="- topic/entry entry colsep-0 rowsep-0" id="更新表__table_i5v_5hn_ryb__entry__3">z</th>
+                        </tr>
+                    </thead><tbody class="- topic/tbody tbody">
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry colsep-0 rowsep-0" headers="更新表__table_i5v_5hn_ryb__entry__1">MS</td>
+                            <td class="- topic/entry entry colsep-0 rowsep-0" headers="更新表__table_i5v_5hn_ryb__entry__2">2010.01.01</td>
+                            <td class="- topic/entry entry colsep-0 rowsep-0" headers="更新表__table_i5v_5hn_ryb__entry__3">1</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry colsep-0 rowsep-0" headers="更新表__table_i5v_5hn_ryb__entry__1">MS</td>
+                            <td class="- topic/entry entry colsep-0 rowsep-0" headers="更新表__table_i5v_5hn_ryb__entry__2">2010.01.02</td>
+                            <td class="- topic/entry entry colsep-0 rowsep-0" headers="更新表__table_i5v_5hn_ryb__entry__3">2</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry colsep-0 rowsep-0" headers="更新表__table_i5v_5hn_ryb__entry__1">MS</td>
+                            <td class="- topic/entry entry colsep-0 rowsep-0" headers="更新表__table_i5v_5hn_ryb__entry__2">2010.01.03</td>
+                            <td class="- topic/entry entry colsep-0 rowsep-0" headers="更新表__table_i5v_5hn_ryb__entry__3">3</td>
+                        </tr>
+                    </tbody></table></div>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="更新表__codeblock_j5v_5hn_ryb" data-ofbid="更新表__codeblock_j5v_5hn_ryb"><code>t=table(1 2 3 as id, 4 5 6 as value);
+t;</code></pre>
+            <div class="table-container"><table class="- topic/table table" id="更新表__table_k5v_5hn_ryb" data-ofbid="更新表__table_k5v_5hn_ryb" data-cols="2"><caption></caption><colgroup><col/><col/></colgroup><thead class="- topic/thead thead">
+                        <tr class="- topic/row">
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="更新表__table_k5v_5hn_ryb__entry__1">id</th>
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="更新表__table_k5v_5hn_ryb__entry__2">value</th>
+                        </tr>
+                    </thead><tbody class="- topic/tbody tbody">
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="更新表__table_k5v_5hn_ryb__entry__1">1</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="更新表__table_k5v_5hn_ryb__entry__2">4</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="更新表__table_k5v_5hn_ryb__entry__1">2</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="更新表__table_k5v_5hn_ryb__entry__2">5</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="更新表__table_k5v_5hn_ryb__entry__1">3</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="更新表__table_k5v_5hn_ryb__entry__2">6</td>
+                        </tr>
+                    </tbody></table></div>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="更新表__codeblock_l5v_5hn_ryb" data-ofbid="更新表__codeblock_l5v_5hn_ryb"><code>t[`id`name]=[7 8 9, `IBM`MSFT`GOOG];
+t;</code></pre>
+            <div class="table-container"><table class="- topic/table table" id="更新表__table_m5v_5hn_ryb" data-ofbid="更新表__table_m5v_5hn_ryb" data-cols="3"><caption></caption><colgroup><col/><col/><col/></colgroup><thead class="- topic/thead thead">
+                        <tr class="- topic/row">
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="更新表__table_m5v_5hn_ryb__entry__1">id</th>
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="更新表__table_m5v_5hn_ryb__entry__2">value</th>
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="更新表__table_m5v_5hn_ryb__entry__3">name</th>
+                        </tr>
+                    </thead><tbody class="- topic/tbody tbody">
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="更新表__table_m5v_5hn_ryb__entry__1">7</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="更新表__table_m5v_5hn_ryb__entry__2">4</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="更新表__table_m5v_5hn_ryb__entry__3">IBM</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="更新表__table_m5v_5hn_ryb__entry__1">8</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="更新表__table_m5v_5hn_ryb__entry__2">5</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="更新表__table_m5v_5hn_ryb__entry__3">MSFT</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="更新表__table_m5v_5hn_ryb__entry__1">9</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="更新表__table_m5v_5hn_ryb__entry__2">6</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="更新表__table_m5v_5hn_ryb__entry__3">GOOG</td>
+                        </tr>
+                    </tbody></table></div>
+            <p class="- topic/p p" id="更新表__p_n5v_5hn_ryb" data-ofbid="更新表__p_n5v_5hn_ryb">例3：通过 SQL update 语句更新表。</p>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="更新表__codeblock_o5v_5hn_ryb" data-ofbid="更新表__codeblock_o5v_5hn_ryb"><code>n=10
+colNames = timesymid
+colTypes = [DATE,SYMBOL,INT]
+t = table(n:0, colNames, colTypes)
+insert into t values(2020.01.05 13:30:10.008, A1, 1)
+insert into t values(2020.01.06 13:30:10.008, A2, 2)
+// 插入数据的时间类型与内存表时间类型不一致时，会自动转换为内存表时间列的类型。
+insert into t values(2020.06M, A3, 3)
+
+update t set time=2020.06.13 13:30:10 where sym=`A1
+select * from t</code></pre>
+            <div class="table-container"><table class="- topic/table table" id="更新表__table_p5v_5hn_ryb" data-ofbid="更新表__table_p5v_5hn_ryb" data-cols="3"><caption></caption><colgroup><col/><col/><col/></colgroup><thead class="- topic/thead thead">
+                        <tr class="- topic/row">
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="更新表__table_p5v_5hn_ryb__entry__1">time</th>
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="更新表__table_p5v_5hn_ryb__entry__2">sym</th>
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="更新表__table_p5v_5hn_ryb__entry__3">id</th>
+                        </tr>
+                    </thead><tbody class="- topic/tbody tbody">
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="更新表__table_p5v_5hn_ryb__entry__1">2020.06.13</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="更新表__table_p5v_5hn_ryb__entry__2">A1</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="更新表__table_p5v_5hn_ryb__entry__3">1</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="更新表__table_p5v_5hn_ryb__entry__1">2020.01.06</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="更新表__table_p5v_5hn_ryb__entry__2">A2</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="更新表__table_p5v_5hn_ryb__entry__3">2</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="更新表__table_p5v_5hn_ryb__entry__1">2020.06.01</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="更新表__table_p5v_5hn_ryb__entry__2">A3</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="更新表__table_p5v_5hn_ryb__entry__3">3</td>
+                        </tr>
+                    </tbody></table></div>
+        </div>
+    </article>
+    <article class="- topic/topic topic nested1" aria-labelledby="ariaid-title5" id="删除表">
+        <h2 class="- topic/title title topictitle2" id="ariaid-title5">删除表</h2>
+        <div class="- topic/body body">
+            <ul class="- topic/ul ul" id="删除表__ul_q5v_5hn_ryb" data-ofbid="删除表__ul_q5v_5hn_ryb">
+                <li class="- topic/li li">
+                    <p class="- topic/p p" id="删除表__p_r5v_5hn_ryb" data-ofbid="删除表__p_r5v_5hn_ryb">通过函数 <a class="- topic/xref xref" href="../../funcs/d/dropTable.html">dropTable</a> 和 <a class="- topic/xref xref" href="../../funcs/t/truncate.html">truncate</a> 可以一次性删除所有分布式表数据。</p>
+                </li>
+                <li class="- topic/li li">
+                    <p class="- topic/p p" id="删除表__p_s5v_5hn_ryb" data-ofbid="删除表__p_s5v_5hn_ryb">通过 <a class="- topic/xref xref" href="../sql/delete.html">delete</a>
+                        语句可以删除指定条件的表（内存表或分布式表）数据。</p>
+                </li>
+            </ul>
+            <p class="- topic/p p" id="删除表__p_t5v_5hn_ryb" data-ofbid="删除表__p_t5v_5hn_ryb">详情参考 <a class="- topic/xref xref" href="../../db_distr_comp/db_oper/drop_db_tb.html">DropDatabaseandTable</a> 页面的说明。</p>
+        </div>
+    </article>
+</article></main></div>
+                        
+                        
+                        
+                        
+                        
+                        
+                    </div>
+                    
+                        <nav role="navigation" id="wh_topic_toc" aria-label="On this page" class="col-lg-2 d-none d-lg-block navbar d-print-none"> 
+                            <div id="wh_topic_toc_content">
+		                        
+	                            <div class=" wh_topic_toc "><div class="wh_topic_label">在本页上</div><ul><li class="topic-item"><a href="#%E5%88%9B%E5%BB%BA%E8%A1%A8" data-tocid="创建表">创建表</a></li><li class="topic-item"><a href="#%E8%AE%BF%E9%97%AE%E8%A1%A8" data-tocid="访问表">访问表</a></li><li class="topic-item"><a href="#%E6%9B%B4%E6%96%B0%E8%A1%A8" data-tocid="更新表">更新表</a></li><li class="topic-item"><a href="#%E5%88%A0%E9%99%A4%E8%A1%A8" data-tocid="删除表">删除表</a></li></ul></div>
+	                        	
+                        	</div>
+                        </nav>
+                    
+                </div>
+            </div>
+            
+            
+            
+        </div> 
+        <footer class="navbar navbar-default wh_footer">
+  <div class=" footer-container mx-auto ">
+<title>Copyright</title><p><b> ©2024 浙江智臾科技有限公司 浙ICP备18048711号-3</b></p>
+  </div>
+</footer>
+        
+        <div id="go2top" class="d-print-none">
+            <span class="oxy-icon oxy-icon-up"></span>
+        </div>
+        
+        <div id="modal_img_large" class="modal">
+            <span class="close oxy-icon oxy-icon-remove"></span>
+            <div id="modal_img_container"></div>
+            <div id="caption"></div>
+        </div>
+        
+        
+        
+    </body>
+</html>

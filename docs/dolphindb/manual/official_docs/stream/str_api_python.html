@@ -1,0 +1,513 @@
+<!DOCTYPE html><html xmlns="http://www.w3.org/1999/xhtml" xml:lang="zh" lang="zh" data-whc_version="26.0">
+    <head><link rel="shortcut icon" href="../favicon.ico"/><link rel="icon" href="../favicon.ico"/><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><meta http-equiv="X-UA-Compatible" content="IE=edge"/><meta name="description" content="实时流数据接入是指将数据从数据源实时写入 DolphinDB 中，供后续进行清洗、计算等使用。本文档介绍如何使用 Python API 把数据写入 DolphinDB。 按照上游发布端数据产生频率大小推荐不同的写入接口： 当数据实时写入频率小于100条每秒时，推荐使用 tableInsert 同步写入接口，其写入延时相对其它接口是最低的 当数据实时写入频率大于100条每秒时，推荐使用 ..."/><meta name="DC.rights.owner" content="(C) 版权 2024"/><meta name="copyright" content="(C) 版权 2024"/><meta name="generator" content="DITA-OT"/><meta name="DC.type" content="topic"/><meta name="DC.coverage" content=""/><meta name="DC.relation" content="../stream/str_intro.html"/><meta name="prodname" content="DolphinDB"/><meta name="brand" content="DolphinDB"/><meta name="DC.creator" content="DolphinDB"/><meta name="DC.publisher" content="DDB N/A DDB 200"/><meta name="DC.format" content="HTML5"/><meta name="DC.identifier" content="dolphindb-apipython"/><title>DolphinDB API：Python</title><!--  Generated with Oxygen version 26.0, build number 2024012323.  --><meta name="wh-path2root" content="../"/><meta name="wh-toc-id" content="dolphindb-apipython-d9529e5025"/><meta name="wh-source-relpath" content="stream/str_api_python.dita"/><meta name="wh-out-relpath" content="stream/str_api_python.html"/>
+
+    <link rel="stylesheet" type="text/css" href="../oxygen-webhelp/app/commons.css?buildId=2024012323"/>
+    <link rel="stylesheet" type="text/css" href="../oxygen-webhelp/app/topic.css?buildId=2024012323"/>
+
+    <script src="../oxygen-webhelp/app/options/properties.js?buildId=20240704100525"></script>
+    <script src="../oxygen-webhelp/app/localization/strings.js?buildId=2024012323"></script>
+    <script src="../oxygen-webhelp/app/search/index/keywords.js?buildId=20240704100525"></script>
+    <script defer="defer" src="../oxygen-webhelp/app/commons.js?buildId=2024012323"></script>
+    <script defer="defer" src="../oxygen-webhelp/app/topic.js?buildId=2024012323"></script>
+<link rel="stylesheet" type="text/css" href="../oxygen-webhelp/template/styles.css?buildId=2024012323"/><script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script><script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script></head>
+
+    <body id="dolphindb-apipython" class="wh_topic_page frmBody">
+        <a href="#wh_topic_body" class="sr-only sr-only-focusable">
+            跳转到主要内容
+        </a>
+        
+        
+        
+        
+        <header class="navbar navbar-default wh_header">
+    <div class="container-fluid">
+        <div xmlns:whc="http://www.oxygenxml.com/webhelp/components" class="wh_header_flex_container navbar-nav navbar-expand-md navbar-dark">
+            <div class="wh_logo_and_publication_title_container">
+                <div class="wh_logo_and_publication_title">
+                    
+                    <a href="https://www.dolphindb.cn" class=" wh_logo d-none d-sm-block "><img src="../logo.png" alt="  DolphinDB 文档中心  "/></a>
+                    <div class=" wh_publication_title "><a href="../index.html"><span class="booktitle">  <span class="ph mainbooktitle">DolphinDB 文档中心</span>  </span></a></div>
+                    
+                </div>
+                
+                
+            </div>
+
+            <div class="wh_top_menu_and_indexterms_link collapse navbar-collapse" id="wh_top_menu_and_indexterms_link">
+                
+                
+                
+                
+            </div>
+        <div class=" wh_search_input navbar-form wh_topic_page_search search " role="form">
+            
+            
+            
+            <form id="searchForm" method="get" role="search" action="../search.html"><div><input type="search" placeholder="搜索 " class="wh_search_textfield" id="textToSearch" name="searchQuery" aria-label="搜索查询" required="required"/><button type="submit" class="wh_search_button" aria-label="搜索"><span class="search_input_text">搜索</span></button></div></form>
+            
+            <script src="/vendors/react/umd/react.production.min.js" defer="defer"></script>
+<script src="/vendors/react-dom/umd/react-dom.production.min.js" defer="defer"></script>
+<script src="/vendors/dayjs/dayjs.min.js" defer="defer"></script>
+<script src="/vendors/antd/dist/antd.min.js" defer="defer"></script>
+<script src="/vendors/@ant-design/icons/dist/index.umd.min.js" defer="defer"></script>
+<script src="/zh/index.js" type="module"></script>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js" defer="defer"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML" defer="defer"><!--
+
+
+--></script>
+
+            
+        </div></div>
+    </div>
+</header>
+        
+        
+         
+        
+        
+        
+        <div class="container-fluid" id="wh_topic_container">
+            <div class="row">
+
+                <nav class="wh_tools d-print-none navbar-expand-md" aria-label="Tools">
+                    
+                    <div data-tooltip-position="bottom" class=" wh_breadcrumb "><ol class="d-print-none"><li><span class="home"><a href="../index.html"><span>主页</span></a></span></li><li><div class="topicref" data-id="chap7_tutorials_streaming"><div class="title"><a href="../stream/str_intro.html"><span class="keyword label">流数据</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 流数据引擎及流数据计算的基本概念</p></div></div></div></li><li><div class="topicref"><div class="title"><a href="../stream/str_api_python.html">实时流数据接入</a></div></div></li><li class="active"><div class="topicref" data-id="dolphindb-apipython"><div class="title"><a href="../stream/str_api_python.html">DolphinDB API：Python</a></div></div></li></ol></div>
+                    
+                    
+                    
+                    <div class="wh_right_tools">
+                        <button class="wh_hide_highlight" aria-label="切换搜索突出显示" title="切换搜索突出显示"></button>
+                        <button class="webhelp_expand_collapse_sections" data-next-state="collapsed" aria-label="折叠截面" title="折叠截面"></button>
+                        
+                        
+                        
+                        
+                        <div class=" wh_print_link print d-none d-md-inline-block "><button onClick="window.print()" title="打印此页" aria-label="打印此页"></button></div>
+                        
+                        <button type="button" id="wh_toc_button" class="custom-toggler navbar-toggler collapsed wh_toggle_button navbar-light" aria-expanded="false" aria-label="Toggle publishing table of content" aria-controls="wh_publication_toc">
+                            <span class="navbar-toggler-icon"></span>
+                        </button>
+                    </div>
+                    
+                </nav>
+            </div>
+            
+            
+            
+            
+            <div class="wh_content_area">
+                <div class="row">
+                    
+                        <nav id="wh_publication_toc" class="col-lg-3 col-md-3 col-sm-12 d-md-block d-none d-print-none" aria-label="Table of Contents Container">
+                            <div id="wh_publication_toc_content">
+		                        
+                            	<div class=" wh_publication_toc " data-tooltip-position="right"><span class="expand-button-action-labels"><span id="button-expand-action" role="button" aria-label="Expand"></span><span id="button-collapse-action" role="button" aria-label="Collapse"></span><span id="button-pending-action" role="button" aria-label="Pending"></span></span><ul role="tree" aria-label="Table of Contents"><li role="treeitem"><div data-tocid="new_chap_about_sect_ddb_docs_intro-d9529e87" class="topicref" data-id="new_chap_about_sect_ddb_docs_intro" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../about/ddb_docs_intro.html" id="new_chap_about_sect_ddb_docs_intro-d9529e87-link">文档使用说明</a><div class="wh-tooltip"><p class="shortdesc">如何获取 DolphinDB 帮助信息</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="chap1_getstarted-d9529e140" class="topicref" data-id="chap1_getstarted" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action chap1_getstarted-d9529e140-link" class="wh-expand-btn"></span><div class="title"><a href="../getstarted/chap1_getstarted.html" id="chap1_getstarted-d9529e140-link"><span class="keyword label">快速上手</span></a><div class="wh-tooltip"><p class="shortdesc">如何快速部署 DolphinDB、建库建表、写入和查询数据</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="sectionddb_deployment-d9529e335" class="topicref" data-id="sectionddb_deployment" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action sectionddb_deployment-d9529e335-link" class="wh-expand-btn"></span><div class="title"><a href="../deploy/deploy_intro.html" id="sectionddb_deployment-d9529e335-link"><span class="keyword label">部署</span></a><div class="wh-tooltip"><p class="shortdesc">如何在不同的场景中部署 DolphinDB</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="new_chap_database_manage_new_chap_dbmanage_landing_page-d9529e2313" class="topicref" data-id="new_chap_database_manage_new_chap_dbmanage_landing_page" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action new_chap_database_manage_new_chap_dbmanage_landing_page-d9529e2313-link" class="wh-expand-btn"></span><div class="title"><a href="../db_distr_comp/cfg/db_intro.html" id="new_chap_database_manage_new_chap_dbmanage_landing_page-d9529e2313-link"><span class="keyword label">数据库</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 数据库的基本概念</p></div></div></div></li><li role="treeitem" aria-expanded="true"><div data-tocid="chap7_tutorials_streaming-d9529e3490" class="topicref" data-id="chap7_tutorials_streaming" data-state="expanded"><span role="button" tabindex="0" aria-labelledby="button-collapse-action chap7_tutorials_streaming-d9529e3490-link" class="wh-expand-btn"></span><div class="title"><a href="../stream/str_intro.html" id="chap7_tutorials_streaming-d9529e3490-link"><span class="keyword label">流数据</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 流数据引擎及流数据计算的基本概念</p></div></div></div><ul role="group" class="navbar-nav nav-list"><li role="treeitem" aria-expanded="false"><div data-tocid="streamfunctions-d9529e3543" class="topicref" data-id="streamfunctions" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action streamfunctions-d9529e3543-link" class="wh-expand-btn"></span><div class="title"><a href="../stream/str_funcs.html" id="streamfunctions-d9529e3543-link">功能简介</a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="tocId-d9529e3821" class="topicref" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action tocId-d9529e3821-link" class="wh-expand-btn"></span><div class="title"><a href="../stream/try_example1.html" id="tocId-d9529e3821-link">入门示例</a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="内置流式计算算子-d9529e3914" class="topicref" data-id="内置流式计算算子" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action 内置流式计算算子-d9529e3914-link" class="wh-expand-btn"></span><div class="title"><a href="../stream/str_operator.html" id="内置流式计算算子-d9529e3914-link"><span class="keyword label">内置流式计算算子</span></a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="streamingEngineTopic-d9529e4099" class="topicref" data-id="streamingEngineTopic" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action streamingEngineTopic-d9529e4099-link" class="wh-expand-btn"></span><div class="title"><a href="../funcs/themes/streamingEngine.html" id="streamingEngineTopic-d9529e4099-link"><span class="keyword label">内置流式计算引擎</span></a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="chap7_tutorials_streaming-d9529e4376" class="topicref" data-id="chap7_tutorials_streaming" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action chap7_tutorials_streaming-d9529e4376-link" class="wh-expand-btn"></span><div class="title"><a href="../stream/str_join_engine.html" id="chap7_tutorials_streaming-d9529e4376-link"><span class="keyword label">内置多数据源流式关联引擎</span></a></div></div></li><li role="treeitem"><div data-tocid="streamha-d9529e4653" class="topicref" data-id="streamha" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../stream/str_ha.html" id="streamha-d9529e4653-link"><span class="keyword label">流数据高可用</span></a></div></div></li><li role="treeitem"><div data-tocid="流计算状态监控-d9529e4700" class="topicref" data-id="流计算状态监控" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../stream/str_monitor.html" id="流计算状态监控-d9529e4700-link">流计算状态监控</a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="replay-d9529e4746" class="topicref" data-id="replay" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action replay-d9529e4746-link" class="wh-expand-btn"></span><div class="title"><a href="../stream/str_replay.html" id="replay-d9529e4746-link"><span class="keyword label">历史数据回放</span></a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="流批一体功能-d9529e4931" class="topicref" data-id="流批一体功能" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action 流批一体功能-d9529e4931-link" class="wh-expand-btn"></span><div class="title"><a href="../stream/str_batch.html" id="流批一体功能-d9529e4931-link"><span class="keyword label">流批一体</span></a></div></div></li><li role="treeitem" aria-expanded="true"><div data-tocid="tocId-d9529e5024" class="topicref" data-state="expanded"><span role="button" tabindex="0" aria-labelledby="button-collapse-action tocId-d9529e5024-link" class="wh-expand-btn"></span><div class="title"><a href="../stream/str_api_python.html" id="tocId-d9529e5024-link">实时流数据接入</a></div></div><ul role="group" class="navbar-nav nav-list"><li role="treeitem" class="active"><div data-tocid="dolphindb-apipython-d9529e5025" class="topicref" data-id="dolphindb-apipython" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../stream/str_api_python.html" id="dolphindb-apipython-d9529e5025-link">DolphinDB API：Python</a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="行情数据插件nsq-d9529e5071" class="topicref" data-id="行情数据插件nsq" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action 行情数据插件nsq-d9529e5071-link" class="wh-expand-btn"></span><div class="title"><a href="../stream/nsq.html" id="行情数据插件nsq-d9529e5071-link">行情数据插件：NSQ</a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="tocId-d9529e5209" class="topicref" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action tocId-d9529e5209-link" class="wh-expand-btn"></span><div class="title"><a href="../plugins/amdquote/amdquote.html" id="tocId-d9529e5209-link">行情数据插件：amdQuote</a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="tocId-d9529e5302" class="topicref" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action tocId-d9529e5302-link" class="wh-expand-btn"></span><div class="title"><a href="../plugins/insight/insight.html" id="tocId-d9529e5302-link">行情数据插件：INSIGHT</a></div></div></li><li role="treeitem"><div data-tocid="ctp-d9529e5349" class="topicref" data-id="ctp" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../plugins/ctp.html" id="ctp-d9529e5349-link">CTP</a></div></div></li><li role="treeitem"><div data-tocid="mdl-d9529e5395" class="topicref" data-id="mdl" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../plugins/mdl.html" id="mdl-d9529e5395-link">MDL</a></div></div></li></ul></li><li role="treeitem" aria-expanded="false"><div data-tocid="cep-d9529e5442" class="topicref" data-id="cep" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action cep-d9529e5442-link" class="wh-expand-btn"></span><div class="title"><a href="../stream/cep.html" id="cep-d9529e5442-link">复杂事件处理（CEP）引擎</a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="tocId-d9529e5995" class="topicref" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action tocId-d9529e5995-link" class="wh-expand-btn"></span><div class="title"><a href="../stream/local_sub.html" id="tocId-d9529e5995-link">流处理结果交互方式</a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="tocId-d9529e6184" class="topicref" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action tocId-d9529e6184-link" class="wh-expand-btn"></span><div class="title"><a href="../stream/str_altair.html" id="tocId-d9529e6184-link">数据可视化工具</a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="tocId-d9529e6277" class="topicref" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action tocId-d9529e6277-link" class="wh-expand-btn"></span><div class="title"><a href="../tutorials/streaming_auto_sub.html" id="tocId-d9529e6277-link">金融场景应用案例</a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="tocId-d9529e6969" class="topicref" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action tocId-d9529e6969-link" class="wh-expand-btn"></span><div class="title"><a href="../tutorials/ddb_str_app_iot.html" id="tocId-d9529e6969-link">物联网场景应用案例</a></div></div></li></ul></li><li role="treeitem" aria-expanded="false"><div data-tocid="tocId-d9529e7385" class="topicref" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action tocId-d9529e7385-link" class="wh-expand-btn"></span><div class="title"><a href="../db_distr_comp/db_oper/import_data.html" id="tocId-d9529e7385-link">数据迁移</a><div class="wh-tooltip"><p class="shortdesc">如何从不同数据源向 DolphinDB 迁移数据</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="chap7_tutorials_system_management-d9529e7812" class="topicref" data-id="chap7_tutorials_system_management" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action chap7_tutorials_system_management-d9529e7812-link" class="wh-expand-btn"></span><div class="title"><a href="../sys_man/om_intro.html" id="chap7_tutorials_system_management-d9529e7812-link"><span class="keyword label">系统运维</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 的系统运维功能及方法</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="about_language_resources-d9529e16490" class="topicref" data-id="about_language_resources" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action about_language_resources-d9529e16490-link" class="wh-expand-btn"></span><div class="title"><a href="../progr/progr_intro.html" id="about_language_resources-d9529e16490-link"><span class="keyword label">编程语言</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 编程基本概念与方法、SQL 在 DolphinDB 的应用</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="functions_references-d9529e26503" class="topicref" data-id="functions_references" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action functions_references-d9529e26503-link" class="wh-expand-btn"></span><div class="title"><a href="../funcs/funcs_intro.html" id="functions_references-d9529e26503-link"><span class="keyword label">函数参考</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 函数分类、语法、详解及示例</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="api_protocol-d9529e86456" class="topicref" data-id="api_protocol" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action api_protocol-d9529e86456-link" class="wh-expand-btn"></span><div class="title"><a href="../api/connapi_intro.html" id="api_protocol-d9529e86456-link"><span class="keyword label">连接器 &amp; API</span></a><div class="wh-tooltip"><p class="shortdesc">面向不同编程语言的 DolphinDB API 及连接器，相关协议和用法</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="chap6_plugin-d9529e91976" class="topicref" data-id="chap6_plugin" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action chap6_plugin-d9529e91976-link" class="wh-expand-btn"></span><div class="title"><a href="../plugins/plg_intro.html" id="chap6_plugin-d9529e91976-link"><span class="keyword label">插件</span></a><div class="wh-tooltip"><p class="shortdesc">多个应用场景的插件使用说明和插件开发指导</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="third_party-d9529e94749" class="topicref" data-id="third_party" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action third_party-d9529e94749-link" class="wh-expand-btn"></span><div class="title"><a href="../third_party.html" id="third_party-d9529e94749-link">第三方工具</a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="about_tutorials-d9529e94980" class="topicref" data-id="about_tutorials" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action about_tutorials-d9529e94980-link" class="wh-expand-btn"></span><div class="title"><a href="../tutorials/about_tutorials.html" id="about_tutorials-d9529e94980-link"><span class="keyword label">教程</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 产品使用教程</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="tocId-d9529e101769" class="topicref" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action tocId-d9529e101769-link" class="wh-expand-btn"></span><div class="title"><a href="../rn/server/3_00_1.html" id="tocId-d9529e101769-link">版本说明</a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 版本发布历史</p></div></div></div></li></ul></div>
+		                        
+                            </div>
+                        </nav>
+                    
+                    
+                    <div class="col-lg-7 col-md-9 col-sm-12" id="wh_topic_body">
+                        <button id="wh_close_publication_toc_button" class="close-toc-button d-none" aria-label="Toggle publishing table of content" aria-controls="wh_publication_toc" aria-expanded="true">
+                            <span class="close-toc-icon-container">
+                                <span class="close-toc-icon"></span>     
+                            </span>
+                        </button>
+                        <button id="wh_close_topic_toc_button" class="close-toc-button d-none" aria-label="Toggle topic table of content" aria-controls="wh_topic_toc" aria-expanded="true">
+                            <span class="close-toc-icon-container">
+                                <span class="close-toc-icon"></span>     
+                            </span>
+                        </button>
+                        
+                        <div class=" wh_topic_content body "><main role="main"><article class="- topic/topic topic" role="article" aria-labelledby="ariaid-title1">
+    <h1 class="- topic/title title topictitle1" id="ariaid-title1">DolphinDB API：Python</h1>
+    <div class="- topic/body body">
+        <p class="- topic/p p">实时流数据接入是指将数据从数据源实时写入 DolphinDB 中，供后续进行清洗、计算等使用。本文档介绍如何使用 Python API 把数据写入 DolphinDB。</p>
+        <p class="- topic/p p">按照上游发布端数据产生频率大小推荐不同的写入接口：</p>
+        <ul class="- topic/ul ul" id="dolphindb-apipython__ul_qct_sql_xzb" data-ofbid="dolphindb-apipython__ul_qct_sql_xzb">
+            <li class="- topic/li li">
+                <p class="- topic/p p">当数据实时写入频率小于100条每秒时，推荐使用 tableInsert 同步写入接口，其写入延时相对其它接口是最低的</p>
+            </li>
+            <li class="- topic/li li">
+                <p class="- topic/p p">当数据实时写入频率大于100条每秒时，推荐使用 MultithreadedTableWriter 异步写入接口，其带来的吞吐量和写入延时综合效益最高</p>
+            </li>
+        </ul>
+        <p class="- topic/p p">下面将介绍两种场景下推荐函数的使用方法和基准性能。</p>
+        <p class="- topic/p p">如果本文档中遇到 DolphinDB Python API 使用相关问题，参考：<a class="- topic/xref xref" href="../api/python/py.html">Python API</a></p>
+    </div>
+    <article class="- topic/topic topic nested1" aria-labelledby="ariaid-title2" id="topic_vxl_tql_xzb">
+        <h2 class="- topic/title title topictitle2" id="ariaid-title2">tableInsert 同步写入接口</h2>
+        <div class="- topic/body body">
+            <p class="- topic/p p">当数据实时写入频率小于 100 条每秒时，推荐使用 tableInsert 同步接口写入数据。</p>
+            <p class="- topic/p p">本文档提供 10 列数据的写入示例和基准性能。</p>
+        </div>
+        <article class="- topic/topic topic nested2" aria-labelledby="ariaid-title3" id="topic_h4b_xql_xzb">
+            <h3 class="- topic/title title topictitle3" id="ariaid-title3">step1：创建共享普通流数据表</h3>
+            <div class="- topic/body body">
+                <pre class="+ topic/pre pr-d/codeblock pre codeblock language-python" id="topic_h4b_xql_xzb__codeblock_bm5_yql_xzb" data-ofbid="topic_h4b_xql_xzb__codeblock_bm5_yql_xzb"><strong class="hl-keyword">import</strong> dolphindb <strong class="hl-keyword">as</strong> ddb
+<strong class="hl-keyword">import</strong> numpy <strong class="hl-keyword">as</strong> np
+<strong class="hl-keyword">import</strong> pandas <strong class="hl-keyword">as</strong> pd
+<strong class="hl-keyword">import</strong> random
+
+s = ddb.session()
+s.connect(host=<span class="hl-string">"localhost"</span>, port=<span class="hl-number">8848</span>, userid=<span class="hl-string">"admin"</span>, password=<span class="hl-string">"123456"</span>)
+
+script = <span class="hl-string">"""
+  name = `c1Time`c2Symbol`c3Int`c4Int`c5Long`c6Long`c7Float`c8Float`c9Double`c10ArrayInt
+  type = [TIMESTAMP, SYMBOL, INT, INT, LONG, LONG, FLOAT, FLOAT, DOUBLE, INT[]]
+  share(table=streamTable(20000:0, name, type), sharedName="sharedMinBar")
+"""</span>
+s.run(script)</pre>
+                <p class="- topic/p p">注意：生产环境推荐使用共享持久化流数据表。</p>
+            </div>
+        </article>
+        <article class="- topic/topic topic nested2" aria-labelledby="ariaid-title4" id="topic_vk3_zql_xzb">
+            <h3 class="- topic/title title topictitle3" id="ariaid-title4">step2：tableInsert 写入数据</h3>
+            <div class="- topic/body body">
+                <pre class="+ topic/pre pr-d/codeblock pre codeblock language-python" id="topic_vk3_zql_xzb__codeblock_uhd_1rl_xzb" data-ofbid="topic_vk3_zql_xzb__codeblock_uhd_1rl_xzb"><strong class="hl-keyword">def</strong> createData():
+    c1Time = [pd.Timestamp.now()]
+    c2Symbol = [<span class="hl-string">'000001'</span>]
+    c3Int = [random.randint(<span class="hl-number">0</span>, <span class="hl-number">10</span>)]
+    c4Int = [random.randint(<span class="hl-number">0</span>, <span class="hl-number">10</span>)]
+    c5Long = [random.randint(<span class="hl-number">0</span>, <span class="hl-number">1000</span>)]
+    c6Long = [random.randint(<span class="hl-number">0</span>, <span class="hl-number">1000</span>)]
+    c7Float = [random.uniform(<span class="hl-number">0</span>, <span class="hl-number">1</span>)]
+    c8Float = [random.uniform(<span class="hl-number">0</span>, <span class="hl-number">1</span>)]
+    c9Double = [random.uniform(<span class="hl-number">0</span>, <span class="hl-number">1</span>)]
+    c10ArrayInt = [np.random.randint(<span class="hl-number">10</span>,size=<span class="hl-number">10</span>)]
+    <strong class="hl-keyword">return</strong> [c1Time, c2Symbol, c3Int, c4Int, c5Long, c6Long, c7Float, c8Float, c9Double, c10ArrayInt]
+
+<strong class="hl-keyword">if</strong> __name__ == <span class="hl-string">"__main__"</span>:
+    inertRows = <span class="hl-number">10000</span>
+    <strong class="hl-keyword">for</strong> i <strong class="hl-keyword">in</strong> range(inertRows):
+        insertData = createData()
+        s.run(<span class="hl-string">"tableInsert{sharedMinBar}"</span>,insertData)</pre>
+            </div>
+        </article>
+        <article class="- topic/topic topic nested2" aria-labelledby="ariaid-title5" id="topic_nmn_1rl_xzb">
+            <h3 class="- topic/title title topictitle3" id="ariaid-title5">step3：查询表中数据</h3>
+            <div class="- topic/body body">
+                <pre class="+ topic/pre pr-d/codeblock pre codeblock language-python" id="topic_nmn_1rl_xzb__codeblock_bjg_brl_xzb" data-ofbid="topic_nmn_1rl_xzb__codeblock_bjg_brl_xzb">pd = s.run(<span class="hl-string">"select * from sharedMinBar limit 10"</span>)</pre>
+                <p class="- topic/p p">返回：</p>
+                <p class="- topic/p p"><img class="- topic/image image" id="topic_nmn_1rl_xzb__image_bdg_lz3_p1c" src="images/python_1.png"/></p>
+            </div>
+        </article>
+        <article class="- topic/topic topic nested2" aria-labelledby="ariaid-title6" id="topic_tvd_crl_xzb">
+            <h3 class="- topic/title title topictitle3" id="ariaid-title6">step4：删除流数据表并关闭当前会话</h3>
+            <div class="- topic/body body">
+                <pre class="+ topic/pre pr-d/codeblock pre codeblock language-python" id="topic_tvd_crl_xzb__codeblock_f4w_crl_xzb" data-ofbid="topic_tvd_crl_xzb__codeblock_f4w_crl_xzb">script = <span class="hl-string">"""
+    dropStreamTable(tableName="sharedMinBar")
+"""</span>
+s.run(script)
+s.close()</pre>
+            </div>
+        </article>
+        <article class="- topic/topic topic nested2" aria-labelledby="ariaid-title7" id="topic_glp_frl_xzb">
+            <h3 class="- topic/title title topictitle3" id="ariaid-title7">基准性能</h3>
+            <div class="- topic/body body">
+                <p class="- topic/p p">tableInsert 同步写入接口基准性能测试代码请参考附录 B，测试结果如下：</p>
+                <div class="table-container"><table class="- topic/table table" id="topic_glp_frl_xzb__table_hkk_grl_xzb" data-ofbid="topic_glp_frl_xzb__table_hkk_grl_xzb" data-cols="2"><caption></caption><colgroup><col/><col/></colgroup><thead class="- topic/thead thead">
+                            <tr class="- topic/row">
+                                <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="topic_glp_frl_xzb__table_hkk_grl_xzb__entry__1">
+                                    <p class="- topic/p p">指标</p>
+                                </th>
+                                <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="topic_glp_frl_xzb__table_hkk_grl_xzb__entry__2">
+                                    <p class="- topic/p p">性能</p>
+                                </th>
+                            </tr>
+                        </thead><tbody class="- topic/tbody tbody">
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="topic_glp_frl_xzb__table_hkk_grl_xzb__entry__1">最小单次插入耗时</td>
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="topic_glp_frl_xzb__table_hkk_grl_xzb__entry__2">0.31 ms</td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="topic_glp_frl_xzb__table_hkk_grl_xzb__entry__1">最大单次插入耗时</td>
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="topic_glp_frl_xzb__table_hkk_grl_xzb__entry__2">1.24 ms</td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="topic_glp_frl_xzb__table_hkk_grl_xzb__entry__1">平均单次插入耗时</td>
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="topic_glp_frl_xzb__table_hkk_grl_xzb__entry__2">0.69 ms</td>
+                            </tr>
+                        </tbody></table></div>
+                <p class="- topic/p p">单次插入耗时统计图如下：</p>
+                <img class="- topic/image image" id="topic_glp_frl_xzb__image_kkk_grl_xzb" src="images/python_2.png" height="331" width="984"/>
+                <p class="- topic/p p">从基准性能测试结果显示：</p>
+                <ul class="- topic/ul ul" id="topic_glp_frl_xzb__ul_lkk_grl_xzb" data-ofbid="topic_glp_frl_xzb__ul_lkk_grl_xzb">
+                    <li class="- topic/li li">
+                        <p class="- topic/p p">DolphinDB Python API 的 tableInsert 同步写入接口，实时逐条写入共享流数据表的平均耗时是 0.69 毫秒</p>
+                    </li>
+                    <li class="- topic/li li">
+                        <p class="- topic/p p">DolphinDB Python API 的 tableInsert 同步写入接口的稳定性较好，波动较小，平均单条数据写入的最大耗时小于 2
+                            毫秒</p>
+                    </li>
+                </ul>
+            </div>
+        </article>
+    </article>
+    <article class="- topic/topic topic nested1" aria-labelledby="ariaid-title8" id="topic_kqy_hrl_xzb">
+        <h2 class="- topic/title title topictitle2" id="ariaid-title8">MultithreadedTableWriter 异步写入接口</h2>
+        <div class="- topic/body body">
+            <p class="- topic/p p">当数据写入频率大于 100 条每秒时，推荐使用 <code class="+ topic/ph pr-d/codeph ph codeph">MultithreadedTableWriter</code>（MTW） 函数写入数据。</p>
+            <p class="- topic/p p">如下图所示，<code class="+ topic/ph pr-d/codeph ph codeph">MultithreadedTableWriter</code> 函数把 Python 端实时产生的数据先通过 insert 线程写入
+                MTW 消息队列，同时 append 线程会批量取出消息队列的数据，自动转换数据类型后把数据写入 DolphinDB。</p>
+            <img class="- topic/image image" id="topic_kqy_hrl_xzb__image_vhc_jrl_xzb" src="images/python_3.png" height="338" width="1850"/>
+            <p class="- topic/p p">下面为 <code class="+ topic/ph pr-d/codeph ph codeph">MultithreadedTableWriter</code> 使用示例。</p>
+            <ol class="- topic/ol ol" id="topic_kqy_hrl_xzb__ol_pxn_zkm_xzb" data-ofbid="topic_kqy_hrl_xzb__ol_pxn_zkm_xzb">
+                
+                <li class="- topic/li li">
+                    <p class="- topic/p p">逐笔成交表</p>
+                    <pre class="+ topic/pre pr-d/codeblock pre codeblock language-python" id="topic_kqy_hrl_xzb__codeblock_whc_jrl_xzb" data-ofbid="topic_kqy_hrl_xzb__codeblock_whc_jrl_xzb"><strong class="hl-keyword">import</strong> numpy <strong class="hl-keyword">as</strong> np
+<strong class="hl-keyword">import</strong> pandas <strong class="hl-keyword">as</strong> pd
+<strong class="hl-keyword">import</strong> dolphindb <strong class="hl-keyword">as</strong> ddb
+<strong class="hl-keyword">import</strong> random
+<strong class="hl-keyword">import</strong> datetime
+
+s = ddb.session()
+s.connect(host=<span class="hl-string">"localhost"</span>, port=<span class="hl-number">8848</span>, userid=<span class="hl-string">"admin"</span>, password=<span class="hl-string">"123456"</span>)
+
+writer = ddb.MultithreadedTableWriter(<span class="hl-string">"localhost"</span>, <span class="hl-number">8848</span>, <span class="hl-string">"admin"</span>, <span class="hl-string">"123456"</span>,<span class="hl-string">""</span>,<span class="hl-string">"tglobal"</span>,False,False,[],<span class="hl-number">10</span>,<span class="hl-number">0</span>,<span class="hl-number">2</span>,<span class="hl-string">"SecurityID"</span>)
+start = datetime.datetime.now()
+<strong class="hl-keyword">for</strong> i <strong class="hl-keyword">in</strong> range(<span class="hl-number">100</span>):
+    res = writer.insert(random.randint(<span class="hl-number">1</span>,<span class="hl-number">100</span>),random.randint(<span class="hl-number">1</span>,<span class="hl-number">100</span>),str(i),random.randint(<span class="hl-number">1</span>,<span class="hl-number">100</span>),random.randint(<span class="hl-number">1</span>,<span class="hl-number">100</span>),str(i),str(i),random.random(),random.randint(<span class="hl-number">1</span>,<span class="hl-number">100</span>),str(i),np.datetime64(<span class="hl-string">'2021-01-04T09:30:02.000'</span>),<span class="hl-number">9</span>,random.randint(<span class="hl-number">1</span>,<span class="hl-number">100</span>),random.randint(<span class="hl-number">1</span>,<span class="hl-number">100</span>),random.random(),str(i),random.randint(<span class="hl-number">1</span>,<span class="hl-number">100</span>),str(i),str(i))
+writer.waitForThreadCompletion()
+<strong class="hl-keyword">print</strong>(writer.getStatus())
+
+<em class="hl-comment">#output</em>
+<span class="hl-string">'''
+errorCode     : None
+ errorInfo     : 
+ isExiting     : True
+ sentRows      : 10000
+ unsentRows    : 0
+ sendFailedRows: 0
+ threadStatus  : 
+ 	threadId	sentRows	unsentRows	sendFailedRows
+	       0	       0	         0	             0
+	2474632960	    4994	         0	             0
+	2483025664	    5006	         0	             0
+&lt;dolphindb.session.MultithreadedTableWriterStatus object at 0x7f0ca9f0e8d0&gt;
+'''</span></pre>
+                </li>
+                <li class="- topic/li li">
+                    <p class="- topic/p p">arrayVector 类型快照表</p>
+                    <pre class="+ topic/pre pr-d/codeblock pre codeblock language-python" id="topic_kqy_hrl_xzb__codeblock_xhc_jrl_xzb" data-ofbid="topic_kqy_hrl_xzb__codeblock_xhc_jrl_xzb">writer = ddb.MultithreadedTableWriter(<span class="hl-string">"localhost"</span>, <span class="hl-number">8892</span>, <span class="hl-string">"admin"</span>, <span class="hl-string">"123456"</span>,<span class="hl-string">""</span>,<span class="hl-string">"tglobal"</span>,False,False,[],<span class="hl-number">10</span>,<span class="hl-number">0</span>,<span class="hl-number">2</span>,<span class="hl-string">"SecurityID"</span>)
+<strong class="hl-keyword">for</strong> i <strong class="hl-keyword">in</strong> range(<span class="hl-number">10000</span>):
+    res = writer.insert(str(i),np.datetime64(<span class="hl-string">'2021-01-04T09:30:02.000'</span>),random.random(),random.random(),random.random(),random.random(),random.random(),random.randint(<span class="hl-number">1</span>,<span class="hl-number">100</span>),random.random(),<span class="hl-string">"OCALL"</span>,np.random.rand(<span class="hl-number">10</span>),np.random.randint(<span class="hl-number">10</span>,size=<span class="hl-number">10</span>),np.random.randint(<span class="hl-number">10</span>,size=<span class="hl-number">10</span>),np.random.randint(<span class="hl-number">10</span>,size=<span class="hl-number">10</span>),np.random.rand(<span class="hl-number">10</span>),np.random.randint(<span class="hl-number">10</span>,size=<span class="hl-number">10</span>),np.random.randint(<span class="hl-number">10</span>,size=<span class="hl-number">10</span>),np.random.randint(<span class="hl-number">10</span>,size=<span class="hl-number">10</span>),random.randint(<span class="hl-number">1</span>,<span class="hl-number">100</span>),random.random(),random.randint(<span class="hl-number">1</span>,<span class="hl-number">100</span>),random.randint(<span class="hl-number">1</span>,<span class="hl-number">100</span>),random.random(),random.random(),random.randint(<span class="hl-number">1</span>,<span class="hl-number">100</span>),random.randint(<span class="hl-number">1</span>,<span class="hl-number">100</span>),random.randint(<span class="hl-number">1</span>,<span class="hl-number">100</span>),random.randint(<span class="hl-number">1</span>,<span class="hl-number">100</span>),random.randint(<span class="hl-number">1</span>,<span class="hl-number">100</span>),random.randint(<span class="hl-number">1</span>,<span class="hl-number">100</span>),random.randint(<span class="hl-number">1</span>,<span class="hl-number">100</span>),random.randint(<span class="hl-number">1</span>,<span class="hl-number">100</span>),random.random(),random.randint(<span class="hl-number">1</span>,<span class="hl-number">100</span>),random.randint(<span class="hl-number">1</span>,<span class="hl-number">100</span>),random.random(),random.randint(<span class="hl-number">1</span>,<span class="hl-number">100</span>),random.randint(<span class="hl-number">1</span>,<span class="hl-number">100</span>),random.random(),random.randint(<span class="hl-number">1</span>,<span class="hl-number">100</span>),random.randint(<span class="hl-number">1</span>,<span class="hl-number">100</span>),random.random())
+writer.waitForThreadCompletion()
+<strong class="hl-keyword">print</strong>(writer.getStatus())
+
+<em class="hl-comment">#output</em>
+<span class="hl-string">'''
+errorCode     : None
+ errorInfo     : 
+ isExiting     : True
+ sentRows      : 10000
+ unsentRows    : 0
+ sendFailedRows: 0
+ threadStatus  : 
+ 	threadId	sentRows	unsentRows	sendFailedRows
+	       0	       0	         0	             0
+	2474632960	    4994	         0	             0
+	2466240256	    5006	         0	             0
+&lt;dolphindb.session.MultithreadedTableWriterStatus object at 0x7f0cb032e190&gt;
+'''</span></pre>
+                </li>
+                <li class="- topic/li li">
+                    <p class="- topic/p p">multicolumn 类型快照表</p>
+                    <pre class="+ topic/pre pr-d/codeblock pre codeblock language-python" id="topic_kqy_hrl_xzb__codeblock_yhc_jrl_xzb" data-ofbid="topic_kqy_hrl_xzb__codeblock_yhc_jrl_xzb">writer = ddb.MultithreadedTableWriter(<span class="hl-string">"localhost"</span>, <span class="hl-number">8892</span>, <span class="hl-string">"admin"</span>, <span class="hl-string">"123456"</span>,<span class="hl-string">""</span>,<span class="hl-string">"tglobal"</span>,False,False,[],<span class="hl-number">10</span>,<span class="hl-number">0</span>,<span class="hl-number">2</span>,<span class="hl-string">"SecurityID"</span>)
+<strong class="hl-keyword">for</strong> i <strong class="hl-keyword">in</strong> range(<span class="hl-number">10000</span>):
+    res = writer.insert(str(i),np.datetime64(<span class="hl-string">'2021-01-04T09:30:02.000'</span>),random.random(),random.random(),random.random(),random.random(),random.random(),random.randint(<span class="hl-number">1</span>,<span class="hl-number">100</span>),random.random(),str(i),random.random(),random.random(),random.random(),random.random(),random.random(),random.random(),random.random(),random.random(),random.random(),random.random(),random.randint(<span class="hl-number">1</span>,<span class="hl-number">100</span>),random.randint(<span class="hl-number">1</span>,<span class="hl-number">100</span>),random.randint(<span class="hl-number">1</span>,<span class="hl-number">100</span>),random.randint(<span class="hl-number">1</span>,<span class="hl-number">100</span>),random.randint(<span class="hl-number">1</span>,<span class="hl-number">100</span>),random.randint(<span class="hl-number">1</span>,<span class="hl-number">100</span>),random.randint(<span class="hl-number">1</span>,<span class="hl-number">100</span>),random.randint(<span class="hl-number">1</span>,<span class="hl-number">100</span>),random.randint(<span class="hl-number">1</span>,<span class="hl-number">100</span>),random.randint(<span class="hl-number">1</span>,<span class="hl-number">100</span>),random.randint(<span class="hl-number">1</span>,<span class="hl-number">100</span>),random.randint(<span class="hl-number">1</span>,<span class="hl-number">100</span>),random.randint(<span class="hl-number">1</span>,<span class="hl-number">100</span>),random.randint(<span class="hl-number">1</span>,<span class="hl-number">100</span>),random.randint(<span class="hl-number">1</span>,<span class="hl-number">100</span>),random.randint(<span class="hl-number">1</span>,<span class="hl-number">100</span>),random.randint(<span class="hl-number">1</span>,<span class="hl-number">100</span>),random.randint(<span class="hl-number">1</span>,<span class="hl-number">100</span>),random.randint(<span class="hl-number">1</span>,<span class="hl-number">100</span>),random.randint(<span class="hl-number">1</span>,<span class="hl-number">100</span>),random.randint(<span class="hl-number">1</span>,<span class="hl-number">100</span>),random.randint(<span class="hl-number">1</span>,<span class="hl-number">100</span>),random.randint(<span class="hl-number">1</span>,<span class="hl-number">100</span>),random.randint(<span class="hl-number">1</span>,<span class="hl-number">100</span>),random.randint(<span class="hl-number">1</span>,<span class="hl-number">100</span>),random.randint(<span class="hl-number">1</span>,<span class="hl-number">100</span>),random.randint(<span class="hl-number">1</span>,<span class="hl-number">100</span>),random.randint(<span class="hl-number">1</span>,<span class="hl-number">100</span>),random.randint(<span class="hl-number">1</span>,<span class="hl-number">100</span>),random.randint(<span class="hl-number">1</span>,<span class="hl-number">100</span>),random.random(),random.random(),random.random(),random.random(),random.random(),random.random(),random.random(),random.random(),random.random(),random.random(),random.randint(<span class="hl-number">1</span>,<span class="hl-number">100</span>),random.randint(<span class="hl-number">1</span>,<span class="hl-number">100</span>),random.randint(<span class="hl-number">1</span>,<span class="hl-number">100</span>),random.randint(<span class="hl-number">1</span>,<span class="hl-number">100</span>),random.randint(<span class="hl-number">1</span>,<span class="hl-number">100</span>),random.randint(<span class="hl-number">1</span>,<span class="hl-number">100</span>),random.randint(<span class="hl-number">1</span>,<span class="hl-number">100</span>),random.randint(<span class="hl-number">1</span>,<span class="hl-number">100</span>),random.randint(<span class="hl-number">1</span>,<span class="hl-number">100</span>),random.randint(<span class="hl-number">1</span>,<span class="hl-number">100</span>),random.randint(<span class="hl-number">1</span>,<span class="hl-number">100</span>),random.randint(<span class="hl-number">1</span>,<span class="hl-number">100</span>),random.randint(<span class="hl-number">1</span>,<span class="hl-number">100</span>),random.randint(<span class="hl-number">1</span>,<span class="hl-number">100</span>),random.randint(<span class="hl-number">1</span>,<span class="hl-number">100</span>),random.randint(<span class="hl-number">1</span>,<span class="hl-number">100</span>),random.randint(<span class="hl-number">1</span>,<span class="hl-number">100</span>),random.randint(<span class="hl-number">1</span>,<span class="hl-number">100</span>),random.randint(<span class="hl-number">1</span>,<span class="hl-number">100</span>),random.randint(<span class="hl-number">1</span>,<span class="hl-number">100</span>),random.randint(<span class="hl-number">1</span>,<span class="hl-number">100</span>),random.randint(<span class="hl-number">1</span>,<span class="hl-number">100</span>),random.randint(<span class="hl-number">1</span>,<span class="hl-number">100</span>),random.randint(<span class="hl-number">1</span>,<span class="hl-number">100</span>),random.randint(<span class="hl-number">1</span>,<span class="hl-number">100</span>),random.randint(<span class="hl-number">1</span>,<span class="hl-number">100</span>),random.randint(<span class="hl-number">1</span>,<span class="hl-number">100</span>),random.randint(<span class="hl-number">1</span>,<span class="hl-number">100</span>),random.randint(<span class="hl-number">1</span>,<span class="hl-number">100</span>),random.randint(<span class="hl-number">1</span>,<span class="hl-number">100</span>),random.randint(<span class="hl-number">1</span>,<span class="hl-number">100</span>),random.random(),random.randint(<span class="hl-number">1</span>,<span class="hl-number">100</span>),random.randint(<span class="hl-number">1</span>,<span class="hl-number">100</span>),random.random(),random.random(),random.randint(<span class="hl-number">1</span>,<span class="hl-number">100</span>),random.randint(<span class="hl-number">1</span>,<span class="hl-number">100</span>),random.randint(<span class="hl-number">1</span>,<span class="hl-number">100</span>),random.randint(<span class="hl-number">1</span>,<span class="hl-number">100</span>),random.randint(<span class="hl-number">1</span>,<span class="hl-number">100</span>),random.randint(<span class="hl-number">1</span>,<span class="hl-number">100</span>),random.randint(<span class="hl-number">1</span>,<span class="hl-number">100</span>),random.randint(<span class="hl-number">1</span>,<span class="hl-number">100</span>),random.random(),random.randint(<span class="hl-number">1</span>,<span class="hl-number">100</span>),random.randint(<span class="hl-number">1</span>,<span class="hl-number">100</span>),random.random(),random.randint(<span class="hl-number">1</span>,<span class="hl-number">100</span>),random.randint(<span class="hl-number">1</span>,<span class="hl-number">100</span>),random.random(),random.randint(<span class="hl-number">1</span>,<span class="hl-number">100</span>),random.randint(<span class="hl-number">1</span>,<span class="hl-number">100</span>),random.random())
+writer.waitForThreadCompletion()
+<strong class="hl-keyword">print</strong>(writer.getStatus())
+
+<em class="hl-comment">#output</em>
+<span class="hl-string">'''
+errorCode     : None
+ errorInfo     : 
+ isExiting     : True
+ sentRows      : 10000
+ unsentRows    : 0
+ sendFailedRows: 0
+ threadStatus  : 
+ 	threadId	sentRows	unsentRows	sendFailedRows
+	       0	       0	         0	             0
+	2474632960	    4994	         0	             0
+	2466240256	    5006	         0	             0
+&lt;dolphindb.session.MultithreadedTableWriterStatus object at 0x7f0ca9b37fd0&gt;
+'''</span></pre>
+                </li>
+            </ol>
+        </div>
+    </article>
+    <article class="- topic/topic topic nested1" aria-labelledby="ariaid-title9" id="topic_y2h_mrl_xzb">
+        <h2 class="- topic/title title topictitle2" id="ariaid-title9">附录 A-测试环境</h2>
+        <div class="- topic/body body">
+            <div class="table-container"><table class="- topic/table table" id="topic_y2h_mrl_xzb__table_jp1_nrl_xzb" data-ofbid="topic_y2h_mrl_xzb__table_jp1_nrl_xzb" data-cols="2"><caption class="- topic/title title tablecap" data-caption-side="top" data-is-repeated="true"><span class="table--title-label">表<span class="table--title-label-number"> 1</span><span class="table--title-label-punctuation">. </span></span><span class="table--title">硬件环境</span></caption><colgroup><col/><col/></colgroup><thead class="- topic/thead thead">
+                        <tr class="- topic/row">
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="topic_y2h_mrl_xzb__table_jp1_nrl_xzb__entry__1">硬件名称</th>
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="topic_y2h_mrl_xzb__table_jp1_nrl_xzb__entry__2">配置信息</th>
+                        </tr>
+                    </thead><tbody class="- topic/tbody tbody">
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="topic_y2h_mrl_xzb__table_jp1_nrl_xzb__entry__1">CPU</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="topic_y2h_mrl_xzb__table_jp1_nrl_xzb__entry__2">Intel(R) Xeon(R) Silver 4216 CPU @ 2.10GHz</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="topic_y2h_mrl_xzb__table_jp1_nrl_xzb__entry__1">内存</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="topic_y2h_mrl_xzb__table_jp1_nrl_xzb__entry__2">32 GB</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="topic_y2h_mrl_xzb__table_jp1_nrl_xzb__entry__1">磁盘</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="topic_y2h_mrl_xzb__table_jp1_nrl_xzb__entry__2">SSD 500 GB</td>
+                        </tr>
+                    </tbody></table></div>
+            <div class="table-container"><table class="- topic/table table" id="topic_y2h_mrl_xzb__table_pp1_nrl_xzb" data-ofbid="topic_y2h_mrl_xzb__table_pp1_nrl_xzb" data-cols="2"><caption class="- topic/title title tablecap" data-caption-side="top" data-is-repeated="true"><span class="table--title-label">表<span class="table--title-label-number"> 2</span><span class="table--title-label-punctuation">. </span></span><span class="table--title">软件环境</span></caption><colgroup><col/><col/></colgroup><thead class="- topic/thead thead">
+                        <tr class="- topic/row">
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="topic_y2h_mrl_xzb__table_pp1_nrl_xzb__entry__1">软件名称</th>
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="topic_y2h_mrl_xzb__table_pp1_nrl_xzb__entry__2">版本信息</th>
+                        </tr>
+                    </thead><tbody class="- topic/tbody tbody">
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="topic_y2h_mrl_xzb__table_pp1_nrl_xzb__entry__1">操作系统</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="topic_y2h_mrl_xzb__table_pp1_nrl_xzb__entry__2">CentOS Linux 7 (Core)</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="topic_y2h_mrl_xzb__table_pp1_nrl_xzb__entry__1">内存</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="topic_y2h_mrl_xzb__table_pp1_nrl_xzb__entry__2">3.10.0-1160.el7.x86_64</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="topic_y2h_mrl_xzb__table_pp1_nrl_xzb__entry__1">DolphinDB server</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="topic_y2h_mrl_xzb__table_pp1_nrl_xzb__entry__2">2.00.10.9 2023.12.09</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="topic_y2h_mrl_xzb__table_pp1_nrl_xzb__entry__1">DolphinDB Python API</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="topic_y2h_mrl_xzb__table_pp1_nrl_xzb__entry__2">1.30.22.6</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="topic_y2h_mrl_xzb__table_pp1_nrl_xzb__entry__1">Python</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="topic_y2h_mrl_xzb__table_pp1_nrl_xzb__entry__2">3.11.5</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="topic_y2h_mrl_xzb__table_pp1_nrl_xzb__entry__1">Numpy</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="topic_y2h_mrl_xzb__table_pp1_nrl_xzb__entry__2">1.24.4</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="topic_y2h_mrl_xzb__table_pp1_nrl_xzb__entry__1">Pandas</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="topic_y2h_mrl_xzb__table_pp1_nrl_xzb__entry__2">2.1.1</td>
+                        </tr>
+                    </tbody></table></div>
+        </div>
+    </article>
+    <article class="- topic/topic topic nested1" aria-labelledby="ariaid-title10" id="topic_jtp_prl_xzb">
+        <h2 class="- topic/title title topictitle2" id="ariaid-title10">附录 B-tableInsert 同步写入接口基准性能测试代码</h2>
+        <div class="- topic/body body">
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock language-python" id="topic_jtp_prl_xzb__codeblock_hnl_qrl_xzb" data-ofbid="topic_jtp_prl_xzb__codeblock_hnl_qrl_xzb"><strong class="hl-keyword">import</strong> dolphindb <strong class="hl-keyword">as</strong> ddb
+<strong class="hl-keyword">import</strong> numpy <strong class="hl-keyword">as</strong> np
+<strong class="hl-keyword">import</strong> pandas <strong class="hl-keyword">as</strong> pd
+<strong class="hl-keyword">import</strong> random
+
+<em class="hl-comment">#模拟数据</em>
+<strong class="hl-keyword">def</strong> createData():
+    c1Time = [pd.Timestamp.now()]
+    c2Symbol = [<span class="hl-string">'000001'</span>]
+    c3Int = [random.randint(<span class="hl-number">0</span>, <span class="hl-number">10</span>)]
+    c4Int = [random.randint(<span class="hl-number">0</span>, <span class="hl-number">10</span>)]
+    c5Long = [random.randint(<span class="hl-number">0</span>, <span class="hl-number">1000</span>)]
+    c6Long = [random.randint(<span class="hl-number">0</span>, <span class="hl-number">1000</span>)]
+    c7Float = [random.uniform(<span class="hl-number">0</span>, <span class="hl-number">1</span>)]
+    c8Float = [random.uniform(<span class="hl-number">0</span>, <span class="hl-number">1</span>)]
+    c9Double = [random.uniform(<span class="hl-number">0</span>, <span class="hl-number">1</span>)]
+    c10ArrayInt = [np.random.randint(<span class="hl-number">10</span>,size=<span class="hl-number">10</span>)]
+    <strong class="hl-keyword">return</strong> [c1Time, c2Symbol, c3Int, c4Int, c5Long, c6Long, c7Float, c8Float, c9Double, c10ArrayInt]
+
+<strong class="hl-keyword">if</strong> __name__ == <span class="hl-string">"__main__"</span>:
+    <em class="hl-comment">#与DolphinDB建立会话</em>
+    s = ddb.session()
+    s.connect(host=<span class="hl-string">"localhost"</span>, port=<span class="hl-number">8200</span>, userid=<span class="hl-string">"admin"</span>, password=<span class="hl-string">"123456"</span>)
+    <em class="hl-comment">#创建共享普通流数据表</em>
+    script = <span class="hl-string">"""
+      name = `c1Time`c2Symbol`c3Int`c4Int`c5Long`c6Long`c7Float`c8Float`c9Double`c10ArrayInt
+      type = [TIMESTAMP, SYMBOL, INT, INT, LONG, LONG, FLOAT, FLOAT, DOUBLE, INT[]]
+      share(table=streamTable(20000:0, name, type), sharedName="sharedMinBar")
+    """</span>
+    s.run(script)
+    <em class="hl-comment">#测试写入数据行数</em>
+    inertRows = <span class="hl-number">10000</span>
+    <em class="hl-comment">#延时统计</em>
+    minCostTime = <span class="hl-number">1000.0</span>
+    maxCostTime = <span class="hl-number">0.0</span>
+    totalCostTime = <span class="hl-number">0.0</span>
+    count = <span class="hl-number">0</span>
+    <strong class="hl-keyword">for</strong> i <strong class="hl-keyword">in</strong> range(inertRows):
+        insertData = createData()
+        startTime = pd.Timestamp.now()
+        s.run(<span class="hl-string">"tableInsert{sharedMinBar}"</span>,insertData)
+        delta = (pd.Timestamp.now() - startTime) / np.timedelta64(<span class="hl-number">1</span>, <span class="hl-string">'ms'</span>)
+        <strong class="hl-keyword">if</strong>(delta &lt; minCostTime):
+            minCostTime = delta
+        <strong class="hl-keyword">if</strong>(delta &gt; maxCostTime):
+            maxCostTime = delta
+        totalCostTime += delta
+        count += <span class="hl-number">1</span>
+        <em class="hl-comment">#每隔一段时间打印写入性能测试结果</em>
+        <strong class="hl-keyword">if</strong>(count %<span class="hl-number">10000</span> == <span class="hl-number">0</span>):
+            <strong class="hl-keyword">print</strong>(f<span class="hl-string">"min: {minCostTime} ms"</span>)
+            <strong class="hl-keyword">print</strong>(f<span class="hl-string">"max: {maxCostTime} ms"</span>)
+            <strong class="hl-keyword">print</strong>(<span class="hl-string">"count:"</span>, count)
+            <strong class="hl-keyword">print</strong>(f<span class="hl-string">"totalCostTime: {totalCostTime} ms"</span>)
+            <strong class="hl-keyword">print</strong>(f<span class="hl-string">"avg: {totalCostTime / count} ms"</span>)
+    <em class="hl-comment">#删除流数据表</em>
+    script = <span class="hl-string">"""
+        dropStreamTable(tableName="sharedMinBar")
+    """</span>
+    s.run(script)
+    <em class="hl-comment">#关闭当前会话</em>
+    s.close()</pre>
+        </div>
+    </article>
+</article></main></div>
+                        
+                        
+                        
+                        
+                        
+                        
+                    </div>
+                    
+                        <nav role="navigation" id="wh_topic_toc" aria-label="On this page" class="col-lg-2 d-none d-lg-block navbar d-print-none"> 
+                            <div id="wh_topic_toc_content">
+		                        
+	                            <div class=" wh_topic_toc "><div class="wh_topic_label">在本页上</div><ul><li class="topic-item"><a href="#topic_vxl_tql_xzb" data-tocid="topic_vxl_tql_xzb">tableInsert 同步写入接口</a><ul><li class="topic-item"><a href="#topic_h4b_xql_xzb" data-tocid="topic_h4b_xql_xzb">step1：创建共享普通流数据表</a></li><li class="topic-item"><a href="#topic_vk3_zql_xzb" data-tocid="topic_vk3_zql_xzb">step2：tableInsert 写入数据</a></li><li class="topic-item"><a href="#topic_nmn_1rl_xzb" data-tocid="topic_nmn_1rl_xzb">step3：查询表中数据</a></li><li class="topic-item"><a href="#topic_tvd_crl_xzb" data-tocid="topic_tvd_crl_xzb">step4：删除流数据表并关闭当前会话</a></li><li class="topic-item"><a href="#topic_glp_frl_xzb" data-tocid="topic_glp_frl_xzb">基准性能</a></li></ul></li><li class="topic-item"><a href="#topic_kqy_hrl_xzb" data-tocid="topic_kqy_hrl_xzb">MultithreadedTableWriter 异步写入接口</a></li><li class="topic-item"><a href="#topic_y2h_mrl_xzb" data-tocid="topic_y2h_mrl_xzb">附录 A-测试环境</a></li><li class="topic-item"><a href="#topic_jtp_prl_xzb" data-tocid="topic_jtp_prl_xzb">附录 B-tableInsert 同步写入接口基准性能测试代码</a></li></ul></div>
+	                        	
+                        	</div>
+                        </nav>
+                    
+                </div>
+            </div>
+            
+            
+            
+        </div> 
+        <footer class="navbar navbar-default wh_footer">
+  <div class=" footer-container mx-auto ">
+<title>Copyright</title><p><b> ©2024 浙江智臾科技有限公司 浙ICP备18048711号-3</b></p>
+  </div>
+</footer>
+        
+        <div id="go2top" class="d-print-none">
+            <span class="oxy-icon oxy-icon-up"></span>
+        </div>
+        
+        <div id="modal_img_large" class="modal">
+            <span class="close oxy-icon oxy-icon-remove"></span>
+            <div id="modal_img_container"></div>
+            <div id="caption"></div>
+        </div>
+        
+        
+        
+    </body>
+</html>

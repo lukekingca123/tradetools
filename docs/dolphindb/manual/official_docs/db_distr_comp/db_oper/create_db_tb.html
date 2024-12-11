@@ -1,0 +1,418 @@
+<!DOCTYPE html><html xmlns="http://www.w3.org/1999/xhtml" xml:lang="zh" lang="zh" data-whc_version="26.0">
+    <head><link rel="shortcut icon" href="../../favicon.ico"/><link rel="icon" href="../../favicon.ico"/><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><meta http-equiv="X-UA-Compatible" content="IE=edge"/><meta name="description" content="创建数据库可以通过两种方式： 通过 SQL 语句： CREATE DATABASE &#34;dfs://test&#34; PARTITIONED BY VALUE(1..10),ENGINE=&#34;TSDB&#34;,ATOMIC=&#34;TRANS&#34;,CHUNKGRANULARITY=&#34;TABLE&#34; 其中关键字不区分大小写。更多关于使用 SQL 语句创建数据库和表的内容，参考： create 。 通过 database ..."/><meta name="DC.rights.owner" content="(C) 版权 2024"/><meta name="copyright" content="(C) 版权 2024"/><meta name="generator" content="DITA-OT"/><meta name="DC.type" content="topic"/><meta name="DC.coverage" content=""/><meta name="DC.relation" content="../../db_distr_comp/db_distr_comp.html"/><meta name="prodname" content="DolphinDB"/><meta name="brand" content="DolphinDB"/><meta name="DC.creator" content="DolphinDB"/><meta name="DC.publisher" content="DDB N/A DDB 200"/><meta name="DC.format" content="HTML5"/><meta name="DC.identifier" content="创建数据库"/><title>建库建表</title><!--  Generated with Oxygen version 26.0, build number 2024012323.  --><meta name="wh-path2root" content="../../"/><meta name="wh-toc-id" content="创建数据库-d9529e2417"/><meta name="wh-source-relpath" content="db_distr_comp/db_oper/create_db_tb.dita"/><meta name="wh-out-relpath" content="db_distr_comp/db_oper/create_db_tb.html"/>
+
+    <link rel="stylesheet" type="text/css" href="../../oxygen-webhelp/app/commons.css?buildId=2024012323"/>
+    <link rel="stylesheet" type="text/css" href="../../oxygen-webhelp/app/topic.css?buildId=2024012323"/>
+
+    <script src="../../oxygen-webhelp/app/options/properties.js?buildId=20240704100525"></script>
+    <script src="../../oxygen-webhelp/app/localization/strings.js?buildId=2024012323"></script>
+    <script src="../../oxygen-webhelp/app/search/index/keywords.js?buildId=20240704100525"></script>
+    <script defer="defer" src="../../oxygen-webhelp/app/commons.js?buildId=2024012323"></script>
+    <script defer="defer" src="../../oxygen-webhelp/app/topic.js?buildId=2024012323"></script>
+<link rel="stylesheet" type="text/css" href="../../oxygen-webhelp/template/styles.css?buildId=2024012323"/><script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script><script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script></head>
+
+    <body id="创建数据库" class="wh_topic_page frmBody">
+        <a href="#wh_topic_body" class="sr-only sr-only-focusable">
+            跳转到主要内容
+        </a>
+        
+        
+        
+        
+        <header class="navbar navbar-default wh_header">
+    <div class="container-fluid">
+        <div xmlns:whc="http://www.oxygenxml.com/webhelp/components" class="wh_header_flex_container navbar-nav navbar-expand-md navbar-dark">
+            <div class="wh_logo_and_publication_title_container">
+                <div class="wh_logo_and_publication_title">
+                    
+                    <a href="https://www.dolphindb.cn" class=" wh_logo d-none d-sm-block "><img src="../../logo.png" alt="  DolphinDB 文档中心  "/></a>
+                    <div class=" wh_publication_title "><a href="../../index.html"><span class="booktitle">  <span class="ph mainbooktitle">DolphinDB 文档中心</span>  </span></a></div>
+                    
+                </div>
+                
+                
+            </div>
+
+            <div class="wh_top_menu_and_indexterms_link collapse navbar-collapse" id="wh_top_menu_and_indexterms_link">
+                
+                
+                
+                
+            </div>
+        <div class=" wh_search_input navbar-form wh_topic_page_search search " role="form">
+            
+            
+            
+            <form id="searchForm" method="get" role="search" action="../../search.html"><div><input type="search" placeholder="搜索 " class="wh_search_textfield" id="textToSearch" name="searchQuery" aria-label="搜索查询" required="required"/><button type="submit" class="wh_search_button" aria-label="搜索"><span class="search_input_text">搜索</span></button></div></form>
+            
+            <script src="/vendors/react/umd/react.production.min.js" defer="defer"></script>
+<script src="/vendors/react-dom/umd/react-dom.production.min.js" defer="defer"></script>
+<script src="/vendors/dayjs/dayjs.min.js" defer="defer"></script>
+<script src="/vendors/antd/dist/antd.min.js" defer="defer"></script>
+<script src="/vendors/@ant-design/icons/dist/index.umd.min.js" defer="defer"></script>
+<script src="/zh/index.js" type="module"></script>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js" defer="defer"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML" defer="defer"><!--
+
+
+--></script>
+
+            
+        </div></div>
+    </div>
+</header>
+        
+        
+         
+        
+        
+        
+        <div class="container-fluid" id="wh_topic_container">
+            <div class="row">
+
+                <nav class="wh_tools d-print-none navbar-expand-md" aria-label="Tools">
+                    
+                    <div data-tooltip-position="bottom" class=" wh_breadcrumb "><ol class="d-print-none"><li><span class="home"><a href="../../index.html"><span>主页</span></a></span></li><li><div class="topicref" data-id="new_chap_database_manage_new_chap_dbmanage_landing_page"><div class="title"><a href="../../db_distr_comp/cfg/db_intro.html"><span class="keyword label">数据库</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 数据库的基本概念</p></div></div></div></li><li><div class="topicref" data-id="chap3_sect_database_distributed_computing"><div class="title"><a href="../../db_distr_comp/db_distr_comp.html"><span class="keyword label">数据库操作</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 数据库的基本操作，例如创建数据库、表，增加列、分区，数据查询，表连接等。</p></div></div></div></li><li class="active"><div class="topicref" data-id="创建数据库"><div class="title"><a href="../../db_distr_comp/db_oper/create_db_tb.html"><span class="keyword label">建库建表</span></a></div></div></li></ol></div>
+                    
+                    
+                    
+                    <div class="wh_right_tools">
+                        <button class="wh_hide_highlight" aria-label="切换搜索突出显示" title="切换搜索突出显示"></button>
+                        <button class="webhelp_expand_collapse_sections" data-next-state="collapsed" aria-label="折叠截面" title="折叠截面"></button>
+                        
+                        
+                        
+                        
+                        <div class=" wh_print_link print d-none d-md-inline-block "><button onClick="window.print()" title="打印此页" aria-label="打印此页"></button></div>
+                        
+                        <button type="button" id="wh_toc_button" class="custom-toggler navbar-toggler collapsed wh_toggle_button navbar-light" aria-expanded="false" aria-label="Toggle publishing table of content" aria-controls="wh_publication_toc">
+                            <span class="navbar-toggler-icon"></span>
+                        </button>
+                    </div>
+                    
+                </nav>
+            </div>
+            
+            
+            
+            
+            <div class="wh_content_area">
+                <div class="row">
+                    
+                        <nav id="wh_publication_toc" class="col-lg-3 col-md-3 col-sm-12 d-md-block d-none d-print-none" aria-label="Table of Contents Container">
+                            <div id="wh_publication_toc_content">
+		                        
+                            	<div class=" wh_publication_toc " data-tooltip-position="right"><span class="expand-button-action-labels"><span id="button-expand-action" role="button" aria-label="Expand"></span><span id="button-collapse-action" role="button" aria-label="Collapse"></span><span id="button-pending-action" role="button" aria-label="Pending"></span></span><ul role="tree" aria-label="Table of Contents"><li role="treeitem"><div data-tocid="new_chap_about_sect_ddb_docs_intro-d9529e87" class="topicref" data-id="new_chap_about_sect_ddb_docs_intro" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../about/ddb_docs_intro.html" id="new_chap_about_sect_ddb_docs_intro-d9529e87-link">文档使用说明</a><div class="wh-tooltip"><p class="shortdesc">如何获取 DolphinDB 帮助信息</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="chap1_getstarted-d9529e140" class="topicref" data-id="chap1_getstarted" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action chap1_getstarted-d9529e140-link" class="wh-expand-btn"></span><div class="title"><a href="../../getstarted/chap1_getstarted.html" id="chap1_getstarted-d9529e140-link"><span class="keyword label">快速上手</span></a><div class="wh-tooltip"><p class="shortdesc">如何快速部署 DolphinDB、建库建表、写入和查询数据</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="sectionddb_deployment-d9529e335" class="topicref" data-id="sectionddb_deployment" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action sectionddb_deployment-d9529e335-link" class="wh-expand-btn"></span><div class="title"><a href="../../deploy/deploy_intro.html" id="sectionddb_deployment-d9529e335-link"><span class="keyword label">部署</span></a><div class="wh-tooltip"><p class="shortdesc">如何在不同的场景中部署 DolphinDB</p></div></div></div></li><li role="treeitem" aria-expanded="true"><div data-tocid="new_chap_database_manage_new_chap_dbmanage_landing_page-d9529e2313" class="topicref" data-id="new_chap_database_manage_new_chap_dbmanage_landing_page" data-state="expanded"><span role="button" tabindex="0" aria-labelledby="button-collapse-action new_chap_database_manage_new_chap_dbmanage_landing_page-d9529e2313-link" class="wh-expand-btn"></span><div class="title"><a href="../../db_distr_comp/cfg/db_intro.html" id="new_chap_database_manage_new_chap_dbmanage_landing_page-d9529e2313-link"><span class="keyword label">数据库</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 数据库的基本概念</p></div></div></div><ul role="group" class="navbar-nav nav-list"><li role="treeitem" aria-expanded="true"><div data-tocid="chap3_sect_database_distributed_computing-d9529e2366" class="topicref" data-id="chap3_sect_database_distributed_computing" data-state="expanded"><span role="button" tabindex="0" aria-labelledby="button-collapse-action chap3_sect_database_distributed_computing-d9529e2366-link" class="wh-expand-btn"></span><div class="title"><a href="../../db_distr_comp/db_distr_comp.html" id="chap3_sect_database_distributed_computing-d9529e2366-link"><span class="keyword label">数据库操作</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 数据库的基本操作，例如创建数据库、表，增加列、分区，数据查询，表连接等。</p></div></div></div><ul role="group" class="navbar-nav nav-list"><li role="treeitem" class="active"><div data-tocid="创建数据库-d9529e2417" class="topicref" data-id="创建数据库" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../db_distr_comp/db_oper/create_db_tb.html" id="创建数据库-d9529e2417-link"><span class="keyword label">建库建表</span></a></div></div></li><li role="treeitem"><div data-tocid="插入数据-d9529e2464" class="topicref" data-id="插入数据" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../db_distr_comp/db_oper/insert_data.html" id="插入数据-d9529e2464-link"><span class="keyword label">插入数据</span></a></div></div></li><li role="treeitem"><div data-tocid="mod_data-d9529e2511" class="topicref" data-id="mod_data" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../db_distr_comp/mod_data.html" id="mod_data-d9529e2511-link"><span class="keyword label">更新数据</span></a></div></div></li><li role="treeitem"><div data-tocid="modify_table_structure-d9529e2558" class="topicref" data-id="modify_table_structure" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../db_distr_comp/modify_table_structure.html" id="modify_table_structure-d9529e2558-link"><span class="keyword label">更新表结构</span></a></div></div></li><li role="treeitem"><div data-tocid="增加分区-d9529e2605" class="topicref" data-id="增加分区" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../db_distr_comp/db_oper/add_partitions.html" id="增加分区-d9529e2605-link"><span class="keyword label">增加分区</span></a></div></div></li><li role="treeitem"><div data-tocid="查询数据-d9529e2652" class="topicref" data-id="查询数据" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../db_distr_comp/db_oper/queries.html" id="查询数据-d9529e2652-link"><span class="keyword label">查询数据</span></a></div></div></li><li role="treeitem"><div data-tocid="删除数据库和表-d9529e2699" class="topicref" data-id="删除数据库和表" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../db_distr_comp/db_oper/drop_db_tb.html" id="删除数据库和表-d9529e2699-link"><span class="keyword label">删除数据</span></a></div></div></li><li role="treeitem"><div data-tocid="drop_database_table-d9529e2746" class="topicref" data-id="drop_database_table" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../db_distr_comp/drop_database_table.html" id="drop_database_table-d9529e2746-link"><span class="keyword label">删除库表</span></a></div></div></li><li role="treeitem"><div data-tocid="删除分区-d9529e2793" class="topicref" data-id="删除分区" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../db_distr_comp/db_oper/drop_partitions.html" id="删除分区-d9529e2793-link"><span class="keyword label">删除分区</span></a></div></div></li><li role="treeitem"><div data-tocid="函数视图-d9529e2840" class="topicref" data-id="函数视图" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../db_distr_comp/db_oper/FunctionView.html" id="函数视图-d9529e2840-link"><span class="keyword label">函数视图</span></a></div></div></li><li role="treeitem"><div data-tocid="用户权限管理-d9529e2888" class="topicref" data-id="用户权限管理" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../tutorials/ACL_and_Security.html" id="用户权限管理-d9529e2888-link">用户权限管理</a></div></div></li></ul></li><li role="treeitem" aria-expanded="false"><div data-tocid="topic_pg3_22w_ryb-d9529e2934" class="topicref" data-id="topic_pg3_22w_ryb" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action topic_pg3_22w_ryb-d9529e2934-link" class="wh-expand-btn"></span><div class="title"><a href="../../db_distr_comp/db/db_architecture.html" id="topic_pg3_22w_ryb-d9529e2934-link"><span class="keyword label">分布式架构</span></a></div></div></li><li role="treeitem"><div data-tocid="tsdb-d9529e3349" class="topicref" data-id="tsdb" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../db_distr_comp/db/tsdb.html" id="tsdb-d9529e3349-link"><span class="keyword label">TSDB 存储引擎</span></a></div></div></li><li role="treeitem"><div data-tocid="olap-d9529e3396" class="topicref" data-id="olap" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../db_distr_comp/db/olap.html" id="olap-d9529e3396-link"><span class="keyword label">OLAP 存储引擎</span></a></div></div></li><li role="treeitem"><div data-tocid="catalog-d9529e3443" class="topicref" data-id="catalog" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../db_distr_comp/db/catalog.html" id="catalog-d9529e3443-link">数据目录（catalog）</a></div></div></li></ul></li><li role="treeitem" aria-expanded="false"><div data-tocid="chap7_tutorials_streaming-d9529e3490" class="topicref" data-id="chap7_tutorials_streaming" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action chap7_tutorials_streaming-d9529e3490-link" class="wh-expand-btn"></span><div class="title"><a href="../../stream/str_intro.html" id="chap7_tutorials_streaming-d9529e3490-link"><span class="keyword label">流数据</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 流数据引擎及流数据计算的基本概念</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="tocId-d9529e7385" class="topicref" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action tocId-d9529e7385-link" class="wh-expand-btn"></span><div class="title"><a href="../../db_distr_comp/db_oper/import_data.html" id="tocId-d9529e7385-link">数据迁移</a><div class="wh-tooltip"><p class="shortdesc">如何从不同数据源向 DolphinDB 迁移数据</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="chap7_tutorials_system_management-d9529e7812" class="topicref" data-id="chap7_tutorials_system_management" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action chap7_tutorials_system_management-d9529e7812-link" class="wh-expand-btn"></span><div class="title"><a href="../../sys_man/om_intro.html" id="chap7_tutorials_system_management-d9529e7812-link"><span class="keyword label">系统运维</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 的系统运维功能及方法</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="about_language_resources-d9529e16490" class="topicref" data-id="about_language_resources" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action about_language_resources-d9529e16490-link" class="wh-expand-btn"></span><div class="title"><a href="../../progr/progr_intro.html" id="about_language_resources-d9529e16490-link"><span class="keyword label">编程语言</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 编程基本概念与方法、SQL 在 DolphinDB 的应用</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="functions_references-d9529e26503" class="topicref" data-id="functions_references" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action functions_references-d9529e26503-link" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/funcs_intro.html" id="functions_references-d9529e26503-link"><span class="keyword label">函数参考</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 函数分类、语法、详解及示例</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="api_protocol-d9529e86456" class="topicref" data-id="api_protocol" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action api_protocol-d9529e86456-link" class="wh-expand-btn"></span><div class="title"><a href="../../api/connapi_intro.html" id="api_protocol-d9529e86456-link"><span class="keyword label">连接器 &amp; API</span></a><div class="wh-tooltip"><p class="shortdesc">面向不同编程语言的 DolphinDB API 及连接器，相关协议和用法</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="chap6_plugin-d9529e91976" class="topicref" data-id="chap6_plugin" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action chap6_plugin-d9529e91976-link" class="wh-expand-btn"></span><div class="title"><a href="../../plugins/plg_intro.html" id="chap6_plugin-d9529e91976-link"><span class="keyword label">插件</span></a><div class="wh-tooltip"><p class="shortdesc">多个应用场景的插件使用说明和插件开发指导</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="third_party-d9529e94749" class="topicref" data-id="third_party" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action third_party-d9529e94749-link" class="wh-expand-btn"></span><div class="title"><a href="../../third_party.html" id="third_party-d9529e94749-link">第三方工具</a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="about_tutorials-d9529e94980" class="topicref" data-id="about_tutorials" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action about_tutorials-d9529e94980-link" class="wh-expand-btn"></span><div class="title"><a href="../../tutorials/about_tutorials.html" id="about_tutorials-d9529e94980-link"><span class="keyword label">教程</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 产品使用教程</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="tocId-d9529e101769" class="topicref" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action tocId-d9529e101769-link" class="wh-expand-btn"></span><div class="title"><a href="../../rn/server/3_00_1.html" id="tocId-d9529e101769-link">版本说明</a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 版本发布历史</p></div></div></div></li></ul></div>
+		                        
+                            </div>
+                        </nav>
+                    
+                    
+                    <div class="col-lg-7 col-md-9 col-sm-12" id="wh_topic_body">
+                        <button id="wh_close_publication_toc_button" class="close-toc-button d-none" aria-label="Toggle publishing table of content" aria-controls="wh_publication_toc" aria-expanded="true">
+                            <span class="close-toc-icon-container">
+                                <span class="close-toc-icon"></span>     
+                            </span>
+                        </button>
+                        <button id="wh_close_topic_toc_button" class="close-toc-button d-none" aria-label="Toggle topic table of content" aria-controls="wh_topic_toc" aria-expanded="true">
+                            <span class="close-toc-icon-container">
+                                <span class="close-toc-icon"></span>     
+                            </span>
+                        </button>
+                        
+                        <div class=" wh_topic_content body "><main role="main"><article class="- topic/topic topic" role="article" aria-labelledby="ariaid-title1">
+    <h1 class="- topic/title title topictitle1" id="ariaid-title1"><span class="- topic/keyword keyword label">建库建表</span></h1>
+    <article class="- topic/topic topic nested1" aria-labelledby="ariaid-title2" id="topic_uyz_pbj_p1c">
+        <h2 class="- topic/title title topictitle2" id="ariaid-title2">创建数据库</h2>
+        <div class="- topic/body body">
+            <p class="- topic/p p">创建数据库可以通过两种方式：</p>
+            <ul class="- topic/ul ul" id="topic_uyz_pbj_p1c__ul_nkg_1nb_wzb" data-ofbid="topic_uyz_pbj_p1c__ul_nkg_1nb_wzb">
+                <li class="- topic/li li">通过 SQL
+                    语句：<pre class="+ topic/pre pr-d/codeblock pre codeblock SQL" id="topic_uyz_pbj_p1c__codeblock_wgt_1nb_wzb" data-ofbid="topic_uyz_pbj_p1c__codeblock_wgt_1nb_wzb"><code>CREATE DATABASE "dfs://test" PARTITIONED BY VALUE(1..10),ENGINE="TSDB",ATOMIC="TRANS",CHUNKGRANULARITY="TABLE"</code></pre>其中关键字不区分大小写。更多关于使用
+                    SQL 语句创建数据库和表的内容，参考：<a class="- topic/xref xref" href="../../progr/sql/create.html">create</a>。</li>
+                <li class="- topic/li li">通过 <code class="+ topic/ph pr-d/codeph ph codeph">database</code>
+                    函数：<pre class="+ topic/pre pr-d/codeblock pre codeblock" id="topic_uyz_pbj_p1c__codeblock_wq2_cnb_wzb" data-ofbid="topic_uyz_pbj_p1c__codeblock_wq2_cnb_wzb"><code>database("dfs://test", VALUE, 1..10,, "TSDB", "TRANS", "TABLE") </code></pre></li>
+            </ul>
+            <p class="- topic/p p">上述两条语句都创建了一个名为 <span class="+ topic/ph sw-d/filepath ph filepath">dfs://test</span> 的分布式数据库，前缀 <code class="+ topic/ph pr-d/codeph ph codeph">dfs://</code>
+                是分布式数据库的标识。</p>
+            <ul class="- topic/ul ul" id="topic_uyz_pbj_p1c__ul_skz_pbj_p1c" data-ofbid="topic_uyz_pbj_p1c__ul_skz_pbj_p1c">
+                <li class="- topic/li li">指定了分区类型为值分区,并设置了 1 到 10 共 10 个初始分区。</li>
+                <li class="- topic/li li">指定了存储引擎的类型为 TSDB。</li>
+                <li class="- topic/li li">指定了写入事务的原子性层级为 TRANS，即不允许并发写入同一个分区。</li>
+                <li class="- topic/li li">指定了分区粒度为 TABLE，即支持同时写入同一分区的不同表。</li>
+            </ul>
+            <p class="- topic/p p">下面以 <code class="+ topic/ph pr-d/codeph ph codeph">database</code> 函数为例，对创建数据库进行详细介绍</p>
+            <p class="- topic/p p">
+                <code class="+ topic/ph pr-d/codeph ph codeph">database(directory, [partitionType], [partitionScheme], [locations],
+                    [engine=’OLAP’], [atomic=’TRANS’], [chunkGranularity=’TABLE’])</code>
+            </p>
+            <ul class="- topic/ul ul" id="topic_uyz_pbj_p1c__ul_tkz_pbj_p1c" data-ofbid="topic_uyz_pbj_p1c__ul_tkz_pbj_p1c">
+                <li class="- topic/li li">
+                    <p class="- topic/p p"><em class="+ topic/ph hi-d/i ph i">directory</em> 用于指示数据库的存储目录。</p>
+                    <ul class="- topic/ul ul" id="topic_uyz_pbj_p1c__ul_zq2_fnb_wzb" data-ofbid="topic_uyz_pbj_p1c__ul_zq2_fnb_wzb">
+                        <li class="- topic/li li">创建内存数据库，只需将 <em class="+ topic/ph hi-d/i ph i">directory</em>
+                            设为空，可通过以下脚本实现：<pre class="+ topic/pre pr-d/codeblock pre codeblock" id="topic_uyz_pbj_p1c__codeblock_pbc_rdb_wzb" data-ofbid="topic_uyz_pbj_p1c__codeblock_pbc_rdb_wzb"><code>db = database("", VALUE, 1..10)</code></pre></li>
+                        <li class="- topic/li li">创建分布式数据库，此参数需要以 <code class="+ topic/ph pr-d/codeph ph codeph">dfs://</code>
+                            开头，并指定一个唯一的库名，可通过以下脚本实现：<pre class="+ topic/pre pr-d/codeblock pre codeblock" id="topic_uyz_pbj_p1c__codeblock_g2q_sdb_wzb" data-ofbid="topic_uyz_pbj_p1c__codeblock_g2q_sdb_wzb"><code>db = database("dfs://uniquedb", VALUE, 1..10)</code></pre></li>
+                    </ul>
+                    <div class="- topic/note note note note_note" id="topic_uyz_pbj_p1c__note_pcy_cnb_wzb" data-ofbid="topic_uyz_pbj_p1c__note_pcy_cnb_wzb"><span class="note__title">注：</span> 
+                        <ul class="- topic/ul ul" id="topic_uyz_pbj_p1c__ul_tbf_dnb_wzb" data-ofbid="topic_uyz_pbj_p1c__ul_tbf_dnb_wzb">
+                            <li class="- topic/li li">采用单节点模式部署的 DolphinDB 也支持创建分布式数据库。</li>
+                            <li class="- topic/li li">数据库的库名一经确定，不可更改。</li>
+                            <li class="- topic/li li">数据库的库名必须具有唯一性，不允许与现有数据库同名。可通过 <a class="- topic/xref xref" href="../../funcs/e/existsDatabase.html">existsDatabase</a> 或 <a class="- topic/xref xref" href="../../funcs/g/getClusterDFSDatabases.html">getClusterDFSDatabases</a>
+                                在创建前查看是否存在同名数据库，也可在创建后验证是否创建成功。</li>
+                        </ul>
+                    </div>
+                </li>
+                <li class="- topic/li li">
+                    <p class="- topic/p p"><em class="+ topic/ph hi-d/i ph i">partitionType</em> 用于指示数据库的分区类型，<em class="+ topic/ph hi-d/i ph i">partitionScheme</em>
+                        用于指示创建的分区结构，DolphinDB 提供了五种分区方式：</p>
+                    <ul class="- topic/ul ul" id="topic_uyz_pbj_p1c__ul_ukz_pbj_p1c" data-ofbid="topic_uyz_pbj_p1c__ul_ukz_pbj_p1c">
+                        <li class="- topic/li li">值分区（VALUE），<em class="+ topic/ph hi-d/i ph i">partitionScheme</em>
+                            指定一个向量，每个元素定义一个分区，例如常见的按天分区可以通过以下脚本实现：<pre class="+ topic/pre pr-d/codeblock pre codeblock" id="topic_uyz_pbj_p1c__codeblock_xx2_ydb_wzb" data-ofbid="topic_uyz_pbj_p1c__codeblock_xx2_ydb_wzb"><code>db = database("dfs://valuedb", VALUE, 2023.01.01..2023.12.31)</code></pre></li>
+                        <li class="- topic/li li">范围分区（RANGE），<em class="+ topic/ph hi-d/i ph i">partitionScheme</em>
+                            指定一个向量，相邻两个元素构成一个<strong class="+ topic/ph hi-d/b ph b">左闭右开</strong>的区间，每个区间定义一个分区，例如常用的按年分区可通过以下脚本实现：<pre class="+ topic/pre pr-d/codeblock pre codeblock" id="topic_uyz_pbj_p1c__codeblock_hh1_zdb_wzb" data-ofbid="topic_uyz_pbj_p1c__codeblock_hh1_zdb_wzb"><code>db = database("dfs://rangedb", RANGE, date(2020.01M+12*1..10)) </code></pre></li>
+                        <li class="- topic/li li">哈希分区（HASH），partitionScheme 指定一个长度为 2
+                            的向量，第一个元素指定分区的数据类型，第二个元素指定分区数，例如常见的按照股票代码进行哈希分区可通过以下脚本实现：<pre class="+ topic/pre pr-d/codeblock pre codeblock" id="topic_uyz_pbj_p1c__codeblock_qmt_zdb_wzb" data-ofbid="topic_uyz_pbj_p1c__codeblock_qmt_zdb_wzb"><code>db = database("dfs://hashdb", HASH, [SYMBOL,25])</code></pre></li>
+                        <li class="- topic/li li">列表分区（LIST），<em class="+ topic/ph hi-d/i ph i">partitionScheme</em>
+                            指定一个元组，元组的每个元素是一个向量，定义一个分区，例如：<pre class="+ topic/pre pr-d/codeblock pre codeblock" id="topic_uyz_pbj_p1c__codeblock_yk4_12b_wzb" data-ofbid="topic_uyz_pbj_p1c__codeblock_yk4_12b_wzb"><code>db = database("dfs://listdb", LIST, [`A`B`C, `D`E])</code></pre></li>
+                        <li class="- topic/li li">组合分区（COMPO），<em class="+ topic/ph hi-d/i ph i">partitionScheme</em>
+                            指定一个向量，向量的每个元素是一个内存数据库的句柄，用于指示各级分区的分区类型，每级分区可以独立采用上述四种分区方式，最多为 3
+                            级分区。组合分区在逻辑上是并列的，并不存在从属或优先级关系，例如常见的对按天分区和按照股票代码哈希分区进行组合分区，可以通过以下脚本实现：<pre class="+ topic/pre pr-d/codeblock pre codeblock" id="topic_uyz_pbj_p1c__codeblock_awg_c2b_wzb" data-ofbid="topic_uyz_pbj_p1c__codeblock_awg_c2b_wzb"><code>db1 = database("", VALUE, 2020.01.01..2021.01.01)
+db2 = database("", HASH, [SYMBOL,25])
+db = database("dfs://compodb", COMPO, [db1,db2])</code></pre></li>
+                    </ul>
+                    <div class="- topic/note note note note_note" id="topic_uyz_pbj_p1c__note_w5s_gnb_wzb" data-ofbid="topic_uyz_pbj_p1c__note_w5s_gnb_wzb"><span class="note__title">注：</span> 
+                        <ul class="- topic/ul ul" id="topic_uyz_pbj_p1c__ul_njy_gnb_wzb" data-ofbid="topic_uyz_pbj_p1c__ul_njy_gnb_wzb">
+                            <li class="- topic/li li">数据库的分区方式一经确定，不可更改。</li>
+                            <li class="- topic/li li">数据库的分区的概念是针对库的，即同一库下的所有表都是采用相同的分区方案。</li>
+                            <li class="- topic/li li">分布式表的值分区（VALUE）后续允许增加分区；分布式表的范围分区（RANGE）允许向后增加分区；其他方式的分区结构，即
+                                <em class="+ topic/ph hi-d/i ph i">partitionScheme</em> 一经确定，不可更改。所以用户在设置分区结构时应充分考量，可参考：<a class="- topic/xref xref" href="../db/db_partitioning.html">数据分区</a>。</li>
+                        </ul>
+                    </div>
+                </li>
+                <li class="- topic/li li">
+                    <p class="- topic/p p"><em class="+ topic/ph hi-d/i ph i">engine</em> 用于指定数据库采用的存储引擎，有 <a class="- topic/xref xref" href="../db/olap.html">OLAP 存储引擎</a> 和 <a class="- topic/xref xref" href="../db/tsdb.html">TSDB 存储引擎</a> 可供选择，默认采用 OLAP。其中，TSDB 存储引擎仅在 200 及以上系列 server
+                        中可用。</p>
+                    <p class="- topic/p p">OLAP 引擎查询和计算整列或多列的性能优越，数据压缩率高，但不适于存储列数较多的表（建议列数不超过 100）。TSDB
+                        的点查性能更优，且兼具优秀的整列计算性能，综合考虑，推荐用户使用 TSDB 存储引擎。</p>
+                    <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="topic_uyz_pbj_p1c__codeblock_vkz_pbj_p1c" data-ofbid="topic_uyz_pbj_p1c__codeblock_vkz_pbj_p1c"><code>// 采用OLAP引擎
+db = database("dfs//olap", VALUE, 1..10,, "OLAP")
+
+// 采用TSDB引擎
+db = database("dfs://tsdb", VALUE, 1..10,, "TSDB)</code></pre>
+                    <div class="- topic/note note note note_note" id="topic_uyz_pbj_p1c__note_prn_hnb_wzb" data-ofbid="topic_uyz_pbj_p1c__note_prn_hnb_wzb"><span class="note__title">注：</span> 
+                        <ul class="- topic/ul ul" id="topic_uyz_pbj_p1c__ul_xqs_hnb_wzb" data-ofbid="topic_uyz_pbj_p1c__ul_xqs_hnb_wzb">
+                            <li class="- topic/li li">使用 TSDB 引擎创建数据库时，应检查配置文件，确保配置项 <code class="+ topic/ph pr-d/codeph ph codeph">dataSync=1</code> 且
+                                    <code class="+ topic/ph pr-d/codeph ph codeph">TSDBCacheEngineSize&gt;0</code> 。单节点的配置文件为
+                                    <em class="+ topic/ph hi-d/i ph i">dolphindb.cfg</em>，普通集群的配置文件为 <em class="+ topic/ph hi-d/i ph i">cluster.cfg</em>，高可用集群的配置项须通过
+                                Web 界面修改。</li>
+                            <li class="- topic/li li">使用 TSDB 引擎创建数据库时，需要连接数据节点或计算节点创建，不能在控制节点创建。</li>
+                            <li class="- topic/li li">TSDB 引擎只可应用于分布式数据库，不可用于内存数据库和本地磁盘数据库。</li>
+                            <li class="- topic/li li">一个数据库的存储引擎一经确定，后续不可修改。</li>
+                        </ul>
+                    </div>
+                </li>
+                <li class="- topic/li li">
+                    <p class="- topic/p p"><em class="+ topic/ph hi-d/i ph i">atomic</em> 用于设置写入事务的原子性层级，即，是否允许并发写入同一分区。可选值为 "TRANS" 和 "CHUNK"，默认值为
+                        "TRANS"。</p>
+                    <ul class="- topic/ul ul" id="topic_uyz_pbj_p1c__ul_wkz_pbj_p1c" data-ofbid="topic_uyz_pbj_p1c__ul_wkz_pbj_p1c">
+                        <li class="- topic/li li">设置为 "TRANS"
+                            时，写入事务的原子性层级为事务，即一个事务写入多个分区时，若某个分区被其他写入事务锁定而出现写入冲突，则该事务的写入全部失败。因此，该设置下，不允许并发写入同一个分区。</li>
+                        <li class="- topic/li li">设置为 "CHUNK"
+                            时，写入事务的原子性层级为分区。若一个事务写入多个分区时，某分区被其它写入事务锁定而出现冲突，系统会完成其他分区的写入，同时对之前发生冲突的分区不断尝试写入，尝试数分钟后仍冲突才放弃。此设置下，允许并发写入同一个分区，但由于不能完全保证事务的原子性，可能出现部分分区写入成功而部分分区写入失败的情况。同时由于采用了重试机制，写入速度可能较慢。</li>
+                    </ul>
+                </li>
+                <li class="- topic/li li">
+                    <p class="- topic/p p"><em class="+ topic/ph hi-d/i ph i">chunkGranularity</em> 用于指定分区的粒度。可选值为 "TABLE" 和 "DATABASE"，默认值为 "TABLE"。</p>
+                    <ul class="- topic/ul ul" id="topic_uyz_pbj_p1c__ul_xkz_pbj_p1c" data-ofbid="topic_uyz_pbj_p1c__ul_xkz_pbj_p1c">
+                        <li class="- topic/li li">"TABLE"：表级分区，设置后支持同时写入同一分区的不同表。</li>
+                        <li class="- topic/li li">"DATABASE"：数据库级分区，设置后只支持同时写入不同分区。</li>
+                    </ul>
+                </li>
+            </ul>
+            <div class="- topic/note note note note_note" id="topic_uyz_pbj_p1c__note_hjs_mgb_wzb" data-ofbid="topic_uyz_pbj_p1c__note_hjs_mgb_wzb"><span class="note__title">注：</span> 
+                <ul class="- topic/ul ul" id="topic_uyz_pbj_p1c__ul_kdf_ngb_wzb" data-ofbid="topic_uyz_pbj_p1c__ul_kdf_ngb_wzb">
+                    <li class="- topic/li li">
+                        <p class="- topic/p p">创建数据库前请确保用户已经登录。可通过函数 <a class="- topic/xref xref" href="../../funcs/g/getCurrentSessionAndUser.html">getCurrentSessionAndUser</a>
+                            查看，如果返回结果的第二个元素不是 guest，表示用户已经登录。默认的管理员 admin 的初始密码为
+                            123456，用户可通过以下脚本登录：</p>
+                        <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="topic_uyz_pbj_p1c__codeblock_ldf_ngb_wzb" data-ofbid="topic_uyz_pbj_p1c__codeblock_ldf_ngb_wzb"><code>login(`admin,`123456)</code></pre>
+                    </li>
+                    <li class="- topic/li li">
+                        <p class="- topic/p p">创建数据库只有具备 DB_OWNER 权限的用户才能执行。可通过 <a class="- topic/xref xref" href="../../funcs/g/getUserAccess.html">getUserAccess</a>
+                            查看当前用户是否具有该权限，如果没有，请联系管理员赋权。</p>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </article>
+    <article class="- topic/topic topic nested1" aria-labelledby="ariaid-title3" id="创建表">
+        <h2 class="- topic/title title topictitle2" id="ariaid-title3">创建表</h2>
+        <article class="- topic/topic topic nested2" aria-labelledby="ariaid-title4" id="创建内存表">
+            <h3 class="- topic/title title topictitle3" id="ariaid-title4">创建内存表</h3>
+            <div class="- topic/body body">
+                <p class="- topic/p p">常用的内存表有 <a class="- topic/xref xref" href="../../funcs/t/table.html">table</a>，<a class="- topic/xref xref" href="../../funcs/k/keyedTable.html">keyedTable</a>, <a class="- topic/xref xref" href="../../funcs/i/indexedTable.html">indexedTable</a>, <a class="- topic/xref xref" href="../../funcs/s/streamTable.html">streamTable</a>, <a class="- topic/xref xref" href="../../funcs/m/mvccTable.html">mvccTable</a> 和分区内存表 (<a class="- topic/xref xref" href="../../funcs/c/createPartitionedTable.html">createPartitionedTable</a>)等，这里以
+                        <code class="+ topic/ph pr-d/codeph ph codeph">table</code> 为例进行介绍。</p>
+                <p class="- topic/p p"><code class="+ topic/ph pr-d/codeph ph codeph">table</code> 有两种用法：</p>
+                <ul class="- topic/ul ul" id="创建内存表__ul_sdk_y2j_p1c" data-ofbid="创建内存表__ul_sdk_y2j_p1c">
+                    <li class="- topic/li li">
+                        <p class="- topic/p p"><code class="+ topic/ph pr-d/codeph ph codeph">table(X, [X1], [X2],
+                            ...)</code>，把多个向量、元组、矩阵或表组合成一个表，向量名、元组名即为列名，集成表中的各列，</p>
+                        <ul class="- topic/ul ul" id="创建内存表__ul_tdk_y2j_p1c" data-ofbid="创建内存表__ul_tdk_y2j_p1c">
+                            <li class="- topic/li li">
+                                <p class="- topic/p p">每列的长度必须一致</p>
+                            </li>
+                            <li class="- topic/li li">
+                                <p class="- topic/p p">注意参数的类型只能是上述几种，尤其是在数据只有一行的情况，例如</p>
+                                <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="创建内存表__codeblock_udk_y2j_p1c" data-ofbid="创建内存表__codeblock_udk_y2j_p1c"><code>u = [2]
+v = [3]
+t = table(u, v)</code></pre>
+                            </li>
+                            <li class="- topic/li li">
+                                <p class="- topic/p p">变量名是大小写敏感的，但是表的列名大小写不敏感，请注意建表时不能出现重复列名</p>
+                            </li>
+                            <li class="- topic/li li">
+                                <p class="- topic/p p">如果需要指定列名，可以在列后增加 <code class="+ topic/ph pr-d/codeph ph codeph">as &lt;alias&gt;</code> , 例如</p>
+                                <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="创建内存表__codeblock_vdk_y2j_p1c" data-ofbid="创建内存表__codeblock_vdk_y2j_p1c"><code>t = table([1,2,3] as id, ["x","y","z"] as sym)</code></pre>
+                            </li>
+                            <li class="- topic/li li">
+                                <p class="- topic/p p">如果要创建存在空列的表，需要为其指定数据类型，如下例当中的 data 列</p>
+                                <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="创建内存表__codeblock_wdk_y2j_p1c" data-ofbid="创建内存表__codeblock_wdk_y2j_p1c"><code>t = table(`A as tag, now() as time, int(NULL) as data)</code></pre>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="- topic/li li">
+                        <p class="- topic/p p"><code class="+ topic/ph pr-d/codeph ph codeph">table(capacity:size, colNames, colTypes)</code>，其中 capacity
+                            为建表时分配的内存（以记录数为单位），如果该参数设置很大，即使创建空表，也会占用大量内存。</p>
+                        <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="创建内存表__codeblock_xdk_y2j_p1c" data-ofbid="创建内存表__codeblock_xdk_y2j_p1c"><code>table(100:0, `col1`col2`col3`col4, [INT,INT,DOUBLE,STRING])</code></pre>
+                    </li>
+                </ul>
+                <div class="- topic/note note tip note_tip" id="创建内存表__note_m1w_nnb_wzb" data-ofbid="创建内存表__note_m1w_nnb_wzb"><span class="note__title">提示：</span> 当内存表数据量较大时，可以创建分区内存表，它由多个子表构成，锁由每个子表独立管理，这样可以大大增加读写并发能力。</div>
+                <p class="- topic/p p">目前支持对内存表进行值分区、范围分区、哈希分区和列表分区，可使用 <a class="- topic/xref xref" href="../../funcs/c/createPartitionedTable.html">createPartitionedTable</a> 创建分区内存表。</p>
+                <p class="- topic/p p">创建分区内存表与创建分布式分区表的方式相同，如下例所示：</p>
+                <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="创建内存表__codeblock_ydk_y2j_p1c" data-ofbid="创建内存表__codeblock_ydk_y2j_p1c"><code>db = database("",VALUE,1..5)
+schemaTb = table(1:0, `id`sym`val, [INT,SYMBOL,DOUBLE])
+t = db.createPartitionedTable(schemaTb, `mpt, `id)</code></pre>
+                <p class="- topic/p p">有关更多参数细节，参考：<a class="- topic/xref xref" href="#%E5%88%9B%E5%BB%BA%E5%88%86%E5%B8%83%E5%BC%8F%E8%A1%A8__dim_table">分区表</a>。</p>
+            </div>
+        </article>
+        <article class="- topic/topic topic nested2" aria-labelledby="ariaid-title5" id="创建分布式表">
+            <h3 class="- topic/title title topictitle3" id="ariaid-title5">创建分布式表</h3>
+            <div class="- topic/body body">
+                <p class="- topic/p p">分布式表包括维度表和分区表两种类型。首先介绍一下维度表和分区表创建时的一些共有特点：</p>
+                <ul class="- topic/ul ul" id="创建分布式表__ul_zdk_y2j_p1c" data-ofbid="创建分布式表__ul_zdk_y2j_p1c">
+                    <li class="- topic/li li">
+                        <p class="- topic/p p">创建分布式表时，需要为其指定一个表名。同一个数据库下，表名具有唯一性，不允许创建同名分布式表。可使用函数
+                                <code class="+ topic/ph pr-d/codeph ph codeph">existsTable</code> 查看是否存在同名表，以及确认创建是否成功。</p>
+                    </li>
+                    <li class="- topic/li li">
+                        <p class="- topic/p p">创建分布式表时，需要一个表作为模板，创建一个跟该表结构一致的分布式表。该表可以是空表，也可以包含数据，使用非空表也不会将其中的数据写入分布式表,仅用于提供表结构。</p>
+                    </li>
+                    <li class="- topic/li li">
+                        <p class="- topic/p p">提供表结构的表不可是流数据表。</p>
+                    </li>
+                    <li class="- topic/li li">
+                        <p class="- topic/p p">如果是现有的分布式表或流数据表，想要复用其结构，可以通过 <code class="+ topic/ph pr-d/codeph ph codeph">schema</code>
+                            函数查询其表的列名和列的数据类型，快速创建，也可查询少部分数据赋值给一个新的表变量作为模板。以流数据表为例：</p>
+                        <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="创建分布式表__codeblock_a2k_y2j_p1c" data-ofbid="创建分布式表__codeblock_a2k_y2j_p1c"><code>// st 为一流数据表,有以下两种方式快速复用其结构
+t1 = select top 3 * from st
+
+t2 = table(1:0,st.schema().colDefs.name,st.schema().colDefs.typeString)
+</code></pre>
+                    </li>
+                </ul>
+                <section class="- topic/section section" id="创建分布式表__section_bvm_dfj_p1c" data-ofbid="创建分布式表__section_bvm_dfj_p1c"><h4 class="- topic/title title sectiontitle">维度表</h4>
+                    
+                    <p class="- topic/p p">维度表是分布式数据库中没有分区的表，一般用于存储不频繁更新的小数据集。可以使用 <code class="+ topic/ph pr-d/codeph ph codeph">createDimensionTable</code>
+                        函数来创建维度表。</p>
+                    <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="创建分布式表__codeblock_b2k_y2j_p1c" data-ofbid="创建分布式表__codeblock_b2k_y2j_p1c"><code>db = database("dfs://db1", VALUE, 1..5)
+schemaTb = table(1:0,`id`sym`qty`price,[INT,SYMBOL,INT,DOUBLE])
+t = db.createDimensionTable(schemaTb,`dt)</code></pre>
+                </section>
+                <section class="- topic/section section" id="创建分布式表__dim_table" data-ofbid="创建分布式表__dim_table"><h4 class="- topic/title title sectiontitle">分区表</h4>
+                    
+                    <div class="- topic/note note note note_note" id="创建分布式表__note_rtc_nfb_wzb" data-ofbid="创建分布式表__note_rtc_nfb_wzb"><span class="note__title">注：</span> 只有具备 DBOBJ_CREATE 权限的用户或当前数据库创建者能够创建分区表。可通过 <a class="- topic/xref xref" href="../../funcs/g/getUserAccess.html">getUserAccess</a>
+                        查看当前用户是否具有创建分区表的权限，如果没有，请联系管理员赋权。</div>
+                    <p class="- topic/p p">创建分区表的 <a class="- topic/xref xref" href="../../funcs/c/createPartitionedTable.html">createPartitionedTable</a> 函数语法如下：</p>
+                    <p class="- topic/p p"><code class="+ topic/ph pr-d/codeph ph codeph">createPartitionedTable(dbHandle, table, tableName, partitionColumns,
+                            compressMethods, sortColumns, keepDuplicates=ALL,
+                            sortKeyMappingFunction)</code></p>
+                    <ul class="- topic/ul ul" id="创建分布式表__ul_c2k_y2j_p1c" data-ofbid="创建分布式表__ul_c2k_y2j_p1c">
+                        <li class="- topic/li li">
+                            <p class="- topic/p p"><em class="+ topic/ph hi-d/i ph i">partitionColumns</em>
+                                同分区内存表类似，创建分布式分区表时，需要指定分区列，分区列的数据类型必须与分区结构一致。分区列一经确定，无法修改。</p>
+                            <p class="- topic/p p">下例中，数据库根据日期值进行分区，建表时应指定一列数据类型为 DATE 或可以转化为 DATE 的列（DATETIME 类型数据可经
+                                    <code class="+ topic/ph pr-d/codeph ph codeph">date</code> 函数转换为 DATE 类型）</p>
+                            <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="创建分布式表__codeblock_d2k_y2j_p1c" data-ofbid="创建分布式表__codeblock_d2k_y2j_p1c"><code>db = database("dfs://valuedb", VALUE, 2023.01.01..2023.12.31)
+schemaTb = table(1:0,`date`time`sym`price,[DATE,TIME,SYMBOL,DOUBLE])
+t = db.createPartitionedTable(schemaTb,`pt,`date)</code></pre>
+                            <p class="- topic/p p">下例中，数据库使用了由值分区和哈希分区组成的组合分区，分区列应指定两列，分别对应两级分区，且数据类型匹配：</p>
+                            <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="创建分布式表__codeblock_e2k_y2j_p1c" data-ofbid="创建分布式表__codeblock_e2k_y2j_p1c"><code>db1 = database("", VALUE, 2020.01.01..2021.01.01)
+db2 = database("", HASH, [SYMBOL,25])
+db = database("dfs://compodb", COMPO, [db1,db2])
+schemaTb = table(1:0,`date`time`sym`price,[DATE,TIME,SYMBOL,DOUBLE])
+t = db.createPartitionedTable(schemaTb,`pt,`date`sym)</code></pre>
+                        </li>
+                        <li class="- topic/li li">
+                            <p class="- topic/p p"><em class="+ topic/ph hi-d/i ph i">sortColumns</em>，当前数据库使用 TSDB 存储引擎时，则必须指定此参数。</p>
+                        </li>
+                        <li class="- topic/li li"><em class="+ topic/ph hi-d/i ph i">sortColumns</em> 如果只有一列，则数据会根据此列，在分区内进行分组；如果有n（n&gt;1）列，则数据会根据前 n-1
+                            列进行分组，这时在考虑是否使用参数 <em class="+ topic/ph hi-d/i ph i">sortKeyMappingFunction</em> 进行降维时，无需考虑最后一列。</li>
+                        <li class="- topic/li li">
+                            <p class="- topic/p p"><em class="+ topic/ph hi-d/i ph i">keepDuplicates</em>，如果指定当前去重策略为 LAST 和 FIRST，<em class="+ topic/ph hi-d/i ph i">sortColumns</em>
+                                的数量不得小于 2。</p>
+                        </li>
+                        <li class="- topic/li li">TSDB 引擎可以根据 <em class="+ topic/ph hi-d/i ph i">sortColumns</em> 和 <em class="+ topic/ph hi-d/i ph i">keepDuplicates</em> 对数据进行去重，但
+                                <em class="+ topic/ph hi-d/i ph i">sortColumns</em> 的设置不可过于随意，因为数据存储时会根据 <em class="+ topic/ph hi-d/i ph i">sortColumns</em>
+                            创建索引，查询也可通过索引提升效率，如果索引设置不合理，不仅会因存储大量索引而造成磁盘占用过多，也会导致查询缓慢。</li>
+                    </ul>
+                </section>
+            </div>
+        </article>
+    </article>
+</article></main></div>
+                        
+                        
+                        
+                        
+                        
+                        
+                    </div>
+                    
+                        <nav role="navigation" id="wh_topic_toc" aria-label="On this page" class="col-lg-2 d-none d-lg-block navbar d-print-none"> 
+                            <div id="wh_topic_toc_content">
+		                        
+	                            <div class=" wh_topic_toc "><div class="wh_topic_label">在本页上</div><ul><li class="topic-item"><a href="#topic_uyz_pbj_p1c" data-tocid="topic_uyz_pbj_p1c">创建数据库</a></li><li class="topic-item"><a href="#%E5%88%9B%E5%BB%BA%E8%A1%A8" data-tocid="创建表">创建表</a><ul><li class="topic-item"><a href="#%E5%88%9B%E5%BB%BA%E5%86%85%E5%AD%98%E8%A1%A8" data-tocid="创建内存表">创建内存表</a></li><li class="topic-item"><a href="#%E5%88%9B%E5%BB%BA%E5%88%86%E5%B8%83%E5%BC%8F%E8%A1%A8" data-tocid="创建分布式表">创建分布式表</a><ul><li class="section-item"><div class="section-title"><a href="#%E5%88%9B%E5%BB%BA%E5%88%86%E5%B8%83%E5%BC%8F%E8%A1%A8__section_bvm_dfj_p1c" data-tocid="创建分布式表__section_bvm_dfj_p1c">维度表</a></div></li><li class="section-item"><div class="section-title"><a href="#%E5%88%9B%E5%BB%BA%E5%88%86%E5%B8%83%E5%BC%8F%E8%A1%A8__dim_table" data-tocid="创建分布式表__dim_table">分区表</a></div></li></ul></li></ul></li></ul></div>
+	                        	
+                        	</div>
+                        </nav>
+                    
+                </div>
+            </div>
+            
+            
+            
+        </div> 
+        <footer class="navbar navbar-default wh_footer">
+  <div class=" footer-container mx-auto ">
+<title>Copyright</title><p><b> ©2024 浙江智臾科技有限公司 浙ICP备18048711号-3</b></p>
+  </div>
+</footer>
+        
+        <div id="go2top" class="d-print-none">
+            <span class="oxy-icon oxy-icon-up"></span>
+        </div>
+        
+        <div id="modal_img_large" class="modal">
+            <span class="close oxy-icon oxy-icon-remove"></span>
+            <div id="modal_img_container"></div>
+            <div id="caption"></div>
+        </div>
+        
+        
+        
+    </body>
+</html>

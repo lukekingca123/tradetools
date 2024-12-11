@@ -1,0 +1,669 @@
+<!DOCTYPE html><html xmlns="http://www.w3.org/1999/xhtml" xml:lang="zh" lang="zh" data-whc_version="26.0">
+    <head><link rel="shortcut icon" href="../../favicon.ico"/><link rel="icon" href="../../favicon.ico"/><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><meta http-equiv="X-UA-Compatible" content="IE=edge"/><meta name="description" content="对数据库进行分区可以显著降低系统响应延迟，提高数据吞吐量。具体来说，分区有以下主要好处。 分区使得大型表更易于管理。对数据子集的维护操作也更加高效，因为这些操作只针对需要的数据而不是整个表。一个好的分区策略通过只读取查询所需的相关数据来减少要扫描的数据量。如果分区机制设计不合理，对数据库的查询、计算以及其它操作都可能受到磁盘访问I/O这个瓶颈的限制。 ..."/><meta name="DC.rights.owner" content="(C) 版权 2024"/><meta name="copyright" content="(C) 版权 2024"/><meta name="generator" content="DITA-OT"/><meta name="DC.type" content="topic"/><meta name="DC.coverage" content=""/><meta name="DC.relation" content="../../db_distr_comp/db/db_architecture.html"/><meta name="prodname" content="DolphinDB"/><meta name="brand" content="DolphinDB"/><meta name="DC.creator" content="DolphinDB"/><meta name="DC.publisher" content="DDB N/A DDB 200"/><meta name="DC.format" content="HTML5"/><meta name="DC.identifier" content="数据库分区"/><title>数据分区</title><!--  Generated with Oxygen version 26.0, build number 2024012323.  --><meta name="wh-path2root" content="../../"/><meta name="wh-toc-id" content="数据库分区-d9529e3027"/><meta name="wh-source-relpath" content="db_distr_comp/db/db_partitioning.dita"/><meta name="wh-out-relpath" content="db_distr_comp/db/db_partitioning.html"/>
+
+    <link rel="stylesheet" type="text/css" href="../../oxygen-webhelp/app/commons.css?buildId=2024012323"/>
+    <link rel="stylesheet" type="text/css" href="../../oxygen-webhelp/app/topic.css?buildId=2024012323"/>
+
+    <script src="../../oxygen-webhelp/app/options/properties.js?buildId=20240704100525"></script>
+    <script src="../../oxygen-webhelp/app/localization/strings.js?buildId=2024012323"></script>
+    <script src="../../oxygen-webhelp/app/search/index/keywords.js?buildId=20240704100525"></script>
+    <script defer="defer" src="../../oxygen-webhelp/app/commons.js?buildId=2024012323"></script>
+    <script defer="defer" src="../../oxygen-webhelp/app/topic.js?buildId=2024012323"></script>
+<link rel="stylesheet" type="text/css" href="../../oxygen-webhelp/template/styles.css?buildId=2024012323"/><script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script><script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script></head>
+
+    <body id="数据库分区" class="wh_topic_page frmBody">
+        <a href="#wh_topic_body" class="sr-only sr-only-focusable">
+            跳转到主要内容
+        </a>
+        
+        
+        
+        
+        <header class="navbar navbar-default wh_header">
+    <div class="container-fluid">
+        <div xmlns:whc="http://www.oxygenxml.com/webhelp/components" class="wh_header_flex_container navbar-nav navbar-expand-md navbar-dark">
+            <div class="wh_logo_and_publication_title_container">
+                <div class="wh_logo_and_publication_title">
+                    
+                    <a href="https://www.dolphindb.cn" class=" wh_logo d-none d-sm-block "><img src="../../logo.png" alt="  DolphinDB 文档中心  "/></a>
+                    <div class=" wh_publication_title "><a href="../../index.html"><span class="booktitle">  <span class="ph mainbooktitle">DolphinDB 文档中心</span>  </span></a></div>
+                    
+                </div>
+                
+                
+            </div>
+
+            <div class="wh_top_menu_and_indexterms_link collapse navbar-collapse" id="wh_top_menu_and_indexterms_link">
+                
+                
+                
+                
+            </div>
+        <div class=" wh_search_input navbar-form wh_topic_page_search search " role="form">
+            
+            
+            
+            <form id="searchForm" method="get" role="search" action="../../search.html"><div><input type="search" placeholder="搜索 " class="wh_search_textfield" id="textToSearch" name="searchQuery" aria-label="搜索查询" required="required"/><button type="submit" class="wh_search_button" aria-label="搜索"><span class="search_input_text">搜索</span></button></div></form>
+            
+            <script src="/vendors/react/umd/react.production.min.js" defer="defer"></script>
+<script src="/vendors/react-dom/umd/react-dom.production.min.js" defer="defer"></script>
+<script src="/vendors/dayjs/dayjs.min.js" defer="defer"></script>
+<script src="/vendors/antd/dist/antd.min.js" defer="defer"></script>
+<script src="/vendors/@ant-design/icons/dist/index.umd.min.js" defer="defer"></script>
+<script src="/zh/index.js" type="module"></script>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js" defer="defer"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML" defer="defer"><!--
+
+
+--></script>
+
+            
+        </div></div>
+    </div>
+</header>
+        
+        
+         
+        
+        
+        
+        <div class="container-fluid" id="wh_topic_container">
+            <div class="row">
+
+                <nav class="wh_tools d-print-none navbar-expand-md" aria-label="Tools">
+                    
+                    <div data-tooltip-position="bottom" class=" wh_breadcrumb "><ol class="d-print-none"><li><span class="home"><a href="../../index.html"><span>主页</span></a></span></li><li><div class="topicref" data-id="new_chap_database_manage_new_chap_dbmanage_landing_page"><div class="title"><a href="../../db_distr_comp/cfg/db_intro.html"><span class="keyword label">数据库</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 数据库的基本概念</p></div></div></div></li><li><div class="topicref" data-id="topic_pg3_22w_ryb"><div class="title"><a href="../../db_distr_comp/db/db_architecture.html"><span class="keyword label">分布式架构</span></a></div></div></li><li class="active"><div class="topicref" data-id="数据库分区"><div class="title"><a href="../../db_distr_comp/db/db_partitioning.html">数据分区</a></div></div></li></ol></div>
+                    
+                    
+                    
+                    <div class="wh_right_tools">
+                        <button class="wh_hide_highlight" aria-label="切换搜索突出显示" title="切换搜索突出显示"></button>
+                        <button class="webhelp_expand_collapse_sections" data-next-state="collapsed" aria-label="折叠截面" title="折叠截面"></button>
+                        
+                        
+                        
+                        
+                        <div class=" wh_print_link print d-none d-md-inline-block "><button onClick="window.print()" title="打印此页" aria-label="打印此页"></button></div>
+                        
+                        <button type="button" id="wh_toc_button" class="custom-toggler navbar-toggler collapsed wh_toggle_button navbar-light" aria-expanded="false" aria-label="Toggle publishing table of content" aria-controls="wh_publication_toc">
+                            <span class="navbar-toggler-icon"></span>
+                        </button>
+                    </div>
+                    
+                </nav>
+            </div>
+            
+            
+            
+            
+            <div class="wh_content_area">
+                <div class="row">
+                    
+                        <nav id="wh_publication_toc" class="col-lg-3 col-md-3 col-sm-12 d-md-block d-none d-print-none" aria-label="Table of Contents Container">
+                            <div id="wh_publication_toc_content">
+		                        
+                            	<div class=" wh_publication_toc " data-tooltip-position="right"><span class="expand-button-action-labels"><span id="button-expand-action" role="button" aria-label="Expand"></span><span id="button-collapse-action" role="button" aria-label="Collapse"></span><span id="button-pending-action" role="button" aria-label="Pending"></span></span><ul role="tree" aria-label="Table of Contents"><li role="treeitem"><div data-tocid="new_chap_about_sect_ddb_docs_intro-d9529e87" class="topicref" data-id="new_chap_about_sect_ddb_docs_intro" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../about/ddb_docs_intro.html" id="new_chap_about_sect_ddb_docs_intro-d9529e87-link">文档使用说明</a><div class="wh-tooltip"><p class="shortdesc">如何获取 DolphinDB 帮助信息</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="chap1_getstarted-d9529e140" class="topicref" data-id="chap1_getstarted" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action chap1_getstarted-d9529e140-link" class="wh-expand-btn"></span><div class="title"><a href="../../getstarted/chap1_getstarted.html" id="chap1_getstarted-d9529e140-link"><span class="keyword label">快速上手</span></a><div class="wh-tooltip"><p class="shortdesc">如何快速部署 DolphinDB、建库建表、写入和查询数据</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="sectionddb_deployment-d9529e335" class="topicref" data-id="sectionddb_deployment" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action sectionddb_deployment-d9529e335-link" class="wh-expand-btn"></span><div class="title"><a href="../../deploy/deploy_intro.html" id="sectionddb_deployment-d9529e335-link"><span class="keyword label">部署</span></a><div class="wh-tooltip"><p class="shortdesc">如何在不同的场景中部署 DolphinDB</p></div></div></div></li><li role="treeitem" aria-expanded="true"><div data-tocid="new_chap_database_manage_new_chap_dbmanage_landing_page-d9529e2313" class="topicref" data-id="new_chap_database_manage_new_chap_dbmanage_landing_page" data-state="expanded"><span role="button" tabindex="0" aria-labelledby="button-collapse-action new_chap_database_manage_new_chap_dbmanage_landing_page-d9529e2313-link" class="wh-expand-btn"></span><div class="title"><a href="../../db_distr_comp/cfg/db_intro.html" id="new_chap_database_manage_new_chap_dbmanage_landing_page-d9529e2313-link"><span class="keyword label">数据库</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 数据库的基本概念</p></div></div></div><ul role="group" class="navbar-nav nav-list"><li role="treeitem" aria-expanded="false"><div data-tocid="chap3_sect_database_distributed_computing-d9529e2366" class="topicref" data-id="chap3_sect_database_distributed_computing" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action chap3_sect_database_distributed_computing-d9529e2366-link" class="wh-expand-btn"></span><div class="title"><a href="../../db_distr_comp/db_distr_comp.html" id="chap3_sect_database_distributed_computing-d9529e2366-link"><span class="keyword label">数据库操作</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 数据库的基本操作，例如创建数据库、表，增加列、分区，数据查询，表连接等。</p></div></div></div></li><li role="treeitem" aria-expanded="true"><div data-tocid="topic_pg3_22w_ryb-d9529e2934" class="topicref" data-id="topic_pg3_22w_ryb" data-state="expanded"><span role="button" tabindex="0" aria-labelledby="button-collapse-action topic_pg3_22w_ryb-d9529e2934-link" class="wh-expand-btn"></span><div class="title"><a href="../../db_distr_comp/db/db_architecture.html" id="topic_pg3_22w_ryb-d9529e2934-link"><span class="keyword label">分布式架构</span></a></div></div><ul role="group" class="navbar-nav nav-list"><li role="treeitem"><div data-tocid="事务-d9529e2981" class="topicref" data-id="事务" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../db_distr_comp/db/transaction.html" id="事务-d9529e2981-link">分布式事务</a></div></div></li><li role="treeitem" class="active"><div data-tocid="数据库分区-d9529e3027" class="topicref" data-id="数据库分区" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../db_distr_comp/db/db_partitioning.html" id="数据库分区-d9529e3027-link">数据分区</a></div></div></li><li role="treeitem"><div data-tocid="recovery-d9529e3073" class="topicref" data-id="recovery" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../db_distr_comp/db/recovery.html" id="recovery-d9529e3073-link">在线恢复</a></div></div></li><li role="treeitem"><div data-tocid="rebalance-d9529e3119" class="topicref" data-id="rebalance" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../db_distr_comp/db/rebalance.html" id="rebalance-d9529e3119-link">数据平衡</a></div></div></li><li role="treeitem"><div data-tocid="ha-d9529e3165" class="topicref" data-id="ha" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../db_distr_comp/db/ha.html" id="ha-d9529e3165-link">高可用</a></div></div></li><li role="treeitem"><div data-tocid="分级存储-d9529e3211" class="topicref" data-id="分级存储" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../db_distr_comp/db/tiered_storage.html" id="分级存储-d9529e3211-link">分级存储</a></div></div></li><li role="treeitem"><div data-tocid="集群间异步复制-d9529e3257" class="topicref" data-id="集群间异步复制" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../sys_man/cluster_async_replc.html" id="集群间异步复制-d9529e3257-link">异步复制</a></div></div></li><li role="treeitem"><div data-tocid="multimodal_storage-d9529e3303" class="topicref" data-id="multimodal_storage" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../db_distr_comp/db/multimodal_storage.html" id="multimodal_storage-d9529e3303-link">多模态存储</a></div></div></li></ul></li><li role="treeitem"><div data-tocid="tsdb-d9529e3349" class="topicref" data-id="tsdb" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../db_distr_comp/db/tsdb.html" id="tsdb-d9529e3349-link"><span class="keyword label">TSDB 存储引擎</span></a></div></div></li><li role="treeitem"><div data-tocid="olap-d9529e3396" class="topicref" data-id="olap" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../db_distr_comp/db/olap.html" id="olap-d9529e3396-link"><span class="keyword label">OLAP 存储引擎</span></a></div></div></li><li role="treeitem"><div data-tocid="catalog-d9529e3443" class="topicref" data-id="catalog" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../db_distr_comp/db/catalog.html" id="catalog-d9529e3443-link">数据目录（catalog）</a></div></div></li></ul></li><li role="treeitem" aria-expanded="false"><div data-tocid="chap7_tutorials_streaming-d9529e3490" class="topicref" data-id="chap7_tutorials_streaming" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action chap7_tutorials_streaming-d9529e3490-link" class="wh-expand-btn"></span><div class="title"><a href="../../stream/str_intro.html" id="chap7_tutorials_streaming-d9529e3490-link"><span class="keyword label">流数据</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 流数据引擎及流数据计算的基本概念</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="tocId-d9529e7385" class="topicref" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action tocId-d9529e7385-link" class="wh-expand-btn"></span><div class="title"><a href="../../db_distr_comp/db_oper/import_data.html" id="tocId-d9529e7385-link">数据迁移</a><div class="wh-tooltip"><p class="shortdesc">如何从不同数据源向 DolphinDB 迁移数据</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="chap7_tutorials_system_management-d9529e7812" class="topicref" data-id="chap7_tutorials_system_management" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action chap7_tutorials_system_management-d9529e7812-link" class="wh-expand-btn"></span><div class="title"><a href="../../sys_man/om_intro.html" id="chap7_tutorials_system_management-d9529e7812-link"><span class="keyword label">系统运维</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 的系统运维功能及方法</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="about_language_resources-d9529e16490" class="topicref" data-id="about_language_resources" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action about_language_resources-d9529e16490-link" class="wh-expand-btn"></span><div class="title"><a href="../../progr/progr_intro.html" id="about_language_resources-d9529e16490-link"><span class="keyword label">编程语言</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 编程基本概念与方法、SQL 在 DolphinDB 的应用</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="functions_references-d9529e26503" class="topicref" data-id="functions_references" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action functions_references-d9529e26503-link" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/funcs_intro.html" id="functions_references-d9529e26503-link"><span class="keyword label">函数参考</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 函数分类、语法、详解及示例</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="api_protocol-d9529e86456" class="topicref" data-id="api_protocol" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action api_protocol-d9529e86456-link" class="wh-expand-btn"></span><div class="title"><a href="../../api/connapi_intro.html" id="api_protocol-d9529e86456-link"><span class="keyword label">连接器 &amp; API</span></a><div class="wh-tooltip"><p class="shortdesc">面向不同编程语言的 DolphinDB API 及连接器，相关协议和用法</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="chap6_plugin-d9529e91976" class="topicref" data-id="chap6_plugin" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action chap6_plugin-d9529e91976-link" class="wh-expand-btn"></span><div class="title"><a href="../../plugins/plg_intro.html" id="chap6_plugin-d9529e91976-link"><span class="keyword label">插件</span></a><div class="wh-tooltip"><p class="shortdesc">多个应用场景的插件使用说明和插件开发指导</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="third_party-d9529e94749" class="topicref" data-id="third_party" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action third_party-d9529e94749-link" class="wh-expand-btn"></span><div class="title"><a href="../../third_party.html" id="third_party-d9529e94749-link">第三方工具</a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="about_tutorials-d9529e94980" class="topicref" data-id="about_tutorials" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action about_tutorials-d9529e94980-link" class="wh-expand-btn"></span><div class="title"><a href="../../tutorials/about_tutorials.html" id="about_tutorials-d9529e94980-link"><span class="keyword label">教程</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 产品使用教程</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="tocId-d9529e101769" class="topicref" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action tocId-d9529e101769-link" class="wh-expand-btn"></span><div class="title"><a href="../../rn/server/3_00_1.html" id="tocId-d9529e101769-link">版本说明</a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 版本发布历史</p></div></div></div></li></ul></div>
+		                        
+                            </div>
+                        </nav>
+                    
+                    
+                    <div class="col-lg-7 col-md-9 col-sm-12" id="wh_topic_body">
+                        <button id="wh_close_publication_toc_button" class="close-toc-button d-none" aria-label="Toggle publishing table of content" aria-controls="wh_publication_toc" aria-expanded="true">
+                            <span class="close-toc-icon-container">
+                                <span class="close-toc-icon"></span>     
+                            </span>
+                        </button>
+                        <button id="wh_close_topic_toc_button" class="close-toc-button d-none" aria-label="Toggle topic table of content" aria-controls="wh_topic_toc" aria-expanded="true">
+                            <span class="close-toc-icon-container">
+                                <span class="close-toc-icon"></span>     
+                            </span>
+                        </button>
+                        
+                        <div class=" wh_topic_content body "><main role="main"><article class="- topic/topic topic" role="article" aria-labelledby="ariaid-title1">
+    <h1 class="- topic/title title topictitle1" id="ariaid-title1">数据分区</h1>
+    <article class="- topic/topic topic nested1" aria-labelledby="ariaid-title2" id="为什么对数据库进行分区">
+        <h2 class="- topic/title title topictitle2" id="ariaid-title2">为什么对数据库进行分区</h2>
+        <div class="- topic/body body">
+            <p class="- topic/p p">对数据库进行分区可以显著降低系统响应延迟，提高数据吞吐量。具体来说，分区有以下主要好处。</p>
+            <ul class="- topic/ul ul">
+                <li class="- topic/li li">
+                    <p class="- topic/p p">分区使得大型表更易于管理。对数据子集的维护操作也更加高效，因为这些操作只针对需要的数据而不是整个表。一个好的分区策略通过只读取查询所需的相关数据来减少要扫描的数据量。如果分区机制设计不合理，对数据库的查询、计算以及其它操作都可能受到磁盘访问I/O这个瓶颈的限制。</p>
+                </li>
+                <li class="- topic/li li">
+                    <p class="- topic/p p">分区使得系统可以充分利用所有资源。选择一个良好的分区方案搭配并行计算，分布式计算可以充分利用所有节点来完成通常要在一个节点上完成的任务。若一个任务可以拆分成几个子任务，每个子任务访问不同的分区，可以显著提升效率。</p>
+                </li>
+            </ul>
+        </div>
+    </article>
+    <article class="- topic/topic topic nested1" aria-labelledby="ariaid-title3" id="分区类型">
+        <h2 class="- topic/title title topictitle2" id="ariaid-title3">分区类型</h2>
+        <div class="- topic/body body">
+            <p class="- topic/p p">DolphinDB 在数据库层面支持多种分区类型： 范围分区、哈希分区、值分区、列表分区与复合分区。选择合适的分区类型，有助于用户根据业务特点对数据进行均匀分割。</p>
+            <ul class="- topic/ul ul">
+                <li class="- topic/li li">
+                    <p class="- topic/p p">范围分区对每个分区区间创建一个分区。</p>
+                </li>
+                <li class="- topic/li li">
+                    <p class="- topic/p p">哈希分区利用哈希函数对分区列操作，方便建立指定数量的分区。</p>
+                </li>
+                <li class="- topic/li li">
+                    <p class="- topic/p p">值分区每个值创建一个分区，例如股票交易日期、股票交易月等。</p>
+                </li>
+                <li class="- topic/li li">
+                    <p class="- topic/p p">列表分区是根据用户枚举的列表来进行分区，比值分区更加灵活。</p>
+                </li>
+                <li class="- topic/li li">
+                    <p class="- topic/p p">复合分区适用于数据量特别大而且SQL where或group
+                        by语句经常涉及多列。可使用2个或3个分区列，每个分区选择都可以采用区间、值、哈希或列表分区。例如按股票交易日期进行值分区，
+                        同时按股票代码进行范围分区。</p>
+                </li>
+            </ul>
+            <p class="- topic/p p">创建一个新的分布式数据库时，需要在<code class="+ topic/ph pr-d/codeph ph codeph">database</code>函数中指定数据库路径directory，分区类型partitionType以及分区模式partitionScheme。重新打开已有的分布式数据库时，只需指定数据库路径。不允许用不同的分区类型或分区方案覆盖已有的分布式数据库。</p>
+            <p class="- topic/p p">聚合函数在分区表上利用分区列操作时，例如当group by列与分区列一致时，运行速度特别快。</p>
+            <p class="- topic/p p">为便于学习， 以下分区例子使用 Windows 本地目录，用户可以将数据库创建使用的路径改成 Linux 或 DFS 目录。</p>
+            <p class="- topic/p p">调用 <a class="- topic/xref xref" href="../../funcs/d/database.html">database</a> 函数前，用户必须先登录，只有具有 DB_OWNER
+                或 admin 管理员权限才能创建数据库。默认的 admin 管理员登录脚本为：</p>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock"><code>login(userId=`admin, password=`123456)</code></pre>
+            <p class="- topic/p p">下文提供的所有创建数据库脚本，默认已经登录。</p>
+        </div>
+        <article class="- topic/topic topic nested2" aria-labelledby="ariaid-title4" id="范围range分区">
+            <h3 class="- topic/title title topictitle3" id="ariaid-title4">范围分区</h3>
+            <div class="- topic/body body">
+                <p class="- topic/p p">在范围分区（RANGE）中，分区由区间决定，而区间由分区向量的任意两个相邻元素定义。区间包含起始值，但不包含结尾值。</p>
+                <p class="- topic/p p">在下面的例子中，数据库 db 有两个分区：[0,5) 和 [5,10)。使用 ID 作为分区列，并使用函数 <code class="+ topic/ph pr-d/codeph ph codeph">append!</code>
+                    在数据库 db 中保存表 t 为分区表 pt。</p>
+                <pre class="+ topic/pre pr-d/codeblock pre codeblock python">n=<span class="hl-number">1000000</span>
+ID=rand(<span class="hl-number">10</span>, n)
+x=rand(<span class="hl-number">1.0</span>, n)
+t=table(ID, x)
+db=database(<span class="hl-string">"dfs://rangedb"</span>, RANGE,  <span class="hl-number">0</span> <span class="hl-number">5</span> <span class="hl-number">10</span>)
+
+pt = db.createPartitionedTable(t, `pt, `ID)
+pt.append!(t)
+
+pt=loadTable(db,`pt)
+select count(x) <strong class="hl-keyword">from</strong> pt;</pre>
+                <p class="- topic/p p">目录结构如下：</p>
+                <br/><div class="imageleft"><img class="- topic/image image imageleft" src="images/range.png"/></div><br/>
+                <p class="- topic/p p">范围分区创建后，可使用 <code class="+ topic/ph pr-d/codeph ph codeph">addRangePartitions</code> 函数来追加分区。细节参见用户手册。</p>
+            </div>
+        </article>
+        <article class="- topic/topic topic nested2" aria-labelledby="ariaid-title5" id="哈希hash分区">
+            <h3 class="- topic/title title topictitle3" id="ariaid-title5">哈希分区</h3>
+            <div class="- topic/body body">
+                <p class="- topic/p p">哈希分区（HASH）对分区列使用哈希函数以产生分区。哈希分区是产生指定数量的分区的一个简便方法。但是要注意，哈希分区不能保证分区的大小一致，尤其当分区列的值的分布存在偏态的时候。此外，若要查找分区列中一个连续范围的数据时，哈希分区的效率比范围分区或值分区要低。</p>
+                <p class="- topic/p p">在下面的例子中，数据库 db 有两个分区。使用ID作为分区列，并使用函数 <code class="+ topic/ph pr-d/codeph ph codeph">append!</code> 在数据库 db 中保存表 t 为分区表
+                    pt。</p>
+                <pre class="+ topic/pre pr-d/codeblock pre codeblock python">n=<span class="hl-number">1000000</span>
+ID=rand(<span class="hl-number">10</span>, n)
+x=rand(<span class="hl-number">1.0</span>, n)
+t=table(ID, x)
+db=database(<span class="hl-string">"dfs://hashdb"</span>, HASH,  [INT, <span class="hl-number">2</span>])
+
+pt = db.createPartitionedTable(t, `pt, `ID)
+pt.append!(t)
+
+pt=loadTable(db,`pt)
+select count(x) <strong class="hl-keyword">from</strong> pt;</pre>
+                <p class="- topic/p p">目录结构如下：</p>
+                <img class="- topic/image image" id="哈希hash分区__image_kqk_442_tzb" src="images/hash.png"/>
+            </div>
+        </article>
+        <article class="- topic/topic topic nested2" aria-labelledby="ariaid-title6" id="值value分区">
+            <h3 class="- topic/title title topictitle3" id="ariaid-title6">值分区</h3>
+            <div class="- topic/body body">
+                <p class="- topic/p p">在值域（VALUE）分区中，一个值代表一个分区。</p>
+                <pre class="+ topic/pre pr-d/codeblock pre codeblock python">n=<span class="hl-number">1000000</span>
+month=take(<span class="hl-number">2000.01</span>M.<span class="hl-number">.2016</span>.<span class="hl-number">12</span>M, n)
+x=rand(<span class="hl-number">1.0</span>, n)
+t=table(month, x)
+
+db=database(<span class="hl-string">"dfs://valuedb"</span>, VALUE, <span class="hl-number">2000.01</span>M.<span class="hl-number">.2016</span>.<span class="hl-number">12</span>M)
+
+pt = db.createPartitionedTable(t, `pt, `month)
+pt.append!(t)
+
+pt=loadTable(db,`pt)
+select count(x) <strong class="hl-keyword">from</strong> pt;</pre>
+                <p class="- topic/p p">上面的例子定义了一个具有 204 个分区的数据库 db。每个分区是 2000 年 1 月到 2016 年 12 月之间的一个月(如下图）。在数据库 db 中，表
+                    t 被保存为分区表 pt，分区列为 month。</p>
+                <br/><div class="imageleft"><img class="- topic/image image imageleft" src="images/value.png"/></div><br/>
+                <p class="- topic/p p">值分区创建后，可使用 <code class="+ topic/ph pr-d/codeph ph codeph">addValuePartitions</code> 函数来追加分区。</p>
+            </div>
+        </article>
+        <article class="- topic/topic topic nested2" aria-labelledby="ariaid-title7" id="列表list分区">
+            <h3 class="- topic/title title topictitle3" id="ariaid-title7">列表分区</h3>
+            <div class="- topic/body body">
+                <p class="- topic/p p">在列表（LIST）分区中，我们用一个包含多个元素的列表代表一个分区。</p>
+                <pre class="+ topic/pre pr-d/codeblock pre codeblock python">n=<span class="hl-number">1000000</span>
+ticker = rand(`MSFT`GOOG`FB`ORCL`IBM,n)
+x=rand(<span class="hl-number">1.0</span>, n)
+t=table(ticker, x)
+
+db=database(<span class="hl-string">"dfs://listdb"</span>, LIST, [`IBM`ORCL`MSFT, `GOOG`FB])
+pt = db.createPartitionedTable(t, `pt, `ticker)
+pt.append!(t)
+
+pt=loadTable(db,`pt)
+select count(x) <strong class="hl-keyword">from</strong> pt;</pre>
+                <p class="- topic/p p">上面的数据库有 2 个分区。第一个分区包含 3 个股票代号，第二个分区包含 2 个股票代号。</p>
+                <br/><div class="imageleft"><img class="- topic/image image imageleft" src="images/list.png"/></div><br/>
+            </div>
+        </article>
+        <article class="- topic/topic topic nested2" aria-labelledby="ariaid-title8" id="组合compo分区">
+            <h3 class="- topic/title title topictitle3" id="ariaid-title8">组合分区</h3>
+            <div class="- topic/body body">
+                <p class="- topic/p p">组合（COMPO）分区可以定义 2 或 3
+                    个分区列。每列可以独立采用范围（RANGE）、值（VALUE）、哈希（HASH）或列表（LIST）分区。组合分区的多个列在逻辑上是并列的，不存在从属关系或优先级关系。</p>
+                <pre class="+ topic/pre pr-d/codeblock pre codeblock python">n=<span class="hl-number">1000000</span>
+ID=rand(<span class="hl-number">100</span>, n)
+dates=<span class="hl-number">2017.08</span>.<span class="hl-number">07.</span><span class="hl-number">.2017</span>.<span class="hl-number">08.11</span>
+date=rand(dates, n)
+x=rand(<span class="hl-number">10.0</span>, n)
+t=table(ID, date, x)
+
+dbDate = database(, VALUE, <span class="hl-number">2017.08</span>.<span class="hl-number">07.</span><span class="hl-number">.2017</span>.<span class="hl-number">08.11</span>)
+dbID=database(, RANGE, <span class="hl-number">0</span> <span class="hl-number">50</span> <span class="hl-number">100</span>)
+db = database(<span class="hl-string">"dfs://compoDB"</span>, COMPO, [dbDate, dbID])
+
+pt = db.createPartitionedTable(t, `pt, `date`ID)
+pt.append!(t)
+
+pt=loadTable(db,`pt)
+select count(x) <strong class="hl-keyword">from</strong> pt;</pre>
+                <p class="- topic/p p">值域有 5 个分区，其中 20170807 分区有 2 个区间域（RANGE）分区：</p>
+                <br/><div class="imageleft"><img class="- topic/image image imageleft" src="images/compo.png"/></div><br/>
+                <p class="- topic/p p">若组合分区有一列为值分区，创建后可使用 <code class="+ topic/ph pr-d/codeph ph codeph">addValuePartitions</code> 函数来追加分区。</p>
+            </div>
+        </article>
+    </article>
+    <article class="- topic/topic topic nested1" aria-labelledby="ariaid-title9" id="分区设计注意事项">
+        <h2 class="- topic/title title topictitle2" id="ariaid-title9">分区设计策略</h2>
+        <div class="- topic/body body">
+            <p class="- topic/p p">合理的数据库分区能够提高数据管理效率、查询和计算的性能，实现低延时和高吞吐量。以下列出了设计和优化分区表的设计策略细则，以供参考。</p>
+        </div>
+        <article class="- topic/topic topic nested2" aria-labelledby="ariaid-title10" id="选择合适的分区字段">
+            <h3 class="- topic/title title topictitle3" id="ariaid-title10">选择恰当分区字段</h3>
+            <div class="- topic/body body">
+                <p class="- topic/p p">在 DolphinDB 中，可以用于分区的数据类型包括整型（CHAR, SHORT, INT），日期类型（DATE, MONTH, TIME, MINUTE,
+                    SECOND, DATETIME, DATEHOUR），以及 STRING 与 SYMBOL。此外，哈希分区还支持 LONG, UUID, IPADDR,
+                    INT128 等类型。虽然 STRING 可作为分区列，为确保性能，建议将 STRING 转化为 SYMBOL 再用于分区列。</p>
+                <p class="- topic/p p">FLOAT 和 DOUBLE 数据类型不可作为分区字段。</p>
+                <pre class="+ topic/pre pr-d/codeblock pre codeblock python">db=database(<span class="hl-string">"dfs://rangedb1"</span>, RANGE,  <span class="hl-number">0.0</span> <span class="hl-number">5.0</span> <span class="hl-number">10.0</span>)</pre>
+                <p class="- topic/p p">会产生出错信息：DOUBLE 数据类型的字段不能作为分区字段</p>
+                <pre class="+ topic/pre pr-d/codeblock pre codeblock python">The data type DOUBLE can<span class="hl-string">'t be used for a partition column</span></pre>
+                <p class="- topic/p p">虽然 DolphinDB 支持对 TIME, SECOND, DATETIME
+                    类型字段的分区，但是在实际使用中要尽量避免对这些数据类型采用值分区，以免分区粒度过细，将耗费大量时间创建或查询百万级以上的很小的分区。例如下面这个例子就会产生过多的分区。</p>
+                <p class="- topic/p p">序列：2012.06.01T09:30:00..2012.06.30T16:00:00 包含 2,529,001个元素。如果用这个序列进行值分区，将会在磁盘上产生
+                    2,529,001 个分区，即 2,529,001 个文件目录和相关文件，使得分区表创建、写入、查询都非常缓慢。</p>
+                <p class="- topic/p p">分区字段应在业务中，特别是数据更新的任务中有重要相关性。譬如在证券交易领域，许多任务都与股票交易日期或股票代码相关，因此以这两个字段来分区比较合理。更新数据库时，DolphinDB
+                    的事务机制不允许多个writer的事务在分区上有重叠。鉴于经常需要对某个交易日或某只股票的数据进行更新，若采用其它分区字段（例如交易时刻），有可能造成多个
+                    writer 同时对同一分区进行写入而导致问题。</p>
+                <p class="- topic/p p">一个分区字段相当于数据表的一个物理索引。如果查询时用到了该字段做数据过滤，SQL
+                    引擎就能快速定位需要的数据块，而无需对整表进行扫描，从而大幅度提高处理速度。因此，分区字段应当选用查询和计算时经常用到的过滤字段。</p>
+            </div>
+        </article>
+        <article class="- topic/topic topic nested2" aria-labelledby="ariaid-title11" id="分区粒度不要过大">
+            <h3 class="- topic/title title topictitle3" id="ariaid-title11">控制分区粒度</h3>
+            <div class="- topic/body body">
+                <p class="- topic/p p">一个分区内的多个列以文件形式独立存储在磁盘上，通常数据是经过压缩的。使用的时候，系统从磁盘读取所需要的列，解压后加载到内存。若分区粒度过大，可能会造成多个工作线程并行时内存不足，或者导致系统频繁地在磁盘和工作内存之间切换，影响性能。一个经验公式是，若数据节点的可用内存是
+                    S，工作线程（worker）的的数量是 W，建议每个分区解压后在内存中的大小不超过 S/8W。假设工作内存上限为 32GB，并有 8
+                    个工作线程，建议单个分区解压后的大小不超过 512MB。</p>
+                <p class="- topic/p p">DolphinDB 的子任务以分区为单位。因此分区粒度过大会造成无法有效利用多节点多分区的优势，将本来可以并行计算的任务转化成了顺序计算任务。</p>
+                <p class="- topic/p p">综上各种因素，建议一个分区未压缩前的原始数据大小不超过
+                    1GB。当然这个限制可结合实际情况调整。譬如在大数据应用中，经常有宽表设计，一个表有几百个字段，但是单个应用只会使用一部分字段。这种情况下，可以适当放大上限的范围。</p>
+                <div class="- topic/p p">降低分区粒度可采用以下几种方法：<ul class="- topic/ul ul" id="分区粒度不要过大__ul_hzb_pq2_tzb" data-ofbid="分区粒度不要过大__ul_hzb_pq2_tzb">
+                        
+                        <li class="- topic/li li">
+                            <p class="- topic/p p">采用组合分区</p>
+                        </li>
+                        <li class="- topic/li li">
+                            <p class="- topic/p p">增加分区个数</p>
+                        </li>
+                        <li class="- topic/li li">
+                            <p class="- topic/p p">将范围分区改为值分区</p>
+                        </li>
+                    </ul></div>
+            </div>
+        </article>
+        <article class="- topic/topic topic nested2" aria-labelledby="ariaid-title12" id="分区粒度不要过小">
+            <h3 class="- topic/title title topictitle3" id="ariaid-title12">分区粒度不要过小</h3>
+            <div class="- topic/body body">
+                <p class="- topic/p p">若分区粒度过小，一个查询和计算作业往往会生成大量的子任务，这会增加数据节点和控制节点，以及控制节点之间的通讯和调度成本。分区粒度过小，也会造成很多低效的磁盘访问（小文件读写)，造成系统负荷过重。另外，所有的分区的元数据都会驻留在控制节点的内存中。分区粒度过小，分区数过多，可能会导致控制节点内存不足。</p>
+                <div class="- topic/note note tip note_tip" id="分区粒度不要过小__note_ssr_tq2_tzb" data-ofbid="分区粒度不要过小__note_ssr_tq2_tzb"><span class="note__title">提示：</span> 
+                    <p class="- topic/p p">建议每个分区未压缩前的数据量不要小于 100M。</p>
+                </div>
+                <p class="- topic/p p">综合前述，推荐分区大小控制在 100MB 到 1GB 之间。</p>
+                <p class="- topic/p p">股票的高频交易数据若按交易日期和股票代码的值做组合分区，会导致许多极小的分区，因为许多交易不活跃的股票的交易数据量太少。如果将股票代码的维度按照范围分区的方法来切分数据，将多个交易不活跃的股票组合在一个分区内，则可以有效解决分区粒度过小的问题，提高系统的性能。</p>
+            </div>
+        </article>
+        <article class="- topic/topic topic nested2" aria-labelledby="ariaid-title13" id="如何将数据均匀分区">
+            <h3 class="- topic/title title topictitle3" id="ariaid-title13">均匀分区</h3>
+            <div class="- topic/body body">
+                <p class="- topic/p p">当各个分区的数据量差异很大时，会造成系统负荷不均衡，部分节点任务过重，而其它节点处于闲置等待状态。当一个任务有多个子任务时，只有最后一个子任务完成了，才会将结果返回给用户。由于一个子任务对应一个分区，如果数据分布不均匀，可能会增大作业延时，影响用户体验。</p>
+                <p class="- topic/p p">为了方便根据数据的分布进行分区，DolphinDB 提供了函数 <code class="+ topic/ph pr-d/codeph ph codeph">cutPoints(X, N, [freq])</code>。其中，X
+                    是一个数组，N 代表需要产生多少组, 而 freq 是 X 的等长数组，其中每个元素对应着 X 中元素出现的频率。函数返回具有（N + 1）个元素的数组，代表
+                    N 个组，使得X中的数据均匀地分布在这 N 个组中。</p>
+                <p class="- topic/p p">下面的例子对股票报价数据按日期和股票代码分区数据。如果仅按股票名称首字母进行范围分区，极易造成数据分布不均，因为极少量的股票代码以 U, V, X，Y，Z
+                    等字母开头。我们这里使用 <code class="+ topic/ph pr-d/codeph ph codeph">cutPoints</code> 函数将 2020 年 10 月 01 日到 2020 年 10 月 29
+                    日的数据根据股票代码划为 5 个分区：</p>
+                <pre class="+ topic/pre pr-d/codeblock pre codeblock python">dates=<span class="hl-number">2020.10</span>.<span class="hl-number">01.</span><span class="hl-number">.2020</span>.<span class="hl-number">10.29</span>;
+syms=<span class="hl-string">"A"</span>+string(<span class="hl-number">1.</span><span class="hl-number">.13</span>);
+syms.append!(string(<span class="hl-string">'B'</span>..<span class="hl-string">'Z'</span>));
+buckets=cutPoints(syms,<span class="hl-number">5</span>);//cutpoints
+t1=table(take(syms,<span class="hl-number">10000</span>) <strong class="hl-keyword">as</strong> stock, rand(dates,<span class="hl-number">10000</span>) <strong class="hl-keyword">as</strong> date, rand(<span class="hl-number">10.0</span>,<span class="hl-number">10000</span>) <strong class="hl-keyword">as</strong> x);
+dateDomain = database(<span class="hl-string">""</span>, VALUE, dates);
+symDomain = database(<span class="hl-string">""</span>, RANGE, buckets);
+stockDB = database(<span class="hl-string">"dfs://stockDBTest"</span>, COMPO, [dateDomain, symDomain]);
+pt = stockDB.createPartitionedTable(t1, `pt, `date`stock).append!(t1);</pre>
+                <p class="- topic/p p">除了使用范围分区的方法，列表分区也是解决数据分布不均匀的有效方法。</p>
+            </div>
+        </article>
+        <article class="- topic/topic topic nested2" aria-labelledby="ariaid-title14" id="时序类型分区">
+            <h3 class="- topic/title title topictitle3" id="ariaid-title14">时序类型分区</h3>
+            <div class="- topic/body body">
+                <p class="- topic/p p">时间是实际数据中最常见的一个维度。以时间类型字段作为分区字段时，在时间取值上可以预留分区以容纳未来数据。以下例子中，我们创建一个数据库，以天为单位，将
+                    2000.01.01 到 2030.01.01 的日期分区。</p>
+                <div class="- topic/note note note note_note" id="时序类型分区__note_gs2_3r2_tzb" data-ofbid="时序类型分区__note_gs2_3r2_tzb"><span class="note__title">注：</span> 仅当实际数据写入数据库时，数据库才会真正创建需要的分区。</div>
+                <pre class="+ topic/pre pr-d/codeblock pre codeblock python">dateDB = database(<span class="hl-string">"dfs://testDate"</span>, VALUE, <span class="hl-number">2000.01</span>.<span class="hl-number">01</span> .. <span class="hl-number">2030.01</span>.<span class="hl-number">01</span>)</pre>
+                <p class="- topic/p p">DolphinDB
+                    使用时间类型作为分区字段时，数据库定义的分区字段类型和数据表实际采用的时间类型可以不一致，只要保证定义的分区字段数据类型精度小于等于实际数据类型即可。例如，如果数据库是按月（month）分区，数据表的字段可以是
+                    month, date, datetime, timestamp和 nanotimestamp。系统自动会作数据类型的转换。</p>
+            </div>
+        </article>
+        <article class="- topic/topic topic nested2" aria-labelledby="ariaid-title15" id="不同表相同分区的数据存于同一节点">
+            <h3 class="- topic/title title topictitle3" id="ariaid-title15">共存储</h3>
+            <div class="- topic/body body">
+                <p class="- topic/p p">在分布式数据库中，如果多个分区的数据表要连接（join）通常十分耗时，因为涉及到的分区可能在不同的节点上，需要在不同节点之间复制数据。</p>
+                <p class="- topic/p p">为解决这个问题，共存储位置（co-location）的分区机制能够确保同一个分布式数据库里所有表在相同分区的数据存储在相同的节点上。这保证了这些表在连接时非常高效。DolphinDB
+                    对采用不同分区机制的多个分区表不提供连接功能。</p>
+                <pre class="+ topic/pre pr-d/codeblock pre codeblock python">dateDomain = database(<span class="hl-string">""</span>, VALUE, <span class="hl-number">2018.05</span>.<span class="hl-number">01.</span><span class="hl-number">.2018</span>.<span class="hl-number">07.01</span>)
+symDomain = database(<span class="hl-string">""</span>, RANGE, string(<span class="hl-string">'A'</span>..<span class="hl-string">'Z'</span>) join `ZZZZZ)
+stockDB = database(<span class="hl-string">"dfs://stockDB"</span>, COMPO, [dateDomain, symDomain])
+
+quoteSchema = table(<span class="hl-number">10</span>:<span class="hl-number">0</span>, `sym`date`time`bid`bidSize`ask`askSize, [SYMBOL,DATE,TIME,DOUBLE,INT,DOUBLE,INT])
+stockDB.createPartitionedTable(quoteSchema, <span class="hl-string">"quotes"</span>, `date`sym)
+
+tradeSchema = table(<span class="hl-number">10</span>:<span class="hl-number">0</span>, `sym`date`time`price`vol, [SYMBOL,DATE,TIME,DOUBLE,INT])
+stockDB.createPartitionedTable(tradeSchema, <span class="hl-string">"trades"</span>, `date`sym)</pre>
+                <p class="- topic/p p">上面的例子中，quotes 和 trades 两个分区表采用同一个分区机制。</p>
+            </div>
+        </article>
+    </article>
+    <article class="- topic/topic topic nested1" aria-labelledby="ariaid-title16" id="导入数据到分布式数据表">
+        <h2 class="- topic/title title topictitle2" id="ariaid-title16">导入数据到分布式数据表</h2>
+        <div class="- topic/body body">
+            <p class="- topic/p p">DolphinDB 能够解决海量结构化数据的快速存储和计算，以及通过内存数据库和流数据计算引擎实现高性能的数据处理。DolphinDB 的数据写入与Hadoop
+                HDFS类似，快速在每个分区或文件的末尾批量插入数据。插入的数据会压缩存储到磁盘，一般压缩比例在 20% ~
+                25%。数据一旦追加到基于磁盘的数据表后，不能快速更新或删除某些符合条件的记录，必须以分区为单位对数据表进行修改。这也是分区原则中提到单个分区不宜过大的原因之一。</p>
+        </div>
+        <article class="- topic/topic topic nested2" aria-labelledby="ariaid-title17" id="多副本机制">
+            <h3 class="- topic/title title topictitle3" id="ariaid-title17">多副本机制</h3>
+            <div class="- topic/body body">
+                <p class="- topic/p p">为了数据安全和提供高可用的数据服务，每个分区数据在物理上存储多份，每一份叫做分区的一个副本。DolphinDB 允许为每一个分区保留多个副本，默认的副本个数是
+                    2，可以修改控制节点的参数 <em class="+ topic/ph hi-d/i ph i">dfsReplicationFactor</em> 来设置副本数量。</p>
+                <div class="- topic/p p">设置冗余数据的目的有两个：<ul class="- topic/ul ul" id="多副本机制__ul_mbm_cs2_tzb" data-ofbid="多副本机制__ul_mbm_cs2_tzb">
+                        
+                        <li class="- topic/li li">
+                            <p class="- topic/p p">业务不中断：某个数据节点失效或者或磁盘数据损坏时，系统提供容错功能继续提供服务，确保业务韧性。</p>
+                        </li>
+                        <li class="- topic/li li">
+                            <p class="- topic/p p">适应高并发场景：大量并发用户访问时，多副本提供负载均衡的功能，提高系统吞吐量，降低访问延时。</p>
+                        </li>
+                    </ul>
+                </div>
+                <p class="- topic/p p">DolphinDB 通过两阶段事务提交机制，确保数据写入时，同一副本在多节点之间的数据强一致性。</p>
+                <p class="- topic/p p">在控制节点的参数文件 <em class="+ topic/ph hi-d/i ph i">controller.cfg</em> 中，还有一个非常重要的参数
+                        <em class="+ topic/ph hi-d/i ph i">dfsReplicaReliabilityLevel</em>。该参数决定是否允许多个副本驻留在同一台物理服务器的多个数据节点上。在开发阶段，可允许在一个机器上配置多个节点，同时允许多个副本驻留在同一台物理服务器（<em class="+ topic/ph hi-d/i ph i">dfsReplicaReliabilityLevel=0</em>），
+                    但是在生产阶段需要设置成为 1，否则起不到容错备份的作用。</p>
+            </div>
+        </article>
+        <article class="- topic/topic topic nested2" aria-labelledby="ariaid-title18" id="事务机制">
+            <h3 class="- topic/title title topictitle3" id="ariaid-title18">事务机制</h3>
+            <div class="- topic/body body">
+                <p class="- topic/p p">DolphinDB 能够确保事务的原子性，一致性，隔离性和持久化（ACID）。DolphinDB
+                    采用多版本机制实现快照级别的隔离。在此隔离机制下，数据的读操作和写操作互相不阻塞，可以最大程度优化数据仓库读的性能。</p>
+                <p class="- topic/p p">为了最大程度优化数据仓库查询、分析、计算的性能，DolphinDB 对事务作了一些限制：</p>
+                <ol class="- topic/ol ol">
+                    <li class="- topic/li li">
+                        <p class="- topic/p p">一个事务只能包含写或者读，不能同时进行写和读。</p>
+                    </li>
+                    <li class="- topic/li li">
+                        <p class="- topic/p p">一个写事务可以跨越多个分区，但当通过 <code class="+ topic/ph pr-d/codeph ph codeph">database</code> 建库且设置参数
+                                <em class="+ topic/ph hi-d/i ph i">atomic='TRANS'</em>，则同一个分区不能被多个 writer 并发写入。当一个分区被某一个事务 A
+                            锁定后，另一个事务 B 试图再次去锁定该分区时，系统立刻会抛出异常导致事务 B 失败回滚。当设置 <em class="+ topic/ph hi-d/i ph i">atomic='CHUNK'</em>
+                            时，无此限制。</p>
+                    </li>
+                </ol>
+            </div>
+        </article>
+        <article class="- topic/topic topic nested2" aria-labelledby="ariaid-title19" id="多writer并行写入">
+            <h3 class="- topic/title title topictitle3" id="ariaid-title19">多 Writer并行写入</h3>
+            <div class="- topic/body body">
+                <p class="- topic/p p">DolphinDB 中，单个数据表可有几百万个分区，这为高性能的并行数据加载创造了条件。特别是将海量数据从其它系统导入 DolphinDB
+                    时，或者需要将实时数据以准实时的方式写入数据仓库时，并行加载对于性能尤为重要。</p>
+                <p class="- topic/p p">下面的例子将股票报价数据（quotes）并行加载到基于日期和股票代码的复合分区数据库 stockDB。数据存储在 <a class="- topic/xref xref" href="../../tutorials/data/database/quotes.zip">csv文件</a>
+                    中，每个文件保存一天的报价数据。对每个文件，通过文件名产生 jobId 前缀，并通过命令 <code class="+ topic/ph pr-d/codeph ph codeph">submitJob</code> 提交后台程序调用
+                        <code class="+ topic/ph pr-d/codeph ph codeph">loadTextEx</code> 函数将数据加载到stockDB数据库中。通过 <code class="+ topic/ph pr-d/codeph ph codeph">pnodeRun</code>
+                    将上述任务发送到集群的每个数据节点进行并行加载。</p>
+                <pre class="+ topic/pre pr-d/codeblock pre codeblock python">dateDomain = database(<span class="hl-string">""</span>, VALUE, <span class="hl-number">2018.05</span>.<span class="hl-number">01.</span><span class="hl-number">.2018</span>.<span class="hl-number">07.01</span>)
+symDomain = database(<span class="hl-string">""</span>, RANGE, string(<span class="hl-string">'A'</span>..<span class="hl-string">'Z'</span>) join `ZZZZZ)
+stockDB = database(<span class="hl-string">"dfs://stockDB"</span>, COMPO, [dateDomain, symDomain])
+quoteSchema = table(<span class="hl-number">10</span>:<span class="hl-number">0</span>, `sym`date`time`bid`bidSize`ask`askSize, [SYMBOL,DATE,TIME,DOUBLE,INT,DOUBLE,INT])
+stockDB.createPartitionedTable(quoteSchema, <span class="hl-string">"quotes"</span>, `date`sym)
+
+<strong class="hl-keyword">def</strong> loadJob(){
+	fileDir=<span class="hl-string">'/stockData'</span>
+	filenames = <strong class="hl-keyword">exec</strong> filename <strong class="hl-keyword">from</strong> files(fileDir)
+	db = database(<span class="hl-string">"dfs://stockDB"</span>)
+
+	<strong class="hl-keyword">for</strong>(fname <strong class="hl-keyword">in</strong> filenames){
+		jobId = fname.strReplace(<span class="hl-string">".csv"</span>, <span class="hl-string">""</span>)
+		submitJob(jobId,, loadTextEx{db, <span class="hl-string">"quotes"</span>, `date`sym, fileDir+<span class="hl-string">'/'</span>+fname})
+	}
+}
+
+pnodeRun(loadJob);</pre>
+                <div class="- topic/note note attention note_attention" id="多writer并行写入__note_fph_1t2_tzb" data-ofbid="多writer并行写入__note_fph_1t2_tzb"><span class="note__title">注意：</span> 在上面的例子中，<code class="+ topic/ph pr-d/codeph ph codeph">database</code>
+                        的参数使用默认值（<em class="+ topic/ph hi-d/i ph i">atomic='TRANS'</em>），若多个 writer 并行加载数据，则需要确保这些 writer
+                    不会同时往同一个分区写入数据，否则会导致事务失败。在上面的例子中，每一个文件存储了一天的数据，而 quotes
+                    表的一个分区字段是日期，从而确保所有加载数据的作业不会产生有重叠的事务。</div>
+            </div>
+        </article>
+    </article>
+    <article class="- topic/topic topic nested1" aria-labelledby="ariaid-title20" id="数据重分区和复制dfs表">
+        <h2 class="- topic/title title topictitle2" id="ariaid-title20">数据重分区和复制 DFS 表</h2>
+        <article class="- topic/topic topic nested2" aria-labelledby="ariaid-title21" id="数据重分区">
+            <h3 class="- topic/title title topictitle3" id="ariaid-title21">数据重分区</h3>
+            <div class="- topic/body body">
+                <p class="- topic/p p">数据库的分区类型和分区方案一旦确定以后，就不能修改。如果要对数据重新分区，需要新建一个数据库，然后把原数据库中的数据导入到新数据库中。</p>
+                <p class="- topic/p p">例如，假设有一个组合分区的数据库
+                    <span class="+ topic/ph sw-d/filepath ph filepath">dfs://db1</span>，第一层是按天分区，第二层根据股票代码范围划分为30个分区，创建数据库的代码如下：</p>
+                <pre class="+ topic/pre pr-d/codeblock pre codeblock python">login(<span class="hl-string">"admin"</span>,<span class="hl-string">"123456"</span>)
+t=table(<span class="hl-number">1</span>:<span class="hl-number">0</span>,`timestamp`sym`qty`price,[TIMESTAMP,SYMBOL,DOUBLE,DOUBLE])
+dates=<span class="hl-number">2010.01</span>.<span class="hl-number">01.</span><span class="hl-number">.2020</span>.<span class="hl-number">12.31</span>
+syms=<span class="hl-string">"A"</span>+string(<span class="hl-number">1.</span><span class="hl-number">.500</span>)
+sym_ranges=cutPoints(syms,<span class="hl-number">30</span>)
+db1=database(<span class="hl-string">""</span>,VALUE,dates)
+db2=database(<span class="hl-string">""</span>,RANGE,sym_ranges)
+db=database(<span class="hl-string">"dfs://db1"</span>,COMPO,[db1,db2])
+db.createPartitionedTable(t,`tb1,`timestamp`sym)</pre>
+                <p class="- topic/p p">现在要把以上数据库中的数据导入到新的数据库 <span class="+ topic/ph sw-d/filepath ph filepath">dfs://db2</span>
+                    中。新数据库是组合分区，第一层依然是按天分区，第二层按照股票代码范围划分为 50 个分区，创建数据库的代码如下：</p>
+                <pre class="+ topic/pre pr-d/codeblock pre codeblock python">login(<span class="hl-string">"admin"</span>,<span class="hl-string">"123456"</span>)
+t=table(<span class="hl-number">1</span>:<span class="hl-number">0</span>,`timestamp`sym`qty`price,[TIMESTAMP,SYMBOL,DOUBLE,DOUBLE])
+dates=<span class="hl-number">2010.01</span>.<span class="hl-number">01.</span><span class="hl-number">.2020</span>.<span class="hl-number">12.31</span>
+syms=<span class="hl-string">"A"</span>+string(<span class="hl-number">1.</span><span class="hl-number">.500</span>)
+sym_ranges=cutPoints(syms,<span class="hl-number">50</span>)
+db1=database(<span class="hl-string">""</span>,VALUE,dates)
+db2=database(<span class="hl-string">""</span>,RANGE,sym_ranges)
+db=database(<span class="hl-string">"dfs://db2"</span>,COMPO,[db1,db2])
+db.createPartitionedTable(t,`tb2,`timestamp`sym)</pre>
+                <div class="- topic/note note note note_note" id="数据重分区__note_bz2_c52_tzb" data-ofbid="数据重分区__note_bz2_c52_tzb"><span class="note__title">注：</span> 如果总数据量很小，可以直接把所有数据加载到内存表中，再把内存表中的数据保存到新的数据库中：<pre class="+ topic/pre pr-d/codeblock pre codeblock python" id="数据重分区__codeblock_pn3_252_tzb" data-ofbid="数据重分区__codeblock_pn3_252_tzb">allData=select * <strong class="hl-keyword">from</strong> loadTable(<span class="hl-string">"dfs://db1"</span>,<span class="hl-string">"tb1"</span>)
+tb2=loadTable(<span class="hl-string">"dfs://db2"</span>,<span class="hl-string">"tb2"</span>)
+tb2.append!(allData)</pre></div>
+                <p class="- topic/p p">但通常分布式表的数据量巨大，无法全量加载到内存中，可以用 <code class="+ topic/ph pr-d/codeph ph codeph">repartitionDS</code>
+                    函数将数据源划分为若干个内存能够容纳的小数据块，再通过 map-reduce
+                        的方法将数据块分批加载到内存并保存到新的数据库中。这样不仅了解决内存不够的问题，还可以通过并行加载提升性能。<code class="+ topic/ph pr-d/codeph ph codeph">repartitionDS</code>
+                        函数的语法：<code class="+ topic/ph pr-d/codeph ph codeph">repartitionDS(query, [column], [partitionType],
+                        [partitionScheme], [local=true])</code></p>
+                
+                <p class="- topic/p p">下例按天将数据划分为多个小数据块，分批将数据写入新的数据库中：</p>
+                <pre class="+ topic/pre pr-d/codeblock pre codeblock python"><strong class="hl-keyword">def</strong> writeDataTo(dbPath, tbName, mutable tbdata){
+	loadTable(dbPath,tbName).append!(tbdata)
+}
+
+datasrc=repartitionDS(&lt;select * <strong class="hl-keyword">from</strong> loadTable(<span class="hl-string">"dfs://db1"</span>,<span class="hl-string">"tb1"</span>)&gt;,`date,VALUE,dates)
+mr(ds=datasrc, mapFunc=writeDataTo{<span class="hl-string">"dfs://db2"</span>,<span class="hl-string">"tb2"</span>}, parallel=true)</pre>
+                <p class="- topic/p p">上例中 <code class="+ topic/ph pr-d/codeph ph codeph">repartitionDS</code> 函数中 <em class="+ topic/ph hi-d/i ph i">local=true</em>，表示会把重分区后的 chunk
+                    数据都汇总到当前的协调节点，做进一步的 map-reduce 处理。如果当前节点的资源有限，可以将 <em class="+ topic/ph hi-d/i ph i">local</em> 设置为
+                    <em class="+ topic/ph hi-d/i ph i">false</em>。</p>
+                <div class="- topic/p p">mr 函数中 <em class="+ topic/ph hi-d/i ph i">parallel=true</em> 表示小数据块会并行加载到内存和写入到数据库，只有满足以下两个条件才能将 <em class="+ topic/ph hi-d/i ph i">parallel</em>
+                    设置为 <em class="+ topic/ph hi-d/i ph i">true</em>：<ul class="- topic/ul ul" id="数据重分区__ul_fv1_q52_tzb" data-ofbid="数据重分区__ul_fv1_q52_tzb">
+                        
+                        <li class="- topic/li li">
+                            <p class="- topic/p p">内存充足</p>
+                        </li>
+                        <li class="- topic/li li">
+                            <p class="- topic/p p">两个 map 子任务不会同时写入新数据库中的某个分区。否则要将 <em class="+ topic/ph hi-d/i ph i">parallel</em> 设置为
+                                    <em class="+ topic/ph hi-d/i ph i">false</em>，<em class="+ topic/ph hi-d/i ph i">local</em> 设置为 <em class="+ topic/ph hi-d/i ph i">true</em></p>
+                        </li>
+                    </ul>假如新数据库 <span class="+ topic/ph sw-d/filepath ph filepath">dfs://db3</span> 的第一层分区是按日期的范围进行分区，每个月一个分区：</div>
+                <pre class="+ topic/pre pr-d/codeblock pre codeblock python">login(<span class="hl-string">"admin"</span>,<span class="hl-string">"123456"</span>)
+t=table(<span class="hl-number">1</span>:<span class="hl-number">0</span>,`timestamp`sym`qty`price,[TIMESTAMP,SYMBOL,DOUBLE,DOUBLE])
+months=date(<span class="hl-number">2010.01</span>M.<span class="hl-number">.2021</span>.<span class="hl-number">01</span>M)
+syms=<span class="hl-string">"A"</span>+string(<span class="hl-number">1.</span><span class="hl-number">.500</span>)
+sym_ranges=cutPoints(syms,<span class="hl-number">50</span>)
+db1=database(<span class="hl-string">""</span>,RANGE,months) //每个月一个分区
+db2=database(<span class="hl-string">""</span>,RANGE,sym_ranges)
+db=database(<span class="hl-string">"dfs://db3"</span>,COMPO,[db1,db2])
+db.createPartitionedTable(t,`tb3,`timestamp`sym)</pre>
+                <p class="- topic/p p">由于 <code class="+ topic/ph pr-d/codeph ph codeph">repartitionDS</code> 函数按天划分的多个小数据块对应新数据库中的同一个分区，而 olphinDB
+                    不允许同时对一个分区进行写入，因此要将 <em class="+ topic/ph hi-d/i ph i">parallel</em> 设置为 <em class="+ topic/ph hi-d/i ph i">false</em>。</p>
+                <pre class="+ topic/pre pr-d/codeblock pre codeblock python"><strong class="hl-keyword">def</strong> writeDataTo(dbPath, tbName, mutable tbdata){
+	loadTable(dbPath,tbName).append!(tbdata)
+}
+
+datasrc=repartitionDS(&lt;select * <strong class="hl-keyword">from</strong> loadTable(<span class="hl-string">"dfs://db1"</span>,<span class="hl-string">"tb1"</span>)&gt;,`date,VALUE,dates)
+mr(ds=datasrc, mapFunc=writeDataTo{<span class="hl-string">"dfs://db2"</span>,<span class="hl-string">"tb2"</span>}, parallel=true)</pre>
+                <p class="- topic/p p"><code class="+ topic/ph pr-d/codeph ph codeph">repartitionDS</code> 目前支持 VALUE 和 RANGE
+                    两种分区方法。上例中，如果内存充足，也可以按月划分数据：</p>
+                <pre class="+ topic/pre pr-d/codeblock pre codeblock python">months=date(<span class="hl-number">2010.01</span>M.<span class="hl-number">.2021</span>.<span class="hl-number">01</span>M)
+datasrc=repartitionDS(&lt;select * <strong class="hl-keyword">from</strong> tb1&gt;,`date,RANGE,months) //按月划分
+mr(ds=datasrc, mapFunc=writeDataTo{<span class="hl-string">"dfs://db2"</span>,<span class="hl-string">"tb2"</span>}, parallel=false)</pre>
+            </div>
+        </article>
+        <article class="- topic/topic topic nested2" aria-labelledby="ariaid-title22" id="复制dfs表">
+            <h3 class="- topic/title title topictitle3" id="ariaid-title22">复制 DFS 表</h3>
+            <div class="- topic/body body">
+                <p class="- topic/p p">如果只需复制 DFS 表，不改变数据的分区类型和分区方案，可以使用 <code class="+ topic/ph pr-d/codeph ph codeph">sqlDS</code> 函数划分数据源。例如，将前述表
+                    tb1的内容复制到同一个数据库的表 tb1_bak 中：</p>
+                <pre class="+ topic/pre pr-d/codeblock pre codeblock python">//创建tb1_bak
+db=database(<span class="hl-string">"dfs://db1"</span>)
+t=table(<span class="hl-number">1</span>:<span class="hl-number">0</span>,`timestamp`sym`qty`price,[TIMESTAMP,SYMBOL,DOUBLE,DOUBLE])
+db.createPartitionedTable(t,`tb1_bak,`timestamp`sym)
+
+//把表tb1的内容写入到表tb1_bak中
+<strong class="hl-keyword">def</strong> writeDataTo(dbPath, tbName, mutable tbdata){
+	loadTable(dbPath,tbName).append!(tbdata)
+}
+
+datasrc=sqlDS(&lt;select * <strong class="hl-keyword">from</strong> tb1&gt;)
+mr(ds=datasrc, mapFunc=writeDataTo{<span class="hl-string">"dfs://db1"</span>,<span class="hl-string">"tb1_bak"</span>}, parallel=true)</pre>
+                <p class="- topic/p p">复制 DFS 表时，<code class="+ topic/ph pr-d/codeph ph codeph">sqlDS</code> 的性能优于 <code class="+ topic/ph pr-d/codeph ph codeph">repartitionDS</code>。</p>
+                <pre class="+ topic/pre pr-d/codeblock pre codeblock python">datasrc=repartitionDS(&lt;select * <strong class="hl-keyword">from</strong> tb1&gt;,`date,VALUE)
+mr(ds=datasrc, mapFunc=writeDataTo{<span class="hl-string">"dfs://db1"</span>,<span class="hl-string">"tb1_bak"</span>}, parallel=true)</pre>
+            </div>
+        </article>
+    </article>
+    <article class="- topic/topic topic nested1" aria-labelledby="ariaid-title23" id="查询分区表注意事项">
+        <h2 class="- topic/title title topictitle2" id="ariaid-title23">查询分区表注意事项</h2>
+        <div class="- topic/body body">
+            <p class="- topic/p p">系统在执行分布式查询时，首先根据 WHERE 条件确定需要的分区，然后把查询发送到相关分区所在的节点，最后整合这些分区的结果返回给用户。</p>
+            <p class="- topic/p p">大多数分布式查询只涉及分布式表的部分分区。系统会根据关系运算符（&lt;, &lt;=, =, ==, &gt;, &gt;=, in,
+                between）和逻辑运算符（or，and）在加载和处理数据前确定相关的分区，避免全表扫描，从而节省大量时间。下面的例子可以帮助理解DolphinDB如何确定相关分区。以下脚本创建了分布式表pt，其中分区字段是
+                date，分区类型是 RANGE，从 1990.01.01 开始，每 2 个月为一个分区。</p>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock python">n=<span class="hl-number">10000000</span>
+id=take(<span class="hl-number">1.</span><span class="hl-number">.1000</span>, n).sort()
+date=<span class="hl-number">1989.12</span>.<span class="hl-number">31</span>+take(<span class="hl-number">1.</span><span class="hl-number">.10000</span>, n)
+x=rand(<span class="hl-number">1.0</span>, n)
+y=rand(<span class="hl-number">10</span>, n)
+t=table(id, date, x, y)
+db=database(<span class="hl-string">"dfs://rangedb1"</span>, RANGE, date(<span class="hl-number">1990.01</span>M+(<span class="hl-number">0.</span><span class="hl-number">.200</span>)*<span class="hl-number">2</span>))
+pt = db.createPartitionedTable(t, `pt, `date)
+pt.append!(t);
+
+pt=db.loadTable(`pt);</pre>
+            <p class="- topic/p p">以下类型的查询可以在加载和处理数据前缩小数据范围：</p>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock sql"><strong class="hl-keyword">select</strong> * <strong class="hl-keyword">from</strong> pt <strong class="hl-keyword">where</strong> <strong class="hl-keyword">date</strong>&gt;<span class="hl-number">1990.04</span>.<span class="hl-number">01</span> <strong class="hl-keyword">and</strong> <strong class="hl-keyword">date</strong>&lt;<span class="hl-number">1990.06</span>.<span class="hl-number">01</span>;</pre>
+            <p class="- topic/p p">系统确定了两个相关分区：[1990.03.01, 1990.05.01) 和 [1990.05.01, 1990.07.01)。</p>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock sql"><strong class="hl-keyword">select</strong> * <strong class="hl-keyword">from</strong> pt <strong class="hl-keyword">where</strong> <strong class="hl-keyword">date</strong> <strong class="hl-keyword">between</strong> <span class="hl-number">1990.12</span>.<span class="hl-number">01</span>:<span class="hl-number">1990.12</span>.<span class="hl-number">10</span>;</pre>
+            <p class="- topic/p p">系统确定了一个相关分区：[1990.11.01, 1991.01.01)。</p>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock sql"><strong class="hl-keyword">select</strong> <strong class="hl-keyword">count</strong>(*) <strong class="hl-keyword">from</strong> pt <strong class="hl-keyword">where</strong> <strong class="hl-keyword">date</strong> <strong class="hl-keyword">between</strong> <span class="hl-number">1990.08</span>.<span class="hl-number">01</span>:<span class="hl-number">1990.12</span>.<span class="hl-number">01</span> <strong class="hl-keyword">group</strong> <strong class="hl-keyword">by</strong> <strong class="hl-keyword">date</strong>;</pre>
+            <p class="- topic/p p">系统确定了三个相关分区：[1990.07.01, 1990.09.01)、[1990.09.01, 1990.11.01) 和 [1990.11.01,
+                1991.01.01)。</p>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock sql"><strong class="hl-keyword">select</strong> * <strong class="hl-keyword">from</strong> pt <strong class="hl-keyword">where</strong> y&lt;<span class="hl-number">5</span> <strong class="hl-keyword">and</strong> <strong class="hl-keyword">date</strong> <strong class="hl-keyword">between</strong> <span class="hl-number">1990.08</span>.<span class="hl-number">01</span>:<span class="hl-number">1990.08</span>.<span class="hl-number">31</span>;</pre>
+            <p class="- topic/p p">系统确定了一个相关分区：[1990.07.01, 1990.09.01)。</p>
+            <div class="- topic/note note note note_note" id="查询分区表注意事项__note_ntx_dv2_tzb" data-ofbid="查询分区表注意事项__note_ntx_dv2_tzb"><span class="note__title">注：</span> 系统忽略了y&lt;5的条件。加载了相关分区后，系统会根据 y&lt;5 的条件进一步筛选数据。</div>
+            <p class="- topic/p p">以下类型的查询不能确定相关分区，会全表扫描。对于数据量非常大的分区表，会耗费大量时间，应当尽量避免。</p>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock sql"><strong class="hl-keyword">select</strong> * <strong class="hl-keyword">from</strong> pt <strong class="hl-keyword">where</strong> <strong class="hl-keyword">date</strong>+<span class="hl-number">10</span>&gt;<span class="hl-number">1990.08</span>.<span class="hl-number">01</span>;
+
+<strong class="hl-keyword">select</strong> * <strong class="hl-keyword">from</strong> pt <strong class="hl-keyword">where</strong> <span class="hl-number">1990.08</span>.<span class="hl-number">01</span>&lt;<strong class="hl-keyword">date</strong>&lt;<span class="hl-number">1990.09</span>.<span class="hl-number">01</span>;
+
+<strong class="hl-keyword">select</strong> * <strong class="hl-keyword">from</strong> pt <strong class="hl-keyword">where</strong> <strong class="hl-keyword">month</strong>(<strong class="hl-keyword">date</strong>)&lt;=<span class="hl-number">1990.03</span>M;
+
+<strong class="hl-keyword">select</strong> * <strong class="hl-keyword">from</strong> pt <strong class="hl-keyword">where</strong> y&lt;<span class="hl-number">5</span>;
+
+announcementDate=<span class="hl-number">1990.08</span>.<span class="hl-number">01</span>
+
+<strong class="hl-keyword">select</strong> * <strong class="hl-keyword">from</strong> pt <strong class="hl-keyword">where</strong> <strong class="hl-keyword">date</strong>&lt;announcementDate-<span class="hl-number">3</span>;
+
+<strong class="hl-keyword">select</strong> * <strong class="hl-keyword">from</strong> pt <strong class="hl-keyword">where</strong> y&lt;<span class="hl-number">5</span> <strong class="hl-keyword">or</strong> <strong class="hl-keyword">date</strong> <strong class="hl-keyword">between</strong> <span class="hl-number">1990.08</span>.<span class="hl-number">01</span>:<span class="hl-number">1990.08</span>.<span class="hl-number">31</span>;</pre>
+        </div>
+    </article>
+</article></main></div>
+                        
+                        
+                        
+                        
+                        
+                        
+                    </div>
+                    
+                        <nav role="navigation" id="wh_topic_toc" aria-label="On this page" class="col-lg-2 d-none d-lg-block navbar d-print-none"> 
+                            <div id="wh_topic_toc_content">
+		                        
+	                            <div class=" wh_topic_toc "><div class="wh_topic_label">在本页上</div><ul><li class="topic-item"><a href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E5%AF%B9%E6%95%B0%E6%8D%AE%E5%BA%93%E8%BF%9B%E8%A1%8C%E5%88%86%E5%8C%BA" data-tocid="为什么对数据库进行分区">为什么对数据库进行分区</a></li><li class="topic-item"><a href="#%E5%88%86%E5%8C%BA%E7%B1%BB%E5%9E%8B" data-tocid="分区类型">分区类型</a><ul><li class="topic-item"><a href="#%E8%8C%83%E5%9B%B4range%E5%88%86%E5%8C%BA" data-tocid="范围range分区">范围分区</a></li><li class="topic-item"><a href="#%E5%93%88%E5%B8%8Chash%E5%88%86%E5%8C%BA" data-tocid="哈希hash分区">哈希分区</a></li><li class="topic-item"><a href="#%E5%80%BCvalue%E5%88%86%E5%8C%BA" data-tocid="值value分区">值分区</a></li><li class="topic-item"><a href="#%E5%88%97%E8%A1%A8list%E5%88%86%E5%8C%BA" data-tocid="列表list分区">列表分区</a></li><li class="topic-item"><a href="#%E7%BB%84%E5%90%88compo%E5%88%86%E5%8C%BA" data-tocid="组合compo分区">组合分区</a></li></ul></li><li class="topic-item"><a href="#%E5%88%86%E5%8C%BA%E8%AE%BE%E8%AE%A1%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A1%B9" data-tocid="分区设计注意事项">分区设计策略</a><ul><li class="topic-item"><a href="#%E9%80%89%E6%8B%A9%E5%90%88%E9%80%82%E7%9A%84%E5%88%86%E5%8C%BA%E5%AD%97%E6%AE%B5" data-tocid="选择合适的分区字段">选择恰当分区字段</a></li><li class="topic-item"><a href="#%E5%88%86%E5%8C%BA%E7%B2%92%E5%BA%A6%E4%B8%8D%E8%A6%81%E8%BF%87%E5%A4%A7" data-tocid="分区粒度不要过大">控制分区粒度</a></li><li class="topic-item"><a href="#%E5%88%86%E5%8C%BA%E7%B2%92%E5%BA%A6%E4%B8%8D%E8%A6%81%E8%BF%87%E5%B0%8F" data-tocid="分区粒度不要过小">分区粒度不要过小</a></li><li class="topic-item"><a href="#%E5%A6%82%E4%BD%95%E5%B0%86%E6%95%B0%E6%8D%AE%E5%9D%87%E5%8C%80%E5%88%86%E5%8C%BA" data-tocid="如何将数据均匀分区">均匀分区</a></li><li class="topic-item"><a href="#%E6%97%B6%E5%BA%8F%E7%B1%BB%E5%9E%8B%E5%88%86%E5%8C%BA" data-tocid="时序类型分区">时序类型分区</a></li><li class="topic-item"><a href="#%E4%B8%8D%E5%90%8C%E8%A1%A8%E7%9B%B8%E5%90%8C%E5%88%86%E5%8C%BA%E7%9A%84%E6%95%B0%E6%8D%AE%E5%AD%98%E4%BA%8E%E5%90%8C%E4%B8%80%E8%8A%82%E7%82%B9" data-tocid="不同表相同分区的数据存于同一节点">共存储</a></li></ul></li><li class="topic-item"><a href="#%E5%AF%BC%E5%85%A5%E6%95%B0%E6%8D%AE%E5%88%B0%E5%88%86%E5%B8%83%E5%BC%8F%E6%95%B0%E6%8D%AE%E8%A1%A8" data-tocid="导入数据到分布式数据表">导入数据到分布式数据表</a><ul><li class="topic-item"><a href="#%E5%A4%9A%E5%89%AF%E6%9C%AC%E6%9C%BA%E5%88%B6" data-tocid="多副本机制">多副本机制</a></li><li class="topic-item"><a href="#%E4%BA%8B%E5%8A%A1%E6%9C%BA%E5%88%B6" data-tocid="事务机制">事务机制</a></li><li class="topic-item"><a href="#%E5%A4%9Awriter%E5%B9%B6%E8%A1%8C%E5%86%99%E5%85%A5" data-tocid="多writer并行写入">多 Writer并行写入</a></li></ul></li><li class="topic-item"><a href="#%E6%95%B0%E6%8D%AE%E9%87%8D%E5%88%86%E5%8C%BA%E5%92%8C%E5%A4%8D%E5%88%B6dfs%E8%A1%A8" data-tocid="数据重分区和复制dfs表">数据重分区和复制 DFS 表</a><ul><li class="topic-item"><a href="#%E6%95%B0%E6%8D%AE%E9%87%8D%E5%88%86%E5%8C%BA" data-tocid="数据重分区">数据重分区</a></li><li class="topic-item"><a href="#%E5%A4%8D%E5%88%B6dfs%E8%A1%A8" data-tocid="复制dfs表">复制 DFS 表</a></li></ul></li><li class="topic-item"><a href="#%E6%9F%A5%E8%AF%A2%E5%88%86%E5%8C%BA%E8%A1%A8%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A1%B9" data-tocid="查询分区表注意事项">查询分区表注意事项</a></li></ul></div>
+	                        	
+                        	</div>
+                        </nav>
+                    
+                </div>
+            </div>
+            
+            
+            
+        </div> 
+        <footer class="navbar navbar-default wh_footer">
+  <div class=" footer-container mx-auto ">
+<title>Copyright</title><p><b> ©2024 浙江智臾科技有限公司 浙ICP备18048711号-3</b></p>
+  </div>
+</footer>
+        
+        <div id="go2top" class="d-print-none">
+            <span class="oxy-icon oxy-icon-up"></span>
+        </div>
+        
+        <div id="modal_img_large" class="modal">
+            <span class="close oxy-icon oxy-icon-remove"></span>
+            <div id="modal_img_container"></div>
+            <div id="caption"></div>
+        </div>
+        
+        
+        
+    </body>
+</html>

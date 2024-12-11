@@ -1,0 +1,307 @@
+<!DOCTYPE html><html xmlns="http://www.w3.org/1999/xhtml" xml:lang="zh" lang="zh" data-whc_version="26.0">
+    <head><link rel="shortcut icon" href="../../favicon.ico"/><link rel="icon" href="../../favicon.ico"/><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><meta http-equiv="X-UA-Compatible" content="IE=edge"/><meta name="description" content="PollingClient 在订阅数据时，会返回一个消息队列，用户可以从该消息队列中获取和处理数据。本小节将从构造函数、订阅和取消订阅对 PollingClient 进行介绍，并展示一个使用示例。 构造方法 PollingClient(int listeningPort = 0) 其中， listeningPort 表示单线程客户端的订阅端口号。 注： 2.00.9 及之后版本的 server ..."/><meta name="DC.rights.owner" content="(C) 版权 2024"/><meta name="copyright" content="(C) 版权 2024"/><meta name="generator" content="DITA-OT"/><meta name="DC.type" content="topic"/><meta name="DC.coverage" content=""/><meta name="DC.relation" content="../../api/cpp/subscribe_stream_data.html"/><meta name="prodname" content="DolphinDB"/><meta name="brand" content="DolphinDB"/><meta name="DC.creator" content="DolphinDB"/><meta name="DC.publisher" content="DDB N/A DDB 200"/><meta name="DC.format" content="HTML5"/><meta name="DC.identifier" content="pollingclient"/><title>PollingClient</title><!--  Generated with Oxygen version 26.0, build number 2024012323.  --><meta name="wh-path2root" content="../../"/><meta name="wh-toc-id" content="pollingclient-d9529e87843"/><meta name="wh-source-relpath" content="api/cpp/pollingclient.dita"/><meta name="wh-out-relpath" content="api/cpp/pollingclient.html"/>
+
+    <link rel="stylesheet" type="text/css" href="../../oxygen-webhelp/app/commons.css?buildId=2024012323"/>
+    <link rel="stylesheet" type="text/css" href="../../oxygen-webhelp/app/topic.css?buildId=2024012323"/>
+
+    <script src="../../oxygen-webhelp/app/options/properties.js?buildId=20240704100525"></script>
+    <script src="../../oxygen-webhelp/app/localization/strings.js?buildId=2024012323"></script>
+    <script src="../../oxygen-webhelp/app/search/index/keywords.js?buildId=20240704100525"></script>
+    <script defer="defer" src="../../oxygen-webhelp/app/commons.js?buildId=2024012323"></script>
+    <script defer="defer" src="../../oxygen-webhelp/app/topic.js?buildId=2024012323"></script>
+<link rel="stylesheet" type="text/css" href="../../oxygen-webhelp/template/styles.css?buildId=2024012323"/><script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script><script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script></head>
+
+    <body id="pollingclient" class="wh_topic_page frmBody">
+        <a href="#wh_topic_body" class="sr-only sr-only-focusable">
+            跳转到主要内容
+        </a>
+        
+        
+        
+        
+        <header class="navbar navbar-default wh_header">
+    <div class="container-fluid">
+        <div xmlns:whc="http://www.oxygenxml.com/webhelp/components" class="wh_header_flex_container navbar-nav navbar-expand-md navbar-dark">
+            <div class="wh_logo_and_publication_title_container">
+                <div class="wh_logo_and_publication_title">
+                    
+                    <a href="https://www.dolphindb.cn" class=" wh_logo d-none d-sm-block "><img src="../../logo.png" alt="  DolphinDB 文档中心  "/></a>
+                    <div class=" wh_publication_title "><a href="../../index.html"><span class="booktitle">  <span class="ph mainbooktitle">DolphinDB 文档中心</span>  </span></a></div>
+                    
+                </div>
+                
+                
+            </div>
+
+            <div class="wh_top_menu_and_indexterms_link collapse navbar-collapse" id="wh_top_menu_and_indexterms_link">
+                
+                
+                
+                
+            </div>
+        <div class=" wh_search_input navbar-form wh_topic_page_search search " role="form">
+            
+            
+            
+            <form id="searchForm" method="get" role="search" action="../../search.html"><div><input type="search" placeholder="搜索 " class="wh_search_textfield" id="textToSearch" name="searchQuery" aria-label="搜索查询" required="required"/><button type="submit" class="wh_search_button" aria-label="搜索"><span class="search_input_text">搜索</span></button></div></form>
+            
+            <script src="/vendors/react/umd/react.production.min.js" defer="defer"></script>
+<script src="/vendors/react-dom/umd/react-dom.production.min.js" defer="defer"></script>
+<script src="/vendors/dayjs/dayjs.min.js" defer="defer"></script>
+<script src="/vendors/antd/dist/antd.min.js" defer="defer"></script>
+<script src="/vendors/@ant-design/icons/dist/index.umd.min.js" defer="defer"></script>
+<script src="/zh/index.js" type="module"></script>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js" defer="defer"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML" defer="defer"><!--
+
+
+--></script>
+
+            
+        </div></div>
+    </div>
+</header>
+        
+        
+         
+        
+        
+        
+        <div class="container-fluid" id="wh_topic_container">
+            <div class="row">
+
+                <nav class="wh_tools d-print-none navbar-expand-md" aria-label="Tools">
+                    
+                    <div data-tooltip-position="bottom" class=" wh_breadcrumb "><ol class="d-print-none"><li><span class="home"><a href="../../index.html"><span>主页</span></a></span></li><li><div class="topicref" data-id="api_protocol"><div class="title"><a href="../../api/connapi_intro.html"><span class="keyword label">连接器 &amp; API</span></a><div class="wh-tooltip"><p class="shortdesc">面向不同编程语言的 DolphinDB API 及连接器，相关协议和用法</p></div></div></div></li><li><div class="topicref" data-id="cpp_api"><div class="title"><a href="../../api/cpp/cpp_api.html">C++ API</a></div></div></li><li><div class="topicref" data-id="bsc_ops"><div class="title"><a href="../../api/cpp/bsc_ops.html">基本操作</a></div></div></li><li><div class="topicref" data-id="subscribe_stream_data"><div class="title"><a href="../../api/cpp/subscribe_stream_data.html">订阅流数据</a></div></div></li><li class="active"><div class="topicref" data-id="pollingclient"><div class="title"><a href="../../api/cpp/pollingclient.html">PollingClient</a></div></div></li></ol></div>
+                    
+                    
+                    
+                    <div class="wh_right_tools">
+                        <button class="wh_hide_highlight" aria-label="切换搜索突出显示" title="切换搜索突出显示"></button>
+                        <button class="webhelp_expand_collapse_sections" data-next-state="collapsed" aria-label="折叠截面" title="折叠截面"></button>
+                        
+                        
+                        
+                        
+                        <div class=" wh_print_link print d-none d-md-inline-block "><button onClick="window.print()" title="打印此页" aria-label="打印此页"></button></div>
+                        
+                        <button type="button" id="wh_toc_button" class="custom-toggler navbar-toggler collapsed wh_toggle_button navbar-light" aria-expanded="false" aria-label="Toggle publishing table of content" aria-controls="wh_publication_toc">
+                            <span class="navbar-toggler-icon"></span>
+                        </button>
+                    </div>
+                    
+                </nav>
+            </div>
+            
+            
+            
+            
+            <div class="wh_content_area">
+                <div class="row">
+                    
+                        <nav id="wh_publication_toc" class="col-lg-3 col-md-3 col-sm-12 d-md-block d-none d-print-none" aria-label="Table of Contents Container">
+                            <div id="wh_publication_toc_content">
+		                        
+                            	<div class=" wh_publication_toc " data-tooltip-position="right"><span class="expand-button-action-labels"><span id="button-expand-action" role="button" aria-label="Expand"></span><span id="button-collapse-action" role="button" aria-label="Collapse"></span><span id="button-pending-action" role="button" aria-label="Pending"></span></span><ul role="tree" aria-label="Table of Contents"><li role="treeitem"><div data-tocid="new_chap_about_sect_ddb_docs_intro-d9529e87" class="topicref" data-id="new_chap_about_sect_ddb_docs_intro" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../about/ddb_docs_intro.html" id="new_chap_about_sect_ddb_docs_intro-d9529e87-link">文档使用说明</a><div class="wh-tooltip"><p class="shortdesc">如何获取 DolphinDB 帮助信息</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="chap1_getstarted-d9529e140" class="topicref" data-id="chap1_getstarted" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action chap1_getstarted-d9529e140-link" class="wh-expand-btn"></span><div class="title"><a href="../../getstarted/chap1_getstarted.html" id="chap1_getstarted-d9529e140-link"><span class="keyword label">快速上手</span></a><div class="wh-tooltip"><p class="shortdesc">如何快速部署 DolphinDB、建库建表、写入和查询数据</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="sectionddb_deployment-d9529e335" class="topicref" data-id="sectionddb_deployment" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action sectionddb_deployment-d9529e335-link" class="wh-expand-btn"></span><div class="title"><a href="../../deploy/deploy_intro.html" id="sectionddb_deployment-d9529e335-link"><span class="keyword label">部署</span></a><div class="wh-tooltip"><p class="shortdesc">如何在不同的场景中部署 DolphinDB</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="new_chap_database_manage_new_chap_dbmanage_landing_page-d9529e2313" class="topicref" data-id="new_chap_database_manage_new_chap_dbmanage_landing_page" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action new_chap_database_manage_new_chap_dbmanage_landing_page-d9529e2313-link" class="wh-expand-btn"></span><div class="title"><a href="../../db_distr_comp/cfg/db_intro.html" id="new_chap_database_manage_new_chap_dbmanage_landing_page-d9529e2313-link"><span class="keyword label">数据库</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 数据库的基本概念</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="chap7_tutorials_streaming-d9529e3490" class="topicref" data-id="chap7_tutorials_streaming" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action chap7_tutorials_streaming-d9529e3490-link" class="wh-expand-btn"></span><div class="title"><a href="../../stream/str_intro.html" id="chap7_tutorials_streaming-d9529e3490-link"><span class="keyword label">流数据</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 流数据引擎及流数据计算的基本概念</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="tocId-d9529e7385" class="topicref" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action tocId-d9529e7385-link" class="wh-expand-btn"></span><div class="title"><a href="../../db_distr_comp/db_oper/import_data.html" id="tocId-d9529e7385-link">数据迁移</a><div class="wh-tooltip"><p class="shortdesc">如何从不同数据源向 DolphinDB 迁移数据</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="chap7_tutorials_system_management-d9529e7812" class="topicref" data-id="chap7_tutorials_system_management" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action chap7_tutorials_system_management-d9529e7812-link" class="wh-expand-btn"></span><div class="title"><a href="../../sys_man/om_intro.html" id="chap7_tutorials_system_management-d9529e7812-link"><span class="keyword label">系统运维</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 的系统运维功能及方法</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="about_language_resources-d9529e16490" class="topicref" data-id="about_language_resources" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action about_language_resources-d9529e16490-link" class="wh-expand-btn"></span><div class="title"><a href="../../progr/progr_intro.html" id="about_language_resources-d9529e16490-link"><span class="keyword label">编程语言</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 编程基本概念与方法、SQL 在 DolphinDB 的应用</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="functions_references-d9529e26503" class="topicref" data-id="functions_references" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action functions_references-d9529e26503-link" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/funcs_intro.html" id="functions_references-d9529e26503-link"><span class="keyword label">函数参考</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 函数分类、语法、详解及示例</p></div></div></div></li><li role="treeitem" aria-expanded="true"><div data-tocid="api_protocol-d9529e86456" class="topicref" data-id="api_protocol" data-state="expanded"><span role="button" tabindex="0" aria-labelledby="button-collapse-action api_protocol-d9529e86456-link" class="wh-expand-btn"></span><div class="title"><a href="../../api/connapi_intro.html" id="api_protocol-d9529e86456-link"><span class="keyword label">连接器 &amp; API</span></a><div class="wh-tooltip"><p class="shortdesc">面向不同编程语言的 DolphinDB API 及连接器，相关协议和用法</p></div></div></div><ul role="group" class="navbar-nav nav-list"><li role="treeitem" aria-expanded="true"><div data-tocid="cpp_api-d9529e86509" class="topicref" data-id="cpp_api" data-state="expanded"><span role="button" tabindex="0" aria-labelledby="button-collapse-action cpp_api-d9529e86509-link" class="wh-expand-btn"></span><div class="title"><a href="../../api/cpp/cpp_api.html" id="cpp_api-d9529e86509-link">C++ API</a></div></div><ul role="group" class="navbar-nav nav-list"><li role="treeitem" aria-expanded="false"><div data-tocid="quickstart-d9529e86555" class="topicref" data-id="quickstart" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action quickstart-d9529e86555-link" class="wh-expand-btn"></span><div class="title"><a href="../../api/cpp/quickstart.html" id="quickstart-d9529e86555-link">快速上手</a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="data_types_forms-d9529e86785" class="topicref" data-id="data_types_forms" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action data_types_forms-d9529e86785-link" class="wh-expand-btn"></span><div class="title"><a href="../../api/cpp/data_types_forms.html" id="data_types_forms-d9529e86785-link">数据类型与形式</a></div></div></li><li role="treeitem" aria-expanded="true"><div data-tocid="bsc_ops-d9529e87107" class="topicref" data-id="bsc_ops" data-state="expanded"><span role="button" tabindex="0" aria-labelledby="button-collapse-action bsc_ops-d9529e87107-link" class="wh-expand-btn"></span><div class="title"><a href="../../api/cpp/bsc_ops.html" id="bsc_ops-d9529e87107-link">基本操作</a></div></div><ul role="group" class="navbar-nav nav-list"><li role="treeitem" aria-expanded="false"><div data-tocid="conn_db-d9529e87153" class="topicref" data-id="conn_db" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action conn_db-d9529e87153-link" class="wh-expand-btn"></span><div class="title"><a href="../../api/cpp/conn_db.html" id="conn_db-d9529e87153-link">连接数据库</a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="run_script_func-d9529e87291" class="topicref" data-id="run_script_func" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action run_script_func-d9529e87291-link" class="wh-expand-btn"></span><div class="title"><a href="../../api/cpp/run_script_func.html" id="run_script_func-d9529e87291-link">运行脚本与函数</a></div></div></li><li role="treeitem"><div data-tocid="upload_obj-d9529e87429" class="topicref" data-id="upload_obj" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../api/cpp/upload_obj.html" id="upload_obj-d9529e87429-link">上传数据对象</a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="conn_pool-d9529e87475" class="topicref" data-id="conn_pool" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action conn_pool-d9529e87475-link" class="wh-expand-btn"></span><div class="title"><a href="../../api/cpp/conn_pool.html" id="conn_pool-d9529e87475-link">使用连接池</a></div></div></li><li role="treeitem" aria-expanded="true"><div data-tocid="subscribe_stream_data-d9529e87659" class="topicref" data-id="subscribe_stream_data" data-state="expanded"><span role="button" tabindex="0" aria-labelledby="button-collapse-action subscribe_stream_data-d9529e87659-link" class="wh-expand-btn"></span><div class="title"><a href="../../api/cpp/subscribe_stream_data.html" id="subscribe_stream_data-d9529e87659-link">订阅流数据</a></div></div><ul role="group" class="navbar-nav nav-list"><li role="treeitem"><div data-tocid="message-d9529e87705" class="topicref" data-id="message" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../api/cpp/message.html" id="message-d9529e87705-link">Message 类说明</a></div></div></li><li role="treeitem"><div data-tocid="threadedclient-d9529e87751" class="topicref" data-id="threadedclient" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../api/cpp/threadedclient.html" id="threadedclient-d9529e87751-link">ThreadedClient</a></div></div></li><li role="treeitem"><div data-tocid="threadpooledclient-d9529e87797" class="topicref" data-id="threadpooledclient" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../api/cpp/threadpooledclient.html" id="threadpooledclient-d9529e87797-link">ThreadPooledClient</a></div></div></li><li role="treeitem" class="active"><div data-tocid="pollingclient-d9529e87843" class="topicref" data-id="pollingclient" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../api/cpp/pollingclient.html" id="pollingclient-d9529e87843-link">PollingClient</a></div></div></li><li role="treeitem"><div data-tocid="jetero_streamtb_subsc-d9529e87889" class="topicref" data-id="jetero_streamtb_subsc" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../api/cpp/jetero_streamtb_subsc.html" id="jetero_streamtb_subsc-d9529e87889-link">订阅异构流表</a></div></div></li><li role="treeitem"><div data-tocid="inmem_tb_subsc-d9529e87935" class="topicref" data-id="inmem_tb_subsc" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../api/cpp/inmem_tb_subsc.html" id="inmem_tb_subsc-d9529e87935-link">订阅跨进程共享内存表</a></div></div></li></ul></li><li role="treeitem" aria-expanded="false"><div data-tocid="write_data-d9529e87981" class="topicref" data-id="write_data" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action write_data-d9529e87981-link" class="wh-expand-btn"></span><div class="title"><a href="../../api/cpp/write_data.html" id="write_data-d9529e87981-link">写入数据</a></div></div></li><li role="treeitem"><div data-tocid="event_handling-d9529e88257" class="topicref" data-id="event_handling" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../api/cpp/event_handling.html" id="event_handling-d9529e88257-link">事件处理</a></div></div></li></ul></li><li role="treeitem"><div data-tocid="troubleshooting-d9529e88303" class="topicref" data-id="troubleshooting" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../api/cpp/troubleshooting.html" id="troubleshooting-d9529e88303-link">故障排查</a></div></div></li></ul></li><li role="treeitem" aria-expanded="false"><div data-tocid="chap5_sectpythonapi-d9529e88349" class="topicref" data-id="chap5_sectpythonapi" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action chap5_sectpythonapi-d9529e88349-link" class="wh-expand-btn"></span><div class="title"><a href="../../api/python/py.html" id="chap5_sectpythonapi-d9529e88349-link"><span class="keyword label">Python API</span></a></div></div></li><li role="treeitem"><div data-tocid="c-api-d9529e90273" class="topicref" data-id="c-api" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../api/csharp.html" id="c-api-d9529e90273-link">C# API</a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="javaapi_landingpage-d9529e90319" class="topicref" data-id="javaapi_landingpage" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action javaapi_landingpage-d9529e90319-link" class="wh-expand-btn"></span><div class="title"><a href="../../api/java_api/newjava.html" id="javaapi_landingpage-d9529e90319-link">Java API</a></div></div></li><li role="treeitem"><div data-tocid="jdbc-连接器-d9529e91745" class="topicref" data-id="jdbc-连接器" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../api/jdbc.html" id="jdbc-连接器-d9529e91745-link">JDBC 连接器</a></div></div></li><li role="treeitem"><div data-tocid="go-api-d9529e91791" class="topicref" data-id="go-api" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../api/go.html" id="go-api-d9529e91791-link">Go API</a></div></div></li><li role="treeitem"><div data-tocid="javascript-api-d9529e91837" class="topicref" data-id="javascript-api" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../api/js.html" id="javascript-api-d9529e91837-link">JavaScript API</a></div></div></li><li role="treeitem"><div data-tocid="json-api-d9529e91883" class="topicref" data-id="json-api" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../api/json.html" id="json-api-d9529e91883-link">JSON API</a></div></div></li><li role="treeitem"><div data-tocid="r-api-d9529e91929" class="topicref" data-id="r-api" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../api/r.html" id="r-api-d9529e91929-link">R API</a></div></div></li></ul></li><li role="treeitem" aria-expanded="false"><div data-tocid="chap6_plugin-d9529e91976" class="topicref" data-id="chap6_plugin" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action chap6_plugin-d9529e91976-link" class="wh-expand-btn"></span><div class="title"><a href="../../plugins/plg_intro.html" id="chap6_plugin-d9529e91976-link"><span class="keyword label">插件</span></a><div class="wh-tooltip"><p class="shortdesc">多个应用场景的插件使用说明和插件开发指导</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="third_party-d9529e94749" class="topicref" data-id="third_party" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action third_party-d9529e94749-link" class="wh-expand-btn"></span><div class="title"><a href="../../third_party.html" id="third_party-d9529e94749-link">第三方工具</a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="about_tutorials-d9529e94980" class="topicref" data-id="about_tutorials" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action about_tutorials-d9529e94980-link" class="wh-expand-btn"></span><div class="title"><a href="../../tutorials/about_tutorials.html" id="about_tutorials-d9529e94980-link"><span class="keyword label">教程</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 产品使用教程</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="tocId-d9529e101769" class="topicref" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action tocId-d9529e101769-link" class="wh-expand-btn"></span><div class="title"><a href="../../rn/server/3_00_1.html" id="tocId-d9529e101769-link">版本说明</a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 版本发布历史</p></div></div></div></li></ul></div>
+		                        
+                            </div>
+                        </nav>
+                    
+                    
+                    <div class="col-lg-7 col-md-9 col-sm-12" id="wh_topic_body">
+                        <button id="wh_close_publication_toc_button" class="close-toc-button d-none" aria-label="Toggle publishing table of content" aria-controls="wh_publication_toc" aria-expanded="true">
+                            <span class="close-toc-icon-container">
+                                <span class="close-toc-icon"></span>     
+                            </span>
+                        </button>
+                        <button id="wh_close_topic_toc_button" class="close-toc-button d-none" aria-label="Toggle topic table of content" aria-controls="wh_topic_toc" aria-expanded="true">
+                            <span class="close-toc-icon-container">
+                                <span class="close-toc-icon"></span>     
+                            </span>
+                        </button>
+                        
+                        <div class=" wh_topic_content body "><main role="main"><article class="- topic/topic topic" role="article" aria-labelledby="ariaid-title1">
+    <h1 class="- topic/title title topictitle1" id="ariaid-title1">PollingClient</h1>
+    <div class="- topic/body body">
+        <p class="- topic/p p">PollingClient 在订阅数据时，会返回一个消息队列，用户可以从该消息队列中获取和处理数据。本小节将从构造函数、订阅和取消订阅对 PollingClient
+            进行介绍，并展示一个使用示例。</p>
+        <section class="- topic/section section" id="pollingclient__how_to_construct" data-ofbid="pollingclient__how_to_construct"><h2 class="- topic/title title sectiontitle">构造方法</h2>
+            
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="pollingclient__codeblock_xtm_2jm_x1c" data-ofbid="pollingclient__codeblock_xtm_2jm_x1c"><code>PollingClient(int listeningPort = 0)</code></pre>
+            <p class="- topic/p p">其中，<code class="+ topic/ph pr-d/codeph ph codeph">listeningPort</code> 表示单线程客户端的订阅端口号。</p>
+            <div class="- topic/note note note note_note" id="pollingclient__note_zpc_3jm_x1c" data-ofbid="pollingclient__note_zpc_3jm_x1c"><span class="note__title">注：</span> 2.00.9 及之后版本的 server 发布端通过订阅端的请求连接推送数据，不再需要接收端指定端口，参数
+                    <em class="+ topic/ph hi-d/i ph i">listeningPort </em>填 0 或者不填即可。</div>
+        </section>
+        <section class="- topic/section section" id="pollingclient__section_dxx_3jm_x1c" data-ofbid="pollingclient__section_dxx_3jm_x1c"><h2 class="- topic/title title sectiontitle">订阅</h2>
+            
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="pollingclient__codeblock_ztm_2jm_x1c" data-ofbid="pollingclient__codeblock_ztm_2jm_x1c"><code>MessageQueueSP subscribe(
+    string host,
+    int port,
+    string tableName,
+    string actionName,
+    int64_t offset = -1,
+    bool resub = true,
+    const VectorSP &amp;filter = nullptr,
+    bool msgAsTable = false,
+    bool allowExists = false,
+	string userName="",
+	string password="",
+	const StreamDeserializerSP &amp;blobDeserializer = nullptr,
+    const std::vector&lt;std::string&gt;&amp; backupSites = std::vector&lt;std::string&gt;(),
+    int resubTimeout = 100,
+    bool subOnce = false
+)</code></pre>
+        </section>
+        <section class="- topic/section section" id="pollingclient__section_wth_mjm_x1c" data-ofbid="pollingclient__section_wth_mjm_x1c"><h2 class="- topic/title title sectiontitle">参数</h2>
+            
+            <ul class="- topic/ul ul" id="pollingclient__paralist" data-ofbid="pollingclient__paralist">
+                <li class="- topic/li li">
+                    <p class="- topic/p p"><code class="+ topic/ph pr-d/codeph ph codeph">host</code>：表示发布端节点的主机名。</p>
+                </li>
+                <li class="- topic/li li">
+                    <p class="- topic/p p"><code class="+ topic/ph pr-d/codeph ph codeph">port</code>：表示发布端节点的端口号。</p>
+                </li>
+                <li class="- topic/li li">
+                    <p class="- topic/p p"><code class="+ topic/ph pr-d/codeph ph codeph">tableName</code>：表示发布端上共享流数据表的名称。</p>
+                </li>
+                <li class="- topic/li li">
+                    <p class="- topic/p p"><code class="+ topic/ph pr-d/codeph ph codeph">actionName</code>：表示订阅任务的名称。传入值可以包含字母、数字和下划线。</p>
+                </li>
+                <li class="- topic/li li">
+                    <p class="- topic/p p"><code class="+ topic/ph pr-d/codeph ph codeph">offset</code>：表示订阅任务开始后的第一条消息所在的位置。消息是流数据表中的行。如果没有指定
+                            <em class="+ topic/ph hi-d/i ph i">offset</em>、或其为负数、或超过了流数据表的记录行数，则订阅将会从流数据表的当前行开始。<em class="+ topic/ph hi-d/i ph i">offset</em>
+                        与流数据表创建时的第一行对应。如果某些行因为内存限制被删除，在决定订阅开始的位置时，这些行仍然考虑在内。</p>
+                </li>
+                <li class="- topic/li li">
+                    <p class="- topic/p p"><code class="+ topic/ph pr-d/codeph ph codeph">resub</code>：表示订阅中断后，API 是否会自动重订阅。</p>
+                </li>
+                <li class="- topic/li li">
+                    <p class="- topic/p p"><code class="+ topic/ph pr-d/codeph ph codeph">filter</code>：一个向量，表示过滤条件。流数据表过滤列在 <em class="+ topic/ph hi-d/i ph i">filter</em> 中的数据才会发布到订阅端，不在
+                            <em class="+ topic/ph hi-d/i ph i">filter</em> 中的数据不会发布。</p>
+                </li>
+                <li class="- topic/li li">
+                    <p class="- topic/p p"><code class="+ topic/ph pr-d/codeph ph codeph">msgAsTable</code>：只有设置了 <em class="+ topic/ph hi-d/i ph i">batchSize</em> 参数，该参数才会生效。若其设置为
+                        true，则订阅的数据会转换为 Table；若其设置为 false，则订阅的数据会转换成 AnyVector。</p>
+                </li>
+                <li class="- topic/li li">
+                    <p class="- topic/p p"><code class="+ topic/ph pr-d/codeph ph codeph">allowExists</code>：若该参数设置为 true，则支持对同一个订阅流表使用多个 <em class="+ topic/ph hi-d/i ph i">handler</em>
+                        处理数据；若其设置为 False，则不支持同一个订阅流表使用多个 <em class="+ topic/ph hi-d/i ph i">handler</em> 处理数据。</p>
+                </li>
+                <li class="- topic/li li">
+                    <p class="- topic/p p"><code class="+ topic/ph pr-d/codeph ph codeph">userName</code>：表示 API 所连接服务器的登录用户名。</p>
+                </li>
+                <li class="- topic/li li">
+                    <p class="- topic/p p"><code class="+ topic/ph pr-d/codeph ph codeph">password</code>：表示 API 所连接服务器的登录密码。</p>
+                </li>
+                <li class="- topic/li li">
+                    <p class="- topic/p p"><code class="+ topic/ph pr-d/codeph ph codeph">blobDeserializer</code>：表示订阅的异构流表对应的反序列化器。</p>
+                </li>
+                <li class="- topic/li li">
+                    <p class="- topic/p p"><code class="+ topic/ph pr-d/codeph ph codeph">backupSites</code>: 字符串列表，可选，表示备用的发布端节点列表，由节点 ip 和端口号组成，例如
+                        [“192.168.0.1:8848“, “192.168.0.2:8849“]。</p>
+                    <ul class="- topic/ul ul" id="pollingclient__ul_jfs_4hm_x1c" data-ofbid="pollingclient__ul_jfs_4hm_x1c">
+                        <li class="- topic/li li">
+                            <p class="- topic/p p">指定<em class="+ topic/ph hi-d/i ph i">backupSites</em>，表示启动主备节点切换。如果发生节点切换（例如连接断开），会在可用节点列表中不断轮询订阅，直至订阅成功。</p>
+                        </li>
+                        <li class="- topic/li li">
+                            <p class="- topic/p p">若配置该参数，用户需保证主节点（由 host 和 port
+                                参数指定）和备用节点上存在相同结构、相同数据的同名流数据表。否则，可能出现订阅的数据不符合预期。</p>
+                        </li>
+                        <li class="- topic/li li">
+                            <p class="- topic/p p">若订阅的是高可用流表，重连时将从 <em class="+ topic/ph hi-d/i ph i">backupSites</em> 指定的节点列表中选择节点。</p>
+                        </li>
+                        <li class="- topic/li li">
+                            <p class="- topic/p p">取消订阅需使用主节点 ip 和端口号进行取消。</p>
+                        </li>
+                    </ul>
+                </li>
+                <li class="- topic/li li">
+                    <p class="- topic/p p"><code class="+ topic/ph pr-d/codeph ph codeph">resubTimeout</code>：一个整数，表示重订阅距离断线最小时间间隔，默认值为 100 毫秒。</p>
+                </li>
+                <li class="- topic/li li">
+                    <p class="- topic/p p"><code class="+ topic/ph pr-d/codeph ph codeph">subOnce</code>：布尔值，False表示在节点切换时，不去尝试之前成功连接过的节点。默认值为 False。</p>
+                </li>
+            </ul>
+        </section>
+        <section class="- topic/section section" id="pollingclient__section_nyn_vjm_x1c" data-ofbid="pollingclient__section_nyn_vjm_x1c"><h2 class="- topic/title title sectiontitle">返回类型</h2>
+            
+            <p class="- topic/p p">该函数返回指向消息队列的指针。</p>
+        </section>
+        <section class="- topic/section section" id="pollingclient__section_wzl_wjm_x1c" data-ofbid="pollingclient__section_wzl_wjm_x1c"><h2 class="- topic/title title sectiontitle">取消订阅</h2>
+            
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="pollingclient__codeblock_wyg_xjm_x1c" data-ofbid="pollingclient__codeblock_wyg_xjm_x1c"><code>void unsubscribe(
+    string host,
+    int port,
+    string tableName,
+    string actionName
+)</code></pre>
+            <div class="- topic/note note note note_note" id="pollingclient__note_a3q_zjm_x1c" data-ofbid="pollingclient__note_a3q_zjm_x1c"><span class="note__title">注：</span> 参数值需要与订阅时填入参数值相同。</div>
+        </section>
+        <section class="- topic/section section" id="pollingclient__use_cases" data-ofbid="pollingclient__use_cases"><h2 class="- topic/title title sectiontitle">使用示例</h2>
+            
+            <p class="- topic/p p"><strong class="+ topic/ph hi-d/b ph b">DolphinDB 脚本</strong>：新建一个Stream表，然后共享该表，名为<code class="+ topic/ph pr-d/codeph ph codeph">shared_stream_table</code>。</p>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="pollingclient__codeblock_a5m_2jm_x1c" data-ofbid="pollingclient__codeblock_a5m_2jm_x1c"><code>rt = streamTable(`XOM`GS`AAPL as id, 102.1 33.4 73.6 as x)
+share rt as shared_stream_table</code></pre>
+            <p class="- topic/p p"><strong class="+ topic/ph hi-d/b ph b">C++代码</strong>：</p>
+            <p class="- topic/p p">本例使用2.00.10版本的DolphinDB server，在订阅一秒后取消订阅</p>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="pollingclient__codeblock_b5m_2jm_x1c" data-ofbid="pollingclient__codeblock_b5m_2jm_x1c"><code>int main(int argc, const char **argv)
+{
+    PollingClient client(0);
+    MessageQueueSP queue = client.subscribe("127.0.0.1", 8848, "shared_stream_table", "action3", 0);
+    ThreadSP t = new Thread(new Executor([&amp;client](){
+        Util::sleep(1000);
+        client.unsubscribe("127.0.0.1", 8848, "shared_stream_table", "action3");
+    }));
+    t-&gt;start();
+    Message msg;
+    while (queue-&gt;poll(msg, 1000) &amp;&amp; !msg.isNull()) {
+        std::cout &lt;&lt; msg-&gt;getString() &lt;&lt; std::endl;
+    }
+}</code></pre>
+        </section>
+    </div>
+</article></main></div>
+                        
+                        
+                        
+                        
+                        
+                        
+                    </div>
+                    
+                        <nav role="navigation" id="wh_topic_toc" aria-label="On this page" class="col-lg-2 d-none d-lg-block navbar d-print-none"> 
+                            <div id="wh_topic_toc_content">
+		                        
+	                            <div class=" wh_topic_toc "><div class="wh_topic_label">在本页上</div><ul><li class="section-item"><div class="section-title"><a href="#pollingclient__how_to_construct" data-tocid="pollingclient__how_to_construct">构造方法</a></div></li><li class="section-item"><div class="section-title"><a href="#pollingclient__section_dxx_3jm_x1c" data-tocid="pollingclient__section_dxx_3jm_x1c">订阅</a></div></li><li class="section-item"><div class="section-title"><a href="#pollingclient__section_wth_mjm_x1c" data-tocid="pollingclient__section_wth_mjm_x1c">参数</a></div></li><li class="section-item"><div class="section-title"><a href="#pollingclient__section_nyn_vjm_x1c" data-tocid="pollingclient__section_nyn_vjm_x1c">返回类型</a></div></li><li class="section-item"><div class="section-title"><a href="#pollingclient__section_wzl_wjm_x1c" data-tocid="pollingclient__section_wzl_wjm_x1c">取消订阅</a></div></li><li class="section-item"><div class="section-title"><a href="#pollingclient__use_cases" data-tocid="pollingclient__use_cases">使用示例</a></div></li></ul></div>
+	                        	
+                        	</div>
+                        </nav>
+                    
+                </div>
+            </div>
+            
+            
+            
+        </div> 
+        <footer class="navbar navbar-default wh_footer">
+  <div class=" footer-container mx-auto ">
+<title>Copyright</title><p><b> ©2024 浙江智臾科技有限公司 浙ICP备18048711号-3</b></p>
+  </div>
+</footer>
+        
+        <div id="go2top" class="d-print-none">
+            <span class="oxy-icon oxy-icon-up"></span>
+        </div>
+        
+        <div id="modal_img_large" class="modal">
+            <span class="close oxy-icon oxy-icon-remove"></span>
+            <div id="modal_img_container"></div>
+            <div id="caption"></div>
+        </div>
+        
+        
+        
+    </body>
+</html>

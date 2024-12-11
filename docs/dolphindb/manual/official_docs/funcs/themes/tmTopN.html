@@ -1,0 +1,293 @@
+<!DOCTYPE html><html xmlns="http://www.w3.org/1999/xhtml" xml:lang="zh" lang="zh" data-whc_version="26.0">
+    <head><link rel="shortcut icon" href="../../favicon.ico"/><link rel="icon" href="../../favicon.ico"/><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><meta http-equiv="X-UA-Compatible" content="IE=edge"/><meta name="description" content="DolphinDB 提供了 tmTopN 系列函数，在根据时间滑动的窗口内，将数据根据某个指标排序后，只取排序靠前的 top 个元素进行计算。 tmTopN 系列函数的通用参数模板如下： tmTopN(T, X, S, window, top, [ascending=true], [tiesMethod='latest']) tmTopN(T, X, Y, S, window, top, ..."/><meta name="DC.rights.owner" content="(C) 版权 2024"/><meta name="copyright" content="(C) 版权 2024"/><meta name="generator" content="DITA-OT"/><meta name="DC.type" content="topic"/><meta name="DC.coverage" content=""/><meta name="DC.relation" content="../../funcs/themes/themes.html"/><meta name="prodname" content="DolphinDB"/><meta name="brand" content="DolphinDB"/><meta name="DC.creator" content="DolphinDB"/><meta name="DC.publisher" content="DDB N/A DDB 200"/><meta name="DC.format" content="HTML5"/><meta name="DC.identifier" content="tmtopn-系列"/><title>tmTopN 系列</title><!--  Generated with Oxygen version 26.0, build number 2024012323.  --><meta name="wh-path2root" content="../../"/><meta name="wh-toc-id" content="tmtopn-系列-d9529e84761"/><meta name="wh-source-relpath" content="funcs/themes/tmTopN.dita"/><meta name="wh-out-relpath" content="funcs/themes/tmTopN.html"/>
+
+    <link rel="stylesheet" type="text/css" href="../../oxygen-webhelp/app/commons.css?buildId=2024012323"/>
+    <link rel="stylesheet" type="text/css" href="../../oxygen-webhelp/app/topic.css?buildId=2024012323"/>
+
+    <script src="../../oxygen-webhelp/app/options/properties.js?buildId=20240704100525"></script>
+    <script src="../../oxygen-webhelp/app/localization/strings.js?buildId=2024012323"></script>
+    <script src="../../oxygen-webhelp/app/search/index/keywords.js?buildId=20240704100525"></script>
+    <script defer="defer" src="../../oxygen-webhelp/app/commons.js?buildId=2024012323"></script>
+    <script defer="defer" src="../../oxygen-webhelp/app/topic.js?buildId=2024012323"></script>
+<link rel="stylesheet" type="text/css" href="../../oxygen-webhelp/template/styles.css?buildId=2024012323"/><script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script><script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script></head>
+
+    <body id="tmtopn-系列" class="wh_topic_page frmBody">
+        <a href="#wh_topic_body" class="sr-only sr-only-focusable">
+            跳转到主要内容
+        </a>
+        
+        
+        
+        
+        <header class="navbar navbar-default wh_header">
+    <div class="container-fluid">
+        <div xmlns:whc="http://www.oxygenxml.com/webhelp/components" class="wh_header_flex_container navbar-nav navbar-expand-md navbar-dark">
+            <div class="wh_logo_and_publication_title_container">
+                <div class="wh_logo_and_publication_title">
+                    
+                    <a href="https://www.dolphindb.cn" class=" wh_logo d-none d-sm-block "><img src="../../logo.png" alt="  DolphinDB 文档中心  "/></a>
+                    <div class=" wh_publication_title "><a href="../../index.html"><span class="booktitle">  <span class="ph mainbooktitle">DolphinDB 文档中心</span>  </span></a></div>
+                    
+                </div>
+                
+                
+            </div>
+
+            <div class="wh_top_menu_and_indexterms_link collapse navbar-collapse" id="wh_top_menu_and_indexterms_link">
+                
+                
+                
+                
+            </div>
+        <div class=" wh_search_input navbar-form wh_topic_page_search search " role="form">
+            
+            
+            
+            <form id="searchForm" method="get" role="search" action="../../search.html"><div><input type="search" placeholder="搜索 " class="wh_search_textfield" id="textToSearch" name="searchQuery" aria-label="搜索查询" required="required"/><button type="submit" class="wh_search_button" aria-label="搜索"><span class="search_input_text">搜索</span></button></div></form>
+            
+            <script src="/vendors/react/umd/react.production.min.js" defer="defer"></script>
+<script src="/vendors/react-dom/umd/react-dom.production.min.js" defer="defer"></script>
+<script src="/vendors/dayjs/dayjs.min.js" defer="defer"></script>
+<script src="/vendors/antd/dist/antd.min.js" defer="defer"></script>
+<script src="/vendors/@ant-design/icons/dist/index.umd.min.js" defer="defer"></script>
+<script src="/zh/index.js" type="module"></script>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js" defer="defer"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML" defer="defer"><!--
+
+
+--></script>
+
+            
+        </div></div>
+    </div>
+</header>
+        
+        
+         
+        
+        
+        
+        <div class="container-fluid" id="wh_topic_container">
+            <div class="row">
+
+                <nav class="wh_tools d-print-none navbar-expand-md" aria-label="Tools">
+                    
+                    <div data-tooltip-position="bottom" class=" wh_breadcrumb "><ol class="d-print-none"><li><span class="home"><a href="../../index.html"><span>主页</span></a></span></li><li><div class="topicref" data-id="functions_references"><div class="title"><a href="../../funcs/funcs_intro.html"><span class="keyword label">函数参考</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 函数分类、语法、详解及示例</p></div></div></div></li><li><div class="topicref" data-id="chap8_sect_series_o_funcs"><div class="title"><a href="../../funcs/themes/themes.html">系列函数</a></div></div></li><li class="active"><div class="topicref" data-id="tmtopn-系列"><div class="title"><a href="../../funcs/themes/tmTopN.html"><span class="keyword">tmTopN 系列</span></a></div></div></li></ol></div>
+                    
+                    
+                    
+                    <div class="wh_right_tools">
+                        <button class="wh_hide_highlight" aria-label="切换搜索突出显示" title="切换搜索突出显示"></button>
+                        <button class="webhelp_expand_collapse_sections" data-next-state="collapsed" aria-label="折叠截面" title="折叠截面"></button>
+                        
+                        
+                        
+                        
+                        <div class=" wh_print_link print d-none d-md-inline-block "><button onClick="window.print()" title="打印此页" aria-label="打印此页"></button></div>
+                        
+                        <button type="button" id="wh_toc_button" class="custom-toggler navbar-toggler collapsed wh_toggle_button navbar-light" aria-expanded="false" aria-label="Toggle publishing table of content" aria-controls="wh_publication_toc">
+                            <span class="navbar-toggler-icon"></span>
+                        </button>
+                    </div>
+                    
+                </nav>
+            </div>
+            
+            
+            
+            
+            <div class="wh_content_area">
+                <div class="row">
+                    
+                        <nav id="wh_publication_toc" class="col-lg-3 col-md-3 col-sm-12 d-md-block d-none d-print-none" aria-label="Table of Contents Container">
+                            <div id="wh_publication_toc_content">
+		                        
+                            	<div class=" wh_publication_toc " data-tooltip-position="right"><span class="expand-button-action-labels"><span id="button-expand-action" role="button" aria-label="Expand"></span><span id="button-collapse-action" role="button" aria-label="Collapse"></span><span id="button-pending-action" role="button" aria-label="Pending"></span></span><ul role="tree" aria-label="Table of Contents"><li role="treeitem"><div data-tocid="new_chap_about_sect_ddb_docs_intro-d9529e87" class="topicref" data-id="new_chap_about_sect_ddb_docs_intro" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../about/ddb_docs_intro.html" id="new_chap_about_sect_ddb_docs_intro-d9529e87-link">文档使用说明</a><div class="wh-tooltip"><p class="shortdesc">如何获取 DolphinDB 帮助信息</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="chap1_getstarted-d9529e140" class="topicref" data-id="chap1_getstarted" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action chap1_getstarted-d9529e140-link" class="wh-expand-btn"></span><div class="title"><a href="../../getstarted/chap1_getstarted.html" id="chap1_getstarted-d9529e140-link"><span class="keyword label">快速上手</span></a><div class="wh-tooltip"><p class="shortdesc">如何快速部署 DolphinDB、建库建表、写入和查询数据</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="sectionddb_deployment-d9529e335" class="topicref" data-id="sectionddb_deployment" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action sectionddb_deployment-d9529e335-link" class="wh-expand-btn"></span><div class="title"><a href="../../deploy/deploy_intro.html" id="sectionddb_deployment-d9529e335-link"><span class="keyword label">部署</span></a><div class="wh-tooltip"><p class="shortdesc">如何在不同的场景中部署 DolphinDB</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="new_chap_database_manage_new_chap_dbmanage_landing_page-d9529e2313" class="topicref" data-id="new_chap_database_manage_new_chap_dbmanage_landing_page" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action new_chap_database_manage_new_chap_dbmanage_landing_page-d9529e2313-link" class="wh-expand-btn"></span><div class="title"><a href="../../db_distr_comp/cfg/db_intro.html" id="new_chap_database_manage_new_chap_dbmanage_landing_page-d9529e2313-link"><span class="keyword label">数据库</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 数据库的基本概念</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="chap7_tutorials_streaming-d9529e3490" class="topicref" data-id="chap7_tutorials_streaming" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action chap7_tutorials_streaming-d9529e3490-link" class="wh-expand-btn"></span><div class="title"><a href="../../stream/str_intro.html" id="chap7_tutorials_streaming-d9529e3490-link"><span class="keyword label">流数据</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 流数据引擎及流数据计算的基本概念</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="tocId-d9529e7385" class="topicref" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action tocId-d9529e7385-link" class="wh-expand-btn"></span><div class="title"><a href="../../db_distr_comp/db_oper/import_data.html" id="tocId-d9529e7385-link">数据迁移</a><div class="wh-tooltip"><p class="shortdesc">如何从不同数据源向 DolphinDB 迁移数据</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="chap7_tutorials_system_management-d9529e7812" class="topicref" data-id="chap7_tutorials_system_management" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action chap7_tutorials_system_management-d9529e7812-link" class="wh-expand-btn"></span><div class="title"><a href="../../sys_man/om_intro.html" id="chap7_tutorials_system_management-d9529e7812-link"><span class="keyword label">系统运维</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 的系统运维功能及方法</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="about_language_resources-d9529e16490" class="topicref" data-id="about_language_resources" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action about_language_resources-d9529e16490-link" class="wh-expand-btn"></span><div class="title"><a href="../../progr/progr_intro.html" id="about_language_resources-d9529e16490-link"><span class="keyword label">编程语言</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 编程基本概念与方法、SQL 在 DolphinDB 的应用</p></div></div></div></li><li role="treeitem" aria-expanded="true"><div data-tocid="functions_references-d9529e26503" class="topicref" data-id="functions_references" data-state="expanded"><span role="button" tabindex="0" aria-labelledby="button-collapse-action functions_references-d9529e26503-link" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/funcs_intro.html" id="functions_references-d9529e26503-link"><span class="keyword label">函数参考</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 函数分类、语法、详解及示例</p></div></div></div><ul role="group" class="navbar-nav nav-list"><li role="treeitem"><div data-tocid="funcs_by_topics-d9529e26556" class="topicref" data-id="funcs_by_topics" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/funcs_by_topics.html" id="funcs_by_topics-d9529e26556-link"><span class="keyword label">函数分类</span></a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="tocId-d9529e26603" class="topicref" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action tocId-d9529e26603-link" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/a/abs.html" id="tocId-d9529e26603-link">函数一览</a></div></div></li><li role="treeitem" aria-expanded="true"><div data-tocid="chap8_sect_series_o_funcs-d9529e84433" class="topicref" data-id="chap8_sect_series_o_funcs" data-state="expanded"><span role="button" tabindex="0" aria-labelledby="button-collapse-action chap8_sect_series_o_funcs-d9529e84433-link" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/themes/themes.html" id="chap8_sect_series_o_funcs-d9529e84433-link">系列函数</a></div></div><ul role="group" class="navbar-nav nav-list"><li role="treeitem"><div data-tocid="累计窗口系列cum-系列-d9529e84479" class="topicref" data-id="累计窗口系列cum-系列" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/themes/cumFunctions.html" id="累计窗口系列cum-系列-d9529e84479-link"><span class="keyword">累计窗口系列（cum 系列）</span></a></div></div></li><li role="treeitem"><div data-tocid="cumtopn-系列-d9529e84526" class="topicref" data-id="cumtopn-系列" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/themes/cumTopN.html" id="cumtopn-系列-d9529e84526-link"><span class="keyword">cumTopN 系列</span></a></div></div></li><li role="treeitem"><div data-tocid="mvoingwindow-d9529e84573" class="topicref" data-id="mvoingwindow" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/themes/mFunctions.html" id="mvoingwindow-d9529e84573-link"><span class="keyword">滑动窗口系列（m 系列）</span></a></div></div></li><li role="treeitem"><div data-tocid="行计算系列row-系列-d9529e84620" class="topicref" data-id="行计算系列row-系列" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/themes/rowFunctions.html" id="行计算系列row-系列-d9529e84620-link"><span class="keyword">行计算系列（row 系列）</span></a></div></div></li><li role="treeitem"><div data-tocid="ta-lib-系列-d9529e84667" class="topicref" data-id="ta-lib-系列" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/themes/TAlib.html" id="ta-lib-系列-d9529e84667-link"><span class="keyword">TA-lib 系列</span></a></div></div></li><li role="treeitem"><div data-tocid="时序滑动窗口系列tm-系列-d9529e84714" class="topicref" data-id="时序滑动窗口系列tm-系列" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/themes/tmFunctions.html" id="时序滑动窗口系列tm-系列-d9529e84714-link"><span class="keyword">时序滑动窗口系列（tm 系列）</span></a></div></div></li><li role="treeitem" class="active"><div data-tocid="tmtopn-系列-d9529e84761" class="topicref" data-id="tmtopn-系列" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/themes/tmTopN.html" id="tmtopn-系列-d9529e84761-link"><span class="keyword">tmTopN 系列</span></a></div></div></li><li role="treeitem"><div data-tocid="mtopn-系列-d9529e84808" class="topicref" data-id="mtopn-系列" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/themes/TopN.html" id="mtopn-系列-d9529e84808-link"><span class="keyword">mTopN 系列</span></a></div></div></li></ul></li><li role="treeitem" aria-expanded="false"><div data-tocid="高阶函数-d9529e84855" class="topicref" data-id="高阶函数" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action 高阶函数-d9529e84855-link" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/ho_funcs/ho_funcs.html" id="高阶函数-d9529e84855-link">高阶函数</a></div></div></li></ul></li><li role="treeitem" aria-expanded="false"><div data-tocid="api_protocol-d9529e86456" class="topicref" data-id="api_protocol" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action api_protocol-d9529e86456-link" class="wh-expand-btn"></span><div class="title"><a href="../../api/connapi_intro.html" id="api_protocol-d9529e86456-link"><span class="keyword label">连接器 &amp; API</span></a><div class="wh-tooltip"><p class="shortdesc">面向不同编程语言的 DolphinDB API 及连接器，相关协议和用法</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="chap6_plugin-d9529e91976" class="topicref" data-id="chap6_plugin" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action chap6_plugin-d9529e91976-link" class="wh-expand-btn"></span><div class="title"><a href="../../plugins/plg_intro.html" id="chap6_plugin-d9529e91976-link"><span class="keyword label">插件</span></a><div class="wh-tooltip"><p class="shortdesc">多个应用场景的插件使用说明和插件开发指导</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="third_party-d9529e94749" class="topicref" data-id="third_party" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action third_party-d9529e94749-link" class="wh-expand-btn"></span><div class="title"><a href="../../third_party.html" id="third_party-d9529e94749-link">第三方工具</a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="about_tutorials-d9529e94980" class="topicref" data-id="about_tutorials" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action about_tutorials-d9529e94980-link" class="wh-expand-btn"></span><div class="title"><a href="../../tutorials/about_tutorials.html" id="about_tutorials-d9529e94980-link"><span class="keyword label">教程</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 产品使用教程</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="tocId-d9529e101769" class="topicref" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action tocId-d9529e101769-link" class="wh-expand-btn"></span><div class="title"><a href="../../rn/server/3_00_1.html" id="tocId-d9529e101769-link">版本说明</a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 版本发布历史</p></div></div></div></li></ul></div>
+		                        
+                            </div>
+                        </nav>
+                    
+                    
+                    <div class="col-lg-7 col-md-9 col-sm-12" id="wh_topic_body">
+                        <button id="wh_close_publication_toc_button" class="close-toc-button d-none" aria-label="Toggle publishing table of content" aria-controls="wh_publication_toc" aria-expanded="true">
+                            <span class="close-toc-icon-container">
+                                <span class="close-toc-icon"></span>     
+                            </span>
+                        </button>
+                        <button id="wh_close_topic_toc_button" class="close-toc-button d-none" aria-label="Toggle topic table of content" aria-controls="wh_topic_toc" aria-expanded="true">
+                            <span class="close-toc-icon-container">
+                                <span class="close-toc-icon"></span>     
+                            </span>
+                        </button>
+                        
+                        <div class=" wh_topic_content body "><main role="main"><article class="- topic/topic topic" role="article" aria-labelledby="ariaid-title1">
+    <h1 class="- topic/title title topictitle1" id="ariaid-title1"><span class="- topic/keyword keyword">tmTopN 系列</span></h1>
+    <div class="- topic/body body">
+        <p class="- topic/p p" id="tmtopn-系列__p_d4t_5hn_ryb" data-ofbid="tmtopn-系列__p_d4t_5hn_ryb">DolphinDB 提供了 tmTopN 系列函数，在根据时间滑动的窗口内，将数据根据某个指标排序后，只取排序靠前的 top 个元素进行计算。</p>
+        <p class="- topic/p p" id="tmtopn-系列__p_e4t_5hn_ryb" data-ofbid="tmtopn-系列__p_e4t_5hn_ryb">tmTopN 系列函数的通用参数模板如下：</p>
+        <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="tmtopn-系列__codeblock_f4t_5hn_ryb" data-ofbid="tmtopn-系列__codeblock_f4t_5hn_ryb"><code>tmTopN(T, X, S, window, top, [ascending=true], [tiesMethod='latest'])
+tmTopN(T, X, Y, S, window, top, [ascending=true], [tiesMethod='latest'])</code></pre>
+        <section class="- topic/section section" id="tmtopn-系列__section_ccr_vvt_vyb" data-ofbid="tmtopn-系列__section_ccr_vvt_vyb"><h2 class="- topic/title title sectiontitle">参数</h2>
+            
+            <ul class="- topic/ul ul" id="tmtopn-系列__ul_rmq_xvt_vyb" data-ofbid="tmtopn-系列__ul_rmq_xvt_vyb">
+                
+                <li class="- topic/li li"><strong class="+ topic/ph hi-d/b ph b">T</strong> 是一个非严格递增的时间类型向量。</li>
+                <li class="- topic/li li"><strong class="+ topic/ph hi-d/b ph b">X</strong> (<strong class="+ topic/ph hi-d/b ph b">Y</strong>) 数值型的向量。</li>
+                <li class="- topic/li li"><strong class="+ topic/ph hi-d/b ph b">S</strong> 数值类型或时间类型的向量，表示 X 的排序指标。S 中的空值会被忽略（不参与排序）。</li>
+                <li class="- topic/li li"><strong class="+ topic/ph hi-d/b ph b">window</strong> 正整型或 DURATION 标量。表示滑动窗口的长度。</li>
+                <li class="- topic/li li"><strong class="+ topic/ph hi-d/b ph b">top</strong> 一个正整数或范围介于 (0, 1) 之间的浮点数。表示将 X 基于 S 排序后，排序靠前的元素数量（数量由 top
+                        的数据类型决定）。<ul class="- topic/ul ul" id="tmtopn-系列__ul_l1d_cwt_vyb" data-ofbid="tmtopn-系列__ul_l1d_cwt_vyb">
+                        
+                        <li class="- topic/li li">当 top 是整数时，数量是 top。</li>
+                        <li class="- topic/li li">当 top 是浮点数时，数量是 max(1, floor(size(窗口)*top))。</li>
+                    </ul></li>
+                <li class="- topic/li li"><strong class="+ topic/ph hi-d/b ph b">ascending</strong> 是一个布尔值，表示 <em class="+ topic/ph hi-d/i ph i">S</em> 是否按升序排序。 默认值是 true。</li>
+                <li class="- topic/li li"><strong class="+ topic/ph hi-d/b ph b">tiesMethod</strong> 字符串。在滑动窗口内对 S 进行排序后，如果有多个具有相同值的元素无法全部进入前
+                        top，可以通过该参数来指定选择元素的方式。可选值为：<ul class="- topic/ul ul" id="tmtopn-系列__ul_vyv_dwt_vyb" data-ofbid="tmtopn-系列__ul_vyv_dwt_vyb">
+                        
+                        <li class="- topic/li li">'oldest'：从最早进入窗口的元素开始选取，直至达到 top 个。</li>
+                        <li class="- topic/li li">'latest'：从最晚进入窗口的元素开始向前选取，直至达到 top 个。</li>
+                        <li class="- topic/li li">'all'：选取所有元素。</li>
+                    </ul></li>
+            </ul>
+            <p class="- topic/p p" id="tmtopn-系列__p_p4t_5hn_ryb" data-ofbid="tmtopn-系列__p_p4t_5hn_ryb">tmTopN 系列函数如下：</p>
+            <p class="- topic/p p" id="tmtopn-系列__p_q4t_5hn_ryb" data-ofbid="tmtopn-系列__p_q4t_5hn_ryb">单目：</p>
+            <ul class="- topic/ul ul" id="tmtopn-系列__ul_r4t_5hn_ryb" data-ofbid="tmtopn-系列__ul_r4t_5hn_ryb">
+                <li class="- topic/li li">
+                    <p class="- topic/p p" id="tmtopn-系列__p_s4t_5hn_ryb" data-ofbid="tmtopn-系列__p_s4t_5hn_ryb">
+                        <a class="- topic/xref xref" href="../t/tmsumTopN.html">tmsumTopN</a>
+                    </p>
+                </li>
+                <li class="- topic/li li">
+                    <p class="- topic/p p" id="tmtopn-系列__p_t4t_5hn_ryb" data-ofbid="tmtopn-系列__p_t4t_5hn_ryb">
+                        <a class="- topic/xref xref" href="../t/tmavgTopN.html">tmavgTopN</a>
+                    </p>
+                </li>
+                <li class="- topic/li li">
+                    <p class="- topic/p p" id="tmtopn-系列__p_u4t_5hn_ryb" data-ofbid="tmtopn-系列__p_u4t_5hn_ryb">
+                        <a class="- topic/xref xref" href="../t/tmstdTopN.html">tmstdTopN</a>
+                    </p>
+                </li>
+                <li class="- topic/li li">
+                    <p class="- topic/p p" id="tmtopn-系列__p_v4t_5hn_ryb" data-ofbid="tmtopn-系列__p_v4t_5hn_ryb">
+                        <a class="- topic/xref xref" href="../t/tmstdpTopN.html">tmstdpTopN</a>
+                    </p>
+                </li>
+                <li class="- topic/li li">
+                    <p class="- topic/p p" id="tmtopn-系列__p_w4t_5hn_ryb" data-ofbid="tmtopn-系列__p_w4t_5hn_ryb">
+                        <a class="- topic/xref xref" href="../t/tmvarTopN.html">tmvarTopN</a>
+                    </p>
+                </li>
+                <li class="- topic/li li">
+                    <p class="- topic/p p" id="tmtopn-系列__p_x4t_5hn_ryb" data-ofbid="tmtopn-系列__p_x4t_5hn_ryb">
+                        <a class="- topic/xref xref" href="../t/tmvarpTopN.html">tmvarpTopN</a>
+                    </p>
+                </li>
+                <li class="- topic/li li">
+                    <p class="- topic/p p" id="tmtopn-系列__p_y4t_5hn_ryb" data-ofbid="tmtopn-系列__p_y4t_5hn_ryb">
+                        <a class="- topic/xref xref" href="../t/tmskewTopN.html">tmskewTopN</a>
+                    </p>
+                </li>
+                <li class="- topic/li li">
+                    <p class="- topic/p p" id="tmtopn-系列__p_z4t_5hn_ryb" data-ofbid="tmtopn-系列__p_z4t_5hn_ryb">
+                        <a class="- topic/xref xref" href="../t/tmkurtosisTopN.html">tmkurtosisTopN</a>
+                    </p>
+                </li>
+            </ul>
+            <p class="- topic/p p" id="tmtopn-系列__p_apt_5hn_ryb" data-ofbid="tmtopn-系列__p_apt_5hn_ryb">双目：</p>
+            <ul class="- topic/ul ul" id="tmtopn-系列__ul_bpt_5hn_ryb" data-ofbid="tmtopn-系列__ul_bpt_5hn_ryb">
+                <li class="- topic/li li">
+                    <p class="- topic/p p" id="tmtopn-系列__p_cpt_5hn_ryb" data-ofbid="tmtopn-系列__p_cpt_5hn_ryb">
+                        <a class="- topic/xref xref" href="../t/tmbetaTopN.html">tmbetaTopN</a>
+                    </p>
+                </li>
+                <li class="- topic/li li">
+                    <p class="- topic/p p" id="tmtopn-系列__p_dpt_5hn_ryb" data-ofbid="tmtopn-系列__p_dpt_5hn_ryb">
+                        <a class="- topic/xref xref" href="../t/tmcorrTopN.html">tmcorrTopN</a>
+                    </p>
+                </li>
+                <li class="- topic/li li">
+                    <p class="- topic/p p" id="tmtopn-系列__p_ept_5hn_ryb" data-ofbid="tmtopn-系列__p_ept_5hn_ryb">
+                        <a class="- topic/xref xref" href="../t/tmcovarTopN.html">tmcovarTopN</a>
+                    </p>
+                </li>
+                <li class="- topic/li li">
+                    <p class="- topic/p p" id="tmtopn-系列__p_fpt_5hn_ryb" data-ofbid="tmtopn-系列__p_fpt_5hn_ryb">
+                        <a class="- topic/xref xref" href="../t/tmwsumTopN.html">tmwsumTopN</a>
+                    </p>
+                </li>
+            </ul>
+        </section>
+        <section class="- topic/section section" id="tmtopn-系列__section_n5n_fwt_vyb" data-ofbid="tmtopn-系列__section_n5n_fwt_vyb"><h2 class="- topic/title title sectiontitle">窗口确定规则</h2><p class="- topic/p p" id="tmtopn-系列__p_gpt_5hn_ryb" data-ofbid="tmtopn-系列__p_gpt_5hn_ryb">tmTopN 系列函数的
+                window 长度以时间衡量。window 可以是正整数类型或者 DURATION 类型。对于 T 中每个元素 Ti，确定的窗口区间为 (temporalAdd(Ti,
+                -window), Ti]。</p><p class="- topic/p p" id="tmtopn-系列__p_hpt_5hn_ryb" data-ofbid="tmtopn-系列__p_hpt_5hn_ryb">对 T 逐元素滑动，在由元素确定的窗口区间内，将 X 或 (X, Y) 根据 S
+                列进行稳定排序（排序方式由 ascending 指定，默认 true 为升序），取排序后结果的前 top 个元素进行计算。 </p><p class="- topic/p p" id="tmtopn-系列__p_ipt_5hn_ryb" data-ofbid="tmtopn-系列__p_ipt_5hn_ryb">以下图为例，在滑动的时间窗口内，将 X 的元素根据 S 的升序排序后，取前 3 个元素进行计算。</p><img class="- topic/image image" id="tmtopn-系列__image_jpt_5hn_ryb" src="../../images/tmTopN_1.png" width="400"/><p class="- topic/p p" id="tmtopn-系列__p_kpt_5hn_ryb" data-ofbid="tmtopn-系列__p_kpt_5hn_ryb">上图的对应代码，这里以 <a class="- topic/xref xref" href="../t/tmsumTopN.html">tmsumTopN</a>
+            为例：</p><pre class="+ topic/pre pr-d/codeblock pre codeblock" id="tmtopn-系列__codeblock_lpt_5hn_ryb" data-ofbid="tmtopn-系列__codeblock_lpt_5hn_ryb"><code>T=13:30m 13:34m 13:36m 13:37m 13:38m
+S = 5 8 1 9 7
+X = 2 1 5 3 4
+tmsumTopN(T, X, S, window=4, top=3)
+# output
+[2,1,6,9,12]
+
+T=2021.01.03+1..7
+X = [2, 1, 4, 3, 4, 3, 1]
+S = [5, 8, 1, 1, 1, 1, 3]
+//在倒数第2个滑动窗口中，S 中有4个1，但只取前3个排名，此时根据 tiesMethod 的设置值来选取元素
+//tiesMethod 未指定，则取默认值 'latest'，即选取后3个1，对应 X 中的3, 4, 3元素
+tmsumTopN(T,X,S,4,3)
+# output
+[2,3,7,9,11,10,10]
+//tiesMethod = 'oldest'，即选前后3个1，对应 X 中的4, 3, 4元素
+tmsumTopN(T,X,S,4,3,tiesMethod=`oldest)
+# output
+[2,3,7,9,11,11,10]
+//tiesMethod = 'all'，即选取全部的1，对应 X 中的4, 3, 4, 3元素
+tmsumTopN(T,X,S,4,3,tiesMethod=`all)
+# output
+[2,3,7,9,11,14,10]</code></pre></section>
+    </div>
+</article></main></div>
+                        
+                        
+                        
+                        
+                        
+                        
+                    </div>
+                    
+                        <nav role="navigation" id="wh_topic_toc" aria-label="On this page" class="col-lg-2 d-none d-lg-block navbar d-print-none"> 
+                            <div id="wh_topic_toc_content">
+		                        
+	                            <div class=" wh_topic_toc "><div class="wh_topic_label">在本页上</div><ul><li class="section-item"><div class="section-title"><a href="#tmtopn-%E7%B3%BB%E5%88%97__section_ccr_vvt_vyb" data-tocid="tmtopn-系列__section_ccr_vvt_vyb">参数</a></div></li><li class="section-item"><div class="section-title"><a href="#tmtopn-%E7%B3%BB%E5%88%97__section_n5n_fwt_vyb" data-tocid="tmtopn-系列__section_n5n_fwt_vyb">窗口确定规则</a></div></li></ul></div>
+	                        	
+                        	</div>
+                        </nav>
+                    
+                </div>
+            </div>
+            
+            
+            
+        </div> 
+        <footer class="navbar navbar-default wh_footer">
+  <div class=" footer-container mx-auto ">
+<title>Copyright</title><p><b> ©2024 浙江智臾科技有限公司 浙ICP备18048711号-3</b></p>
+  </div>
+</footer>
+        
+        <div id="go2top" class="d-print-none">
+            <span class="oxy-icon oxy-icon-up"></span>
+        </div>
+        
+        <div id="modal_img_large" class="modal">
+            <span class="close oxy-icon oxy-icon-remove"></span>
+            <div id="modal_img_container"></div>
+            <div id="caption"></div>
+        </div>
+        
+        
+        
+    </body>
+</html>

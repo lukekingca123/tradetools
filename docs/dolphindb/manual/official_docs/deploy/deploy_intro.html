@@ -1,0 +1,427 @@
+<!DOCTYPE html><html xmlns="http://www.w3.org/1999/xhtml" xml:lang="zh" lang="zh" data-whc_version="26.0">
+    <head><link rel="shortcut icon" href="../favicon.ico"/><link rel="icon" href="../favicon.ico"/><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><meta http-equiv="X-UA-Compatible" content="IE=edge"/><meta name="description" content="DolphinDB 系统包括：服务器程序（dolphindb.exe）、Web 集群管理工具、图形界面客户端 DolphinDB GUI、DolphinDB VS Code 插件、API 以及面向不同使用场景的插件。 前往： https://www.dolphindb.cn/downloads.html 。 图 1 . 下载页面 点击 立即下载 即可下载 DolphinDB server ..."/><meta name="DC.rights.owner" content="(C) 版权 2024"/><meta name="copyright" content="(C) 版权 2024"/><meta name="generator" content="DITA-OT"/><meta name="DC.type" content="topic"/><meta name="DC.coverage" content=""/><meta name="DC.relation" content="../getstarted/import_data_basics.html"/><meta name="DC.relation" content="../tutorials/standalone_server.md"/><meta name="DC.relation" content="../tutorials/prep_linux_for_deploy.md"/><meta name="DC.relation" content="../db_distr_comp/clients.html"/><meta name="DC.relation" content="../db_distr_comp/cfg/para_cfg.html"/><meta name="prodname" content="DolphinDB"/><meta name="brand" content="DolphinDB"/><meta name="DC.creator" content="DolphinDB"/><meta name="DC.publisher" content="DDB N/A DDB 200"/><meta name="DC.format" content="HTML5"/><meta name="DC.identifier" content="sectionddb_deployment"/><meta name="wh-search-title" content="安装部署"/><title>部署</title><!--  Generated with Oxygen version 26.0, build number 2024012323.  --><meta name="wh-path2root" content="../"/><meta name="wh-toc-id" content="sectionddb_deployment-d9529e335"/><meta name="wh-source-relpath" content="deploy/deploy_intro.dita"/><meta name="wh-out-relpath" content="deploy/deploy_intro.html"/>
+
+    <link rel="stylesheet" type="text/css" href="../oxygen-webhelp/app/commons.css?buildId=2024012323"/>
+    <link rel="stylesheet" type="text/css" href="../oxygen-webhelp/app/topic.css?buildId=2024012323"/>
+
+    <script src="../oxygen-webhelp/app/options/properties.js?buildId=20240704100525"></script>
+    <script src="../oxygen-webhelp/app/localization/strings.js?buildId=2024012323"></script>
+    <script src="../oxygen-webhelp/app/search/index/keywords.js?buildId=20240704100525"></script>
+    <script defer="defer" src="../oxygen-webhelp/app/commons.js?buildId=2024012323"></script>
+    <script defer="defer" src="../oxygen-webhelp/app/topic.js?buildId=2024012323"></script>
+<link rel="stylesheet" type="text/css" href="../oxygen-webhelp/template/styles.css?buildId=2024012323"/><script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script><script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script></head>
+
+    <body id="sectionddb_deployment" class="wh_topic_page frmBody">
+        <a href="#wh_topic_body" class="sr-only sr-only-focusable">
+            跳转到主要内容
+        </a>
+        
+        
+        
+        
+        <header class="navbar navbar-default wh_header">
+    <div class="container-fluid">
+        <div xmlns:whc="http://www.oxygenxml.com/webhelp/components" class="wh_header_flex_container navbar-nav navbar-expand-md navbar-dark">
+            <div class="wh_logo_and_publication_title_container">
+                <div class="wh_logo_and_publication_title">
+                    
+                    <a href="https://www.dolphindb.cn" class=" wh_logo d-none d-sm-block "><img src="../logo.png" alt="  DolphinDB 文档中心  "/></a>
+                    <div class=" wh_publication_title "><a href="../index.html"><span class="booktitle">  <span class="ph mainbooktitle">DolphinDB 文档中心</span>  </span></a></div>
+                    
+                </div>
+                
+                
+            </div>
+
+            <div class="wh_top_menu_and_indexterms_link collapse navbar-collapse" id="wh_top_menu_and_indexterms_link">
+                
+                
+                
+                
+            </div>
+        <div class=" wh_search_input navbar-form wh_topic_page_search search " role="form">
+            
+            
+            
+            <form id="searchForm" method="get" role="search" action="../search.html"><div><input type="search" placeholder="搜索 " class="wh_search_textfield" id="textToSearch" name="searchQuery" aria-label="搜索查询" required="required"/><button type="submit" class="wh_search_button" aria-label="搜索"><span class="search_input_text">搜索</span></button></div></form>
+            
+            <script src="/vendors/react/umd/react.production.min.js" defer="defer"></script>
+<script src="/vendors/react-dom/umd/react-dom.production.min.js" defer="defer"></script>
+<script src="/vendors/dayjs/dayjs.min.js" defer="defer"></script>
+<script src="/vendors/antd/dist/antd.min.js" defer="defer"></script>
+<script src="/vendors/@ant-design/icons/dist/index.umd.min.js" defer="defer"></script>
+<script src="/zh/index.js" type="module"></script>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js" defer="defer"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML" defer="defer"><!--
+
+
+--></script>
+
+            
+        </div></div>
+    </div>
+</header>
+        
+        
+         
+        
+        
+        
+        <div class="container-fluid" id="wh_topic_container">
+            <div class="row">
+
+                <nav class="wh_tools d-print-none navbar-expand-md" aria-label="Tools">
+                    
+                    <div data-tooltip-position="bottom" class=" wh_breadcrumb "><ol class="d-print-none"><li><span class="home"><a href="../index.html"><span>主页</span></a></span></li><li class="active"><div class="topicref" data-id="sectionddb_deployment"><div class="title"><a href="../deploy/deploy_intro.html"><span class="keyword label">部署</span></a><div class="wh-tooltip"><p class="shortdesc">如何在不同的场景中部署 DolphinDB</p></div></div></div></li></ol></div>
+                    
+                    
+                    
+                    <div class="wh_right_tools">
+                        <button class="wh_hide_highlight" aria-label="切换搜索突出显示" title="切换搜索突出显示"></button>
+                        <button class="webhelp_expand_collapse_sections" data-next-state="collapsed" aria-label="折叠截面" title="折叠截面"></button>
+                        <div class=" wh_navigation_links "><span id="topic_navigation_links" class="navheader">
+<span class="navprev"><a class="- topic/link link" href="../getstarted/import_data_basics.html" title="写入和查询" aria-label="上一主题: 写入和查询" rel="prev"></a></span>  
+<span class="navnext"><a class="- topic/link link" href="../tutorials/standalone_server.html" title="单节点部署与升级" aria-label="下一主题: 单节点部署与升级" rel="next"></a></span>  </span></div>
+                        
+                        
+                        
+                        <div class=" wh_print_link print d-none d-md-inline-block "><button onClick="window.print()" title="打印此页" aria-label="打印此页"></button></div>
+                        
+                        <button type="button" id="wh_toc_button" class="custom-toggler navbar-toggler collapsed wh_toggle_button navbar-light" aria-expanded="false" aria-label="Toggle publishing table of content" aria-controls="wh_publication_toc">
+                            <span class="navbar-toggler-icon"></span>
+                        </button>
+                    </div>
+                    
+                </nav>
+            </div>
+            
+            
+            
+            
+            <div class="wh_content_area">
+                <div class="row">
+                    
+                        <nav id="wh_publication_toc" class="col-lg-3 col-md-3 col-sm-12 d-md-block d-none d-print-none" aria-label="Table of Contents Container">
+                            <div id="wh_publication_toc_content">
+		                        
+                            	<div class=" wh_publication_toc " data-tooltip-position="right"><span class="expand-button-action-labels"><span id="button-expand-action" role="button" aria-label="Expand"></span><span id="button-collapse-action" role="button" aria-label="Collapse"></span><span id="button-pending-action" role="button" aria-label="Pending"></span></span><ul role="tree" aria-label="Table of Contents"><li role="treeitem"><div data-tocid="new_chap_about_sect_ddb_docs_intro-d9529e87" class="topicref" data-id="new_chap_about_sect_ddb_docs_intro" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../about/ddb_docs_intro.html" id="new_chap_about_sect_ddb_docs_intro-d9529e87-link">文档使用说明</a><div class="wh-tooltip"><p class="shortdesc">如何获取 DolphinDB 帮助信息</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="chap1_getstarted-d9529e140" class="topicref" data-id="chap1_getstarted" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action chap1_getstarted-d9529e140-link" class="wh-expand-btn"></span><div class="title"><a href="../getstarted/chap1_getstarted.html" id="chap1_getstarted-d9529e140-link"><span class="keyword label">快速上手</span></a><div class="wh-tooltip"><p class="shortdesc">如何快速部署 DolphinDB、建库建表、写入和查询数据</p></div></div></div></li><li role="treeitem" aria-expanded="true" class="active"><div data-tocid="sectionddb_deployment-d9529e335" class="topicref" data-id="sectionddb_deployment" data-state="expanded"><span role="button" tabindex="0" aria-labelledby="button-collapse-action sectionddb_deployment-d9529e335-link" class="wh-expand-btn"></span><div class="title"><a href="../deploy/deploy_intro.html" id="sectionddb_deployment-d9529e335-link"><span class="keyword label">部署</span></a><div class="wh-tooltip"><p class="shortdesc">如何在不同的场景中部署 DolphinDB</p></div></div></div><ul role="group" class="navbar-nav nav-list"><li role="treeitem" aria-expanded="false"><div data-tocid="tocId-d9529e388" class="topicref" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action tocId-d9529e388-link" class="wh-expand-btn"></span><div class="title"><a href="../tutorials/standalone_server.html" id="tocId-d9529e388-link">单节点部署与升级</a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="tocId-d9529e481" class="topicref" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action tocId-d9529e481-link" class="wh-expand-btn"></span><div class="title"><a href="../tutorials/single_machine_cluster_deploy.html" id="tocId-d9529e481-link">集群部署与升级</a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="tocId-d9529e666" class="topicref" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action tocId-d9529e666-link" class="wh-expand-btn"></span><div class="title"><a href="../tutorials/docker_single_deployment.html" id="tocId-d9529e666-link">云环境部署</a></div></div></li><li role="treeitem"><div data-tocid="linux-系统部署准备-d9529e943" class="topicref" data-id="linux-系统部署准备" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../tutorials/prep_linux_for_deploy.html" id="linux-系统部署准备-d9529e943-link">Linux 系统部署准备</a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="chap1_sect_using_clients-d9529e989" class="topicref" data-id="chap1_sect_using_clients" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action chap1_sect_using_clients-d9529e989-link" class="wh-expand-btn"></span><div class="title"><a href="../db_distr_comp/clients.html" id="chap1_sect_using_clients-d9529e989-link">数据库管理工具</a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="parameters_configuration-d9529e2076" class="topicref" data-id="parameters_configuration" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action parameters_configuration-d9529e2076-link" class="wh-expand-btn"></span><div class="title"><a href="../db_distr_comp/cfg/para_cfg.html" id="parameters_configuration-d9529e2076-link"><span class="keyword label">参数配置</span></a></div></div></li></ul></li><li role="treeitem" aria-expanded="false"><div data-tocid="new_chap_database_manage_new_chap_dbmanage_landing_page-d9529e2313" class="topicref" data-id="new_chap_database_manage_new_chap_dbmanage_landing_page" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action new_chap_database_manage_new_chap_dbmanage_landing_page-d9529e2313-link" class="wh-expand-btn"></span><div class="title"><a href="../db_distr_comp/cfg/db_intro.html" id="new_chap_database_manage_new_chap_dbmanage_landing_page-d9529e2313-link"><span class="keyword label">数据库</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 数据库的基本概念</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="chap7_tutorials_streaming-d9529e3490" class="topicref" data-id="chap7_tutorials_streaming" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action chap7_tutorials_streaming-d9529e3490-link" class="wh-expand-btn"></span><div class="title"><a href="../stream/str_intro.html" id="chap7_tutorials_streaming-d9529e3490-link"><span class="keyword label">流数据</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 流数据引擎及流数据计算的基本概念</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="tocId-d9529e7385" class="topicref" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action tocId-d9529e7385-link" class="wh-expand-btn"></span><div class="title"><a href="../db_distr_comp/db_oper/import_data.html" id="tocId-d9529e7385-link">数据迁移</a><div class="wh-tooltip"><p class="shortdesc">如何从不同数据源向 DolphinDB 迁移数据</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="chap7_tutorials_system_management-d9529e7812" class="topicref" data-id="chap7_tutorials_system_management" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action chap7_tutorials_system_management-d9529e7812-link" class="wh-expand-btn"></span><div class="title"><a href="../sys_man/om_intro.html" id="chap7_tutorials_system_management-d9529e7812-link"><span class="keyword label">系统运维</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 的系统运维功能及方法</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="about_language_resources-d9529e16490" class="topicref" data-id="about_language_resources" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action about_language_resources-d9529e16490-link" class="wh-expand-btn"></span><div class="title"><a href="../progr/progr_intro.html" id="about_language_resources-d9529e16490-link"><span class="keyword label">编程语言</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 编程基本概念与方法、SQL 在 DolphinDB 的应用</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="functions_references-d9529e26503" class="topicref" data-id="functions_references" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action functions_references-d9529e26503-link" class="wh-expand-btn"></span><div class="title"><a href="../funcs/funcs_intro.html" id="functions_references-d9529e26503-link"><span class="keyword label">函数参考</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 函数分类、语法、详解及示例</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="api_protocol-d9529e86456" class="topicref" data-id="api_protocol" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action api_protocol-d9529e86456-link" class="wh-expand-btn"></span><div class="title"><a href="../api/connapi_intro.html" id="api_protocol-d9529e86456-link"><span class="keyword label">连接器 &amp; API</span></a><div class="wh-tooltip"><p class="shortdesc">面向不同编程语言的 DolphinDB API 及连接器，相关协议和用法</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="chap6_plugin-d9529e91976" class="topicref" data-id="chap6_plugin" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action chap6_plugin-d9529e91976-link" class="wh-expand-btn"></span><div class="title"><a href="../plugins/plg_intro.html" id="chap6_plugin-d9529e91976-link"><span class="keyword label">插件</span></a><div class="wh-tooltip"><p class="shortdesc">多个应用场景的插件使用说明和插件开发指导</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="third_party-d9529e94749" class="topicref" data-id="third_party" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action third_party-d9529e94749-link" class="wh-expand-btn"></span><div class="title"><a href="../third_party.html" id="third_party-d9529e94749-link">第三方工具</a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="about_tutorials-d9529e94980" class="topicref" data-id="about_tutorials" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action about_tutorials-d9529e94980-link" class="wh-expand-btn"></span><div class="title"><a href="../tutorials/about_tutorials.html" id="about_tutorials-d9529e94980-link"><span class="keyword label">教程</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 产品使用教程</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="tocId-d9529e101769" class="topicref" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action tocId-d9529e101769-link" class="wh-expand-btn"></span><div class="title"><a href="../rn/server/3_00_1.html" id="tocId-d9529e101769-link">版本说明</a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 版本发布历史</p></div></div></div></li></ul></div>
+		                        
+                            </div>
+                        </nav>
+                    
+                    
+                    <div class="col-lg-7 col-md-9 col-sm-12" id="wh_topic_body">
+                        <button id="wh_close_publication_toc_button" class="close-toc-button d-none" aria-label="Toggle publishing table of content" aria-controls="wh_publication_toc" aria-expanded="true">
+                            <span class="close-toc-icon-container">
+                                <span class="close-toc-icon"></span>     
+                            </span>
+                        </button>
+                        <button id="wh_close_topic_toc_button" class="close-toc-button d-none" aria-label="Toggle topic table of content" aria-controls="wh_topic_toc" aria-expanded="true">
+                            <span class="close-toc-icon-container">
+                                <span class="close-toc-icon"></span>     
+                            </span>
+                        </button>
+                        
+                        <div class=" wh_topic_content body "><main role="main"><article class="- topic/topic topic" role="article" aria-labelledby="sectionddb_deployment__title_fts_s4v_nyb">
+    <h1 class="- topic/title title topictitle1" id="sectionddb_deployment__title_fts_s4v_nyb"><span class="- topic/keyword keyword label">部署</span></h1>
+        <div class="- topic/body body">
+            <p class="- topic/p p">DolphinDB 系统包括：服务器程序（dolphindb.exe）、Web 集群管理工具、图形界面客户端 DolphinDB GUI、DolphinDB VS
+            Code 插件、API 以及面向不同使用场景的插件。</p>
+        </div>
+        <article class="- topic/topic topic nested1" aria-labelledby="ariaid-title2" id="安装系统">
+            <h2 class="- topic/title title topictitle2" id="ariaid-title2">安装系统</h2>
+            <article class="- topic/topic topic nested2" aria-labelledby="ariaid-title3" id="下载">
+                <h3 class="- topic/title title topictitle3" id="ariaid-title3">下载 Server 压缩包</h3>
+                <div class="- topic/body body">
+                <ol class="- topic/ol ol" id="下载__ul_ify_5wm_xzb" data-ofbid="下载__ul_ify_5wm_xzb">
+                    <li class="- topic/li li">前往：<a class="- topic/xref xref" href="https://www.dolphindb.cn/downloads.html" target="_blank" rel="external noopener">https://www.dolphindb.cn/downloads.html</a>。<figure class="- topic/fig fig fignone" id="下载__fig_eyy_y3q_xzb" data-ofbid="下载__fig_eyy_y3q_xzb"><figcaption data-caption-side="top" class="- topic/title title figcap"><span class="figtitleprefix fig--title-label">图<span class="fig--title-label-number"> 1</span><span class="fig--title-label-punctuation">. </span></span><span class="fig--title">下载页面</span></figcaption>
+                            
+                            <br/><div class="imageleft"><img class="- topic/image image imageleft" id="下载__image_bkh_bjq_xzb" src="../images/product_dl.png" height="267" width="772"/></div><br/>
+                        </figure></li>
+                    <li class="- topic/li li">点击 <span class="+ topic/keyword ui-d/wintitle keyword wintitle">立即下载</span> 即可下载 DolphinDB server 社区版压缩包。</li>
+                    <li class="- topic/li li">解压 DolphinDB server 压缩包，其中含有 Web 集群管理工具、服务端程序以及 license
+                        文件。解压完成后不需要进一步安装。</li>
+                </ol>
+                <div class="- topic/note note note note_note" id="下载__note_dy3_gxm_xzb" data-ofbid="下载__note_dy3_gxm_xzb"><span class="note__title">注：</span> 如需企业试用版，点击 <span class="+ topic/keyword ui-d/wintitle keyword wintitle">申请企业试用版</span>
+                    填写申请表单并提交。DolphinDB 技术支持人员与您联系后，您会收到企业试用版 license 文件。若 license 文件名不是
+                        <em class="+ topic/ph hi-d/i ph i">dolphindb.lic</em>，需要将其改名为 <em class="+ topic/ph hi-d/i ph i">dolphindb.lic</em> 并替换社区版中
+                        <span class="+ topic/ph sw-d/filepath ph filepath">/server/</span> 路径下的同名文件，即可使用企业试用版。</div>
+                </div>
+            </article>
+            <article class="- topic/topic topic nested2" aria-labelledby="ariaid-title4" id="dolphindb-vscode-插件推荐">
+                <h3 class="- topic/title title topictitle3" id="ariaid-title4">选择编程交互客户端</h3>
+                <div class="- topic/body body">
+                <figure class="- topic/fig fig fignone" id="dolphindb-vscode-插件推荐__fig_pfp_4jq_xzb" data-ofbid="dolphindb-vscode-插件推荐__fig_pfp_4jq_xzb"><figcaption data-caption-side="top" class="- topic/title title figcap"><span class="figtitleprefix fig--title-label">图<span class="fig--title-label-number"> 2</span><span class="fig--title-label-punctuation">. </span></span><span class="fig--title">客户端</span></figcaption>
+                    
+                    <br/><img class="- topic/image image" id="dolphindb-vscode-插件推荐__image_ng1_rjq_xzb" src="../images/client_dl.png" height="367" width="772"/><br/>
+                </figure>
+                    <p class="- topic/p p">DolphinDB 公司开发了支持 DolphinDB 数据库编程语言的 VS Code 插件，便于用户使用 VS Code 编写 DolphinDB
+                    脚本，并在 DolphinDB 服务器上运行。VS Code
+                        使用者无需安装其它软件，直接下载插件即可使用，学习成本低，上手快。因此，<strong class="+ topic/ph hi-d/b ph b">推荐具有深度编程需求的用户选择使用 VS Code 插件（即 Visual
+                        Studio Code extension for DolphinDB）</strong>。</p>
+                <p class="- topic/p p">有关 VS Code 插件的安装和使用，参考：<a class="- topic/xref xref" href="../db_distr_comp/vscode.html">DolphinDB VS
+                        Code 插件</a>。</p>
+                    <p class="- topic/p p">DolphinDB 也支持使用 DolphinDB GUI 客户端来连接 DolphinDB、编辑脚本。有关 DolphinDB GUI
+                        的安装和使用，参考：<a class="- topic/xref xref" href="../db_distr_comp/gui.html">GUI 客户端</a>。</p>
+                </div>
+            </article>
+            <article class="- topic/topic topic nested2" aria-labelledby="ariaid-title5" id="pythonjavac-api可选">
+                <h3 class="- topic/title title topictitle3" id="ariaid-title5">开发资源（可选）</h3>
+                <div class="- topic/body body">
+                    <div class="- topic/p p">为满足不同场景需求下的用户操作，DolphinDB 提供了 C++，Java, Python 和 C# 等开发接口，包含 JDBC，Grafana
+                        在内的连接器以及数十个面向不同应用场景的插件作为可选的开发资源。<ul class="- topic/ul ul" id="pythonjavac-api可选__ul_swf_3kq_xzb" data-ofbid="pythonjavac-api可选__ul_swf_3kq_xzb">
+                        <li class="- topic/li li">更多相关内容，查看：<a class="- topic/xref xref" href="https://www.dolphindb.cn/product/development-resources" target="_blank" rel="external noopener">开发资源</a>。</li>
+                        <li class="- topic/li li">有关 DolphinDB 的连接器安装步骤及使用方法，参考：<a class="- topic/xref xref" href="../api/connapi_intro.html">连接器
+                                &amp; API</a>。</li>
+                        <li class="- topic/li li">有关 DolphinDB 的插件使用说明，参考：<a class="- topic/xref xref" href="../plugins/plg_intro.html">插件</a>。</li>
+                    </ul></div>
+                </div>
+            </article>
+        </article>
+        <article class="- topic/topic topic nested1" aria-labelledby="ariaid-title6" id="配置">
+            <h2 class="- topic/title title topictitle2" id="ariaid-title6">配置</h2>
+            <div class="- topic/body body">
+                <p class="- topic/p p">完成以上系统安装后，即可搭建单机集群或多机集群。</p>
+            </div>
+            <article class="- topic/topic topic nested2" aria-labelledby="ariaid-title7" id="独立服务器单节点模式">
+                <h3 class="- topic/title title topictitle3" id="ariaid-title7">独立服务器（单节点模式）</h3>
+                <div class="- topic/body body">
+                    <p class="- topic/p p">作为一个独立的工作站或服务器使用，下载后即可使用，无需配置。详见：<a class="- topic/xref xref" href="../tutorials/standalone_server.html">单节点部署教程</a>。</p>
+                <p class="- topic/p p">DolphinDB 支持嵌入式 ARM 环境。详见：<a class="- topic/xref xref" href="../tutorials/ARM_standalone_deploy.html">ARM版本单节点部署教程</a>。</p>
+                    <p class="- topic/p p">单节点模式拥有与集群模式相同的功能，区别在于单节点模式不支持扩展节点和高可用，而集群模式可以方便地扩展到多个服务器节点以及支持高可用。</p>
+                </div>
+            </article>
+            <article class="- topic/topic topic nested2" aria-labelledby="ariaid-title8" id="单机集群搭建">
+                <h3 class="- topic/title title topictitle3" id="ariaid-title8">单机集群搭建</h3>
+                <div class="- topic/body body">
+                    <p class="- topic/p p">控制节点（controller）、代理节点（agent)、数据节点（data node）、计算节点（compute
+                        node）部署在同一个物理机器上。详见：<a class="- topic/xref xref" href="../tutorials/single_machine_cluster_deploy.html">单服务器集群部署</a>。</p>
+                </div>
+            </article>
+            <article class="- topic/topic topic nested2" aria-labelledby="ariaid-title9" id="多机集群搭建">
+                <h3 class="- topic/title title topictitle3" id="ariaid-title9">多机集群搭建</h3>
+                <div class="- topic/body body">
+                    <p class="- topic/p p">在多个物理机器上部署 DolphinDB 集群。详见：<a class="- topic/xref xref" href="../tutorials/multi_machine_cluster_deployment.html">多服务器集群部署</a>。</p>
+                    <p class="- topic/p p">DolphinDB 提供数据、元数据以及客户端的高可用方案，使得数据库节点发生故障时，数据库依然可以正常运作，保证业务不会中断。详见：<a class="- topic/xref xref" href="../tutorials/ha_cluster_deployment.html">高可用集群部署</a>。</p>
+                </div>
+            </article>
+            <article class="- topic/topic topic nested2" aria-labelledby="ariaid-title10" id="功能及应用场景">
+                <h3 class="- topic/title title topictitle3" id="ariaid-title10">功能及应用场景</h3>
+                <div class="- topic/body body">
+                    <div class="table-container"><table class="- topic/table table" id="功能及应用场景__table_f23_2vb_5yb" data-ofbid="功能及应用场景__table_f23_2vb_5yb" data-cols="4"><caption></caption><colgroup><col style="width:234.75pt"/><col style="width:237pt"/><col style="width:237pt"/><col style="width:236.25pt"/></colgroup><thead class="- topic/thead thead">
+                            <tr class="- topic/row">
+                                <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="功能及应用场景__table_f23_2vb_5yb__entry__1">
+                                    <strong class="+ topic/ph hi-d/b ph b">功能</strong>
+                                </th>
+                                <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="功能及应用场景__table_f23_2vb_5yb__entry__2">
+                                    <strong class="+ topic/ph hi-d/b ph b">单节点</strong>
+                                </th>
+                                <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="功能及应用场景__table_f23_2vb_5yb__entry__3">
+                                    <strong class="+ topic/ph hi-d/b ph b">单机集群</strong>
+                                </th>
+                                <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="功能及应用场景__table_f23_2vb_5yb__entry__4">
+                                    <strong class="+ topic/ph hi-d/b ph b">多服务器集群</strong>
+                                </th>
+                            </tr>
+                        </thead><tbody class="- topic/tbody tbody">
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="功能及应用场景__table_f23_2vb_5yb__entry__1">多模存储引擎</td>
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="功能及应用场景__table_f23_2vb_5yb__entry__2">√</td>
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="功能及应用场景__table_f23_2vb_5yb__entry__3">√</td>
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="功能及应用场景__table_f23_2vb_5yb__entry__4">√</td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="功能及应用场景__table_f23_2vb_5yb__entry__1">支持事务</td>
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="功能及应用场景__table_f23_2vb_5yb__entry__2">√</td>
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="功能及应用场景__table_f23_2vb_5yb__entry__3">√</td>
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="功能及应用场景__table_f23_2vb_5yb__entry__4">√</td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="功能及应用场景__table_f23_2vb_5yb__entry__1">分布式计算</td>
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="功能及应用场景__table_f23_2vb_5yb__entry__2">√</td>
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="功能及应用场景__table_f23_2vb_5yb__entry__3">√</td>
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="功能及应用场景__table_f23_2vb_5yb__entry__4">√</td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="功能及应用场景__table_f23_2vb_5yb__entry__1">多范式编程</td>
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="功能及应用场景__table_f23_2vb_5yb__entry__2">√</td>
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="功能及应用场景__table_f23_2vb_5yb__entry__3">√</td>
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="功能及应用场景__table_f23_2vb_5yb__entry__4">√</td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="功能及应用场景__table_f23_2vb_5yb__entry__1">实时流数据</td>
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="功能及应用场景__table_f23_2vb_5yb__entry__2">√</td>
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="功能及应用场景__table_f23_2vb_5yb__entry__3">√</td>
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="功能及应用场景__table_f23_2vb_5yb__entry__4">√</td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="功能及应用场景__table_f23_2vb_5yb__entry__1">系统管理及接口</td>
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="功能及应用场景__table_f23_2vb_5yb__entry__2">√</td>
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="功能及应用场景__table_f23_2vb_5yb__entry__3">√</td>
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="功能及应用场景__table_f23_2vb_5yb__entry__4">√</td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="功能及应用场景__table_f23_2vb_5yb__entry__1">云上部署</td>
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="功能及应用场景__table_f23_2vb_5yb__entry__2">√</td>
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="功能及应用场景__table_f23_2vb_5yb__entry__3">√</td>
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="功能及应用场景__table_f23_2vb_5yb__entry__4">√</td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="功能及应用场景__table_f23_2vb_5yb__entry__1">扩展节点</td>
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="功能及应用场景__table_f23_2vb_5yb__entry__2">x</td>
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="功能及应用场景__table_f23_2vb_5yb__entry__3">√</td>
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="功能及应用场景__table_f23_2vb_5yb__entry__4">√</td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="功能及应用场景__table_f23_2vb_5yb__entry__1">数据高可用（多副本）</td>
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="功能及应用场景__table_f23_2vb_5yb__entry__2">x</td>
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="功能及应用场景__table_f23_2vb_5yb__entry__3">√</td>
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="功能及应用场景__table_f23_2vb_5yb__entry__4">√</td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="功能及应用场景__table_f23_2vb_5yb__entry__1">应用高可用</td>
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="功能及应用场景__table_f23_2vb_5yb__entry__2">x</td>
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="功能及应用场景__table_f23_2vb_5yb__entry__3">x</td>
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="功能及应用场景__table_f23_2vb_5yb__entry__4">√</td>
+                            </tr>
+                        </tbody></table></div>
+                    <div class="table-container"><table class="- topic/table table" id="功能及应用场景__table_g23_2vb_5yb" data-ofbid="功能及应用场景__table_g23_2vb_5yb" data-cols="4"><caption></caption><colgroup><col style="width:234.75pt"/><col style="width:237pt"/><col style="width:237pt"/><col style="width:236.25pt"/></colgroup><thead class="- topic/thead thead">
+                            <tr class="- topic/row">
+                                <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="功能及应用场景__table_g23_2vb_5yb__entry__1">
+                                    <strong class="+ topic/ph hi-d/b ph b">应用场景</strong>
+                                </th>
+                                <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="功能及应用场景__table_g23_2vb_5yb__entry__2">
+                                    <strong class="+ topic/ph hi-d/b ph b">单节点</strong>
+                                </th>
+                                <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="功能及应用场景__table_g23_2vb_5yb__entry__3">
+                                    <strong class="+ topic/ph hi-d/b ph b">单机集群</strong>
+                                </th>
+                                <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="功能及应用场景__table_g23_2vb_5yb__entry__4">
+                                    <strong class="+ topic/ph hi-d/b ph b">多服务器集群</strong>
+                                </th>
+                            </tr>
+                        </thead><tbody class="- topic/tbody tbody">
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="功能及应用场景__table_g23_2vb_5yb__entry__1">开发</td>
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="功能及应用场景__table_g23_2vb_5yb__entry__2">√</td>
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="功能及应用场景__table_g23_2vb_5yb__entry__3">√</td>
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="功能及应用场景__table_g23_2vb_5yb__entry__4">√</td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="功能及应用场景__table_g23_2vb_5yb__entry__1">研究</td>
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="功能及应用场景__table_g23_2vb_5yb__entry__2">√</td>
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="功能及应用场景__table_g23_2vb_5yb__entry__3">√</td>
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="功能及应用场景__table_g23_2vb_5yb__entry__4">√</td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="功能及应用场景__table_g23_2vb_5yb__entry__1">小规模生产环境</td>
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="功能及应用场景__table_g23_2vb_5yb__entry__2">√</td>
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="功能及应用场景__table_g23_2vb_5yb__entry__3">√</td>
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="功能及应用场景__table_g23_2vb_5yb__entry__4">√</td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="功能及应用场景__table_g23_2vb_5yb__entry__1">可扩展</td>
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="功能及应用场景__table_g23_2vb_5yb__entry__2">x</td>
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="功能及应用场景__table_g23_2vb_5yb__entry__3">√</td>
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="功能及应用场景__table_g23_2vb_5yb__entry__4">√</td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="功能及应用场景__table_g23_2vb_5yb__entry__1">企业级生产环境</td>
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="功能及应用场景__table_g23_2vb_5yb__entry__2">x</td>
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="功能及应用场景__table_g23_2vb_5yb__entry__3">x</td>
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="功能及应用场景__table_g23_2vb_5yb__entry__4">√</td>
+                            </tr>
+                        </tbody></table></div>
+                </div>
+            </article>
+        </article>
+        <article class="- topic/topic topic nested1" aria-labelledby="ariaid-title11" id="使用系统">
+            <h2 class="- topic/title title topictitle2" id="ariaid-title11">使用系统</h2>
+            <div class="- topic/body body">
+                <ul class="- topic/ul ul" id="使用系统__ul_h23_2vb_5yb" data-ofbid="使用系统__ul_h23_2vb_5yb">
+                    <li class="- topic/li li">使用 Web 集群管理工具可以启动关闭数据节点、查看集群各节点的性能指标、浏览分布式数据库整体数据分区情况及详细数据。详见：<a class="- topic/xref xref" href="../db_distr_comp/db_man/web/intro.html">Web 集群管理器</a>。</li>
+                    <li class="- topic/li li">GUI 客户端提供了方便开发 DolphinDB 脚本的图形界面。详见：<a class="- topic/xref xref" href="../db_distr_comp/gui.html">GUI 客户端</a>。</li>
+                    <li class="- topic/li li">在 DolphinDB 中创建分区数据库和表。DolphinDB
+                        支持范围、哈希、值、列表、以及组合分区，可灵活应对各类企业实际业务场景，详见：<a class="- topic/xref xref" href="../db_distr_comp/db_oper/create_db_tb.html">建库建表</a>。</li>
+                    <li class="- topic/li li">使用 DolphinDB 流数据引擎进行实时数据处理与分析。详见：<a class="- topic/xref xref" href="../stream/str_intro.html">流数据</a>。</li>
+                </ul>
+            <div class="- topic/note note tip note_tip" id="使用系统__note_nhj_hth_rzb" data-ofbid="使用系统__note_nhj_hth_rzb"><span class="note__title">提示：</span> 使用系统前建议先阅读：<ul class="- topic/ul ul" id="使用系统__ul_xzs_hwm_xzb" data-ofbid="使用系统__ul_xzs_hwm_xzb">
+                    <li class="- topic/li li"><a class="- topic/xref xref" href="../tutorials/quant_finance_examples.html">量化金融范例</a></li>
+                    <li class="- topic/li li"><a class="- topic/xref xref" href="../tutorials/iot_examples.html">物联网范例</a></li>
+                </ul></div>
+            </div>
+        </article>
+        <article class="- topic/topic topic nested1" aria-labelledby="ariaid-title12" id="用户权限设置">
+            <h2 class="- topic/title title topictitle2" id="ariaid-title12">用户权限设置</h2>
+            <div class="- topic/body body">
+                <p class="- topic/p p">DolphinDB 提供了完善、安全的权限管理机制，适用于企业级的不同应用场景，详见：<a class="- topic/xref xref" href="../tutorials/ACL_and_Security.html">用户权限管理</a>。</p>
+            </div>
+        </article>
+        <article class="- topic/topic topic nested1" aria-labelledby="ariaid-title13" id="常见错误原因">
+            <h2 class="- topic/title title topictitle2" id="ariaid-title13">常见错误原因</h2>
+            <div class="- topic/body body">
+                <ul class="- topic/ul ul" id="常见错误原因__ul_i23_2vb_5yb" data-ofbid="常见错误原因__ul_i23_2vb_5yb">
+                    <li class="- topic/li li">
+                        <p class="- topic/p p">节点启动后立即退出，在 log 文件中显示错误原因为 "<code class="+ topic/ph pr-d/codeph ph codeph">The license has
+                        expired</code>"。</p>
+                    <p class="- topic/p p">原因：license 过期。</p>
+                    <p class="- topic/p p">解决方案：联系 DolphinDB 技术支持 <a class="- topic/xref xref" href="mailto:support@dolphindb.com%EF%BC%8C%E6%9B%B4%E6%96%B0" target="_blank" rel="external noopener">support@dolphindb.com</a>，更新 license
+                        文件 <em class="+ topic/ph hi-d/i ph i">dolphindb.lic</em>。</p>
+                    </li>
+                <li class="- topic/li li">
+                    <p class="- topic/p p">集群管理器上启动节点后，节点仍然显示未启动状态。</p>
+                    <p class="- topic/p p">原因：需要手动刷新集群节点状态。</p>
+                    <p class="- topic/p p">解决方案：点击集群管理器上刷新按钮。</p>
+                    <p class="- topic/p p">在使用过程中如果遇到各种问题，可以查看 log 文件获取问题信息。每个数据节点和控制节点都有独立的 log 文件，默认在
+                            <span class="+ topic/ph sw-d/filepath ph filepath">home</span> 目录下（例如单节点部署是 <em class="+ topic/ph hi-d/i ph i">server/dolphindb.log</em>，集群部署是
+                            <em class="+ topic/ph hi-d/i ph i">server/log/*.log</em>），里面有系统详细的运行日志；也可以联系 <a class="- topic/xref xref" href="mailto:support@dolphindb.com" target="_blank" rel="external noopener">support@dolphindb.com</a> 或致电 0571-82853925。</p>
+                </li>
+                </ul>
+            <p class="- topic/p p">有关更多 DolphinDB server 使用中可能出现的错误码及说明，参考：<a class="- topic/xref xref" href="../error_codes/err_codes.html">错误代码</a>。</p>
+            </div>
+        </article>
+</article></main></div>
+                        
+                        
+                        
+                        
+                        
+                        
+                    </div>
+                    
+                        <nav role="navigation" id="wh_topic_toc" aria-label="On this page" class="col-lg-2 d-none d-lg-block navbar d-print-none"> 
+                            <div id="wh_topic_toc_content">
+		                        
+	                            <div class=" wh_topic_toc "><div class="wh_topic_label">在本页上</div><ul><li class="topic-item"><a href="#%E5%AE%89%E8%A3%85%E7%B3%BB%E7%BB%9F" data-tocid="安装系统">安装系统</a><ul><li class="topic-item"><a href="#%E4%B8%8B%E8%BD%BD" data-tocid="下载">下载 Server 压缩包</a></li><li class="topic-item"><a href="#dolphindb-vscode-%E6%8F%92%E4%BB%B6%E6%8E%A8%E8%8D%90" data-tocid="dolphindb-vscode-插件推荐">选择编程交互客户端</a></li><li class="topic-item"><a href="#pythonjavac-api%E5%8F%AF%E9%80%89" data-tocid="pythonjavac-api可选">开发资源（可选）</a></li></ul></li><li class="topic-item"><a href="#%E9%85%8D%E7%BD%AE" data-tocid="配置">配置</a><ul><li class="topic-item"><a href="#%E7%8B%AC%E7%AB%8B%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%8D%95%E8%8A%82%E7%82%B9%E6%A8%A1%E5%BC%8F" data-tocid="独立服务器单节点模式">独立服务器（单节点模式）</a></li><li class="topic-item"><a href="#%E5%8D%95%E6%9C%BA%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA" data-tocid="单机集群搭建">单机集群搭建</a></li><li class="topic-item"><a href="#%E5%A4%9A%E6%9C%BA%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA" data-tocid="多机集群搭建">多机集群搭建</a></li><li class="topic-item"><a href="#%E5%8A%9F%E8%83%BD%E5%8F%8A%E5%BA%94%E7%94%A8%E5%9C%BA%E6%99%AF" data-tocid="功能及应用场景">功能及应用场景</a></li></ul></li><li class="topic-item"><a href="#%E4%BD%BF%E7%94%A8%E7%B3%BB%E7%BB%9F" data-tocid="使用系统">使用系统</a></li><li class="topic-item"><a href="#%E7%94%A8%E6%88%B7%E6%9D%83%E9%99%90%E8%AE%BE%E7%BD%AE" data-tocid="用户权限设置">用户权限设置</a></li><li class="topic-item"><a href="#%E5%B8%B8%E8%A7%81%E9%94%99%E8%AF%AF%E5%8E%9F%E5%9B%A0" data-tocid="常见错误原因">常见错误原因</a></li></ul></div>
+	                        	
+                        	</div>
+                        </nav>
+                    
+                </div>
+            </div>
+            
+            
+            
+        </div> 
+        <footer class="navbar navbar-default wh_footer">
+  <div class=" footer-container mx-auto ">
+<title>Copyright</title><p><b> ©2024 浙江智臾科技有限公司 浙ICP备18048711号-3</b></p>
+  </div>
+</footer>
+        
+        <div id="go2top" class="d-print-none">
+            <span class="oxy-icon oxy-icon-up"></span>
+        </div>
+        
+        <div id="modal_img_large" class="modal">
+            <span class="close oxy-icon oxy-icon-remove"></span>
+            <div id="modal_img_container"></div>
+            <div id="caption"></div>
+        </div>
+        
+        
+        
+    </body>
+</html>

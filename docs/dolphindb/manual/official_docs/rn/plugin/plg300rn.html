@@ -1,0 +1,630 @@
+<!DOCTYPE html><html xmlns="http://www.w3.org/1999/xhtml" xml:lang="zh" lang="zh" data-whc_version="26.0">
+    <head><link rel="shortcut icon" href="../../favicon.ico"/><link rel="icon" href="../../favicon.ico"/><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><meta http-equiv="X-UA-Compatible" content="IE=edge"/><meta name="description" content="新功能 connect 新增参数 dataVersion ，用于指定华锐行情数据的版本号，以根据版本号来确定合适的表结构。（ 3.00.0.1 ） subscribe 新增参数 seqCheckMode ，用于指定插件在接收到不连续数据后的行为。仅在订阅 orderExecution 或 bondOrderExecution 类型数据时有效。（ 3.00.0.1 ） amdQuote398 ..."/><meta name="DC.rights.owner" content="(C) 版权 2024"/><meta name="copyright" content="(C) 版权 2024"/><meta name="generator" content="DITA-OT"/><meta name="DC.type" content="topic"/><meta name="DC.coverage" content=""/><meta name="prodname" content="DolphinDB"/><meta name="brand" content="DolphinDB"/><meta name="DC.creator" content="DolphinDB"/><meta name="DC.publisher" content="DDB N/A DDB 200"/><meta name="DC.format" content="HTML5"/><meta name="DC.identifier" content="plg300rn"/><title>3.00.00</title><!--  Generated with Oxygen version 26.0, build number 2024012323.  --><meta name="wh-path2root" content="../../"/><meta name="wh-toc-id" content="plg300rn-d9529e104598"/><meta name="wh-source-relpath" content="rn/plugin/plg300rn.dita"/><meta name="wh-out-relpath" content="rn/plugin/plg300rn.html"/>
+
+    <link rel="stylesheet" type="text/css" href="../../oxygen-webhelp/app/commons.css?buildId=2024012323"/>
+    <link rel="stylesheet" type="text/css" href="../../oxygen-webhelp/app/topic.css?buildId=2024012323"/>
+
+    <script src="../../oxygen-webhelp/app/options/properties.js?buildId=20240704100525"></script>
+    <script src="../../oxygen-webhelp/app/localization/strings.js?buildId=2024012323"></script>
+    <script src="../../oxygen-webhelp/app/search/index/keywords.js?buildId=20240704100525"></script>
+    <script defer="defer" src="../../oxygen-webhelp/app/commons.js?buildId=2024012323"></script>
+    <script defer="defer" src="../../oxygen-webhelp/app/topic.js?buildId=2024012323"></script>
+<link rel="stylesheet" type="text/css" href="../../oxygen-webhelp/template/styles.css?buildId=2024012323"/><script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script><script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script></head>
+
+    <body id="plg300rn" class="wh_topic_page frmBody">
+        <a href="#wh_topic_body" class="sr-only sr-only-focusable">
+            跳转到主要内容
+        </a>
+        
+        
+        
+        
+        <header class="navbar navbar-default wh_header">
+    <div class="container-fluid">
+        <div xmlns:whc="http://www.oxygenxml.com/webhelp/components" class="wh_header_flex_container navbar-nav navbar-expand-md navbar-dark">
+            <div class="wh_logo_and_publication_title_container">
+                <div class="wh_logo_and_publication_title">
+                    
+                    <a href="https://www.dolphindb.cn" class=" wh_logo d-none d-sm-block "><img src="../../logo.png" alt="  DolphinDB 文档中心  "/></a>
+                    <div class=" wh_publication_title "><a href="../../index.html"><span class="booktitle">  <span class="ph mainbooktitle">DolphinDB 文档中心</span>  </span></a></div>
+                    
+                </div>
+                
+                
+            </div>
+
+            <div class="wh_top_menu_and_indexterms_link collapse navbar-collapse" id="wh_top_menu_and_indexterms_link">
+                
+                
+                
+                
+            </div>
+        <div class=" wh_search_input navbar-form wh_topic_page_search search " role="form">
+            
+            
+            
+            <form id="searchForm" method="get" role="search" action="../../search.html"><div><input type="search" placeholder="搜索 " class="wh_search_textfield" id="textToSearch" name="searchQuery" aria-label="搜索查询" required="required"/><button type="submit" class="wh_search_button" aria-label="搜索"><span class="search_input_text">搜索</span></button></div></form>
+            
+            <script src="/vendors/react/umd/react.production.min.js" defer="defer"></script>
+<script src="/vendors/react-dom/umd/react-dom.production.min.js" defer="defer"></script>
+<script src="/vendors/dayjs/dayjs.min.js" defer="defer"></script>
+<script src="/vendors/antd/dist/antd.min.js" defer="defer"></script>
+<script src="/vendors/@ant-design/icons/dist/index.umd.min.js" defer="defer"></script>
+<script src="/zh/index.js" type="module"></script>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js" defer="defer"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML" defer="defer"><!--
+
+
+--></script>
+
+            
+        </div></div>
+    </div>
+</header>
+        
+        
+         
+        
+        
+        
+        <div class="container-fluid" id="wh_topic_container">
+            <div class="row">
+
+                <nav class="wh_tools d-print-none navbar-expand-md" aria-label="Tools">
+                    
+                    <div data-tooltip-position="bottom" class=" wh_breadcrumb "><ol class="d-print-none"><li><span class="home"><a href="../../index.html"><span>主页</span></a></span></li><li><div class="topicref"><div class="title"><a href="../../rn/server/3_00_1.html">版本说明</a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 版本发布历史</p></div></div></div></li><li><div class="topicref"><div class="title"><a href="../../rn/plugin/3_00_1.html">插件</a></div></div></li><li class="active"><div class="topicref" data-id="plg300rn"><div class="title"><a href="../../rn/plugin/plg300rn.html">3.00.00</a></div></div></li></ol></div>
+                    
+                    
+                    
+                    <div class="wh_right_tools">
+                        <button class="wh_hide_highlight" aria-label="切换搜索突出显示" title="切换搜索突出显示"></button>
+                        <button class="webhelp_expand_collapse_sections" data-next-state="collapsed" aria-label="折叠截面" title="折叠截面"></button>
+                        
+                        
+                        
+                        
+                        <div class=" wh_print_link print d-none d-md-inline-block "><button onClick="window.print()" title="打印此页" aria-label="打印此页"></button></div>
+                        
+                        <button type="button" id="wh_toc_button" class="custom-toggler navbar-toggler collapsed wh_toggle_button navbar-light" aria-expanded="false" aria-label="Toggle publishing table of content" aria-controls="wh_publication_toc">
+                            <span class="navbar-toggler-icon"></span>
+                        </button>
+                    </div>
+                    
+                </nav>
+            </div>
+            
+            
+            
+            
+            <div class="wh_content_area">
+                <div class="row">
+                    
+                        <nav id="wh_publication_toc" class="col-lg-3 col-md-3 col-sm-12 d-md-block d-none d-print-none" aria-label="Table of Contents Container">
+                            <div id="wh_publication_toc_content">
+		                        
+                            	<div class=" wh_publication_toc " data-tooltip-position="right"><span class="expand-button-action-labels"><span id="button-expand-action" role="button" aria-label="Expand"></span><span id="button-collapse-action" role="button" aria-label="Collapse"></span><span id="button-pending-action" role="button" aria-label="Pending"></span></span><ul role="tree" aria-label="Table of Contents"><li role="treeitem"><div data-tocid="new_chap_about_sect_ddb_docs_intro-d9529e87" class="topicref" data-id="new_chap_about_sect_ddb_docs_intro" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../about/ddb_docs_intro.html" id="new_chap_about_sect_ddb_docs_intro-d9529e87-link">文档使用说明</a><div class="wh-tooltip"><p class="shortdesc">如何获取 DolphinDB 帮助信息</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="chap1_getstarted-d9529e140" class="topicref" data-id="chap1_getstarted" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action chap1_getstarted-d9529e140-link" class="wh-expand-btn"></span><div class="title"><a href="../../getstarted/chap1_getstarted.html" id="chap1_getstarted-d9529e140-link"><span class="keyword label">快速上手</span></a><div class="wh-tooltip"><p class="shortdesc">如何快速部署 DolphinDB、建库建表、写入和查询数据</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="sectionddb_deployment-d9529e335" class="topicref" data-id="sectionddb_deployment" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action sectionddb_deployment-d9529e335-link" class="wh-expand-btn"></span><div class="title"><a href="../../deploy/deploy_intro.html" id="sectionddb_deployment-d9529e335-link"><span class="keyword label">部署</span></a><div class="wh-tooltip"><p class="shortdesc">如何在不同的场景中部署 DolphinDB</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="new_chap_database_manage_new_chap_dbmanage_landing_page-d9529e2313" class="topicref" data-id="new_chap_database_manage_new_chap_dbmanage_landing_page" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action new_chap_database_manage_new_chap_dbmanage_landing_page-d9529e2313-link" class="wh-expand-btn"></span><div class="title"><a href="../../db_distr_comp/cfg/db_intro.html" id="new_chap_database_manage_new_chap_dbmanage_landing_page-d9529e2313-link"><span class="keyword label">数据库</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 数据库的基本概念</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="chap7_tutorials_streaming-d9529e3490" class="topicref" data-id="chap7_tutorials_streaming" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action chap7_tutorials_streaming-d9529e3490-link" class="wh-expand-btn"></span><div class="title"><a href="../../stream/str_intro.html" id="chap7_tutorials_streaming-d9529e3490-link"><span class="keyword label">流数据</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 流数据引擎及流数据计算的基本概念</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="tocId-d9529e7385" class="topicref" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action tocId-d9529e7385-link" class="wh-expand-btn"></span><div class="title"><a href="../../db_distr_comp/db_oper/import_data.html" id="tocId-d9529e7385-link">数据迁移</a><div class="wh-tooltip"><p class="shortdesc">如何从不同数据源向 DolphinDB 迁移数据</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="chap7_tutorials_system_management-d9529e7812" class="topicref" data-id="chap7_tutorials_system_management" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action chap7_tutorials_system_management-d9529e7812-link" class="wh-expand-btn"></span><div class="title"><a href="../../sys_man/om_intro.html" id="chap7_tutorials_system_management-d9529e7812-link"><span class="keyword label">系统运维</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 的系统运维功能及方法</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="about_language_resources-d9529e16490" class="topicref" data-id="about_language_resources" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action about_language_resources-d9529e16490-link" class="wh-expand-btn"></span><div class="title"><a href="../../progr/progr_intro.html" id="about_language_resources-d9529e16490-link"><span class="keyword label">编程语言</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 编程基本概念与方法、SQL 在 DolphinDB 的应用</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="functions_references-d9529e26503" class="topicref" data-id="functions_references" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action functions_references-d9529e26503-link" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/funcs_intro.html" id="functions_references-d9529e26503-link"><span class="keyword label">函数参考</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 函数分类、语法、详解及示例</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="api_protocol-d9529e86456" class="topicref" data-id="api_protocol" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action api_protocol-d9529e86456-link" class="wh-expand-btn"></span><div class="title"><a href="../../api/connapi_intro.html" id="api_protocol-d9529e86456-link"><span class="keyword label">连接器 &amp; API</span></a><div class="wh-tooltip"><p class="shortdesc">面向不同编程语言的 DolphinDB API 及连接器，相关协议和用法</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="chap6_plugin-d9529e91976" class="topicref" data-id="chap6_plugin" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action chap6_plugin-d9529e91976-link" class="wh-expand-btn"></span><div class="title"><a href="../../plugins/plg_intro.html" id="chap6_plugin-d9529e91976-link"><span class="keyword label">插件</span></a><div class="wh-tooltip"><p class="shortdesc">多个应用场景的插件使用说明和插件开发指导</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="third_party-d9529e94749" class="topicref" data-id="third_party" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action third_party-d9529e94749-link" class="wh-expand-btn"></span><div class="title"><a href="../../third_party.html" id="third_party-d9529e94749-link">第三方工具</a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="about_tutorials-d9529e94980" class="topicref" data-id="about_tutorials" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action about_tutorials-d9529e94980-link" class="wh-expand-btn"></span><div class="title"><a href="../../tutorials/about_tutorials.html" id="about_tutorials-d9529e94980-link"><span class="keyword label">教程</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 产品使用教程</p></div></div></div></li><li role="treeitem" aria-expanded="true"><div data-tocid="tocId-d9529e101769" class="topicref" data-state="expanded"><span role="button" tabindex="0" aria-labelledby="button-collapse-action tocId-d9529e101769-link" class="wh-expand-btn"></span><div class="title"><a href="../../rn/server/3_00_1.html" id="tocId-d9529e101769-link">版本说明</a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 版本发布历史</p></div></div></div><ul role="group" class="navbar-nav nav-list"><li role="treeitem" aria-expanded="false"><div data-tocid="tocId-d9529e101834" class="topicref" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action tocId-d9529e101834-link" class="wh-expand-btn"></span><div class="title"><a href="../../rn/server/3_00_1.html" id="tocId-d9529e101834-link">Server</a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="tocId-d9529e101927" class="topicref" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action tocId-d9529e101927-link" class="wh-expand-btn"></span><div class="title"><a href="../../rn/api/rn_cpp.html" id="tocId-d9529e101927-link">连接器和 API</a></div></div></li><li role="treeitem" aria-expanded="true"><div data-tocid="tocId-d9529e104551" class="topicref" data-state="expanded"><span role="button" tabindex="0" aria-labelledby="button-collapse-action tocId-d9529e104551-link" class="wh-expand-btn"></span><div class="title"><a href="../../rn/plugin/3_00_1.html" id="tocId-d9529e104551-link">插件</a></div></div><ul role="group" class="navbar-nav nav-list"><li role="treeitem"><div data-tocid="_3_00_1-d9529e104552" class="topicref" data-id="_3_00_1" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../rn/plugin/3_00_1.html" id="_3_00_1-d9529e104552-link">3.00.1</a></div></div></li><li role="treeitem" class="active"><div data-tocid="plg300rn-d9529e104598" class="topicref" data-id="plg300rn" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../rn/plugin/plg300rn.html" id="plg300rn-d9529e104598-link">3.00.00</a></div></div></li></ul></li><li role="treeitem" aria-expanded="false"><div data-tocid="tocId-d9529e104644" class="topicref" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action tocId-d9529e104644-link" class="wh-expand-btn"></span><div class="title"><a href="../../rn/rn_web.html" id="tocId-d9529e104644-link">客户端</a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="third_party_rn-d9529e104783" class="topicref" data-id="third_party_rn" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action third_party_rn-d9529e104783-link" class="wh-expand-btn"></span><div class="title"><a href="../../rn/server/third_party_rn.html" id="third_party_rn-d9529e104783-link">第三方工具</a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="compatibility_def-d9529e104921" class="topicref" data-id="compatibility_def" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action compatibility_def-d9529e104921-link" class="wh-expand-btn"></span><div class="title"><a href="../../rn/compat_def.html" id="compatibility_def-d9529e104921-link">版本兼容性说明</a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="tocId-d9529e105243" class="topicref" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action tocId-d9529e105243-link" class="wh-expand-btn"></span><div class="title"><a href="../../rn/compat_report_3001.html" id="tocId-d9529e105243-link">版本兼容性列表</a></div></div></li></ul></li></ul></div>
+		                        
+                            </div>
+                        </nav>
+                    
+                    
+                    <div class="col-lg-7 col-md-9 col-sm-12" id="wh_topic_body">
+                        <button id="wh_close_publication_toc_button" class="close-toc-button d-none" aria-label="Toggle publishing table of content" aria-controls="wh_publication_toc" aria-expanded="true">
+                            <span class="close-toc-icon-container">
+                                <span class="close-toc-icon"></span>     
+                            </span>
+                        </button>
+                        <button id="wh_close_topic_toc_button" class="close-toc-button d-none" aria-label="Toggle topic table of content" aria-controls="wh_topic_toc" aria-expanded="true">
+                            <span class="close-toc-icon-container">
+                                <span class="close-toc-icon"></span>     
+                            </span>
+                        </button>
+                        
+                        <div class=" wh_topic_content body "><main role="main"><article class="- topic/topic topic" role="article" aria-labelledby="ariaid-title1">
+    <h1 class="- topic/title title topictitle1" id="ariaid-title1">3.00.00</h1>
+    <article class="- topic/topic topic nested1" aria-labelledby="ariaid-title2" id="topic_mh5_j35_1bc">
+        <h2 class="- topic/title title topictitle2" id="ariaid-title2">amdQuote</h2>
+        <div class="- topic/body body">
+            <section class="- topic/section section" id="topic_mh5_j35_1bc__section_mny_k35_1bc" data-ofbid="topic_mh5_j35_1bc__section_mny_k35_1bc"><h3 class="- topic/title title sectiontitle">新功能</h3>
+                
+                <ul class="- topic/ul ul" id="topic_mh5_j35_1bc__ul_bwk_kbs_lbc" data-ofbid="topic_mh5_j35_1bc__ul_bwk_kbs_lbc">
+                    <li class="- topic/li li">
+                        <p class="- topic/p p"><code class="+ topic/ph pr-d/codeph ph codeph">connect</code> 新增参数
+                                <em class="+ topic/ph hi-d/i ph i">dataVersion</em>，用于指定华锐行情数据的版本号，以根据版本号来确定合适的表结构。（<strong class="+ topic/ph hi-d/b ph b">3.00.0.1</strong>）</p>
+                    </li>
+                    <li class="- topic/li li">
+                        <p class="- topic/p p"><code class="+ topic/ph pr-d/codeph ph codeph">subscribe</code> 新增参数
+                            <em class="+ topic/ph hi-d/i ph i">seqCheckMode</em>，用于指定插件在接收到不连续数据后的行为。仅在订阅 orderExecution 或
+                            bondOrderExecution 类型数据时有效。（<strong class="+ topic/ph hi-d/b ph b">3.00.0.1</strong>）</p>
+                    </li>
+                    <li class="- topic/li li">
+                        <p class="- topic/p p">amdQuote398 插件支持 Linux X86-64 ABI=1 DolphinDB server。</p>
+                    </li>
+                </ul>
+            </section>
+        </div>
+    </article>
+    <article class="- topic/topic topic nested1" aria-labelledby="ariaid-title3" id="topic_t5y_xy5_x1c">
+        <h2 class="- topic/title title topictitle2" id="ariaid-title3">Arrow</h2>
+        <div class="- topic/body body">
+            <section class="- topic/section section" id="topic_t5y_xy5_x1c__section_v5y_xy5_x1c" data-ofbid="topic_t5y_xy5_x1c__section_v5y_xy5_x1c"><h3 class="- topic/title title sectiontitle">故障修复</h3>
+                
+                <p class="- topic/p p">修复了下载超过 8192 行数据的数组向量时插件异常退出的问题。</p>
+            </section>
+        </div>
+    </article>
+    <article class="- topic/topic topic nested1" aria-labelledby="ariaid-title4" id="topic_hrd_1y5_x1c">
+        <h2 class="- topic/title title topictitle2" id="ariaid-title4">aws s3</h2>
+        <div class="- topic/body body">
+            <section class="- topic/section section" id="topic_hrd_1y5_x1c__awss3_enh" data-ofbid="topic_hrd_1y5_x1c__awss3_enh"><h3 class="- topic/title title sectiontitle">新功能</h3>
+                
+                <p class="- topic/p p">支持设置 REST endpoint 的 URL 地址及其他请求参数，以建立到私有 AWS S3 环境的连接。</p>
+            </section>
+        </div>
+    </article>
+    <article class="- topic/topic topic nested1" aria-labelledby="ariaid-title5" id="topic_bmb_mf5_4bc">
+        <h2 class="- topic/title title topictitle2" id="ariaid-title5">Backtest</h2>
+        <div class="- topic/body body">
+            <section class="- topic/section section" id="topic_bmb_mf5_4bc__section_cmb_mf5_4bc" data-ofbid="topic_bmb_mf5_4bc__section_cmb_mf5_4bc"><h3 class="- topic/title title sectiontitle">新功能</h3>
+                
+                <ul class="- topic/ul ul" id="topic_bmb_mf5_4bc__ul_m5n_rf5_4bc" data-ofbid="topic_bmb_mf5_4bc__ul_m5n_rf5_4bc">
+                    <li class="- topic/li li">新增两融回测引擎，支持融资融券业务逻辑。（<strong class="+ topic/ph hi-d/b ph b">3.00.0.2</strong>）</li>
+                    <li class="- topic/li li">新增期货回测引擎，支持期货业务逻辑。（<strong class="+ topic/ph hi-d/b ph b">3.00.0.2</strong>）</li>
+                </ul>
+            </section>
+            <section class="- topic/section section" id="topic_bmb_mf5_4bc__section_pjc_yf5_4bc" data-ofbid="topic_bmb_mf5_4bc__section_pjc_yf5_4bc"><h3 class="- topic/title title sectiontitle">故障修复</h3>
+                
+                <p class="- topic/p p">股票回测引擎部分计算结果错误。（<strong class="+ topic/ph hi-d/b ph b">3.00.0.2</strong>）</p>
+            </section>
+        </div>
+    </article>
+    <article class="- topic/topic topic nested1" aria-labelledby="ariaid-title6" id="topic_kb5_rz5_x1c">
+        <h2 class="- topic/title title topictitle2" id="ariaid-title6">CTP</h2>
+        <div class="- topic/body body">
+            <section class="- topic/section section" id="topic_kb5_rz5_x1c__section_n4f_c25_4bc" data-ofbid="topic_kb5_rz5_x1c__section_n4f_c25_4bc"><h3 class="- topic/title title sectiontitle">功能改进</h3>
+                
+                <p class="- topic/p p"><code class="+ topic/ph pr-d/codeph ph codeph">connect</code> 和 <code class="+ topic/ph pr-d/codeph ph codeph">queryInstrument</code>
+                        函数连接时支持传入多个连接地址和端口。（<strong class="+ topic/ph hi-d/b ph b">3.00.0.2</strong>）</p>
+            </section>
+        </div>
+    </article>
+    <article class="- topic/topic topic nested1" aria-labelledby="ariaid-title7" id="topic_n4r_cds_lbc">
+        <h2 class="- topic/title title topictitle2" id="ariaid-title7">DataFeed</h2>
+        <div class="- topic/body body">
+            <section class="- topic/section section" id="topic_n4r_cds_lbc__section_twb_2ds_lbc" data-ofbid="topic_n4r_cds_lbc__section_twb_2ds_lbc"><h3 class="- topic/title title sectiontitle">新功能</h3>
+                
+                <ul class="- topic/ul ul" id="topic_n4r_cds_lbc__ul_scj_qxn_tbc" data-ofbid="topic_n4r_cds_lbc__ul_scj_qxn_tbc">
+                    <li class="- topic/li li"><code class="+ topic/ph pr-d/codeph ph codeph">createHandle</code> 的 <em class="+ topic/ph hi-d/i ph i">config</em> 参数新增配置项
+                            “OutputElapsed”，用于设置是否获取插件从收到行情到准备插入流表的时延。（<strong class="+ topic/ph hi-d/b ph b">3.00.0.3</strong>）</li>
+                    <li class="- topic/li li"><code class="+ topic/ph pr-d/codeph ph codeph">getSchema</code> 新增可选参数
+                            <em class="+ topic/ph hi-d/i ph i">needElapsedTime</em>，用于设置存放行情的表结构中是否包含时延列。（<strong class="+ topic/ph hi-d/b ph b">3.00.0.3</strong>）</li>
+                    <li class="- topic/li li"><code class="+ topic/ph pr-d/codeph ph codeph">createHandle</code> 新增参数 <em class="+ topic/ph hi-d/i ph i">config</em>，可配置 receiveTime
+                            字段，以输出接收到数据的时间至输出表。（<strong class="+ topic/ph hi-d/b ph b">3.00.0.1</strong>）</li>
+                </ul>
+            </section>
+        </div>
+    </article>
+    <article class="- topic/topic topic nested1" aria-labelledby="ariaid-title8" id="topic_wtv_zy5_x1c">
+        <h2 class="- topic/title title topictitle2" id="ariaid-title8">EFH</h2>
+        <div class="- topic/body body">
+            <p class="- topic/p p">首次发布，用于对接盛立 EFH 行情服务软件，将上交所和深交所的 Level-2 实时行情接入 DolphinDB。（<strong class="+ topic/ph hi-d/b ph b">3.00.0.1</strong>）</p>
+        </div>
+    </article>
+    <article class="- topic/topic topic nested1" aria-labelledby="ariaid-title9" id="k4l_xg5_4bc">
+        <h2 class="- topic/title title topictitle2" id="ariaid-title9">gurobi</h2>
+        <div class="- topic/body body">
+            <p class="- topic/p p">首次发布，用于求解线性规划、整数规划、混合整数线性规划、二次规划等一些优化问题。（<strong class="+ topic/ph hi-d/b ph b">3.00.0.1</strong>）</p>
+        </div>
+    </article>
+    <article class="- topic/topic topic nested1" aria-labelledby="ariaid-title10" id="topic_pjv_dn4_fbc">
+        <h2 class="- topic/title title topictitle2" id="ariaid-title10">HttpClient</h2>
+        <div class="- topic/body body">
+            <section class="- topic/section section" id="topic_pjv_dn4_fbc__section_wbw_2n4_fbc" data-ofbid="topic_pjv_dn4_fbc__section_wbw_2n4_fbc"><h3 class="- topic/title title sectiontitle">新功能</h3>
+                
+                <ul class="- topic/ul ul" id="topic_pjv_dn4_fbc__ul_nl1_tds_lbc" data-ofbid="topic_pjv_dn4_fbc__ul_nl1_tds_lbc">
+                    <li class="- topic/li li">
+                        <p class="- topic/p p">新增接口 <code class="+ topic/ph pr-d/codeph ph codeph">httpPut</code> 和 <code class="+ topic/ph pr-d/codeph ph codeph">httpDelete</code>
+                                ，分别用于更新或删除服务器上的资源。（<strong class="+ topic/ph hi-d/b ph b">3.00.0.2</strong>）</p>
+                    </li>
+                    <li class="- topic/li li">
+                        <p class="- topic/p p"><code class="+ topic/ph pr-d/codeph ph codeph">httpGet</code> 新增参数 <em class="+ topic/ph hi-d/i ph i">config</em>，可配置 proxy，以指定代理地址
+                                。（<strong class="+ topic/ph hi-d/b ph b">3.00.0.1</strong>）</p>
+                    </li>
+                    <li class="- topic/li li">
+                        <p class="- topic/p p">HttpClient 插件支持 Windows 系统。</p>
+                    </li>
+                </ul>
+            </section>
+        </div>
+    </article>
+    <article class="- topic/topic topic nested1" aria-labelledby="ariaid-title11" id="topic_ukt_pds_lbc">
+        <h2 class="- topic/title title topictitle2" id="ariaid-title11">insight</h2>
+        <div class="- topic/body body">
+            <section class="- topic/section section" id="topic_ukt_pds_lbc__section_dm4_qds_lbc" data-ofbid="topic_ukt_pds_lbc__section_dm4_qds_lbc"><h3 class="- topic/title title sectiontitle">新功能</h3>
+                
+                <div class="- topic/p p">
+                    <ul class="- topic/ul ul" id="topic_ukt_pds_lbc__ul_dhk_5ds_lbc" data-ofbid="topic_ukt_pds_lbc__ul_dhk_5ds_lbc">
+                        <li class="- topic/li li">
+                            <p class="- topic/p p"><code class="+ topic/ph pr-d/codeph ph codeph">connect</code> 的参数 <em class="+ topic/ph hi-d/i ph i">handles</em>
+                                    新增支持以下数据品类选项：债券快照（BondTick）、基金快照（FundTick）、期权快照（OptionTick）、融券通（SecurityLending）。（<strong class="+ topic/ph hi-d/b ph b">3.00.0.1</strong>）</p>
+                        </li>
+                        <li class="- topic/li li">
+                            <p class="- topic/p p">
+                                <code class="+ topic/ph pr-d/codeph ph codeph">connect</code> 新增参数 <em class="+ topic/ph hi-d/i ph i">backupList</em>，支持配置多个 Insight
+                                    服务器地址，实现服务高可用。（<strong class="+ topic/ph hi-d/b ph b">3.00.0.1</strong>）</p>
+                        </li>
+                        <li class="- topic/li li">
+                            <p class="- topic/p p">
+                                <code class="+ topic/ph pr-d/codeph ph codeph">subscribe</code>的参数 <em class="+ topic/ph hi-d/i ph i">securityIDSource</em>
+                                新增以下市场选项：北交所（XBSE），大商所（XDCE），上期所（XSGE），新三板（NEEQ），郑商所（XZCE），港股通（HKSC），H
+                                    股全流通（HGHQ），国证指数（CNI）。（<strong class="+ topic/ph hi-d/b ph b">3.00.0.1</strong>）</p>
+                        </li>
+                    </ul>
+                </div>
+            </section>
+            <section class="- topic/section section" id="topic_ukt_pds_lbc__section_f24_hqd_xbc" data-ofbid="topic_ukt_pds_lbc__section_f24_hqd_xbc"><h3 class="- topic/title title sectiontitle">故障修复</h3>
+                
+                <ul class="- topic/ul ul" id="topic_ukt_pds_lbc__ul_pgl_3qd_xbc" data-ofbid="topic_ukt_pds_lbc__ul_pgl_3qd_xbc">
+                    <li class="- topic/li li">
+                        <p class="- topic/p p">集群状态下，无法自动找到 insight 插件加密认证所需的 cert 文件。（<strong class="+ topic/ph hi-d/b ph b">3.00.0.4</strong>）</p>
+                    </li>
+                    <li class="- topic/li li">
+                        <p class="- topic/p p">订阅 orderTransaction 类型数据，出现错误的状态显示。（<strong class="+ topic/ph hi-d/b ph b">3.00.0.4</strong>）</p>
+                    </li>
+                </ul>
+            </section>
+        </div>
+    </article>
+    <article class="- topic/topic topic nested1" aria-labelledby="ariaid-title12" id="topic_yv5_cjn_1bc">
+        <h2 class="- topic/title title topictitle2" id="ariaid-title12">kafka</h2>
+        <div class="- topic/body body">
+            <section class="- topic/section section" id="topic_yv5_cjn_1bc__section_zv5_cjn_1bc" data-ofbid="topic_yv5_cjn_1bc__section_zv5_cjn_1bc"><h3 class="- topic/title title sectiontitle">新功能</h3>
+                
+                <p class="- topic/p p">支持 zstd 压缩算法。（<strong class="+ topic/ph hi-d/b ph b">3.00.0.0.1</strong>）</p>
+            </section>
+        </div>
+    </article>
+    <article class="- topic/topic topic nested1" aria-labelledby="ariaid-title13" id="topic_wdg_wx5_x1c">
+        <h2 class="- topic/title title topictitle2" id="ariaid-title13">kdb+</h2>
+        <div class="- topic/body body">
+            <section class="- topic/section section" id="topic_wdg_wx5_x1c__kdb_new" data-ofbid="topic_wdg_wx5_x1c__kdb_new"><h3 class="- topic/title title sectiontitle">新功能</h3>
+                
+                <p class="- topic/p p">支持 kdb+ nested list 类型，对应 DolphinDB 的 arrayVector 类型。（<strong class="+ topic/ph hi-d/b ph b">3.00.0.3</strong>）</p>
+            </section>
+            <section class="- topic/section section" id="topic_wdg_wx5_x1c__kdb_enh" data-ofbid="topic_wdg_wx5_x1c__kdb_enh"><h3 class="- topic/title title sectiontitle">功能改进</h3>
+                
+                <p class="- topic/p p">支持读取以 snappy 和 lz4 压缩算法格式的 kdb+ 文件。</p>
+            </section>
+            <section class="- topic/section section" id="topic_wdg_wx5_x1c__kdb_bug" data-ofbid="topic_wdg_wx5_x1c__kdb_bug"><h3 class="- topic/title title sectiontitle">故障修复</h3>
+                
+                <p class="- topic/p p">解析部分序列化文件失败。（<strong class="+ topic/ph hi-d/b ph b">3.00.0.3</strong>）</p>
+            </section>
+        </div>
+    </article>
+    <article class="- topic/topic topic nested1" aria-labelledby="ariaid-title14" id="id_qpc_hms_lbc">
+        <h2 class="- topic/title title topictitle2" id="ariaid-title14">LDAP</h2>
+        <div class="- topic/body body">
+            <p class="- topic/p p">首次发布，用于搜索 LDAP 服务器内的条目信息，进而实现在 DolphinDB 中进行 LDAP 第三方验证登录功能。（<strong class="+ topic/ph hi-d/b ph b">3.00.0.1</strong>）</p>
+        </div>
+    </article>
+    <article class="- topic/topic topic nested1" aria-labelledby="ariaid-title15" id="topic_e2l_5y5_x1c">
+        <h2 class="- topic/title title topictitle2" id="ariaid-title15">MatchingEngineSimulator</h2>
+        <div class="- topic/body body">
+            <section class="- topic/section section" id="topic_e2l_5y5_x1c__section_r1j_4qg_y1c" data-ofbid="topic_e2l_5y5_x1c__section_r1j_4qg_y1c"><h3 class="- topic/title title sectiontitle">新功能</h3>
+                
+                <ul class="- topic/ul ul" id="topic_e2l_5y5_x1c__ul_zvy_ypg_y1c" data-ofbid="topic_e2l_5y5_x1c__ul_zvy_ypg_y1c">
+                    <li class="- topic/li li">在对科创版股票进行模拟撮合的日频模式中，取消对用户订单的委托数量的上限。（<strong class="+ topic/ph hi-d/b ph b">3.00.0.3</strong>）</li>
+                    <li class="- topic/li li">支持对期货类型数据进行模拟撮合。（<strong class="+ topic/ph hi-d/b ph b">3.00.0.2</strong>）</li>
+                    <li class="- topic/li li">支持股票上交所保护限价的市价单。（<strong class="+ topic/ph hi-d/b ph b">3.00.0.2</strong>）</li>
+                    <li class="- topic/li li">新增配置项 <em class="+ topic/ph hi-d/i ph i">outputRejectDetails</em>，支持获取用户订单的拒单信息。（<strong class="+ topic/ph hi-d/b ph b">3.00.0.2</strong>）</li>
+                    <li class="- topic/li li">支持配置参数 <em class="+ topic/ph hi-d/i ph i">lantency </em>为 -1 时，即时撮合用户订单。（<strong class="+ topic/ph hi-d/b ph b">3.00.0.2</strong>）</li>
+                    <li class="- topic/li li"><code class="+ topic/ph pr-d/codeph ph codeph">resetMatchingEngine</code> 增加可选参数
+                            <em class="+ topic/ph hi-d/i ph i">cancelOrder</em>，支持撤销用户订单并将撤单信息写入到订单输入列表。（<strong class="+ topic/ph hi-d/b ph b">3.00.0.2</strong>）</li>
+                    <li class="- topic/li li">
+                        <p class="- topic/p p">增加了股票数据（逐笔和快照）的集合竞价逻辑。</p>
+                    </li>
+                    <li class="- topic/li li">
+                        <p class="- topic/p p">接口 <code class="+ topic/ph pr-d/codeph ph codeph">createMatchEngine</code> 新增参数
+                            <em class="+ topic/ph hi-d/i ph i">outputOrderConfirmation</em>，用于输出委托回报。</p>
+                    </li>
+                </ul>
+                <ul class="- topic/ul ul">
+                    <li class="- topic/li li">
+                        <p class="- topic/p p">支持判断上交科创版股票的用户订单类型。</p>
+                    </li>
+                    <li class="- topic/li li">
+                        <p class="- topic/p p">支持判断可转债的用户订单类型。</p>
+                    </li>
+                </ul>
+            </section>
+            <section class="- topic/section section" id="topic_e2l_5y5_x1c__section_f2l_5y5_x1c" data-ofbid="topic_e2l_5y5_x1c__section_f2l_5y5_x1c"><h3 class="- topic/title title sectiontitle">功能优化</h3>
+                
+                <ul class="- topic/ul ul" id="topic_e2l_5y5_x1c__ul_khs_zpg_y1c" data-ofbid="topic_e2l_5y5_x1c__ul_khs_zpg_y1c">
+                    <li class="- topic/li li">股票和期货在中低频的模拟撮合中，涨停卖出、跌停买入被拒单。（<strong class="+ topic/ph hi-d/b ph b">3.00.0.3</strong>）</li>
+                    <li class="- topic/li li">修改股票的开盘竞价逻辑。（<strong class="+ topic/ph hi-d/b ph b">3.00.0.2</strong>）</li>
+                    <li class="- topic/li li">
+                        <p class="- topic/p p">参考沪深行情的最新数据字段修订了相关的接口命名。</p>
+                    </li>
+                    <li class="- topic/li li">行情为股票逐笔类型时，提升了单行数据写入的性能和用户订单的撮合性能。</li>
+                    <li class="- topic/li li">
+                        <p class="- topic/p p">修改 <em class="+ topic/ph hi-d/i ph i">latency</em>（延时）大于 0 时用户委托订单的撮合时间条件的计算规则。</p>
+                    </li>
+                    <li class="- topic/li li">
+                        <p class="- topic/p p">将用户实际撤单时间调整为撤单请求时间与延迟时间之和 。</p>
+                    </li>
+                    <li class="- topic/li li">
+                        <p class="- topic/p p">将实际的拒单时间调整为行情时间之后。</p>
+                    </li>
+                </ul>
+            </section>
+            <section class="- topic/section section" id="topic_e2l_5y5_x1c__section_g2l_5y5_x1c" data-ofbid="topic_e2l_5y5_x1c__section_g2l_5y5_x1c"><h3 class="- topic/title title sectiontitle">故障修复</h3>
+                
+                <ul class="- topic/ul ul" id="topic_e2l_5y5_x1c__ul_gk3_zpg_y1c" data-ofbid="topic_e2l_5y5_x1c__ul_gk3_zpg_y1c">
+                    <li class="- topic/li li">
+                        <p class="- topic/p p">逐笔撮合多条用户订单时撮合结果错误。</p>
+                    </li>
+                    <li class="- topic/li li">
+                        <p class="- topic/p p">逐笔撮合时计算逐笔数据的全额成交没有包含全部行情数据。</p>
+                    </li>
+                </ul>
+            </section>
+        </div>
+    </article>
+    <article class="- topic/topic topic nested1" aria-labelledby="ariaid-title16" id="topic_u5g_bz5_x1c">
+        <h2 class="- topic/title title topictitle2" id="ariaid-title16">MDL</h2>
+        <div class="- topic/body body">
+            <p class="- topic/p p">首次发布，用于将通联数据提供的高频行情数据接入 DolphinDB 中，以便进行后续的计算或存储。</p>
+        </div>
+    </article>
+    <article class="- topic/topic topic nested1" aria-labelledby="ariaid-title17" id="topic_t1y_ky4_pbc">
+        <h2 class="- topic/title title topictitle2" id="ariaid-title17">MQTT</h2>
+        <div class="- topic/body body">
+            <section class="- topic/section section" id="topic_t1y_ky4_pbc__section_hwr_ny4_pbc" data-ofbid="topic_t1y_ky4_pbc__section_hwr_ny4_pbc"><h3 class="- topic/title title sectiontitle">功能优化</h3>
+                
+                <ul class="- topic/ul ul" id="topic_t1y_ky4_pbc__ul_pmh_qy4_pbc" data-ofbid="topic_t1y_ky4_pbc__ul_pmh_qy4_pbc">
+                    <li class="- topic/li li">
+                        <p class="- topic/p p">Windows 插件的 <code class="+ topic/ph pr-d/codeph ph codeph">connect</code>
+                                接口新增了连接校验和账户、密码等正确性校验。（<strong class="+ topic/ph hi-d/b ph b">3.00.0.2</strong>）</p>
+                    </li>
+                    <li class="- topic/li li">
+                        <p class="- topic/p p">Linux 插件的 <code class="+ topic/ph pr-d/codeph ph codeph">connect</code> 接口新增了账户、密码等正确性校验。（<strong class="+ topic/ph hi-d/b ph b">3.00.0.2</strong>）</p>
+                    </li>
+                </ul>
+            </section>
+        </div>
+    </article>
+    <article class="- topic/topic topic nested1" aria-labelledby="ariaid-title18" id="id_gwc_tms_lbc">
+        <h2 class="- topic/title title topictitle2" id="ariaid-title18">MySQL</h2>
+        <div class="- topic/body body">
+            <section class="- topic/section section" id="id_gwc_tms_lbc__section_sh4_4ct_cbc" data-ofbid="id_gwc_tms_lbc__section_sh4_4ct_cbc"><h3 class="- topic/title title sectiontitle">功能优化</h3>
+                
+                <ul class="- topic/ul ul" id="id_gwc_tms_lbc__ul_th4_4ct_cbc" data-ofbid="id_gwc_tms_lbc__ul_th4_4ct_cbc">
+                    <li class="- topic/li li"><code class="+ topic/ph pr-d/codeph ph codeph">mysql::load</code> 和 <code class="+ topic/ph pr-d/codeph ph codeph">mysql::loadEx</code> 接口支持在加载
+                        DECIMAL 数据时通过 <em class="+ topic/ph hi-d/i ph i">schema</em> 参数指定小数精度。（<strong class="+ topic/ph hi-d/b ph b">3.00.0.0.1</strong>）</li>
+                    <li class="- topic/li li"><code class="+ topic/ph pr-d/codeph ph codeph">mysql::extractSchema</code> 接口支持在提取 DECIMAL
+                            类型数据时显示其小数精度。（<strong class="+ topic/ph hi-d/b ph b">3.00.0.0.1</strong>）</li>
+                </ul>
+            </section>
+        </div>
+    </article>
+    <article class="- topic/topic topic nested1" aria-labelledby="ariaid-title19" id="id_f54_rmt_4bc">
+        <h2 class="- topic/title title topictitle2" id="ariaid-title19">NSQ</h2>
+        <div class="- topic/body body">
+            <section class="- topic/section section" id="id_f54_rmt_4bc__section_ust_dz5_x1c" data-ofbid="id_f54_rmt_4bc__section_ust_dz5_x1c"><h3 class="- topic/title title sectiontitle">新功能</h3>
+                
+                <div class="- topic/p p">
+                    <ul class="- topic/ul ul" id="id_f54_rmt_4bc__ul_b3x_nmt_4bc" data-ofbid="id_f54_rmt_4bc__ul_b3x_nmt_4bc">
+                        <li class="- topic/li li">支持 orderTrade 类型，输出数据可以直接写入快照合成引擎中。相关变动接口：<code class="+ topic/ph pr-d/codeph ph codeph">getSchema</code>,
+                                <code class="+ topic/ph pr-d/codeph ph codeph">subscribe</code>。（<strong class="+ topic/ph hi-d/b ph b">3.00.0.3</strong>）</li>
+                        <li class="- topic/li li">
+                            <p class="- topic/p p"><code class="+ topic/ph pr-d/codeph ph codeph">connect</code> 新增参数
+                                    <em class="+ topic/ph hi-d/i ph i">dataVersion</em>，用于指定数据字段版本。（<strong class="+ topic/ph hi-d/b ph b">3.00.0.2</strong>）</p>
+                        </li>
+                        <li class="- topic/li li">
+                            <p class="- topic/p p"><code class="+ topic/ph pr-d/codeph ph codeph">getSubscriptionStatus </code>函数新增别名
+                                    <code class="+ topic/ph pr-d/codeph ph codeph">getStatus</code>。（<strong class="+ topic/ph hi-d/b ph b">3.00.0.2</strong>）</p>
+                        </li>
+                    </ul>
+                </div>
+                <ul class="- topic/ul ul" id="id_f54_rmt_4bc__ul_dy1_4mt_4bc" data-ofbid="id_f54_rmt_4bc__ul_dy1_4mt_4bc">
+                    <li class="- topic/li li">接口 <code class="+ topic/ph pr-d/codeph ph codeph">nsq::connect</code> 新增参数 <em class="+ topic/ph hi-d/i ph i">username</em>,
+                        <em class="+ topic/ph hi-d/i ph i">password</em>，支持在建立连接时指定用户名及密码。</li>
+                </ul>
+            </section>
+            <section class="- topic/section section" id="id_f54_rmt_4bc__section_bgv_pmt_4bc" data-ofbid="id_f54_rmt_4bc__section_bgv_pmt_4bc"><h3 class="- topic/title title sectiontitle">故障修复</h3>
+                
+                <div class="- topic/p p">
+                    <ul class="- topic/ul ul" id="id_f54_rmt_4bc__ul_hgv_pmt_4bc" data-ofbid="id_f54_rmt_4bc__ul_hgv_pmt_4bc">
+                        <li class="- topic/li li">在非 sailfish 情况下连接特殊源时，NSQ 宕机。（<strong class="+ topic/ph hi-d/b ph b">3.00.0.3</strong>）</li>
+                        <li class="- topic/li li">
+                            <p class="- topic/p p">连接非法配置文件 server 宕机。（<strong class="+ topic/ph hi-d/b ph b">3.00.0.2</strong>）</p>
+                        </li>
+                    </ul>
+                </div>
+            </section>
+        </div>
+    </article>
+    <article class="- topic/topic topic nested1" aria-labelledby="ariaid-title20" id="topic_ptx_ry5_x1c">
+        <h2 class="- topic/title title topictitle2" id="ariaid-title20">parquet</h2>
+        <div class="- topic/body body">
+            <section class="- topic/section section" id="topic_ptx_ry5_x1c__section_crq_sy5_x1c" data-ofbid="topic_ptx_ry5_x1c__section_crq_sy5_x1c"><h3 class="- topic/title title sectiontitle">功能优化</h3>
+                
+                <p class="- topic/p p"><code class="+ topic/ph pr-d/codeph ph codeph">parquet::saveParquet</code> 接口新增用于指定压缩格式的可选参数 compression。</p>
+            </section>
+            <section class="- topic/section section" id="topic_ptx_ry5_x1c__section_arq_sy5_x1c" data-ofbid="topic_ptx_ry5_x1c__section_arq_sy5_x1c"><h3 class="- topic/title title sectiontitle">故障修复</h3>
+                
+                <p class="- topic/p p">修复了加载 parquet 时使用 <code class="+ topic/ph pr-d/codeph ph codeph">parquet::loadParquet</code> 的参数 <em class="+ topic/ph hi-d/i ph i">schema</em> 填写错误导致
+                    Server 宕机的问题。</p>
+            </section>
+        </div>
+    </article>
+    <article class="- topic/topic topic nested1" aria-labelledby="ariaid-title21" id="id_tyh_jms_lbc">
+        <h2 class="- topic/title title topictitle2" id="ariaid-title21">SSEQuotationFile</h2>
+        <div class="- topic/body body">
+            <ul class="- topic/ul ul" id="id_tyh_jms_lbc__ul_uv5_vpn_tbc" data-ofbid="id_tyh_jms_lbc__ul_uv5_vpn_tbc">
+                <li class="- topic/li li">
+                    <p class="- topic/p p"><code class="+ topic/ph pr-d/codeph ph codeph">subscribe</code> 接口新增 OutputElapsed
+                            配置项，用于设定是否为行情表增加最后一列。该列包含插件从收到行情开始到准备插入流表为止的延时。（<strong class="+ topic/ph hi-d/b ph b">3.00.0.3</strong>）</p>
+                </li>
+            </ul>
+            <ul class="- topic/ul ul" id="id_tyh_jms_lbc__ul_ovd_wpn_tbc" data-ofbid="id_tyh_jms_lbc__ul_ovd_wpn_tbc">
+                <li class="- topic/li li">
+                    <p class="- topic/p p"><code class="+ topic/ph pr-d/codeph ph codeph">getSchema</code> 接口新增参数 <em class="+ topic/ph hi-d/i ph i">needElapsedTime</em>，用于设定返回的 shcmea 是否包含
+                        elapsedTime 列。（<strong class="+ topic/ph hi-d/b ph b">3.00.0.3</strong>）</p>
+                </li>
+            </ul>
+            <ul class="- topic/ul ul" id="id_tyh_jms_lbc__ul_rlb_xpn_tbc" data-ofbid="id_tyh_jms_lbc__ul_rlb_xpn_tbc">
+                <li class="- topic/li li">首次发布，用于解析上交所提供的行情文件，并将信息存储到 DolphinDB 的表中。（<strong class="+ topic/ph hi-d/b ph b">3.00.0.1</strong>）</li>
+            </ul>
+        </div>
+    </article>
+    <article class="- topic/topic topic nested1" aria-labelledby="ariaid-title22" id="topic_kjl_dy5_x1c">
+        <h2 class="- topic/title title topictitle2" id="ariaid-title22">RabbitMQ</h2>
+        <div class="- topic/body body">
+            <section class="- topic/section section" id="topic_kjl_dy5_x1c__section_ljl_dy5_x1c" data-ofbid="topic_kjl_dy5_x1c__section_ljl_dy5_x1c"><h3 class="- topic/title title sectiontitle">功能改进</h3>
+                
+                <p class="- topic/p p">将可同时存在的最大连接数限定为 100。</p>
+            </section>
+        </div>
+    </article>
+    <article class="- topic/topic topic nested1" aria-labelledby="ariaid-title23" id="topic_gxm_3y5_x1c">
+        <h2 class="- topic/title title topictitle2" id="ariaid-title23">Redis</h2>
+        <div class="- topic/body body">
+            <section class="- topic/section section"><h3 class="- topic/title title sectiontitle">新功能</h3>
+                
+                <ul class="- topic/ul ul" id="topic_gxm_3y5_x1c__ul_f32_jmt_4bc" data-ofbid="topic_gxm_3y5_x1c__ul_f32_jmt_4bc">
+                    <li class="- topic/li li">新增接口 <code class="+ topic/ph pr-d/codeph ph codeph">redis::batchHashSet</code>，可高效率批量执行 Redis 的 HSET 操作。</li>
+                    <li class="- topic/li li">新增支持 Windows x86 平台。（<strong class="+ topic/ph hi-d/b ph b">3.00.0.2</strong>）</li>
+                </ul>
+            </section>
+        </div>
+    </article>
+    <article class="- topic/topic topic nested1" aria-labelledby="ariaid-title24" id="topic_sb5_pzss_1bc">
+        <h2 class="- topic/title title topictitle2" id="ariaid-title24">TCPSocket</h2>
+        <div class="- topic/body body">
+            <p class="- topic/p p">首次发布用于创建 TCP 连接并与指定 IP 和端口进行数据交互的 TCPSocket 插件。</p>
+        </div>
+    </article>
+    <article class="- topic/topic topic nested1" aria-labelledby="ariaid-title25" id="topic_c2w_w1p_pbc">
+        <h2 class="- topic/title title topictitle2" id="ariaid-title25">WebSocket</h2>
+        <div class="- topic/body body">
+            <section class="- topic/section section" id="topic_c2w_w1p_pbc__section_cn4_x1p_pbc" data-ofbid="topic_c2w_w1p_pbc__section_cn4_x1p_pbc"><h3 class="- topic/title title sectiontitle">新功能</h3>
+                
+                <p class="- topic/p p">新增 WebSocket 插件，支持从 WebSocket 的服务端读取数据以及发送数据到 WebSocket
+                    的服务端。（<strong class="+ topic/ph hi-d/b ph b">3.00.0.2</strong>）</p>
+            </section>
+            <section class="- topic/section section" id="topic_c2w_w1p_pbc__section_kxp_ydn_tbc" data-ofbid="topic_c2w_w1p_pbc__section_kxp_ydn_tbc"><h3 class="- topic/title title sectiontitle">故障修复</h3>
+                
+                <p class="- topic/p p"><code class="+ topic/ph pr-d/codeph ph codeph">WebSocket::createSubJob</code> 的 <em class="+ topic/ph hi-d/i ph i">onMessage</em> 回调函数中的 data 参数接收到非
+                    table 类型数据。（<strong class="+ topic/ph hi-d/b ph b">3.00.0.3</strong>）</p>
+            </section>
+        </div>
+    </article>
+    <article class="- topic/topic topic nested1" aria-labelledby="ariaid-title26" id="topic_lh1_mgs_lbc">
+        <h2 class="- topic/title title topictitle2" id="ariaid-title26">WindTDF</h2>
+        <div class="- topic/body body">
+            <section class="- topic/section section" id="topic_lh1_mgs_lbc__section_d25_mgs_lbc" data-ofbid="topic_lh1_mgs_lbc__section_d25_mgs_lbc"><h3 class="- topic/title title sectiontitle">新功能</h3>
+                
+                <p class="- topic/p p">新增 WindTDF 插件，支持接收万得实时行情数据。（<strong class="+ topic/ph hi-d/b ph b">3.00.0.1</strong>）</p>
+            </section>
+        </div>
+    </article>
+    <article class="- topic/topic topic nested1" aria-labelledby="ariaid-title27" id="topic_m5d_cz5_x1c">
+        <h2 class="- topic/title title topictitle2" id="ariaid-title27">xgboost</h2>
+        <div class="- topic/body body">
+            <section class="- topic/section section"><h3 class="- topic/title title sectiontitle">功能改进</h3>
+                
+                <p class="- topic/p p">支持 2.0.0 版本的 xgboost。</p>
+            </section>
+        </div>
+    </article>
+    
+    <article class="- topic/topic topic nested1" aria-labelledby="ariaid-title28" id="id_ez4_3ms_lbc">
+        <h2 class="- topic/title title topictitle2" id="ariaid-title28">XTP</h2>
+        <div class="- topic/body body">
+            <p class="- topic/p p">首次发布，用于接收上交所、深交所以及北交所的实时行情，并将数据存储于 DolphinDB 的共享表中。（<strong class="+ topic/ph hi-d/b ph b">3.00.0.1</strong>）</p>
+            <section class="- topic/section section"><h3 class="- topic/title title sectiontitle">新功能</h3>
+                
+                <ul class="- topic/ul ul" id="id_ez4_3ms_lbc__ul_iqp_4pn_tbc" data-ofbid="id_ez4_3ms_lbc__ul_iqp_4pn_tbc">
+                    <li class="- topic/li li"><code class="+ topic/ph pr-d/codeph ph codeph">createXTPConnection</code> 接口新增：<ul class="- topic/ul ul" id="id_ez4_3ms_lbc__ul_b3b_ppn_tbc" data-ofbid="id_ez4_3ms_lbc__ul_b3b_ppn_tbc">
+                            <li class="- topic/li li">
+                                <p class="- topic/p p"> OutputElapsed
+                                        配置项，用于设定是否为行情表增加最后一列。该列包含插件从收到行情开始到准备插入流表为止的延时。（<strong class="+ topic/ph hi-d/b ph b">3.00.0.3</strong>）</p>
+                            </li>
+                            <li class="- topic/li li">
+                                <p class="- topic/p p">ciphertext 配置项，用于设定返回的 shcmea 是否包含 elapsedTime
+                                    列。（<strong class="+ topic/ph hi-d/b ph b">3.00.0.3</strong>）</p>
+                            </li>
+                        </ul></li>
+                    <li class="- topic/li li"><code class="+ topic/ph pr-d/codeph ph codeph">getSchema</code> 接口新增参数 <em class="+ topic/ph hi-d/i ph i">needElapsedTime</em>，用于设定返回的 shcmea 是否包含
+                        elapsedTime 列。（<strong class="+ topic/ph hi-d/b ph b">3.00.0.3</strong>）</li>
+                    <li class="- topic/li li">新增接口 <code class="+ topic/ph pr-d/codeph ph codeph">generateCiphertextAndIV</code>，用于获取密文密码以及 iv
+                            值。（<strong class="+ topic/ph hi-d/b ph b">3.00.0.3</strong>）</li>
+                    <li class="- topic/li li">支持开发逐笔数据。（<strong class="+ topic/ph hi-d/b ph b">3.00.0.2</strong>）</li>
+                </ul>
+            </section>
+        </div>
+    </article>
+    <article class="- topic/topic topic nested1" aria-labelledby="ariaid-title29" id="topic_l3t_py5_x1c">
+        <h2 class="- topic/title title topictitle2" id="ariaid-title29">zip</h2>
+        <div class="- topic/body body">
+            <section class="- topic/section section" id="topic_l3t_py5_x1c__section_h5f_qy5_x1c" data-ofbid="topic_l3t_py5_x1c__section_h5f_qy5_x1c"><h3 class="- topic/title title sectiontitle">功能优化</h3>
+                
+                <p class="- topic/p p">增强对参数 <em class="+ topic/ph hi-d/i ph i">compressionLevel</em>（压缩等级）, <em class="+ topic/ph hi-d/i ph i">password</em>（密码）的校验。</p>
+            </section>
+        </div>
+    </article>
+    <article class="- topic/topic topic nested1" aria-labelledby="ariaid-title30" id="topic_e14_cz4_pbc">
+        <h2 class="- topic/title title topictitle2" id="ariaid-title30">zmq</h2>
+        <div class="- topic/body body">
+            <section class="- topic/section section" id="topic_e14_cz4_pbc__section_gjf_dz4_pbc" data-ofbid="topic_e14_cz4_pbc__section_gjf_dz4_pbc"><h3 class="- topic/title title sectiontitle">新功能</h3>
+                
+                <p class="- topic/p p">新增 <code class="+ topic/ph pr-d/codeph ph codeph">setMonitor</code> 接口，支持开启 ZeroMQ 的连接监视。（<strong class="+ topic/ph hi-d/b ph b">3.00.0.2</strong>）</p>
+            </section>
+        </div>
+    </article>
+</article></main></div>
+                        
+                        
+                        
+                        
+                        
+                        
+                    </div>
+                    
+                        <nav role="navigation" id="wh_topic_toc" aria-label="On this page" class="col-lg-2 d-none d-lg-block navbar d-print-none"> 
+                            <div id="wh_topic_toc_content">
+		                        
+	                            <div class=" wh_topic_toc "><div class="wh_topic_label">在本页上</div><ul><li class="topic-item"><a href="#topic_mh5_j35_1bc" data-tocid="topic_mh5_j35_1bc">amdQuote</a><ul><li class="section-item"><div class="section-title"><a href="#topic_mh5_j35_1bc__section_mny_k35_1bc" data-tocid="topic_mh5_j35_1bc__section_mny_k35_1bc">新功能</a></div></li></ul></li><li class="topic-item"><a href="#topic_t5y_xy5_x1c" data-tocid="topic_t5y_xy5_x1c">Arrow</a><ul><li class="section-item"><div class="section-title"><a href="#topic_t5y_xy5_x1c__section_v5y_xy5_x1c" data-tocid="topic_t5y_xy5_x1c__section_v5y_xy5_x1c">故障修复</a></div></li></ul></li><li class="topic-item"><a href="#topic_hrd_1y5_x1c" data-tocid="topic_hrd_1y5_x1c">aws s3</a><ul><li class="section-item"><div class="section-title"><a href="#topic_hrd_1y5_x1c__awss3_enh" data-tocid="topic_hrd_1y5_x1c__awss3_enh">新功能</a></div></li></ul></li><li class="topic-item"><a href="#topic_bmb_mf5_4bc" data-tocid="topic_bmb_mf5_4bc">Backtest</a><ul><li class="section-item"><div class="section-title"><a href="#topic_bmb_mf5_4bc__section_cmb_mf5_4bc" data-tocid="topic_bmb_mf5_4bc__section_cmb_mf5_4bc">新功能</a></div></li><li class="section-item"><div class="section-title"><a href="#topic_bmb_mf5_4bc__section_pjc_yf5_4bc" data-tocid="topic_bmb_mf5_4bc__section_pjc_yf5_4bc">故障修复</a></div></li></ul></li><li class="topic-item"><a href="#topic_kb5_rz5_x1c" data-tocid="topic_kb5_rz5_x1c">CTP</a><ul><li class="section-item"><div class="section-title"><a href="#topic_kb5_rz5_x1c__section_n4f_c25_4bc" data-tocid="topic_kb5_rz5_x1c__section_n4f_c25_4bc">功能改进</a></div></li></ul></li><li class="topic-item"><a href="#topic_n4r_cds_lbc" data-tocid="topic_n4r_cds_lbc">DataFeed</a><ul><li class="section-item"><div class="section-title"><a href="#topic_n4r_cds_lbc__section_twb_2ds_lbc" data-tocid="topic_n4r_cds_lbc__section_twb_2ds_lbc">新功能</a></div></li></ul></li><li class="topic-item"><a href="#topic_wtv_zy5_x1c" data-tocid="topic_wtv_zy5_x1c">EFH</a></li><li class="topic-item"><a href="#k4l_xg5_4bc" data-tocid="k4l_xg5_4bc">gurobi</a></li><li class="topic-item"><a href="#topic_pjv_dn4_fbc" data-tocid="topic_pjv_dn4_fbc">HttpClient</a><ul><li class="section-item"><div class="section-title"><a href="#topic_pjv_dn4_fbc__section_wbw_2n4_fbc" data-tocid="topic_pjv_dn4_fbc__section_wbw_2n4_fbc">新功能</a></div></li></ul></li><li class="topic-item"><a href="#topic_ukt_pds_lbc" data-tocid="topic_ukt_pds_lbc">insight</a><ul><li class="section-item"><div class="section-title"><a href="#topic_ukt_pds_lbc__section_dm4_qds_lbc" data-tocid="topic_ukt_pds_lbc__section_dm4_qds_lbc">新功能</a></div></li><li class="section-item"><div class="section-title"><a href="#topic_ukt_pds_lbc__section_f24_hqd_xbc" data-tocid="topic_ukt_pds_lbc__section_f24_hqd_xbc">故障修复</a></div></li></ul></li><li class="topic-item"><a href="#topic_yv5_cjn_1bc" data-tocid="topic_yv5_cjn_1bc">kafka</a><ul><li class="section-item"><div class="section-title"><a href="#topic_yv5_cjn_1bc__section_zv5_cjn_1bc" data-tocid="topic_yv5_cjn_1bc__section_zv5_cjn_1bc">新功能</a></div></li></ul></li><li class="topic-item"><a href="#topic_wdg_wx5_x1c" data-tocid="topic_wdg_wx5_x1c">kdb+</a><ul><li class="section-item"><div class="section-title"><a href="#topic_wdg_wx5_x1c__kdb_new" data-tocid="topic_wdg_wx5_x1c__kdb_new">新功能</a></div></li><li class="section-item"><div class="section-title"><a href="#topic_wdg_wx5_x1c__kdb_enh" data-tocid="topic_wdg_wx5_x1c__kdb_enh">功能改进</a></div></li><li class="section-item"><div class="section-title"><a href="#topic_wdg_wx5_x1c__kdb_bug" data-tocid="topic_wdg_wx5_x1c__kdb_bug">故障修复</a></div></li></ul></li><li class="topic-item"><a href="#id_qpc_hms_lbc" data-tocid="id_qpc_hms_lbc">LDAP</a></li><li class="topic-item"><a href="#topic_e2l_5y5_x1c" data-tocid="topic_e2l_5y5_x1c">MatchingEngineSimulator</a><ul><li class="section-item"><div class="section-title"><a href="#topic_e2l_5y5_x1c__section_r1j_4qg_y1c" data-tocid="topic_e2l_5y5_x1c__section_r1j_4qg_y1c">新功能</a></div></li><li class="section-item"><div class="section-title"><a href="#topic_e2l_5y5_x1c__section_f2l_5y5_x1c" data-tocid="topic_e2l_5y5_x1c__section_f2l_5y5_x1c">功能优化</a></div></li><li class="section-item"><div class="section-title"><a href="#topic_e2l_5y5_x1c__section_g2l_5y5_x1c" data-tocid="topic_e2l_5y5_x1c__section_g2l_5y5_x1c">故障修复</a></div></li></ul></li><li class="topic-item"><a href="#topic_u5g_bz5_x1c" data-tocid="topic_u5g_bz5_x1c">MDL</a></li><li class="topic-item"><a href="#topic_t1y_ky4_pbc" data-tocid="topic_t1y_ky4_pbc">MQTT</a><ul><li class="section-item"><div class="section-title"><a href="#topic_t1y_ky4_pbc__section_hwr_ny4_pbc" data-tocid="topic_t1y_ky4_pbc__section_hwr_ny4_pbc">功能优化</a></div></li></ul></li><li class="topic-item"><a href="#id_gwc_tms_lbc" data-tocid="id_gwc_tms_lbc">MySQL</a><ul><li class="section-item"><div class="section-title"><a href="#id_gwc_tms_lbc__section_sh4_4ct_cbc" data-tocid="id_gwc_tms_lbc__section_sh4_4ct_cbc">功能优化</a></div></li></ul></li><li class="topic-item"><a href="#id_f54_rmt_4bc" data-tocid="id_f54_rmt_4bc">NSQ</a><ul><li class="section-item"><div class="section-title"><a href="#id_f54_rmt_4bc__section_ust_dz5_x1c" data-tocid="id_f54_rmt_4bc__section_ust_dz5_x1c">新功能</a></div></li><li class="section-item"><div class="section-title"><a href="#id_f54_rmt_4bc__section_bgv_pmt_4bc" data-tocid="id_f54_rmt_4bc__section_bgv_pmt_4bc">故障修复</a></div></li></ul></li><li class="topic-item"><a href="#topic_ptx_ry5_x1c" data-tocid="topic_ptx_ry5_x1c">parquet</a><ul><li class="section-item"><div class="section-title"><a href="#topic_ptx_ry5_x1c__section_crq_sy5_x1c" data-tocid="topic_ptx_ry5_x1c__section_crq_sy5_x1c">功能优化</a></div></li><li class="section-item"><div class="section-title"><a href="#topic_ptx_ry5_x1c__section_arq_sy5_x1c" data-tocid="topic_ptx_ry5_x1c__section_arq_sy5_x1c">故障修复</a></div></li></ul></li><li class="topic-item"><a href="#id_tyh_jms_lbc" data-tocid="id_tyh_jms_lbc">SSEQuotationFile</a></li><li class="topic-item"><a href="#topic_kjl_dy5_x1c" data-tocid="topic_kjl_dy5_x1c">RabbitMQ</a><ul><li class="section-item"><div class="section-title"><a href="#topic_kjl_dy5_x1c__section_ljl_dy5_x1c" data-tocid="topic_kjl_dy5_x1c__section_ljl_dy5_x1c">功能改进</a></div></li></ul></li><li class="topic-item"><a href="#topic_gxm_3y5_x1c" data-tocid="topic_gxm_3y5_x1c">Redis</a></li><li class="topic-item"><a href="#topic_sb5_pzss_1bc" data-tocid="topic_sb5_pzss_1bc">TCPSocket</a></li><li class="topic-item"><a href="#topic_c2w_w1p_pbc" data-tocid="topic_c2w_w1p_pbc">WebSocket</a><ul><li class="section-item"><div class="section-title"><a href="#topic_c2w_w1p_pbc__section_cn4_x1p_pbc" data-tocid="topic_c2w_w1p_pbc__section_cn4_x1p_pbc">新功能</a></div></li><li class="section-item"><div class="section-title"><a href="#topic_c2w_w1p_pbc__section_kxp_ydn_tbc" data-tocid="topic_c2w_w1p_pbc__section_kxp_ydn_tbc">故障修复</a></div></li></ul></li><li class="topic-item"><a href="#topic_lh1_mgs_lbc" data-tocid="topic_lh1_mgs_lbc">WindTDF</a><ul><li class="section-item"><div class="section-title"><a href="#topic_lh1_mgs_lbc__section_d25_mgs_lbc" data-tocid="topic_lh1_mgs_lbc__section_d25_mgs_lbc">新功能</a></div></li></ul></li><li class="topic-item"><a href="#topic_m5d_cz5_x1c" data-tocid="topic_m5d_cz5_x1c">xgboost</a></li><li class="topic-item"><a href="#id_ez4_3ms_lbc" data-tocid="id_ez4_3ms_lbc">XTP</a></li><li class="topic-item"><a href="#topic_l3t_py5_x1c" data-tocid="topic_l3t_py5_x1c">zip</a><ul><li class="section-item"><div class="section-title"><a href="#topic_l3t_py5_x1c__section_h5f_qy5_x1c" data-tocid="topic_l3t_py5_x1c__section_h5f_qy5_x1c">功能优化</a></div></li></ul></li><li class="topic-item"><a href="#topic_e14_cz4_pbc" data-tocid="topic_e14_cz4_pbc">zmq</a><ul><li class="section-item"><div class="section-title"><a href="#topic_e14_cz4_pbc__section_gjf_dz4_pbc" data-tocid="topic_e14_cz4_pbc__section_gjf_dz4_pbc">新功能</a></div></li></ul></li></ul></div>
+	                        	
+                        	</div>
+                        </nav>
+                    
+                </div>
+            </div>
+            
+            
+            
+        </div> 
+        <footer class="navbar navbar-default wh_footer">
+  <div class=" footer-container mx-auto ">
+<title>Copyright</title><p><b> ©2024 浙江智臾科技有限公司 浙ICP备18048711号-3</b></p>
+  </div>
+</footer>
+        
+        <div id="go2top" class="d-print-none">
+            <span class="oxy-icon oxy-icon-up"></span>
+        </div>
+        
+        <div id="modal_img_large" class="modal">
+            <span class="close oxy-icon oxy-icon-remove"></span>
+            <div id="modal_img_container"></div>
+            <div id="caption"></div>
+        </div>
+        
+        
+        
+    </body>
+</html>

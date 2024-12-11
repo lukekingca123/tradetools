@@ -1,0 +1,164 @@
+<!DOCTYPE html><html xmlns="http://www.w3.org/1999/xhtml" xml:lang="zh" lang="zh" data-whc_version="26.0">
+    <head><link rel="shortcut icon" href="../../favicon.ico"/><link rel="icon" href="../../favicon.ico"/><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><meta http-equiv="X-UA-Compatible" content="IE=edge"/><meta name="description" content="新增功能 session 对象增加了 keepAliveTime 参数，设置检测 TCP 存活的时间间隔，默认为30秒。在大数据量访问时，给该参数设置一个较大值，可以避免 TCP 连接掉线。"/><meta name="DC.rights.owner" content="(C) 版权 2024"/><meta name="copyright" content="(C) 版权 2024"/><meta name="generator" content="DITA-OT"/><meta name="DC.type" content="topic"/><meta name="DC.coverage" content=""/><meta name="DC.relation" content="../../rn/api/rn_py.html"/><meta name="prodname" content="DolphinDB"/><meta name="brand" content="DolphinDB"/><meta name="DC.creator" content="DolphinDB"/><meta name="DC.publisher" content="DDB N/A DDB 200"/><meta name="DC.format" content="HTML5"/><meta name="DC.identifier" content="rn_13015_py"/><title>1.30.0.15</title><!--  Generated with Oxygen version 26.0, build number 2024012323.  --><meta name="wh-path2root" content="../../"/><meta name="wh-toc-id" content="rn_13015_py-d9529e104090"/><meta name="wh-source-relpath" content="rn/api/rn_13015_py.dita"/><meta name="wh-out-relpath" content="rn/api/rn_13015_py.html"/>
+
+    <link rel="stylesheet" type="text/css" href="../../oxygen-webhelp/app/commons.css?buildId=2024012323"/>
+    <link rel="stylesheet" type="text/css" href="../../oxygen-webhelp/app/topic.css?buildId=2024012323"/>
+
+    <script src="../../oxygen-webhelp/app/options/properties.js?buildId=20240704100525"></script>
+    <script src="../../oxygen-webhelp/app/localization/strings.js?buildId=2024012323"></script>
+    <script src="../../oxygen-webhelp/app/search/index/keywords.js?buildId=20240704100525"></script>
+    <script defer="defer" src="../../oxygen-webhelp/app/commons.js?buildId=2024012323"></script>
+    <script defer="defer" src="../../oxygen-webhelp/app/topic.js?buildId=2024012323"></script>
+<link rel="stylesheet" type="text/css" href="../../oxygen-webhelp/template/styles.css?buildId=2024012323"/><script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script><script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script></head>
+
+    <body id="rn_13015_py" class="wh_topic_page frmBody">
+        <a href="#wh_topic_body" class="sr-only sr-only-focusable">
+            跳转到主要内容
+        </a>
+        
+        
+        
+        
+        <header class="navbar navbar-default wh_header">
+    <div class="container-fluid">
+        <div xmlns:whc="http://www.oxygenxml.com/webhelp/components" class="wh_header_flex_container navbar-nav navbar-expand-md navbar-dark">
+            <div class="wh_logo_and_publication_title_container">
+                <div class="wh_logo_and_publication_title">
+                    
+                    <a href="https://www.dolphindb.cn" class=" wh_logo d-none d-sm-block "><img src="../../logo.png" alt="  DolphinDB 文档中心  "/></a>
+                    <div class=" wh_publication_title "><a href="../../index.html"><span class="booktitle">  <span class="ph mainbooktitle">DolphinDB 文档中心</span>  </span></a></div>
+                    
+                </div>
+                
+                
+            </div>
+
+            <div class="wh_top_menu_and_indexterms_link collapse navbar-collapse" id="wh_top_menu_and_indexterms_link">
+                
+                
+                
+                
+            </div>
+        <div class=" wh_search_input navbar-form wh_topic_page_search search " role="form">
+            
+            
+            
+            <form id="searchForm" method="get" role="search" action="../../search.html"><div><input type="search" placeholder="搜索 " class="wh_search_textfield" id="textToSearch" name="searchQuery" aria-label="搜索查询" required="required"/><button type="submit" class="wh_search_button" aria-label="搜索"><span class="search_input_text">搜索</span></button></div></form>
+            
+            <script src="/vendors/react/umd/react.production.min.js" defer="defer"></script>
+<script src="/vendors/react-dom/umd/react-dom.production.min.js" defer="defer"></script>
+<script src="/vendors/dayjs/dayjs.min.js" defer="defer"></script>
+<script src="/vendors/antd/dist/antd.min.js" defer="defer"></script>
+<script src="/vendors/@ant-design/icons/dist/index.umd.min.js" defer="defer"></script>
+<script src="/zh/index.js" type="module"></script>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js" defer="defer"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML" defer="defer"><!--
+
+
+--></script>
+
+            
+        </div></div>
+    </div>
+</header>
+        
+        
+         
+        
+        
+        
+        <div class="container-fluid" id="wh_topic_container">
+            <div class="row">
+
+                <nav class="wh_tools d-print-none navbar-expand-md" aria-label="Tools">
+                    
+                    <div data-tooltip-position="bottom" class=" wh_breadcrumb "><ol class="d-print-none"><li><span class="home"><a href="../../index.html"><span>主页</span></a></span></li><li><div class="topicref"><div class="title"><a href="../../rn/server/3_00_1.html">版本说明</a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 版本发布历史</p></div></div></div></li><li><div class="topicref"><div class="title"><a href="../../rn/api/rn_cpp.html">连接器和 API</a></div></div></li><li><div class="topicref" data-id="rn_py"><div class="title"><a href="../../rn/api/rn_py.html">Python</a></div></div></li><li class="active"><div class="topicref" data-id="rn_13015_py"><div class="title"><a href="../../rn/api/rn_13015_py.html">1.30.0.15</a></div></div></li></ol></div>
+                    
+                    
+                    
+                    <div class="wh_right_tools">
+                        <button class="wh_hide_highlight" aria-label="切换搜索突出显示" title="切换搜索突出显示"></button>
+                        <button class="webhelp_expand_collapse_sections" data-next-state="collapsed" aria-label="折叠截面" title="折叠截面"></button>
+                        
+                        
+                        
+                        
+                        <div class=" wh_print_link print d-none d-md-inline-block "><button onClick="window.print()" title="打印此页" aria-label="打印此页"></button></div>
+                        
+                        <button type="button" id="wh_toc_button" class="custom-toggler navbar-toggler collapsed wh_toggle_button navbar-light" aria-expanded="false" aria-label="Toggle publishing table of content" aria-controls="wh_publication_toc">
+                            <span class="navbar-toggler-icon"></span>
+                        </button>
+                    </div>
+                    
+                </nav>
+            </div>
+            
+            
+            
+            
+            <div class="wh_content_area">
+                <div class="row">
+                    
+                        <nav id="wh_publication_toc" class="col-lg-3 col-md-3 col-sm-12 d-md-block d-none d-print-none" aria-label="Table of Contents Container">
+                            <div id="wh_publication_toc_content">
+		                        
+                            	<div class=" wh_publication_toc " data-tooltip-position="right"><span class="expand-button-action-labels"><span id="button-expand-action" role="button" aria-label="Expand"></span><span id="button-collapse-action" role="button" aria-label="Collapse"></span><span id="button-pending-action" role="button" aria-label="Pending"></span></span><ul role="tree" aria-label="Table of Contents"><li role="treeitem"><div data-tocid="new_chap_about_sect_ddb_docs_intro-d9529e87" class="topicref" data-id="new_chap_about_sect_ddb_docs_intro" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../about/ddb_docs_intro.html" id="new_chap_about_sect_ddb_docs_intro-d9529e87-link">文档使用说明</a><div class="wh-tooltip"><p class="shortdesc">如何获取 DolphinDB 帮助信息</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="chap1_getstarted-d9529e140" class="topicref" data-id="chap1_getstarted" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action chap1_getstarted-d9529e140-link" class="wh-expand-btn"></span><div class="title"><a href="../../getstarted/chap1_getstarted.html" id="chap1_getstarted-d9529e140-link"><span class="keyword label">快速上手</span></a><div class="wh-tooltip"><p class="shortdesc">如何快速部署 DolphinDB、建库建表、写入和查询数据</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="sectionddb_deployment-d9529e335" class="topicref" data-id="sectionddb_deployment" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action sectionddb_deployment-d9529e335-link" class="wh-expand-btn"></span><div class="title"><a href="../../deploy/deploy_intro.html" id="sectionddb_deployment-d9529e335-link"><span class="keyword label">部署</span></a><div class="wh-tooltip"><p class="shortdesc">如何在不同的场景中部署 DolphinDB</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="new_chap_database_manage_new_chap_dbmanage_landing_page-d9529e2313" class="topicref" data-id="new_chap_database_manage_new_chap_dbmanage_landing_page" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action new_chap_database_manage_new_chap_dbmanage_landing_page-d9529e2313-link" class="wh-expand-btn"></span><div class="title"><a href="../../db_distr_comp/cfg/db_intro.html" id="new_chap_database_manage_new_chap_dbmanage_landing_page-d9529e2313-link"><span class="keyword label">数据库</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 数据库的基本概念</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="chap7_tutorials_streaming-d9529e3490" class="topicref" data-id="chap7_tutorials_streaming" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action chap7_tutorials_streaming-d9529e3490-link" class="wh-expand-btn"></span><div class="title"><a href="../../stream/str_intro.html" id="chap7_tutorials_streaming-d9529e3490-link"><span class="keyword label">流数据</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 流数据引擎及流数据计算的基本概念</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="tocId-d9529e7385" class="topicref" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action tocId-d9529e7385-link" class="wh-expand-btn"></span><div class="title"><a href="../../db_distr_comp/db_oper/import_data.html" id="tocId-d9529e7385-link">数据迁移</a><div class="wh-tooltip"><p class="shortdesc">如何从不同数据源向 DolphinDB 迁移数据</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="chap7_tutorials_system_management-d9529e7812" class="topicref" data-id="chap7_tutorials_system_management" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action chap7_tutorials_system_management-d9529e7812-link" class="wh-expand-btn"></span><div class="title"><a href="../../sys_man/om_intro.html" id="chap7_tutorials_system_management-d9529e7812-link"><span class="keyword label">系统运维</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 的系统运维功能及方法</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="about_language_resources-d9529e16490" class="topicref" data-id="about_language_resources" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action about_language_resources-d9529e16490-link" class="wh-expand-btn"></span><div class="title"><a href="../../progr/progr_intro.html" id="about_language_resources-d9529e16490-link"><span class="keyword label">编程语言</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 编程基本概念与方法、SQL 在 DolphinDB 的应用</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="functions_references-d9529e26503" class="topicref" data-id="functions_references" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action functions_references-d9529e26503-link" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/funcs_intro.html" id="functions_references-d9529e26503-link"><span class="keyword label">函数参考</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 函数分类、语法、详解及示例</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="api_protocol-d9529e86456" class="topicref" data-id="api_protocol" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action api_protocol-d9529e86456-link" class="wh-expand-btn"></span><div class="title"><a href="../../api/connapi_intro.html" id="api_protocol-d9529e86456-link"><span class="keyword label">连接器 &amp; API</span></a><div class="wh-tooltip"><p class="shortdesc">面向不同编程语言的 DolphinDB API 及连接器，相关协议和用法</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="chap6_plugin-d9529e91976" class="topicref" data-id="chap6_plugin" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action chap6_plugin-d9529e91976-link" class="wh-expand-btn"></span><div class="title"><a href="../../plugins/plg_intro.html" id="chap6_plugin-d9529e91976-link"><span class="keyword label">插件</span></a><div class="wh-tooltip"><p class="shortdesc">多个应用场景的插件使用说明和插件开发指导</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="third_party-d9529e94749" class="topicref" data-id="third_party" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action third_party-d9529e94749-link" class="wh-expand-btn"></span><div class="title"><a href="../../third_party.html" id="third_party-d9529e94749-link">第三方工具</a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="about_tutorials-d9529e94980" class="topicref" data-id="about_tutorials" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action about_tutorials-d9529e94980-link" class="wh-expand-btn"></span><div class="title"><a href="../../tutorials/about_tutorials.html" id="about_tutorials-d9529e94980-link"><span class="keyword label">教程</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 产品使用教程</p></div></div></div></li><li role="treeitem" aria-expanded="true"><div data-tocid="tocId-d9529e101769" class="topicref" data-state="expanded"><span role="button" tabindex="0" aria-labelledby="button-collapse-action tocId-d9529e101769-link" class="wh-expand-btn"></span><div class="title"><a href="../../rn/server/3_00_1.html" id="tocId-d9529e101769-link">版本说明</a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 版本发布历史</p></div></div></div><ul role="group" class="navbar-nav nav-list"><li role="treeitem" aria-expanded="false"><div data-tocid="tocId-d9529e101834" class="topicref" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action tocId-d9529e101834-link" class="wh-expand-btn"></span><div class="title"><a href="../../rn/server/3_00_1.html" id="tocId-d9529e101834-link">Server</a></div></div></li><li role="treeitem" aria-expanded="true"><div data-tocid="tocId-d9529e101927" class="topicref" data-state="expanded"><span role="button" tabindex="0" aria-labelledby="button-collapse-action tocId-d9529e101927-link" class="wh-expand-btn"></span><div class="title"><a href="../../rn/api/rn_cpp.html" id="tocId-d9529e101927-link">连接器和 API</a></div></div><ul role="group" class="navbar-nav nav-list"><li role="treeitem" aria-expanded="false"><div data-tocid="rn_cpp-d9529e101928" class="topicref" data-id="rn_cpp" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action rn_cpp-d9529e101928-link" class="wh-expand-btn"></span><div class="title"><a href="../../rn/api/rn_cpp.html" id="rn_cpp-d9529e101928-link">C++</a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="rn_csharp-d9529e102296" class="topicref" data-id="rn_csharp" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action rn_csharp-d9529e102296-link" class="wh-expand-btn"></span><div class="title"><a href="../../rn/api/rn_csharp.html" id="rn_csharp-d9529e102296-link">C#</a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="rn_go-d9529e102572" class="topicref" data-id="rn_go" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action rn_go-d9529e102572-link" class="wh-expand-btn"></span><div class="title"><a href="../../rn/api/rn_go.html" id="rn_go-d9529e102572-link">Go</a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="rn_java-d9529e102756" class="topicref" data-id="rn_java" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action rn_java-d9529e102756-link" class="wh-expand-btn"></span><div class="title"><a href="../../rn/api/rn_java.html" id="rn_java-d9529e102756-link">Java</a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="rn_js-d9529e103170" class="topicref" data-id="rn_js" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action rn_js-d9529e103170-link" class="wh-expand-btn"></span><div class="title"><a href="../../rn/api/rn_js.html" id="rn_js-d9529e103170-link">JavaScript</a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="rn_jdbc-d9529e103446" class="topicref" data-id="rn_jdbc" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action rn_jdbc-d9529e103446-link" class="wh-expand-btn"></span><div class="title"><a href="../../rn/api/rn_jdbc.html" id="rn_jdbc-d9529e103446-link">JDBC</a></div></div></li><li role="treeitem" aria-expanded="true"><div data-tocid="rn_py-d9529e103676" class="topicref" data-id="rn_py" data-state="expanded"><span role="button" tabindex="0" aria-labelledby="button-collapse-action rn_py-d9529e103676-link" class="wh-expand-btn"></span><div class="title"><a href="../../rn/api/rn_py.html" id="rn_py-d9529e103676-link">Python</a></div></div><ul role="group" class="navbar-nav nav-list"><li role="treeitem"><div data-tocid="rn_3001_py-d9529e103722" class="topicref" data-id="rn_3001_py" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../rn/api/rn_3001_py.html" id="rn_3001_py-d9529e103722-link">3.0.1</a></div></div></li><li role="treeitem"><div data-tocid="_3_0_0_0-d9529e103768" class="topicref" data-id="_3_0_0_0" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../rn/api/3_0_0_0.html" id="_3_0_0_0-d9529e103768-link">3.0.0</a></div></div></li><li role="treeitem"><div data-tocid="rn_2011_py-d9529e103814" class="topicref" data-id="rn_2011_py" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../rn/api/rn_2011_py.html" id="rn_2011_py-d9529e103814-link">2.0.11</a></div></div></li><li role="treeitem"><div data-tocid="rn_13022_py-d9529e103860" class="topicref" data-id="rn_13022_py" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../rn/api/rn_13022_py.html" id="rn_13022_py-d9529e103860-link">1.30.22</a></div></div></li><li role="treeitem"><div data-tocid="rn_13021_py-d9529e103906" class="topicref" data-id="rn_13021_py" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../rn/api/rn_13021_py.html" id="rn_13021_py-d9529e103906-link">1.30.21</a></div></div></li><li role="treeitem"><div data-tocid="rn_13019_py-d9529e103952" class="topicref" data-id="rn_13019_py" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../rn/api/rn_13019_py.html" id="rn_13019_py-d9529e103952-link">1.30.19</a></div></div></li><li role="treeitem"><div data-tocid="rn_13017_py-d9529e103998" class="topicref" data-id="rn_13017_py" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../rn/api/rn_13017_py.html" id="rn_13017_py-d9529e103998-link">1.30.17</a></div></div></li><li role="treeitem"><div data-tocid="rn_13016_py-d9529e104044" class="topicref" data-id="rn_13016_py" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../rn/api/rn_13016_py.html" id="rn_13016_py-d9529e104044-link">1.30.16</a></div></div></li><li role="treeitem" class="active"><div data-tocid="rn_13015_py-d9529e104090" class="topicref" data-id="rn_13015_py" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../rn/api/rn_13015_py.html" id="rn_13015_py-d9529e104090-link">1.30.0.15</a></div></div></li><li role="treeitem"><div data-tocid="rn_13010_py-d9529e104136" class="topicref" data-id="rn_13010_py" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../rn/api/rn_13010_py.html" id="rn_13010_py-d9529e104136-link">1.30.0.10</a></div></div></li><li role="treeitem"><div data-tocid="rn_1309_py-d9529e104183" class="topicref" data-id="rn_1309_py" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../rn/api/rn_1309_py.html" id="rn_1309_py-d9529e104183-link">1.30.0.9</a></div></div></li><li role="treeitem"><div data-tocid="rn_1308_py-d9529e104229" class="topicref" data-id="rn_1308_py" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../rn/api/rn_1308_py.html" id="rn_1308_py-d9529e104229-link">1.30.0.8</a></div></div></li><li role="treeitem"><div data-tocid="rn_1307_py-d9529e104275" class="topicref" data-id="rn_1307_py" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../rn/api/rn_1307_py.html" id="rn_1307_py-d9529e104275-link">1.30.0.7</a></div></div></li><li role="treeitem"><div data-tocid="rn_1306_py-d9529e104321" class="topicref" data-id="rn_1306_py" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../rn/api/rn_1306_py.html" id="rn_1306_py-d9529e104321-link">1.30.0.6</a></div></div></li><li role="treeitem"><div data-tocid="rn_1305_py-d9529e104367" class="topicref" data-id="rn_1305_py" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../rn/api/rn_1305_py.html" id="rn_1305_py-d9529e104367-link">1.30.0.5</a></div></div></li></ul></li><li role="treeitem" aria-expanded="false"><div data-tocid="rn_r-d9529e104413" class="topicref" data-id="rn_r" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action rn_r-d9529e104413-link" class="wh-expand-btn"></span><div class="title"><a href="../../rn/api/rn_r.html" id="rn_r-d9529e104413-link">R</a></div></div></li></ul></li><li role="treeitem" aria-expanded="false"><div data-tocid="tocId-d9529e104551" class="topicref" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action tocId-d9529e104551-link" class="wh-expand-btn"></span><div class="title"><a href="../../rn/plugin/3_00_1.html" id="tocId-d9529e104551-link">插件</a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="tocId-d9529e104644" class="topicref" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action tocId-d9529e104644-link" class="wh-expand-btn"></span><div class="title"><a href="../../rn/rn_web.html" id="tocId-d9529e104644-link">客户端</a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="third_party_rn-d9529e104783" class="topicref" data-id="third_party_rn" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action third_party_rn-d9529e104783-link" class="wh-expand-btn"></span><div class="title"><a href="../../rn/server/third_party_rn.html" id="third_party_rn-d9529e104783-link">第三方工具</a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="compatibility_def-d9529e104921" class="topicref" data-id="compatibility_def" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action compatibility_def-d9529e104921-link" class="wh-expand-btn"></span><div class="title"><a href="../../rn/compat_def.html" id="compatibility_def-d9529e104921-link">版本兼容性说明</a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="tocId-d9529e105243" class="topicref" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action tocId-d9529e105243-link" class="wh-expand-btn"></span><div class="title"><a href="../../rn/compat_report_3001.html" id="tocId-d9529e105243-link">版本兼容性列表</a></div></div></li></ul></li></ul></div>
+		                        
+                            </div>
+                        </nav>
+                    
+                    
+                    <div class="col-lg-9 col-md-9 col-sm-12" id="wh_topic_body">
+                        <button id="wh_close_publication_toc_button" class="close-toc-button d-none" aria-label="Toggle publishing table of content" aria-controls="wh_publication_toc" aria-expanded="true">
+                            <span class="close-toc-icon-container">
+                                <span class="close-toc-icon"></span>     
+                            </span>
+                        </button>
+                        
+                        
+                        <div class=" wh_topic_content body "><main role="main"><article class="- topic/topic topic" role="article" aria-labelledby="ariaid-title1">
+    <h1 class="- topic/title title topictitle1" id="ariaid-title1">1.30.0.15</h1>
+    <div class="- topic/body body">
+        <section class="- topic/section section" id="rn_13015_py__section_qrh_21q_pyb" data-ofbid="rn_13015_py__section_qrh_21q_pyb"><h2 class="- topic/title title sectiontitle">新增功能</h2>
+            
+            <p class="- topic/p p" id="rn_13015_py__p_tzc_hkj_qyb" data-ofbid="rn_13015_py__p_tzc_hkj_qyb">session 对象增加了 keepAliveTime 参数，设置检测 TCP
+                存活的时间间隔，默认为30秒。在大数据量访问时，给该参数设置一个较大值，可以避免 TCP 连接掉线。</p>
+        </section>
+    </div>
+</article></main></div>
+                        
+                        
+                        
+                        
+                        
+                        
+                    </div>
+                    
+                </div>
+            </div>
+            
+            
+            
+        </div> 
+        <footer class="navbar navbar-default wh_footer">
+  <div class=" footer-container mx-auto ">
+<title>Copyright</title><p><b> ©2024 浙江智臾科技有限公司 浙ICP备18048711号-3</b></p>
+  </div>
+</footer>
+        
+        <div id="go2top" class="d-print-none">
+            <span class="oxy-icon oxy-icon-up"></span>
+        </div>
+        
+        <div id="modal_img_large" class="modal">
+            <span class="close oxy-icon oxy-icon-remove"></span>
+            <div id="modal_img_container"></div>
+            <div id="caption"></div>
+        </div>
+        
+        
+        
+    </body>
+</html>

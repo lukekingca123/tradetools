@@ -1,0 +1,857 @@
+<!DOCTYPE html><html xmlns="http://www.w3.org/1999/xhtml" xml:lang="zh" lang="zh" data-whc_version="26.0">
+    <head><link rel="shortcut icon" href="../../favicon.ico"/><link rel="icon" href="../../favicon.ico"/><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><meta http-equiv="X-UA-Compatible" content="IE=edge"/><meta name="description" content="wj(leftTable, rightTable, window, aggs, matchingCols, [rightMatchingCols]) pwj(leftTable, rightTable, window, aggs, matchingCols, [rightMatchingCols]) leftTable 和 rightTable 是连接的表。 注： rightTable ..."/><meta name="DC.rights.owner" content="(C) 版权 2024"/><meta name="copyright" content="(C) 版权 2024"/><meta name="generator" content="DITA-OT"/><meta name="DC.type" content="topic"/><meta name="DC.coverage" content=""/><meta name="DC.relation" content="../../progr/sql/tb_joiner_intro.html"/><meta name="prodname" content="DolphinDB"/><meta name="brand" content="DolphinDB"/><meta name="DC.creator" content="DolphinDB"/><meta name="DC.publisher" content="DDB N/A DDB 200"/><meta name="DC.format" content="HTML5"/><meta name="DC.identifier" content="window-join"/><title>window join</title><!--  Generated with Oxygen version 26.0, build number 2024012323.  --><meta name="wh-path2root" content="../../"/><meta name="wh-toc-id" content="window-join-d9529e25164"/><meta name="wh-source-relpath" content="progr/sql/windowjoin.dita"/><meta name="wh-out-relpath" content="progr/sql/windowjoin.html"/>
+
+    <link rel="stylesheet" type="text/css" href="../../oxygen-webhelp/app/commons.css?buildId=2024012323"/>
+    <link rel="stylesheet" type="text/css" href="../../oxygen-webhelp/app/topic.css?buildId=2024012323"/>
+
+    <script src="../../oxygen-webhelp/app/options/properties.js?buildId=20240704100525"></script>
+    <script src="../../oxygen-webhelp/app/localization/strings.js?buildId=2024012323"></script>
+    <script src="../../oxygen-webhelp/app/search/index/keywords.js?buildId=20240704100525"></script>
+    <script defer="defer" src="../../oxygen-webhelp/app/commons.js?buildId=2024012323"></script>
+    <script defer="defer" src="../../oxygen-webhelp/app/topic.js?buildId=2024012323"></script>
+<link rel="stylesheet" type="text/css" href="../../oxygen-webhelp/template/styles.css?buildId=2024012323"/><script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script><script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script></head>
+
+    <body id="window-join" class="wh_topic_page frmBody">
+        <a href="#wh_topic_body" class="sr-only sr-only-focusable">
+            跳转到主要内容
+        </a>
+        
+        
+        
+        
+        <header class="navbar navbar-default wh_header">
+    <div class="container-fluid">
+        <div xmlns:whc="http://www.oxygenxml.com/webhelp/components" class="wh_header_flex_container navbar-nav navbar-expand-md navbar-dark">
+            <div class="wh_logo_and_publication_title_container">
+                <div class="wh_logo_and_publication_title">
+                    
+                    <a href="https://www.dolphindb.cn" class=" wh_logo d-none d-sm-block "><img src="../../logo.png" alt="  DolphinDB 文档中心  "/></a>
+                    <div class=" wh_publication_title "><a href="../../index.html"><span class="booktitle">  <span class="ph mainbooktitle">DolphinDB 文档中心</span>  </span></a></div>
+                    
+                </div>
+                
+                
+            </div>
+
+            <div class="wh_top_menu_and_indexterms_link collapse navbar-collapse" id="wh_top_menu_and_indexterms_link">
+                
+                
+                
+                
+            </div>
+        <div class=" wh_search_input navbar-form wh_topic_page_search search " role="form">
+            
+            
+            
+            <form id="searchForm" method="get" role="search" action="../../search.html"><div><input type="search" placeholder="搜索 " class="wh_search_textfield" id="textToSearch" name="searchQuery" aria-label="搜索查询" required="required"/><button type="submit" class="wh_search_button" aria-label="搜索"><span class="search_input_text">搜索</span></button></div></form>
+            
+            <script src="/vendors/react/umd/react.production.min.js" defer="defer"></script>
+<script src="/vendors/react-dom/umd/react-dom.production.min.js" defer="defer"></script>
+<script src="/vendors/dayjs/dayjs.min.js" defer="defer"></script>
+<script src="/vendors/antd/dist/antd.min.js" defer="defer"></script>
+<script src="/vendors/@ant-design/icons/dist/index.umd.min.js" defer="defer"></script>
+<script src="/zh/index.js" type="module"></script>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js" defer="defer"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML" defer="defer"><!--
+
+
+--></script>
+
+            
+        </div></div>
+    </div>
+</header>
+        
+        
+         
+        
+        
+        
+        <div class="container-fluid" id="wh_topic_container">
+            <div class="row">
+
+                <nav class="wh_tools d-print-none navbar-expand-md" aria-label="Tools">
+                    
+                    <div data-tooltip-position="bottom" class=" wh_breadcrumb "><ol class="d-print-none"><li><span class="home"><a href="../../index.html"><span>主页</span></a></span></li><li><div class="topicref" data-id="about_language_resources"><div class="title"><a href="../../progr/progr_intro.html"><span class="keyword label">编程语言</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 编程基本概念与方法、SQL 在 DolphinDB 的应用</p></div></div></div></li><li><div class="topicref" data-id="chap4_sect_sql_statements"><div class="title"><a href="../../progr/sql/sql_intro.html"><span class="keyword label">SQL 语句</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 中 SQL 语句的基本语法和用法</p></div></div></div></li><li><div class="topicref" data-id="table_joiners"><div class="title"><a href="../../progr/sql/tb_joiner_intro.html"><span class="keyword label">表连接</span></a></div></div></li><li class="active"><div class="topicref" data-id="window-join"><div class="title"><a href="../../progr/sql/windowjoin.html">window join</a></div></div></li></ol></div>
+                    
+                    
+                    
+                    <div class="wh_right_tools">
+                        <button class="wh_hide_highlight" aria-label="切换搜索突出显示" title="切换搜索突出显示"></button>
+                        <button class="webhelp_expand_collapse_sections" data-next-state="collapsed" aria-label="折叠截面" title="折叠截面"></button>
+                        
+                        
+                        
+                        
+                        <div class=" wh_print_link print d-none d-md-inline-block "><button onClick="window.print()" title="打印此页" aria-label="打印此页"></button></div>
+                        
+                        <button type="button" id="wh_toc_button" class="custom-toggler navbar-toggler collapsed wh_toggle_button navbar-light" aria-expanded="false" aria-label="Toggle publishing table of content" aria-controls="wh_publication_toc">
+                            <span class="navbar-toggler-icon"></span>
+                        </button>
+                    </div>
+                    
+                </nav>
+            </div>
+            
+            
+            
+            
+            <div class="wh_content_area">
+                <div class="row">
+                    
+                        <nav id="wh_publication_toc" class="col-lg-3 col-md-3 col-sm-12 d-md-block d-none d-print-none" aria-label="Table of Contents Container">
+                            <div id="wh_publication_toc_content">
+		                        
+                            	<div class=" wh_publication_toc " data-tooltip-position="right"><span class="expand-button-action-labels"><span id="button-expand-action" role="button" aria-label="Expand"></span><span id="button-collapse-action" role="button" aria-label="Collapse"></span><span id="button-pending-action" role="button" aria-label="Pending"></span></span><ul role="tree" aria-label="Table of Contents"><li role="treeitem"><div data-tocid="new_chap_about_sect_ddb_docs_intro-d9529e87" class="topicref" data-id="new_chap_about_sect_ddb_docs_intro" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../about/ddb_docs_intro.html" id="new_chap_about_sect_ddb_docs_intro-d9529e87-link">文档使用说明</a><div class="wh-tooltip"><p class="shortdesc">如何获取 DolphinDB 帮助信息</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="chap1_getstarted-d9529e140" class="topicref" data-id="chap1_getstarted" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action chap1_getstarted-d9529e140-link" class="wh-expand-btn"></span><div class="title"><a href="../../getstarted/chap1_getstarted.html" id="chap1_getstarted-d9529e140-link"><span class="keyword label">快速上手</span></a><div class="wh-tooltip"><p class="shortdesc">如何快速部署 DolphinDB、建库建表、写入和查询数据</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="sectionddb_deployment-d9529e335" class="topicref" data-id="sectionddb_deployment" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action sectionddb_deployment-d9529e335-link" class="wh-expand-btn"></span><div class="title"><a href="../../deploy/deploy_intro.html" id="sectionddb_deployment-d9529e335-link"><span class="keyword label">部署</span></a><div class="wh-tooltip"><p class="shortdesc">如何在不同的场景中部署 DolphinDB</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="new_chap_database_manage_new_chap_dbmanage_landing_page-d9529e2313" class="topicref" data-id="new_chap_database_manage_new_chap_dbmanage_landing_page" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action new_chap_database_manage_new_chap_dbmanage_landing_page-d9529e2313-link" class="wh-expand-btn"></span><div class="title"><a href="../../db_distr_comp/cfg/db_intro.html" id="new_chap_database_manage_new_chap_dbmanage_landing_page-d9529e2313-link"><span class="keyword label">数据库</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 数据库的基本概念</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="chap7_tutorials_streaming-d9529e3490" class="topicref" data-id="chap7_tutorials_streaming" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action chap7_tutorials_streaming-d9529e3490-link" class="wh-expand-btn"></span><div class="title"><a href="../../stream/str_intro.html" id="chap7_tutorials_streaming-d9529e3490-link"><span class="keyword label">流数据</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 流数据引擎及流数据计算的基本概念</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="tocId-d9529e7385" class="topicref" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action tocId-d9529e7385-link" class="wh-expand-btn"></span><div class="title"><a href="../../db_distr_comp/db_oper/import_data.html" id="tocId-d9529e7385-link">数据迁移</a><div class="wh-tooltip"><p class="shortdesc">如何从不同数据源向 DolphinDB 迁移数据</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="chap7_tutorials_system_management-d9529e7812" class="topicref" data-id="chap7_tutorials_system_management" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action chap7_tutorials_system_management-d9529e7812-link" class="wh-expand-btn"></span><div class="title"><a href="../../sys_man/om_intro.html" id="chap7_tutorials_system_management-d9529e7812-link"><span class="keyword label">系统运维</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 的系统运维功能及方法</p></div></div></div></li><li role="treeitem" aria-expanded="true"><div data-tocid="about_language_resources-d9529e16490" class="topicref" data-id="about_language_resources" data-state="expanded"><span role="button" tabindex="0" aria-labelledby="button-collapse-action about_language_resources-d9529e16490-link" class="wh-expand-btn"></span><div class="title"><a href="../../progr/progr_intro.html" id="about_language_resources-d9529e16490-link"><span class="keyword label">编程语言</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 编程基本概念与方法、SQL 在 DolphinDB 的应用</p></div></div></div><ul role="group" class="navbar-nav nav-list"><li role="treeitem" aria-expanded="false"><div data-tocid="chap4_db_programming-d9529e16543" class="topicref" data-id="chap4_db_programming" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action chap4_db_programming-d9529e16543-link" class="wh-expand-btn"></span><div class="title"><a href="../../progr/lang_intro.html" id="chap4_db_programming-d9529e16543-link"><span class="keyword label">DolphinDB 脚本语言</span></a><div class="wh-tooltip"><p class="shortdesc"> 脚本编程相关概念参考，包括：数据类型与形式、对象、运算符、编程语句、数据操作、函数化编程、文件操作和 SQL 语句。 </p></div></div></div></li><li role="treeitem" aria-expanded="true"><div data-tocid="chap4_sect_sql_statements-d9529e22890" class="topicref" data-id="chap4_sect_sql_statements" data-state="expanded"><span role="button" tabindex="0" aria-labelledby="button-collapse-action chap4_sect_sql_statements-d9529e22890-link" class="wh-expand-btn"></span><div class="title"><a href="../../progr/sql/sql_intro.html" id="chap4_sect_sql_statements-d9529e22890-link"><span class="keyword label">SQL 语句</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 中 SQL 语句的基本语法和用法</p></div></div></div><ul role="group" class="navbar-nav nav-list"><li role="treeitem" aria-expanded="false"><div data-tocid="ddl-d9529e22941" class="topicref" data-id="ddl" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action ddl-d9529e22941-link" class="wh-expand-btn"></span><div class="title"><a href="../../progr/sql/sql_ddl.html" id="ddl-d9529e22941-link">DDL</a><div class="wh-tooltip"><p class="shortdesc">介绍 DolphinDB 中的数据定义（DDL）语言</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="dml-d9529e23129" class="topicref" data-id="dml" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action dml-d9529e23129-link" class="wh-expand-btn"></span><div class="title"><a href="../../progr/sql/sql_dml.html" id="dml-d9529e23129-link">DML</a><div class="wh-tooltip"><p class="shortdesc">介绍 DolphinDB 中的数据描述（DML）语言</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="dql-d9529e23317" class="topicref" data-id="dql" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action dql-d9529e23317-link" class="wh-expand-btn"></span><div class="title"><a href="../../progr/sql/sql_dql.html" id="dql-d9529e23317-link">DQL</a><div class="wh-tooltip"><p class="shortdesc">介绍 DolphinDB 中的数据查询（DQL）语言</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="predicates-d9529e24196" class="topicref" data-id="predicates" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action predicates-d9529e24196-link" class="wh-expand-btn"></span><div class="title"><a href="../../progr/sql/predicates.html" id="predicates-d9529e24196-link"><span class="keyword label">谓词</span></a></div></div></li><li role="treeitem" aria-expanded="true"><div data-tocid="table_joiners-d9529e24703" class="topicref" data-id="table_joiners" data-state="expanded"><span role="button" tabindex="0" aria-labelledby="button-collapse-action table_joiners-d9529e24703-link" class="wh-expand-btn"></span><div class="title"><a href="../../progr/sql/tb_joiner_intro.html" id="table_joiners-d9529e24703-link"><span class="keyword label">表连接</span></a></div></div><ul role="group" class="navbar-nav nav-list"><li role="treeitem"><div data-tocid="asof-join-d9529e24750" class="topicref" data-id="asof-join" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../progr/sql/asofjoin.html" id="asof-join-d9529e24750-link">asof join</a></div></div></li><li role="treeitem"><div data-tocid="cross-join-d9529e24796" class="topicref" data-id="cross-join" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../progr/sql/crossjoin.html" id="cross-join-d9529e24796-link">cross join</a></div></div></li><li role="treeitem"><div data-tocid="equi-join-d9529e24842" class="topicref" data-id="equi-join" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../progr/sql/equijoin.html" id="equi-join-d9529e24842-link">equi join</a></div></div></li><li role="treeitem"><div data-tocid="full-joinfull-outer-join-d9529e24888" class="topicref" data-id="full-joinfull-outer-join" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../progr/sql/fulljoin.html" id="full-joinfull-outer-join-d9529e24888-link">full join/full outer join</a></div></div></li><li role="treeitem"><div data-tocid="inner-join-d9529e24934" class="topicref" data-id="inner-join" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../progr/sql/innerjoin.html" id="inner-join-d9529e24934-link">inner join</a></div></div></li><li role="treeitem"><div data-tocid="join_sql-d9529e24980" class="topicref" data-id="join_sql" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../progr/sql/join.html" id="join_sql-d9529e24980-link">join</a></div></div></li><li role="treeitem"><div data-tocid="left-joinleft-outer-join-d9529e25026" class="topicref" data-id="left-joinleft-outer-join" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../progr/sql/leftjoin.html" id="left-joinleft-outer-join-d9529e25026-link">left join/left outer join</a></div></div></li><li role="treeitem"><div data-tocid="prefix-join-d9529e25072" class="topicref" data-id="prefix-join" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../progr/sql/prefixjoin.html" id="prefix-join-d9529e25072-link">prefix join</a></div></div></li><li role="treeitem"><div data-tocid="right-joinright-outer-join-d9529e25118" class="topicref" data-id="right-joinright-outer-join" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../progr/sql/rightjoin.html" id="right-joinright-outer-join-d9529e25118-link">right join/right outer join</a></div></div></li><li role="treeitem" class="active"><div data-tocid="window-join-d9529e25164" class="topicref" data-id="window-join" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../progr/sql/windowjoin.html" id="window-join-d9529e25164-link">window join</a></div></div></li></ul></li><li role="treeitem"><div data-tocid="执行顺序-d9529e25210" class="topicref" data-id="执行顺序" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../progr/sql/exe_order.html" id="执行顺序-d9529e25210-link"><span class="keyword label">执行顺序</span></a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="landingpage_sql_trace-d9529e25257" class="topicref" data-id="landingpage_sql_trace" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action landingpage_sql_trace-d9529e25257-link" class="wh-expand-btn"></span><div class="title"><a href="../../progr/sql/sql_trace.html" id="landingpage_sql_trace-d9529e25257-link"><span class="keyword label">SQL Trace</span></a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="hint-d9529e25442" class="topicref" data-id="hint" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action hint-d9529e25442-link" class="wh-expand-btn"></span><div class="title"><a href="../../progr/sql/hint.html" id="hint-d9529e25442-link"><span class="keyword label">HINT 关键字</span></a></div></div></li></ul></li><li role="treeitem" aria-expanded="false"><div data-tocid="python-parser-简介-d9529e25535" class="topicref" data-id="python-parser-简介" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action python-parser-简介-d9529e25535-link" class="wh-expand-btn"></span><div class="title"><a href="../../progr/py_parser/py_par_intro.html" id="python-parser-简介-d9529e25535-link"><span class="keyword label">Python Parser</span></a></div></div></li></ul></li><li role="treeitem" aria-expanded="false"><div data-tocid="functions_references-d9529e26503" class="topicref" data-id="functions_references" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action functions_references-d9529e26503-link" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/funcs_intro.html" id="functions_references-d9529e26503-link"><span class="keyword label">函数参考</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 函数分类、语法、详解及示例</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="api_protocol-d9529e86456" class="topicref" data-id="api_protocol" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action api_protocol-d9529e86456-link" class="wh-expand-btn"></span><div class="title"><a href="../../api/connapi_intro.html" id="api_protocol-d9529e86456-link"><span class="keyword label">连接器 &amp; API</span></a><div class="wh-tooltip"><p class="shortdesc">面向不同编程语言的 DolphinDB API 及连接器，相关协议和用法</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="chap6_plugin-d9529e91976" class="topicref" data-id="chap6_plugin" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action chap6_plugin-d9529e91976-link" class="wh-expand-btn"></span><div class="title"><a href="../../plugins/plg_intro.html" id="chap6_plugin-d9529e91976-link"><span class="keyword label">插件</span></a><div class="wh-tooltip"><p class="shortdesc">多个应用场景的插件使用说明和插件开发指导</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="third_party-d9529e94749" class="topicref" data-id="third_party" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action third_party-d9529e94749-link" class="wh-expand-btn"></span><div class="title"><a href="../../third_party.html" id="third_party-d9529e94749-link">第三方工具</a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="about_tutorials-d9529e94980" class="topicref" data-id="about_tutorials" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action about_tutorials-d9529e94980-link" class="wh-expand-btn"></span><div class="title"><a href="../../tutorials/about_tutorials.html" id="about_tutorials-d9529e94980-link"><span class="keyword label">教程</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 产品使用教程</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="tocId-d9529e101769" class="topicref" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action tocId-d9529e101769-link" class="wh-expand-btn"></span><div class="title"><a href="../../rn/server/3_00_1.html" id="tocId-d9529e101769-link">版本说明</a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 版本发布历史</p></div></div></div></li></ul></div>
+		                        
+                            </div>
+                        </nav>
+                    
+                    
+                    <div class="col-lg-7 col-md-9 col-sm-12" id="wh_topic_body">
+                        <button id="wh_close_publication_toc_button" class="close-toc-button d-none" aria-label="Toggle publishing table of content" aria-controls="wh_publication_toc" aria-expanded="true">
+                            <span class="close-toc-icon-container">
+                                <span class="close-toc-icon"></span>     
+                            </span>
+                        </button>
+                        <button id="wh_close_topic_toc_button" class="close-toc-button d-none" aria-label="Toggle topic table of content" aria-controls="wh_topic_toc" aria-expanded="true">
+                            <span class="close-toc-icon-container">
+                                <span class="close-toc-icon"></span>     
+                            </span>
+                        </button>
+                        
+                        <div class=" wh_topic_content body "><main role="main"><article class="- topic/topic topic" role="article" aria-labelledby="ariaid-title1">
+    <h1 class="- topic/title title topictitle1" id="ariaid-title1">window join</h1>
+    
+    <article class="- topic/topic topic nested1" aria-labelledby="ariaid-title2" id="语法">
+        <h2 class="- topic/title title topictitle2" id="ariaid-title2">语法</h2>
+        
+        <article class="- topic/topic topic nested2" aria-labelledby="ariaid-title3" id="窗口连接">
+            <h3 class="- topic/title title topictitle3" id="ariaid-title3">窗口连接</h3>
+            <div class="- topic/body body">
+                <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="窗口连接__codeblock_jly_5hn_ryb" data-ofbid="窗口连接__codeblock_jly_5hn_ryb"><code>wj(leftTable, rightTable, window, aggs, matchingCols, [rightMatchingCols])</code></pre>
+            </div>
+        </article>
+        <article class="- topic/topic topic nested2" aria-labelledby="ariaid-title4" id="现行窗口连接">
+            <h3 class="- topic/title title topictitle3" id="ariaid-title4">现行窗口连接</h3>
+            <div class="- topic/body body">
+                <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="现行窗口连接__codeblock_kly_5hn_ryb" data-ofbid="现行窗口连接__codeblock_kly_5hn_ryb"><code>pwj(leftTable, rightTable, window, aggs, matchingCols, [rightMatchingCols])</code></pre>
+            </div>
+        </article>
+    </article>
+    <article class="- topic/topic topic nested1" aria-labelledby="ariaid-title5" id="参数">
+        <h2 class="- topic/title title topictitle2" id="ariaid-title5">参数</h2>
+        <div class="- topic/body body">
+            <ul class="- topic/ul ul" id="参数__ul_lly_5hn_ryb" data-ofbid="参数__ul_lly_5hn_ryb">
+                <li class="- topic/li li">
+                    <p class="- topic/p p" id="参数__p_mly_5hn_ryb" data-ofbid="参数__p_mly_5hn_ryb"><strong class="+ topic/ph hi-d/b ph b">leftTable</strong> 和 <strong class="+ topic/ph hi-d/b ph b">rightTable</strong> 是连接的表。</p>
+                    <div class="- topic/note note note note_note" id="参数__note_jzx_rqb_zzb" data-ofbid="参数__note_jzx_rqb_zzb"><span class="note__title">注：</span> <em class="+ topic/ph hi-d/i ph i">rightTable</em> 不能是分布式表。</div>
+                </li>
+                <li class="- topic/li li">
+                    <p class="- topic/p p" id="参数__p_nly_5hn_ryb" data-ofbid="参数__p_nly_5hn_ryb"><strong class="+ topic/ph hi-d/b ph b">window</strong> 是表示与左表记录有关的窗口边界的整型数据对或 DURATION 数据对，其中左右边界都包含在内。</p>
+                </li>
+                <li class="- topic/li li">
+                    <p class="- topic/p p" id="参数__p_oly_5hn_ryb" data-ofbid="参数__p_oly_5hn_ryb"><strong class="+ topic/ph hi-d/b ph b">aggs</strong> 表示聚合函数的元代码，详情请参考 <a class="- topic/xref xref" href="../objs/meta_progr.html">元编程</a>，支持输入元组。聚合函数中的参数必须是右表中的数值类型列。<span class="- topic/ph ph">支持输出右表字段的不定长 array vector。</span></p>
+                </li>
+                <li class="- topic/li li">
+                    <p class="- topic/p p" id="参数__p_ply_5hn_ryb" data-ofbid="参数__p_ply_5hn_ryb"><strong class="+ topic/ph hi-d/b ph b">matchingCols</strong> 是表示连接列的字符串标量或向量。</p>
+                </li>
+                <li class="- topic/li li">
+                    <p class="- topic/p p" id="参数__p_qly_5hn_ryb" data-ofbid="参数__p_qly_5hn_ryb"><strong class="+ topic/ph hi-d/b ph b">rightMatchingCols</strong> 是表示右表连接列的字符串标量或向量。当 <em class="+ topic/ph hi-d/i ph i">leftTable</em> 和
+                            <em class="+ topic/ph hi-d/i ph i">rightTable</em> 至少有一个连接列不同时，必须指定
+                        <em class="+ topic/ph hi-d/i ph i">rightMatchingCols</em>。返回结果中的连接列与左表的连接列名称相同。</p>
+                </li>
+            </ul>
+        </div>
+    </article>
+    <article class="- topic/topic topic nested1" aria-labelledby="ariaid-title6" id="详情">
+        <h2 class="- topic/title title topictitle2" id="ariaid-title6">详情</h2>
+        <div class="- topic/body body">
+            <p class="- topic/p p" id="详情__p_rly_5hn_ryb" data-ofbid="详情__p_rly_5hn_ryb">window join 是 asof join 的扩展。与 asof join 一样：</p>
+            <ul class="- topic/ul ul" id="详情__ul_sly_5hn_ryb" data-ofbid="详情__ul_sly_5hn_ryb">
+                <li class="- topic/li li">
+                    <p class="- topic/p p" id="详情__p_tly_5hn_ryb" data-ofbid="详情__p_tly_5hn_ryb">如果只有 1 个连接列，则 window join 假定右表已按照连接列排过序；</p>
+                </li>
+                <li class="- topic/li li">
+                    <p class="- topic/p p" id="详情__p_uly_5hn_ryb" data-ofbid="详情__p_uly_5hn_ryb">如果有多个连接列，则 window join
+                        假定右表根据除最后一个连接列外的其他连接列定义分组，每个分组根据最后一个连接列排序。右表的其他连接列不需要排序；</p>
+                </li>
+                <li class="- topic/li li">
+                    <p class="- topic/p p" id="详情__p_vly_5hn_ryb" data-ofbid="详情__p_vly_5hn_ryb">如果这些条件不符合，处理将与期望值不符。左表不需要排序。</p>
+                </li>
+            </ul>
+            <p class="- topic/p p" id="详情__p_wly_5hn_ryb" data-ofbid="详情__p_wly_5hn_ryb">与 asof join 一样，使用 <code class="+ topic/ph pr-d/codeph ph codeph">wj</code> 关联分区表时，用于分组的关联字段必须包含全部分区字段。</p>
+            <p class="- topic/p p" id="详情__p_xly_5hn_ryb" data-ofbid="详情__p_xly_5hn_ryb">如果 <em class="+ topic/ph hi-d/i ph i">window</em> = w1:w2，左表的 <em class="+ topic/ph hi-d/i ph i">matchingCols</em> 中最后一个连接列对应的每一行记录为
+                t，在右表中找到与其他连接列对应的记录行以及与最后一个连接列对应并且在 (t+w1) 到 (t+w2) 之间的值，然后把聚合函数应用到右表选中的行。</p>
+            <p class="- topic/p p" id="详情__p_yly_5hn_ryb" data-ofbid="详情__p_yly_5hn_ryb"><code class="+ topic/ph pr-d/codeph ph codeph">wj</code> 和 <code class="+ topic/ph pr-d/codeph ph codeph">pwj</code> 的区别是：</p>
+            <ul class="- topic/ul ul" id="详情__ul_zly_5hn_ryb" data-ofbid="详情__ul_zly_5hn_ryb">
+                <li class="- topic/li li">
+                    <p class="- topic/p p" id="详情__p_amy_5hn_ryb" data-ofbid="详情__p_amy_5hn_ryb">如果右表没有与 t+w1（窗口左边界）匹配的值， <code class="+ topic/ph pr-d/codeph ph codeph">wj</code> 的窗口左边界值为空，而 <code class="+ topic/ph pr-d/codeph ph codeph">pwj</code>
+                        会选择 (t+w1) 前的最后一个值，将其并入窗口。</p>
+                </li>
+                <li class="- topic/li li">
+                    <p class="- topic/p p" id="详情__p_bmy_5hn_ryb" data-ofbid="详情__p_bmy_5hn_ryb">如果右表有多个与 t+w1（窗口左边界）匹配的值时， <code class="+ topic/ph pr-d/codeph ph codeph">wj</code> 的窗口会包含所有重复的值，而
+                            <code class="+ topic/ph pr-d/codeph ph codeph">pwj</code> 只包含最后一行。</p>
+                </li>
+            </ul>
+            <p class="- topic/p p">如果 <em class="+ topic/ph hi-d/i ph i">window</em> = 0:0 ，右表的计算窗口将由左表两条数据的时间戳决定。假设左表某一条记录时间戳为
+                t，上一条记录的时间戳为 t0，则右表根据 <em class="+ topic/ph hi-d/i ph i">matchingCols</em> 其他列匹配后的计算窗口为 [t0, t)。</p>
+            <p class="- topic/p p" id="详情__p_cmy_5hn_ryb" data-ofbid="详情__p_cmy_5hn_ryb">以下聚合函数经过优化，使得它们在 window join 中的计算速度更快: <a class="- topic/xref xref" href="../../funcs/a/avg.html">avg</a>, <a class="- topic/xref xref" href="../../funcs/b/beta.html">beta</a>, <a class="- topic/xref xref" href="../../funcs/c/count.html">count</a>, <a class="- topic/xref xref" href="../../funcs/c/corr.html">corr</a>, <a class="- topic/xref xref" href="../../funcs/c/covar.html">covar</a>, <a class="- topic/xref xref" href="../../funcs/f/first.html">first</a>, <a class="- topic/xref xref" href="../../funcs/l/last.html">last</a>, <a class="- topic/xref xref" href="../../funcs/m/max.html">max</a>, <a class="- topic/xref xref" href="../../funcs/m/med.html">med</a>, <a class="- topic/xref xref" href="../../funcs/m/min.html">min</a>, <a class="- topic/xref xref" href="../../funcs/p/percentile.html">percentile</a>, <a class="- topic/xref xref" href="../../funcs/s/std.html">std</a>, <a class="- topic/xref xref" href="../../funcs/s/sum.html">sum</a>, <a class="- topic/xref xref" href="../../funcs/s/sum2.html">sum2</a>, <a class="- topic/xref xref" href="../../funcs/v/var.html">var</a>, <a class="- topic/xref xref" href="../../funcs/w/wavg.html">wavg</a>, <a class="- topic/xref xref" href="../../funcs/k/kurtosis.html">kurtosis</a>, <a class="- topic/xref xref" href="../../funcs/p/prod.html">prod</a>, <a class="- topic/xref xref" href="../../funcs/s/skew.html">skew</a>, <a class="- topic/xref xref" href="../../funcs/s/stdp.html">stdp</a>,<a class="- topic/xref xref" href="../../funcs/v/varp.html">varp</a>, <a class="- topic/xref xref" href="../../funcs/a/atImin.html">atImin</a>, <a class="- topic/xref xref" href="../../funcs/a/atImax.html">atImax</a>
+            </p>
+            <div class="- topic/note note note note_note" id="详情__note_j4x_zmt_vyb" data-ofbid="详情__note_j4x_zmt_vyb"><span class="note__title">注：</span> 在 window join 中，当 <em class="+ topic/ph hi-d/i ph i">aggs</em> 中使用 atImax 和 atImin
+                进行计算时，如果计算窗口内中有多个相同的最值，默认取最大索引值对应的记录。</div>
+        </div>
+    </article>
+    <article class="- topic/topic topic nested1" aria-labelledby="ariaid-title7" id="例子">
+        <h2 class="- topic/title title topictitle2" id="ariaid-title7">例子</h2>
+        <div class="- topic/body body">
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="例子__codeblock_cny_5hn_ryb" data-ofbid="例子__codeblock_cny_5hn_ryb"><code>t1 = table(`A`A`B as sym, 09:56:06 09:56:07 09:56:06 as time, 10.6 10.7 20.6 as price)
+t2 = table(take(`A,10) join take(`B,10) as sym, take(09:56:00+1..10,20) as time, (10+(1..10)\10-0.05) join (20+(1..10)\10-0.05) as bid, (10+(1..10)\10+0.05) join (20+(1..10)\10+0.05) as offer, take(100 300 800 200 600, 20) as volume);
+t1;</code></pre>
+            <div class="table-container"><table class="- topic/table table" id="例子__table_dny_5hn_ryb" data-ofbid="例子__table_dny_5hn_ryb" data-cols="3"><caption></caption><colgroup><col/><col/><col/></colgroup><thead class="- topic/thead thead">
+                        <tr class="- topic/row">
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="例子__table_dny_5hn_ryb__entry__1">sym</th>
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="例子__table_dny_5hn_ryb__entry__2">time</th>
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="例子__table_dny_5hn_ryb__entry__3">price</th>
+                        </tr>
+                    </thead><tbody class="- topic/tbody tbody">
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_dny_5hn_ryb__entry__1">A</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_dny_5hn_ryb__entry__2">09:56:06</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_dny_5hn_ryb__entry__3">10.6</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_dny_5hn_ryb__entry__1">A</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_dny_5hn_ryb__entry__2">09:56:07</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_dny_5hn_ryb__entry__3">10.7</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_dny_5hn_ryb__entry__1">B</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_dny_5hn_ryb__entry__2">09:56:06</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_dny_5hn_ryb__entry__3">20.6</td>
+                        </tr>
+                    </tbody></table></div>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="例子__codeblock_eny_5hn_ryb" data-ofbid="例子__codeblock_eny_5hn_ryb"><code>t2;</code></pre>
+            <div class="table-container"><table class="- topic/table table" id="例子__table_fny_5hn_ryb" data-ofbid="例子__table_fny_5hn_ryb" data-cols="5"><caption></caption><colgroup><col/><col/><col/><col/><col/></colgroup><thead class="- topic/thead thead">
+                        <tr class="- topic/row">
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="例子__table_fny_5hn_ryb__entry__1">sym</th>
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="例子__table_fny_5hn_ryb__entry__2">time</th>
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="例子__table_fny_5hn_ryb__entry__3">bid</th>
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="例子__table_fny_5hn_ryb__entry__4">offer</th>
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="例子__table_fny_5hn_ryb__entry__5">volume</th>
+                        </tr>
+                    </thead><tbody class="- topic/tbody tbody">
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_fny_5hn_ryb__entry__1">A</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_fny_5hn_ryb__entry__2">09:56:01</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_fny_5hn_ryb__entry__3">10.05</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_fny_5hn_ryb__entry__4">10.15</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_fny_5hn_ryb__entry__5">100</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_fny_5hn_ryb__entry__1">A</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_fny_5hn_ryb__entry__2">09:56:02</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_fny_5hn_ryb__entry__3">10.15</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_fny_5hn_ryb__entry__4">10.25</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_fny_5hn_ryb__entry__5">300</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_fny_5hn_ryb__entry__1">A</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_fny_5hn_ryb__entry__2">09:56:03</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_fny_5hn_ryb__entry__3">10.25</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_fny_5hn_ryb__entry__4">10.35</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_fny_5hn_ryb__entry__5">800</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_fny_5hn_ryb__entry__1">A</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_fny_5hn_ryb__entry__2">09:56:04</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_fny_5hn_ryb__entry__3">10.35</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_fny_5hn_ryb__entry__4">10.45</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_fny_5hn_ryb__entry__5">200</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_fny_5hn_ryb__entry__1">A</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_fny_5hn_ryb__entry__2">09:56:05</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_fny_5hn_ryb__entry__3">10.45</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_fny_5hn_ryb__entry__4">10.55</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_fny_5hn_ryb__entry__5">600</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_fny_5hn_ryb__entry__1">A</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_fny_5hn_ryb__entry__2">09:56:06</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_fny_5hn_ryb__entry__3">10.55</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_fny_5hn_ryb__entry__4">10.65</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_fny_5hn_ryb__entry__5">100</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_fny_5hn_ryb__entry__1">A</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_fny_5hn_ryb__entry__2">09:56:07</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_fny_5hn_ryb__entry__3">10.65</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_fny_5hn_ryb__entry__4">10.75</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_fny_5hn_ryb__entry__5">300</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_fny_5hn_ryb__entry__1">A</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_fny_5hn_ryb__entry__2">09:56:08</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_fny_5hn_ryb__entry__3">10.75</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_fny_5hn_ryb__entry__4">10.85</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_fny_5hn_ryb__entry__5">800</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_fny_5hn_ryb__entry__1">A</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_fny_5hn_ryb__entry__2">09:56:09</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_fny_5hn_ryb__entry__3">10.85</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_fny_5hn_ryb__entry__4">10.95</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_fny_5hn_ryb__entry__5">200</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_fny_5hn_ryb__entry__1">A</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_fny_5hn_ryb__entry__2">09:56:10</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_fny_5hn_ryb__entry__3">10.95</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_fny_5hn_ryb__entry__4">11.05</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_fny_5hn_ryb__entry__5">600</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_fny_5hn_ryb__entry__1">B</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_fny_5hn_ryb__entry__2">09:56:01</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_fny_5hn_ryb__entry__3">20.05</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_fny_5hn_ryb__entry__4">20.15</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_fny_5hn_ryb__entry__5">100</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_fny_5hn_ryb__entry__1">B</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_fny_5hn_ryb__entry__2">09:56:02</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_fny_5hn_ryb__entry__3">20.15</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_fny_5hn_ryb__entry__4">20.25</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_fny_5hn_ryb__entry__5">300</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_fny_5hn_ryb__entry__1">B</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_fny_5hn_ryb__entry__2">09:56:03</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_fny_5hn_ryb__entry__3">20.25</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_fny_5hn_ryb__entry__4">20.35</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_fny_5hn_ryb__entry__5">800</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_fny_5hn_ryb__entry__1">B</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_fny_5hn_ryb__entry__2">09:56:04</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_fny_5hn_ryb__entry__3">20.35</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_fny_5hn_ryb__entry__4">20.45</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_fny_5hn_ryb__entry__5">200</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_fny_5hn_ryb__entry__1">B</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_fny_5hn_ryb__entry__2">09:56:05</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_fny_5hn_ryb__entry__3">20.45</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_fny_5hn_ryb__entry__4">20.55</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_fny_5hn_ryb__entry__5">600</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_fny_5hn_ryb__entry__1">B</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_fny_5hn_ryb__entry__2">09:56:06</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_fny_5hn_ryb__entry__3">20.55</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_fny_5hn_ryb__entry__4">20.65</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_fny_5hn_ryb__entry__5">100</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_fny_5hn_ryb__entry__1">B</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_fny_5hn_ryb__entry__2">09:56:07</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_fny_5hn_ryb__entry__3">20.65</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_fny_5hn_ryb__entry__4">20.75</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_fny_5hn_ryb__entry__5">300</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_fny_5hn_ryb__entry__1">B</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_fny_5hn_ryb__entry__2">09:56:08</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_fny_5hn_ryb__entry__3">20.75</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_fny_5hn_ryb__entry__4">20.85</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_fny_5hn_ryb__entry__5">800</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_fny_5hn_ryb__entry__1">B</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_fny_5hn_ryb__entry__2">09:56:09</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_fny_5hn_ryb__entry__3">20.85</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_fny_5hn_ryb__entry__4">20.95</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_fny_5hn_ryb__entry__5">200</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_fny_5hn_ryb__entry__1">B</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_fny_5hn_ryb__entry__2">09:56:10</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_fny_5hn_ryb__entry__3">20.95</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_fny_5hn_ryb__entry__4">21.05</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_fny_5hn_ryb__entry__5">600</td>
+                        </tr>
+                    </tbody></table></div>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="例子__codeblock_gny_5hn_ryb" data-ofbid="例子__codeblock_gny_5hn_ryb"><code>wj(t1, t2, -5s:0s, &lt;avg(bid)&gt;, `sym`time);</code></pre>
+            <div class="table-container"><table class="- topic/table table" id="例子__table_hny_5hn_ryb" data-ofbid="例子__table_hny_5hn_ryb" data-cols="4"><caption></caption><colgroup><col/><col/><col/><col/></colgroup><thead class="- topic/thead thead">
+                        <tr class="- topic/row">
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="例子__table_hny_5hn_ryb__entry__1">sym</th>
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="例子__table_hny_5hn_ryb__entry__2">time</th>
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="例子__table_hny_5hn_ryb__entry__3">price</th>
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="例子__table_hny_5hn_ryb__entry__4">avg_bid</th>
+                        </tr>
+                    </thead><tbody class="- topic/tbody tbody">
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_hny_5hn_ryb__entry__1">A</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_hny_5hn_ryb__entry__2">09:56:06</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_hny_5hn_ryb__entry__3">10.6</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_hny_5hn_ryb__entry__4">10.3</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_hny_5hn_ryb__entry__1">A</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_hny_5hn_ryb__entry__2">09:56:07</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_hny_5hn_ryb__entry__3">10.7</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_hny_5hn_ryb__entry__4">10.4</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_hny_5hn_ryb__entry__1">B</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_hny_5hn_ryb__entry__2">09:56:06</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_hny_5hn_ryb__entry__3">20.6</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_hny_5hn_ryb__entry__4">20.3</td>
+                        </tr>
+                    </tbody></table></div>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="例子__codeblock_iny_5hn_ryb" data-ofbid="例子__codeblock_iny_5hn_ryb"><code>wj(t1, t2, -5:-1, &lt;[wavg(bid,volume), wavg(offer,volume)]&gt;, `sym`time);</code></pre>
+            <div class="table-container"><table class="- topic/table table" id="例子__table_jny_5hn_ryb" data-ofbid="例子__table_jny_5hn_ryb" data-cols="5"><caption></caption><colgroup><col/><col/><col/><col/><col/></colgroup><thead class="- topic/thead thead">
+                        <tr class="- topic/row">
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="例子__table_jny_5hn_ryb__entry__1">sym</th>
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="例子__table_jny_5hn_ryb__entry__2">time</th>
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="例子__table_jny_5hn_ryb__entry__3">price</th>
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="例子__table_jny_5hn_ryb__entry__4">wavg_bid</th>
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="例子__table_jny_5hn_ryb__entry__5">wavg_offer</th>
+                        </tr>
+                    </thead><tbody class="- topic/tbody tbody">
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_jny_5hn_ryb__entry__1">A</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_jny_5hn_ryb__entry__2">09:56:06</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_jny_5hn_ryb__entry__3">10.6</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_jny_5hn_ryb__entry__4">10.295</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_jny_5hn_ryb__entry__5">10.395</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_jny_5hn_ryb__entry__1">A</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_jny_5hn_ryb__entry__2">09:56:07</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_jny_5hn_ryb__entry__3">10.7</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_jny_5hn_ryb__entry__4">10.32</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_jny_5hn_ryb__entry__5">10.42</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_jny_5hn_ryb__entry__1">B</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_jny_5hn_ryb__entry__2">09:56:06</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_jny_5hn_ryb__entry__3">20.6</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_jny_5hn_ryb__entry__4">20.295</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_jny_5hn_ryb__entry__5">20.395</td>
+                        </tr>
+                    </tbody></table></div>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="例子__codeblock_kny_5hn_ryb" data-ofbid="例子__codeblock_kny_5hn_ryb"><code>t3=t2
+t3.rename!(`time, `second)
+wj(t1, t3, -2:2, &lt;[wavg(bid,volume), wavg(offer,volume)]&gt;, `sym`time, `sym`second);</code></pre>
+            <div class="table-container"><table class="- topic/table table" id="例子__table_lny_5hn_ryb" data-ofbid="例子__table_lny_5hn_ryb" data-cols="5"><caption></caption><colgroup><col/><col/><col/><col/><col/></colgroup><thead class="- topic/thead thead">
+                        <tr class="- topic/row">
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="例子__table_lny_5hn_ryb__entry__1">sym</th>
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="例子__table_lny_5hn_ryb__entry__2">time</th>
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="例子__table_lny_5hn_ryb__entry__3">price</th>
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="例子__table_lny_5hn_ryb__entry__4">wavg_bid</th>
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="例子__table_lny_5hn_ryb__entry__5">wavg_offer</th>
+                        </tr>
+                    </thead><tbody class="- topic/tbody tbody">
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_lny_5hn_ryb__entry__1">A</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_lny_5hn_ryb__entry__2">09:56:06</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_lny_5hn_ryb__entry__3">10.6</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_lny_5hn_ryb__entry__4">10.595</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_lny_5hn_ryb__entry__5">10.695</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_lny_5hn_ryb__entry__1">A</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_lny_5hn_ryb__entry__2">09:56:07</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_lny_5hn_ryb__entry__3">10.7</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_lny_5hn_ryb__entry__4">10.645</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_lny_5hn_ryb__entry__5">10.745</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_lny_5hn_ryb__entry__1">B</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_lny_5hn_ryb__entry__2">09:56:06</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_lny_5hn_ryb__entry__3">20.6</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_lny_5hn_ryb__entry__4">20.595</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_lny_5hn_ryb__entry__5">20.695</td>
+                        </tr>
+                    </tbody></table></div>
+            <p class="- topic/p p" id="例子__p_mny_5hn_ryb" data-ofbid="例子__p_mny_5hn_ryb">
+                <em class="+ topic/ph hi-d/i ph i">window join是asof join的扩展：</em>
+            </p>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="例子__codeblock_nny_5hn_ryb" data-ofbid="例子__codeblock_nny_5hn_ryb"><code>wj(t1, t2, -100:0, &lt;[last(bid) as bid, last(offer) as offer]&gt;, `sym`time);</code></pre>
+            <div class="table-container"><table class="- topic/table table" id="例子__table_ony_5hn_ryb" data-ofbid="例子__table_ony_5hn_ryb" data-cols="5"><caption></caption><colgroup><col/><col/><col/><col/><col/></colgroup><thead class="- topic/thead thead">
+                        <tr class="- topic/row">
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="例子__table_ony_5hn_ryb__entry__1">sym</th>
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="例子__table_ony_5hn_ryb__entry__2">time</th>
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="例子__table_ony_5hn_ryb__entry__3">price</th>
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="例子__table_ony_5hn_ryb__entry__4">bid</th>
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="例子__table_ony_5hn_ryb__entry__5">offer</th>
+                        </tr>
+                    </thead><tbody class="- topic/tbody tbody">
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_ony_5hn_ryb__entry__1">A</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_ony_5hn_ryb__entry__2">09:56:06</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_ony_5hn_ryb__entry__3">10.6</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_ony_5hn_ryb__entry__4">10.55</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_ony_5hn_ryb__entry__5">10.65</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_ony_5hn_ryb__entry__1">A</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_ony_5hn_ryb__entry__2">09:56:07</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_ony_5hn_ryb__entry__3">10.7</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_ony_5hn_ryb__entry__4">10.65</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_ony_5hn_ryb__entry__5">10.75</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_ony_5hn_ryb__entry__1">B</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_ony_5hn_ryb__entry__2">09:56:06</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_ony_5hn_ryb__entry__3">20.6</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_ony_5hn_ryb__entry__4">20.55</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_ony_5hn_ryb__entry__5">20.65</td>
+                        </tr>
+                    </tbody></table></div>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="例子__codeblock_pny_5hn_ryb" data-ofbid="例子__codeblock_pny_5hn_ryb"><code>select sym, time, price, bid, offer from aj(t1, t2, `sym`time);</code></pre>
+            <div class="table-container"><table class="- topic/table table" id="例子__table_qny_5hn_ryb" data-ofbid="例子__table_qny_5hn_ryb" data-cols="5"><caption></caption><colgroup><col/><col/><col/><col/><col/></colgroup><thead class="- topic/thead thead">
+                        <tr class="- topic/row">
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="例子__table_qny_5hn_ryb__entry__1">sym</th>
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="例子__table_qny_5hn_ryb__entry__2">time</th>
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="例子__table_qny_5hn_ryb__entry__3">price</th>
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="例子__table_qny_5hn_ryb__entry__4">bid</th>
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="例子__table_qny_5hn_ryb__entry__5">offer</th>
+                        </tr>
+                    </thead><tbody class="- topic/tbody tbody">
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_qny_5hn_ryb__entry__1">A</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_qny_5hn_ryb__entry__2">09:56:06</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_qny_5hn_ryb__entry__3">10.6</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_qny_5hn_ryb__entry__4">10.55</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_qny_5hn_ryb__entry__5">10.65</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_qny_5hn_ryb__entry__1">A</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_qny_5hn_ryb__entry__2">09:56:07</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_qny_5hn_ryb__entry__3">10.7</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_qny_5hn_ryb__entry__4">10.65</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_qny_5hn_ryb__entry__5">10.75</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_qny_5hn_ryb__entry__1">B</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_qny_5hn_ryb__entry__2">09:56:06</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_qny_5hn_ryb__entry__3">20.6</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_qny_5hn_ryb__entry__4">20.55</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_qny_5hn_ryb__entry__5">20.65</td>
+                        </tr>
+                    </tbody></table></div>
+            <p class="- topic/p p" id="例子__p_rny_5hn_ryb" data-ofbid="例子__p_rny_5hn_ryb">
+                <em class="+ topic/ph hi-d/i ph i">prevailing window join：</em>
+            </p>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="例子__codeblock_sny_5hn_ryb" data-ofbid="例子__codeblock_sny_5hn_ryb"><code>delete from t2 where 09:56:04&lt;=time&lt;=09:56:06;
+t2;</code></pre>
+            <div class="table-container"><table class="- topic/table table" id="例子__table_tny_5hn_ryb" data-ofbid="例子__table_tny_5hn_ryb" data-cols="5"><caption></caption><colgroup><col/><col/><col/><col/><col/></colgroup><thead class="- topic/thead thead">
+                        <tr class="- topic/row">
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="例子__table_tny_5hn_ryb__entry__1">sym</th>
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="例子__table_tny_5hn_ryb__entry__2">time</th>
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="例子__table_tny_5hn_ryb__entry__3">bid</th>
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="例子__table_tny_5hn_ryb__entry__4">offer</th>
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="例子__table_tny_5hn_ryb__entry__5">volume</th>
+                        </tr>
+                    </thead><tbody class="- topic/tbody tbody">
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_tny_5hn_ryb__entry__1">A</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_tny_5hn_ryb__entry__2">09:56:01</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_tny_5hn_ryb__entry__3">10.05</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_tny_5hn_ryb__entry__4">10.15</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_tny_5hn_ryb__entry__5">100</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_tny_5hn_ryb__entry__1">A</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_tny_5hn_ryb__entry__2">09:56:02</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_tny_5hn_ryb__entry__3">10.15</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_tny_5hn_ryb__entry__4">10.25</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_tny_5hn_ryb__entry__5">300</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_tny_5hn_ryb__entry__1">A</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_tny_5hn_ryb__entry__2">09:56:03</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_tny_5hn_ryb__entry__3">10.25</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_tny_5hn_ryb__entry__4">10.35</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_tny_5hn_ryb__entry__5">800</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_tny_5hn_ryb__entry__1">A</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_tny_5hn_ryb__entry__2">09:56:07</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_tny_5hn_ryb__entry__3">10.65</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_tny_5hn_ryb__entry__4">10.75</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_tny_5hn_ryb__entry__5">300</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_tny_5hn_ryb__entry__1">A</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_tny_5hn_ryb__entry__2">09:56:08</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_tny_5hn_ryb__entry__3">10.75</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_tny_5hn_ryb__entry__4">10.85</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_tny_5hn_ryb__entry__5">800</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_tny_5hn_ryb__entry__1">A</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_tny_5hn_ryb__entry__2">09:56:09</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_tny_5hn_ryb__entry__3">10.85</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_tny_5hn_ryb__entry__4">10.95</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_tny_5hn_ryb__entry__5">200</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_tny_5hn_ryb__entry__1">A</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_tny_5hn_ryb__entry__2">09:56:10</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_tny_5hn_ryb__entry__3">10.95</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_tny_5hn_ryb__entry__4">11.05</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_tny_5hn_ryb__entry__5">600</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_tny_5hn_ryb__entry__1">B</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_tny_5hn_ryb__entry__2">09:56:01</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_tny_5hn_ryb__entry__3">20.05</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_tny_5hn_ryb__entry__4">20.15</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_tny_5hn_ryb__entry__5">100</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_tny_5hn_ryb__entry__1">B</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_tny_5hn_ryb__entry__2">09:56:02</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_tny_5hn_ryb__entry__3">20.15</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_tny_5hn_ryb__entry__4">20.25</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_tny_5hn_ryb__entry__5">300</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_tny_5hn_ryb__entry__1">B</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_tny_5hn_ryb__entry__2">09:56:03</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_tny_5hn_ryb__entry__3">20.25</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_tny_5hn_ryb__entry__4">20.35</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_tny_5hn_ryb__entry__5">800</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_tny_5hn_ryb__entry__1">B</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_tny_5hn_ryb__entry__2">09:56:07</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_tny_5hn_ryb__entry__3">20.65</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_tny_5hn_ryb__entry__4">20.75</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_tny_5hn_ryb__entry__5">300</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_tny_5hn_ryb__entry__1">B</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_tny_5hn_ryb__entry__2">09:56:08</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_tny_5hn_ryb__entry__3">20.75</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_tny_5hn_ryb__entry__4">20.85</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_tny_5hn_ryb__entry__5">800</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_tny_5hn_ryb__entry__1">B</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_tny_5hn_ryb__entry__2">09:56:09</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_tny_5hn_ryb__entry__3">20.85</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_tny_5hn_ryb__entry__4">20.95</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_tny_5hn_ryb__entry__5">200</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_tny_5hn_ryb__entry__1">B</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_tny_5hn_ryb__entry__2">09:56:10</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_tny_5hn_ryb__entry__3">20.95</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_tny_5hn_ryb__entry__4">21.05</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_tny_5hn_ryb__entry__5">600</td>
+                        </tr>
+                    </tbody></table></div>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="例子__codeblock_uny_5hn_ryb" data-ofbid="例子__codeblock_uny_5hn_ryb"><code>wj(t1, t2, -1:1, &lt;[first(bid), avg(offer)]&gt;, `sym`time);</code></pre>
+            <div class="table-container"><table class="- topic/table table" id="例子__table_vny_5hn_ryb" data-ofbid="例子__table_vny_5hn_ryb" data-cols="5"><caption></caption><colgroup><col/><col/><col/><col/><col/></colgroup><thead class="- topic/thead thead">
+                        <tr class="- topic/row">
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="例子__table_vny_5hn_ryb__entry__1">sym</th>
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="例子__table_vny_5hn_ryb__entry__2">time</th>
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="例子__table_vny_5hn_ryb__entry__3">price</th>
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="例子__table_vny_5hn_ryb__entry__4">first_bid</th>
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="例子__table_vny_5hn_ryb__entry__5">avg_offer</th>
+                        </tr>
+                    </thead><tbody class="- topic/tbody tbody">
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_vny_5hn_ryb__entry__1">A</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_vny_5hn_ryb__entry__2">09:56:06</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_vny_5hn_ryb__entry__3">10.6</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_vny_5hn_ryb__entry__4">10.65</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_vny_5hn_ryb__entry__5">10.75</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_vny_5hn_ryb__entry__1">A</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_vny_5hn_ryb__entry__2">09:56:07</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_vny_5hn_ryb__entry__3">10.7</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_vny_5hn_ryb__entry__4">10.65</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_vny_5hn_ryb__entry__5">10.8</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_vny_5hn_ryb__entry__1">B</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_vny_5hn_ryb__entry__2">09:56:06</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_vny_5hn_ryb__entry__3">20.6</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_vny_5hn_ryb__entry__4">20.65</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_vny_5hn_ryb__entry__5">20.75</td>
+                        </tr>
+                    </tbody></table></div>
+            <p class="- topic/p p" id="例子__p_wny_5hn_ryb" data-ofbid="例子__p_wny_5hn_ryb">以tuple方式动态传参给aggs。</p>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="例子__codeblock_xny_5hn_ryb" data-ofbid="例子__codeblock_xny_5hn_ryb"><code>aggs = array(ANY, 3)   //定义一个包含元代码的aggs元组
+aggs[0] = &lt;min(bid)&gt;
+aggs[1] = &lt;min(offer)&gt;
+aggs[2] = &lt;min(volume)&gt;
+wj(t1, t2, -5s:0s, aggs, `sym`time);</code></pre>
+            <div class="table-container"><table class="- topic/table table" id="例子__table_yny_5hn_ryb" data-ofbid="例子__table_yny_5hn_ryb" data-cols="6"><caption></caption><colgroup><col/><col/><col/><col/><col/><col/></colgroup><thead class="- topic/thead thead">
+                        <tr class="- topic/row">
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="例子__table_yny_5hn_ryb__entry__1">sym</th>
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="例子__table_yny_5hn_ryb__entry__2">time</th>
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="例子__table_yny_5hn_ryb__entry__3">price</th>
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="例子__table_yny_5hn_ryb__entry__4">min_bid</th>
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="例子__table_yny_5hn_ryb__entry__5">min_offer</th>
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="例子__table_yny_5hn_ryb__entry__6">min_volume</th>
+                        </tr>
+                    </thead><tbody class="- topic/tbody tbody">
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_yny_5hn_ryb__entry__1">A</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_yny_5hn_ryb__entry__2">09:56:06</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_yny_5hn_ryb__entry__3">10.6</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_yny_5hn_ryb__entry__4">10.05</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_yny_5hn_ryb__entry__5">10.15</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_yny_5hn_ryb__entry__6">100</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_yny_5hn_ryb__entry__1">A</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_yny_5hn_ryb__entry__2">09:56:07</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_yny_5hn_ryb__entry__3">10.7</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_yny_5hn_ryb__entry__4">10.15</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_yny_5hn_ryb__entry__5">10.25</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_yny_5hn_ryb__entry__6">100</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_yny_5hn_ryb__entry__1">B</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_yny_5hn_ryb__entry__2">09:56:06</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_yny_5hn_ryb__entry__3">20.6</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_yny_5hn_ryb__entry__4">20.05</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_yny_5hn_ryb__entry__5">20.15</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_yny_5hn_ryb__entry__6">100</td>
+                        </tr>
+                    </tbody></table></div>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="例子__codeblock_zny_5hn_ryb" data-ofbid="例子__codeblock_zny_5hn_ryb"><code>pwj(t1, t2, -1:1, &lt;[first(bid), avg(offer)]&gt;, `sym`time);</code></pre>
+            <div class="table-container"><table class="- topic/table table" id="例子__table_a4y_5hn_ryb" data-ofbid="例子__table_a4y_5hn_ryb" data-cols="5"><caption></caption><colgroup><col/><col/><col/><col/><col/></colgroup><thead class="- topic/thead thead">
+                        <tr class="- topic/row">
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="例子__table_a4y_5hn_ryb__entry__1">sym</th>
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="例子__table_a4y_5hn_ryb__entry__2">time</th>
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="例子__table_a4y_5hn_ryb__entry__3">price</th>
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="例子__table_a4y_5hn_ryb__entry__4">first_bid</th>
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="例子__table_a4y_5hn_ryb__entry__5">avg_offer</th>
+                        </tr>
+                    </thead><tbody class="- topic/tbody tbody">
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_a4y_5hn_ryb__entry__1">A</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_a4y_5hn_ryb__entry__2">09:56:06</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_a4y_5hn_ryb__entry__3">10.6</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_a4y_5hn_ryb__entry__4">10.25</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_a4y_5hn_ryb__entry__5">10.55</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_a4y_5hn_ryb__entry__1">A</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_a4y_5hn_ryb__entry__2">09:56:07</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_a4y_5hn_ryb__entry__3">10.7</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_a4y_5hn_ryb__entry__4">10.25</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_a4y_5hn_ryb__entry__5">10.65</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_a4y_5hn_ryb__entry__1">B</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_a4y_5hn_ryb__entry__2">09:56:06</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_a4y_5hn_ryb__entry__3">20.6</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_a4y_5hn_ryb__entry__4">20.25</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_a4y_5hn_ryb__entry__5">20.55</td>
+                        </tr>
+                    </tbody></table></div>
+            <p class="- topic/p p" id="例子__p_b4y_5hn_ryb" data-ofbid="例子__p_b4y_5hn_ryb">在上面的例子中，以左表的第一条记录为例，wj 和 pwj 会在右表中查找 (09:56:06-1) 到 (09:56:06+1) 的数据，wj 使用右表 sym 列中
+                "A" 在 09:56:07 的数据来计算 first(bid) 和 avg(offer)，然而 <code class="+ topic/ph pr-d/codeph ph codeph">pwj</code> 使用的是右表 sym 列中
+                "A" 在 09:56:03 和 09:56:07 的数据。</p>
+            <p class="- topic/p p">特殊用法：</p>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="例子__codeblock_uqv_xqb_zzb" data-ofbid="例子__codeblock_uqv_xqb_zzb"><code>wj(t1, t2, 0:0, &lt;[last(bid), bid]&gt;, `sym`time)</code></pre>
+            <p class="- topic/p p">返回：</p>
+            <div class="table-container"><table class="- topic/table table frame-all" id="例子__table_j55_yqb_zzb" data-ofbid="例子__table_j55_yqb_zzb" data-cols="5"><caption></caption><colgroup><col/><col/><col/><col/><col/></colgroup><thead class="- topic/thead thead">
+                        <tr class="- topic/row">
+                            <th class="- topic/entry entry colsep-1 rowsep-1" id="例子__table_j55_yqb_zzb__entry__1">
+                                <p class="- topic/p p">sym</p>
+                            </th>
+                            <th class="- topic/entry entry colsep-1 rowsep-1" id="例子__table_j55_yqb_zzb__entry__2">
+                                <p class="- topic/p p">time</p>
+                            </th>
+                            <th class="- topic/entry entry colsep-1 rowsep-1" id="例子__table_j55_yqb_zzb__entry__3">
+                                <p class="- topic/p p">price</p>
+                            </th>
+                            <th class="- topic/entry entry colsep-1 rowsep-1" id="例子__table_j55_yqb_zzb__entry__4">
+                                <p class="- topic/p p"><strong class="+ topic/ph hi-d/b ph b">last_bid</strong></p>
+                            </th>
+                            <th class="- topic/entry entry colsep-0 rowsep-1" id="例子__table_j55_yqb_zzb__entry__5">
+                                <p class="- topic/p p"><strong class="+ topic/ph hi-d/b ph b">bid</strong></p>
+                            </th>
+                        </tr>
+                    </thead><tbody class="- topic/tbody tbody">
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry colsep-1 rowsep-1" headers="例子__table_j55_yqb_zzb__entry__1">A</td>
+                            <td class="- topic/entry entry colsep-1 rowsep-1" headers="例子__table_j55_yqb_zzb__entry__2">09:56:06</td>
+                            <td class="- topic/entry entry colsep-1 rowsep-1" headers="例子__table_j55_yqb_zzb__entry__3">10.6</td>
+                            <td class="- topic/entry entry colsep-1 rowsep-1" headers="例子__table_j55_yqb_zzb__entry__4">10.45</td>
+                            <td class="- topic/entry entry colsep-0 rowsep-1" headers="例子__table_j55_yqb_zzb__entry__5">[10.05, 10.15, 10.25, 10.35, 10.45]</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry colsep-1 rowsep-1" headers="例子__table_j55_yqb_zzb__entry__1">A</td>
+                            <td class="- topic/entry entry colsep-1 rowsep-1" headers="例子__table_j55_yqb_zzb__entry__2">09:56:07</td>
+                            <td class="- topic/entry entry colsep-1 rowsep-1" headers="例子__table_j55_yqb_zzb__entry__3">10.7</td>
+                            <td class="- topic/entry entry colsep-1 rowsep-1" headers="例子__table_j55_yqb_zzb__entry__4">10.55</td>
+                            <td class="- topic/entry entry colsep-0 rowsep-1" headers="例子__table_j55_yqb_zzb__entry__5">[10.55]</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry colsep-1 rowsep-0" headers="例子__table_j55_yqb_zzb__entry__1">B</td>
+                            <td class="- topic/entry entry colsep-1 rowsep-0" headers="例子__table_j55_yqb_zzb__entry__2">09:56:06</td>
+                            <td class="- topic/entry entry colsep-1 rowsep-0" headers="例子__table_j55_yqb_zzb__entry__3">20.6</td>
+                            <td class="- topic/entry entry colsep-1 rowsep-0" headers="例子__table_j55_yqb_zzb__entry__4">20.45</td>
+                            <td class="- topic/entry entry colsep-0 rowsep-0" headers="例子__table_j55_yqb_zzb__entry__5">[20.05, 20.15, 20.25, 20.35, 20.45]</td>
+                        </tr>
+                    </tbody></table></div>
+        </div>
+    </article>
+</article></main></div>
+                        
+                        
+                        
+                        
+                        
+                        
+                    </div>
+                    
+                        <nav role="navigation" id="wh_topic_toc" aria-label="On this page" class="col-lg-2 d-none d-lg-block navbar d-print-none"> 
+                            <div id="wh_topic_toc_content">
+		                        
+	                            <div class=" wh_topic_toc "><div class="wh_topic_label">在本页上</div><ul><li class="topic-item"><a href="#%E8%AF%AD%E6%B3%95" data-tocid="语法">语法</a><ul><li class="topic-item"><a href="#%E7%AA%97%E5%8F%A3%E8%BF%9E%E6%8E%A5" data-tocid="窗口连接">窗口连接</a></li><li class="topic-item"><a href="#%E7%8E%B0%E8%A1%8C%E7%AA%97%E5%8F%A3%E8%BF%9E%E6%8E%A5" data-tocid="现行窗口连接">现行窗口连接</a></li></ul></li><li class="topic-item"><a href="#%E5%8F%82%E6%95%B0" data-tocid="参数">参数</a></li><li class="topic-item"><a href="#%E8%AF%A6%E6%83%85" data-tocid="详情">详情</a></li><li class="topic-item"><a href="#%E4%BE%8B%E5%AD%90" data-tocid="例子">例子</a></li></ul></div>
+	                        	
+                        	</div>
+                        </nav>
+                    
+                </div>
+            </div>
+            
+            
+            
+        </div> 
+        <footer class="navbar navbar-default wh_footer">
+  <div class=" footer-container mx-auto ">
+<title>Copyright</title><p><b> ©2024 浙江智臾科技有限公司 浙ICP备18048711号-3</b></p>
+  </div>
+</footer>
+        
+        <div id="go2top" class="d-print-none">
+            <span class="oxy-icon oxy-icon-up"></span>
+        </div>
+        
+        <div id="modal_img_large" class="modal">
+            <span class="close oxy-icon oxy-icon-remove"></span>
+            <div id="modal_img_container"></div>
+            <div id="caption"></div>
+        </div>
+        
+        
+        
+    </body>
+</html>

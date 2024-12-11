@@ -1,0 +1,1571 @@
+<!DOCTYPE html><html xmlns="http://www.w3.org/1999/xhtml" xml:lang="zh" lang="zh" data-whc_version="26.0">
+    <head><link rel="shortcut icon" href="../../favicon.ico"/><link rel="icon" href="../../favicon.ico"/><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><meta http-equiv="X-UA-Compatible" content="IE=edge"/><meta name="description" content="模拟撮合引擎插件（Matching Engine Simulator）用于模拟用户在某个时间点发出或取消订单的操作，并获取相应的交易结果。 该插件以行情数据（快照数据或逐笔数据）和用户委托订单（买方或卖方）作为输入，根据订单撮合规则实现模拟撮合后，将订单成交结果（含部分成交结果、拒绝订单和已撤订单）输出至订单明细输出表，未成交部分等待与后续行情撮合成交，或者等待用户撤单。 版本要求 ..."/><meta name="DC.rights.owner" content="(C) 版权 2024"/><meta name="copyright" content="(C) 版权 2024"/><meta name="generator" content="DITA-OT"/><meta name="DC.type" content="topic"/><meta name="DC.coverage" content=""/><meta name="DC.relation" content="../../plugins/plg_intro.html"/><meta name="DC.relation" content="../../tutorials/matching_engine_simulator.md"/><meta name="prodname" content="DolphinDB"/><meta name="brand" content="DolphinDB"/><meta name="DC.creator" content="DolphinDB"/><meta name="DC.publisher" content="DDB N/A DDB 200"/><meta name="DC.format" content="HTML5"/><meta name="DC.identifier" content="mes"/><title>MatchingEngineSimulator</title><!--  Generated with Oxygen version 26.0, build number 2024012323.  --><meta name="wh-path2root" content="../../"/><meta name="wh-toc-id" content="mes-d9529e93320"/><meta name="wh-source-relpath" content="plugins/matchingEngineSimulator/mes.dita"/><meta name="wh-out-relpath" content="plugins/matchingEngineSimulator/mes.html"/>
+
+    <link rel="stylesheet" type="text/css" href="../../oxygen-webhelp/app/commons.css?buildId=2024012323"/>
+    <link rel="stylesheet" type="text/css" href="../../oxygen-webhelp/app/topic.css?buildId=2024012323"/>
+
+    <script src="../../oxygen-webhelp/app/options/properties.js?buildId=20240704100525"></script>
+    <script src="../../oxygen-webhelp/app/localization/strings.js?buildId=2024012323"></script>
+    <script src="../../oxygen-webhelp/app/search/index/keywords.js?buildId=20240704100525"></script>
+    <script defer="defer" src="../../oxygen-webhelp/app/commons.js?buildId=2024012323"></script>
+    <script defer="defer" src="../../oxygen-webhelp/app/topic.js?buildId=2024012323"></script>
+<link rel="stylesheet" type="text/css" href="../../oxygen-webhelp/template/styles.css?buildId=2024012323"/><script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script><script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script></head>
+
+    <body id="mes" class="wh_topic_page frmBody">
+        <a href="#wh_topic_body" class="sr-only sr-only-focusable">
+            跳转到主要内容
+        </a>
+        
+        
+        
+        
+        <header class="navbar navbar-default wh_header">
+    <div class="container-fluid">
+        <div xmlns:whc="http://www.oxygenxml.com/webhelp/components" class="wh_header_flex_container navbar-nav navbar-expand-md navbar-dark">
+            <div class="wh_logo_and_publication_title_container">
+                <div class="wh_logo_and_publication_title">
+                    
+                    <a href="https://www.dolphindb.cn" class=" wh_logo d-none d-sm-block "><img src="../../logo.png" alt="  DolphinDB 文档中心  "/></a>
+                    <div class=" wh_publication_title "><a href="../../index.html"><span class="booktitle">  <span class="ph mainbooktitle">DolphinDB 文档中心</span>  </span></a></div>
+                    
+                </div>
+                
+                
+            </div>
+
+            <div class="wh_top_menu_and_indexterms_link collapse navbar-collapse" id="wh_top_menu_and_indexterms_link">
+                
+                
+                
+                
+            </div>
+        <div class=" wh_search_input navbar-form wh_topic_page_search search " role="form">
+            
+            
+            
+            <form id="searchForm" method="get" role="search" action="../../search.html"><div><input type="search" placeholder="搜索 " class="wh_search_textfield" id="textToSearch" name="searchQuery" aria-label="搜索查询" required="required"/><button type="submit" class="wh_search_button" aria-label="搜索"><span class="search_input_text">搜索</span></button></div></form>
+            
+            <script src="/vendors/react/umd/react.production.min.js" defer="defer"></script>
+<script src="/vendors/react-dom/umd/react-dom.production.min.js" defer="defer"></script>
+<script src="/vendors/dayjs/dayjs.min.js" defer="defer"></script>
+<script src="/vendors/antd/dist/antd.min.js" defer="defer"></script>
+<script src="/vendors/@ant-design/icons/dist/index.umd.min.js" defer="defer"></script>
+<script src="/zh/index.js" type="module"></script>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js" defer="defer"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML" defer="defer"><!--
+
+
+--></script>
+
+            
+        </div></div>
+    </div>
+</header>
+        
+        
+         
+        
+        
+        
+        <div class="container-fluid" id="wh_topic_container">
+            <div class="row">
+
+                <nav class="wh_tools d-print-none navbar-expand-md" aria-label="Tools">
+                    
+                    <div data-tooltip-position="bottom" class=" wh_breadcrumb "><ol class="d-print-none"><li><span class="home"><a href="../../index.html"><span>主页</span></a></span></li><li><div class="topicref" data-id="chap6_plugin"><div class="title"><a href="../../plugins/plg_intro.html"><span class="keyword label">插件</span></a><div class="wh-tooltip"><p class="shortdesc">多个应用场景的插件使用说明和插件开发指导</p></div></div></div></li><li class="active"><div class="topicref" data-id="mes"><div class="title"><a href="../../plugins/matchingEngineSimulator/mes.html">MatchingEngineSimulator</a></div></div></li></ol></div>
+                    
+                    
+                    
+                    <div class="wh_right_tools">
+                        <button class="wh_hide_highlight" aria-label="切换搜索突出显示" title="切换搜索突出显示"></button>
+                        <button class="webhelp_expand_collapse_sections" data-next-state="collapsed" aria-label="折叠截面" title="折叠截面"></button>
+                        
+                        
+                        
+                        
+                        <div class=" wh_print_link print d-none d-md-inline-block "><button onClick="window.print()" title="打印此页" aria-label="打印此页"></button></div>
+                        
+                        <button type="button" id="wh_toc_button" class="custom-toggler navbar-toggler collapsed wh_toggle_button navbar-light" aria-expanded="false" aria-label="Toggle publishing table of content" aria-controls="wh_publication_toc">
+                            <span class="navbar-toggler-icon"></span>
+                        </button>
+                    </div>
+                    
+                </nav>
+            </div>
+            
+            
+            
+            
+            <div class="wh_content_area">
+                <div class="row">
+                    
+                        <nav id="wh_publication_toc" class="col-lg-3 col-md-3 col-sm-12 d-md-block d-none d-print-none" aria-label="Table of Contents Container">
+                            <div id="wh_publication_toc_content">
+		                        
+                            	<div class=" wh_publication_toc " data-tooltip-position="right"><span class="expand-button-action-labels"><span id="button-expand-action" role="button" aria-label="Expand"></span><span id="button-collapse-action" role="button" aria-label="Collapse"></span><span id="button-pending-action" role="button" aria-label="Pending"></span></span><ul role="tree" aria-label="Table of Contents"><li role="treeitem"><div data-tocid="new_chap_about_sect_ddb_docs_intro-d9529e87" class="topicref" data-id="new_chap_about_sect_ddb_docs_intro" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../about/ddb_docs_intro.html" id="new_chap_about_sect_ddb_docs_intro-d9529e87-link">文档使用说明</a><div class="wh-tooltip"><p class="shortdesc">如何获取 DolphinDB 帮助信息</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="chap1_getstarted-d9529e140" class="topicref" data-id="chap1_getstarted" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action chap1_getstarted-d9529e140-link" class="wh-expand-btn"></span><div class="title"><a href="../../getstarted/chap1_getstarted.html" id="chap1_getstarted-d9529e140-link"><span class="keyword label">快速上手</span></a><div class="wh-tooltip"><p class="shortdesc">如何快速部署 DolphinDB、建库建表、写入和查询数据</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="sectionddb_deployment-d9529e335" class="topicref" data-id="sectionddb_deployment" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action sectionddb_deployment-d9529e335-link" class="wh-expand-btn"></span><div class="title"><a href="../../deploy/deploy_intro.html" id="sectionddb_deployment-d9529e335-link"><span class="keyword label">部署</span></a><div class="wh-tooltip"><p class="shortdesc">如何在不同的场景中部署 DolphinDB</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="new_chap_database_manage_new_chap_dbmanage_landing_page-d9529e2313" class="topicref" data-id="new_chap_database_manage_new_chap_dbmanage_landing_page" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action new_chap_database_manage_new_chap_dbmanage_landing_page-d9529e2313-link" class="wh-expand-btn"></span><div class="title"><a href="../../db_distr_comp/cfg/db_intro.html" id="new_chap_database_manage_new_chap_dbmanage_landing_page-d9529e2313-link"><span class="keyword label">数据库</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 数据库的基本概念</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="chap7_tutorials_streaming-d9529e3490" class="topicref" data-id="chap7_tutorials_streaming" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action chap7_tutorials_streaming-d9529e3490-link" class="wh-expand-btn"></span><div class="title"><a href="../../stream/str_intro.html" id="chap7_tutorials_streaming-d9529e3490-link"><span class="keyword label">流数据</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 流数据引擎及流数据计算的基本概念</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="tocId-d9529e7385" class="topicref" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action tocId-d9529e7385-link" class="wh-expand-btn"></span><div class="title"><a href="../../db_distr_comp/db_oper/import_data.html" id="tocId-d9529e7385-link">数据迁移</a><div class="wh-tooltip"><p class="shortdesc">如何从不同数据源向 DolphinDB 迁移数据</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="chap7_tutorials_system_management-d9529e7812" class="topicref" data-id="chap7_tutorials_system_management" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action chap7_tutorials_system_management-d9529e7812-link" class="wh-expand-btn"></span><div class="title"><a href="../../sys_man/om_intro.html" id="chap7_tutorials_system_management-d9529e7812-link"><span class="keyword label">系统运维</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 的系统运维功能及方法</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="about_language_resources-d9529e16490" class="topicref" data-id="about_language_resources" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action about_language_resources-d9529e16490-link" class="wh-expand-btn"></span><div class="title"><a href="../../progr/progr_intro.html" id="about_language_resources-d9529e16490-link"><span class="keyword label">编程语言</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 编程基本概念与方法、SQL 在 DolphinDB 的应用</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="functions_references-d9529e26503" class="topicref" data-id="functions_references" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action functions_references-d9529e26503-link" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/funcs_intro.html" id="functions_references-d9529e26503-link"><span class="keyword label">函数参考</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 函数分类、语法、详解及示例</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="api_protocol-d9529e86456" class="topicref" data-id="api_protocol" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action api_protocol-d9529e86456-link" class="wh-expand-btn"></span><div class="title"><a href="../../api/connapi_intro.html" id="api_protocol-d9529e86456-link"><span class="keyword label">连接器 &amp; API</span></a><div class="wh-tooltip"><p class="shortdesc">面向不同编程语言的 DolphinDB API 及连接器，相关协议和用法</p></div></div></div></li><li role="treeitem" aria-expanded="true"><div data-tocid="chap6_plugin-d9529e91976" class="topicref" data-id="chap6_plugin" data-state="expanded"><span role="button" tabindex="0" aria-labelledby="button-collapse-action chap6_plugin-d9529e91976-link" class="wh-expand-btn"></span><div class="title"><a href="../../plugins/plg_intro.html" id="chap6_plugin-d9529e91976-link"><span class="keyword label">插件</span></a><div class="wh-tooltip"><p class="shortdesc">多个应用场景的插件使用说明和插件开发指导</p></div></div></div><ul role="group" class="navbar-nav nav-list"><li role="treeitem" aria-expanded="false"><div data-tocid="tocId-d9529e92029" class="topicref" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action tocId-d9529e92029-link" class="wh-expand-btn"></span><div class="title"><a href="../../plugins/plg_howtos.html" id="tocId-d9529e92029-link">插件使用与开发</a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="amdquote-d9529e92214" class="topicref" data-id="amdquote" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action amdquote-d9529e92214-link" class="wh-expand-btn"></span><div class="title"><a href="../../plugins/amdquote/amdquote_2.html" id="amdquote-d9529e92214-link">amdQuote</a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="arrow-d9529e92306" class="topicref" data-id="arrow" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action arrow-d9529e92306-link" class="wh-expand-btn"></span><div class="title"><a href="../../plugins/Arrow/arrow.html" id="arrow-d9529e92306-link">Arrow</a></div></div></li><li role="treeitem"><div data-tocid="awss3-d9529e92398" class="topicref" data-id="awss3" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../plugins/aws/aws.html" id="awss3-d9529e92398-link">AWSS3</a></div></div></li><li role="treeitem"><div data-tocid="backtest-d9529e92444" class="topicref" data-id="backtest" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../plugins/backtest.html" id="backtest-d9529e92444-link">Backtest</a></div></div></li><li role="treeitem"><div data-tocid="ctp-d9529e92490" class="topicref" data-id="ctp" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../plugins/ctp_2.html" id="ctp-d9529e92490-link">CTP</a></div></div></li><li role="treeitem"><div data-tocid="datafeed-d9529e92536" class="topicref" data-id="datafeed" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../plugins/datafeed.html" id="datafeed-d9529e92536-link">DataFeed</a></div></div></li><li role="treeitem"><div data-tocid="efh-d9529e92582" class="topicref" data-id="efh" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../plugins/efh.html" id="efh-d9529e92582-link">EFH</a></div></div></li><li role="treeitem"><div data-tocid="encoderdecoder-d9529e92628" class="topicref" data-id="encoderdecoder" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../plugins/EncoderDecoder.html" id="encoderdecoder-d9529e92628-link">EncoderDecoder</a></div></div></li><li role="treeitem"><div data-tocid="feather-d9529e92674" class="topicref" data-id="feather" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../plugins/feather/feather.html" id="feather-d9529e92674-link">Feather</a></div></div></li><li role="treeitem"><div data-tocid="gp-d9529e92721" class="topicref" data-id="gp" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../plugins/gp/gp.html" id="gp-d9529e92721-link">GP</a></div></div></li><li role="treeitem"><div data-tocid="gurobi-d9529e92767" class="topicref" data-id="gurobi" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../plugins/gurobi.html" id="gurobi-d9529e92767-link">gurobi</a></div></div></li><li role="treeitem"><div data-tocid="hbase-d9529e92813" class="topicref" data-id="hbase" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../plugins/hbase/hbase.html" id="hbase-d9529e92813-link">HBase</a></div></div></li><li role="treeitem"><div data-tocid="hdf5-d9529e92859" class="topicref" data-id="hdf5" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../plugins/hdf5/hdf5.html" id="hdf5-d9529e92859-link">HDF5</a></div></div></li><li role="treeitem"><div data-tocid="hdfs-d9529e92905" class="topicref" data-id="hdfs" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../plugins/hdfs/hdfs.html" id="hdfs-d9529e92905-link">HDFS</a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="httpclient-d9529e92951" class="topicref" data-id="httpclient" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action httpclient-d9529e92951-link" class="wh-expand-btn"></span><div class="title"><a href="../../plugins/httpClient/httpclient.html" id="httpclient-d9529e92951-link">HttpClient</a></div></div></li><li role="treeitem"><div data-tocid="insight-d9529e93043" class="topicref" data-id="insight" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../plugins/insight/insight_2.html" id="insight-d9529e93043-link">INSIGHT</a></div></div></li><li role="treeitem"><div data-tocid="kafka-d9529e93089" class="topicref" data-id="kafka" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../plugins/kafka/kafka.html" id="kafka-d9529e93089-link">Kafka</a></div></div></li><li role="treeitem"><div data-tocid="kdb-d9529e93135" class="topicref" data-id="kdb" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../plugins/kdb/kdb.html" id="kdb-d9529e93135-link">Kdb+</a></div></div></li><li role="treeitem"><div data-tocid="ldap-d9529e93181" class="topicref" data-id="ldap" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../plugins/LDAP.html" id="ldap-d9529e93181-link">LDAP</a></div></div></li><li role="treeitem"><div data-tocid="mat-d9529e93227" class="topicref" data-id="mat" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../plugins/mat/mat.html" id="mat-d9529e93227-link">mat</a></div></div></li><li role="treeitem"><div data-tocid="matchingengine-d9529e93274" class="topicref" data-id="matchingengine" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../plugins/MatchingEngine/me.html" id="matchingengine-d9529e93274-link">MatchingEngine</a></div></div></li><li role="treeitem" aria-expanded="true" class="active"><div data-tocid="mes-d9529e93320" class="topicref" data-id="mes" data-state="expanded"><span role="button" tabindex="0" aria-labelledby="button-collapse-action mes-d9529e93320-link" class="wh-expand-btn"></span><div class="title"><a href="../../plugins/matchingEngineSimulator/mes.html" id="mes-d9529e93320-link">MatchingEngineSimulator</a></div></div><ul role="group" class="navbar-nav nav-list"><li role="treeitem"><div data-tocid="模拟撮合引擎使用教程-d9529e93366" class="topicref" data-id="模拟撮合引擎使用教程" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../tutorials/matching_engine_simulator.html" id="模拟撮合引擎使用教程-d9529e93366-link">模拟撮合引擎使用教程</a></div></div></li></ul></li><li role="treeitem" aria-expanded="false"><div data-tocid="mdl-d9529e93412" class="topicref" data-id="mdl" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action mdl-d9529e93412-link" class="wh-expand-btn"></span><div class="title"><a href="../../plugins/MDL.html" id="mdl-d9529e93412-link">MDL</a></div></div></li><li role="treeitem"><div data-tocid="mongodb-d9529e93504" class="topicref" data-id="mongodb" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../plugins/mongodb/mongodb.html" id="mongodb-d9529e93504-link">MongoDB</a></div></div></li><li role="treeitem"><div data-tocid="mqtt-d9529e93550" class="topicref" data-id="mqtt" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../plugins/mqtt/mqtt.html" id="mqtt-d9529e93550-link">mqtt</a></div></div></li><li role="treeitem"><div data-tocid="mseed-d9529e93596" class="topicref" data-id="mseed" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../plugins/mseed/mseed.html" id="mseed-d9529e93596-link">mseed</a></div></div></li><li role="treeitem"><div data-tocid="mysql-d9529e93642" class="topicref" data-id="mysql" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../plugins/mysql/mysql.html" id="mysql-d9529e93642-link">MySQL</a></div></div></li><li role="treeitem"><div data-tocid="nsq-d9529e93688" class="topicref" data-id="nsq" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../plugins/nsq/nsq_2.html" id="nsq-d9529e93688-link">NSQ</a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="odbc-d9529e93734" class="topicref" data-id="odbc" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action odbc-d9529e93734-link" class="wh-expand-btn"></span><div class="title"><a href="../../plugins/odbc/odbc.html" id="odbc-d9529e93734-link">ODBC</a></div></div></li><li role="treeitem"><div data-tocid="opcua-d9529e93826" class="topicref" data-id="opcua" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../plugins/opcua/opcua.html" id="opcua-d9529e93826-link">OPCUA</a></div></div></li><li role="treeitem"><div data-tocid="opc-d9529e93872" class="topicref" data-id="opc" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../plugins/opc/opc.html" id="opc-d9529e93872-link">OPC</a></div></div></li><li role="treeitem"><div data-tocid="orc-d9529e93919" class="topicref" data-id="orc" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../plugins/orc.html" id="orc-d9529e93919-link">ORC</a></div></div></li><li role="treeitem"><div data-tocid="parquet-d9529e93965" class="topicref" data-id="parquet" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../plugins/parquet/parquet.html" id="parquet-d9529e93965-link">Parquet</a></div></div></li><li role="treeitem"><div data-tocid="py-d9529e94011" class="topicref" data-id="py" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../plugins/py/py.html" id="py-d9529e94011-link">Py</a></div></div></li><li role="treeitem"><div data-tocid="rabbitmq-d9529e94057" class="topicref" data-id="rabbitmq" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../plugins/rabbitMQ.html" id="rabbitmq-d9529e94057-link">RabbitMQ</a></div></div></li><li role="treeitem"><div data-tocid="redis-d9529e94103" class="topicref" data-id="redis" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../plugins/redis.html" id="redis-d9529e94103-link">Redis</a></div></div></li><li role="treeitem"><div data-tocid="rocketmq-d9529e94149" class="topicref" data-id="rocketmq" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../plugins/rocketMQ.html" id="rocketmq-d9529e94149-link">RocketMQ</a></div></div></li><li role="treeitem"><div data-tocid="schemalesswriter-d9529e94195" class="topicref" data-id="schemalesswriter" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../plugins/slwriter.html" id="schemalesswriter-d9529e94195-link">SchemalessWriter</a></div></div></li><li role="treeitem"><div data-tocid="signal-d9529e94241" class="topicref" data-id="signal" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../plugins/signal/signal.html" id="signal-d9529e94241-link">signal</a></div></div></li><li role="treeitem"><div data-tocid="ssequotationfile-d9529e94287" class="topicref" data-id="ssequotationfile" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../plugins/SSEQuotationFile.html" id="ssequotationfile-d9529e94287-link">SSEQuotationFile</a></div></div></li><li role="treeitem"><div data-tocid="svm-d9529e94333" class="topicref" data-id="svm" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../plugins/svm/svm.html" id="svm-d9529e94333-link">SVM</a></div></div></li><li role="treeitem"><div data-tocid="tcpsocket-d9529e94379" class="topicref" data-id="tcpsocket" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../plugins/tcpsocket.html" id="tcpsocket-d9529e94379-link">TCPSocket</a></div></div></li><li role="treeitem"><div data-tocid="websocket-d9529e94426" class="topicref" data-id="websocket" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../plugins/websocket.html" id="websocket-d9529e94426-link">WebSocket</a></div></div></li><li role="treeitem"><div data-tocid="windtdf-d9529e94472" class="topicref" data-id="windtdf" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../plugins/windtdf.html" id="windtdf-d9529e94472-link">WindTDF</a></div></div></li><li role="treeitem"><div data-tocid="xgboost-d9529e94518" class="topicref" data-id="xgboost" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../plugins/xgboost/xgboost.html" id="xgboost-d9529e94518-link">xgboost</a></div></div></li><li role="treeitem"><div data-tocid="xtp-d9529e94564" class="topicref" data-id="xtp" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../plugins/xtp.html" id="xtp-d9529e94564-link">XTP</a></div></div></li><li role="treeitem"><div data-tocid="zip-d9529e94610" class="topicref" data-id="zip" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../plugins/zip/zip.html" id="zip-d9529e94610-link">zip</a></div></div></li><li role="treeitem"><div data-tocid="zlib-d9529e94656" class="topicref" data-id="zlib" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../plugins/zlib/zlib.html" id="zlib-d9529e94656-link">Zlib</a></div></div></li><li role="treeitem"><div data-tocid="zmq-d9529e94702" class="topicref" data-id="zmq" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../plugins/zmq/zmq.html" id="zmq-d9529e94702-link">zmq</a></div></div></li></ul></li><li role="treeitem" aria-expanded="false"><div data-tocid="third_party-d9529e94749" class="topicref" data-id="third_party" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action third_party-d9529e94749-link" class="wh-expand-btn"></span><div class="title"><a href="../../third_party.html" id="third_party-d9529e94749-link">第三方工具</a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="about_tutorials-d9529e94980" class="topicref" data-id="about_tutorials" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action about_tutorials-d9529e94980-link" class="wh-expand-btn"></span><div class="title"><a href="../../tutorials/about_tutorials.html" id="about_tutorials-d9529e94980-link"><span class="keyword label">教程</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 产品使用教程</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="tocId-d9529e101769" class="topicref" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action tocId-d9529e101769-link" class="wh-expand-btn"></span><div class="title"><a href="../../rn/server/3_00_1.html" id="tocId-d9529e101769-link">版本说明</a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 版本发布历史</p></div></div></div></li></ul></div>
+		                        
+                            </div>
+                        </nav>
+                    
+                    
+                    <div class="col-lg-7 col-md-9 col-sm-12" id="wh_topic_body">
+                        <button id="wh_close_publication_toc_button" class="close-toc-button d-none" aria-label="Toggle publishing table of content" aria-controls="wh_publication_toc" aria-expanded="true">
+                            <span class="close-toc-icon-container">
+                                <span class="close-toc-icon"></span>     
+                            </span>
+                        </button>
+                        <button id="wh_close_topic_toc_button" class="close-toc-button d-none" aria-label="Toggle topic table of content" aria-controls="wh_topic_toc" aria-expanded="true">
+                            <span class="close-toc-icon-container">
+                                <span class="close-toc-icon"></span>     
+                            </span>
+                        </button>
+                        
+                        <div class=" wh_topic_content body "><main role="main"><article class="- topic/topic topic" role="article" aria-labelledby="ariaid-title1">
+    <h1 class="- topic/title title topictitle1" id="ariaid-title1">MatchingEngineSimulator</h1>
+    <div class="- topic/body body">
+        <p class="- topic/p p">模拟撮合引擎插件（Matching Engine Simulator）用于模拟用户在某个时间点发出或取消订单的操作，并获取相应的交易结果。</p>
+        <p class="- topic/p p">该插件以行情数据（快照数据或逐笔数据）和用户委托订单（买方或卖方）作为输入，根据订单撮合规则实现模拟撮合后，将订单成交结果（含部分成交结果、拒绝订单和已撤订单）输出至订单明细输出表，未成交部分等待与后续行情撮合成交，或者等待用户撤单。</p>
+    </div>
+    <article class="- topic/topic topic nested1" aria-labelledby="ariaid-title2" id="topic_nhk_xlf_1bc">
+        <h2 class="- topic/title title topictitle2" id="ariaid-title2"><strong class="+ topic/ph hi-d/b ph b">安装插件</strong></h2>
+        <div class="- topic/body body">
+            <section class="- topic/section section" id="topic_nhk_xlf_1bc__section_g45_ylf_1bc" data-ofbid="topic_nhk_xlf_1bc__section_g45_ylf_1bc"><h3 class="- topic/title title sectiontitle"><strong class="+ topic/ph hi-d/b ph b">版本要求</strong></h3>
+                
+                <p class="- topic/p p">DolphinDB Server 2.00.12.2 和 3.00.0.2 及更高版本，支持 Linux x86-64, Linux JIT, Windows,
+                    Windows JIT。</p>
+            </section>
+            <section class="- topic/section section" id="topic_nhk_xlf_1bc__section_bfr_1mf_1bc" data-ofbid="topic_nhk_xlf_1bc__section_bfr_1mf_1bc"><h3 class="- topic/title title sectiontitle"><strong class="+ topic/ph hi-d/b ph b">安装步骤</strong></h3>
+                
+                <ol class="- topic/ol ol" id="topic_nhk_xlf_1bc__ol_qyh_cmf_1bc" data-ofbid="topic_nhk_xlf_1bc__ol_qyh_cmf_1bc">
+                    <li class="- topic/li li">
+                        <p class="- topic/p p">在 DolphinDB 客户端中使用 <code class="+ topic/ph pr-d/codeph ph codeph">listRemotePlugins</code> 命令查看插件仓库中的插件信息。</p>
+                        <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="topic_nhk_xlf_1bc__codeblock_kcz_ytr_lbc" data-ofbid="topic_nhk_xlf_1bc__codeblock_kcz_ytr_lbc"><code>login("admin", "123456")
+listRemotePlugins("MatchingEngineSimulator")</code></pre>
+                    </li>
+                    <li class="- topic/li li">
+                        <p class="- topic/p p">使用 <code class="+ topic/ph pr-d/codeph ph codeph">installPlugin</code> 命令完成插件安装。</p>
+                        <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="topic_nhk_xlf_1bc__codeblock_qmp_ztr_lbc" data-ofbid="topic_nhk_xlf_1bc__codeblock_qmp_ztr_lbc"><code>installPlugin("MatchingEngineSimulator")</code></pre>
+                    </li>
+                    <li class="- topic/li li">
+                        <p class="- topic/p p">使用 <code class="+ topic/ph pr-d/codeph ph codeph">loadPlugin</code> 命令加载插件。</p>
+                        <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="topic_nhk_xlf_1bc__codeblock_xzc_15r_lbc" data-ofbid="topic_nhk_xlf_1bc__codeblock_xzc_15r_lbc"><code>loadPlugin("MatchingEngineSimulator")</code></pre>
+                    </li>
+                </ol>
+            </section>
+        </div>
+    </article>
+    <article class="- topic/topic topic nested1" aria-labelledby="ariaid-title3" id="topic_zyq_3mf_1bc">
+        <h2 class="- topic/title title topictitle2" id="ariaid-title3"><strong class="+ topic/ph hi-d/b ph b">插件接口</strong></h2>
+        <div class="- topic/body body">
+            <section class="- topic/section section" id="topic_zyq_3mf_1bc__section_ez1_lmf_1bc" data-ofbid="topic_zyq_3mf_1bc__section_ez1_lmf_1bc"><h3 class="- topic/title title sectiontitle"><strong class="+ topic/ph hi-d/b ph b">createMatchEngine</strong></h3>
+                
+                <p class="- topic/p p"><strong class="+ topic/ph hi-d/b ph b">语法</strong></p>
+                <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="topic_zyq_3mf_1bc__codeblock_hy5_nmf_1bc" data-ofbid="topic_zyq_3mf_1bc__codeblock_hy5_nmf_1bc"><code>MatchingEngineSimulator::createMatchEngine(name, 
+	exchange, 
+	config, 
+	dummyQuoteTable,
+	quoteColMap, 
+	dummyUserOrderTable,
+	userOrderColMap, 
+	orderDetailsOutput,
+	[orderDetailsAndSnapshotOutput], 
+	[snapshotOutput])</code></pre>
+                <p class="- topic/p p"><strong class="+ topic/ph hi-d/b ph b">详情</strong></p>
+                <p class="- topic/p p">创建一个模拟撮合引擎。</p>
+                <p class="- topic/p p"><strong class="+ topic/ph hi-d/b ph b">参数</strong></p>
+                <div class="- topic/p p">
+                    <ul class="- topic/ul ul" id="topic_zyq_3mf_1bc__ul_sdk_pmf_1bc" data-ofbid="topic_zyq_3mf_1bc__ul_sdk_pmf_1bc">
+                        <li class="- topic/li li">
+                            <p class="- topic/p p">name：名称，字符串标量，全局唯一。</p>
+                        </li>
+                        <li class="- topic/li li">
+                            <p class="- topic/p p">exchange：交易所标识，深交所"XSHE"或上交所"XSHG"。</p>
+                        </li>
+                        <li class="- topic/li li">
+                            <p class="- topic/p p">config： 是一个字典标量，包含配置的键值对，类型为(STRING, DOUBLE)。</p>
+                        </li>
+                    </ul>
+                </div>
+                <div class="table-container"><table class="- topic/table table frame-all" id="topic_zyq_3mf_1bc__table_itv_qmf_1bc" data-ofbid="topic_zyq_3mf_1bc__table_itv_qmf_1bc" data-cols="2"><caption></caption><colgroup><col/><col/></colgroup><tbody class="- topic/tbody tbody">
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry colsep-1 rowsep-1">
+                                    <p class="- topic/p p"><strong class="+ topic/ph hi-d/b ph b">字典 key</strong></p>
+                                </td>
+                                <td class="- topic/entry entry colsep-0 rowsep-1">
+                                    <p class="- topic/p p"><strong class="+ topic/ph hi-d/b ph b">含义</strong></p>
+                                </td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry colsep-1 rowsep-1">dataType</td>
+                                <td class="- topic/entry entry colsep-0 rowsep-1">行情类别：<p class="- topic/p p">股票逐笔：0； </p><p class="- topic/p p">股票快照：1； </p><p class="- topic/p p">股票分钟：4； </p><p class="- topic/p p">股票日频：5；
+                                        </p><p class="- topic/p p">期货期权快照：6； </p><p class="- topic/p p">期货期权分钟：7； </p><p class="- topic/p p">期货期权分钟：8；
+                                        </p><p class="- topic/p p">通用类型快照：10</p><p class="- topic/p p">通用类型分钟：11</p><p class="- topic/p p">通用类型日频：12</p></td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry colsep-1 rowsep-1">depth</td>
+                                <td class="- topic/entry entry colsep-0 rowsep-1">匹配的订单簿深度，5 - 50</td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry colsep-1 rowsep-1">outputOrderBook</td>
+                                <td class="- topic/entry entry colsep-0 rowsep-1">是否输出订单簿。0（不输出），1（输出）</td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry colsep-1 rowsep-1">outputInterval</td>
+                                <td class="- topic/entry entry colsep-0 rowsep-1">输出订单簿的最小时间间隔，单位为毫秒</td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry colsep-1 rowsep-1">latency</td>
+                                <td class="- topic/entry entry colsep-0 rowsep-1">
+                                    <p class="- topic/p p">模拟时延，单位为毫秒，用来模拟用户订单从发出到被处理的时延。</p>
+                                    <p class="- topic/p p">latency=-1 时，订单会即时撮合</p>
+                                </td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry colsep-1 rowsep-1">orderBookMatchingRatio</td>
+                                <td class="- topic/entry entry colsep-0 rowsep-1">成交百分比，不能小于0。</td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry colsep-1 rowsep-1">matchingMode</td>
+                                <td class="- topic/entry entry colsep-0 rowsep-1">
+                                    <p class="- topic/p p">快照模式下，匹配的两种模式，可设置为 1 或者 2</p>
+                                    <ul class="- topic/ul ul" id="topic_zyq_3mf_1bc__ul_ltv_qmf_1bc" data-ofbid="topic_zyq_3mf_1bc__ul_ltv_qmf_1bc">
+                                        <li class="- topic/li li">
+                                            <p class="- topic/p p">撮合模式一：与最新成交价以及对手方盘口按配置的比例撮合</p>
+                                        </li>
+                                        <li class="- topic/li li">
+                                            <p class="- topic/p p">撮合模式二：与区间的成交列表以及对手方盘口撮合成交</p>
+                                        </li>
+                                    </ul>
+                                </td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry colsep-1 rowsep-1">matchingRatio</td>
+                                <td class="- topic/entry entry colsep-0 rowsep-1">快照模式下，快照的区间成交百分比，默认和成交百分比 <em class="+ topic/ph hi-d/i ph i">orderBookMatchingRatio</em>
+                                    相等</td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry colsep-1 rowsep-1">enableOrderDetailsAndSnapshotOutput</td>
+                                <td class="- topic/entry entry colsep-0 rowsep-1">是否需要输出到复合输出表</td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry colsep-1 rowsep-1">outputTimeInfo</td>
+                                <td class="- topic/entry entry colsep-0 rowsep-1">
+                                    <p class="- topic/p p">成交输出表中是否需要订单收到时的行情最新时间，”匹配开始时间“”匹配完成时间“</p>
+                                    <p class="- topic/p p">0（不需要）， 1（需要）</p>
+                                </td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry colsep-1 rowsep-1">outputQueuePosition</td>
+                                <td class="- topic/entry entry colsep-0 rowsep-1">
+                                    <p class="- topic/p p">是否输出订单在真实行情数据的位置信息。</p>
+                                    <p class="- topic/p p">如果输出该信息，则在成交明细和未成交订单接口中会增加以下 5 个指标：</p>
+                                    <ul class="- topic/ul ul" id="topic_zyq_3mf_1bc__ul_mtv_qmf_1bc" data-ofbid="topic_zyq_3mf_1bc__ul_mtv_qmf_1bc">
+                                        <li class="- topic/li li">
+                                            <p class="- topic/p p">优于委托价格的行情未成交委托单总量</p>
+                                        </li>
+                                        <li class="- topic/li li">
+                                            <p class="- topic/p p">次于委托价格的行情未成交委托单总量</p>
+                                        </li>
+                                        <li class="- topic/li li">
+                                            <p class="- topic/p p">等于委托价格的行情未成交委托单总量</p>
+                                        </li>
+                                        <li class="- topic/li li">
+                                            <p class="- topic/p p">等于委托价格且早于用户订单时间的行情未成交委托单总量</p>
+                                        </li>
+                                        <li class="- topic/li li">
+                                            <p class="- topic/p p">优于委托价格的行情档位数</p>
+                                        </li>
+                                    </ul>
+                                    <p class="- topic/p p">该参数可设置为如下值：</p>
+                                    <ul class="- topic/ul ul" id="topic_zyq_3mf_1bc__ul_f5q_psn_1bc" data-ofbid="topic_zyq_3mf_1bc__ul_f5q_psn_1bc">
+                                        <li class="- topic/li li">0：默认值，表示不输出</li>
+                                        <li class="- topic/li li">1：表示订单撮合成交计算上述指标的时候，把最新的一条行情纳入订单薄</li>
+                                        <li class="- topic/li li">2：表示订单撮合成交计算上述指标的时候，把最新的一条行情不纳入订单薄，即统计的是撮合计算前的位置信息</li>
+                                    </ul>
+                                </td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry colsep-1 rowsep-1">outputOrderConfirmation</td>
+                                <td class="- topic/entry entry colsep-0 rowsep-1">是否输出委托回报，默认为 true。</td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry colsep-1 rowsep-1">outputRejectDetails</td>
+                                <td class="- topic/entry entry colsep-0 rowsep-1">是否输出用户订单、用户撤单被拒绝的具体原因。默认为 false。</td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry colsep-1 rowsep-0">cpuId</td>
+                                <td class="- topic/entry entry colsep-0 rowsep-0">绑定到的 CPU 核的 ID，只在第一次接收到行情或者用户订单的时候绑定该线程</td>
+                            </tr>
+                        </tbody></table></div>
+                <ul class="- topic/ul ul" id="topic_zyq_3mf_1bc__ul_frc_tmf_1bc" data-ofbid="topic_zyq_3mf_1bc__ul_frc_tmf_1bc">
+                    <li class="- topic/li li">
+                        <p class="- topic/p p">dummyQuoteTable：插入行情数据的表的实际结构，对于一些引擎内部使用到的列，由参数 quoteColMap 提供列名映射关系。</p>
+                    </li>
+                    <li class="- topic/li li">
+                        <p class="- topic/p p">quoteColMap：行情数据表的列名映射关系，一个字典标量，类型为(STRING, DOUBLE)。</p>
+                        <p class="- topic/p p">其中，对于逐笔模式，行情表必须提供的列如下：</p>
+                    </li>
+                </ul>
+                <div class="table-container"><table class="- topic/table table frame-all" id="topic_zyq_3mf_1bc__table_grc_tmf_1bc" data-ofbid="topic_zyq_3mf_1bc__table_grc_tmf_1bc" data-cols="3"><caption></caption><colgroup><col/><col/><col/></colgroup><tbody class="- topic/tbody tbody">
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry colsep-1 rowsep-1">
+                                    <p class="- topic/p p"><strong class="+ topic/ph hi-d/b ph b">名称</strong></p>
+                                </td>
+                                <td class="- topic/entry entry colsep-1 rowsep-1">
+                                    <p class="- topic/p p"><strong class="+ topic/ph hi-d/b ph b">类型</strong></p>
+                                </td>
+                                <td class="- topic/entry entry colsep-0 rowsep-1">
+                                    <p class="- topic/p p"><strong class="+ topic/ph hi-d/b ph b">含义</strong></p>
+                                </td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry colsep-1 rowsep-1">symbol</td>
+                                <td class="- topic/entry entry colsep-1 rowsep-1">SYMBOL</td>
+                                <td class="- topic/entry entry colsep-0 rowsep-1">股票标的</td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry colsep-1 rowsep-1">symbolSource</td>
+                                <td class="- topic/entry entry colsep-1 rowsep-1">SYMBOL</td>
+                                <td class="- topic/entry entry colsep-0 rowsep-1">证券市场：深交所、上交所</td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry colsep-1 rowsep-1">timestamp</td>
+                                <td class="- topic/entry entry colsep-1 rowsep-1">TIMESTAMP</td>
+                                <td class="- topic/entry entry colsep-0 rowsep-1">时间戳</td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry colsep-1 rowsep-1">sourceType</td>
+                                <td class="- topic/entry entry colsep-1 rowsep-1">INT</td>
+                                <td class="- topic/entry entry colsep-0 rowsep-1">0（order） ，1（transaction）</td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry colsep-1 rowsep-1">orderType</td>
+                                <td class="- topic/entry entry colsep-1 rowsep-1">INT</td>
+                                <td class="- topic/entry entry colsep-0 rowsep-1">
+                                    <p class="- topic/p p">order：</p>
+                                    <ul class="- topic/ul ul" id="topic_zyq_3mf_1bc__ul_emd_psn_1bc" data-ofbid="topic_zyq_3mf_1bc__ul_emd_psn_1bc">
+                                        <li class="- topic/li li">1：市价</li>
+                                        <li class="- topic/li li">2：限价</li>
+                                        <li class="- topic/li li">3：本方最优</li>
+                                        <li class="- topic/li li">10：撤单（仅上交所，即上交所撤单记录在 order 中）</li>
+                                    </ul>
+                                    <p class="- topic/p p">transaction：</p>
+                                    <ul class="- topic/ul ul" id="topic_zyq_3mf_1bc__ul_jc3_psn_1bc" data-ofbid="topic_zyq_3mf_1bc__ul_jc3_psn_1bc">
+                                        <li class="- topic/li li">0：成交</li>
+                                        <li class="- topic/li li">1：撤单（仅深交所，即深交所撤单记录在 transaction 中）</li>
+                                    </ul>
+                                </td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry colsep-1 rowsep-1">price</td>
+                                <td class="- topic/entry entry colsep-1 rowsep-1">DOUBLE</td>
+                                <td class="- topic/entry entry colsep-0 rowsep-1">订单价格</td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry colsep-1 rowsep-1">qty</td>
+                                <td class="- topic/entry entry colsep-1 rowsep-1">LONG</td>
+                                <td class="- topic/entry entry colsep-0 rowsep-1">订单数量</td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry colsep-1 rowsep-1">buyNo</td>
+                                <td class="- topic/entry entry colsep-1 rowsep-1">LONG</td>
+                                <td class="- topic/entry entry colsep-0 rowsep-1">transaction 对应其原始数据；order
+                                    填充原始订单号，无意义，深交所数据为了补全上交所数据格式增加的冗余列</td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry colsep-1 rowsep-1">sellNo</td>
+                                <td class="- topic/entry entry colsep-1 rowsep-1">LONG</td>
+                                <td class="- topic/entry entry colsep-0 rowsep-1">transaction 对应其原始数据；order
+                                    填充原始委托订单号，无意义，深交所数据为了补全上交所数据格式增加的冗余列</td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry colsep-1 rowsep-1">direction</td>
+                                <td class="- topic/entry entry colsep-1 rowsep-1">INT</td>
+                                <td class="- topic/entry entry colsep-0 rowsep-1">1（买 ），2（卖）</td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry colsep-1 rowsep-0">seqNum</td>
+                                <td class="- topic/entry entry colsep-1 rowsep-0">LONG</td>
+                                <td class="- topic/entry entry colsep-0 rowsep-0">逐笔数据序号</td>
+                            </tr>
+                        </tbody></table></div>
+                <p class="- topic/p p">对于快照模式，行情表必须提供的列如下：</p>
+                <div class="- topic/note note note note_note" id="topic_zyq_3mf_1bc__note_gp4_dvr_lbc" data-ofbid="topic_zyq_3mf_1bc__note_gp4_dvr_lbc"><span class="note__title">注：</span> 
+                    <p class="- topic/p p">注意：</p>
+                    <ul class="- topic/ul ul" id="topic_zyq_3mf_1bc__ul_jpx_b4p_wbc" data-ofbid="topic_zyq_3mf_1bc__ul_jpx_b4p_wbc">
+                        <li class="- topic/li li">股票行情撮合模式二中必须提供 tradePrice（成交价格）和 tradeQty（成交数量）列表字段，撮合模式一中可以不包含这两列。</li>
+                    </ul>
+                    <ul class="- topic/ul ul" id="topic_zyq_3mf_1bc__ul_zt5_b4p_wbc" data-ofbid="topic_zyq_3mf_1bc__ul_zt5_b4p_wbc">
+                        <li class="- topic/li li">期货期权和通用版本有 highPrice 和 lowPrice 两个字段。</li>
+                    </ul>
+                    <div class="- topic/p p">
+                        <ul class="- topic/ul ul" id="topic_zyq_3mf_1bc__ul_rrj_b4p_wbc" data-ofbid="topic_zyq_3mf_1bc__ul_rrj_b4p_wbc">
+                            <li class="- topic/li li">
+                                <p class="- topic/p p">通用版本的价格和量的数据类型都为LONG。</p>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="table-container"><table class="- topic/table table frame-all" id="topic_zyq_3mf_1bc__table_krc_tmf_1bc" data-ofbid="topic_zyq_3mf_1bc__table_krc_tmf_1bc" data-cols="3"><caption></caption><colgroup><col/><col/><col/></colgroup><tbody class="- topic/tbody tbody">
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry colsep-1 rowsep-1">
+                                    <p class="- topic/p p"><strong class="+ topic/ph hi-d/b ph b">名称</strong></p>
+                                </td>
+                                <td class="- topic/entry entry colsep-1 rowsep-1">
+                                    <p class="- topic/p p"><strong class="+ topic/ph hi-d/b ph b">类型</strong></p>
+                                </td>
+                                <td class="- topic/entry entry colsep-0 rowsep-1">
+                                    <p class="- topic/p p"><strong class="+ topic/ph hi-d/b ph b">含义</strong></p>
+                                </td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry colsep-1 rowsep-1">symbol</td>
+                                <td class="- topic/entry entry colsep-1 rowsep-1">SYMBOL</td>
+                                <td class="- topic/entry entry colsep-0 rowsep-1">股票标的</td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry colsep-1 rowsep-1">symbolSource</td>
+                                <td class="- topic/entry entry colsep-1 rowsep-1">SYMBOL</td>
+                                <td class="- topic/entry entry colsep-0 rowsep-1">证券市场：深交所、上交所</td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry colsep-1 rowsep-1">timestamp</td>
+                                <td class="- topic/entry entry colsep-1 rowsep-1">TIMESTAMP</td>
+                                <td class="- topic/entry entry colsep-0 rowsep-1">时间戳</td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry colsep-1 rowsep-1">lastPrice</td>
+                                <td class="- topic/entry entry colsep-1 rowsep-1">DOUBLE</td>
+                                <td class="- topic/entry entry colsep-0 rowsep-1">最新价</td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry colsep-1 rowsep-1">upLimitPrice</td>
+                                <td class="- topic/entry entry colsep-1 rowsep-1">DOUBLE</td>
+                                <td class="- topic/entry entry colsep-0 rowsep-1">涨停板价</td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry colsep-1 rowsep-1">downLimitPrice</td>
+                                <td class="- topic/entry entry colsep-1 rowsep-1">DOUBLE</td>
+                                <td class="- topic/entry entry colsep-0 rowsep-1">跌停板价</td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry colsep-1 rowsep-1">totalBidQty</td>
+                                <td class="- topic/entry entry colsep-1 rowsep-1">LONG</td>
+                                <td class="- topic/entry entry colsep-0 rowsep-1">区间买单成交数量总和</td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry colsep-1 rowsep-1">totalOfferQty</td>
+                                <td class="- topic/entry entry colsep-1 rowsep-1">LONG</td>
+                                <td class="- topic/entry entry colsep-0 rowsep-1">区间卖单成交数量总和</td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry colsep-1 rowsep-1">bidPrice</td>
+                                <td class="- topic/entry entry colsep-1 rowsep-1">DOUBLE[]</td>
+                                <td class="- topic/entry entry colsep-0 rowsep-1">买单价格列表</td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry colsep-1 rowsep-1">bidQty</td>
+                                <td class="- topic/entry entry colsep-1 rowsep-1">LONG[]</td>
+                                <td class="- topic/entry entry colsep-0 rowsep-1">买单数量列表</td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry colsep-1 rowsep-1">offerPrice</td>
+                                <td class="- topic/entry entry colsep-1 rowsep-1">DOUBLE[]</td>
+                                <td class="- topic/entry entry colsep-0 rowsep-1">卖单价格列表</td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry colsep-1 rowsep-1">offerQty</td>
+                                <td class="- topic/entry entry colsep-1 rowsep-1">LONG[]</td>
+                                <td class="- topic/entry entry colsep-0 rowsep-1">卖单数量列表</td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry colsep-1 rowsep-1">tradePrice</td>
+                                <td class="- topic/entry entry colsep-1 rowsep-1">DOUBLE[]</td>
+                                <td class="- topic/entry entry colsep-0 rowsep-1">成交价格列表（撮合模式二时必须有）</td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry colsep-1 rowsep-1">tradeQty</td>
+                                <td class="- topic/entry entry colsep-1 rowsep-1">LONG[]</td>
+                                <td class="- topic/entry entry colsep-0 rowsep-1">成交数量列表（撮合模式二时必须有）</td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry colsep-1 rowsep-1">highPrice</td>
+                                <td class="- topic/entry entry colsep-1 rowsep-1">DOUBLE</td>
+                                <td class="- topic/entry entry colsep-0 rowsep-1">最高价（期货期权品种和通用版本带有的字段）</td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry colsep-1 rowsep-0">lowPrice</td>
+                                <td class="- topic/entry entry colsep-1 rowsep-0">DOUBLE</td>
+                                <td class="- topic/entry entry colsep-0 rowsep-0">最低价（期货期权品种和通用版本带有的字段）</td>
+                            </tr>
+                        </tbody></table></div>
+                <p class="- topic/p p">对于分钟频率和日频数据，行情表必须提供的列如下：</p>
+                <div class="- topic/note note note note_note" id="topic_zyq_3mf_1bc__note_fsh_pnp_wbc" data-ofbid="topic_zyq_3mf_1bc__note_fsh_pnp_wbc"><span class="note__title">注：</span> 
+                    <ul class="- topic/ul ul" id="topic_zyq_3mf_1bc__ul_nt4_pnp_wbc" data-ofbid="topic_zyq_3mf_1bc__ul_nt4_pnp_wbc">
+                        <li class="- topic/li li">
+                            <p class="- topic/p p"><u class="+ topic/ph hi-d/u ph u">通用类型的分钟频、日频模式必须提供 symbolSource 字段，期货、股票类型的分钟频、日频模式可以不包含
+                                    symbolSource 字段。</u></p>
+                        </li>
+                        <li class="- topic/li li">
+                            <p class="- topic/p p"><u class="+ topic/ph hi-d/u ph u">通用版本的价格和量的数据类型都为LONG。</u></p>
+                        </li>
+                    </ul>
+                </div>
+                <div class="table-container"><table class="- topic/table table frame-all" id="topic_zyq_3mf_1bc__table_orc_tmf_1bc" data-ofbid="topic_zyq_3mf_1bc__table_orc_tmf_1bc" data-cols="3"><caption></caption><colgroup><col/><col/><col/></colgroup><tbody class="- topic/tbody tbody">
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry colsep-1 rowsep-1">
+                                    <p class="- topic/p p"><strong class="+ topic/ph hi-d/b ph b">字段</strong></p>
+                                </td>
+                                <td class="- topic/entry entry colsep-1 rowsep-1">
+                                    <p class="- topic/p p"><strong class="+ topic/ph hi-d/b ph b">类型</strong></p>
+                                </td>
+                                <td class="- topic/entry entry colsep-0 rowsep-1">
+                                    <p class="- topic/p p"><strong class="+ topic/ph hi-d/b ph b">名称</strong></p>
+                                </td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry colsep-1 rowsep-1">symbol</td>
+                                <td class="- topic/entry entry colsep-1 rowsep-1">SYMBOL</td>
+                                <td class="- topic/entry entry colsep-0 rowsep-1">标的代码</td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry colsep-1 rowsep-1">symbolSource</td>
+                                <td class="- topic/entry entry colsep-1 rowsep-1">SYMBOL</td>
+                                <td class="- topic/entry entry colsep-0 rowsep-1">证券市场</td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry colsep-1 rowsep-1">tradeTime</td>
+                                <td class="- topic/entry entry colsep-1 rowsep-1">TIMESTAMP</td>
+                                <td class="- topic/entry entry colsep-0 rowsep-1">时间</td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry colsep-1 rowsep-1">open</td>
+                                <td class="- topic/entry entry colsep-1 rowsep-1">DOUBLE</td>
+                                <td class="- topic/entry entry colsep-0 rowsep-1">开盘价</td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry colsep-1 rowsep-1">low</td>
+                                <td class="- topic/entry entry colsep-1 rowsep-1">DOUBLE</td>
+                                <td class="- topic/entry entry colsep-0 rowsep-1">最低价</td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry colsep-1 rowsep-1">high</td>
+                                <td class="- topic/entry entry colsep-1 rowsep-1">DOUBLE</td>
+                                <td class="- topic/entry entry colsep-0 rowsep-1">最高价</td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry colsep-1 rowsep-1">close</td>
+                                <td class="- topic/entry entry colsep-1 rowsep-1">DOUBLE</td>
+                                <td class="- topic/entry entry colsep-0 rowsep-1">收盘价</td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry colsep-1 rowsep-1">volume</td>
+                                <td class="- topic/entry entry colsep-1 rowsep-1">LONG</td>
+                                <td class="- topic/entry entry colsep-0 rowsep-1">成交量</td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry colsep-1 rowsep-1">amount</td>
+                                <td class="- topic/entry entry colsep-1 rowsep-1">DOUBLE</td>
+                                <td class="- topic/entry entry colsep-0 rowsep-1">成交额</td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry colsep-1 rowsep-1">upLimitPrice</td>
+                                <td class="- topic/entry entry colsep-1 rowsep-1">DOUBLE</td>
+                                <td class="- topic/entry entry colsep-0 rowsep-1">涨停价</td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry colsep-1 rowsep-0">downLimitPrice</td>
+                                <td class="- topic/entry entry colsep-1 rowsep-0">DOUBLE</td>
+                                <td class="- topic/entry entry colsep-0 rowsep-0">跌停价</td>
+                            </tr>
+                        </tbody></table></div>
+                <ul class="- topic/ul ul" id="topic_zyq_3mf_1bc__ul_src_tmf_1bc" data-ofbid="topic_zyq_3mf_1bc__ul_src_tmf_1bc">
+                    <li class="- topic/li li">
+                        <p class="- topic/p p">dummyUserOrderTable：插入用户订单数据的表的实际结构，对于一些引擎内部使用到的列，由参数 userOrderColMap
+                            提供列名映射关系。</p>
+                    </li>
+                    <li class="- topic/li li">
+                        <p class="- topic/p p">userOrderColMap：用户订单表的列名映射关系，一个字典标量，类型为(STRING, DOUBLE)。</p>
+                        <ul class="- topic/ul ul" id="topic_zyq_3mf_1bc__ul_hbv_kvr_lbc" data-ofbid="topic_zyq_3mf_1bc__ul_hbv_kvr_lbc">
+                            <li class="- topic/li li">股票，用户订单表必须提供的列如下：</li>
+                        </ul>
+                    </li>
+                </ul>
+                <div class="table-container"><table class="- topic/table table frame-all" id="topic_zyq_3mf_1bc__table_trc_tmf_1bc" data-ofbid="topic_zyq_3mf_1bc__table_trc_tmf_1bc" data-cols="3"><caption></caption><colgroup><col/><col/><col/></colgroup><tbody class="- topic/tbody tbody">
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry colsep-1 rowsep-1">
+                                    <p class="- topic/p p"><strong class="+ topic/ph hi-d/b ph b">名称</strong></p>
+                                </td>
+                                <td class="- topic/entry entry colsep-1 rowsep-1">
+                                    <p class="- topic/p p"><strong class="+ topic/ph hi-d/b ph b">类型</strong></p>
+                                </td>
+                                <td class="- topic/entry entry colsep-0 rowsep-1">
+                                    <p class="- topic/p p"><strong class="+ topic/ph hi-d/b ph b">含义</strong></p>
+                                </td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry colsep-1 rowsep-1">symbol </td>
+                                <td class="- topic/entry entry colsep-1 rowsep-1">STRING </td>
+                                <td class="- topic/entry entry colsep-0 rowsep-1">股票标的。取消订单时股票标的无效，以 orderId 为准。 </td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry colsep-1 rowsep-1"><u class="+ topic/ph hi-d/u ph u">symbolSource</u></td>
+                                <td class="- topic/entry entry colsep-1 rowsep-1"><u class="+ topic/ph hi-d/u ph u">SYMBOL</u></td>
+                                <td class="- topic/entry entry colsep-0 rowsep-1"><u class="+ topic/ph hi-d/u ph u">证券市场</u></td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry colsep-1 rowsep-1">timestamp </td>
+                                <td class="- topic/entry entry colsep-1 rowsep-1">TIMESTAMP </td>
+                                <td class="- topic/entry entry colsep-0 rowsep-1">时间戳 </td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry colsep-1 rowsep-1">orderType </td>
+                                <td class="- topic/entry entry colsep-1 rowsep-1">INT </td>
+                                <td class="- topic/entry entry colsep-0 rowsep-1">
+                                    <p class="- topic/p p">上交所：</p>
+                                    <ul class="- topic/ul ul" id="topic_zyq_3mf_1bc__ul_flr_nsn_1bc" data-ofbid="topic_zyq_3mf_1bc__ul_flr_nsn_1bc">
+                                        <li class="- topic/li li">0：市价单中最优五档即时成交剩余撤销委托订单</li>
+                                        <li class="- topic/li li">1：市价单中最优五档即时成交剩余转限价委托订单</li>
+                                        <li class="- topic/li li">2：市价单中本方最优价格委托订单</li>
+                                        <li class="- topic/li li">3：市价单中对手方最优价格委托订单</li>
+                                        <li class="- topic/li li">5：限价单</li>
+                                        <li class="- topic/li li">6：撤单</li>
+                                        <li class="- topic/li li">7：市价单中最优五档即时成交剩余撤销委托订单（保护限价）</li>
+                                        <li class="- topic/li li">8：市价单中最优五档即时成交剩余转限价委托订单（保护限价）</li>
+                                        <li class="- topic/li li">9：市价单中本方最优价格委托订单（保护限价）</li>
+                                        <li class="- topic/li li">10：市价单中对手方最优价格委托订单（保护限价）</li>
+                                    </ul>
+                                    <p class="- topic/p p">深交所：</p>
+                                    <ul class="- topic/ul ul" id="topic_zyq_3mf_1bc__ul_g2j_4sn_1bc" data-ofbid="topic_zyq_3mf_1bc__ul_g2j_4sn_1bc">
+                                        <li class="- topic/li li">0：市价单中最优五档即时成交剩余撤销委托订单</li>
+                                        <li class="- topic/li li">1：市价单中即时成交剩余撤销委托订单</li>
+                                        <li class="- topic/li li">2：市价单中本方最优价格委托订单</li>
+                                        <li class="- topic/li li">3：市价单中对手方最优价格委托订单</li>
+                                        <li class="- topic/li li">4：市价单中全额成交或撤销委托订单</li>
+                                        <li class="- topic/li li">5：限价单</li>
+                                        <li class="- topic/li li">6：撤单 </li>
+                                    </ul>
+                                    <p class="- topic/p p">分钟频率、日频模式：</p>
+                                    <ul class="- topic/ul ul" id="topic_zyq_3mf_1bc__ul_bkp_4sn_1bc" data-ofbid="topic_zyq_3mf_1bc__ul_bkp_4sn_1bc">
+                                        <li class="- topic/li li">0：市价单</li>
+                                        <li class="- topic/li li">5：限价单</li>
+                                        <li class="- topic/li li">6：撤单</li>
+                                    </ul>
+                                </td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry colsep-1 rowsep-1">price </td>
+                                <td class="- topic/entry entry colsep-1 rowsep-1">DOUBLE </td>
+                                <td class="- topic/entry entry colsep-0 rowsep-1">订单委托价格 </td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry colsep-1 rowsep-1">orderQty </td>
+                                <td class="- topic/entry entry colsep-1 rowsep-1">LONG </td>
+                                <td class="- topic/entry entry colsep-0 rowsep-1">委托数量 </td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry colsep-1 rowsep-1">direction </td>
+                                <td class="- topic/entry entry colsep-1 rowsep-1">INT </td>
+                                <td class="- topic/entry entry colsep-0 rowsep-1">1（买 ），2（卖） </td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry colsep-1 rowsep-0">orderId</td>
+                                <td class="- topic/entry entry colsep-1 rowsep-0">LONG </td>
+                                <td class="- topic/entry entry colsep-0 rowsep-0">用户订单 ID，仅撤单时起作用 </td>
+                            </tr>
+                        </tbody></table></div>
+                <ul class="- topic/ul ul" id="topic_zyq_3mf_1bc__ul_hsj_pvr_lbc" data-ofbid="topic_zyq_3mf_1bc__ul_hsj_pvr_lbc">
+                    <li class="- topic/li li">
+                        <ul class="- topic/ul ul" id="topic_zyq_3mf_1bc__ul_nzn_pvr_lbc" data-ofbid="topic_zyq_3mf_1bc__ul_nzn_pvr_lbc">
+                            <li class="- topic/li li"><u class="+ topic/ph hi-d/u ph u">期货期权，用户订单表必须提供的列如下：</u></li>
+                        </ul>
+                    </li>
+                </ul>
+                <div class="table-container"><table class="- topic/table table frame-all" id="topic_zyq_3mf_1bc__table_y3x_nvr_lbc" data-ofbid="topic_zyq_3mf_1bc__table_y3x_nvr_lbc" data-cols="3"><caption></caption><colgroup><col style="width:33.33333333333333%"/><col style="width:33.33333333333333%"/><col style="width:33.33333333333333%"/></colgroup><thead class="- topic/thead thead">
+                            <tr class="- topic/row">
+                                <th class="- topic/entry entry colsep-1 rowsep-1" id="topic_zyq_3mf_1bc__table_y3x_nvr_lbc__entry__1"><strong class="+ topic/ph hi-d/b ph b">名称</strong></th>
+                                <th class="- topic/entry entry colsep-1 rowsep-1" id="topic_zyq_3mf_1bc__table_y3x_nvr_lbc__entry__2"><strong class="+ topic/ph hi-d/b ph b">类型</strong></th>
+                                <th class="- topic/entry entry colsep-0 rowsep-1" id="topic_zyq_3mf_1bc__table_y3x_nvr_lbc__entry__3"><strong class="+ topic/ph hi-d/b ph b">含义</strong></th>
+                            </tr>
+                        </thead><tbody class="- topic/tbody tbody">
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry colsep-1 rowsep-1" headers="topic_zyq_3mf_1bc__table_y3x_nvr_lbc__entry__1">symbol</td>
+                                <td class="- topic/entry entry colsep-1 rowsep-1" headers="topic_zyq_3mf_1bc__table_y3x_nvr_lbc__entry__2">SYMBOL</td>
+                                <td class="- topic/entry entry colsep-0 rowsep-1" headers="topic_zyq_3mf_1bc__table_y3x_nvr_lbc__entry__3">期货标的</td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry colsep-1 rowsep-1" headers="topic_zyq_3mf_1bc__table_y3x_nvr_lbc__entry__1">symbolSource</td>
+                                <td class="- topic/entry entry colsep-1 rowsep-1" headers="topic_zyq_3mf_1bc__table_y3x_nvr_lbc__entry__2">SYMBOL</td>
+                                <td class="- topic/entry entry colsep-0 rowsep-1" headers="topic_zyq_3mf_1bc__table_y3x_nvr_lbc__entry__3">交易所代码</td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry colsep-1 rowsep-1" headers="topic_zyq_3mf_1bc__table_y3x_nvr_lbc__entry__1">timestamp</td>
+                                <td class="- topic/entry entry colsep-1 rowsep-1" headers="topic_zyq_3mf_1bc__table_y3x_nvr_lbc__entry__2">TIMESTAMP</td>
+                                <td class="- topic/entry entry colsep-0 rowsep-1" headers="topic_zyq_3mf_1bc__table_y3x_nvr_lbc__entry__3">时间</td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry colsep-1 rowsep-1" headers="topic_zyq_3mf_1bc__table_y3x_nvr_lbc__entry__1">orderType</td>
+                                <td class="- topic/entry entry colsep-1 rowsep-1" headers="topic_zyq_3mf_1bc__table_y3x_nvr_lbc__entry__2">INT</td>
+                                <td class="- topic/entry entry colsep-0 rowsep-1" headers="topic_zyq_3mf_1bc__table_y3x_nvr_lbc__entry__3">
+                                    <p class="- topic/p p">订单类型：默认 5 表示限价单</p>
+                                    <p class="- topic/p p">5：限价单</p>
+                                    <p class="- topic/p p">6：撤单</p>
+                                    <p class="- topic/p p">0：市价单，以涨跌停价委托，并遵循时间优先原则</p>
+                                    <p class="- topic/p p">1：市价止损单</p>
+                                    <p class="- topic/p p">　　市价止损单是指某标的市场价格一旦达到委托设定的价格水平时即转变为市价单。市价止损单既可以是平仓单，也可以是开仓单</p>
+                                    <p class="- topic/p p">2：市价止盈单</p>
+                                    <p class="- topic/p p">
+                                        市价止盈单是指某标的市场价格一旦达到委托设定的价格水平时即转变为市价单。市价止盈单既可以是平仓单，也可以是开仓单</p>
+                                    <p class="- topic/p p">3：限价止损单</p>
+                                    <p class="- topic/p p">
+                                        限价止损单是指委托订单指定某合约成交的价格波动区间。价格一旦触发后即转变为价格波动区间极值的限价单。限价止损单既可以是平仓单，也可以是开仓单。</p>
+                                    <p class="- topic/p p">4：限价止盈单</p>
+                                    <p class="- topic/p p">
+                                        限价止盈单是指委托订单指定某合约成交的价格波动区间。价格一旦触发后即转变为价格波动区间极值的限价单。限价止盈单既可以是平仓单，也可以是开仓单。</p>
+                                </td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry colsep-1 rowsep-1" headers="topic_zyq_3mf_1bc__table_y3x_nvr_lbc__entry__1">price</td>
+                                <td class="- topic/entry entry colsep-1 rowsep-1" headers="topic_zyq_3mf_1bc__table_y3x_nvr_lbc__entry__2">DOUBLE</td>
+                                <td class="- topic/entry entry colsep-0 rowsep-1" headers="topic_zyq_3mf_1bc__table_y3x_nvr_lbc__entry__3">委托订单价格</td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry colsep-1 rowsep-1" headers="topic_zyq_3mf_1bc__table_y3x_nvr_lbc__entry__1">stopPrice</td>
+                                <td class="- topic/entry entry colsep-1 rowsep-1" headers="topic_zyq_3mf_1bc__table_y3x_nvr_lbc__entry__2">DOUBLE</td>
+                                <td class="- topic/entry entry colsep-0 rowsep-1" headers="topic_zyq_3mf_1bc__table_y3x_nvr_lbc__entry__3">止损价/止盈价</td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry colsep-1 rowsep-1" headers="topic_zyq_3mf_1bc__table_y3x_nvr_lbc__entry__1">orderQty</td>
+                                <td class="- topic/entry entry colsep-1 rowsep-1" headers="topic_zyq_3mf_1bc__table_y3x_nvr_lbc__entry__2">LONG</td>
+                                <td class="- topic/entry entry colsep-0 rowsep-1" headers="topic_zyq_3mf_1bc__table_y3x_nvr_lbc__entry__3">委托订单数量</td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry colsep-1 rowsep-1" headers="topic_zyq_3mf_1bc__table_y3x_nvr_lbc__entry__1">direction</td>
+                                <td class="- topic/entry entry colsep-1 rowsep-1" headers="topic_zyq_3mf_1bc__table_y3x_nvr_lbc__entry__2">INT</td>
+                                <td class="- topic/entry entry colsep-0 rowsep-1" headers="topic_zyq_3mf_1bc__table_y3x_nvr_lbc__entry__3">买卖方向：1：买开；2：卖开；3：卖平；4：买平</td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry colsep-1 rowsep-1" headers="topic_zyq_3mf_1bc__table_y3x_nvr_lbc__entry__1">timeInForce</td>
+                                <td class="- topic/entry entry colsep-1 rowsep-1" headers="topic_zyq_3mf_1bc__table_y3x_nvr_lbc__entry__2">INT</td>
+                                <td class="- topic/entry entry colsep-0 rowsep-1" headers="topic_zyq_3mf_1bc__table_y3x_nvr_lbc__entry__3">
+                                    <p class="- topic/p p">委托订单有效性：</p>
+                                    <p class="- topic/p p">0：当日有效（默认）</p>
+                                    <p class="- topic/p p">1：立即全部成交否则自动撤销（FOK）</p>
+                                    <p class="- topic/p p">2：立即成交剩余自动撤销（FAK）</p>
+                                </td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry colsep-1 rowsep-0" headers="topic_zyq_3mf_1bc__table_y3x_nvr_lbc__entry__1">orderId</td>
+                                <td class="- topic/entry entry colsep-1 rowsep-0" headers="topic_zyq_3mf_1bc__table_y3x_nvr_lbc__entry__2">LONG</td>
+                                <td class="- topic/entry entry colsep-0 rowsep-0" headers="topic_zyq_3mf_1bc__table_y3x_nvr_lbc__entry__3">用户订单ID，仅撤单时起作用</td>
+                            </tr>
+                        </tbody></table></div>
+                <ul class="- topic/ul ul" id="topic_zyq_3mf_1bc__ul_xrc_tmf_1bc" data-ofbid="topic_zyq_3mf_1bc__ul_xrc_tmf_1bc">
+                    <li class="- topic/li li">
+                        <p class="- topic/p p">orderDetailsAndSnapshotOutput：复合输出表，包含订单簿及用户订单成交委托详细情况表。需要调用
+                                <code class="+ topic/ph pr-d/codeph ph codeph">extractInfo</code> 接口（详见后文该接口说明）来解析出具体数据。</p>
+                    </li>
+                </ul>
+                <div class="table-container"><table class="- topic/table table frame-all" id="topic_zyq_3mf_1bc__table_yrc_tmf_1bc" data-ofbid="topic_zyq_3mf_1bc__table_yrc_tmf_1bc" data-cols="3"><caption></caption><colgroup><col/><col/><col/></colgroup><tbody class="- topic/tbody tbody">
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry colsep-1 rowsep-1">
+                                    <p class="- topic/p p"><strong class="+ topic/ph hi-d/b ph b">名称</strong></p>
+                                </td>
+                                <td class="- topic/entry entry colsep-1 rowsep-1">
+                                    <p class="- topic/p p"><strong class="+ topic/ph hi-d/b ph b">类型</strong></p>
+                                </td>
+                                <td class="- topic/entry entry colsep-0 rowsep-1">
+                                    <p class="- topic/p p"><strong class="+ topic/ph hi-d/b ph b">含义</strong></p>
+                                </td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry colsep-1 rowsep-1">msgType </td>
+                                <td class="- topic/entry entry colsep-1 rowsep-1">INT </td>
+                                <td class="- topic/entry entry colsep-0 rowsep-1">1（成交结果）或 2（订单簿）</td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry colsep-1 rowsep-0">content </td>
+                                <td class="- topic/entry entry colsep-1 rowsep-0">BLOB </td>
+                                <td class="- topic/entry entry colsep-0 rowsep-0">具体数据 </td>
+                            </tr>
+                        </tbody></table></div>
+                <ul class="- topic/ul ul" id="topic_zyq_3mf_1bc__ul_csc_tmf_1bc" data-ofbid="topic_zyq_3mf_1bc__ul_csc_tmf_1bc">
+                    <li class="- topic/li li">
+                        <p class="- topic/p p">orderDetailsOutput：订单详情结果输出表(包括用户订单委托回报，成交、拒单以及撤单状态)。</p>
+                        <ul class="- topic/ul ul" id="topic_zyq_3mf_1bc__ul_dsc_tmf_1bc" data-ofbid="topic_zyq_3mf_1bc__ul_dsc_tmf_1bc">
+                            <li class="- topic/li li">
+                                <p class="- topic/p p">在配置项 <em class="+ topic/ph hi-d/i ph i">outputRejectDetails</em> 为 true 时（详见本接口的 <em class="+ topic/ph hi-d/i ph i">config</em>
+                                    参数说明），启用 outputRejectDetails 列。</p>
+                            </li>
+                            <li class="- topic/li li">
+                                <p class="- topic/p p">在配置项 <em class="+ topic/ph hi-d/i ph i">outputQueuePosition</em> 为 1 时（详见本接口的 <em class="+ topic/ph hi-d/i ph i">config</em>
+                                    参数说明），启用 openVolumeWithBetterPrice, openVolumeWithWorsePrice,
+                                    openVolumeAtOrderPrice, priorOpenVolumeAtOrderPrice
+                                    和depthWithBetterPrice五列。 </p>
+                            </li>
+                            <li class="- topic/li li">
+                                <p class="- topic/p p">在配置项 <em class="+ topic/ph hi-d/i ph i">outputTimeInfo 为</em> 1 时（详见本接口的 <em class="+ topic/ph hi-d/i ph i">config</em> 参数说明），启用
+                                    receiveTime, startMatchTime, endMatchTime 列。 </p>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+                <div class="table-container"><table class="- topic/table table frame-all" id="topic_zyq_3mf_1bc__table_isc_tmf_1bc" data-ofbid="topic_zyq_3mf_1bc__table_isc_tmf_1bc" data-cols="3"><caption></caption><colgroup><col/><col/><col/></colgroup><tbody class="- topic/tbody tbody">
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry colsep-1 rowsep-1">
+                                    <p class="- topic/p p"><strong class="+ topic/ph hi-d/b ph b">名称</strong></p>
+                                </td>
+                                <td class="- topic/entry entry colsep-1 rowsep-1">
+                                    <p class="- topic/p p"><strong class="+ topic/ph hi-d/b ph b">类型</strong></p>
+                                </td>
+                                <td class="- topic/entry entry colsep-0 rowsep-1">
+                                    <p class="- topic/p p"><strong class="+ topic/ph hi-d/b ph b">含义</strong></p>
+                                </td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry colsep-1 rowsep-1">orderId</td>
+                                <td class="- topic/entry entry colsep-1 rowsep-1">LONG </td>
+                                <td class="- topic/entry entry colsep-0 rowsep-1">成交的用户订单 ID </td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry colsep-1 rowsep-1">symbol </td>
+                                <td class="- topic/entry entry colsep-1 rowsep-1">STRING </td>
+                                <td class="- topic/entry entry colsep-0 rowsep-1">股票标的 </td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry colsep-1 rowsep-1">direction </td>
+                                <td class="- topic/entry entry colsep-1 rowsep-1">INT </td>
+                                <td class="- topic/entry entry colsep-0 rowsep-1">1（买 ），2（卖） </td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry colsep-1 rowsep-1">sendTime</td>
+                                <td class="- topic/entry entry colsep-1 rowsep-1">TIMESTAMP </td>
+                                <td class="- topic/entry entry colsep-0 rowsep-1">订单发送时间 </td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry colsep-1 rowsep-1">orderPrice</td>
+                                <td class="- topic/entry entry colsep-1 rowsep-1">DOUBLE </td>
+                                <td class="- topic/entry entry colsep-0 rowsep-1">委托价格 </td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry colsep-1 rowsep-1">orderQty</td>
+                                <td class="- topic/entry entry colsep-1 rowsep-1">LONG </td>
+                                <td class="- topic/entry entry colsep-0 rowsep-1">订单委托数量 </td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry colsep-1 rowsep-1">tradeTime </td>
+                                <td class="- topic/entry entry colsep-1 rowsep-1">TIMESTAMP </td>
+                                <td class="- topic/entry entry colsep-0 rowsep-1">成交时间 </td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry colsep-1 rowsep-1">tradePrice </td>
+                                <td class="- topic/entry entry colsep-1 rowsep-1">DOUBLE </td>
+                                <td class="- topic/entry entry colsep-0 rowsep-1">成交价格 </td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry colsep-1 rowsep-1">tradeQty</td>
+                                <td class="- topic/entry entry colsep-1 rowsep-1">LONG </td>
+                                <td class="- topic/entry entry colsep-0 rowsep-1">成交量 </td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry colsep-1 rowsep-1">orderStatus </td>
+                                <td class="- topic/entry entry colsep-1 rowsep-1">INT </td>
+                                <td class="- topic/entry entry colsep-0 rowsep-1">
+                                    <p class="- topic/p p">用户订单是否完全成交</p>
+                                    <ul class="- topic/ul ul" id="topic_zyq_3mf_1bc__ul_n3n_qsn_1bc" data-ofbid="topic_zyq_3mf_1bc__ul_n3n_qsn_1bc">
+                                        <li class="- topic/li li">4：已报</li>
+                                        <li class="- topic/li li">-2：表示撤单被拒绝</li>
+                                        <li class="- topic/li li">-1：表示订单被拒绝</li>
+                                        <li class="- topic/li li">0：表示订单部分成交</li>
+                                        <li class="- topic/li li">1：表示订单完全成交</li>
+                                        <li class="- topic/li li">2：表示订单被撤单 </li>
+                                    </ul>
+                                </td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry colsep-1 rowsep-1">sysReceiveTime</td>
+                                <td class="- topic/entry entry colsep-1 rowsep-1">NANOTIMESTAMP </td>
+                                <td class="- topic/entry entry colsep-0 rowsep-1">订单收到时的时间（系统时间） </td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry colsep-1 rowsep-1">rejectDetails</td>
+                                <td class="- topic/entry entry colsep-1 rowsep-1">STRING</td>
+                                <td class="- topic/entry entry colsep-0 rowsep-1">用户订单、用户撤单的具体拒单原因</td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry colsep-1 rowsep-1">openVolumeWithBetterPrice</td>
+                                <td class="- topic/entry entry colsep-1 rowsep-1">LONG</td>
+                                <td class="- topic/entry entry colsep-0 rowsep-1">优于委托价格的行情未成交委托单总量</td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry colsep-1 rowsep-1">openVolumeWithWorsePrice</td>
+                                <td class="- topic/entry entry colsep-1 rowsep-1">LONG</td>
+                                <td class="- topic/entry entry colsep-0 rowsep-1">次于委托价格的行情未成交委托单总量</td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry colsep-1 rowsep-1">openVolumeAtOrderPrice</td>
+                                <td class="- topic/entry entry colsep-1 rowsep-1">LONG</td>
+                                <td class="- topic/entry entry colsep-0 rowsep-1">等于委托价格行情未成交委托单总量</td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry colsep-1 rowsep-1">priorOpenVolumeAtOrderPrice</td>
+                                <td class="- topic/entry entry colsep-1 rowsep-1">LONG</td>
+                                <td class="- topic/entry entry colsep-0 rowsep-1">等于委托价格行情且比自己早的行情未成交委托单总量</td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry colsep-1 rowsep-1">depthWithBetterPrice</td>
+                                <td class="- topic/entry entry colsep-1 rowsep-1">INT</td>
+                                <td class="- topic/entry entry colsep-0 rowsep-1">优于委托价格的行情档位数</td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry colsep-1 rowsep-1">receiveTime</td>
+                                <td class="- topic/entry entry colsep-1 rowsep-1">TIMESTAMP </td>
+                                <td class="- topic/entry entry colsep-0 rowsep-1">订单收到时的行情最新时间 </td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry colsep-1 rowsep-1">startMatchTime</td>
+                                <td class="- topic/entry entry colsep-1 rowsep-1">NANOTIMESTAMP </td>
+                                <td class="- topic/entry entry colsep-0 rowsep-1">匹配开始时间 </td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry colsep-1 rowsep-0">endMatchTime </td>
+                                <td class="- topic/entry entry colsep-1 rowsep-0">NANOTIMESTAMP </td>
+                                <td class="- topic/entry entry colsep-0 rowsep-0">匹配完成时间 </td>
+                            </tr>
+                        </tbody></table></div>
+                <div class="- topic/note note note note_note" id="topic_zyq_3mf_1bc__note_d5h_xmf_1bc" data-ofbid="topic_zyq_3mf_1bc__note_d5h_xmf_1bc"><span class="note__title">注：</span> 
+                    <p class="- topic/p p">订单状态 orderStatus 为 -1 即订单被拒绝的场景：</p>
+                    <ol class="- topic/ol ol" id="topic_zyq_3mf_1bc__ol_ukt_nwr_lbc" data-ofbid="topic_zyq_3mf_1bc__ol_ukt_nwr_lbc">
+                        <li class="- topic/li li">
+                            <p class="- topic/p p">委托的用户订单不在交易所交易时间内。</p>
+                        </li>
+                        <li class="- topic/li li">
+                            <p class="- topic/p p">委托数量不符合要求：volume &lt;0；买单的 volume 不是100 的倍数；科创版“68”的限价单小于 200 股或超过 10
+                                万股；科创版“68”的市价单小于 200 股或超过 5 万股；上交“11”或深交”12”的 volume 不是 10 的倍数。</p>
+                        </li>
+                        <li class="- topic/li li">
+                            <p class="- topic/p p">用户订单的价格大于涨停价或者小于跌停价。</p>
+                        </li>
+                        <li class="- topic/li li">
+                            <p class="- topic/p p">在 dataType=5 时，行情的价格必须低于涨停价和高于跌停价。</p>
+                        </li>
+                        <li class="- topic/li li">
+                            <p class="- topic/p p">在 dataType=0 和 dataType =1 时，用户订单开始处理时，没有时间早于用户订单的行情。</p>
+                        </li>
+                        <li class="- topic/li li">
+                            <p class="- topic/p p">在 dataType=4 时，插入市价的用户订单前没有行情。</p>
+                        </li>
+                        <li class="- topic/li li">
+                            <p class="- topic/p p">在 dataType=0 和 dataType=1 时，市价用户订单在 9:15-9:25 或 14:57 以后。</p>
+                        </li>
+                    </ol>
+                    <p class="- topic/p p">订单状态 orderStatus 为 -2 即撤单被拒绝的场景：</p>
+                    <ol class="- topic/ol ol" id="topic_zyq_3mf_1bc__ol_xrg_nwr_lbc" data-ofbid="topic_zyq_3mf_1bc__ol_xrg_nwr_lbc">
+                        <li class="- topic/li li">
+                            <p class="- topic/p p">撤单时，撤单时间早于或等于用户订单时间。</p>
+                        </li>
+                        <li class="- topic/li li">
+                            <p class="- topic/p p">回撤了一个不存在的订单或者是已经完全交易的订单。</p>
+                        </li>
+                        <li class="- topic/li li">
+                            <p class="- topic/p p">用户撤单发生在 9:20-9:25、14:57-15:00。</p>
+                        </li>
+                    </ol>
+                </div>
+                <ul class="- topic/ul ul" id="topic_zyq_3mf_1bc__ul_cz2_1nf_1bc" data-ofbid="topic_zyq_3mf_1bc__ul_cz2_1nf_1bc">
+                    <li class="- topic/li li">
+                        <p class="- topic/p p">snapshotOutput：行情快照输出表。</p>
+                    </li>
+                </ul>
+                <div class="table-container"><table class="- topic/table table frame-all" id="topic_zyq_3mf_1bc__table_hz2_1nf_1bc" data-ofbid="topic_zyq_3mf_1bc__table_hz2_1nf_1bc" data-cols="3"><caption></caption><colgroup><col/><col/><col/></colgroup><tbody class="- topic/tbody tbody">
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry colsep-1 rowsep-1">
+                                    <p class="- topic/p p"><strong class="+ topic/ph hi-d/b ph b">名称</strong></p>
+                                </td>
+                                <td class="- topic/entry entry colsep-1 rowsep-1">
+                                    <p class="- topic/p p"><strong class="+ topic/ph hi-d/b ph b">类型</strong></p>
+                                </td>
+                                <td class="- topic/entry entry colsep-0 rowsep-1">
+                                    <p class="- topic/p p"><strong class="+ topic/ph hi-d/b ph b">含义</strong></p>
+                                </td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry colsep-1 rowsep-1">symbol </td>
+                                <td class="- topic/entry entry colsep-1 rowsep-1">STRING </td>
+                                <td class="- topic/entry entry colsep-0 rowsep-1">股票标的 </td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry colsep-1 rowsep-1">timestamp </td>
+                                <td class="- topic/entry entry colsep-1 rowsep-1">TIMESTAMP </td>
+                                <td class="- topic/entry entry colsep-0 rowsep-1">时间 </td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry colsep-1 rowsep-1">avgBidPrice </td>
+                                <td class="- topic/entry entry colsep-1 rowsep-1">DOUBLE </td>
+                                <td class="- topic/entry entry colsep-0 rowsep-1">买单成交均价 </td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry colsep-1 rowsep-1">avgOfferPrice </td>
+                                <td class="- topic/entry entry colsep-1 rowsep-1">DOUBLE </td>
+                                <td class="- topic/entry entry colsep-0 rowsep-1">卖单成交均价 </td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry colsep-1 rowsep-1">totalBidQty </td>
+                                <td class="- topic/entry entry colsep-1 rowsep-1">LONG </td>
+                                <td class="- topic/entry entry colsep-0 rowsep-1">买单成交数量总和 </td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry colsep-1 rowsep-1">totalOfferQty </td>
+                                <td class="- topic/entry entry colsep-1 rowsep-1">LONG </td>
+                                <td class="- topic/entry entry colsep-0 rowsep-1">卖单成交数量总和 </td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry colsep-1 rowsep-1">bidPrice </td>
+                                <td class="- topic/entry entry colsep-1 rowsep-1">DOUBLE[] </td>
+                                <td class="- topic/entry entry colsep-0 rowsep-1">买单价格列表 </td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry colsep-1 rowsep-1">bidQty </td>
+                                <td class="- topic/entry entry colsep-1 rowsep-1">LONG[] </td>
+                                <td class="- topic/entry entry colsep-0 rowsep-1">买单数量列表 </td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry colsep-1 rowsep-1">offerPrice </td>
+                                <td class="- topic/entry entry colsep-1 rowsep-1">DOUBLE[] </td>
+                                <td class="- topic/entry entry colsep-0 rowsep-1">卖单价格列表 </td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry colsep-1 rowsep-1">offerQty </td>
+                                <td class="- topic/entry entry colsep-1 rowsep-1">LONG[] </td>
+                                <td class="- topic/entry entry colsep-0 rowsep-1">卖单数量列表 </td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry colsep-1 rowsep-1">lastPrice </td>
+                                <td class="- topic/entry entry colsep-1 rowsep-1">DOUBLE </td>
+                                <td class="- topic/entry entry colsep-0 rowsep-1">最新价 </td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry colsep-1 rowsep-1">highPrice </td>
+                                <td class="- topic/entry entry colsep-1 rowsep-1">DOUBLE </td>
+                                <td class="- topic/entry entry colsep-0 rowsep-1">最高价 </td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry colsep-1 rowsep-0">lowPrice </td>
+                                <td class="- topic/entry entry colsep-1 rowsep-0">DOUBLE </td>
+                                <td class="- topic/entry entry colsep-0 rowsep-0">最低价 </td>
+                            </tr>
+                        </tbody></table></div>
+                <p class="- topic/p p"><strong class="+ topic/ph hi-d/b ph b">返回值</strong></p>
+                <p class="- topic/p p">一个模拟撮合引擎。</p>
+            </section>
+            <section class="- topic/section section" id="topic_zyq_3mf_1bc__section_qmf_lnf_1bc" data-ofbid="topic_zyq_3mf_1bc__section_qmf_lnf_1bc"><h3 class="- topic/title title sectiontitle"><strong class="+ topic/ph hi-d/b ph b">getOpenOrders</strong></h3>
+                
+                <p class="- topic/p p"><strong class="+ topic/ph hi-d/b ph b">语法</strong></p>
+                <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="topic_zyq_3mf_1bc__codeblock_bbh_nnf_1bc" data-ofbid="topic_zyq_3mf_1bc__codeblock_bbh_nnf_1bc"><code>MatchingEngineSimulator::getOpenOrders(engine, symbolList);</code></pre>
+                <p class="- topic/p p"><strong class="+ topic/ph hi-d/b ph b">详情</strong></p>
+                <p class="- topic/p p">获取未成交的用户订单信息。</p>
+                <p class="- topic/p p"><strong class="+ topic/ph hi-d/b ph b">参数</strong></p>
+                <div class="- topic/p p">
+                    <ul class="- topic/ul ul" id="topic_zyq_3mf_1bc__ul_b3p_4nf_1bc" data-ofbid="topic_zyq_3mf_1bc__ul_b3p_4nf_1bc">
+                        <li class="- topic/li li">
+                            <p class="- topic/p p">engine：通过 <code class="+ topic/ph pr-d/codeph ph codeph">createMatchEngine</code> 接口创建的撮合引擎。</p>
+                        </li>
+                        <li class="- topic/li li">
+                            <p class="- topic/p p">symbolList：股票标的列表，选填，表示获取所有的未成交订单。</p>
+                        </li>
+                    </ul>
+                </div>
+                <p class="- topic/p p"><strong class="+ topic/ph hi-d/b ph b">返回值</strong></p>
+                <p class="- topic/p p">返回值是一个表。包含如下列：</p>
+                <p class="- topic/p p">注意：仅当 <em class="+ topic/ph hi-d/i ph i">outputQueuePosition</em>=1 时，包含 openVolumeWithBetterPrice,
+                    openVolumeWithWorsePrice, openVolumeAtOrderPrice, priorOpenVolumeAtOrderPrice,
+                    depthWithBetterPrice，</p>
+                <p class="- topic/p p">updateTime 五列。（详见 <code class="+ topic/ph pr-d/codeph ph codeph">createMatchEngine</code> 接口的 <em class="+ topic/ph hi-d/i ph i">config</em> 参数说明）</p>
+                <div class="- topic/p p">
+                    <div class="table-container"><table class="- topic/table table" data-cols="3"><caption></caption><colgroup><col/><col/><col/></colgroup><tbody class="- topic/tbody tbody">
+                                <tr class="- topic/row">
+                                    <td class="- topic/entry entry colsep-0 rowsep-0">
+                                        <p class="- topic/p p"><strong class="+ topic/ph hi-d/b ph b">名称</strong></p>
+                                    </td>
+                                    <td class="- topic/entry entry colsep-0 rowsep-0">
+                                        <p class="- topic/p p"><strong class="+ topic/ph hi-d/b ph b">类型</strong></p>
+                                    </td>
+                                    <td class="- topic/entry entry colsep-0 rowsep-0">
+                                        <p class="- topic/p p"><strong class="+ topic/ph hi-d/b ph b">含义</strong></p>
+                                    </td>
+                                </tr>
+                                <tr class="- topic/row">
+                                    <td class="- topic/entry entry colsep-0 rowsep-0">orderId </td>
+                                    <td class="- topic/entry entry colsep-0 rowsep-0">LONG </td>
+                                    <td class="- topic/entry entry colsep-0 rowsep-0">订单 ID </td>
+                                </tr>
+                                <tr class="- topic/row">
+                                    <td class="- topic/entry entry colsep-0 rowsep-0">timestamp </td>
+                                    <td class="- topic/entry entry colsep-0 rowsep-0">TIMESTAMP </td>
+                                    <td class="- topic/entry entry colsep-0 rowsep-0">时间 </td>
+                                </tr>
+                                <tr class="- topic/row">
+                                    <td class="- topic/entry entry colsep-0 rowsep-0">symbol </td>
+                                    <td class="- topic/entry entry colsep-0 rowsep-0">STRING </td>
+                                    <td class="- topic/entry entry colsep-0 rowsep-0">股票标的 </td>
+                                </tr>
+                                <tr class="- topic/row">
+                                    <td class="- topic/entry entry colsep-0 rowsep-0">price </td>
+                                    <td class="- topic/entry entry colsep-0 rowsep-0">DOUBLE </td>
+                                    <td class="- topic/entry entry colsep-0 rowsep-0">委托价格 </td>
+                                </tr>
+                                <tr class="- topic/row">
+                                    <td class="- topic/entry entry colsep-0 rowsep-0">totalQty </td>
+                                    <td class="- topic/entry entry colsep-0 rowsep-0">LONG </td>
+                                    <td class="- topic/entry entry colsep-0 rowsep-0">用户订单数量 </td>
+                                </tr>
+                                <tr class="- topic/row">
+                                    <td class="- topic/entry entry colsep-0 rowsep-0">openQty</td>
+                                    <td class="- topic/entry entry colsep-0 rowsep-0">LONG </td>
+                                    <td class="- topic/entry entry colsep-0 rowsep-0">用户订单余量 </td>
+                                </tr>
+                                <tr class="- topic/row">
+                                    <td class="- topic/entry entry colsep-0 rowsep-0">direction </td>
+                                    <td class="- topic/entry entry colsep-0 rowsep-0">INT </td>
+                                    <td class="- topic/entry entry colsep-0 rowsep-0">1（买 ），2（卖） </td>
+                                </tr>
+                                <tr class="- topic/row">
+                                    <td class="- topic/entry entry colsep-0 rowsep-0">isMacthing</td>
+                                    <td class="- topic/entry entry colsep-0 rowsep-0">INT</td>
+                                    <td class="- topic/entry entry colsep-0 rowsep-0">订单是否到达撮合时间</td>
+                                </tr>
+                                <tr class="- topic/row">
+                                    <td class="- topic/entry entry colsep-0 rowsep-0">openVolumeWithBetterPrice</td>
+                                    <td class="- topic/entry entry colsep-0 rowsep-0">LONG</td>
+                                    <td class="- topic/entry entry colsep-0 rowsep-0">优于委托价格的行情未成交委托单总量</td>
+                                </tr>
+                                <tr class="- topic/row">
+                                    <td class="- topic/entry entry colsep-0 rowsep-0">openVolumeWithWorsePrice</td>
+                                    <td class="- topic/entry entry colsep-0 rowsep-0">LONG</td>
+                                    <td class="- topic/entry entry colsep-0 rowsep-0">次于委托价格的行情未成交委托单总量</td>
+                                </tr>
+                                <tr class="- topic/row">
+                                    <td class="- topic/entry entry colsep-0 rowsep-0">openVolumeAtOrderPrice</td>
+                                    <td class="- topic/entry entry colsep-0 rowsep-0">LONG</td>
+                                    <td class="- topic/entry entry colsep-0 rowsep-0">等于委托价格行情未成交委托单总量</td>
+                                </tr>
+                                <tr class="- topic/row">
+                                    <td class="- topic/entry entry colsep-0 rowsep-0">priorOpenVolumeAtOrderPrice</td>
+                                    <td class="- topic/entry entry colsep-0 rowsep-0">LONG</td>
+                                    <td class="- topic/entry entry colsep-0 rowsep-0">等于委托价格行情且比自己早的行情未成交委托单总量</td>
+                                </tr>
+                                <tr class="- topic/row">
+                                    <td class="- topic/entry entry colsep-0 rowsep-0">depthWithBetterPrice</td>
+                                    <td class="- topic/entry entry colsep-0 rowsep-0">INT</td>
+                                    <td class="- topic/entry entry colsep-0 rowsep-0">优于委托价格的行情档位数</td>
+                                </tr>
+                                <tr class="- topic/row">
+                                    <td class="- topic/entry entry colsep-0 rowsep-0">updateTime</td>
+                                    <td class="- topic/entry entry colsep-0 rowsep-0">TIMESTAMP</td>
+                                    <td class="- topic/entry entry colsep-0 rowsep-0">最新更新时间</td>
+                                </tr>
+                            </tbody></table></div>
+                </div>
+            </section>
+            <section class="- topic/section section" id="topic_zyq_3mf_1bc__section_ysl_qnf_1bc" data-ofbid="topic_zyq_3mf_1bc__section_ysl_qnf_1bc"><h3 class="- topic/title title sectiontitle"><strong class="+ topic/ph hi-d/b ph b">resetMatchEngine</strong></h3>
+                
+                <p class="- topic/p p"><strong class="+ topic/ph hi-d/b ph b">语法</strong></p>
+                <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="topic_zyq_3mf_1bc__codeblock_cbn_14f_1bc" data-ofbid="topic_zyq_3mf_1bc__codeblock_cbn_14f_1bc"><code>MatchingEngineSimulator::resetMatchEngine(engine, [cancelOrder])</code></pre>
+                <p class="- topic/p p"><strong class="+ topic/ph hi-d/b ph b">详情</strong></p>
+                <p class="- topic/p p">清空内部缓存的所有订单信息以及行情信息。</p>
+                <p class="- topic/p p"><strong class="+ topic/ph hi-d/b ph b">参数</strong></p>
+                <ul class="- topic/ul ul" id="topic_zyq_3mf_1bc__ul_lsd_pnt_4bc" data-ofbid="topic_zyq_3mf_1bc__ul_lsd_pnt_4bc">
+                    <li class="- topic/li li">engine：通过 <code class="+ topic/ph pr-d/codeph ph codeph">createMatchEngine</code> 接口创建的撮合引擎。</li>
+                </ul>
+                <div class="- topic/p p">
+                    <ul class="- topic/ul ul" id="topic_zyq_3mf_1bc__ul_om5_4nt_4bc" data-ofbid="topic_zyq_3mf_1bc__ul_om5_4nt_4bc">
+                        <li class="- topic/li li">
+                            <p class="- topic/p p">cancelOrder：布尔类型，可选参数，表示是否撤销所有撤销所有的用户订单，并将订单信息输出到
+                                orderDetailsOutput。默认为 false，表示不撤销。</p>
+                        </li>
+                    </ul>
+                </div>
+                <p class="- topic/p p"><strong class="+ topic/ph hi-d/b ph b">返回值</strong></p>
+                <p class="- topic/p p">无。</p>
+            </section>
+            <section class="- topic/section section" id="topic_zyq_3mf_1bc__section_cjj_d4f_1bc" data-ofbid="topic_zyq_3mf_1bc__section_cjj_d4f_1bc"><h3 class="- topic/title title sectiontitle"><strong class="+ topic/ph hi-d/b ph b">getEngineList</strong></h3>
+                
+                <p class="- topic/p p"><strong class="+ topic/ph hi-d/b ph b">语法</strong></p>
+                <p class="- topic/p p">MatchingEngineSimulator::getEngineList();</p>
+                <p class="- topic/p p"><strong class="+ topic/ph hi-d/b ph b">详情</strong></p>
+                <p class="- topic/p p">获取所有的 engine。</p>
+                <p class="- topic/p p"><strong class="+ topic/ph hi-d/b ph b">返回值</strong></p>
+                <p class="- topic/p p">返回一个 engine 列表。类型为字典，key 为 ID，value 为 engine 对象。</p>
+            </section>
+            <section class="- topic/section section" id="topic_zyq_3mf_1bc__section_djj_d4f_1bc" data-ofbid="topic_zyq_3mf_1bc__section_djj_d4f_1bc"><h3 class="- topic/title title sectiontitle"><strong class="+ topic/ph hi-d/b ph b">getSymbolList</strong></h3>
+                
+                <p class="- topic/p p"><strong class="+ topic/ph hi-d/b ph b">语法</strong></p>
+                <p class="- topic/p p">MatchingEngineSimulator::getSymbolList(engine);</p>
+                <p class="- topic/p p"><strong class="+ topic/ph hi-d/b ph b">详情</strong></p>
+                <p class="- topic/p p">获取某引擎中当前存在的股票 symbol 列表。</p>
+                <p class="- topic/p p"><strong class="+ topic/ph hi-d/b ph b">返回值</strong></p>
+                <p class="- topic/p p">返回一个 STRING 类型的向量，包含当前存在的股票标的。</p>
+            </section>
+            <section class="- topic/section section" id="topic_zyq_3mf_1bc__section_ld5_d4f_1bc" data-ofbid="topic_zyq_3mf_1bc__section_ld5_d4f_1bc"><h3 class="- topic/title title sectiontitle"><strong class="+ topic/ph hi-d/b ph b">stopMatchEngine</strong></h3>
+                
+                <p class="- topic/p p"><strong class="+ topic/ph hi-d/b ph b">语法</strong></p>
+                <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="topic_zyq_3mf_1bc__codeblock_pd5_d4f_1bc" data-ofbid="topic_zyq_3mf_1bc__codeblock_pd5_d4f_1bc"><code>MatchingEngineSimulator::stopMatchEngine(engine, symbolList);</code></pre>
+                <p class="- topic/p p"><strong class="+ topic/ph hi-d/b ph b">详情</strong></p>
+                <p class="- topic/p p">停止模拟撮合引擎。</p>
+                <p class="- topic/p p"><strong class="+ topic/ph hi-d/b ph b">参数</strong></p>
+                <ul class="- topic/ul ul" id="topic_zyq_3mf_1bc__ul_bsb_k4f_1bc" data-ofbid="topic_zyq_3mf_1bc__ul_bsb_k4f_1bc">
+                    <li class="- topic/li li">
+                        <p class="- topic/p p">engine：通过 <code class="+ topic/ph pr-d/codeph ph codeph">createMatchEngine</code> 接口创建的撮合引擎。</p>
+                    </li>
+                    <li class="- topic/li li">
+                        <p class="- topic/p p">symbolList：字符串标量，可选参数，表示需要停止模拟的股票。若不填，则停止所有股票模拟。</p>
+                    </li>
+                </ul>
+            </section>
+            <section class="- topic/section section" id="topic_zyq_3mf_1bc__section_bp5_d4f_1bc" data-ofbid="topic_zyq_3mf_1bc__section_bp5_d4f_1bc"><h3 class="- topic/title title sectiontitle"><strong class="+ topic/ph hi-d/b ph b">extractInfo</strong></h3>
+                
+                <p class="- topic/p p"><strong class="+ topic/ph hi-d/b ph b">语法</strong></p>
+                <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="topic_zyq_3mf_1bc__codeblock_gp5_d4f_1bc" data-ofbid="topic_zyq_3mf_1bc__codeblock_gp5_d4f_1bc"><code>MatchingEngineSimulator::extractInfo(msgType, msg, [table]);</code></pre>
+                <p class="- topic/p p"><strong class="+ topic/ph hi-d/b ph b">详情</strong></p>
+                <p class="- topic/p p">解析 orderDetailsAndSnapshotOutput 表中的内容。（详见 <code class="+ topic/ph pr-d/codeph ph codeph">createMatchEngine</code> 接口的
+                        <em class="+ topic/ph hi-d/i ph i">orderDetailsAndSnapshotOutput</em> 参数说明）</p>
+                <p class="- topic/p p"><strong class="+ topic/ph hi-d/b ph b">参数</strong></p>
+                <div class="- topic/p p">
+                    <ul class="- topic/ul ul" id="topic_zyq_3mf_1bc__ul_ip3_m4f_1bc" data-ofbid="topic_zyq_3mf_1bc__ul_ip3_m4f_1bc">
+                        <li class="- topic/li li">
+                            <p class="- topic/p p">msgType：1 表示订单状态详情表，2 表示订单簿。</p>
+                        </li>
+                        <li class="- topic/li li">
+                            <p class="- topic/p p">msg： 待解析的 BLOB 类型的数据。</p>
+                        </li>
+                        <li class="- topic/li li">
+                            <p class="- topic/p p">table： 与 orderDetailsAndSnapshotOutput 相同结构的表。</p>
+                        </li>
+                    </ul>
+                </div>
+                <p class="- topic/p p"><strong class="+ topic/ph hi-d/b ph b">返回值</strong></p>
+                <p class="- topic/p p">如果指定 table，则将解析结果 append 到 table 的末尾中，并返回 true。</p>
+                <p class="- topic/p p">如果未指定 table，则返回解析结果。</p>
+            </section>
+            <section class="- topic/section section" id="topic_zyq_3mf_1bc__section_ax5_d4f_1bc" data-ofbid="topic_zyq_3mf_1bc__section_ax5_d4f_1bc"><h3 class="- topic/title title sectiontitle"><strong class="+ topic/ph hi-d/b ph b">insertMsg</strong></h3>
+                
+                <p class="- topic/p p"><strong class="+ topic/ph hi-d/b ph b">语法</strong></p>
+                <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="topic_zyq_3mf_1bc__codeblock_fx5_d4f_1bc" data-ofbid="topic_zyq_3mf_1bc__codeblock_fx5_d4f_1bc"><code>MatchingEngineSimulator::insertMsg(engine, msgBody, msgType);</code></pre>
+                <p class="- topic/p p"><strong class="+ topic/ph hi-d/b ph b">详情</strong></p>
+                <p class="- topic/p p">插入行情和用户订单数据。</p>
+                <p class="- topic/p p"><strong class="+ topic/ph hi-d/b ph b">参数</strong></p>
+                <ul class="- topic/ul ul" id="topic_zyq_3mf_1bc__ul_lr1_44f_1bc" data-ofbid="topic_zyq_3mf_1bc__ul_lr1_44f_1bc">
+                    <li class="- topic/li li">
+                        <p class="- topic/p p">engine：通过 <code class="+ topic/ph pr-d/codeph ph codeph">createMatchEngine</code> 接口创建的撮合引擎。</p>
+                    </li>
+                    <li class="- topic/li li">
+                        <p class="- topic/p p">msgBody：行情或用户订单数据。</p>
+                    </li>
+                    <li class="- topic/li li">
+                        <p class="- topic/p p">msgType：数据类型。1 表示行情，2 表示用户订单。</p>
+                    </li>
+                </ul>
+                <p class="- topic/p p"><strong class="+ topic/ph hi-d/b ph b">返回值</strong></p>
+                <p class="- topic/p p">如果插入的是行情数据，返回 Void；</p>
+                <p class="- topic/p p">如果插入的是用户订单数据，返回用户的订单 ID（LONG 类型的向量）。</p>
+            </section>
+            <section class="- topic/section section" id="topic_zyq_3mf_1bc__section_xqv_d4f_1bc" data-ofbid="topic_zyq_3mf_1bc__section_xqv_d4f_1bc"><h3 class="- topic/title title sectiontitle"><strong class="+ topic/ph hi-d/b ph b">setLimitPrice</strong></h3>
+                
+                <p class="- topic/p p"><strong class="+ topic/ph hi-d/b ph b">语法</strong></p>
+                <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="topic_zyq_3mf_1bc__codeblock_erv_d4f_1bc" data-ofbid="topic_zyq_3mf_1bc__codeblock_erv_d4f_1bc"><code>MatchingEngineSimulator::setLimitPrice(engine, data);</code></pre>
+                <p class="- topic/p p"><strong class="+ topic/ph hi-d/b ph b">详情</strong></p>
+                <p class="- topic/p p">设置模拟撮合引擎的涨停价和跌停价。</p>
+                <p class="- topic/p p">注意：价格超过涨停价和跌停价范围内的用户订单都会被拒绝。</p>
+                <p class="- topic/p p"><strong class="+ topic/ph hi-d/b ph b">参数</strong></p>
+                <div class="- topic/p p">
+                    <ul class="- topic/ul ul" id="topic_zyq_3mf_1bc__ul_c2s_p4f_1bc" data-ofbid="topic_zyq_3mf_1bc__ul_c2s_p4f_1bc">
+                        <li class="- topic/li li">
+                            <p class="- topic/p p">engine：通过 <code class="+ topic/ph pr-d/codeph ph codeph">createMatchEngine</code> 接口创建的撮合引擎。</p>
+                        </li>
+                        <li class="- topic/li li">
+                            <p class="- topic/p p">data：一个表。包含 3 列(symbol, upLimitPrice, downLimitPrice)，分别是
+                                STRING，DOUBLE，DOUBLE 类型。</p>
+                        </li>
+                    </ul>
+                </div>
+                <p class="- topic/p p"><strong class="+ topic/ph hi-d/b ph b">返回值</strong></p>
+                <p class="- topic/p p">如果设置成功，返回 true。</p>
+            </section>
+            <section class="- topic/section section" id="topic_zyq_3mf_1bc__section_qcw_d4f_1bc" data-ofbid="topic_zyq_3mf_1bc__section_qcw_d4f_1bc"><h3 class="- topic/title title sectiontitle"><strong class="+ topic/ph hi-d/b ph b">setPrevClose</strong></h3>
+                
+                <p class="- topic/p p"><strong class="+ topic/ph hi-d/b ph b">语法</strong></p>
+                <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="topic_zyq_3mf_1bc__codeblock_vcw_d4f_1bc" data-ofbid="topic_zyq_3mf_1bc__codeblock_vcw_d4f_1bc"><code>MatchingEngineSimulator::setPrevClose(engine, prevClose);</code></pre>
+                <p class="- topic/p p"><strong class="+ topic/ph hi-d/b ph b">详情</strong></p>
+                <p class="- topic/p p">设置模拟撮合引擎的前收盘价。</p>
+                <div class="- topic/note note note note_note" id="topic_zyq_3mf_1bc__note_dbs_r4f_1bc" data-ofbid="topic_zyq_3mf_1bc__note_dbs_r4f_1bc"><span class="note__title">注：</span> 深交所的逐笔模式且有创业版的股票时，必须设置前收盘价。</div>
+                <p class="- topic/p p"><strong class="+ topic/ph hi-d/b ph b">参数</strong></p>
+                <ul class="- topic/ul ul" id="topic_zyq_3mf_1bc__ul_rz1_s4f_1bc" data-ofbid="topic_zyq_3mf_1bc__ul_rz1_s4f_1bc">
+                    <li class="- topic/li li">
+                        <p class="- topic/p p">engine：通过 <code class="+ topic/ph pr-d/codeph ph codeph">createMatchEngine</code> 接口创建的撮合引擎。</p>
+                    </li>
+                    <li class="- topic/li li">
+                        <p class="- topic/p p">prevClose：一个字典。键值类型为 STRING-DOUBLE。字典的 key 为股票号，value 为对应股票的前收盘价。</p>
+                    </li>
+                </ul>
+                <p class="- topic/p p"><strong class="+ topic/ph hi-d/b ph b">返回值</strong></p>
+                <p class="- topic/p p">如果设置成功，返回 true。</p>
+            </section>
+            <section class="- topic/section section" id="topic_zyq_3mf_1bc__section_cnw_d4f_1bc" data-ofbid="topic_zyq_3mf_1bc__section_cnw_d4f_1bc"><h3 class="- topic/title title sectiontitle"><strong class="+ topic/ph hi-d/b ph b">getSnapshot</strong></h3>
+                
+                <p class="- topic/p p"><strong class="+ topic/ph hi-d/b ph b">语法</strong></p>
+                <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="topic_zyq_3mf_1bc__codeblock_jnw_d4f_1bc" data-ofbid="topic_zyq_3mf_1bc__codeblock_jnw_d4f_1bc"><code>MatchingEngineSimulator::getSnapshot(engine, symbolList);</code></pre>
+                <p class="- topic/p p"><strong class="+ topic/ph hi-d/b ph b">详情</strong></p>
+                <p class="- topic/p p">获取逐笔引擎中的行情快照信息。</p>
+                <p class="- topic/p p"><strong class="+ topic/ph hi-d/b ph b">参数</strong></p>
+                <ul class="- topic/ul ul" id="topic_zyq_3mf_1bc__ul_t5w_t4f_1bc" data-ofbid="topic_zyq_3mf_1bc__ul_t5w_t4f_1bc">
+                    <li class="- topic/li li">
+                        <p class="- topic/p p">engine：是通过 <code class="+ topic/ph pr-d/codeph ph codeph">createMatchEngine</code> 接口创建的逐笔撮合引擎。</p>
+                    </li>
+                    <li class="- topic/li li">
+                        <p class="- topic/p p">symbolList： 股票标的，字符串向量。如果没有填该参数，表示获取所有股票标的快照。</p>
+                    </li>
+                </ul>
+                <p class="- topic/p p"><strong class="+ topic/ph hi-d/b ph b">返回值</strong></p>
+                <p class="- topic/p p">返回一个表 ，结构如下：</p>
+                <div class="table-container"><table class="- topic/table table frame-all" id="topic_zyq_3mf_1bc__table_g3g_54f_1bc" data-ofbid="topic_zyq_3mf_1bc__table_g3g_54f_1bc" data-cols="3"><caption></caption><colgroup><col/><col/><col/></colgroup><tbody class="- topic/tbody tbody">
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry colsep-1 rowsep-1">
+                                    <p class="- topic/p p"><strong class="+ topic/ph hi-d/b ph b">名称</strong></p>
+                                </td>
+                                <td class="- topic/entry entry colsep-1 rowsep-1">
+                                    <p class="- topic/p p"><strong class="+ topic/ph hi-d/b ph b">类型</strong></p>
+                                </td>
+                                <td class="- topic/entry entry colsep-0 rowsep-1">
+                                    <p class="- topic/p p"><strong class="+ topic/ph hi-d/b ph b">含义</strong></p>
+                                </td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry colsep-1 rowsep-1">symbol </td>
+                                <td class="- topic/entry entry colsep-1 rowsep-1">STRING </td>
+                                <td class="- topic/entry entry colsep-0 rowsep-1">股票标的 </td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry colsep-1 rowsep-1">timestamp </td>
+                                <td class="- topic/entry entry colsep-1 rowsep-1">TIMESTAMP </td>
+                                <td class="- topic/entry entry colsep-0 rowsep-1">时间 </td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry colsep-1 rowsep-1">avgTradePriceAtBid</td>
+                                <td class="- topic/entry entry colsep-1 rowsep-1">DOUBLE </td>
+                                <td class="- topic/entry entry colsep-0 rowsep-1">买单成交均价 </td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry colsep-1 rowsep-1">avgTradePriceAtOffer</td>
+                                <td class="- topic/entry entry colsep-1 rowsep-1">DOUBLE </td>
+                                <td class="- topic/entry entry colsep-0 rowsep-1">卖单成交均价 </td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry colsep-1 rowsep-1">totalTradeQtyAtBid</td>
+                                <td class="- topic/entry entry colsep-1 rowsep-1">LONG </td>
+                                <td class="- topic/entry entry colsep-0 rowsep-1">买单成交数量总和 </td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry colsep-1 rowsep-1">totalTradeQtyAtOffer</td>
+                                <td class="- topic/entry entry colsep-1 rowsep-1">LONG </td>
+                                <td class="- topic/entry entry colsep-0 rowsep-1">卖单成交数量总和 </td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry colsep-1 rowsep-1">bidPrice </td>
+                                <td class="- topic/entry entry colsep-1 rowsep-1">DOUBLE\[] </td>
+                                <td class="- topic/entry entry colsep-0 rowsep-1">买单价格列表 </td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry colsep-1 rowsep-1">bidQty </td>
+                                <td class="- topic/entry entry colsep-1 rowsep-1">LONG\[] </td>
+                                <td class="- topic/entry entry colsep-0 rowsep-1">买单数量列表 </td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry colsep-1 rowsep-1">offerPrice </td>
+                                <td class="- topic/entry entry colsep-1 rowsep-1">DOUBLE\[] </td>
+                                <td class="- topic/entry entry colsep-0 rowsep-1">卖单价格列表 </td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry colsep-1 rowsep-1">offerQty </td>
+                                <td class="- topic/entry entry colsep-1 rowsep-1">LONG[] </td>
+                                <td class="- topic/entry entry colsep-0 rowsep-1">卖单数量列表 </td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry colsep-1 rowsep-1">lastPrice </td>
+                                <td class="- topic/entry entry colsep-1 rowsep-1">DOUBLE </td>
+                                <td class="- topic/entry entry colsep-0 rowsep-1">最新价 </td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry colsep-1 rowsep-1">highPrice </td>
+                                <td class="- topic/entry entry colsep-1 rowsep-1">DOUBLE </td>
+                                <td class="- topic/entry entry colsep-0 rowsep-1">最高价 </td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry colsep-1 rowsep-0">lowPrice </td>
+                                <td class="- topic/entry entry colsep-1 rowsep-0">DOUBLE </td>
+                                <td class="- topic/entry entry colsep-0 rowsep-0">最低价 </td>
+                            </tr>
+                        </tbody></table></div>
+            </section>            
+        </div>       
+    </article>
+    <article class="- topic/topic topic nested1" aria-labelledby="ariaid-title4" id="topic_rxr_w4f_1bc">
+        <h2 class="- topic/title title topictitle2" id="ariaid-title4"><strong class="+ topic/ph hi-d/b ph b">例子</strong></h2>
+        <div class="- topic/body body">
+            <section class="- topic/section section" id="topic_rxr_w4f_1bc__section_hhz_x4f_1bc" data-ofbid="topic_rxr_w4f_1bc__section_hhz_x4f_1bc"><h3 class="- topic/title title sectiontitle"><strong class="+ topic/ph hi-d/b ph b">例 1：通过自定义函数指定模拟撮合需要的参数</strong></h3>
+                
+                <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="topic_rxr_w4f_1bc__codeblock_bht_y4f_1bc" data-ofbid="topic_rxr_w4f_1bc__codeblock_bht_y4f_1bc"><code>login("admin", "123456") //登录 loadPlugin("/DolphinDBPlugin/MatchingEngineSimulator/bin/PluginMatchingEngineSimulator.txt")
+            //加载插件 go //用户订单 MARKET_OTHER_BEST = 3 MARKET_THIS_BEST = 2 MARKET_BEST_FIVE = 0 MARKET_INSTANT_DEAL = 1 MARKET_ALL_DEAL = 4 LIMIT_ORDER = 5 ORDER_CANCEL = 6 def initArgsSnapshotmode2(){     dummyQuoteTable = table(1:0,
+            `symbol`symbolSource`timestamp`lastPrice`highestPrice2`lowestPrice2`highestPrice`lowestPrice`openPrice`preClosePrice`upLimitPrice`downLimitPrice`avgBidPrice`avgOfferPrice`totalBidQty`totalOfferQty`bidPrice`bidQty`offerPrice`offerQty`tradePrice`tradeQty,
+            [STRING, STRING,
+            TIMESTAMP,DOUBLE,DOUBLE,DOUBLE,DOUBLE,DOUBLE,DOUBLE,DOUBLE,DOUBLE,DOUBLE,DOUBLE, DOUBLE,
+            LONG, LONG, DOUBLE[], LONG[], DOUBLE[], LONG[],DOUBLE[],LONG[]])     quoteColMap = dict(
+            `symbol`symbolSource`timestamp`lastPrice`highestPrice`lowestPrice`highestPrice2`lowestPrice2`openPrice`preClosePrice`upLimitPrice`downLimitPrice`avgBidPrice`avgOfferPrice`totalBidQty`totalOfferQty`bidPrice`bidQty`offerPrice`offerQty`tradePrice`tradeQty,
+            `symbol`symbolSource`timestamp`lastPrice`highestPrice`lowestPrice`highestPrice2`lowestPrice2`openPrice`preClosePrice`upLimitPrice`downLimitPrice`avgBidPrice`avgOfferPrice`totalBidQty`totalOfferQty`bidPrice`bidQty`offerPrice`offerQty`tradePrice`tradeQty)
+                dummyUserOrderTable = table(1:0,
+            `symbol`timestamp`orderType`price`orderQty`direction`orderId, [STRING, TIMESTAMP, INT,
+            DOUBLE, LONG, INT, LONG])             userOrderColMap = dict(
+            `symbol`timestamp`orderType`price`orderQty`direction`orderId,
+            `symbol`timestamp`orderType`price`orderQty`direction`orderId)             orderDetailsOutput  = table(1:0,
+            `orderId`symbol`direction`sendTime`orderPrice`orderQty`tradeTime`tradePrice`tradeQty`orderStatus`sysReceiveTime,
+            [LONG, STRING, INT,TIMESTAMP,DOUBLE,LONG, TIMESTAMP,DOUBLE,LONG, INT,NANOTIMESTAMP])
+                orderDetailsAndSnapshotOutput = table(1:0, `msgType`content, [INT, BLOB])
+                snapshotOutput  = table(1:0,
+            `symbol`timestamp`avgBidPrice`avgOfferPrice`totalBidQty`totalOfferQty`bidPrice`bidQty`offerPrice`offerQty`lastPrice`highPrice`lowPrice,
+            [STRING, TIMESTAMP,DOUBLE,DOUBLE, LONG, LONG,DOUBLE[],LONG[], DOUBLE[],
+            LONG[],DOUBLE,DOUBLE,DOUBLE])     return
+            [dummyQuoteTable,quoteColMap,dummyUserOrderTable,userOrderColMap,orderDetailsOutput,orderDetailsAndSnapshotOutput,snapshotOutput]
+            }</code></pre>
+                <p class="- topic/p p">在上述代码中，</p>
+                <ol class="- topic/ol ol" id="topic_rxr_w4f_1bc__ol_cht_y4f_1bc" data-ofbid="topic_rxr_w4f_1bc__ol_cht_y4f_1bc">
+                    <li class="- topic/li li">
+                        <p class="- topic/p p">登录 DolphinDB 客户端(<code class="+ topic/ph pr-d/codeph ph codeph">login("admin", "123456")</code>)并使用
+                                <code class="+ topic/ph pr-d/codeph ph codeph">loadPlugin</code> 载入位于
+                                <em class="+ topic/ph hi-d/i ph i">/DolphinDBPlugin/MatchingEngineSimulator/bin/PluginMatchingEngineSimulator.txt</em>
+                            的插件。</p>
+                    </li>
+                    <li class="- topic/li li">
+                        <p class="- topic/p p">在 <code class="+ topic/ph pr-d/codeph ph codeph">go</code> 语句后指定用户订单。</p>
+                    </li>
+                </ol>
+                <p class="- topic/p p">定义了 <code class="+ topic/ph pr-d/codeph ph codeph">initArgsSnapshotmode2</code> 函数，并为各个命名函数指定需要执行的语句。</p>
+                <p class="- topic/p p"><code class="+ topic/ph pr-d/codeph ph codeph">initArgsSnapshotmode2</code> 返回一个包含多个表格和字典的列表，其中：</p>
+                <ul class="- topic/ul ul" id="topic_rxr_w4f_1bc__ul_dht_y4f_1bc" data-ofbid="topic_rxr_w4f_1bc__ul_dht_y4f_1bc">
+                    <li class="- topic/li li">
+                        <p class="- topic/p p"><code class="+ topic/ph pr-d/codeph ph codeph">dummyQuoteTable</code>：报价表。</p>
+                    </li>
+                    <li class="- topic/li li">
+                        <p class="- topic/p p"><code class="+ topic/ph pr-d/codeph ph codeph">quoteColMap</code>：字典，用于映射报价表中的列名。</p>
+                    </li>
+                    <li class="- topic/li li">
+                        <p class="- topic/p p"><code class="+ topic/ph pr-d/codeph ph codeph">dummyUserOrderTable</code>：用户订单表。</p>
+                    </li>
+                    <li class="- topic/li li">
+                        <p class="- topic/p p"><code class="+ topic/ph pr-d/codeph ph codeph">userOrderColMap</code>：字典，用于映射用户订单表中的列名。</p>
+                    </li>
+                    <li class="- topic/li li">
+                        <p class="- topic/p p"><code class="+ topic/ph pr-d/codeph ph codeph">orderDetailsOutput</code>、<code class="+ topic/ph pr-d/codeph ph codeph">snapshotOutput</code>、<code class="+ topic/ph pr-d/codeph ph codeph">orderDetailsAndSnapshotOutput</code>
+                            分别代表了交易输出、快照输出、复合输出表。</p>
+                    </li>
+                </ul>
+            </section>
+            <section class="- topic/section section" id="topic_rxr_w4f_1bc__section_p4s_z4f_1bc" data-ofbid="topic_rxr_w4f_1bc__section_p4s_z4f_1bc"><h3 class="- topic/title title sectiontitle"><strong class="+ topic/ph hi-d/b ph b">例 2：快照模式下以模式二模拟撮合委托订单</strong></h3>
+                
+                <p class="- topic/p p">下例展示了在快照模式下以模式二（<code class="+ topic/ph pr-d/codeph ph codeph">matchingMode = 2</code>，详见
+                        <code class="+ topic/ph pr-d/codeph ph codeph">createMatchEngine</code> 接口的 <em class="+ topic/ph hi-d/i ph i">config</em>
+                    参数说明）模拟撮合证券交易市场委托订单的关键过程。</p>
+                <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="topic_rxr_w4f_1bc__codeblock_tb3_1pf_1bc" data-ofbid="topic_rxr_w4f_1bc__codeblock_tb3_1pf_1bc"><code>config = dict(STRING, DOUBLE); //定义了一个包含多个配置参数的字典
+            config["latency"] = 0; //模拟时延 config["orderBookMatchingRatio"] = 0.12; //成交百分比 config["dataType"] = 1; // 行情类别为快照 config["outputOrderBook"] = 1; //是否输出订单，此处1表示输出 config["depth"] = 6; //匹配的订单簿的深度，区间为5到50，此处为6 config["matchingMode"] = 2; //快照模式下的匹配模式，此处为按照模式二撮合订单 name = "engine_snapshot" //指定引擎名称 exchange = "XSHE" //指定交易所名称 symbol = "AAA123" //指定证券代码 try{dropStreamEngine(name)}catch(ex){} args = initArgsSnapshotmode2() engine = MatchingEngineSimulator::createMatchEngine(name, exchange, config,
+            args[0], args[1], args[2], args[3], args[4], args[5], args[6]) MatchingEngineSimulator::resetMatchEngine(engine) appendMsg(engine, (symbol, "XSHE", 2021.01.08
+            10:14:01.400,23.5,,,25.0,23.0,,,,, 23.51, 23.59, 100, 100, [23.45  23.4  23.3  23.2
+            23.1  23.0],  [1000 1000 1000 1000 1000 1000], [23.72  23.78  23.8  23.9  24.0 24.1],
+            [1000 1000 1000 1000 1000 1000],[23.441 23.1235 23.653 23.771],[100 100 100 100]), 1)
+            appendMsg(engine, (symbol, 2021.01.08 10:14:01.400, MARKET_THIS_BEST, 23.2, 200,
+            ORDER_SEL, 1), 2)   // 23.72 appendMsg(engine, (symbol, 2021.01.08 10:14:01.400, MARKET_THIS_BEST, 23.3, 400,
+            ORDER_SEL, 2), 2)  // 272 res = MatchingEngineSimulator::getOpenOrders(engine) ex = table([1,2] as orderId, [2021.01.08 10:14:01.400,2021.01.08 10:14:01.400]
+            as timestamp, ["AAA123","AAA123"] as symbol, [23.72,23.72] as price, [200,400] as
+            totalQty, [200,400] as openQty, [2,2] as BsFlag,  [true, true] as isMatching)
+            assert 1, each(eqObj, res.values(), ex.values()) appendMsg(engine, (symbol, 2021.01.08 10:14:01.450, LIMIT_ORDER, 23.68, 400,
+            ORDER_SEL, 2), 2)  // 23.68 appendMsg(engine, (symbol, "XSHE", 2021.01.08
+            10:14:01.500,24.3,,,25.0,23.0,,,,, 23.51, 23.59, 1000, 1000, [23.45  23.4  23.3  23.2
+            23.1  23.0],  [1000 1000 1000 1000 1000 1000], [23.72  23.78  23.8  23.9  24.0 24.1],
+            [1000 1000 1000 1000 1000 1000],[23.65 23.81 23.73 23.72 23.45],[100 100 100 200 100]),
+            1) appendMsg(engine, (symbol, "XSHE", 2021.01.08
+            10:14:01.600,24.3,,,25.0,23.0,,,,, 23.51, 23.59, 1000, 1000, [23.45  23.4  23.3  23.2
+            23.1  23.0],  [1000 1000 1000 1000 1000 1000], [23.67  23.78  23.8  23.9  24.0 24.1],
+            [1000 1000 1000 1000 1000 1000],[23.72 0],[1200 0]), 1) res = select orderId, symbol, direction, sendTime, orderPrice, orderQty,
+            tradeTime, tradePrice, tradeQty, orderStatus, sysReceiveTime from
+        args[4]</code></pre>
+                <p class="- topic/p p">在上述代码中，</p>
+                <ul class="- topic/ul ul" id="topic_rxr_w4f_1bc__ul_ub3_1pf_1bc" data-ofbid="topic_rxr_w4f_1bc__ul_ub3_1pf_1bc">
+                    <li class="- topic/li li">
+                        <p class="- topic/p p">定义了一个名为 <code class="+ topic/ph pr-d/codeph ph codeph">config</code>
+                            的字典，它包含了一些配置参数，如模拟时延、成交百分比、行情类别、是否输出订单、订单簿深度等。</p>
+                    </li>
+                    <li class="- topic/li li">
+                        <p class="- topic/p p">指定了引擎名称、交易所名称和证券代码。</p>
+                    </li>
+                    <li class="- topic/li li">
+                        <p class="- topic/p p">还定义了一些函数，如 <code class="+ topic/ph pr-d/codeph ph codeph">appendMsg</code> 和
+                            <code class="+ topic/ph pr-d/codeph ph codeph">getOpenOrders</code>，用于向引擎中添加消息和获取当前未完成的订单。</p>
+                    </li>
+                    <li class="- topic/li li">
+                        <p class="- topic/p p">使用 <code class="+ topic/ph pr-d/codeph ph codeph">assert</code> 函数来验证结果是否符合预期。</p>
+                    </li>
+                </ul>
+                <p class="- topic/p p">其中，函数 <code class="+ topic/ph pr-d/codeph ph codeph">dropStreamEngine</code> 用于释放已创建的流数据引擎的定义，例如上述例子中的 <code class="+ topic/ph pr-d/codeph ph codeph">name =
+                        "engine_snapshot"</code>。</p>
+            </section>
+        </div>
+    </article>
+    <article class="- topic/topic topic nested1" aria-labelledby="ariaid-title5" id="topic_h21_bpf_1bc">
+        <h2 class="- topic/title title topictitle2" id="ariaid-title5"><strong class="+ topic/ph hi-d/b ph b">参考</strong></h2>
+        <div class="- topic/body body">
+            <p class="- topic/p p"><a class="- topic/xref xref" href="../../progr/named_func.html">命名函数</a></p>
+            <p class="- topic/p p"><a class="- topic/xref xref" href="../../tutorials/matching_engine_simulator.html">模拟撮合教程</a></p>
+        </div>
+    </article>
+</article></main></div>
+                        
+                        
+                        
+                        
+                        
+                        
+                    </div>
+                    
+                        <nav role="navigation" id="wh_topic_toc" aria-label="On this page" class="col-lg-2 d-none d-lg-block navbar d-print-none"> 
+                            <div id="wh_topic_toc_content">
+		                        
+	                            <div class=" wh_topic_toc "><div class="wh_topic_label">在本页上</div><ul><li class="topic-item"><a href="#topic_nhk_xlf_1bc" data-tocid="topic_nhk_xlf_1bc"><strong class="+ topic/ph hi-d/b ph b">安装插件</strong></a><ul><li class="section-item"><div class="section-title"><a href="#topic_nhk_xlf_1bc__section_g45_ylf_1bc" data-tocid="topic_nhk_xlf_1bc__section_g45_ylf_1bc"><strong class="+ topic/ph hi-d/b ph b">版本要求</strong></a></div></li><li class="section-item"><div class="section-title"><a href="#topic_nhk_xlf_1bc__section_bfr_1mf_1bc" data-tocid="topic_nhk_xlf_1bc__section_bfr_1mf_1bc"><strong class="+ topic/ph hi-d/b ph b">安装步骤</strong></a></div></li></ul></li><li class="topic-item"><a href="#topic_zyq_3mf_1bc" data-tocid="topic_zyq_3mf_1bc"><strong class="+ topic/ph hi-d/b ph b">插件接口</strong></a><ul><li class="section-item"><div class="section-title"><a href="#topic_zyq_3mf_1bc__section_ez1_lmf_1bc" data-tocid="topic_zyq_3mf_1bc__section_ez1_lmf_1bc"><strong class="+ topic/ph hi-d/b ph b">createMatchEngine</strong></a></div></li><li class="section-item"><div class="section-title"><a href="#topic_zyq_3mf_1bc__section_qmf_lnf_1bc" data-tocid="topic_zyq_3mf_1bc__section_qmf_lnf_1bc"><strong class="+ topic/ph hi-d/b ph b">getOpenOrders</strong></a></div></li><li class="section-item"><div class="section-title"><a href="#topic_zyq_3mf_1bc__section_ysl_qnf_1bc" data-tocid="topic_zyq_3mf_1bc__section_ysl_qnf_1bc"><strong class="+ topic/ph hi-d/b ph b">resetMatchEngine</strong></a></div></li><li class="section-item"><div class="section-title"><a href="#topic_zyq_3mf_1bc__section_cjj_d4f_1bc" data-tocid="topic_zyq_3mf_1bc__section_cjj_d4f_1bc"><strong class="+ topic/ph hi-d/b ph b">getEngineList</strong></a></div></li><li class="section-item"><div class="section-title"><a href="#topic_zyq_3mf_1bc__section_djj_d4f_1bc" data-tocid="topic_zyq_3mf_1bc__section_djj_d4f_1bc"><strong class="+ topic/ph hi-d/b ph b">getSymbolList</strong></a></div></li><li class="section-item"><div class="section-title"><a href="#topic_zyq_3mf_1bc__section_ld5_d4f_1bc" data-tocid="topic_zyq_3mf_1bc__section_ld5_d4f_1bc"><strong class="+ topic/ph hi-d/b ph b">stopMatchEngine</strong></a></div></li><li class="section-item"><div class="section-title"><a href="#topic_zyq_3mf_1bc__section_bp5_d4f_1bc" data-tocid="topic_zyq_3mf_1bc__section_bp5_d4f_1bc"><strong class="+ topic/ph hi-d/b ph b">extractInfo</strong></a></div></li><li class="section-item"><div class="section-title"><a href="#topic_zyq_3mf_1bc__section_ax5_d4f_1bc" data-tocid="topic_zyq_3mf_1bc__section_ax5_d4f_1bc"><strong class="+ topic/ph hi-d/b ph b">insertMsg</strong></a></div></li><li class="section-item"><div class="section-title"><a href="#topic_zyq_3mf_1bc__section_xqv_d4f_1bc" data-tocid="topic_zyq_3mf_1bc__section_xqv_d4f_1bc"><strong class="+ topic/ph hi-d/b ph b">setLimitPrice</strong></a></div></li><li class="section-item"><div class="section-title"><a href="#topic_zyq_3mf_1bc__section_qcw_d4f_1bc" data-tocid="topic_zyq_3mf_1bc__section_qcw_d4f_1bc"><strong class="+ topic/ph hi-d/b ph b">setPrevClose</strong></a></div></li><li class="section-item"><div class="section-title"><a href="#topic_zyq_3mf_1bc__section_cnw_d4f_1bc" data-tocid="topic_zyq_3mf_1bc__section_cnw_d4f_1bc"><strong class="+ topic/ph hi-d/b ph b">getSnapshot</strong></a></div></li></ul></li><li class="topic-item"><a href="#topic_rxr_w4f_1bc" data-tocid="topic_rxr_w4f_1bc"><strong class="+ topic/ph hi-d/b ph b">例子</strong></a><ul><li class="section-item"><div class="section-title"><a href="#topic_rxr_w4f_1bc__section_hhz_x4f_1bc" data-tocid="topic_rxr_w4f_1bc__section_hhz_x4f_1bc"><strong class="+ topic/ph hi-d/b ph b">例 1：通过自定义函数指定模拟撮合需要的参数</strong></a></div></li><li class="section-item"><div class="section-title"><a href="#topic_rxr_w4f_1bc__section_p4s_z4f_1bc" data-tocid="topic_rxr_w4f_1bc__section_p4s_z4f_1bc"><strong class="+ topic/ph hi-d/b ph b">例 2：快照模式下以模式二模拟撮合委托订单</strong></a></div></li></ul></li><li class="topic-item"><a href="#topic_h21_bpf_1bc" data-tocid="topic_h21_bpf_1bc"><strong class="+ topic/ph hi-d/b ph b">参考</strong></a></li></ul></div>
+	                        	
+                        	</div>
+                        </nav>
+                    
+                </div>
+            </div>
+            
+            
+            
+        </div> 
+        <footer class="navbar navbar-default wh_footer">
+  <div class=" footer-container mx-auto ">
+<title>Copyright</title><p><b> ©2024 浙江智臾科技有限公司 浙ICP备18048711号-3</b></p>
+  </div>
+</footer>
+        
+        <div id="go2top" class="d-print-none">
+            <span class="oxy-icon oxy-icon-up"></span>
+        </div>
+        
+        <div id="modal_img_large" class="modal">
+            <span class="close oxy-icon oxy-icon-remove"></span>
+            <div id="modal_img_container"></div>
+            <div id="caption"></div>
+        </div>
+        
+        
+        
+    </body>
+</html>

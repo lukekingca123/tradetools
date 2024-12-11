@@ -1,0 +1,1329 @@
+<!DOCTYPE html><html xmlns="http://www.w3.org/1999/xhtml" xml:lang="zh" lang="zh" data-whc_version="26.0">
+    <head><link rel="shortcut icon" href="../favicon.ico"/><link rel="icon" href="../favicon.ico"/><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><meta http-equiv="X-UA-Compatible" content="IE=edge"/><meta name="description" content="在处理面板数据时，矩阵运算相对于表运算而言，速度更快，效率更高。DolphinDB 针对矩阵运算场景为用户提供了丰富且便捷的内置函数，其中部分矩阵运算采用 OpenBlas 和 Lapack 进行优化，与 Matlab 的性能在一个数量级。 本教程将重点介绍 DolphinDB 矩阵的特点及矩阵运算的相关方法。 本教程将讲述以下有关矩阵内容： DolphinDB 中的矩阵采用列优先（column ..."/><meta name="DC.rights.owner" content="(C) 版权 2024"/><meta name="copyright" content="(C) 版权 2024"/><meta name="generator" content="DITA-OT"/><meta name="DC.type" content="topic"/><meta name="DC.coverage" content=""/><meta name="DC.relation" content="../tutorials/about_tutorials.html"/><meta name="prodname" content="DolphinDB"/><meta name="brand" content="DolphinDB"/><meta name="DC.creator" content="DolphinDB"/><meta name="DC.publisher" content="DDB N/A DDB 200"/><meta name="DC.format" content="HTML5"/><meta name="DC.identifier" content="矩阵运算"/><title>矩阵运算</title><!--  Generated with Oxygen version 26.0, build number 2024012323.  --><meta name="wh-path2root" content="../"/><meta name="wh-toc-id" content="&lt;?xml version=&#34;1.0&#34; encoding=&#34;UTF-8&#34;?&gt;&lt;?workdir /tmp/temp20240704100525325/tutorials?&gt;&lt;?workdir-uri file:/tmp/temp20240704100525325/tutorials/?&gt;&lt;?path2project ../?&gt;&lt;?path2project-uri ../?&gt;&lt;?path2rootmap-uri ../?&gt;&lt;topic xmlns:dita-ot=&#34;http://dita-ot.sourceforge.net/ns/201007/dita-ot&#34; xmlns:ditaarch=&#34;http://dita.oasis-open.org/architecture/2005/&#34; class=&#34;- topic/topic &#34; ditaarch:DITAArchVersion=&#34;2.0&#34; domains=&#34;a(props audience) a(props deliveryTarget) a(props otherprops) a(props platform) a(props product)&#34; id=&#34;矩阵运算&#34; specializations=&#34;@props/audience @props/deliveryTarget @props/otherprops @props/platform @props/product&#34; xtrc=&#34;topic:1;1:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/matrix.md&#34;&gt;&lt;title class=&#34;- topic/title &#34; xtrc=&#34;title:1;1:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/matrix.md&#34;&gt;矩阵运算&lt;/title&gt;&lt;prolog class=&#34;- topic/prolog &#34;&gt;&lt;author class=&#34;- topic/author &#34; xtrc=&#34;author:1;12:17&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/ddb_doc_centre.ditamap&#34;&gt;DolphinDB&lt;/author&gt;&lt;publisherinformation class=&#34;- topic/publisher bookmap/publisherinformation &#34; xtrc=&#34;publisherinformation:1;14:31&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/ddb_doc_centre.ditamap&#34;&gt; &lt;person class=&#34;- topic/data bookmap/person &#34; xtrc=&#34;person:1;15:21&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/ddb_doc_centre.ditamap&#34;&gt;DDB&lt;/person&gt; &lt;printlocation class=&#34;- topic/data bookmap/printlocation &#34; xtrc=&#34;printlocation:1;16:28&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/ddb_doc_centre.ditamap&#34;&gt;N/A&lt;/printlocation&gt; &lt;published class=&#34;- topic/data bookmap/published &#34; xtrc=&#34;published:1;17:24&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/ddb_doc_centre.ditamap&#34;&gt; &lt;person class=&#34;- topic/data bookmap/person &#34; xtrc=&#34;person:2;18:25&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/ddb_doc_centre.ditamap&#34;&gt;DDB&lt;/person&gt; &lt;publishtype class=&#34;- topic/data bookmap/publishtype &#34; value=&#34;HTML&#34; xtrc=&#34;publishtype:1;19:44&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/ddb_doc_centre.ditamap&#34;/&gt; &lt;revisionid class=&#34;- topic/ph bookmap/revisionid &#34; xtrc=&#34;revisionid:1;20:29&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/ddb_doc_centre.ditamap&#34;&gt;200&lt;/revisionid&gt; &lt;summary class=&#34;- topic/ph bookmap/summary &#34; xtrc=&#34;summary:1;22:27&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/ddb_doc_centre.ditamap&#34;/&gt; &lt;data class=&#34;- topic/data &#34; xtrc=&#34;data:1;23:24&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/ddb_doc_centre.ditamap&#34;/&gt; &lt;/published&gt; &lt;data class=&#34;- topic/data &#34; xtrc=&#34;data:2;25:20&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/ddb_doc_centre.ditamap&#34;/&gt; &lt;/publisherinformation&gt;&lt;metadata class=&#34;- topic/metadata &#34;&gt;&lt;audience class=&#34;- topic/audience &#34; xtrc=&#34;audience:2;39:20&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/ddb_doc_centre.ditamap&#34;/&gt;&lt;audience class=&#34;- topic/audience &#34; xtrc=&#34;audience:1;28:24&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/ddb_doc_centre.ditamap&#34;/&gt;&lt;category class=&#34;- topic/category &#34; xtrc=&#34;category:1;29:24&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/ddb_doc_centre.ditamap&#34;/&gt;&lt;prodinfo class=&#34;- topic/prodinfo &#34; xtrc=&#34;prodinfo:1;34:23&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/ddb_doc_centre.ditamap&#34;&gt; &lt;prodname class=&#34;- topic/prodname &#34; xtrc=&#34;prodname:1;35:27&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/ddb_doc_centre.ditamap&#34;&gt;DolphinDB&lt;/prodname&gt; &lt;brand class=&#34;- topic/brand &#34; xtrc=&#34;brand:1;36:24&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/ddb_doc_centre.ditamap&#34;&gt;DolphinDB&lt;/brand&gt; &lt;/prodinfo&gt;&lt;/metadata&gt;&lt;/prolog&gt;&lt;body class=&#34;- topic/body &#34; xtrc=&#34;body:1;1:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/matrix.md&#34;&gt;&lt;p class=&#34;- topic/p &#34; xtrc=&#34;p:1;3:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/matrix.md&#34;&gt;在处理面板数据时，矩阵运算相对于表运算而言，速度更快，效率更高。DolphinDB 针对矩阵运算场景为用户提供了丰富且便捷的内置函数，其中部分矩阵运算采用 OpenBlas 和 Lapack 进行优化，与 Matlab 的性能在一个数量级。 本教程将重点介绍 DolphinDB 矩阵的特点及矩阵运算的相关方法。&lt;/p&gt;&lt;p class=&#34;- topic/p &#34; xtrc=&#34;p:2;5:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/matrix.md&#34;&gt;本教程将讲述以下有关矩阵内容：&lt;/p&gt;&lt;/body&gt;&lt;related-links class=&#34;- topic/related-links &#34;&gt;&lt;linkpool class=&#34;- topic/linkpool &#34; xtrc=&#34;topicref:42;61:69&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/chap_tutorials.ditamap&#34;&gt;&lt;link class=&#34;- topic/link &#34; format=&#34;dita&#34; href=&#34;../tutorials/about_tutorials.dita&#34; mapclass=&#34;- map/topicref bookmap/chapter &#34; role=&#34;parent&#34; scope=&#34;local&#34; type=&#34;topic&#34; xtrc=&#34;topicref:1;5:53&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/chap_tutorials.ditamap&#34;&gt;&lt;?ditaot usertext?&gt;&lt;linktext class=&#34;- topic/linktext &#34;&gt;&lt;?ditaot usertext?&gt;教程&lt;/linktext&gt;&lt;?ditaot usershortdesc?&gt;&lt;desc class=&#34;- topic/desc &#34;&gt;DolphinDB 产品使用教程&lt;/desc&gt;&lt;/link&gt;&lt;/linkpool&gt;&lt;/related-links&gt;&lt;topic class=&#34;- topic/topic &#34; ditaarch:DITAArchVersion=&#34;2.0&#34; domains=&#34;a(props audience) a(props deliveryTarget) a(props otherprops) a(props platform) a(props product)&#34; id=&#34;1-矩阵的存储&#34; specializations=&#34;@props/audience @props/deliveryTarget @props/otherprops @props/platform @props/product&#34; xtrc=&#34;topic:2;7:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/matrix.md&#34;&gt;&lt;title class=&#34;- topic/title &#34; xtrc=&#34;title:2;7:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/matrix.md&#34;&gt;1. 矩阵的存储&lt;/title&gt;&lt;body class=&#34;- topic/body &#34; xtrc=&#34;body:2;7:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/matrix.md&#34;&gt;&lt;p class=&#34;- topic/p &#34; xtrc=&#34;p:3;9:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/matrix.md&#34;&gt;DolphinDB 中的矩阵采用列优先（column major）的形式。因此创建矩阵时，数据在内存中按列存储。系统会将输入的向量数据从左向右以列为单位填充为矩阵中的元素。注意：矩阵中行和列的下标都是从0开始的。&lt;/p&gt;&lt;p class=&#34;- topic/p &#34; xtrc=&#34;p:4;11:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/matrix.md&#34;&gt;例：用[1, 2, 3], [4, 5, 6]两个向量创建矩阵得到的矩阵维度为 3*2，而不是 2*3。&lt;/p&gt;&lt;codeblock class=&#34;+ topic/pre pr-d/codeblock &#34; xml:space=&#34;preserve&#34; xtrc=&#34;codeblock:1;13:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/matrix.md&#34;&gt;&amp;gt;matrix(1 2 3, 4 5 6); #0 #1 -- -- 1 4 2 5 3 6&lt;/codeblock&gt;&lt;p class=&#34;- topic/p &#34; xtrc=&#34;p:5;22:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/matrix.md&#34;&gt;由于 DolphinDB 的矩阵是列优先的，读取或构建矩阵时，&lt;b class=&#34;+ topic/ph hi-d/b &#34; xtrc=&#34;b:1;22:32&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/matrix.md&#34;&gt;列操作比行操作要更为高效。&lt;/b&gt;&lt;/p&gt;&lt;p class=&#34;- topic/p &#34; xtrc=&#34;p:6;24:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/matrix.md&#34;&gt;给定一个长度为1000的向量 v，构建一个900*100的矩阵。其第 i 行是 v[i:i+100]。比较下列两种做法：&lt;/p&gt;&lt;codeblock class=&#34;+ topic/pre pr-d/codeblock &#34; xml:space=&#34;preserve&#34; xtrc=&#34;codeblock:2;26:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/matrix.md&#34;&gt;def alongRows(v, mutable m){ for(i in 0:900){ m[i,]=v[i:(i+100)] } } v=1..1000 m = matrix(int,900,100) timer(10){alongRows(v, m)}&lt;/codeblock&gt;&lt;p class=&#34;- topic/p &#34; xtrc=&#34;p:7;36:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/matrix.md&#34;&gt;上述脚本逐行对矩阵进行赋值，耗时为236.369毫秒。&lt;/p&gt;&lt;codeblock class=&#34;+ topic/pre pr-d/codeblock &#34; xml:space=&#34;preserve&#34; xtrc=&#34;codeblock:3;38:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/matrix.md&#34;&gt;def alongColumns(v, mutable m){ for(i in 0:100){ m[,i]=v[i:(i+900)] } } v=1..1000 m = matrix(int,900,100) timer(10){alongColumns(v, m)}&lt;/codeblock&gt;&lt;p class=&#34;- topic/p &#34; xtrc=&#34;p:8;48:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/matrix.md&#34;&gt;上述脚本逐列对矩阵进行赋值，耗时为2.991毫秒。对比按行赋值，耗时缩短了两个数量级。&lt;/p&gt;&lt;/body&gt;&lt;/topic&gt;&lt;topic class=&#34;- topic/topic &#34; ditaarch:DITAArchVersion=&#34;2.0&#34; domains=&#34;a(props audience) a(props deliveryTarget) a(props otherprops) a(props platform) a(props product)&#34; id=&#34;2-矩阵的基础操作&#34; specializations=&#34;@props/audience @props/deliveryTarget @props/otherprops @props/platform @props/product&#34; xtrc=&#34;topic:3;50:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/matrix.md&#34;&gt;&lt;title class=&#34;- topic/title &#34; xtrc=&#34;title:3;50:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/matrix.md&#34;&gt;2. 矩阵的基础操作&lt;/title&gt;&lt;body class=&#34;- topic/body &#34; xtrc=&#34;body:3;50:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/matrix.md&#34;/&gt;&lt;topic class=&#34;- topic/topic &#34; ditaarch:DITAArchVersion=&#34;2.0&#34; domains=&#34;a(props audience) a(props deliveryTarget) a(props otherprops) a(props platform) a(props product)&#34; id=&#34;21-矩阵的创建&#34; specializations=&#34;@props/audience @props/deliveryTarget @props/otherprops @props/platform @props/product&#34; xtrc=&#34;topic:4;52:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/matrix.md&#34;&gt;&lt;title class=&#34;- topic/title &#34; xtrc=&#34;title:4;52:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/matrix.md&#34;&gt;2.1. 矩阵的创建&lt;/title&gt;&lt;body class=&#34;- topic/body &#34; xtrc=&#34;body:4;52:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/matrix.md&#34;&gt;&lt;p class=&#34;- topic/p &#34; xtrc=&#34;p:9;54:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/matrix.md&#34;&gt;DolphinDB 的矩阵有三种类型，分别为普通矩阵（matrix）、索引序列（indexed series）和索引矩阵（indexed matrix）。&lt;/p&gt;&lt;ul class=&#34;- topic/ul &#34; xtrc=&#34;ul:1;56:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/matrix.md&#34;&gt;&lt;li class=&#34;- topic/li &#34; xtrc=&#34;li:1;56:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/matrix.md&#34;&gt;&lt;p class=&#34;- topic/p &#34; xtrc=&#34;p:10;56:3&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/matrix.md&#34;&gt;普通矩阵：调用函数 &lt;codeph class=&#34;+ topic/ph pr-d/codeph &#34; xtrc=&#34;codeph:1;56:13&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/matrix.md&#34;&gt;matrix&lt;/codeph&gt; 创建一个指定数据类型和维度的普通矩阵。函数 matrix 也可根据已有的数据包括向量、矩阵、表、元组及这些数据结构的组合创建一个矩阵。&lt;/p&gt;&lt;/li&gt;&lt;li class=&#34;- topic/li &#34; xtrc=&#34;li:2;58:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/matrix.md&#34;&gt;&lt;p class=&#34;- topic/p &#34; xtrc=&#34;p:11;58:3&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/matrix.md&#34;&gt;索引序列：索引序列带行索引标签的单列矩阵，可以通过函数 &lt;codeph class=&#34;+ topic/ph pr-d/codeph &#34; xtrc=&#34;codeph:2;58:31&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/matrix.md&#34;&gt;indexedSeries&lt;/codeph&gt; 进行创建，或者通过一个单列的矩阵调用 &lt;codeph class=&#34;+ topic/ph pr-d/codeph &#34; xtrc=&#34;codeph:3;58:66&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/matrix.md&#34;&gt;setIndexedSeries&lt;/codeph&gt; 函数进行转换。&lt;/p&gt;&lt;/li&gt;&lt;li class=&#34;- topic/li &#34; xtrc=&#34;li:3;60:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/matrix.md&#34;&gt;&lt;p class=&#34;- topic/p &#34; xtrc=&#34;p:12;60:3&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/matrix.md&#34;&gt;索引矩阵：索引矩阵为带行/列索引标签的矩阵。只能通过普通矩阵调用函数 &lt;codeph class=&#34;+ topic/ph pr-d/codeph &#34; xtrc=&#34;codeph:4;60:38&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/matrix.md&#34;&gt;setIndexedMatrix&lt;/codeph&gt; 生成。&lt;/p&gt;&lt;/li&gt;&lt;/ul&gt;&lt;p class=&#34;- topic/p &#34; xtrc=&#34;p:13;62:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/matrix.md&#34;&gt;除直接生成矩阵外，通过运算符 &lt;codeph class=&#34;+ topic/ph pr-d/codeph &#34; xtrc=&#34;codeph:5;62:16&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/matrix.md&#34;&gt;cast($)&lt;/codeph&gt; 可以把一个向量重组为一个矩阵。&lt;/p&gt;&lt;codeblock class=&#34;+ topic/pre pr-d/codeblock &#34; xml:space=&#34;preserve&#34; xtrc=&#34;codeblock:4;64:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/matrix.md&#34;&gt;&amp;gt;m=1..10$5:2; &amp;gt;m; #0 #1 -- -- 1 6 2 7 3 8 4 9 5 10&lt;/codeblock&gt;&lt;p class=&#34;- topic/p &#34; xtrc=&#34;p:14;75:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/matrix.md&#34;&gt;函数 &lt;codeph class=&#34;+ topic/ph pr-d/codeph &#34; xtrc=&#34;codeph:6;75:4&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/matrix.md&#34;&gt;reshape&lt;/codeph&gt; 可以实现矩阵与向量之间的互相转换。&lt;/p&gt;&lt;codeblock class=&#34;+ topic/pre pr-d/codeblock &#34; xml:space=&#34;preserve&#34; xtrc=&#34;codeblock:5;76:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/matrix.md&#34;&gt;&amp;gt;m=(1..6).reshape(3:2); &amp;gt;m; #0 #1 -- -- 1 4 2 5 3 6 &amp;gt;y=m.reshape() &amp;gt;y; [1,2,3,4,5,6]&lt;/codeblock&gt;&lt;p class=&#34;- topic/p &#34; xtrc=&#34;p:15;90:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/matrix.md&#34;&gt;reshape 实现的功能相当于 &lt;codeph class=&#34;+ topic/ph pr-d/codeph &#34; xtrc=&#34;codeph:7;90:18&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/matrix.md&#34;&gt;cast($)&lt;/codeph&gt; 和 &lt;codeph class=&#34;+ topic/ph pr-d/codeph &#34; xtrc=&#34;codeph:8;90:30&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/matrix.md&#34;&gt;flatten&lt;/codeph&gt; 的组合。函数 &lt;codeph class=&#34;+ topic/ph pr-d/codeph &#34; xtrc=&#34;codeph:9;90:48&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/matrix.md&#34;&gt;flatten&lt;/codeph&gt; 可把一个矩阵转换为一个向量。&lt;/p&gt;&lt;codeblock class=&#34;+ topic/pre pr-d/codeblock &#34; xml:space=&#34;preserve&#34; xtrc=&#34;codeblock:6;92:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/matrix.md&#34;&gt;&amp;gt;x = flatten m; &amp;gt;x [1,2,3,4,5,6] &amp;gt;x$2:5 #0 #1 #2 #3 #4 -- -- -- -- -- 1 3 5 7 9 2 4 6 8 10&lt;/codeblock&gt;&lt;p class=&#34;- topic/p &#34; xtrc=&#34;p:16;104:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/matrix.md&#34;&gt;此外，可以调用函数生成一些特殊的矩阵类型：&lt;/p&gt;&lt;ul class=&#34;- topic/ul &#34; xtrc=&#34;ul:2;106:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/matrix.md&#34;&gt;&lt;li class=&#34;- topic/li &#34; xtrc=&#34;li:4;106:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/matrix.md&#34;&gt;&lt;p class=&#34;- topic/p &#34; xtrc=&#34;p:17;106:3&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/matrix.md&#34;&gt;单位矩阵&lt;/p&gt;&lt;p class=&#34;- topic/p &#34; xtrc=&#34;p:18;108:2&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/matrix.md&#34;&gt;使用函数 &lt;codeph class=&#34;+ topic/ph pr-d/codeph &#34; xtrc=&#34;codeph:10;108:7&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/matrix.md&#34;&gt;eye(n)&lt;/codeph&gt; 创建维度为 n 的单位矩阵。&lt;/p&gt;&lt;codeblock class=&#34;+ topic/pre pr-d/codeblock &#34; xml:space=&#34;preserve&#34; xtrc=&#34;codeblock:7;109:2&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/matrix.md&#34;&gt; &amp;gt;eye(3); #0 #1 #2 -- -- -- 1 0 0 0 1 0 0 0 1&lt;/codeblock&gt;&lt;/li&gt;&lt;li class=&#34;- topic/li &#34; xtrc=&#34;li:5;118:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/matrix.md&#34;&gt;&lt;p class=&#34;- topic/p &#34; xtrc=&#34;p:19;118:3&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/matrix.md&#34;&gt;对角矩阵&lt;/p&gt;&lt;p class=&#34;- topic/p &#34; xtrc=&#34;p:20;120:2&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/matrix.md&#34;&gt;函数 &lt;codeph class=&#34;+ topic/ph pr-d/codeph &#34; xtrc=&#34;codeph:11;120:5&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/matrix.md&#34;&gt;diag(X)&lt;/codeph&gt;：如果 X 是一个向量，返回一个对角矩阵，X 为主对角线上的元素；如果 X 是一个方阵，返回一个由主对角线元素组成的向量。&lt;/p&gt;&lt;codeblock class=&#34;+ topic/pre pr-d/codeblock &#34; xml:space=&#34;preserve&#34; xtrc=&#34;codeblock:8;121:2&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/matrix.md&#34;&gt; &amp;gt;m=diag(1..5); &amp;gt;m; #0 #1 #2 #3 #4 -- -- -- -- -- 1 0 0 0 0 0 2 0 0 0 0 0 3 0 0 0 0 0 4 0 0 0 0 0 5 &amp;gt;diag(m); [1,2,3,4,5]&lt;/codeblock&gt;&lt;/li&gt;&lt;/ul&gt;&lt;p class=&#34;- topic/p &#34; xtrc=&#34;p:21;136:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/matrix.md&#34;&gt;使用&lt;codeph class=&#34;+ topic/ph pr-d/codeph &#34; xtrc=&#34;codeph:12;136:3&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/matrix.md&#34;&gt;rename!&lt;/codeph&gt;函数给矩阵添加行标签和列标签：&lt;/p&gt;&lt;codeblock class=&#34;+ topic/pre pr-d/codeblock &#34; xml:space=&#34;preserve&#34; xtrc=&#34;codeblock:9;137:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/matrix.md&#34;&gt;&amp;gt;m=1..9$3:3; &amp;gt;m; #0 #1 #2 -- -- -- 1 4 7 2 5 8 3 6 9 &amp;gt;m.rename!(`col1`col2`col3); col1 col2 col3 ---- ---- ---- 1 4 7 2 5 8 3 6 9 &amp;gt;m.rename!(1 2 3, `c1`c2`c3); c1 c2 c3 -- -- -- 1|1 4 7 2|2 5 8 3|3 6 9 &amp;gt;m.colNames(); [&#34;c1&#34;,&#34;c2&#34;,&#34;c3&#34;] &amp;gt;m.rowNames(); [1,2,3]&lt;/codeblock&gt;&lt;p class=&#34;- topic/p &#34; xtrc=&#34;p:22;167:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/matrix.md&#34;&gt;此外，通过 SQL 语句也可以生成矩阵：&lt;/p&gt;&lt;p class=&#34;- topic/p &#34; xtrc=&#34;p:23;169:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/matrix.md&#34;&gt;&lt;codeph class=&#34;+ topic/ph pr-d/codeph &#34; xtrc=&#34;codeph:13;169:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/matrix.md&#34;&gt;exec&lt;/codeph&gt; + &lt;codeph class=&#34;+ topic/ph pr-d/codeph &#34; xtrc=&#34;codeph:14;169:10&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/matrix.md&#34;&gt;pivot by&lt;/codeph&gt;： SQL 语句中，可以通过 exec 语句搭配 pivot by 子句，将表数据转换成一个矩阵形式的面板数据。更多使用场景可以参考&lt;xref class=&#34;- topic/xref &#34; dita-ot:orig-format=&#34;md&#34; format=&#34;dita&#34; href=&#34;panel_data.md&#34; xtrc=&#34;xref:1;169:86&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/matrix.md&#34; type=&#34;topic&#34;&gt;&lt;?ditaot usertext?&gt;面板数据处理教程&lt;/xref&gt;。&lt;/p&gt;&lt;codeblock class=&#34;+ topic/pre pr-d/codeblock &#34; xml:space=&#34;preserve&#34; xtrc=&#34;codeblock:10;171:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/matrix.md&#34;&gt;&amp;gt;sym = `C`MS`MS`MS`IBM`IBM`C`C`C$SYMBOL                                 &amp;gt;price = 49.6 29.46 29.52 30.02 174.97 175.23 50.76 50.32 51.29                         &amp;gt;qty = 2200 1900 2100 3200 6800 5400 1300 2500 8800           &amp;gt;timestamp = [09:34:07,09:35:42,09:36:51,09:36:59,09:35:47,09:36:26,09:34:16,09:35:26,09:36:12] &amp;gt;t2 = table(timestamp, sym, qty, price) &amp;gt;b = exec count(price) from t2 pivot by timestamp.minute(), sym;  ​ &amp;gt;b;             C IBM MS     - --- -- 09:34m|2 09:35m|1 1   1 09:36m|1 1   2  ​ &amp;gt;typestr b; FAST DOUBLE MATRIX&lt;/codeblock&gt;&lt;p class=&#34;- topic/p &#34; xtrc=&#34;p:24;190:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/matrix.md&#34;&gt;除了使用 pivot by 子句外，还可以使用以下函数生成面板数据：&lt;/p&gt;&lt;ul class=&#34;- topic/ul &#34; xtrc=&#34;ul:3;192:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/matrix.md&#34;&gt;&lt;li class=&#34;- topic/li &#34; xtrc=&#34;li:6;192:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/matrix.md&#34;&gt;&lt;p class=&#34;- topic/p &#34; xtrc=&#34;p:25;192:3&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/matrix.md&#34;&gt;&lt;codeph class=&#34;+ topic/ph pr-d/codeph &#34; xtrc=&#34;codeph:15;192:3&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/matrix.md&#34;&gt;pivot&lt;/codeph&gt;：在二维维度上重组数据，其功能与 pivot by 等同。&lt;/p&gt;&lt;/li&gt;&lt;li class=&#34;- topic/li &#34; xtrc=&#34;li:7;194:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/matrix.md&#34;&gt;&lt;p class=&#34;- topic/p &#34; xtrc=&#34;p:26;194:3&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/matrix.md&#34;&gt;&lt;codeph class=&#34;+ topic/ph pr-d/codeph &#34; xtrc=&#34;codeph:16;194:3&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/matrix.md&#34;&gt;panel&lt;/codeph&gt;：指定一个或多个指标列，生成一个或多个矩阵。&lt;/p&gt;&lt;/li&gt;&lt;/ul&gt;&lt;p class=&#34;- topic/p &#34; xtrc=&#34;p:27;196:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/matrix.md&#34;&gt;使用函数 &lt;codeph class=&#34;+ topic/ph pr-d/codeph &#34; xtrc=&#34;codeph:17;196:6&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/matrix.md&#34;&gt;cross&lt;/codeph&gt; 将指定函数应用于 X 和 Y 中元素的两两组合，其中 X, Y 可以是数据对向量或矩阵。&lt;/p&gt;&lt;p class=&#34;- topic/p &#34; xtrc=&#34;p:28;198:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/matrix.md&#34;&gt;例：假设 X，Y 是向量，X 有 m 个元素，矩阵 Y 有 n 个元素，则 cross 函数将返回一个 m×n 矩阵。&lt;/p&gt;&lt;codeblock class=&#34;+ topic/pre pr-d/codeblock &#34; xml:space=&#34;preserve&#34; xtrc=&#34;codeblock:11;200:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/matrix.md&#34;&gt;&amp;gt;x=1 2; &amp;gt;y=3 5 7;     &amp;gt;cross(pow, x, y); 3 5 7 - -- --- 1|1 1 1 2|8 32 128&lt;/codeblock&gt;&lt;/body&gt;&lt;/topic&gt;&lt;topic class=&#34;- topic/topic &#34; ditaarch:DITAArchVersion=&#34;2.0&#34; domains=&#34;a(props audience) a(props deliveryTarget) a(props otherprops) a(props platform) a(props product)&#34; id=&#34;22-访问矩阵&#34; specializations=&#34;@props/audience @props/deliveryTarget @props/otherprops @props/platform @props/product&#34; xtrc=&#34;topic:5;210:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/matrix.md&#34;&gt;&lt;title class=&#34;- topic/title &#34; xtrc=&#34;title:5;210:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/matrix.md&#34;&gt;2.2. 访问矩阵&lt;/title&gt;&lt;body class=&#34;- topic/body &#34; xtrc=&#34;body:5;210:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/matrix.md&#34;&gt;&lt;p class=&#34;- topic/p &#34; xtrc=&#34;p:29;212:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/matrix.md&#34;&gt;矩阵的维度可以通过函数 &lt;codeph class=&#34;+ topic/ph pr-d/codeph &#34; xtrc=&#34;codeph:18;212:13&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/matrix.md&#34;&gt;shape&lt;/codeph&gt; 获得。单独获取行数和列数，可通过调用 &lt;codeph class=&#34;+ topic/ph pr-d/codeph &#34; xtrc=&#34;codeph:19;212:40&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/matrix.md&#34;&gt;rows&lt;/codeph&gt; 和 &lt;codeph class=&#34;+ topic/ph pr-d/codeph &#34; xtrc=&#34;codeph:20;212:49&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/matrix.md&#34;&gt;cols&lt;/codeph&gt; 函数实现。&lt;/p&gt;&lt;codeblock class=&#34;+ topic/pre pr-d/codeblock &#34; xml:space=&#34;preserve&#34; xtrc=&#34;codeblock:12;213:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/matrix.md&#34;&gt;&amp;gt;m=1..10$2:5; &amp;gt;shape(m); 2 : 5 &amp;gt;rows(m) 2 &amp;gt;cols(m) 5&lt;/codeblock&gt;&lt;p class=&#34;- topic/p &#34; xtrc=&#34;p:30;222:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/matrix.md&#34;&gt;DolphinDB 提供了多样化的矩阵元素访问方式。&lt;/p&gt;&lt;/body&gt;&lt;topic class=&#34;- topic/topic &#34; ditaarch:DITAArchVersion=&#34;2.0&#34; domains=&#34;a(props audience) a(props deliveryTarget) a(props otherprops) a(props platform) a(props product)&#34; id=&#34;221-根据行列索引访问矩阵&#34; specializations=&#34;@props/audience @props/deliveryTarget @props/otherprops @props/platform @props/product&#34; xtrc=&#34;topic:6;224:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/matrix.md&#34;&gt;&lt;title class=&#34;- topic/title &#34; xtrc=&#34;title:6;224:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/matrix.md&#34;&gt;2.2.1. 根据行列索引访问矩阵&lt;/title&gt;&lt;body class=&#34;- topic/body &#34; xtrc=&#34;body:6;224:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/matrix.md&#34;&gt;&lt;p class=&#34;- topic/p &#34; xtrc=&#34;p:31;226:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/matrix.md&#34;&gt;定义一个普通矩阵：&lt;/p&gt;&lt;codeblock class=&#34;+ topic/pre pr-d/codeblock &#34; xml:space=&#34;preserve&#34; xtrc=&#34;codeblock:13;228:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/matrix.md&#34;&gt;m = 1..100$10:10;&lt;/codeblock&gt;&lt;p class=&#34;- topic/p &#34; xtrc=&#34;p:32;232:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/matrix.md&#34;&gt;（1）获取单个单元格的值：&lt;codeph class=&#34;+ topic/ph pr-d/codeph &#34; xtrc=&#34;codeph:21;232:14&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/matrix.md&#34;&gt;slice&lt;/codeph&gt;, &lt;codeph class=&#34;+ topic/ph pr-d/codeph &#34; xtrc=&#34;codeph:22;232:23&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/matrix.md&#34;&gt;cell&lt;/codeph&gt;&lt;/p&gt;&lt;codeblock class=&#34;+ topic/pre pr-d/codeblock &#34; xml:space=&#34;preserve&#34; xtrc=&#34;codeblock:14;234:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/matrix.md&#34;&gt;&amp;gt;m.slice(1,1) // 等同于 m[1,1] 12 &amp;gt;m.cell(1,1) 12&lt;/codeblock&gt;&lt;p class=&#34;- topic/p &#34; xtrc=&#34;p:33;242:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/matrix.md&#34;&gt;（2）获取多个单元格的值：&lt;codeph class=&#34;+ topic/ph pr-d/codeph &#34; xtrc=&#34;codeph:23;242:14&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/matrix.md&#34;&gt;slice&lt;/codeph&gt;, &lt;codeph class=&#34;+ topic/ph pr-d/codeph &#34; xtrc=&#34;codeph:24;242:23&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/matrix.md&#34;&gt;cell&lt;/codeph&gt;&lt;/p&gt;&lt;codeblock class=&#34;+ topic/pre pr-d/codeblock &#34; xml:space=&#34;preserve&#34; xtrc=&#34;codeblock:15;244:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/matrix.md&#34;&gt;&amp;gt;m.slice([0,1],[1,2,3]) // 等同于 m[[0,1],[1,2,3]] col1 col2 col3 11 21 31 12 22 32 &amp;gt;m.cells([0,1],[1,2]) [11, 22]&lt;/codeblock&gt;&lt;p class=&#34;- topic/p &#34; xtrc=&#34;p:34;254:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/matrix.md&#34;&gt;cells 与 slice 的区别在于：&lt;/p&gt;&lt;ul class=&#34;- topic/ul &#34; xtrc=&#34;ul:4;256:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/matrix.md&#34;&gt;&lt;li class=&#34;- topic/li &#34; xtrc=&#34;li:8;256:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/matrix.md&#34;&gt;&lt;p class=&#34;- topic/p &#34; xtrc=&#34;p:35;256:3&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/matrix.md&#34;&gt;cells 输入的行列坐标一一对应，因此返回的结果与输入的行/列坐标的长度相同；slice 获取的是行/列坐标的组合值，因此返回的结果是一个 “行坐标长度 × 列坐标长度” 维度的矩阵。&lt;/p&gt;&lt;/li&gt;&lt;li class=&#34;- topic/li &#34; xtrc=&#34;li:9;258:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/matrix.md&#34;&gt;&lt;p class=&#34;- topic/p &#34; xtrc=&#34;p:36;258:3&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/matrix.md&#34;&gt;cells 返回一个向量；slice 是对矩阵进行切片，返回一个矩阵（可调用 flatten 转换为向量）。&lt;/p&gt;&lt;/li&gt;&lt;/ul&gt;&lt;p class=&#34;- topic/p &#34; xtrc=&#34;p:37;260:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/matrix.md&#34;&gt;（3）获取某列/某几列的值：&lt;codeph class=&#34;+ topic/ph pr-d/codeph &#34; xtrc=&#34;codeph:25;260:15&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/matrix.md&#34;&gt;slice&lt;/codeph&gt;, &lt;codeph class=&#34;+ topic/ph pr-d/codeph &#34; xtrc=&#34;codeph:26;260:24&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/matrix.md&#34;&gt;col&lt;/codeph&gt;, &lt;codeph class=&#34;+ topic/ph pr-d/codeph &#34; xtrc=&#34;codeph:27;260:31&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/matrix.md&#34;&gt;loc&lt;/codeph&gt;&lt;/p&gt;&lt;codeblock class=&#34;+ topic/pre pr-d/codeblock &#34; xml:space=&#34;preserve&#34; xtrc=&#34;codeblock:16;262:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/matrix.md&#34;&gt;&amp;gt;m.slice(0) // 等同于 m[0] 或 m[, 0] [1,2,3,4,5,6,7,8,9,10] &amp;gt;m.slice([0,3]) // 等同于 m[[0,3]] col1 col2 1 31 2 32 3 33 4 34 5 35 6 36 7 37 8 38 9 39 10 40 &amp;gt;m.slice(0:3) // 等同于 m[0:3] 或 m[,0:3] col1 col2 col3 1 11 21 2 12 22 3 13 23 4 14 24 5 15 25 6 16 26 7 17 27 8 18 28 9 19 29 10 20 30&lt;/codeblock&gt;&lt;codeblock class=&#34;+ topic/pre pr-d/codeblock &#34; xml:space=&#34;preserve&#34; xtrc=&#34;codeblock:17;293:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/matrix.md&#34;&gt;&amp;gt;m.col(0) [1,2,3,4,5,6,7,8,9,10] &amp;gt;m.col(0:3) col1 col2 col3 1 11 21 2 12 22 3 13 23 4 14 24 5 15 25 6 16 26 7 17 27 8 18 28 9 19 29 10 20 30&lt;/codeblock&gt;&lt;codeblock class=&#34;+ topic/pre pr-d/codeblock &#34; xml:space=&#34;preserve&#34; xtrc=&#34;codeblock:18;310:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/matrix.md&#34;&gt;&amp;gt;m.loc(,[true, false, false, false, false, false, false, false, false, false]) col1 1 2 3 4 5 6 7 8 9 10 &amp;gt;m.loc(,[true, false, true, false, false, false, true, false, false, false]) col1 col2 col3 1 21 61 2 22 62 3 23 63 4 24 64 5 25 65 6 26 66 7 27 67 8 28 68 9 29 69 10 30 70&lt;/codeblock&gt;&lt;p class=&#34;- topic/p &#34; xtrc=&#34;p:38;338:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/matrix.md&#34;&gt;（4）获取某行/某几行的值：&lt;codeph class=&#34;+ topic/ph pr-d/codeph &#34; xtrc=&#34;codeph:28;338:15&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/matrix.md&#34;&gt;slice&lt;/codeph&gt;, &lt;codeph class=&#34;+ topic/ph pr-d/codeph &#34; xtrc=&#34;codeph:29;338:24&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/matrix.md&#34;&gt;row&lt;/codeph&gt;, &lt;codeph class=&#34;+ topic/ph pr-d/codeph &#34; xtrc=&#34;codeph:30;338:31&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/matrix.md&#34;&gt;loc&lt;/codeph&gt;&lt;/p&gt;&lt;codeblock class=&#34;+ topic/pre pr-d/codeblock &#34; xml:space=&#34;preserve&#34; xtrc=&#34;codeblock:19;340:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/matrix.md&#34;&gt;&amp;gt;m.slice(1,).flatten() // 等同于 m[index, ].flatten() [2,12,22,32,42,52,62,72,82,92] &amp;gt;m.slice([1,2],) col1 col2 col3 col4 col5 col6 col7 col8 col9 col10 1 11 21 31 41 51 61 71 81 91 2 12 22 32 42 52 62 72 82 92 &lt;/codeblock&gt;&lt;codeblock class=&#34;+ topic/pre pr-d/codeblock &#34; xml:space=&#34;preserve&#34; xtrc=&#34;codeblock:20;349:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/matrix.md&#34;&gt;&amp;gt;m.row(1) [2,12,22,32,42,52,62,72,82,92] &amp;gt;m.row(0:2) col1 col2 col3 col4 col5 col6 col7 col8 col9 col10 1 11 21 31 41 51 61 71 81 91 2 12 22 32 42 52 62 72 82 92&lt;/codeblock&gt;&lt;codeblock class=&#34;+ topic/pre pr-d/codeblock &#34; xml:space=&#34;preserve&#34; xtrc=&#34;codeblock:21;358:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/matrix.md&#34;&gt;&amp;gt;m.loc([true, false, false, false, false, false, false, false, false, false]) col1 col2 col3 col4 col5 col6 col7 col8 col9 col10 1 11 21 31 41 51 61 71 81 91 &amp;gt;m.loc([true, false, true, false, false, false, false, false, false, false]) col1 col2 col3 col4 col5 col6 col7 col8 col9 col10 1 11 21 31 41 51 61 71 81 91 3 13 23 33 43 53 63 73 83 93&lt;/codeblock&gt;&lt;p class=&#34;- topic/p &#34; xtrc=&#34;p:39;368:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/matrix.md&#34;&gt;（5）获取指定位置的矩阵切片：&lt;codeph class=&#34;+ topic/ph pr-d/codeph &#34; xtrc=&#34;codeph:31;368:16&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/matrix.md&#34;&gt;slice&lt;/codeph&gt;, &lt;codeph class=&#34;+ topic/ph pr-d/codeph &#34; xtrc=&#34;codeph:32;368:25&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/matrix.md&#34;&gt;loc&lt;/codeph&gt;&lt;/p&gt;&lt;codeblock class=&#34;+ topic/pre pr-d/codeblock &#34; xml:space=&#34;preserve&#34; xtrc=&#34;codeblock:22;369:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/matrix.md&#34;&gt;&amp;gt;m.slice(1:3,0:4) // s[1:3,0:4] col1 col2 col3 col4 2 12 22 32 3 13 23 33 &amp;gt;m.slice([1,4], [2]) col1 22 25 &lt;/codeblock&gt;&lt;codeblock class=&#34;+ topic/pre pr-d/codeblock &#34; xml:space=&#34;preserve&#34; xtrc=&#34;codeblock:23;382:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/matrix.md&#34;&gt;&amp;gt;m.loc([true, false, true, false, false, false, false, false, false, false],[true, true, true, false, false, false, false, false, false, false]) col1 col2 col3 1 11 21 3 13 23&lt;/codeblock&gt;&lt;/body&gt;&lt;/topic&gt;&lt;topic class=&#34;- topic/topic &#34; ditaarch:DITAArchVersion=&#34;2.0&#34; domains=&#34;a(props audience) a(props deliveryTarget) a(props otherprops) a(props platform) a(props product)&#34; id=&#34;222-根据标签访问矩阵&#34; specializations=&#34;@props/audience @props/deliveryTarget @props/otherprops @props/platform @props/product&#34; xtrc=&#34;topic:7;388:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/matrix.md&#34;&gt;&lt;title class=&#34;- topic/title &#34; xtrc=&#34;title:7;388:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/matrix.md&#34;&gt;2.2.2. 根据标签访问矩阵&lt;/title&gt;&lt;body class=&#34;- topic/body &#34; xtrc=&#34;body:7;388:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/matrix.md&#34;&gt;&lt;p class=&#34;- topic/p &#34; xtrc=&#34;p:40;390:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/matrix.md&#34;&gt;通过 &lt;codeph class=&#34;+ topic/ph pr-d/codeph &#34; xtrc=&#34;codeph:33;390:4&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/matrix.md&#34;&gt;rename!&lt;/codeph&gt; 函数为矩阵打上标签。&lt;/p&gt;&lt;codeblock class=&#34;+ topic/pre pr-d/codeblock &#34; xml:space=&#34;preserve&#34; xtrc=&#34;codeblock:24;392:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/matrix.md&#34;&gt;&amp;gt;m = 1..25$5:5; &amp;gt;rlabel = 1..5 &amp;gt;clabel = 2022.01.01 + 1..5 &amp;gt;m.rename!(rlabel, clabel) &amp;gt;m; label 2022.01.02 2022.01.03 2022.01.04 2022.01.05 2022.01.06 1 1 6 11 16 21 2 2 7 12 17 22 3 3 8 13 18 23 4 4 9 14 19 24 5 5 10 15 20 25&lt;/codeblock&gt;&lt;codeblock class=&#34;+ topic/pre pr-d/codeblock &#34; xml:space=&#34;preserve&#34; xtrc=&#34;codeblock:25;406:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/matrix.md&#34;&gt;&amp;gt;m.loc(1, 2022.01.03) 6 &amp;gt;m.loc([1,3,4], [2022.01.02, 2022.01.06]) label 2022.01.02 2022.01.06 1 1 21 3 3 23 4 4 24 // 使用数据对访问标签时，要求矩阵必须是索引矩阵或索引序列 &amp;gt;m.setIndexedMatrix!() &amp;gt;m.loc(1:3, 2022.01.01:2022.01.03) label 2022.01.02 2022.01.03 1 1 6 2 2 7 3 3 8&lt;/codeblock&gt;&lt;/body&gt;&lt;/topic&gt;&lt;/topic&gt;&lt;topic class=&#34;- topic/topic &#34; ditaarch:DITAArchVersion=&#34;2.0&#34; domains=&#34;a(props audience) a(props deliveryTarget) a(props otherprops) a(props platform) a(props product)&#34; id=&#34;23-修改矩阵&#34; specializations=&#34;@props/audience @props/deliveryTarget @props/otherprops @props/platform @props/product&#34; xtrc=&#34;topic:8;425:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/matrix.md&#34;&gt;&lt;title class=&#34;- topic/title &#34; xtrc=&#34;title:8;425:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/matrix.md&#34;&gt;2.3. 修改矩阵&lt;/title&gt;&lt;body class=&#34;- topic/body &#34; xtrc=&#34;body:8;425:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/matrix.md&#34;/&gt;&lt;topic class=&#34;- topic/topic &#34; ditaarch:DITAArchVersion=&#34;2.0&#34; domains=&#34;a(props audience) a(props deliveryTarget) a(props otherprops) a(props platform) a(props product)&#34; id=&#34;231-追加数据&#34; specializations=&#34;@props/audience @props/deliveryTarget @props/otherprops @props/platform @props/product&#34; xtrc=&#34;topic:9;427:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/matrix.md&#34;&gt;&lt;title class=&#34;- topic/title &#34; xtrc=&#34;title:9;427:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/matrix.md&#34;&gt;2.3.1. 追加数据&lt;/title&gt;&lt;body class=&#34;- topic/body &#34; xtrc=&#34;body:9;427:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/matrix.md&#34;&gt;&lt;p class=&#34;- topic/p &#34; xtrc=&#34;p:41;429:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/matrix.md&#34;&gt;通过 &lt;codeph class=&#34;+ topic/ph pr-d/codeph &#34; xtrc=&#34;codeph:34;429:4&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/matrix.md&#34;&gt;append!&lt;/codeph&gt; 函数追加向量到矩阵，该向量的长度必须是矩阵行数的倍数。&lt;/p&gt;&lt;codeblock class=&#34;+ topic/pre pr-d/codeblock &#34; xml:space=&#34;preserve&#34; xtrc=&#34;codeblock:26;431:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/matrix.md&#34;&gt;&amp;gt;m=1..6$2:3; &amp;gt;m; #0 #1 #2 -- -- -- 1 3 5 2 4 6 // 追加1列到m &amp;gt;append!(m, 7 9); #0 #1 #2 #3 -- -- -- -- 1 3 5 7 2 4 6 9 // 追加2列到m &amp;gt;append!(m, 8 6 1 2); #0 #1 #2 #3 #4 #5 -- -- -- -- -- -- 1 3 5 7 8 1 2 4 6 9 6 2 // 要追加的向量长度必须能被矩阵的行数除尽。 &amp;gt;append!(m, 3 4 5); The size of the vector to append must be divisible by the number of rows of the matrix.&lt;/codeblock&gt;&lt;/body&gt;&lt;/topic&gt;&lt;topic class=&#34;- topic/topic &#34; ditaarch:DITAArchVersion=&#34;2.0&#34; domains=&#34;a(props audience) a(props deliveryTarget) a(props otherprops) a(props platform) a(props product)&#34; id=&#34;232-修改数据&#34; specializations=&#34;@props/audience @props/deliveryTarget @props/otherprops @props/platform @props/product&#34; xtrc=&#34;topic:10;457:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/matrix.md&#34;&gt;&lt;title class=&#34;- topic/title &#34; xtrc=&#34;title:10;457:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/matrix.md&#34;&gt;2.3.2. 修改数据&lt;/title&gt;&lt;body class=&#34;- topic/body &#34; xtrc=&#34;body:10;457:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/matrix.md&#34;&gt;&lt;p class=&#34;- topic/p &#34; xtrc=&#34;p:42;459:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/matrix.md&#34;&gt;访问矩阵固定位置的元素并通过赋值修改对应元素的值。&lt;/p&gt;&lt;ul class=&#34;- topic/ul &#34; xtrc=&#34;ul:5;461:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/matrix.md&#34;&gt;&lt;li class=&#34;- topic/li &#34; xtrc=&#34;li:10;461:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/matrix.md&#34;&gt;&lt;p class=&#34;- topic/p &#34; xtrc=&#34;p:43;461:3&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/matrix.md&#34;&gt;修改列：使用 m[index] = X 修改某列；使用 m[start:end] = X 修改多列。&lt;/p&gt;&lt;/li&gt;&lt;li class=&#34;- topic/li &#34; xtrc=&#34;li:11;463:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/matrix.md&#34;&gt;&lt;p class=&#34;- topic/p &#34; xtrc=&#34;p:44;463:3&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/matrix.md&#34;&gt;修改行：使用 m[index,] = X 修改某行；使用 m[start:end,] = X 修改多行。&lt;/p&gt;&lt;/li&gt;&lt;li class=&#34;- topic/li &#34; xtrc=&#34;li:12;465:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/matrix.md&#34;&gt;&lt;p class=&#34;- topic/p &#34; xtrc=&#34;p:45;465:3&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/matrix.md&#34;&gt;修改矩阵窗口：使用 m[r1:r2, c1:c2] = X 来修改矩阵窗口。&lt;/p&gt;&lt;/li&gt;&lt;/ul&gt;&lt;p class=&#34;- topic/p &#34; xtrc=&#34;p:46;467:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/matrix.md&#34;&gt;其中，X 是一个标量或者向量。&lt;/p&gt;&lt;/body&gt;&lt;/topic&gt;&lt;/topic&gt;&lt;topic class=&#34;- topic/topic &#34; ditaarch:DITAArchVersion=&#34;2.0&#34; domains=&#34;a(props audience) a(props deliveryTarget) a(props otherprops) a(props platform) a(props product)&#34; id=&#34;24-按列对矩阵进行过滤&#34; specializations=&#34;@props/audience @props/deliveryTarget @props/otherprops @props/platform @props/product&#34; xtrc=&#34;topic:11;469:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/matrix.md&#34;&gt;&lt;title class=&#34;- topic/title &#34; xtrc=&#34;title:11;469:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/matrix.md&#34;&gt;2.4. 按列对矩阵进行过滤&lt;/title&gt;&lt;body class=&#34;- topic/body &#34; xtrc=&#34;body:11;469:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/matrix.md&#34;&gt;&lt;p class=&#34;- topic/p &#34; xtrc=&#34;p:47;471:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/matrix.md&#34;&gt;&lt;codeph class=&#34;+ topic/ph pr-d/codeph &#34; xtrc=&#34;codeph:35;471:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/matrix.md&#34;&gt;mask&lt;/codeph&gt; 函数会过滤满足条件表达式的结果，并保留不满足条件的结果，不改变矩阵的维度。at 保留满足条件的结果，其行为和 mask 相反。&lt;/p&gt;&lt;codeblock class=&#34;+ topic/pre pr-d/codeblock &#34; xml:space=&#34;preserve&#34; xtrc=&#34;codeblock:27;473:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/matrix.md&#34;&gt;&amp;gt;mask(m, m%2!=0); // 等价于 iif(m%2!=0, NULL, m) col1 col2 col3 col4 col5 col6 col7 col8 col9 col10 2 12 22 32 42 52 62 72 82 92 4 14 24 34 44 54 64 74 84 94 6 16 26 36 46 56 66 76 86 96 8 18 28 38 48 58 68 78 88 98 10 20 30 40 50 60 70 80 90 100&lt;/codeblock&gt;&lt;codeblock class=&#34;+ topic/pre pr-d/codeblock &#34; xml:space=&#34;preserve&#34; xtrc=&#34;codeblock:28;488:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/matrix.md&#34;&gt;&amp;gt;m.at(m%2!=0) // m[m%2!=0] // 等价于 iif(m%2!=0, m, NULL) col1 col2 col3 col4 col5 col6 col7 col8 col9 col10 1 11 21 31 41 51 61 71 81 91 3 13 23 33 43 53 63 73 83 93 5 15 25 35 45 55 65 75 85 95 7 17 27 37 47 57 67 77 87 97 9 19 29 39 49 59 69 79 89 99&lt;/codeblock&gt;&lt;p class=&#34;- topic/p &#34; xtrc=&#34;p:48;503:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/matrix.md&#34;&gt;使用 lambda 表达式对矩阵的每一个列进行过滤。注意，按列对矩阵进行过滤时，lambda 表达式只能接受一个参数，并且返回的结果必须是 BOOL 类型的标量。&lt;/p&gt;&lt;codeblock class=&#34;+ topic/pre pr-d/codeblock &#34; xml:space=&#34;preserve&#34; xtrc=&#34;codeblock:29;504:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/matrix.md&#34;&gt;&amp;gt;m=matrix(0 2 3 4,0 0 0 0,4 7 8 2); //返回矩阵中不全为0的列 &amp;gt;m[x-&amp;gt;!all(x==0)]; #0 #1 -- -- 0 4 2 7 3 8 4 2 //返回矩阵中均值大于4的列 &amp;gt;m=matrix(0 2 3 4,5 3 6 9,4 7 8 2); &amp;gt;m[def (x):avg(x)&amp;gt;4]; #0 #1 -- -- 5 4 3 7 6 8 9 2&lt;/codeblock&gt;&lt;p class=&#34;- topic/p &#34; xtrc=&#34;p:49;527:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/matrix.md&#34;&gt;通过 &lt;codeph class=&#34;+ topic/ph pr-d/codeph &#34; xtrc=&#34;codeph:36;527:4&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/matrix.md&#34;&gt;iif&lt;/codeph&gt; 函数修改矩阵中满足条件的元素。&lt;/p&gt;&lt;codeblock class=&#34;+ topic/pre pr-d/codeblock &#34; xml:space=&#34;preserve&#34; xtrc=&#34;codeblock:30;529:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/matrix.md&#34;&gt;&amp;gt;m1=1..6$3:2 &amp;gt;m2=6..1$3:2 &amp;gt;iif(m1&amp;gt;m2, m1, m2); col1 col2 6 4 5 5 4 6 &amp;gt;m=matrix(NULL 2 3 4,NULL NULL 3 NULL,4 7 8 2); &amp;gt;iif(isNull(m), 0, m) col1 col2 col3 0 0 4 2 0 7 3 3 8 4 0 2&lt;/codeblock&gt;&lt;/body&gt;&lt;/topic&gt;&lt;topic class=&#34;- topic/topic &#34; ditaarch:DITAArchVersion=&#34;2.0&#34; domains=&#34;a(props audience) a(props deliveryTarget) a(props otherprops) a(props platform) a(props product)&#34; id=&#34;25-矩阵的拼接&#34; specializations=&#34;@props/audience @props/deliveryTarget @props/otherprops @props/platform @props/product&#34; xtrc=&#34;topic:12;547:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/matrix.md&#34;&gt;&lt;title class=&#34;- topic/title &#34; xtrc=&#34;title:12;547:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/matrix.md&#34;&gt;2.5. 矩阵的拼接&lt;/title&gt;&lt;body class=&#34;- topic/body &#34; xtrc=&#34;body:12;547:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/matrix.md&#34;&gt;&lt;p class=&#34;- topic/p &#34; xtrc=&#34;p:50;549:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/matrix.md&#34;&gt;通过函数 &lt;codeph class=&#34;+ topic/ph pr-d/codeph &#34; xtrc=&#34;codeph:37;549:6&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/matrix.md&#34;&gt;concatMatrix&lt;/codeph&gt; 将多个矩阵进行水平/垂直的拼接：&lt;/p&gt;&lt;codeblock class=&#34;+ topic/pre pr-d/codeblock &#34; xml:space=&#34;preserve&#34; xtrc=&#34;codeblock:31;551:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/matrix.md&#34;&gt;&amp;gt;m1 = matrix(4 0 5, 2 1 8); &amp;gt;m2 = matrix(2 9 8, 3 7 -3, 6 4 2, 0 5 8); &amp;gt;m3 = matrix(1 -1 6 2, 1 -3 1 9, 5 3 0 -4, 1 NULL 3 4); &amp;gt;concatMatrix([m1, m2]); col1 col2 col3 col4 col5 col6 4 2 2 3 6 0 0 1 9 7 4 5 5 8 8 (3) 2 8 &amp;gt;concatMatrix([m2, m3], false); col1 col2 col3 col4 2 3 6 0 9 7 4 5 8 (3) 2 8 1 1 5 1 (1) (3) 3 6 1 0 3 2 9 (4) 4&lt;/codeblock&gt;&lt;/body&gt;&lt;/topic&gt;&lt;topic class=&#34;- topic/topic &#34; ditaarch:DITAArchVersion=&#34;2.0&#34; domains=&#34;a(props audience) a(props deliveryTarget) a(props otherprops) a(props platform) a(props product)&#34; id=&#34;26-矩阵的连接和对齐&#34; specializations=&#34;@props/audience @props/deliveryTarget @props/otherprops @props/platform @props/product&#34; xtrc=&#34;topic:13;572:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/matrix.md&#34;&gt;&lt;title class=&#34;- topic/title &#34; xtrc=&#34;title:13;572:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/matrix.md&#34;&gt;2.6. 矩阵的连接和对齐&lt;/title&gt;&lt;body class=&#34;- topic/body &#34; xtrc=&#34;body:13;572:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/matrix.md&#34;&gt;&lt;p class=&#34;- topic/p &#34; xtrc=&#34;p:51;574:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/matrix.md&#34;&gt;矩阵的连接和表类似，可以根据行标签进行 'inner join', 'outer join', 'left join', 'right join', 与'asof join' 等连接操作，合并两个矩阵。通过函数 &lt;codeph class=&#34;+ topic/ph pr-d/codeph &#34; xtrc=&#34;codeph:38;574:107&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/matrix.md&#34;&gt;merge&lt;/codeph&gt; 实现。&lt;/p&gt;&lt;codeblock class=&#34;+ topic/pre pr-d/codeblock &#34; xml:space=&#34;preserve&#34; xtrc=&#34;codeblock:32;576:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/matrix.md&#34;&gt;&amp;gt;m1 = matrix([1.2, 7.8, 4.6, 5.1, 9.5], [0.15, 1.26, 0.45, 1.02, 0.33]).rename!([2012.01.01, 2015.02.01, 2015.03.01, 2015.04.01, 2015.05.01], `x1`x2).setIndexedMatrix!() &amp;gt;m2 = matrix([1.0, 2.0, 3.0, 4.0], [0.14, 0.26, 0.35, 0.48]).rename!([2015.02.01, 2015.02.16, 2015.05.01, 2015.05.02], `y1`y2).setIndexedMatrix!() &amp;gt;m1; label x1 x2 y1 y2 2012.01.01 1.2 0.15 2015.02.01 7.8 1.26 1 0.14 2015.03.01 4.6 0.45 2 0.26 2015.04.01 5.1 1.02 2 0.26 2015.05.01 9.5 0.33 3 0.35 &amp;gt;m2; label y1 y2 2015.02.01 1 0.14 2015.02.16 2 0.26 2015.05.01 3 0.35 2015.05.02 4 0.48&lt;/codeblock&gt;&lt;codeblock class=&#34;+ topic/pre pr-d/codeblock &#34; xml:space=&#34;preserve&#34; xtrc=&#34;codeblock:33;596:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/matrix.md&#34;&gt;&amp;gt;merge(m1, m2, 'asof'); label x1 x2 y1 y2 2012.01.01 1.2 0.15 2015.02.01 7.8 1.26 1 0.14 2015.03.01 4.6 0.45 2 0.26 2015.04.01 5.1 1.02 2 0.26 2015.05.01 9.5 0.33 3 0.35 &amp;gt;merge(m1, m2, 'outer'); label x1 x2 y1 y2 2012.01.01 1.2 0.15 2015.02.01 7.8 1.26 1 0.14 2015.02.16 2 0.26 2015.03.01 4.6 0.45 2015.04.01 5.1 1.02 2015.05.01 9.5 0.33 3 0.35 2015.05.02 4 0.48&lt;/codeblock&gt;&lt;p class=&#34;- topic/p &#34; xtrc=&#34;p:52;615:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/matrix.md&#34;&gt;连接操作除了用于合并矩阵外，还可用于矩阵标签和数据的对齐。通过函数 &lt;codeph class=&#34;+ topic/ph pr-d/codeph &#34; xtrc=&#34;codeph:39;615:35&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/matrix.md&#34;&gt;align&lt;/codeph&gt; 实现。&lt;/p&gt;&lt;p class=&#34;- topic/p &#34; xtrc=&#34;p:53;617:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/matrix.md&#34;&gt;align 支持按行对齐，按列对齐或者同时按行列进行矩阵对齐，详情请参考用户手册的说明。&lt;/p&gt;&lt;codeblock class=&#34;+ topic/pre pr-d/codeblock &#34; xml:space=&#34;preserve&#34; xtrc=&#34;codeblock:34;619:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/matrix.md&#34;&gt;&amp;gt;x1 = [09:00:00, 09:00:01, 09:00:03] &amp;gt;x2 = [09:00:00, 09:00:02, 09:00:03, 09:00:04] &amp;gt;m1 = matrix(1 2 3, 2 3 4, 3 4 5).rename!(x1) &amp;gt;m2 = matrix(1 2 3, 2 3 4, 3 4 5, 4 5 6).rename!(x2) &amp;gt;m = align(m1, m3, 'fj', false); &amp;gt;m[0]; 09:00:00 09:00:01 09:00:03 09:00:04 1 2 3 2 3 4 3 4 5 &amp;gt;m[1]; 09:00:00 09:00:01 09:00:03 09:00:04 1 2 3 2 3 4 3 4 5 4 5 6&lt;/codeblock&gt;&lt;/body&gt;&lt;/topic&gt;&lt;topic class=&#34;- topic/topic &#34; ditaarch:DITAArchVersion=&#34;2.0&#34; domains=&#34;a(props audience) a(props deliveryTarget) a(props otherprops) a(props platform) a(props product)&#34; id=&#34;27-矩阵空值处理&#34; specializations=&#34;@props/audience @props/deliveryTarget @props/otherprops @props/platform @props/product&#34; xtrc=&#34;topic:14;638:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/matrix.md&#34;&gt;&lt;title class=&#34;- topic/title &#34; xtrc=&#34;title:14;638:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/matrix.md&#34;&gt;2.7. 矩阵空值处理&lt;/title&gt;&lt;body class=&#34;- topic/body &#34; xtrc=&#34;body:14;638:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/matrix.md&#34;/&gt;&lt;topic class=&#34;- topic/topic &#34; ditaarch:DITAArchVersion=&#34;2.0&#34; domains=&#34;a(props audience) a(props deliveryTarget) a(props otherprops) a(props platform) a(props product)&#34; id=&#34;271-填充空值&#34; specializations=&#34;@props/audience @props/deliveryTarget @props/otherprops @props/platform @props/product&#34; xtrc=&#34;topic:15;640:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/matrix.md&#34;&gt;&lt;title class=&#34;- topic/title &#34; xtrc=&#34;title:15;640:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/matrix.md&#34;&gt;2.7.1. 填充空值&lt;/title&gt;&lt;body class=&#34;- topic/body &#34; xtrc=&#34;body:15;640:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/matrix.md&#34;&gt;&lt;p class=&#34;- topic/p &#34; xtrc=&#34;p:54;642:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/matrix.md&#34;&gt;矩阵的二元计算（非聚合运算）中，若包含空值，返回的结果也为 NULL。参考手册第 6 章：NULL 值的操作。&lt;/p&gt;&lt;codeblock class=&#34;+ topic/pre pr-d/codeblock &#34; xml:space=&#34;preserve&#34; xtrc=&#34;codeblock:35;644:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/matrix.md&#34;&gt;&amp;gt;m1 = 3 -2 1 NULL -5 6$2:3 col1 col2 col3 3 1 (5) (2) 6 &amp;gt;m2 = 5 NULL 2 4 -5 9$2:3 col1 col2 col3 5 2 (5) 4 9 &amp;gt;m1 + m2 col1 col2 col3 8 3 (10) 15&lt;/codeblock&gt;&lt;p class=&#34;- topic/p &#34; xtrc=&#34;p:55;660:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/matrix.md&#34;&gt;可以看到，包含空值的单元格计算结果也为空，这可能与预期的结果不符。某些场景下，用户希望空值不影响计算结果，或者以某个特定的值去填充空值。&lt;/p&gt;&lt;p class=&#34;- topic/p &#34; xtrc=&#34;p:56;662:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/matrix.md&#34;&gt;常规的空值填充方法有：&lt;/p&gt;&lt;ul class=&#34;- topic/ul &#34; xtrc=&#34;ul:6;664:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/matrix.md&#34;&gt;&lt;li class=&#34;- topic/li &#34; xtrc=&#34;li:13;664:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/matrix.md&#34;&gt;&lt;p class=&#34;- topic/p &#34; xtrc=&#34;p:57;664:3&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/matrix.md&#34;&gt;&lt;codeph class=&#34;+ topic/ph pr-d/codeph &#34; xtrc=&#34;codeph:40;664:3&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/matrix.md&#34;&gt;bfill&lt;/codeph&gt; 和 &lt;codeph class=&#34;+ topic/ph pr-d/codeph &#34; xtrc=&#34;codeph:41;664:13&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/matrix.md&#34;&gt;bfill!&lt;/codeph&gt;：使用 NULL 后的非NULL元素填充 NULL 值。&lt;/p&gt;&lt;/li&gt;&lt;li class=&#34;- topic/li &#34; xtrc=&#34;li:14;666:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/matrix.md&#34;&gt;&lt;p class=&#34;- topic/p &#34; xtrc=&#34;p:58;666:3&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/matrix.md&#34;&gt;&lt;codeph class=&#34;+ topic/ph pr-d/codeph &#34; xtrc=&#34;codeph:42;666:3&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/matrix.md&#34;&gt;ffill&lt;/codeph&gt; 和 &lt;codeph class=&#34;+ topic/ph pr-d/codeph &#34; xtrc=&#34;codeph:43;666:13&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/matrix.md&#34;&gt;ffill!&lt;/codeph&gt;：使用 NULL 前的非NULL元素填充 NULL 值。&lt;/p&gt;&lt;/li&gt;&lt;li class=&#34;- topic/li &#34; xtrc=&#34;li:15;668:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/matrix.md&#34;&gt;&lt;p class=&#34;- topic/p &#34; xtrc=&#34;p:59;668:3&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/matrix.md&#34;&gt;&lt;codeph class=&#34;+ topic/ph pr-d/codeph &#34; xtrc=&#34;codeph:44;668:3&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/matrix.md&#34;&gt;lfill&lt;/codeph&gt; 和 &lt;codeph class=&#34;+ topic/ph pr-d/codeph &#34; xtrc=&#34;codeph:45;668:13&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/matrix.md&#34;&gt;lfill!&lt;/codeph&gt;：线性填充非 NULL 元素之间的 NULL 值。&lt;/p&gt;&lt;/li&gt;&lt;li class=&#34;- topic/li &#34; xtrc=&#34;li:16;670:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/matrix.md&#34;&gt;&lt;p class=&#34;- topic/p &#34; xtrc=&#34;p:60;670:3&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/matrix.md&#34;&gt;&lt;codeph class=&#34;+ topic/ph pr-d/codeph &#34; xtrc=&#34;codeph:46;670:3&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/matrix.md&#34;&gt;fill!&lt;/codeph&gt;，&lt;codeph class=&#34;+ topic/ph pr-d/codeph &#34; xtrc=&#34;codeph:47;670:11&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/matrix.md&#34;&gt;nullFill&lt;/codeph&gt; 和 &lt;codeph class=&#34;+ topic/ph pr-d/codeph &#34; xtrc=&#34;codeph:48;670:24&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/matrix.md&#34;&gt;nullFill!&lt;/codeph&gt;：用指定值填充 NULL 值。&lt;/p&gt;&lt;/li&gt;&lt;/ul&gt;&lt;p class=&#34;- topic/p &#34; xtrc=&#34;p:61;672:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/matrix.md&#34;&gt;上述方法都需要对参与计算的矩阵单独填充。对于矩阵间的二元计算，可以通过 &lt;codeph class=&#34;+ topic/ph pr-d/codeph &#34; xtrc=&#34;codeph:49;672:37&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/matrix.md&#34;&gt;withNullFill&lt;/codeph&gt; 函数同时实现填充和计算。&lt;/p&gt;&lt;/body&gt;&lt;/topic&gt;&lt;topic class=&#34;- topic/topic &#34; ditaarch:DITAArchVersion=&#34;2.0&#34; domains=&#34;a(props audience) a(props deliveryTarget) a(props otherprops) a(props platform) a(props product)&#34; id=&#34;272-去除空行列&#34; specializations=&#34;@props/audience @props/deliveryTarget @props/otherprops @props/platform @props/product&#34; xtrc=&#34;topic:16;674:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/matrix.md&#34;&gt;&lt;title class=&#34;- topic/title &#34; xtrc=&#34;title:16;674:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/matrix.md&#34;&gt;2.7.2. 去除空行/列&lt;/title&gt;&lt;body class=&#34;- topic/body &#34; xtrc=&#34;body:16;674:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/matrix.md&#34;&gt;&lt;p class=&#34;- topic/p &#34; xtrc=&#34;p:62;676:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/matrix.md&#34;&gt;若想删除矩阵中全为空值或空值较多的行/列，可以通过 &lt;codeph class=&#34;+ topic/ph pr-d/codeph &#34; xtrc=&#34;codeph:50;676:27&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/matrix.md&#34;&gt;dropna&lt;/codeph&gt; 实现。&lt;/p&gt;&lt;p class=&#34;- topic/p &#34; xtrc=&#34;p:63;678:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/matrix.md&#34;&gt;下例使用 dropna 删除 mask 过滤后全为空的行。&lt;/p&gt;&lt;codeblock class=&#34;+ topic/pre pr-d/codeblock &#34; xml:space=&#34;preserve&#34; xtrc=&#34;codeblock:36;680:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/matrix.md&#34;&gt;&amp;gt;m=1..100$10:10 &amp;gt;dropna(m.at(m%2!=0)) col1 col2 col3 col4 col5 col6 col7 col8 col9 col10 1 11 21 31 41 51 61 71 81 91 3 13 23 33 43 53 63 73 83 93 5 15 25 35 45 55 65 75 85 95 7 17 27 37 47 57 67 77 87 97 9 19 29 39 49 59 69 79 89 99&lt;/codeblock&gt;&lt;/body&gt;&lt;/topic&gt;&lt;/topic&gt;&lt;/topic&gt;&lt;topic class=&#34;- topic/topic &#34; ditaarch:DITAArchVersion=&#34;2.0&#34; domains=&#34;a(props audience) a(props deliveryTarget) a(props otherprops) a(props platform) a(props product)&#34; id=&#34;3-矩阵的运算&#34; specializations=&#34;@props/audience @props/deliveryTarget @props/otherprops @props/platform @props/product&#34; xtrc=&#34;topic:17;691:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/matrix.md&#34;&gt;&lt;title class=&#34;- topic/title &#34; xtrc=&#34;title:17;691:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/matrix.md&#34;&gt;3. 矩阵的运算&lt;/title&gt;&lt;body class=&#34;- topic/body &#34; xtrc=&#34;body:17;691:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/matrix.md&#34;/&gt;&lt;topic class=&#34;- topic/topic &#34; ditaarch:DITAArchVersion=&#34;2.0&#34; domains=&#34;a(props audience) a(props deliveryTarget) a(props otherprops) a(props platform) a(props product)&#34; id=&#34;31-矩阵基本运算&#34; specializations=&#34;@props/audience @props/deliveryTarget @props/otherprops @props/platform @props/product&#34; xtrc=&#34;topic:18;693:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/matrix.md&#34;&gt;&lt;title class=&#34;- topic/title &#34; xtrc=&#34;title:18;693:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/matrix.md&#34;&gt;3.1. 矩阵基本运算&lt;/title&gt;&lt;body class=&#34;- topic/body &#34; xtrc=&#34;body:18;693:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/matrix.md&#34;&gt;&lt;p class=&#34;- topic/p &#34; xtrc=&#34;p:64;695:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/matrix.md&#34;&gt;DolphinDB 中矩阵的每一列都可以视为一个向量，所以大部分向量函数和聚合函数都适用于矩阵，计算结果等价于对矩阵每列进行计算后结果的拼接。例如：&lt;/p&gt;&lt;codeblock class=&#34;+ topic/pre pr-d/codeblock &#34; xml:space=&#34;preserve&#34; xtrc=&#34;codeblock:37;696:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/matrix.md&#34;&gt;&amp;gt;m=1..6$2:3; &amp;gt;m; #0 #1 #2 -- -- -- 1 3 5 2 4 6 // 每个元素的余弦值 &amp;gt;cos(m); #0 #1 #2 --------- --------- -------- 0.540302 -0.989992 0.283662 -0.416147 -0.653644 0.96017 &lt;/codeblock&gt;&lt;p class=&#34;- topic/p &#34; xtrc=&#34;p:65;712:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/matrix.md&#34;&gt;DolphinDB 中矩阵可以直接与其它矩阵或标量进行四则运算。&lt;/p&gt;&lt;p class=&#34;- topic/p &#34; xtrc=&#34;p:66;714:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/matrix.md&#34;&gt;矩阵和标量进行运算，等价于矩阵每个元素和标量进行运算。注意若标量为 NULL，计算结果也为 NULL：&lt;/p&gt;&lt;codeblock class=&#34;+ topic/pre pr-d/codeblock &#34; xml:space=&#34;preserve&#34; xtrc=&#34;codeblock:38;715:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/matrix.md&#34;&gt;&amp;gt;m=1..10$5:2; &amp;gt;m; #0 #1 -- -- 1 6 2 7 3 8 4 9 5 10 &amp;gt;2.1*m; #0 #1 ---- ---- 2.1 12.6 4.2 14.7 6.3 16.8 8.4 18.9 10.5 21 &amp;gt;m\2; #0 #1 --- --- 0.5 3 1 3.5 1.5 4 2 4.5 2.5 5 &amp;gt;m+1.1; #0 #1 --- ---- 2.1 7.1 3.1 8.1 4.1 9.1 5.1 10.1 6.1 11.1 &amp;gt;m*NULL; #0 #1 -- --&lt;/codeblock&gt;&lt;p class=&#34;- topic/p &#34; xtrc=&#34;p:67;758:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/matrix.md&#34;&gt;矩阵和矩阵进行运算时，参与计算的两个矩阵的维度必须一致：&lt;/p&gt;&lt;codeblock class=&#34;+ topic/pre pr-d/codeblock &#34; xml:space=&#34;preserve&#34; xtrc=&#34;codeblock:39;759:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/matrix.md&#34;&gt;&amp;gt;m=1..10$5:2; &amp;gt;n=3..12$5:2; &amp;gt;m; #0 #1 -- -- 1 6 2 7 3 8 4 9 5 10 &amp;gt;n; #0 #1 -- -- 3 8 4 9 5 10 6 11 7 12 &amp;gt;m*n; #0 #1 -- --- 3 48 8 63 15 80 24 99 35 120 &amp;gt;m\n; #0 #1 -------- -------- 0.333333 0.75 0.5 0.777778 0.6 0.8 0.666667 0.818182 0.714286 0.833333 &amp;gt;m+n; #0 #1 -- -- 4 14 6 16 8 18 10 20 12 22 &amp;gt;n=3..10$4:2 &amp;gt;m+n; Incompatible vector size&lt;/codeblock&gt;&lt;p class=&#34;- topic/p &#34; xtrc=&#34;p:68;810:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/matrix.md&#34;&gt;DolphinDB 中部分矩阵运算，如相乘、求逆、求行列式、矩阵分解等采用了 OpenBlas 和 Lapack 进行优化，与 Matlab 的性能在一个数量级。&lt;/p&gt;&lt;/body&gt;&lt;/topic&gt;&lt;topic class=&#34;- topic/topic &#34; ditaarch:DITAArchVersion=&#34;2.0&#34; domains=&#34;a(props audience) a(props deliveryTarget) a(props otherprops) a(props platform) a(props product)&#34; id=&#34;32-矩阵相乘求逆转置求矩阵行列式&#34; specializations=&#34;@props/audience @props/deliveryTarget @props/otherprops @props/platform @props/product&#34; xtrc=&#34;topic:19;812:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/matrix.md&#34;&gt;&lt;title class=&#34;- topic/title &#34; xtrc=&#34;title:19;812:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/matrix.md&#34;&gt;3.2. 矩阵相乘，求逆，转置，求矩阵行列式&lt;/title&gt;&lt;body class=&#34;- topic/body &#34; xtrc=&#34;body:19;812:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/matrix.md&#34;&gt;&lt;p class=&#34;- topic/p &#34; xtrc=&#34;p:69;814:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/matrix.md&#34;&gt;矩阵相乘：&lt;/p&gt;&lt;p class=&#34;- topic/p &#34; xtrc=&#34;p:70;816:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/matrix.md&#34;&gt;dot(X,Y) 或 X**Y：返回 X 和 Y 的矩阵乘法的结果。&lt;/p&gt;&lt;codeblock class=&#34;+ topic/pre pr-d/codeblock &#34; xml:space=&#34;preserve&#34; xtrc=&#34;codeblock:40;818:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/matrix.md&#34;&gt;&amp;gt;x=1..6$2:3; &amp;gt;y=1 2 3; &amp;gt;x; #0 #1 #2 -- -- -- 1 3 5 2 4 6 &amp;gt;y; [1,2,3] &amp;gt;x dot y; #0 -- 22 28 &amp;gt;y=6..1$3:2; &amp;gt;y; #0 #1 -- -- 6 3 5 2 4 1 &amp;gt;x**y; #0 #1 -- -- 41 14 56 20 &amp;gt;y**x; #0 #1 #2 -- -- -- 12 30 48 9 23 37 6 16 26&lt;/codeblock&gt;&lt;p class=&#34;- topic/p &#34; xtrc=&#34;p:71;855:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/matrix.md&#34;&gt;矩阵求逆：&lt;/p&gt;&lt;p class=&#34;- topic/p &#34; xtrc=&#34;p:72;857:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/matrix.md&#34;&gt;inverse(X)：如果 X 可逆，返回矩阵 X 的逆矩阵。&lt;/p&gt;&lt;codeblock class=&#34;+ topic/pre pr-d/codeblock &#34; xml:space=&#34;preserve&#34; xtrc=&#34;codeblock:41;858:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/matrix.md&#34;&gt;&amp;gt;x=1..4$2:2; &amp;gt;x; #0 #1 -- -- 1 3 2 4 &amp;gt;x.inverse(); #0 #1 -- -- -2 1.5 1 -0.5&lt;/codeblock&gt;&lt;p class=&#34;- topic/p &#34; xtrc=&#34;p:73;872:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/matrix.md&#34;&gt;矩阵转置：&lt;/p&gt;&lt;p class=&#34;- topic/p &#34; xtrc=&#34;p:74;874:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/matrix.md&#34;&gt;transpose(X)：如果 X 为矩阵，返回 X 的转置矩阵。&lt;/p&gt;&lt;codeblock class=&#34;+ topic/pre pr-d/codeblock &#34; xml:space=&#34;preserve&#34; xtrc=&#34;codeblock:42;875:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/matrix.md&#34;&gt;&amp;gt;x=1..6 $ 3:2; &amp;gt;x; #0 #1 -- -- 1 4 2 5 3 6 &amp;gt;transpose x; #0 #1 #2 -- -- -- 1 2 3 4 5 6&lt;/codeblock&gt;&lt;p class=&#34;- topic/p &#34; xtrc=&#34;p:75;890:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/matrix.md&#34;&gt;求行列式：&lt;/p&gt;&lt;p class=&#34;- topic/p &#34; xtrc=&#34;p:76;892:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/matrix.md&#34;&gt;det(X):计算矩阵的行列式，在计算中，NULL 值用 0 代替。&lt;/p&gt;&lt;codeblock class=&#34;+ topic/pre pr-d/codeblock &#34; xml:space=&#34;preserve&#34; xtrc=&#34;codeblock:43;893:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/matrix.md&#34;&gt;&amp;gt;x=1..4$2:2; &amp;gt;x; #0 #1 -- -- 1 3 2 4 &amp;gt;X.det(); -2 &amp;gt;x=1 2 3 6 5 4 8 7 NULL $3:3; &amp;gt;x; #0 #1 #2 -- -- -- 1 6 8 2 5 7 3 4 &amp;gt;det x; 42 &amp;gt;x=1 2 3 6 5 4 3 6 9$3:3; &amp;gt;x; #0 #1 #2 -- -- -- 1 6 3 2 5 6 3 4 9 &amp;gt;det x; 0&lt;/codeblock&gt;&lt;/body&gt;&lt;/topic&gt;&lt;topic class=&#34;- topic/topic &#34; ditaarch:DITAArchVersion=&#34;2.0&#34; domains=&#34;a(props audience) a(props deliveryTarget) a(props otherprops) a(props platform) a(props product)&#34; id=&#34;33-按行计算和按列计算&#34; specializations=&#34;@props/audience @props/deliveryTarget @props/otherprops @props/platform @props/product&#34; xtrc=&#34;topic:20;923:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/matrix.md&#34;&gt;&lt;title class=&#34;- topic/title &#34; xtrc=&#34;title:20;923:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/matrix.md&#34;&gt;3.3. 按行计算和按列计算&lt;/title&gt;&lt;body class=&#34;- topic/body &#34; xtrc=&#34;body:20;923:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/matrix.md&#34;&gt;&lt;p class=&#34;- topic/p &#34; xtrc=&#34;p:77;925:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/matrix.md&#34;&gt;“矩阵基本运算”一节简单介绍了函数在矩阵上应用时的计算规则，可以看出对矩阵直接应用向量函数和聚合函数，都是按列进行计算的。此外，DolphinDB 手册提供了部分按行计算的函数和对应的高阶函数&lt;codeph class=&#34;+ topic/ph pr-d/codeph &#34; xtrc=&#34;codeph:51;925:97&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/matrix.md&#34;&gt;byRow&lt;/codeph&gt;。&lt;/p&gt;&lt;p class=&#34;- topic/p &#34; xtrc=&#34;p:78;927:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/matrix.md&#34;&gt;部分函数不支持矩阵的列计算，此时可以采用高阶函数 &lt;codeph class=&#34;+ topic/ph pr-d/codeph &#34; xtrc=&#34;codeph:52;927:26&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/matrix.md&#34;&gt;each&lt;/codeph&gt; 实现：&lt;/p&gt;&lt;codeblock class=&#34;+ topic/pre pr-d/codeblock &#34; xml:space=&#34;preserve&#34; xtrc=&#34;codeblock:44;929:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/matrix.md&#34;&gt;//两个矩阵按列进行矩阵相乘运算 &amp;gt;x=1..6$2:3; &amp;gt;y=6..1$2:3; &amp;gt;x; #0 #1 #2 -- -- -- 1 3 5 2 4 6 &amp;gt;y; #0 #1 #2 -- -- -- 6 4 2 5 3 1 &amp;gt;each(**, x, y); [16,24,16] //比如，24=3*4+4*3&lt;/codeblock&gt;&lt;/body&gt;&lt;/topic&gt;&lt;/topic&gt;&lt;topic class=&#34;- topic/topic &#34; ditaarch:DITAArchVersion=&#34;2.0&#34; domains=&#34;a(props audience) a(props deliveryTarget) a(props otherprops) a(props platform) a(props product)&#34; id=&#34;4-矩阵分解与求解线性方程&#34; specializations=&#34;@props/audience @props/deliveryTarget @props/otherprops @props/platform @props/product&#34; xtrc=&#34;topic:21;949:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/matrix.md&#34;&gt;&lt;title class=&#34;- topic/title &#34; xtrc=&#34;title:21;949:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/matrix.md&#34;&gt;4. 矩阵分解与求解线性方程&lt;/title&gt;&lt;body class=&#34;- topic/body &#34; xtrc=&#34;body:21;949:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/matrix.md&#34;&gt;&lt;p class=&#34;- topic/p &#34; xtrc=&#34;p:79;951:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/matrix.md&#34;&gt;DolphinDB 实现了以下矩阵分解函数：&lt;/p&gt;&lt;/body&gt;&lt;topic class=&#34;- topic/topic &#34; ditaarch:DITAArchVersion=&#34;2.0&#34; domains=&#34;a(props audience) a(props deliveryTarget) a(props otherprops) a(props platform) a(props product)&#34; id=&#34;41-lu-分解&#34; specializations=&#34;@props/audience @props/deliveryTarget @props/otherprops @props/platform @props/product&#34; xtrc=&#34;topic:22;953:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/matrix.md&#34;&gt;&lt;title class=&#34;- topic/title &#34; xtrc=&#34;title:22;953:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/matrix.md&#34;&gt;4.1. lu 分解&lt;/title&gt;&lt;body class=&#34;- topic/body &#34; xtrc=&#34;body:22;953:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/matrix.md&#34;&gt;&lt;p class=&#34;- topic/p &#34; xtrc=&#34;p:80;955:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/matrix.md&#34;&gt;&lt;codeph class=&#34;+ topic/ph pr-d/codeph &#34; xtrc=&#34;codeph:53;955:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/matrix.md&#34;&gt;lu&lt;/codeph&gt;：对矩阵进行 lu分 解，X = P**L**U，其中P为置换矩阵，L 为下三角矩阵，U 为上三角矩阵。如果 permute=true，返回 PL=P**L 和 U。&lt;/p&gt;&lt;codeblock class=&#34;+ topic/pre pr-d/codeblock &#34; xml:space=&#34;preserve&#34; xtrc=&#34;codeblock:45;956:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/matrix.md&#34;&gt;&amp;gt;m=matrix([2 5 7 5, 5 2 5 4, 8 2 6 4, 7 8 6 8]); &amp;gt;m; #0 #1 #2 #3 -- -- -- -- 2 5 8 7 5 2 2 8 7 5 6 6 5 4 4 8 &amp;gt;p,l,u=lu(m); &amp;gt;p; #0 #1 #2 #3 -- -- -- -- 0 1 0 0 0 0 0 1 1 0 0 0 0 0 1 0 &amp;gt;l; #0 #1 #2 #3 -------- ----- --------- -- 1 0 0 0 0.285714 1 0 0 0.714286 0.12 1 0 0.714286 -0.44 -0.461538 1 &amp;gt;u; #0 #1 #2 #3 -- -------- -------- -------- 7 5 6 6 0 3.571429 6.285714 5.285714 0 0 -1.04 3.08 0 0 0 7.461538 &amp;gt;pl,u=lu(m,true); &amp;gt;pl; #0 #1 #2 #3 -------- ----- --------- -- 0.285714 1 0 0 0.714286 -0.44 -0.461538 1 1 0 0 0 0.714286 0.12 1 0 &amp;gt;u; #0 #1 #2 #3 -- -------- -------- -------- 7 5 6 6 0 3.571429 6.285714 5.285714 0 0 -1.04 3.08 0 0 0 7.461538&lt;/codeblock&gt;&lt;p class=&#34;- topic/p &#34; xtrc=&#34;p:81;1006:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/matrix.md&#34;&gt;可以对非方阵的矩阵进行 lu 分解。&lt;/p&gt;&lt;codeblock class=&#34;+ topic/pre pr-d/codeblock &#34; xml:space=&#34;preserve&#34; xtrc=&#34;codeblock:46;1007:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/matrix.md&#34;&gt;&amp;gt;m=matrix([2 5 5, 5 5 4, 8 6 4, 7 6 8]); &amp;gt;m; #0 #1 #2 #3 -- -- -- -- 2 5 8 7 5 5 6 6 5 4 4 8 &amp;gt;p,l,u=lu(m); &amp;gt;p; #0 #1 #2 -- -- -- 0 1 0 1 0 0 0 0 1 &amp;gt;l; #0 #1 #2 --- --------- -- 1 0 0 0.4 1 0 1 -0.333333 1 &amp;gt;u; #0 #1 #2 #3 -- -- --------- -------- 5 5 6 6 0 3 5.6 4.6 0 0 -0.133333 3.533333 &amp;gt;pl,u=lu(m,true); &amp;gt;pl; #0 #1 #2 --- --------- -- 0.4 1 0 1 0 0 1 -0.333333 1 &amp;gt;u; #0 #1 #2 #3 -- -- --------- -------- 5 5 6 6 0 3 5.6 4.6 0 0 -0.133333 3.533333&lt;/codeblock&gt;&lt;/body&gt;&lt;/topic&gt;&lt;topic class=&#34;- topic/topic &#34; ditaarch:DITAArchVersion=&#34;2.0&#34; domains=&#34;a(props audience) a(props deliveryTarget) a(props otherprops) a(props platform) a(props product)&#34; id=&#34;42-qr-分解&#34; specializations=&#34;@props/audience @props/deliveryTarget @props/otherprops @props/platform @props/product&#34; xtrc=&#34;topic:23;1050:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/matrix.md&#34;&gt;&lt;title class=&#34;- topic/title &#34; xtrc=&#34;title:23;1050:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/matrix.md&#34;&gt;4.2. qr 分解&lt;/title&gt;&lt;body class=&#34;- topic/body &#34; xtrc=&#34;body:23;1050:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/matrix.md&#34;&gt;&lt;p class=&#34;- topic/p &#34; xtrc=&#34;p:82;1052:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/matrix.md&#34;&gt;&lt;codeph class=&#34;+ topic/ph pr-d/codeph &#34; xtrc=&#34;codeph:54;1052:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/matrix.md&#34;&gt;qr&lt;/codeph&gt;：X 为一个 m*n 的矩阵，对 X 进行 qr 分解，X=Q**R，Q 为正交矩阵，R 为上三角矩阵。mode 的选项有：'full', 'r', 'economic', 'raw'。&lt;/p&gt;&lt;p class=&#34;- topic/p &#34; xtrc=&#34;p:83;1054:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/matrix.md&#34;&gt;mode 为'full'：返回完整的 qr 分解结果，即 Q 为 m*m 的矩阵，R 为 m*n 的矩阵。&lt;/p&gt;&lt;codeblock class=&#34;+ topic/pre pr-d/codeblock &#34; xml:space=&#34;preserve&#34; xtrc=&#34;codeblock:47;1056:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/matrix.md&#34;&gt;&amp;gt;m=matrix([2 5 5, 5 5 4, 8 6 4, 7 6 8]); &amp;gt;m; #0 #1 #2 #3 -- -- -- -- 2 5 8 7 5 5 6 6 5 4 4 8 &amp;gt;q,r=qr(m,mode='full',pivoting=false); &amp;gt;q; #0 #1 #2 --------- --------- --------- -0.272166 0.93784 0.215365 -0.680414 -0.029307 -0.732242 -0.680414 -0.345828 0.646096 &amp;gt;r; #0 #1 #2 #3 --------- --------- --------- ---------- -7.348469 -7.484552 -8.981462 -11.430952 0 3.159348 5.943561 3.622407 0 0 -0.086146 2.282872 &amp;gt;m=matrix([2 5 7 5, 5 2 5 4, 8 2 6 4]); &amp;gt;m; #0 #1 #2 -- -- -- 2 5 8 5 2 2 7 5 6 5 4 4 &amp;gt;q,r=qr(m); //mode='full',pivoting=false &amp;gt;q; #0 #1 #2 #3 --------- --------- --------- --------- -0.197066 0.903357 0.300275 0.234404 -0.492665 -0.418267 0.459245 0.609449 -0.68973 -0.02475 0.170745 -0.703211 -0.492665 0.091573 -0.818398 0.281284 &amp;gt;r; #0 #1 #2 ---------- -------- --------- -10.148892 -7.38997 -8.670898 0 3.922799 6.608121 0 0 1.071571 0 0 0 &lt;/codeblock&gt;&lt;p class=&#34;- topic/p &#34; xtrc=&#34;p:84;1105:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/matrix.md&#34;&gt;对于 m&amp;gt;n 的矩阵，mode 为 full 时 R 矩阵的下面的 m−n 行全为 0，X=Q**R 可以进一步分解为: X = Q**([R1,0]&lt;sup class=&#34;+ topic/ph hi-d/sup &#34; xtrc=&#34;sup:1;1106:18&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/matrix.md&#34;&gt;T&lt;/sup&gt;) = [Q1,Q2]**([R1,0]&lt;sup class=&#34;+ topic/ph hi-d/sup &#34; xtrc=&#34;sup:2;1106:54&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/matrix.md&#34;&gt;T&lt;/sup&gt;) = Q1**R1。&lt;/p&gt;&lt;p class=&#34;- topic/p &#34; xtrc=&#34;p:85;1108:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/matrix.md&#34;&gt;mode 取 'economic': m&amp;gt;n，即返回 Q1 和 R1，Q1 为 m*n 的矩阵，R 为 n*n 的矩阵；m&amp;lt;=n 时，返回结果和 mode 取 'full' 时一致。&lt;/p&gt;&lt;codeblock class=&#34;+ topic/pre pr-d/codeblock &#34; xml:space=&#34;preserve&#34; xtrc=&#34;codeblock:48;1109:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/matrix.md&#34;&gt;&amp;gt;m=matrix([2 5 5, 5 5 4, 8 6 4, 7 6 8]); &amp;gt;m; #0 #1 #2 #3 -- -- -- -- 2 5 8 7 5 5 6 6 5 4 4 8 &amp;gt;q,r=qr(m,mode='economic',pivoting=false); &amp;gt;q; #0 #1 #2 --------- --------- --------- -0.272166 0.93784 0.215365 -0.680414 -0.029307 -0.732242 -0.680414 -0.345828 0.646096 &amp;gt;r; #0 #1 #2 #3 --------- --------- --------- ---------- -7.348469 -7.484552 -8.981462 -11.430952 0 3.159348 5.943561 3.622407 0 0 -0.086146 2.282872 &amp;gt;m=matrix([2 5 7 5, 5 2 5 4, 8 2 6 4]); &amp;gt;m; #0 #1 #2 -- -- -- 2 5 8 5 2 2 7 5 6 5 4 4 &amp;gt;q,r=qr(m,mode='economic'); //pivoting=false &amp;gt;q; #0 #1 #2 --------- --------- --------- -0.197066 0.903357 0.300275 -0.492665 -0.418267 0.459245 -0.68973 -0.02475 0.170745 -0.492665 0.091573 -0.818398 &amp;gt;r; #0 #1 #2 ---------- -------- --------- -10.148892 -7.38997 -8.670898 0 3.922799 6.608121 0 0 1.071571 &lt;/codeblock&gt;&lt;p class=&#34;- topic/p &#34; xtrc=&#34;p:86;1157:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/matrix.md&#34;&gt;mode取 'r'：返回 qr(X,mode = 'full') 中的R。&lt;/p&gt;&lt;codeblock class=&#34;+ topic/pre pr-d/codeblock &#34; xml:space=&#34;preserve&#34; xtrc=&#34;codeblock:49;1159:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/matrix.md&#34;&gt;&amp;gt;m=matrix([2 5 5, 5 5 4, 8 6 4, 7 6 8]); &amp;gt;m; #0 #1 #2 #3 -- -- -- -- 2 5 8 7 5 5 6 6 5 4 4 8 &amp;gt;r=qr(m,mode='r',pivoting=false); &amp;gt;r; #0 #1 #2 #3 --------- --------- --------- ---------- -7.348469 -7.484552 -8.981462 -11.430952 0 3.159348 5.943561 3.622407 0 0 -0.086146 2.282872 &amp;gt;m=matrix([2 5 7 5, 5 2 5 4, 8 2 6 4]); &amp;gt;m; #0 #1 #2 -- -- -- 2 5 8 5 2 2 7 5 6 5 4 4 &amp;gt;r=qr(m,mode='r'); //pivoting=false &amp;gt;r; #0 #1 #2 ---------- -------- --------- -10.148892 -7.38997 -8.670898 0 3.922799 6.608121 0 0 1.071571 0 0 0 &lt;/codeblock&gt;&lt;p class=&#34;- topic/p &#34; xtrc=&#34;p:87;1195:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/matrix.md&#34;&gt;mode 取 'raw': 返回矩阵 h、数组 tau 和矩阵 R。qr 分解的计算通过 householder 变换实现，h 为其计算 R 矩阵时的变换矩阵，tau 为 householder 变换的变换因子。&lt;/p&gt;&lt;codeblock class=&#34;+ topic/pre pr-d/codeblock &#34; xml:space=&#34;preserve&#34; xtrc=&#34;codeblock:50;1197:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/matrix.md&#34;&gt;&amp;gt;m=matrix([2 5 5, 5 5 4, 8 6 4, 7 6 8]); &amp;gt;m; #0 #1 #2 #3 -- -- -- -- 2 5 8 7 5 5 6 6 5 4 4 8 &amp;gt;h,tau,r=qr(m,mode=`raw,pivoting=false); &amp;gt;h; #0 #1 #2 #3 --------- --------- --------- ---------- -7.348469 -7.484552 -8.981462 -11.430952 0.534847 3.159348 5.943561 3.622407 0.534847 0.553547 -0.086146 2.282872 &amp;gt;tau; [1.272166,1.530908,0] &amp;gt;r; #0 #1 #2 #3 --------- --------- --------- ---------- -7.348469 -7.484552 -8.981462 -11.430952 0 3.159348 5.943561 3.622407 0 0 -0.086146 2.282872 &lt;/codeblock&gt;&lt;p class=&#34;- topic/p &#34; xtrc=&#34;p:88;1223:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/matrix.md&#34;&gt;pivoting 取 true：计算秩显 qr 分解，计算 A**P=Q**R，P 是置换矩阵，R 矩阵满足对角线上的元素不递减。qr(X,pivoting=true,[mode='full']) 返回矩阵 Q，R 和 piv 数组，piv 为 P 矩阵的置换规则。&lt;/p&gt;&lt;codeblock class=&#34;+ topic/pre pr-d/codeblock &#34; xml:space=&#34;preserve&#34; xtrc=&#34;codeblock:51;1224:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/matrix.md&#34;&gt;&amp;gt;m=matrix([2 5 5, 5 5 4, 8 6 4, 7 6 8]); &amp;gt;m; #0 #1 #2 #3 -- -- -- -- 2 5 8 7 5 5 6 6 5 4 4 8 &amp;gt;q,r,piv=qr(m,mode=`full,pivoting=true); &amp;gt;q; #0 #1 #2 --------- --------- -------- -0.742781 0.629178 0.228934 -0.557086 -0.391111 -0.73259 -0.371391 -0.67169 0.641016 &amp;gt;r; #0 #1 #2 #3 --------- --------- ---------- --------- -10.77033 -6.127946 -11.513111 -7.9849 0 -4.055647 -3.315938 -1.496423 0 0 2.33513 0.045787 &amp;gt;piv; [2,0,3,1] //置换规则: 如果 piv[i] != i, 则m[i] = m[piv[i]] &amp;gt;q**r; #0 #1 #2 #3 -- -- -- -- 8 2 7 5 6 5 6 5 4 5 8 4 &lt;/codeblock&gt;&lt;/body&gt;&lt;/topic&gt;&lt;topic class=&#34;- topic/topic &#34; ditaarch:DITAArchVersion=&#34;2.0&#34; domains=&#34;a(props audience) a(props deliveryTarget) a(props otherprops) a(props platform) a(props product)&#34; id=&#34;43-svd-分解&#34; specializations=&#34;@props/audience @props/deliveryTarget @props/otherprops @props/platform @props/product&#34; xtrc=&#34;topic:24;1257:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/matrix.md&#34;&gt;&lt;title class=&#34;- topic/title &#34; xtrc=&#34;title:24;1257:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/matrix.md&#34;&gt;4.3. svd 分解&lt;/title&gt;&lt;body class=&#34;- topic/body &#34; xtrc=&#34;body:24;1257:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/matrix.md&#34;&gt;&lt;p class=&#34;- topic/p &#34; xtrc=&#34;p:89;1259:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/matrix.md&#34;&gt;函数 &lt;codeph class=&#34;+ topic/ph pr-d/codeph &#34; xtrc=&#34;codeph:55;1259:4&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/matrix.md&#34;&gt;svd&lt;/codeph&gt; 计算矩阵 svd 分解：X = U ** Σ ** V&lt;sup class=&#34;+ topic/ph hi-d/sup &#34; xtrc=&#34;sup:3;1259:37&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/matrix.md&#34;&gt;T&lt;/sup&gt;，X 为 m*n 的矩阵，输出 U, s(diag(Σ)), Vt(V.transpose())；U 和 V 均为单位正交阵，U 为左奇异矩阵，V 为右奇异矩阵。Σ 仅在主对角线上有值，s 为矩阵的奇异值。&lt;/p&gt;&lt;p class=&#34;- topic/p &#34; xtrc=&#34;p:90;1261:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/matrix.md&#34;&gt;s 是长度为 k 的一维矩阵；fullfullMatrice 为 true 时，U 和 Vh 的维度分别为(m, m) 与 (n, n)；fullfullMatrice 为 false 时，U 和 Vh 的维度分别为(m, k), (k, n), k = min(m, n)。 computeUV 为 false 时，只返回 s。&lt;/p&gt;&lt;codeblock class=&#34;+ topic/pre pr-d/codeblock &#34; xml:space=&#34;preserve&#34; xtrc=&#34;codeblock:52;1264:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/matrix.md&#34;&gt;&amp;gt;m=matrix([2 5 5, 5 5 4, 8 6 4, 7 6 8]); &amp;gt;m; #0 #1 #2 #3 -- -- -- -- 2 5 8 7 5 5 6 6 5 4 4 8 &amp;gt;u,s,vh = svd(m); //fullMatrices=true,computeUV=true &amp;gt;u; #0 #1 #2 --------- --------- --------- -0.604057 -0.734356 0.309574 -0.570062 0.126705 -0.811773 -0.556906 0.666834 0.495165 &amp;gt;s; [19.202978,3.644527,1.721349] &amp;gt;vh; #0 #1 #2 #3 --------- --------- --------- --------- -0.356349 -0.421717 -0.545772 -0.63032 0.68568 -0.101776 -0.671497 0.261873 -0.559964 -0.308094 -0.240155 0.730646 -0.29883 0.846684 -0.439944 -0.016602 &amp;gt;u,s,vh = svd(m, fullMatrices=false); //computeUV=true &amp;gt;u; #0 #1 #2 --------- --------- --------- -0.604057 -0.734356 0.309574 -0.570062 0.126705 -0.811773 -0.556906 0.666834 0.495165 &amp;gt;s; [19.202978,3.644527,1.721349] &amp;gt;vh; #0 #1 #2 #3 --------- --------- --------- -------- -0.356349 -0.421717 -0.545772 -0.63032 0.68568 -0.101776 -0.671497 0.261873 -0.559964 -0.308094 -0.240155 0.730646 &amp;gt;s = svd(m, computeUV=false); &amp;gt;s; [19.202978,3.644527,1.721349]&lt;/codeblock&gt;&lt;/body&gt;&lt;/topic&gt;&lt;topic class=&#34;- topic/topic &#34; ditaarch:DITAArchVersion=&#34;2.0&#34; domains=&#34;a(props audience) a(props deliveryTarget) a(props otherprops) a(props platform) a(props product)&#34; id=&#34;44-cholesky-分解&#34; specializations=&#34;@props/audience @props/deliveryTarget @props/otherprops @props/platform @props/product&#34; xtrc=&#34;topic:25;1311:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/matrix.md&#34;&gt;&lt;title class=&#34;- topic/title &#34; xtrc=&#34;title:25;1311:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/matrix.md&#34;&gt;4.4. cholesky 分解&lt;/title&gt;&lt;body class=&#34;- topic/body &#34; xtrc=&#34;body:25;1311:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/matrix.md&#34;&gt;&lt;p class=&#34;- topic/p &#34; xtrc=&#34;p:91;1313:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/matrix.md&#34;&gt;cholesky(X, [lower=true]): 对矩阵进行 Cholesky 分解 X = L ** L&lt;sup class=&#34;+ topic/ph hi-d/sup &#34; xtrc=&#34;sup:4;1313:57&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/matrix.md&#34;&gt;T&lt;/sup&gt;, X 是一个对称正定矩阵; lower 是一个布尔值，表示是否使用输入矩阵的下三角来计算分解。默认值为 true，表示使用下三角计算。如果 lower 为 false，表示使用上三角计算。&lt;/p&gt;&lt;codeblock class=&#34;+ topic/pre pr-d/codeblock &#34; xml:space=&#34;preserve&#34; xtrc=&#34;codeblock:53;1314:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/matrix.md&#34;&gt;&amp;gt;m=[1, 0, 1, 0, 2, 0, 1, 0, 3]$3:3; &amp;gt;m; #0 #1 #2 -- -- -- 1 0 1 0 2 0 1 0 3 &amp;gt;L=cholesky(m); &amp;gt;L; #0 #1 #2 -- -------- -------- 1 0 0 0 1.414214 0 1 0 1.414214 &amp;gt;L**transpose(L); #0 #1 #2 -- -- -- 1 0 1 0 2 0 1 0 3 &amp;gt;cholesky(m, false); #0 #1 #2 -- -------- -------- 1 0 1 0 1.414214 0 0 0 1.414214&lt;/codeblock&gt;&lt;/body&gt;&lt;/topic&gt;&lt;topic class=&#34;- topic/topic &#34; ditaarch:DITAArchVersion=&#34;2.0&#34; domains=&#34;a(props audience) a(props deliveryTarget) a(props otherprops) a(props platform) a(props product)&#34; id=&#34;45-schur-分解&#34; specializations=&#34;@props/audience @props/deliveryTarget @props/otherprops @props/platform @props/product&#34; xtrc=&#34;topic:26;1346:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/matrix.md&#34;&gt;&lt;title class=&#34;- topic/title &#34; xtrc=&#34;title:26;1346:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/matrix.md&#34;&gt;4.5. schur 分解&lt;/title&gt;&lt;body class=&#34;- topic/body &#34; xtrc=&#34;body:26;1346:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/matrix.md&#34;&gt;&lt;p class=&#34;- topic/p &#34; xtrc=&#34;p:92;1348:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/matrix.md&#34;&gt;&lt;codeph class=&#34;+ topic/ph pr-d/codeph &#34; xtrc=&#34;codeph:56;1348:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/matrix.md&#34;&gt;schur&lt;/codeph&gt;: 对矩阵进行 schur 分解，X = U ** T ** U&lt;sup class=&#34;+ topic/ph hi-d/sup &#34; xtrc=&#34;sup:5;1348:40&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/matrix.md&#34;&gt;H&lt;/sup&gt;；U 为幺正矩阵 (U&lt;sup class=&#34;+ topic/ph hi-d/sup &#34; xtrc=&#34;sup:6;1348:63&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/matrix.md&#34;&gt;-1&lt;/sup&gt; = U&lt;sup class=&#34;+ topic/ph hi-d/sup &#34; xtrc=&#34;sup:7;1348:80&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/matrix.md&#34;&gt;T&lt;/sup&gt;)，T 为上三角矩阵，T 的对角元素是 A 的所有特征值；sort 根据指定的特征值顺序对分解得到的矩阵进行重新排序，默认为 NULL，目前支持的有 'lhp': 左半平面 (e &amp;lt; 0.0)；'rhp': 右半平面 (e &amp;gt; 0.0)；'iuc': 单位圆盘的内部 (abs(e) &amp;lt; 1)；'ouc': 单位圆盘的外部 (abs(e) &amp;gt;= 1)。&lt;/p&gt;&lt;codeblock class=&#34;+ topic/pre pr-d/codeblock &#34; xml:space=&#34;preserve&#34; xtrc=&#34;codeblock:54;1350:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/matrix.md&#34;&gt;&amp;gt;m=matrix([2 5 7 5, 5 2 5 4, 8 2 6 4, 7 8 6 8]); &amp;gt;m; #0 #1 #2 #3 -- -- -- -- 2 5 8 7 5 2 2 8 7 5 6 6 5 4 4 8 &amp;gt;t,u=schur(m); &amp;gt;t; #0 #1 #2 #3 -------- --------- --------- --------- 21.16354 -1.073588 -0.473548 -4.270044 0 -4.306007 -1.391659 2.039609 0 0 -0.995651 -2.879786 0 0 0 2.138117 &amp;gt;u; #0 #1 #2 #3 -------- --------- --------- --------- 0.52214 0.818236 0.198151 0.136364 0.401387 -0.461653 0.785756 0.091394 0.568479 -0.320408 -0.540423 0.531143 0.493041 -0.121263 -0.226421 -0.831228 &amp;gt;u**t**u.transpose(); #0 #1 #2 #3 -- -- -- -- 2 5 8 7 5 2 2 8 7 5 6 6 5 4 4 8 &amp;gt;t,u, sdim=schur(m,'lhp') //'lhp':(e &amp;lt; 0.0), sdim 为符合sort条件的特征值数量 &amp;gt;t; #0 #1 #2 #3 --------- --------- --------- --------- -4.306007 -1.390041 -1.099778 -1.857969 0 -0.995651 -0.414519 2.960681 0 0 21.16354 -4.29753 0 0 0 2.138117 &amp;gt;u; #0 #1 #2 #3 -------- --------- -------- --------- -0.8395 -0.207229 0.483426 0.136364 0.444339 -0.793483 0.405703 0.091394 0.296182 0.529453 0.591475 0.531143 0.100391 0.217073 0.501858 -0.831228 &amp;gt;sdim; 2 &amp;gt;t,u, sdim=schur(m,'rhp') //'rhp':(e &amp;lt; 0.0) &amp;gt;t; #0 #1 #2 #3 -------- --------- --------- --------- 21.16354 -3.020883 0.002732 3.237958 0 2.138117 2.443445 -2.818711 0 0 -4.306007 -0.688714 0 0 0 -0.995651 &amp;gt;u; #0 #1 #2 #3 -------- --------- --------- --------- 0.52214 0.258617 -0.777021 -0.238171 0.401387 -0.597888 0.267022 -0.640405 0.568479 0.594002 0.567898 0.03853 0.493041 -0.472026 -0.049293 0.729158 &amp;gt;sdim; 2 &amp;gt;t,u, sdim=schur(m,'iuc') //'iuc':(abs(e) &amp;lt; 1.0) &amp;gt;t; #0 #1 #2 #3 --------- -------- --------- --------- -0.995651 -0.02048 1.390574 3.449116 0 21.16354 1.174494 -4.266858 0 0 -4.306007 -0.764178 0 0 0 2.138117 &amp;gt;u; #0 #1 #2 #3 --------- -------- --------- --------- 0.133953 0.522264 -0.831085 0.136364 -0.903631 0.400552 0.121062 0.091394 0.373493 0.568825 0.504805 0.531143 0.161277 0.49319 0.199534 -0.831228 &amp;gt;sdim; 1 &amp;gt;t,u, sdim=schur(m,'ouc') //'ouc':(abs(e) &amp;gt;= 1.0) &amp;gt;t; #0 #1 #2 #3 -------- --------- --------- --------- 21.16354 -1.073588 -2.823677 3.237958 0 -4.306007 2.443445 -0.355379 0 0 2.138117 -2.879786 0 0 0 -0.995651 &amp;gt;u; #0 #1 #2 #3 -------- --------- --------- --------- 0.52214 0.818236 -0.03367 -0.238171 0.401387 -0.461653 -0.464378 -0.640405 0.568479 -0.320408 0.75676 0.03853 0.493041 -0.121263 -0.45884 0.729158 0.161277 0.49319 0.199534 -0.831228 &amp;gt;sdim; 3&lt;/codeblock&gt;&lt;/body&gt;&lt;/topic&gt;&lt;topic class=&#34;- topic/topic &#34; ditaarch:DITAArchVersion=&#34;2.0&#34; domains=&#34;a(props audience) a(props deliveryTarget) a(props otherprops) a(props platform) a(props product)&#34; id=&#34;46-求解线性方程组&#34; specializations=&#34;@props/audience @props/deliveryTarget @props/otherprops @props/platform @props/product&#34; xtrc=&#34;topic:27;1458:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/matrix.md&#34;&gt;&lt;title class=&#34;- topic/title &#34; xtrc=&#34;title:27;1458:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/matrix.md&#34;&gt;4.6. 求解线性方程组&lt;/title&gt;&lt;body class=&#34;- topic/body &#34; xtrc=&#34;body:27;1458:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/matrix.md&#34;&gt;&lt;p class=&#34;- topic/p &#34; xtrc=&#34;p:93;1460:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/matrix.md&#34;&gt;solve(a,y): 求解线性方程组 a*x=y&lt;/p&gt;&lt;codeblock class=&#34;+ topic/pre pr-d/codeblock &#34; xml:space=&#34;preserve&#34; xtrc=&#34;codeblock:55;1461:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/matrix.md&#34;&gt;&amp;gt;a=[1,0,2,1,2,5,1,5,-1]$3:3; &amp;gt;y=[6,-4,27]; &amp;gt;a; #0 #1 #2 -- -- -- 1 1 1 0 2 5 2 5 -1 &amp;gt;x = solve(a,y); &amp;gt;x; [5,3,-2] &amp;gt;a ** matrix(x); #0 -- 6 -4 27&lt;/codeblock&gt;&lt;/body&gt;&lt;/topic&gt;&lt;/topic&gt;&lt;topic class=&#34;- topic/topic &#34; ditaarch:DITAArchVersion=&#34;2.0&#34; domains=&#34;a(props audience) a(props deliveryTarget) a(props otherprops) a(props platform) a(props product)&#34; id=&#34;5-矩阵高级运算&#34; specializations=&#34;@props/audience @props/deliveryTarget @props/otherprops @props/platform @props/product&#34; xtrc=&#34;topic:28;1484:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/matrix.md&#34;&gt;&lt;title class=&#34;- topic/title &#34; xtrc=&#34;title:28;1484:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/matrix.md&#34;&gt;5. 矩阵高级运算&lt;/title&gt;&lt;body class=&#34;- topic/body &#34; xtrc=&#34;body:28;1484:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/matrix.md&#34;/&gt;&lt;topic class=&#34;- topic/topic &#34; ditaarch:DITAArchVersion=&#34;2.0&#34; domains=&#34;a(props audience) a(props deliveryTarget) a(props otherprops) a(props platform) a(props product)&#34; id=&#34;51-计算矩阵特征值和特征向量&#34; specializations=&#34;@props/audience @props/deliveryTarget @props/otherprops @props/platform @props/product&#34; xtrc=&#34;topic:29;1486:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/matrix.md&#34;&gt;&lt;title class=&#34;- topic/title &#34; xtrc=&#34;title:29;1486:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/matrix.md&#34;&gt;5.1. 计算矩阵特征值和特征向量&lt;/title&gt;&lt;body class=&#34;- topic/body &#34; xtrc=&#34;body:29;1486:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/matrix.md&#34;&gt;&lt;p class=&#34;- topic/p &#34; xtrc=&#34;p:94;1488:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/matrix.md&#34;&gt;函数 &lt;codeph class=&#34;+ topic/ph pr-d/codeph &#34; xtrc=&#34;codeph:57;1488:4&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/matrix.md&#34;&gt;eig(X)&lt;/codeph&gt; 计算矩阵的特征值和特征向量。返回一个字典，包含两个键：values（特征值）与 vectors（特征向量）。&lt;/p&gt;&lt;codeblock class=&#34;+ topic/pre pr-d/codeblock &#34; xml:space=&#34;preserve&#34; xtrc=&#34;codeblock:56;1489:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/matrix.md&#34;&gt;&amp;gt;m=matrix([2 5 7 5, 5 2 5 4, 8 2 6 4, 7 8 6 8]); &amp;gt;m; #0 #1 #2 #3 -- -- -- -- 2 5 8 7 5 2 2 8 7 5 6 6 5 4 4 8 &amp;gt;v=eig(m); &amp;gt;v[`values]; [19.750181,-3.807927,-1.551136,3.608882] &amp;gt;v[`vectors]; #0 #1 #2 #3 -------- --------- --------- --------- 0.485606 -0.853982 -0.034777 -0.183556 0.413406 0.301775 -0.845881 -0.15004 0.553396 0.40595 0.507665 -0.520802 0.535757 0.121868 0.15985 0.820098 &lt;/codeblock&gt;&lt;/body&gt;&lt;/topic&gt;&lt;topic class=&#34;- topic/topic &#34; ditaarch:DITAArchVersion=&#34;2.0&#34; domains=&#34;a(props audience) a(props deliveryTarget) a(props otherprops) a(props platform) a(props product)&#34; id=&#34;52-pca-计算&#34; specializations=&#34;@props/audience @props/deliveryTarget @props/otherprops @props/platform @props/product&#34; xtrc=&#34;topic:30;1511:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/matrix.md&#34;&gt;&lt;title class=&#34;- topic/title &#34; xtrc=&#34;title:30;1511:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/matrix.md&#34;&gt;5.2. PCA 计算&lt;/title&gt;&lt;body class=&#34;- topic/body &#34; xtrc=&#34;body:30;1511:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/matrix.md&#34;&gt;&lt;p class=&#34;- topic/p &#34; xtrc=&#34;p:95;1513:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/matrix.md&#34;&gt;&lt;codeph class=&#34;+ topic/ph pr-d/codeph &#34; xtrc=&#34;codeph:58;1513:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/matrix.md&#34;&gt;pca&lt;/codeph&gt;: 对数据源中指定列中的数据求主成分分析。&lt;/p&gt;&lt;p class=&#34;- topic/p &#34; xtrc=&#34;p:96;1515:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/matrix.md&#34;&gt;返回的结果是一个字典，包含以下键：&lt;/p&gt;&lt;ul class=&#34;- topic/ul &#34; xtrc=&#34;ul:7;1516:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/matrix.md&#34;&gt;&lt;li class=&#34;- topic/li &#34; xtrc=&#34;li:17;1516:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/matrix.md&#34;&gt;explainedVarianceRatio: 对应一个长度为k的向量，包含前k个主成分分别解释的方差权重。&lt;/li&gt;&lt;li class=&#34;- topic/li &#34; xtrc=&#34;li:18;1517:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/matrix.md&#34;&gt;singularValues: 对应一个长度为k的向量，包含主成分方差(协方差矩阵特征值)。&lt;/li&gt;&lt;li class=&#34;- topic/li &#34; xtrc=&#34;li:19;1518:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/matrix.md&#34;&gt;components: 对应长度为size(xColNames)*k的主成分分析矩阵。&lt;/li&gt;&lt;/ul&gt;&lt;codeblock class=&#34;+ topic/pre pr-d/codeblock &#34; xml:space=&#34;preserve&#34; xtrc=&#34;codeblock:57;1519:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/matrix.md&#34;&gt;&amp;gt;x = [7,1,1,0,5,2] &amp;gt;y = [0.7, 0.9, 0.01, 0.8, 0.09, 0.23] &amp;gt;t=table(x, y) &amp;gt;ds = sqlDS(&amp;lt;select * from t&amp;gt;); &amp;gt;pca(ds); components-&amp;gt; #0 #1 --------- --------- -0.999883 0.015306 -0.015306 -0.999883 explainedVarianceRatio-&amp;gt;[0.980301,0.019699] singularValues-&amp;gt;[6.110802,0.866243]&lt;/codeblock&gt;&lt;/body&gt;&lt;/topic&gt;&lt;/topic&gt;&lt;topic class=&#34;- topic/topic &#34; ditaarch:DITAArchVersion=&#34;2.0&#34; domains=&#34;a(props audience) a(props deliveryTarget) a(props otherprops) a(props platform) a(props product)&#34; id=&#34;6-jit-的支持&#34; specializations=&#34;@props/audience @props/deliveryTarget @props/otherprops @props/platform @props/product&#34; xtrc=&#34;topic:31;1536:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/matrix.md&#34;&gt;&lt;title class=&#34;- topic/title &#34; xtrc=&#34;title:31;1536:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/matrix.md&#34;&gt;6. JIT 的支持&lt;/title&gt;&lt;body class=&#34;- topic/body &#34; xtrc=&#34;body:31;1536:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/matrix.md&#34;&gt;&lt;p class=&#34;- topic/p &#34; xtrc=&#34;p:97;1538:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/matrix.md&#34;&gt;从 1.20 版本开始，DolphinDB database 的 JIT 增加了对矩阵运算的支持。支持矩阵作为函数参数和返回值，支持矩阵的四则运算，函数 &lt;codeph class=&#34;+ topic/ph pr-d/codeph &#34; xtrc=&#34;codeph:59;1538:78&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/matrix.md&#34;&gt;det&lt;/codeph&gt; 与 &lt;codeph class=&#34;+ topic/ph pr-d/codeph &#34; xtrc=&#34;codeph:60;1538:86&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/matrix.md&#34;&gt;flatten&lt;/codeph&gt;，以及矩阵的转置、点乘等运算。&lt;/p&gt;&lt;codeblock class=&#34;+ topic/pre pr-d/codeblock &#34; xml:space=&#34;preserve&#34; xtrc=&#34;codeblock:58;1539:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/matrix.md&#34;&gt;//定义对角矩阵，jit计算比非jit快了10倍左右 @jit def diagonalMatrix_jit(data, m){ n=data.size() res=m for( i in 0:n){ //i in 0:n res[i*n+i]=data[i] } return res } def diagonalMatrix(data, m){ n=data.size() res=m for( i in 0:n){ x=m[i] for(j in 0:n){ if(i==j){ x[j]=data[i] } } res[i]=x } return res } &amp;gt;m = matrix(DOUBLE,32,32) &amp;gt;data=1..32 &amp;gt;timer(1000) diagonalMatrix(data,m) Time elapsed: 420.021 ms &amp;gt;timer(1000) diagonalMatrix_jit(data,m) Time elapsed: 41.026 ms //获取矩阵的上三角矩阵 @jit def upperTriangularMatrix_jit(m, rowNum,colNum){ upperM=m for( i in 0:colNum){ for(j in 0:rowNum){ if(i&amp;lt;j){ upperM[i*rowNum+j]=0 } } } return upperM } def upperTriangularMatrix(m, rowNum,colNum){ upperM=m for( i in 0:colNum){ col=flatten(m[i]) for(j in 0:rowNum){ if(i&amp;lt;j){ col[j]=0 } } upperM[i]=col } return upperM } &amp;gt;m=1..1024$32:32 timer(1000) upperTriangularMatrix_jit(m,32,32) Time elapsed: 24.049 ms &amp;gt;timer(1000) upperTriangularMatrix(m,32,32) Time elapsed: 355.052 ms&lt;/codeblock&gt;&lt;p class=&#34;- topic/p &#34; xtrc=&#34;p:98;1607:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/matrix.md&#34;&gt;对于矩阵的转置、点乘等函数，由于函数实现已做优化，所以 JIT 和非 JIT 的性能差别不大，其实现的目的是方便用户在 JIT 函数中使用。&lt;/p&gt;&lt;/body&gt;&lt;/topic&gt;&lt;/topic&gt;"/><meta name="wh-source-relpath" content="tutorials/matrix.md"/><meta name="wh-out-relpath" content="tutorials/matrix.html"/>
+
+    <link rel="stylesheet" type="text/css" href="../oxygen-webhelp/app/commons.css?buildId=2024012323"/>
+    <link rel="stylesheet" type="text/css" href="../oxygen-webhelp/app/topic.css?buildId=2024012323"/>
+
+    <script src="../oxygen-webhelp/app/options/properties.js?buildId=20240704100525"></script>
+    <script src="../oxygen-webhelp/app/localization/strings.js?buildId=2024012323"></script>
+    <script src="../oxygen-webhelp/app/search/index/keywords.js?buildId=20240704100525"></script>
+    <script defer="defer" src="../oxygen-webhelp/app/commons.js?buildId=2024012323"></script>
+    <script defer="defer" src="../oxygen-webhelp/app/topic.js?buildId=2024012323"></script>
+<link rel="stylesheet" type="text/css" href="../oxygen-webhelp/template/styles.css?buildId=2024012323"/><script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script><script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script></head>
+
+    <body id="矩阵运算" class="wh_topic_page frmBody">
+        <a href="#wh_topic_body" class="sr-only sr-only-focusable">
+            跳转到主要内容
+        </a>
+        
+        
+        
+        
+        <header class="navbar navbar-default wh_header">
+    <div class="container-fluid">
+        <div xmlns:whc="http://www.oxygenxml.com/webhelp/components" class="wh_header_flex_container navbar-nav navbar-expand-md navbar-dark">
+            <div class="wh_logo_and_publication_title_container">
+                <div class="wh_logo_and_publication_title">
+                    
+                    <a href="https://www.dolphindb.cn" class=" wh_logo d-none d-sm-block "><img src="../logo.png" alt="  DolphinDB 文档中心  "/></a>
+                    <div class=" wh_publication_title "><a href="../index.html"><span class="booktitle">  <span class="ph mainbooktitle">DolphinDB 文档中心</span>  </span></a></div>
+                    
+                </div>
+                
+                
+            </div>
+
+            <div class="wh_top_menu_and_indexterms_link collapse navbar-collapse" id="wh_top_menu_and_indexterms_link">
+                
+                
+                
+                
+            </div>
+        <div class=" wh_search_input navbar-form wh_topic_page_search search " role="form">
+            
+            
+            
+            <form id="searchForm" method="get" role="search" action="../search.html"><div><input type="search" placeholder="搜索 " class="wh_search_textfield" id="textToSearch" name="searchQuery" aria-label="搜索查询" required="required"/><button type="submit" class="wh_search_button" aria-label="搜索"><span class="search_input_text">搜索</span></button></div></form>
+            
+            <script src="/vendors/react/umd/react.production.min.js" defer="defer"></script>
+<script src="/vendors/react-dom/umd/react-dom.production.min.js" defer="defer"></script>
+<script src="/vendors/dayjs/dayjs.min.js" defer="defer"></script>
+<script src="/vendors/antd/dist/antd.min.js" defer="defer"></script>
+<script src="/vendors/@ant-design/icons/dist/index.umd.min.js" defer="defer"></script>
+<script src="/zh/index.js" type="module"></script>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js" defer="defer"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML" defer="defer"><!--
+
+
+--></script>
+
+            
+        </div></div>
+    </div>
+</header>
+        
+        
+         
+        
+        
+        
+        <div class="container-fluid" id="wh_topic_container">
+            <div class="row">
+
+                <nav class="wh_tools d-print-none navbar-expand-md" aria-label="Tools">
+                    
+                    <div data-tooltip-position="bottom" class=" wh_breadcrumb "><ol class="d-print-none"><li><span class="home"><a href="../index.html"><span>主页</span></a></span></li><li><div class="topicref" data-id="about_tutorials"><div class="title"><a href="../tutorials/about_tutorials.html"><span class="keyword label">教程</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 产品使用教程</p></div></div></div></li><li><div class="topicref"><div class="title"><a href="../tutorials/hybrid_programming_paradigms.html">编程语言</a></div></div></li><li class="active"><div class="topicref" data-id="矩阵运算"><div class="title"><a href="../tutorials/matrix.html">矩阵运算</a></div></div></li></ol></div>
+                    
+                    
+                    
+                    <div class="wh_right_tools">
+                        <button class="wh_hide_highlight" aria-label="切换搜索突出显示" title="切换搜索突出显示"></button>
+                        <button class="webhelp_expand_collapse_sections" data-next-state="collapsed" aria-label="折叠截面" title="折叠截面"></button>
+                        
+                        
+                        
+                        
+                        <div class=" wh_print_link print d-none d-md-inline-block "><button onClick="window.print()" title="打印此页" aria-label="打印此页"></button></div>
+                        
+                        <button type="button" id="wh_toc_button" class="custom-toggler navbar-toggler collapsed wh_toggle_button navbar-light" aria-expanded="false" aria-label="Toggle publishing table of content" aria-controls="wh_publication_toc">
+                            <span class="navbar-toggler-icon"></span>
+                        </button>
+                    </div>
+                    
+                </nav>
+            </div>
+            
+            
+            
+            
+            <div class="wh_content_area">
+                <div class="row">
+                    
+                        <nav id="wh_publication_toc" class="col-lg-3 col-md-3 col-sm-12 d-md-block d-none d-print-none" aria-label="Table of Contents Container">
+                            <div id="wh_publication_toc_content">
+		                        
+                            	<div class=" wh_publication_toc " data-tooltip-position="right"><span class="expand-button-action-labels"><span id="button-expand-action" role="button" aria-label="Expand"></span><span id="button-collapse-action" role="button" aria-label="Collapse"></span><span id="button-pending-action" role="button" aria-label="Pending"></span></span><ul role="tree" aria-label="Table of Contents"><li role="treeitem"><div data-tocid="new_chap_about_sect_ddb_docs_intro-d9529e87" class="topicref" data-id="new_chap_about_sect_ddb_docs_intro" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../about/ddb_docs_intro.html" id="new_chap_about_sect_ddb_docs_intro-d9529e87-link">文档使用说明</a><div class="wh-tooltip"><p class="shortdesc">如何获取 DolphinDB 帮助信息</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="chap1_getstarted-d9529e140" class="topicref" data-id="chap1_getstarted" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action chap1_getstarted-d9529e140-link" class="wh-expand-btn"></span><div class="title"><a href="../getstarted/chap1_getstarted.html" id="chap1_getstarted-d9529e140-link"><span class="keyword label">快速上手</span></a><div class="wh-tooltip"><p class="shortdesc">如何快速部署 DolphinDB、建库建表、写入和查询数据</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="sectionddb_deployment-d9529e335" class="topicref" data-id="sectionddb_deployment" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action sectionddb_deployment-d9529e335-link" class="wh-expand-btn"></span><div class="title"><a href="../deploy/deploy_intro.html" id="sectionddb_deployment-d9529e335-link"><span class="keyword label">部署</span></a><div class="wh-tooltip"><p class="shortdesc">如何在不同的场景中部署 DolphinDB</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="new_chap_database_manage_new_chap_dbmanage_landing_page-d9529e2313" class="topicref" data-id="new_chap_database_manage_new_chap_dbmanage_landing_page" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action new_chap_database_manage_new_chap_dbmanage_landing_page-d9529e2313-link" class="wh-expand-btn"></span><div class="title"><a href="../db_distr_comp/cfg/db_intro.html" id="new_chap_database_manage_new_chap_dbmanage_landing_page-d9529e2313-link"><span class="keyword label">数据库</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 数据库的基本概念</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="chap7_tutorials_streaming-d9529e3490" class="topicref" data-id="chap7_tutorials_streaming" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action chap7_tutorials_streaming-d9529e3490-link" class="wh-expand-btn"></span><div class="title"><a href="../stream/str_intro.html" id="chap7_tutorials_streaming-d9529e3490-link"><span class="keyword label">流数据</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 流数据引擎及流数据计算的基本概念</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="tocId-d9529e7385" class="topicref" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action tocId-d9529e7385-link" class="wh-expand-btn"></span><div class="title"><a href="../db_distr_comp/db_oper/import_data.html" id="tocId-d9529e7385-link">数据迁移</a><div class="wh-tooltip"><p class="shortdesc">如何从不同数据源向 DolphinDB 迁移数据</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="chap7_tutorials_system_management-d9529e7812" class="topicref" data-id="chap7_tutorials_system_management" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action chap7_tutorials_system_management-d9529e7812-link" class="wh-expand-btn"></span><div class="title"><a href="../sys_man/om_intro.html" id="chap7_tutorials_system_management-d9529e7812-link"><span class="keyword label">系统运维</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 的系统运维功能及方法</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="about_language_resources-d9529e16490" class="topicref" data-id="about_language_resources" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action about_language_resources-d9529e16490-link" class="wh-expand-btn"></span><div class="title"><a href="../progr/progr_intro.html" id="about_language_resources-d9529e16490-link"><span class="keyword label">编程语言</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 编程基本概念与方法、SQL 在 DolphinDB 的应用</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="functions_references-d9529e26503" class="topicref" data-id="functions_references" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action functions_references-d9529e26503-link" class="wh-expand-btn"></span><div class="title"><a href="../funcs/funcs_intro.html" id="functions_references-d9529e26503-link"><span class="keyword label">函数参考</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 函数分类、语法、详解及示例</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="api_protocol-d9529e86456" class="topicref" data-id="api_protocol" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action api_protocol-d9529e86456-link" class="wh-expand-btn"></span><div class="title"><a href="../api/connapi_intro.html" id="api_protocol-d9529e86456-link"><span class="keyword label">连接器 &amp; API</span></a><div class="wh-tooltip"><p class="shortdesc">面向不同编程语言的 DolphinDB API 及连接器，相关协议和用法</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="chap6_plugin-d9529e91976" class="topicref" data-id="chap6_plugin" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action chap6_plugin-d9529e91976-link" class="wh-expand-btn"></span><div class="title"><a href="../plugins/plg_intro.html" id="chap6_plugin-d9529e91976-link"><span class="keyword label">插件</span></a><div class="wh-tooltip"><p class="shortdesc">多个应用场景的插件使用说明和插件开发指导</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="third_party-d9529e94749" class="topicref" data-id="third_party" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action third_party-d9529e94749-link" class="wh-expand-btn"></span><div class="title"><a href="../third_party.html" id="third_party-d9529e94749-link">第三方工具</a></div></div></li><li role="treeitem" aria-expanded="true"><div data-tocid="about_tutorials-d9529e94980" class="topicref" data-id="about_tutorials" data-state="expanded"><span role="button" tabindex="0" aria-labelledby="button-collapse-action about_tutorials-d9529e94980-link" class="wh-expand-btn"></span><div class="title"><a href="../tutorials/about_tutorials.html" id="about_tutorials-d9529e94980-link"><span class="keyword label">教程</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 产品使用教程</p></div></div></div><ul role="group" class="navbar-nav nav-list"><li role="treeitem" aria-expanded="false"><div data-tocid="tocId-d9529e95033" class="topicref" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action tocId-d9529e95033-link" class="wh-expand-btn"></span><div class="title"><a href="../tutorials/import_data.html" id="tocId-d9529e95033-link">数据导入</a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="tocId-d9529e95264" class="topicref" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action tocId-d9529e95264-link" class="wh-expand-btn"></span><div class="title"><a href="../tutorials/DolphinDB_TopN.html" id="tocId-d9529e95264-link">数据库</a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="tocId-d9529e95910" class="topicref" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action tocId-d9529e95910-link" class="wh-expand-btn"></span><div class="title"><a href="../tutorials/memory_management.html" id="tocId-d9529e95910-link">系统运维</a></div></div></li><li role="treeitem" aria-expanded="true"><div data-tocid="tocId-d9529e96325" class="topicref" data-state="expanded"><span role="button" tabindex="0" aria-labelledby="button-collapse-action tocId-d9529e96325-link" class="wh-expand-btn"></span><div class="title"><a href="../tutorials/hybrid_programming_paradigms.html" id="tocId-d9529e96325-link">编程语言</a></div></div><ul role="group" class="navbar-nav nav-list"><li role="treeitem"><div data-tocid="多范式编程-d9529e96326" class="topicref" data-id="多范式编程" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../tutorials/hybrid_programming_paradigms.html" id="多范式编程-d9529e96326-link">多范式编程</a></div></div></li><li role="treeitem"><div data-tocid="array-vector-的最佳实践指南-d9529e96372" class="topicref" data-id="array-vector-的最佳实践指南" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../tutorials/Array_Vector.html" id="array-vector-的最佳实践指南-d9529e96372-link">Array Vector 的最佳实践指南</a></div></div></li><li role="treeitem"><div data-tocid="启动脚本-d9529e96418" class="topicref" data-id="启动脚本" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../tutorials/Startup.html" id="启动脚本-d9529e96418-link">启动脚本</a></div></div></li><li role="treeitem"><div data-tocid="函数化编程案例-d9529e96464" class="topicref" data-id="函数化编程案例" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../tutorials/func_progr_cases.html" id="函数化编程案例-d9529e96464-link">函数化编程案例</a></div></div></li><li role="treeitem"><div data-tocid="即时编译jit-d9529e96510" class="topicref" data-id="即时编译jit" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../tutorials/jit.html" id="即时编译jit-d9529e96510-link">即时编译（JIT）</a></div></div></li><li role="treeitem"><div data-tocid="元编程-d9529e96556" class="topicref" data-id="元编程" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../tutorials/meta_programming.html" id="元编程-d9529e96556-link">元编程</a></div></div></li><li role="treeitem"><div data-tocid="基于宏变量的元编程-d9529e96602" class="topicref" data-id="基于宏变量的元编程" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../tutorials/macro_var_based_metaprogramming.html" id="基于宏变量的元编程-d9529e96602-link">基于宏变量的元编程</a></div></div></li><li role="treeitem"><div data-tocid="自定义聚合函数-d9529e96648" class="topicref" data-id="自定义聚合函数" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../tutorials/udaf.html" id="自定义聚合函数-d9529e96648-link">自定义聚合函数</a></div></div></li><li role="treeitem"><div data-tocid="日期时间类型-d9529e96694" class="topicref" data-id="日期时间类型" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../tutorials/date_time.html" id="日期时间类型-d9529e96694-link">日期/时间类型</a></div></div></li><li role="treeitem"><div data-tocid="dolphindb-时间类型比较规则-d9529e96740" class="topicref" data-id="dolphindb-时间类型比较规则" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../tutorials/ddb_comparison_rules_of_time_types.html" id="dolphindb-时间类型比较规则-d9529e96740-link">DolphinDB 时间类型比较规则</a></div></div></li><li role="treeitem"><div data-tocid="通用计算-d9529e96786" class="topicref" data-id="通用计算" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../tutorials/general_computing.html" id="通用计算-d9529e96786-link">通用计算</a></div></div></li><li role="treeitem"><div data-tocid="窗口计算-d9529e96833" class="topicref" data-id="窗口计算" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../tutorials/window_cal.html" id="窗口计算-d9529e96833-link">窗口计算</a></div></div></li><li role="treeitem" class="active"><div data-tocid="矩阵运算-d9529e96879" class="topicref" data-id="矩阵运算" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../tutorials/matrix.html" id="矩阵运算-d9529e96879-link">矩阵运算</a></div></div></li><li role="treeitem"><div data-tocid="sql-编写案例-d9529e96925" class="topicref" data-id="sql-编写案例" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../tutorials/ddb_sql_cases.html" id="sql-编写案例-d9529e96925-link">SQL 编写案例</a></div></div></li><li role="treeitem"><div data-tocid="sql-执行计划-d9529e96971" class="topicref" data-id="sql-执行计划" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../tutorials/DolphinDB_Explain.html" id="sql-执行计划-d9529e96971-link">SQL 执行计划</a></div></div></li><li role="treeitem"><div data-tocid="python-到-dolphindb-的函数映射-d9529e97017" class="topicref" data-id="python-到-dolphindb-的函数映射" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../tutorials/function_mapping_py.html" id="python-到-dolphindb-的函数映射-d9529e97017-link">Python 到 DolphinDB 的函数映射</a></div></div></li><li role="treeitem"><div data-tocid="ai-dataloader-d9529e97063" class="topicref" data-id="ai-dataloader" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../tutorials/ai_dataloader_ml.html" id="ai-dataloader-d9529e97063-link">AI DataLoader</a></div></div></li><li role="treeitem"><div data-tocid="线程模型-d9529e97109" class="topicref" data-id="线程模型" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../tutorials/threading_model.html" id="线程模型-d9529e97109-link">线程模型</a></div></div></li></ul></li><li role="treeitem" aria-expanded="false"><div data-tocid="tocId-d9529e97155" class="topicref" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action tocId-d9529e97155-link" class="wh-expand-btn"></span><div class="title"><a href="../tutorials/data_sync_among_clusters.html" id="tocId-d9529e97155-link">安全与容灾</a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="tocId-d9529e97386" class="topicref" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action tocId-d9529e97386-link" class="wh-expand-btn"></span><div class="title"><a href="../tutorials/streaming_tutorial.html" id="tocId-d9529e97386-link">流数据</a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="tocId-d9529e97893" class="topicref" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action tocId-d9529e97893-link" class="wh-expand-btn"></span><div class="title"><a href="../tutorials/DECIMAL.html" id="tocId-d9529e97893-link">数值处理</a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="chap7_tutorials_modules-d9529e97986" class="topicref" data-id="chap7_tutorials_modules" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action chap7_tutorials_modules-d9529e97986-link" class="wh-expand-btn"></span><div class="title"><a href="../tutorials/tu_modules.html" id="chap7_tutorials_modules-d9529e97986-link"><span class="keyword label">模块</span></a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="plugins_apply-d9529e98493" class="topicref" data-id="plugins_apply" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action plugins_apply-d9529e98493-link" class="wh-expand-btn"></span><div class="title"><a href="../tutorials/plugins_apply.html" id="plugins_apply-d9529e98493-link">插件应用</a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="tocId-d9529e98631" class="topicref" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action tocId-d9529e98631-link" class="wh-expand-btn"></span><div class="title"><a href="../tutorials/dolphinscheduler_integration.html" id="tocId-d9529e98631-link">金融场景案例</a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="tocId-d9529e100707" class="topicref" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action tocId-d9529e100707-link" class="wh-expand-btn"></span><div class="title"><a href="../tutorials/iot_examples.html" id="tocId-d9529e100707-link">物联网场景案例</a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="tocId-d9529e101629" class="topicref" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action tocId-d9529e101629-link" class="wh-expand-btn"></span><div class="title"><a href="../tutorials/cluster_scaleout_perf_test.html" id="tocId-d9529e101629-link">测试报告</a></div></div></li></ul></li><li role="treeitem" aria-expanded="false"><div data-tocid="tocId-d9529e101769" class="topicref" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action tocId-d9529e101769-link" class="wh-expand-btn"></span><div class="title"><a href="../rn/server/3_00_1.html" id="tocId-d9529e101769-link">版本说明</a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 版本发布历史</p></div></div></div></li></ul></div>
+		                        
+                            </div>
+                        </nav>
+                    
+                    
+                    <div class="col-lg-7 col-md-9 col-sm-12" id="wh_topic_body">
+                        <button id="wh_close_publication_toc_button" class="close-toc-button d-none" aria-label="Toggle publishing table of content" aria-controls="wh_publication_toc" aria-expanded="true">
+                            <span class="close-toc-icon-container">
+                                <span class="close-toc-icon"></span>     
+                            </span>
+                        </button>
+                        <button id="wh_close_topic_toc_button" class="close-toc-button d-none" aria-label="Toggle topic table of content" aria-controls="wh_topic_toc" aria-expanded="true">
+                            <span class="close-toc-icon-container">
+                                <span class="close-toc-icon"></span>     
+                            </span>
+                        </button>
+                        
+                        <div class=" wh_topic_content body "><main role="main"><article class="- topic/topic topic" role="article" aria-labelledby="ariaid-title1"><h1 class="- topic/title title topictitle1" id="ariaid-title1">矩阵运算</h1><div class="- topic/body body"><p class="- topic/p p">在处理面板数据时，矩阵运算相对于表运算而言，速度更快，效率更高。DolphinDB 针对矩阵运算场景为用户提供了丰富且便捷的内置函数，其中部分矩阵运算采用 OpenBlas 和 Lapack 进行优化，与 Matlab 的性能在一个数量级。 本教程将重点介绍 DolphinDB 矩阵的特点及矩阵运算的相关方法。</p><p class="- topic/p p">本教程将讲述以下有关矩阵内容：</p></div><article class="- topic/topic topic nested1" aria-labelledby="ariaid-title2" id="1-矩阵的存储"><h2 class="- topic/title title topictitle2" id="ariaid-title2">1. 矩阵的存储</h2><div class="- topic/body body"><p class="- topic/p p">DolphinDB 中的矩阵采用列优先（column major）的形式。因此创建矩阵时，数据在内存中按列存储。系统会将输入的向量数据从左向右以列为单位填充为矩阵中的元素。注意：矩阵中行和列的下标都是从0开始的。</p><p class="- topic/p p">例：用[1, 2, 3], [4, 5, 6]两个向量创建矩阵得到的矩阵维度为 3*2，而不是 2*3。</p><pre class="+ topic/pre pr-d/codeblock pre codeblock"><code>&gt;matrix(1 2 3, 4 5 6);
+#0 #1
+-- --
+1  4
+2  5
+3  6</code></pre><p class="- topic/p p">由于 DolphinDB 的矩阵是列优先的，读取或构建矩阵时，<strong class="+ topic/ph hi-d/b ph b">列操作比行操作要更为高效。</strong></p><p class="- topic/p p">给定一个长度为1000的向量 v，构建一个900*100的矩阵。其第 i 行是 v[i:i+100]。比较下列两种做法：</p><pre class="+ topic/pre pr-d/codeblock pre codeblock"><code>def alongRows(v, mutable m){
+	for(i in 0:900){
+	    m[i,]=v[i:(i+100)]
+	}
+}
+v=1..1000
+m = matrix(int,900,100)
+timer(10){alongRows(v, m)}</code></pre><p class="- topic/p p">上述脚本逐行对矩阵进行赋值，耗时为236.369毫秒。</p><pre class="+ topic/pre pr-d/codeblock pre codeblock"><code>def alongColumns(v, mutable m){
+	for(i in 0:100){
+	    m[,i]=v[i:(i+900)]
+	}
+}
+v=1..1000
+m = matrix(int,900,100)
+timer(10){alongColumns(v, m)}</code></pre><p class="- topic/p p">上述脚本逐列对矩阵进行赋值，耗时为2.991毫秒。对比按行赋值，耗时缩短了两个数量级。</p></div></article><article class="- topic/topic topic nested1" aria-labelledby="ariaid-title3" id="2-矩阵的基础操作"><h2 class="- topic/title title topictitle2" id="ariaid-title3">2. 矩阵的基础操作</h2><div class="- topic/body body"></div><article class="- topic/topic topic nested2" aria-labelledby="ariaid-title4" id="21-矩阵的创建"><h3 class="- topic/title title topictitle3" id="ariaid-title4">2.1. 矩阵的创建</h3><div class="- topic/body body"><p class="- topic/p p">DolphinDB 的矩阵有三种类型，分别为普通矩阵（matrix）、索引序列（indexed series）和索引矩阵（indexed matrix）。</p><ul class="- topic/ul ul"><li class="- topic/li li"><p class="- topic/p p">普通矩阵：调用函数 <code class="+ topic/ph pr-d/codeph ph codeph">matrix</code> 创建一个指定数据类型和维度的普通矩阵。函数 matrix 也可根据已有的数据包括向量、矩阵、表、元组及这些数据结构的组合创建一个矩阵。</p></li><li class="- topic/li li"><p class="- topic/p p">索引序列：索引序列带行索引标签的单列矩阵，可以通过函数 <code class="+ topic/ph pr-d/codeph ph codeph">indexedSeries</code> 进行创建，或者通过一个单列的矩阵调用 <code class="+ topic/ph pr-d/codeph ph codeph">setIndexedSeries</code> 函数进行转换。</p></li><li class="- topic/li li"><p class="- topic/p p">索引矩阵：索引矩阵为带行/列索引标签的矩阵。只能通过普通矩阵调用函数 <code class="+ topic/ph pr-d/codeph ph codeph">setIndexedMatrix</code> 生成。</p></li></ul><p class="- topic/p p">除直接生成矩阵外，通过运算符 <code class="+ topic/ph pr-d/codeph ph codeph">cast($)</code> 可以把一个向量重组为一个矩阵。</p><pre class="+ topic/pre pr-d/codeblock pre codeblock"><code>&gt;m=1..10$5:2;
+&gt;m;
+#0 #1
+-- --
+1  6
+2  7
+3  8
+4  9
+5  10</code></pre><p class="- topic/p p">函数 <code class="+ topic/ph pr-d/codeph ph codeph">reshape</code> 可以实现矩阵与向量之间的互相转换。</p><pre class="+ topic/pre pr-d/codeblock pre codeblock"><code>&gt;m=(1..6).reshape(3:2);                
+&gt;m;
+#0 #1
+-- --
+1  4
+2  5
+3  6
+
+&gt;y=m.reshape()
+&gt;y;
+[1,2,3,4,5,6]</code></pre><p class="- topic/p p">reshape 实现的功能相当于 <code class="+ topic/ph pr-d/codeph ph codeph">cast($)</code> 和 <code class="+ topic/ph pr-d/codeph ph codeph">flatten</code> 的组合。函数  <code class="+ topic/ph pr-d/codeph ph codeph">flatten</code> 可把一个矩阵转换为一个向量。</p><pre class="+ topic/pre pr-d/codeblock pre codeblock"><code>&gt;x = flatten m;
+&gt;x
+[1,2,3,4,5,6]
+
+&gt;x$2:5
+#0 #1 #2 #3 #4
+-- -- -- -- --
+1  3  5  7  9 
+2  4  6  8  10</code></pre><p class="- topic/p p">此外，可以调用函数生成一些特殊的矩阵类型：</p><ul class="- topic/ul ul"><li class="- topic/li li"><p class="- topic/p p">单位矩阵</p><p class="- topic/p p">使用函数 <code class="+ topic/ph pr-d/codeph ph codeph">eye(n)</code> 创建维度为 n 的单位矩阵。</p><pre class="+ topic/pre pr-d/codeblock pre codeblock"><code>	&gt;eye(3);
+	#0 #1 #2
+	-- -- --
+	1  0  0
+	0  1  0
+	0  0  1</code></pre></li><li class="- topic/li li"><p class="- topic/p p">对角矩阵</p><p class="- topic/p p">函数 <code class="+ topic/ph pr-d/codeph ph codeph">diag(X)</code>：如果 X 是一个向量，返回一个对角矩阵，X 为主对角线上的元素；如果 X 是一个方阵，返回一个由主对角线元素组成的向量。</p><pre class="+ topic/pre pr-d/codeblock pre codeblock"><code>	&gt;m=diag(1..5);
+	&gt;m;
+	#0 #1 #2 #3 #4
+	-- -- -- -- --
+	1  0  0  0  0
+	0  2  0  0  0
+	0  0  3  0  0
+	0  0  0  4  0
+	0  0  0  0  5
+
+	&gt;diag(m);
+	[1,2,3,4,5]</code></pre></li></ul><p class="- topic/p p">使用<code class="+ topic/ph pr-d/codeph ph codeph">rename!</code>函数给矩阵添加行标签和列标签：</p><pre class="+ topic/pre pr-d/codeblock pre codeblock"><code>&gt;m=1..9$3:3;
+&gt;m;
+#0 #1 #2
+-- -- --
+1  4  7
+2  5  8
+3  6  9
+
+&gt;m.rename!(`col1`col2`col3);
+col1 col2 col3
+---- ---- ----
+1    4    7
+2    5    8
+3    6    9
+
+&gt;m.rename!(1 2 3, `c1`c2`c3);
+ c1 c2 c3
+ -- -- --
+1|1  4  7
+2|2  5  8
+3|3  6  9
+
+&gt;m.colNames();
+["c1","c2","c3"]
+
+&gt;m.rowNames();
+[1,2,3]</code></pre><p class="- topic/p p">此外，通过 SQL 语句也可以生成矩阵：</p><p class="- topic/p p"><code class="+ topic/ph pr-d/codeph ph codeph">exec</code> + <code class="+ topic/ph pr-d/codeph ph codeph">pivot by</code>： SQL 语句中，可以通过 exec 语句搭配 pivot by 子句，将表数据转换成一个矩阵形式的面板数据。更多使用场景可以参考<a class="- topic/xref xref" href="panel_data.html">面板数据处理教程</a>。</p><pre class="+ topic/pre pr-d/codeblock pre codeblock"><code>&gt;sym = `C`MS`MS`MS`IBM`IBM`C`C`C$SYMBOL                                
+&gt;price = 49.6 29.46 29.52 30.02 174.97 175.23 50.76 50.32 51.29                        
+
+&gt;qty = 2200 1900 2100 3200 6800 5400 1300 2500 8800           &gt;timestamp = [09:34:07,09:35:42,09:36:51,09:36:59,09:35:47,09:36:26,09:34:16,09:35:26,09:36:12]
+&gt;t2 = table(timestamp, sym, qty, price)
+&gt;b = exec count(price) from t2 pivot by timestamp.minute(), sym;
+ ​
+&gt;b;        
+      C IBM MS
+      - --- --
+09:34m|2
+09:35m|1 1   1
+09:36m|1 1   2
+ ​
+&gt;typestr b;
+FAST DOUBLE MATRIX</code></pre><p class="- topic/p p">除了使用 pivot by 子句外，还可以使用以下函数生成面板数据：</p><ul class="- topic/ul ul"><li class="- topic/li li"><p class="- topic/p p"><code class="+ topic/ph pr-d/codeph ph codeph">pivot</code>：在二维维度上重组数据，其功能与 pivot by 等同。</p></li><li class="- topic/li li"><p class="- topic/p p"><code class="+ topic/ph pr-d/codeph ph codeph">panel</code>：指定一个或多个指标列，生成一个或多个矩阵。</p></li></ul><p class="- topic/p p">使用函数 <code class="+ topic/ph pr-d/codeph ph codeph">cross</code> 将指定函数应用于 X 和 Y 中元素的两两组合，其中 X, Y 可以是数据对向量或矩阵。</p><p class="- topic/p p">例：假设 X，Y 是向量，X 有 m 个元素，矩阵 Y 有 n 个元素，则 cross 函数将返回一个 m×n 矩阵。</p><pre class="+ topic/pre pr-d/codeblock pre codeblock"><code>&gt;x=1 2;
+&gt;y=3 5 7;    
+&gt;cross(pow, x, y);
+ 3 5  7
+ - -- ---
+1|1 1  1
+2|8 32 128</code></pre></div></article><article class="- topic/topic topic nested2" aria-labelledby="ariaid-title5" id="22-访问矩阵"><h3 class="- topic/title title topictitle3" id="ariaid-title5">2.2. 访问矩阵</h3><div class="- topic/body body"><p class="- topic/p p">矩阵的维度可以通过函数 <code class="+ topic/ph pr-d/codeph ph codeph">shape</code> 获得。单独获取行数和列数，可通过调用 <code class="+ topic/ph pr-d/codeph ph codeph">rows</code> 和 <code class="+ topic/ph pr-d/codeph ph codeph">cols</code> 函数实现。</p><pre class="+ topic/pre pr-d/codeblock pre codeblock"><code>&gt;m=1..10$2:5;
+&gt;shape(m);                        
+2 : 5
+&gt;rows(m)                      
+2
+&gt;cols(m)                     
+5</code></pre><p class="- topic/p p">DolphinDB 提供了多样化的矩阵元素访问方式。</p></div><article class="- topic/topic topic nested3" aria-labelledby="ariaid-title6" id="221-根据行列索引访问矩阵"><h4 class="- topic/title title topictitle4" id="ariaid-title6">2.2.1. 根据行列索引访问矩阵</h4><div class="- topic/body body"><p class="- topic/p p">定义一个普通矩阵：</p><pre class="+ topic/pre pr-d/codeblock pre codeblock"><code>m = 1..100$10:10;</code></pre><p class="- topic/p p">（1）获取单个单元格的值：<code class="+ topic/ph pr-d/codeph ph codeph">slice</code>, <code class="+ topic/ph pr-d/codeph ph codeph">cell</code></p><pre class="+ topic/pre pr-d/codeblock pre codeblock"><code>&gt;m.slice(1,1) // 等同于 m[1,1]
+12
+
+&gt;m.cell(1,1)
+12</code></pre><p class="- topic/p p">（2）获取多个单元格的值：<code class="+ topic/ph pr-d/codeph ph codeph">slice</code>, <code class="+ topic/ph pr-d/codeph ph codeph">cell</code></p><pre class="+ topic/pre pr-d/codeblock pre codeblock"><code>&gt;m.slice([0,1],[1,2,3]) // 等同于 m[[0,1],[1,2,3]]
+col1	col2	col3
+11	21	31
+12	22	32
+
+&gt;m.cells([0,1],[1,2])
+[11, 22]</code></pre><p class="- topic/p p">cells 与 slice 的区别在于：</p><ul class="- topic/ul ul"><li class="- topic/li li"><p class="- topic/p p">cells 输入的行列坐标一一对应，因此返回的结果与输入的行/列坐标的长度相同；slice 获取的是行/列坐标的组合值，因此返回的结果是一个 “行坐标长度 × 列坐标长度” 维度的矩阵。</p></li><li class="- topic/li li"><p class="- topic/p p">cells 返回一个向量；slice 是对矩阵进行切片，返回一个矩阵（可调用 flatten 转换为向量）。</p></li></ul><p class="- topic/p p">（3）获取某列/某几列的值：<code class="+ topic/ph pr-d/codeph ph codeph">slice</code>, <code class="+ topic/ph pr-d/codeph ph codeph">col</code>, <code class="+ topic/ph pr-d/codeph ph codeph">loc</code></p><pre class="+ topic/pre pr-d/codeblock pre codeblock"><code>&gt;m.slice(0) // 等同于 m[0] 或 m[, 0]
+[1,2,3,4,5,6,7,8,9,10]
+
+&gt;m.slice([0,3]) // 等同于 m[[0,3]]
+col1	col2
+1	31
+2	32
+3	33
+4	34
+5	35
+6	36
+7	37
+8	38
+9	39
+10	40
+
+&gt;m.slice(0:3) // 等同于 m[0:3] 或 m[,0:3] 
+col1	col2	col3
+1	11	21
+2	12	22
+3	13	23
+4	14	24
+5	15	25
+6	16	26
+7	17	27
+8	18	28
+9	19	29
+10	20	30</code></pre><pre class="+ topic/pre pr-d/codeblock pre codeblock"><code>&gt;m.col(0)
+[1,2,3,4,5,6,7,8,9,10]
+
+&gt;m.col(0:3)
+col1	col2	col3
+1	11	21
+2	12	22
+3	13	23
+4	14	24
+5	15	25
+6	16	26
+7	17	27
+8	18	28
+9	19	29
+10	20	30</code></pre><pre class="+ topic/pre pr-d/codeblock pre codeblock"><code>&gt;m.loc(,[true, false, false, false, false, false, false, false, false, false])
+col1
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+
+&gt;m.loc(,[true, false, true, false, false, false, true, false, false, false])
+col1	col2	col3
+1	21	61
+2	22	62
+3	23	63
+4	24	64
+5	25	65
+6	26	66
+7	27	67
+8	28	68
+9	29	69
+10	30	70</code></pre><p class="- topic/p p">（4）获取某行/某几行的值：<code class="+ topic/ph pr-d/codeph ph codeph">slice</code>, <code class="+ topic/ph pr-d/codeph ph codeph">row</code>, <code class="+ topic/ph pr-d/codeph ph codeph">loc</code></p><pre class="+ topic/pre pr-d/codeblock pre codeblock"><code>&gt;m.slice(1,).flatten() // 等同于 m[index, ].flatten()
+[2,12,22,32,42,52,62,72,82,92]
+
+&gt;m.slice([1,2],)
+col1	col2	col3	col4	col5	col6	col7	col8	col9	col10
+1	11	21	31	41	51	61	71	81	91
+2	12	22	32	42	52	62	72	82	92  </code></pre><pre class="+ topic/pre pr-d/codeblock pre codeblock"><code>&gt;m.row(1)
+[2,12,22,32,42,52,62,72,82,92]
+
+&gt;m.row(0:2)
+col1	col2	col3	col4	col5	col6	col7	col8	col9	col10
+1	11	21	31	41	51	61	71	81	91
+2	12	22	32	42	52	62	72	82	92</code></pre><pre class="+ topic/pre pr-d/codeblock pre codeblock"><code>&gt;m.loc([true, false, false, false, false, false, false, false, false, false])
+col1	col2	col3	col4	col5	col6	col7	col8	col9	col10
+1	11	21	31	41	51	61	71	81	91
+
+&gt;m.loc([true, false, true, false, false, false, false, false, false, false])
+col1	col2	col3	col4	col5	col6	col7	col8	col9	col10
+1	11	21	31	41	51	61	71	81	91
+3	13	23	33	43	53	63	73	83	93</code></pre><p class="- topic/p p">（5）获取指定位置的矩阵切片：<code class="+ topic/ph pr-d/codeph ph codeph">slice</code>, <code class="+ topic/ph pr-d/codeph ph codeph">loc</code></p><pre class="+ topic/pre pr-d/codeblock pre codeblock"><code>&gt;m.slice(1:3,0:4) // s[1:3,0:4]
+col1	col2	col3	col4
+2	12	22	32
+3	13	23	33
+
+&gt;m.slice([1,4], [2])
+col1
+22
+25
+</code></pre><pre class="+ topic/pre pr-d/codeblock pre codeblock"><code>&gt;m.loc([true, false, true, false, false, false, false, false, false, false],[true, true, true, false, false, false, false, false, false, false])
+col1	col2	col3
+1	11	21
+3	13	23</code></pre></div></article><article class="- topic/topic topic nested3" aria-labelledby="ariaid-title7" id="222-根据标签访问矩阵"><h4 class="- topic/title title topictitle4" id="ariaid-title7">2.2.2. 根据标签访问矩阵</h4><div class="- topic/body body"><p class="- topic/p p">通过 <code class="+ topic/ph pr-d/codeph ph codeph">rename!</code> 函数为矩阵打上标签。</p><pre class="+ topic/pre pr-d/codeblock pre codeblock"><code>&gt;m = 1..25$5:5;
+&gt;rlabel = 1..5
+&gt;clabel = 2022.01.01 + 1..5
+&gt;m.rename!(rlabel, clabel)
+&gt;m;
+
+label	2022.01.02	2022.01.03	2022.01.04	2022.01.05	2022.01.06
+1	1	6	11	16	21
+2	2	7	12	17	22
+3	3	8	13	18	23
+4	4	9	14	19	24
+5	5	10	15	20	25</code></pre><pre class="+ topic/pre pr-d/codeblock pre codeblock"><code>&gt;m.loc(1, 2022.01.03)
+6
+
+&gt;m.loc([1,3,4], [2022.01.02, 2022.01.06])
+label	2022.01.02	2022.01.06
+1	1	21
+3	3	23
+4	4	24
+
+// 使用数据对访问标签时，要求矩阵必须是索引矩阵或索引序列
+&gt;m.setIndexedMatrix!()
+&gt;m.loc(1:3, 2022.01.01:2022.01.03)
+label	2022.01.02	2022.01.03
+1	1	6
+2	2	7
+3	3	8</code></pre></div></article></article><article class="- topic/topic topic nested2" aria-labelledby="ariaid-title8" id="23-修改矩阵"><h3 class="- topic/title title topictitle3" id="ariaid-title8">2.3. 修改矩阵</h3><div class="- topic/body body"></div><article class="- topic/topic topic nested3" aria-labelledby="ariaid-title9" id="231-追加数据"><h4 class="- topic/title title topictitle4" id="ariaid-title9">2.3.1. 追加数据</h4><div class="- topic/body body"><p class="- topic/p p">通过 <code class="+ topic/ph pr-d/codeph ph codeph">append!</code> 函数追加向量到矩阵，该向量的长度必须是矩阵行数的倍数。</p><pre class="+ topic/pre pr-d/codeblock pre codeblock"><code>&gt;m=1..6$2:3;          
+&gt;m;                  
+#0 #1 #2              
+-- -- --
+1  3  5              
+2  4  6              
+
+// 追加1列到m                    
+&gt;append!(m, 7 9);      
+#0 #1 #2 #3
+-- -- -- --
+1  3  5  7
+2  4  6  9
+
+// 追加2列到m
+&gt;append!(m, 8 6 1 2);    
+#0 #1 #2 #3 #4 #5
+-- -- -- -- -- --
+1  3  5  7  8  1
+2  4  6  9  6  2
+
+// 要追加的向量长度必须能被矩阵的行数除尽。
+&gt;append!(m, 3 4 5);
+The size of the vector to append must be divisible by the number of rows of the matrix.</code></pre></div></article><article class="- topic/topic topic nested3" aria-labelledby="ariaid-title10" id="232-修改数据"><h4 class="- topic/title title topictitle4" id="ariaid-title10">2.3.2. 修改数据</h4><div class="- topic/body body"><p class="- topic/p p">访问矩阵固定位置的元素并通过赋值修改对应元素的值。</p><ul class="- topic/ul ul"><li class="- topic/li li"><p class="- topic/p p">修改列：使用 m[index] = X 修改某列；使用 m[start:end] = X 修改多列。</p></li><li class="- topic/li li"><p class="- topic/p p">修改行：使用 m[index,] = X 修改某行；使用 m[start:end,] = X 修改多行。</p></li><li class="- topic/li li"><p class="- topic/p p">修改矩阵窗口：使用 m[r1:r2, c1:c2] = X 来修改矩阵窗口。</p></li></ul><p class="- topic/p p">其中，X 是一个标量或者向量。</p></div></article></article><article class="- topic/topic topic nested2" aria-labelledby="ariaid-title11" id="24-按列对矩阵进行过滤"><h3 class="- topic/title title topictitle3" id="ariaid-title11">2.4. 按列对矩阵进行过滤</h3><div class="- topic/body body"><p class="- topic/p p"><code class="+ topic/ph pr-d/codeph ph codeph">mask</code> 函数会过滤满足条件表达式的结果，并保留不满足条件的结果，不改变矩阵的维度。at 保留满足条件的结果，其行为和 mask 相反。</p><pre class="+ topic/pre pr-d/codeblock pre codeblock"><code>&gt;mask(m, m%2!=0); 
+// 等价于 iif(m%2!=0, NULL, m)
+col1	col2	col3	col4	col5	col6	col7	col8	col9	col10
+									
+2	12	22	32	42	52	62	72	82	92
+									
+4	14	24	34	44	54	64	74	84	94
+									
+6	16	26	36	46	56	66	76	86	96
+									
+8	18	28	38	48	58	68	78	88	98
+									
+10	20	30	40	50	60	70	80	90	100</code></pre><pre class="+ topic/pre pr-d/codeblock pre codeblock"><code>&gt;m.at(m%2!=0) // m[m%2!=0]
+// 等价于 iif(m%2!=0, m, NULL)
+col1	col2	col3	col4	col5	col6	col7	col8	col9	col10
+1	11	21	31	41	51	61	71	81	91
+									
+3	13	23	33	43	53	63	73	83	93
+									
+5	15	25	35	45	55	65	75	85	95
+									
+7	17	27	37	47	57	67	77	87	97
+									
+9	19	29	39	49	59	69	79	89	99</code></pre><p class="- topic/p p">使用 lambda 表达式对矩阵的每一个列进行过滤。注意，按列对矩阵进行过滤时，lambda 表达式只能接受一个参数，并且返回的结果必须是 BOOL 类型的标量。</p><pre class="+ topic/pre pr-d/codeblock pre codeblock"><code>&gt;m=matrix(0 2 3 4,0 0 0 0,4 7 8 2);
+
+//返回矩阵中不全为0的列
+&gt;m[x-&gt;!all(x==0)];
+#0 #1
+-- --
+0  4
+2  7
+3  8
+4  2
+
+//返回矩阵中均值大于4的列
+&gt;m=matrix(0 2 3 4,5 3 6 9,4 7 8 2);
+&gt;m[def (x):avg(x)&gt;4];
+#0 #1
+-- --
+5  4
+3  7
+6  8
+9  2</code></pre><p class="- topic/p p">通过 <code class="+ topic/ph pr-d/codeph ph codeph">iif</code> 函数修改矩阵中满足条件的元素。</p><pre class="+ topic/pre pr-d/codeblock pre codeblock"><code>&gt;m1=1..6$3:2
+&gt;m2=6..1$3:2
+&gt;iif(m1&gt;m2, m1, m2);
+col1	col2
+6	4
+5	5
+4	6
+
+&gt;m=matrix(NULL 2 3 4,NULL NULL 3 NULL,4 7 8 2);
+&gt;iif(isNull(m), 0, m)
+col1	col2	col3
+0	0	4
+2	0	7
+3	3	8
+4	0	2</code></pre></div></article><article class="- topic/topic topic nested2" aria-labelledby="ariaid-title12" id="25-矩阵的拼接"><h3 class="- topic/title title topictitle3" id="ariaid-title12">2.5. 矩阵的拼接</h3><div class="- topic/body body"><p class="- topic/p p">通过函数 <code class="+ topic/ph pr-d/codeph ph codeph">concatMatrix</code> 将多个矩阵进行水平/垂直的拼接：</p><pre class="+ topic/pre pr-d/codeblock pre codeblock"><code>&gt;m1 = matrix(4 0 5, 2 1 8);
+&gt;m2 = matrix(2 9 8, 3 7 -3, 6 4 2, 0 5 8);
+&gt;m3 = matrix(1 -1 6 2, 1 -3 1 9, 5 3 0 -4, 1 NULL 3 4);
+&gt;concatMatrix([m1, m2]);
+
+col1	col2	col3	col4	col5	col6
+4	2	2	3	6	0
+0	1	9	7	4	5
+5	8	8	(3)	2	8
+
+&gt;concatMatrix([m2, m3], false);
+col1	col2	col3	col4
+2	3	6	0
+9	7	4	5
+8	(3)	2	8
+1	1	5	1
+(1)	(3)	3	
+6	1	0	3
+2	9	(4)	4</code></pre></div></article><article class="- topic/topic topic nested2" aria-labelledby="ariaid-title13" id="26-矩阵的连接和对齐"><h3 class="- topic/title title topictitle3" id="ariaid-title13">2.6. 矩阵的连接和对齐</h3><div class="- topic/body body"><p class="- topic/p p">矩阵的连接和表类似，可以根据行标签进行 'inner join', 'outer join', 'left join', 'right join', 与'asof join' 等连接操作，合并两个矩阵。通过函数 <code class="+ topic/ph pr-d/codeph ph codeph">merge</code> 实现。</p><pre class="+ topic/pre pr-d/codeblock pre codeblock"><code>&gt;m1 = matrix([1.2, 7.8, 4.6, 5.1, 9.5], [0.15, 1.26, 0.45, 1.02, 0.33]).rename!([2012.01.01, 2015.02.01, 2015.03.01, 2015.04.01, 2015.05.01], `x1`x2).setIndexedMatrix!()
+&gt;m2 = matrix([1.0, 2.0, 3.0, 4.0], [0.14, 0.26, 0.35, 0.48]).rename!([2015.02.01, 2015.02.16, 2015.05.01, 2015.05.02], `y1`y2).setIndexedMatrix!()
+
+&gt;m1;
+label	x1	x2	y1	y2
+2012.01.01	1.2	0.15		
+2015.02.01	7.8	1.26	1	0.14
+2015.03.01	4.6	0.45	2	0.26
+2015.04.01	5.1	1.02	2	0.26
+2015.05.01	9.5	0.33	3	0.35
+
+&gt;m2;
+label	y1	y2
+2015.02.01	1	0.14
+2015.02.16	2	0.26
+2015.05.01	3	0.35
+2015.05.02	4	0.48</code></pre><pre class="+ topic/pre pr-d/codeblock pre codeblock"><code>&gt;merge(m1, m2, 'asof');
+label	x1	x2	y1	y2
+2012.01.01	1.2	0.15		
+2015.02.01	7.8	1.26	1	0.14
+2015.03.01	4.6	0.45	2	0.26
+2015.04.01	5.1	1.02	2	0.26
+2015.05.01	9.5	0.33	3	0.35
+
+&gt;merge(m1, m2, 'outer');
+label	x1	x2	y1	y2
+2012.01.01	1.2	0.15		
+2015.02.01	7.8	1.26	1	0.14
+2015.02.16			    2	0.26
+2015.03.01	4.6	0.45		
+2015.04.01	5.1	1.02		
+2015.05.01	9.5	0.33	3	0.35
+2015.05.02			    4	0.48</code></pre><p class="- topic/p p">连接操作除了用于合并矩阵外，还可用于矩阵标签和数据的对齐。通过函数 <code class="+ topic/ph pr-d/codeph ph codeph">align</code> 实现。</p><p class="- topic/p p">align 支持按行对齐，按列对齐或者同时按行列进行矩阵对齐，详情请参考用户手册的说明。</p><pre class="+ topic/pre pr-d/codeblock pre codeblock"><code>&gt;x1 = [09:00:00, 09:00:01, 09:00:03]
+&gt;x2 = [09:00:00, 09:00:02, 09:00:03, 09:00:04]
+&gt;m1 = matrix(1 2 3, 2 3 4, 3 4 5).rename!(x1)
+&gt;m2 = matrix(1 2 3, 2 3 4, 3 4 5, 4 5 6).rename!(x2)
+&gt;m = align(m1, m3, 'fj', false);
+&gt;m[0];
+09:00:00	09:00:01	09:00:03	09:00:04
+1	2	3	
+2	3	4	
+3	4	5	
+
+&gt;m[1];
+09:00:00	09:00:01	09:00:03	09:00:04
+1	2		3
+2	3		4
+3	4		5
+4	5		6</code></pre></div></article><article class="- topic/topic topic nested2" aria-labelledby="ariaid-title14" id="27-矩阵空值处理"><h3 class="- topic/title title topictitle3" id="ariaid-title14">2.7. 矩阵空值处理</h3><div class="- topic/body body"></div><article class="- topic/topic topic nested3" aria-labelledby="ariaid-title15" id="271-填充空值"><h4 class="- topic/title title topictitle4" id="ariaid-title15">2.7.1. 填充空值</h4><div class="- topic/body body"><p class="- topic/p p">矩阵的二元计算（非聚合运算）中，若包含空值，返回的结果也为 NULL。参考手册第 6 章：NULL 值的操作。</p><pre class="+ topic/pre pr-d/codeblock pre codeblock"><code>&gt;m1 = 3 -2 1 NULL -5 6$2:3
+col1	col2	col3
+3	1	(5)
+(2)		6
+
+&gt;m2 = 5 NULL 2 4 -5 9$2:3
+col1	col2	col3
+5	2	(5)
+	4	9
+
+&gt;m1 + m2
+col1	col2	col3
+8	3	(10)
+		15</code></pre><p class="- topic/p p">可以看到，包含空值的单元格计算结果也为空，这可能与预期的结果不符。某些场景下，用户希望空值不影响计算结果，或者以某个特定的值去填充空值。</p><p class="- topic/p p">常规的空值填充方法有：</p><ul class="- topic/ul ul"><li class="- topic/li li"><p class="- topic/p p"><code class="+ topic/ph pr-d/codeph ph codeph">bfill</code> 和 <code class="+ topic/ph pr-d/codeph ph codeph">bfill!</code>：使用 NULL 后的非NULL元素填充 NULL 值。</p></li><li class="- topic/li li"><p class="- topic/p p"><code class="+ topic/ph pr-d/codeph ph codeph">ffill</code> 和 <code class="+ topic/ph pr-d/codeph ph codeph">ffill!</code>：使用 NULL 前的非NULL元素填充 NULL 值。</p></li><li class="- topic/li li"><p class="- topic/p p"><code class="+ topic/ph pr-d/codeph ph codeph">lfill</code> 和 <code class="+ topic/ph pr-d/codeph ph codeph">lfill!</code>：线性填充非 NULL 元素之间的 NULL 值。</p></li><li class="- topic/li li"><p class="- topic/p p"><code class="+ topic/ph pr-d/codeph ph codeph">fill!</code>，<code class="+ topic/ph pr-d/codeph ph codeph">nullFill</code> 和 <code class="+ topic/ph pr-d/codeph ph codeph">nullFill!</code>：用指定值填充 NULL 值。</p></li></ul><p class="- topic/p p">上述方法都需要对参与计算的矩阵单独填充。对于矩阵间的二元计算，可以通过 <code class="+ topic/ph pr-d/codeph ph codeph">withNullFill</code> 函数同时实现填充和计算。</p></div></article><article class="- topic/topic topic nested3" aria-labelledby="ariaid-title16" id="272-去除空行列"><h4 class="- topic/title title topictitle4" id="ariaid-title16">2.7.2. 去除空行/列</h4><div class="- topic/body body"><p class="- topic/p p">若想删除矩阵中全为空值或空值较多的行/列，可以通过 <code class="+ topic/ph pr-d/codeph ph codeph">dropna</code> 实现。</p><p class="- topic/p p">下例使用 dropna 删除 mask 过滤后全为空的行。</p><pre class="+ topic/pre pr-d/codeblock pre codeblock"><code>&gt;m=1..100$10:10
+&gt;dropna(m.at(m%2!=0))
+col1	col2	col3	col4	col5	col6	col7	col8	col9	col10
+1	11	21	31	41	51	61	71	81	91
+3	13	23	33	43	53	63	73	83	93
+5	15	25	35	45	55	65	75	85	95
+7	17	27	37	47	57	67	77	87	97
+9	19	29	39	49	59	69	79	89	99</code></pre></div></article></article></article><article class="- topic/topic topic nested1" aria-labelledby="ariaid-title17" id="3-矩阵的运算"><h2 class="- topic/title title topictitle2" id="ariaid-title17">3. 矩阵的运算</h2><div class="- topic/body body"></div><article class="- topic/topic topic nested2" aria-labelledby="ariaid-title18" id="31-矩阵基本运算"><h3 class="- topic/title title topictitle3" id="ariaid-title18">3.1. 矩阵基本运算</h3><div class="- topic/body body"><p class="- topic/p p">DolphinDB 中矩阵的每一列都可以视为一个向量，所以大部分向量函数和聚合函数都适用于矩阵，计算结果等价于对矩阵每列进行计算后结果的拼接。例如：</p><pre class="+ topic/pre pr-d/codeblock pre codeblock"><code>&gt;m=1..6$2:3;
+&gt;m;
+#0 #1 #2
+-- -- --
+1  3  5
+2  4  6
+
+// 每个元素的余弦值
+&gt;cos(m);                  
+#0        #1        #2
+--------- --------- --------
+0.540302  -0.989992 0.283662
+-0.416147 -0.653644 0.96017
+</code></pre><p class="- topic/p p">DolphinDB 中矩阵可以直接与其它矩阵或标量进行四则运算。</p><p class="- topic/p p">矩阵和标量进行运算，等价于矩阵每个元素和标量进行运算。注意若标量为 NULL，计算结果也为 NULL：</p><pre class="+ topic/pre pr-d/codeblock pre codeblock"><code>&gt;m=1..10$5:2;
+&gt;m;  
+#0 #1        
+-- --
+1  6        
+2  7        
+3  8        
+4  9        
+5  10      
+
+&gt;2.1*m;                
+#0   #1
+---- ----
+2.1  12.6
+4.2  14.7
+6.3  16.8
+8.4  18.9
+10.5 21
+
+&gt;m\2;                
+#0  #1
+--- ---
+0.5 3
+1   3.5
+1.5 4
+2   4.5
+2.5 5
+
+&gt;m+1.1;
+#0  #1
+--- ----
+2.1 7.1
+3.1 8.1
+4.1 9.1
+5.1 10.1
+6.1 11.1
+
+&gt;m*NULL;        
+#0 #1                
+-- --</code></pre><p class="- topic/p p">矩阵和矩阵进行运算时，参与计算的两个矩阵的维度必须一致：</p><pre class="+ topic/pre pr-d/codeblock pre codeblock"><code>&gt;m=1..10$5:2;
+&gt;n=3..12$5:2;
+&gt;m;  
+#0 #1        
+-- --
+1  6        
+2  7        
+3  8        
+4  9        
+5  10      
+&gt;n;
+#0 #1
+-- --
+3  8 
+4  9 
+5  10
+6  11
+7  12
+
+&gt;m*n;                
+#0 #1 
+-- ---
+3  48 
+8  63 
+15 80 
+24 99 
+35 120
+
+&gt;m\n;                
+#0       #1      
+-------- --------
+0.333333 0.75    
+0.5      0.777778
+0.6      0.8     
+0.666667 0.818182
+0.714286 0.833333
+
+&gt;m+n;
+#0 #1
+-- --
+4  14
+6  16
+8  18
+10 20
+12 22
+
+&gt;n=3..10$4:2
+&gt;m+n;        
+Incompatible vector size</code></pre><p class="- topic/p p">DolphinDB 中部分矩阵运算，如相乘、求逆、求行列式、矩阵分解等采用了 OpenBlas 和 Lapack 进行优化，与 Matlab 的性能在一个数量级。</p></div></article><article class="- topic/topic topic nested2" aria-labelledby="ariaid-title19" id="32-矩阵相乘求逆转置求矩阵行列式"><h3 class="- topic/title title topictitle3" id="ariaid-title19">3.2. 矩阵相乘，求逆，转置，求矩阵行列式</h3><div class="- topic/body body"><p class="- topic/p p">矩阵相乘：</p><p class="- topic/p p">dot(X,Y) 或 X**Y：返回 X 和 Y 的矩阵乘法的结果。</p><pre class="+ topic/pre pr-d/codeblock pre codeblock"><code>&gt;x=1..6$2:3;
+&gt;y=1 2 3;
+&gt;x;
+#0 #1 #2
+-- -- --
+1  3  5 
+2  4  6 
+&gt;y;
+[1,2,3]
+&gt;x dot y;
+#0
+--
+22
+28
+           
+&gt;y=6..1$3:2;
+&gt;y;
+#0 #1
+-- --
+6  3 
+5  2 
+4  1  
+
+&gt;x**y;                            
+#0 #1
+-- --
+41 14
+56 20
+
+&gt;y**x;
+#0 #1 #2
+-- -- --
+12 30 48
+9  23 37
+6  16 26</code></pre><p class="- topic/p p">矩阵求逆：</p><p class="- topic/p p">inverse(X)：如果 X 可逆，返回矩阵 X 的逆矩阵。</p><pre class="+ topic/pre pr-d/codeblock pre codeblock"><code>&gt;x=1..4$2:2;
+&gt;x;
+#0 #1
+-- --
+1  3
+2  4
+
+&gt;x.inverse();
+#0 #1
+-- --
+-2 1.5
+1  -0.5</code></pre><p class="- topic/p p">矩阵转置：</p><p class="- topic/p p">transpose(X)：如果 X 为矩阵，返回 X 的转置矩阵。</p><pre class="+ topic/pre pr-d/codeblock pre codeblock"><code>&gt;x=1..6 $ 3:2;
+&gt;x;
+#0 #1
+-- --
+1  4
+2  5
+3  6
+
+&gt;transpose x;
+#0 #1 #2
+-- -- --
+1  2  3
+4  5  6</code></pre><p class="- topic/p p">求行列式：</p><p class="- topic/p p">det(X):计算矩阵的行列式，在计算中，NULL 值用 0 代替。</p><pre class="+ topic/pre pr-d/codeblock pre codeblock"><code>&gt;x=1..4$2:2;
+&gt;x;
+#0 #1
+-- --
+1  3
+2  4
+&gt;X.det();
+-2
+
+&gt;x=1 2 3 6 5 4 8 7 NULL $3:3;
+&gt;x;
+#0 #1 #2
+-- -- --
+1  6  8
+2  5  7
+3  4
+&gt;det x;
+42
+
+&gt;x=1 2 3 6 5 4 3 6 9$3:3;
+&gt;x;
+#0 #1 #2
+-- -- --
+1  6  3
+2  5  6
+3  4  9
+&gt;det x;
+0</code></pre></div></article><article class="- topic/topic topic nested2" aria-labelledby="ariaid-title20" id="33-按行计算和按列计算"><h3 class="- topic/title title topictitle3" id="ariaid-title20">3.3. 按行计算和按列计算</h3><div class="- topic/body body"><p class="- topic/p p">“矩阵基本运算”一节简单介绍了函数在矩阵上应用时的计算规则，可以看出对矩阵直接应用向量函数和聚合函数，都是按列进行计算的。此外，DolphinDB 手册提供了部分按行计算的函数和对应的高阶函数<code class="+ topic/ph pr-d/codeph ph codeph">byRow</code>。</p><p class="- topic/p p">部分函数不支持矩阵的列计算，此时可以采用高阶函数 <code class="+ topic/ph pr-d/codeph ph codeph">each</code> 实现：</p><pre class="+ topic/pre pr-d/codeblock pre codeblock"><code>//两个矩阵按列进行矩阵相乘运算
+&gt;x=1..6$2:3;
+&gt;y=6..1$2:3;
+&gt;x;
+#0 #1 #2
+-- -- --
+1  3  5
+2  4  6
+
+&gt;y;
+#0 #1 #2
+-- -- --
+6  4  2
+5  3  1
+
+&gt;each(**, x, y);
+[16,24,16] //比如，24=3*4+4*3</code></pre></div></article></article><article class="- topic/topic topic nested1" aria-labelledby="ariaid-title21" id="4-矩阵分解与求解线性方程"><h2 class="- topic/title title topictitle2" id="ariaid-title21">4. 矩阵分解与求解线性方程</h2><div class="- topic/body body"><p class="- topic/p p">DolphinDB 实现了以下矩阵分解函数：</p></div><article class="- topic/topic topic nested2" aria-labelledby="ariaid-title22" id="41-lu-分解"><h3 class="- topic/title title topictitle3" id="ariaid-title22">4.1. lu 分解</h3><div class="- topic/body body"><p class="- topic/p p"><code class="+ topic/ph pr-d/codeph ph codeph">lu</code>：对矩阵进行 lu分 解，X = P**L**U，其中P为置换矩阵，L 为下三角矩阵，U 为上三角矩阵。如果 permute=true，返回 PL=P**L 和 U。</p><pre class="+ topic/pre pr-d/codeblock pre codeblock"><code>&gt;m=matrix([2 5 7 5, 5 2 5 4, 8 2 6 4, 7 8 6 8]);
+&gt;m;
+#0 #1 #2 #3
+-- -- -- --
+2  5  8  7 
+5  2  2  8 
+7  5  6  6 
+5  4  4  8 
+
+&gt;p,l,u=lu(m);
+&gt;p;
+#0 #1 #2 #3
+-- -- -- --
+0  1  0  0 
+0  0  0  1 
+1  0  0  0 
+0  0  1  0 
+&gt;l;
+#0       #1    #2        #3
+-------- ----- --------- --
+1        0     0         0 
+0.285714 1     0         0 
+0.714286 0.12  1         0 
+0.714286 -0.44 -0.461538 1 
+&gt;u;
+#0 #1       #2       #3      
+-- -------- -------- --------
+7  5        6        6       
+0  3.571429 6.285714 5.285714
+0  0        -1.04    3.08    
+0  0        0        7.461538
+
+&gt;pl,u=lu(m,true);
+&gt;pl;
+#0       #1    #2        #3
+-------- ----- --------- --
+0.285714 1     0         0 
+0.714286 -0.44 -0.461538 1 
+1        0     0         0 
+0.714286 0.12  1         0 
+&gt;u;
+#0 #1       #2       #3      
+-- -------- -------- --------
+7  5        6        6       
+0  3.571429 6.285714 5.285714
+0  0        -1.04    3.08    
+0  0        0        7.461538</code></pre><p class="- topic/p p">可以对非方阵的矩阵进行 lu 分解。</p><pre class="+ topic/pre pr-d/codeblock pre codeblock"><code>&gt;m=matrix([2 5 5, 5 5 4, 8 6 4, 7 6 8]);
+&gt;m;
+#0 #1 #2 #3
+-- -- -- --
+2  5  8  7 
+5  5  6  6 
+5  4  4  8 
+
+&gt;p,l,u=lu(m);
+&gt;p;
+#0 #1 #2
+-- -- --
+0  1  0 
+1  0  0 
+0  0  1 
+&gt;l;
+#0  #1        #2
+--- --------- --
+1   0         0 
+0.4 1         0 
+1   -0.333333 1 
+&gt;u;
+#0 #1 #2        #3      
+-- -- --------- --------
+5  5  6         6       
+0  3  5.6       4.6     
+0  0  -0.133333 3.533333
+
+&gt;pl,u=lu(m,true);
+&gt;pl;
+#0  #1        #2
+--- --------- --
+0.4 1         0 
+1   0         0 
+1   -0.333333 1 
+&gt;u;
+#0 #1 #2        #3      
+-- -- --------- --------
+5  5  6         6       
+0  3  5.6       4.6     
+0  0  -0.133333 3.533333</code></pre></div></article><article class="- topic/topic topic nested2" aria-labelledby="ariaid-title23" id="42-qr-分解"><h3 class="- topic/title title topictitle3" id="ariaid-title23">4.2. qr 分解</h3><div class="- topic/body body"><p class="- topic/p p"><code class="+ topic/ph pr-d/codeph ph codeph">qr</code>：X 为一个 m*n 的矩阵，对 X 进行 qr 分解，X=Q**R，Q 为正交矩阵，R 为上三角矩阵。mode 的选项有：'full', 'r', 'economic', 'raw'。</p><p class="- topic/p p">mode 为'full'：返回完整的 qr 分解结果，即 Q 为 m*m 的矩阵，R 为 m*n 的矩阵。</p><pre class="+ topic/pre pr-d/codeblock pre codeblock"><code>&gt;m=matrix([2 5 5, 5 5 4, 8 6 4, 7 6 8]);
+&gt;m;
+#0 #1 #2 #3
+-- -- -- --
+2  5  8  7 
+5  5  6  6 
+5  4  4  8 
+
+&gt;q,r=qr(m,mode='full',pivoting=false);
+&gt;q;
+#0        #1        #2       
+--------- --------- ---------
+-0.272166 0.93784   0.215365 
+-0.680414 -0.029307 -0.732242
+-0.680414 -0.345828 0.646096 
+&gt;r;
+#0        #1        #2        #3        
+--------- --------- --------- ----------
+-7.348469 -7.484552 -8.981462 -11.430952
+0         3.159348  5.943561  3.622407  
+0         0         -0.086146 2.282872
+
+&gt;m=matrix([2 5 7 5, 5 2 5 4, 8 2 6 4]);
+&gt;m;
+#0 #1 #2
+-- -- --
+2  5  8 
+5  2  2 
+7  5  6 
+5  4  4  
+
+&gt;q,r=qr(m); //mode='full',pivoting=false
+&gt;q;
+#0        #1        #2        #3       
+--------- --------- --------- ---------
+-0.197066 0.903357  0.300275  0.234404 
+-0.492665 -0.418267 0.459245  0.609449 
+-0.68973  -0.02475  0.170745  -0.703211
+-0.492665 0.091573  -0.818398 0.281284 
+&gt;r;
+#0         #1       #2       
+---------- -------- ---------
+-10.148892 -7.38997 -8.670898
+0          3.922799 6.608121 
+0          0        1.071571 
+0          0        0  </code></pre><p class="- topic/p p">对于 m&gt;n 的矩阵，mode 为 full 时 R 矩阵的下面的 m−n 行全为 0，X=Q**R 可以进一步分解为:
+X = Q**([R1,0]<sup class="+ topic/ph hi-d/sup ph sup">T</sup>) = [Q1,Q2]**([R1,0]<sup class="+ topic/ph hi-d/sup ph sup">T</sup>) = Q1**R1。</p><p class="- topic/p p">mode 取 'economic': m&gt;n，即返回 Q1 和 R1，Q1 为 m*n 的矩阵，R 为 n*n 的矩阵；m&lt;=n 时，返回结果和 mode 取 'full' 时一致。</p><pre class="+ topic/pre pr-d/codeblock pre codeblock"><code>&gt;m=matrix([2 5 5, 5 5 4, 8 6 4, 7 6 8]);
+&gt;m;
+#0 #1 #2 #3
+-- -- -- --
+2  5  8  7 
+5  5  6  6 
+5  4  4  8 
+
+&gt;q,r=qr(m,mode='economic',pivoting=false);
+&gt;q;
+#0        #1        #2       
+--------- --------- ---------
+-0.272166 0.93784   0.215365 
+-0.680414 -0.029307 -0.732242
+-0.680414 -0.345828 0.646096 
+&gt;r;
+#0        #1        #2        #3        
+--------- --------- --------- ----------
+-7.348469 -7.484552 -8.981462 -11.430952
+0         3.159348  5.943561  3.622407  
+0         0         -0.086146 2.282872
+  
+&gt;m=matrix([2 5 7 5, 5 2 5 4, 8 2 6 4]);
+&gt;m;
+#0 #1 #2
+-- -- --
+2  5  8 
+5  2  2 
+7  5  6 
+5  4  4  
+
+&gt;q,r=qr(m,mode='economic'); //pivoting=false
+&gt;q;
+#0        #1        #2       
+--------- --------- ---------
+-0.197066 0.903357  0.300275 
+-0.492665 -0.418267 0.459245 
+-0.68973  -0.02475  0.170745 
+-0.492665 0.091573  -0.818398
+&gt;r;
+#0         #1       #2       
+---------- -------- ---------
+-10.148892 -7.38997 -8.670898
+0          3.922799 6.608121 
+0          0        1.071571 </code></pre><p class="- topic/p p">mode取 'r'：返回 qr(X,mode = 'full') 中的R。</p><pre class="+ topic/pre pr-d/codeblock pre codeblock"><code>&gt;m=matrix([2 5 5, 5 5 4, 8 6 4, 7 6 8]);
+&gt;m;
+#0 #1 #2 #3
+-- -- -- --
+2  5  8  7 
+5  5  6  6 
+5  4  4  8 
+
+&gt;r=qr(m,mode='r',pivoting=false);
+&gt;r;
+#0        #1        #2        #3        
+--------- --------- --------- ----------
+-7.348469 -7.484552 -8.981462 -11.430952
+0         3.159348  5.943561  3.622407  
+0         0         -0.086146 2.282872
+  
+&gt;m=matrix([2 5 7 5, 5 2 5 4, 8 2 6 4]);
+&gt;m;
+#0 #1 #2
+-- -- --
+2  5  8 
+5  2  2 
+7  5  6 
+5  4  4  
+
+&gt;r=qr(m,mode='r'); //pivoting=false
+&gt;r;
+#0         #1       #2       
+---------- -------- ---------
+-10.148892 -7.38997 -8.670898
+0          3.922799 6.608121 
+0          0        1.071571 
+0          0        0        </code></pre><p class="- topic/p p">mode 取 'raw': 返回矩阵 h、数组 tau 和矩阵 R。qr 分解的计算通过 householder 变换实现，h 为其计算 R 矩阵时的变换矩阵，tau 为 householder 变换的变换因子。</p><pre class="+ topic/pre pr-d/codeblock pre codeblock"><code>&gt;m=matrix([2 5 5, 5 5 4, 8 6 4, 7 6 8]);
+&gt;m;
+#0 #1 #2 #3
+-- -- -- --
+2  5  8  7 
+5  5  6  6 
+5  4  4  8 
+
+&gt;h,tau,r=qr(m,mode=`raw,pivoting=false);
+&gt;h;
+#0        #1        #2        #3        
+--------- --------- --------- ----------
+-7.348469 -7.484552 -8.981462 -11.430952
+0.534847  3.159348  5.943561  3.622407  
+0.534847  0.553547  -0.086146 2.282872  
+&gt;tau;
+[1.272166,1.530908,0]
+&gt;r;
+#0        #1        #2        #3        
+--------- --------- --------- ----------
+-7.348469 -7.484552 -8.981462 -11.430952
+0         3.159348  5.943561  3.622407  
+0         0         -0.086146 2.282872  </code></pre><p class="- topic/p p">pivoting 取 true：计算秩显 qr 分解，计算 A**P=Q**R，P 是置换矩阵，R 矩阵满足对角线上的元素不递减。qr(X,pivoting=true,[mode='full']) 返回矩阵 Q，R 和 piv 数组，piv 为 P 矩阵的置换规则。</p><pre class="+ topic/pre pr-d/codeblock pre codeblock"><code>&gt;m=matrix([2 5 5, 5 5 4, 8 6 4, 7 6 8]);
+&gt;m;
+#0 #1 #2 #3
+-- -- -- --
+2  5  8  7 
+5  5  6  6 
+5  4  4  8 
+
+&gt;q,r,piv=qr(m,mode=`full,pivoting=true);
+&gt;q;
+#0        #1        #2      
+--------- --------- --------
+-0.742781 0.629178  0.228934
+-0.557086 -0.391111 -0.73259
+-0.371391 -0.67169  0.641016
+&gt;r;
+#0        #1        #2         #3       
+--------- --------- ---------- ---------
+-10.77033 -6.127946 -11.513111 -7.9849  
+0         -4.055647 -3.315938  -1.496423
+0         0         2.33513    0.045787 
+&gt;piv;
+[2,0,3,1] 
+
+//置换规则: 如果 piv[i] != i, 则m[i] = m[piv[i]]
+&gt;q**r;
+#0 #1 #2 #3
+-- -- -- --
+8  2  7  5 
+6  5  6  5 
+4  5  8  4 </code></pre></div></article><article class="- topic/topic topic nested2" aria-labelledby="ariaid-title24" id="43-svd-分解"><h3 class="- topic/title title topictitle3" id="ariaid-title24">4.3. svd 分解</h3><div class="- topic/body body"><p class="- topic/p p">函数 <code class="+ topic/ph pr-d/codeph ph codeph">svd</code> 计算矩阵 svd 分解：X = U ** Σ ** V<sup class="+ topic/ph hi-d/sup ph sup">T</sup>，X 为 m*n 的矩阵，输出 U, s(diag(Σ)), Vt(V.transpose())；U 和 V 均为单位正交阵，U 为左奇异矩阵，V 为右奇异矩阵。Σ 仅在主对角线上有值，s 为矩阵的奇异值。</p><p class="- topic/p p">s 是长度为 k 的一维矩阵；fullfullMatrice 为 true 时，U 和 Vh 的维度分别为(m, m) 与 (n, n)；fullfullMatrice 为 false 时，U 和 Vh 的维度分别为(m, k), (k, n), k = min(m, n)。
+computeUV 为 false 时，只返回 s。</p><pre class="+ topic/pre pr-d/codeblock pre codeblock"><code>&gt;m=matrix([2 5 5, 5 5 4, 8 6 4, 7 6 8]);
+&gt;m;
+#0 #1 #2 #3
+-- -- -- --
+2  5  8  7 
+5  5  6  6 
+5  4  4  8
+
+&gt;u,s,vh = svd(m); //fullMatrices=true,computeUV=true
+&gt;u;
+#0        #1        #2       
+--------- --------- ---------
+-0.604057 -0.734356 0.309574 
+-0.570062 0.126705  -0.811773
+-0.556906 0.666834  0.495165 
+&gt;s;
+[19.202978,3.644527,1.721349]
+&gt;vh;
+#0        #1        #2        #3       
+--------- --------- --------- ---------
+-0.356349 -0.421717 -0.545772 -0.63032 
+0.68568   -0.101776 -0.671497 0.261873 
+-0.559964 -0.308094 -0.240155 0.730646 
+-0.29883  0.846684  -0.439944 -0.016602
+
+&gt;u,s,vh = svd(m, fullMatrices=false); //computeUV=true
+&gt;u;
+#0        #1        #2       
+--------- --------- ---------
+-0.604057 -0.734356 0.309574 
+-0.570062 0.126705  -0.811773
+-0.556906 0.666834  0.495165 
+&gt;s;
+[19.202978,3.644527,1.721349]
+&gt;vh;
+#0        #1        #2        #3      
+--------- --------- --------- --------
+-0.356349 -0.421717 -0.545772 -0.63032
+0.68568   -0.101776 -0.671497 0.261873
+-0.559964 -0.308094 -0.240155 0.730646
+
+&gt;s = svd(m, computeUV=false);
+&gt;s;
+[19.202978,3.644527,1.721349]</code></pre></div></article><article class="- topic/topic topic nested2" aria-labelledby="ariaid-title25" id="44-cholesky-分解"><h3 class="- topic/title title topictitle3" id="ariaid-title25">4.4. cholesky 分解</h3><div class="- topic/body body"><p class="- topic/p p">cholesky(X, [lower=true]): 对矩阵进行 Cholesky 分解 X = L ** L<sup class="+ topic/ph hi-d/sup ph sup">T</sup>, X 是一个对称正定矩阵; lower 是一个布尔值，表示是否使用输入矩阵的下三角来计算分解。默认值为 true，表示使用下三角计算。如果 lower 为 false，表示使用上三角计算。</p><pre class="+ topic/pre pr-d/codeblock pre codeblock"><code>&gt;m=[1, 0, 1, 0, 2, 0, 1, 0, 3]$3:3;
+&gt;m;
+#0 #1 #2
+-- -- --
+1  0  1
+0  2  0
+1  0  3
+
+&gt;L=cholesky(m);
+&gt;L;
+#0 #1       #2      
+-- -------- --------
+1  0        0      
+0  1.414214 0      
+1  0        1.414214
+
+&gt;L**transpose(L);
+#0 #1 #2
+-- -- --
+1  0  1
+0  2  0
+1  0  3
+
+&gt;cholesky(m, false);
+#0 #1       #2      
+-- -------- --------
+1  0        1      
+0  1.414214 0      
+0  0        1.414214</code></pre></div></article><article class="- topic/topic topic nested2" aria-labelledby="ariaid-title26" id="45-schur-分解"><h3 class="- topic/title title topictitle3" id="ariaid-title26">4.5. schur 分解</h3><div class="- topic/body body"><p class="- topic/p p"><code class="+ topic/ph pr-d/codeph ph codeph">schur</code>: 对矩阵进行 schur 分解，X = U ** T ** U<sup class="+ topic/ph hi-d/sup ph sup">H</sup>；U 为幺正矩阵 (U<sup class="+ topic/ph hi-d/sup ph sup">-1</sup> = U<sup class="+ topic/ph hi-d/sup ph sup">T</sup>)，T 为上三角矩阵，T 的对角元素是 A 的所有特征值；sort 根据指定的特征值顺序对分解得到的矩阵进行重新排序，默认为 NULL，目前支持的有 'lhp': 左半平面 (e &lt; 0.0)；'rhp': 右半平面 (e &gt; 0.0)；'iuc': 单位圆盘的内部 (abs(e) &lt; 1)；'ouc': 单位圆盘的外部 (abs(e) &gt;= 1)。</p><pre class="+ topic/pre pr-d/codeblock pre codeblock"><code>&gt;m=matrix([2 5 7 5, 5 2 5 4, 8 2 6 4, 7 8 6 8]);
+&gt;m;
+#0 #1 #2 #3
+-- -- -- --
+2  5  8  7 
+5  2  2  8 
+7  5  6  6 
+5  4  4  8 
+
+&gt;t,u=schur(m);
+&gt;t;
+#0       #1        #2        #3       
+-------- --------- --------- ---------
+21.16354 -1.073588 -0.473548 -4.270044
+0        -4.306007 -1.391659 2.039609 
+0        0         -0.995651 -2.879786
+0        0         0         2.138117 
+&gt;u;
+#0       #1        #2        #3       
+-------- --------- --------- ---------
+0.52214  0.818236  0.198151  0.136364 
+0.401387 -0.461653 0.785756  0.091394 
+0.568479 -0.320408 -0.540423 0.531143 
+0.493041 -0.121263 -0.226421 -0.831228
+
+&gt;u**t**u.transpose();
+#0 #1 #2 #3
+-- -- -- --
+2  5  8  7 
+5  2  2  8 
+7  5  6  6 
+5  4  4  8 
+
+&gt;t,u, sdim=schur(m,'lhp') //'lhp':(e &lt; 0.0), sdim 为符合sort条件的特征值数量
+&gt;t;
+#0        #1        #2        #3       
+--------- --------- --------- ---------
+-4.306007 -1.390041 -1.099778 -1.857969
+0         -0.995651 -0.414519 2.960681 
+0         0         21.16354  -4.29753 
+0         0         0         2.138117 
+&gt;u;
+#0       #1        #2       #3       
+-------- --------- -------- ---------
+-0.8395  -0.207229 0.483426 0.136364 
+0.444339 -0.793483 0.405703 0.091394 
+0.296182 0.529453  0.591475 0.531143 
+0.100391 0.217073  0.501858 -0.831228
+&gt;sdim;
+2
+
+&gt;t,u, sdim=schur(m,'rhp') //'rhp':(e &lt; 0.0)
+&gt;t;
+#0       #1        #2        #3       
+-------- --------- --------- ---------
+21.16354 -3.020883 0.002732  3.237958 
+0        2.138117  2.443445  -2.818711
+0        0         -4.306007 -0.688714
+0        0         0         -0.995651
+&gt;u;
+#0       #1        #2        #3       
+-------- --------- --------- ---------
+0.52214  0.258617  -0.777021 -0.238171
+0.401387 -0.597888 0.267022  -0.640405
+0.568479 0.594002  0.567898  0.03853  
+0.493041 -0.472026 -0.049293 0.729158 
+&gt;sdim;
+2
+
+&gt;t,u, sdim=schur(m,'iuc') //'iuc':(abs(e) &lt; 1.0)
+&gt;t;
+#0        #1       #2        #3       
+--------- -------- --------- ---------
+-0.995651 -0.02048 1.390574  3.449116 
+0         21.16354 1.174494  -4.266858
+0         0        -4.306007 -0.764178
+0         0        0         2.138117 
+&gt;u;
+#0        #1       #2        #3       
+--------- -------- --------- ---------
+0.133953  0.522264 -0.831085 0.136364 
+-0.903631 0.400552 0.121062  0.091394 
+0.373493  0.568825 0.504805  0.531143 
+0.161277  0.49319  0.199534  -0.831228
+&gt;sdim;
+1
+
+&gt;t,u, sdim=schur(m,'ouc') //'ouc':(abs(e) &gt;= 1.0)
+&gt;t;
+#0       #1        #2        #3       
+-------- --------- --------- ---------
+21.16354 -1.073588 -2.823677 3.237958 
+0        -4.306007 2.443445  -0.355379
+0        0         2.138117  -2.879786
+0        0         0         -0.995651
+&gt;u;
+#0       #1        #2        #3       
+-------- --------- --------- ---------
+0.52214  0.818236  -0.03367  -0.238171
+0.401387 -0.461653 -0.464378 -0.640405
+0.568479 -0.320408 0.75676   0.03853  
+0.493041 -0.121263 -0.45884  0.729158 
+0.161277  0.49319  0.199534  -0.831228
+&gt;sdim;
+3</code></pre></div></article><article class="- topic/topic topic nested2" aria-labelledby="ariaid-title27" id="46-求解线性方程组"><h3 class="- topic/title title topictitle3" id="ariaid-title27">4.6. 求解线性方程组</h3><div class="- topic/body body"><p class="- topic/p p">solve(a,y): 求解线性方程组 a*x=y</p><pre class="+ topic/pre pr-d/codeblock pre codeblock"><code>&gt;a=[1,0,2,1,2,5,1,5,-1]$3:3;
+&gt;y=[6,-4,27];
+&gt;a;
+#0 #1 #2
+-- -- --
+1  1  1 
+0  2  5 
+2  5  -1
+
+&gt;x = solve(a,y);
+&gt;x;
+[5,3,-2]
+
+&gt;a ** matrix(x);
+#0
+--
+6 
+-4
+27</code></pre></div></article></article><article class="- topic/topic topic nested1" aria-labelledby="ariaid-title28" id="5-矩阵高级运算"><h2 class="- topic/title title topictitle2" id="ariaid-title28">5. 矩阵高级运算</h2><div class="- topic/body body"></div><article class="- topic/topic topic nested2" aria-labelledby="ariaid-title29" id="51-计算矩阵特征值和特征向量"><h3 class="- topic/title title topictitle3" id="ariaid-title29">5.1. 计算矩阵特征值和特征向量</h3><div class="- topic/body body"><p class="- topic/p p">函数 <code class="+ topic/ph pr-d/codeph ph codeph">eig(X)</code> 计算矩阵的特征值和特征向量。返回一个字典，包含两个键：values（特征值）与 vectors（特征向量）。</p><pre class="+ topic/pre pr-d/codeblock pre codeblock"><code>&gt;m=matrix([2 5 7 5, 5 2 5 4, 8 2 6 4, 7 8 6 8]);
+&gt;m;
+#0 #1 #2 #3
+-- -- -- --
+2  5  8  7 
+5  2  2  8 
+7  5  6  6 
+5  4  4  8 
+
+&gt;v=eig(m);
+&gt;v[`values];
+[19.750181,-3.807927,-1.551136,3.608882]
+
+&gt;v[`vectors];
+#0       #1        #2        #3       
+-------- --------- --------- ---------
+0.485606 -0.853982 -0.034777 -0.183556
+0.413406 0.301775  -0.845881 -0.15004 
+0.553396 0.40595   0.507665  -0.520802
+0.535757 0.121868  0.15985   0.820098 </code></pre></div></article><article class="- topic/topic topic nested2" aria-labelledby="ariaid-title30" id="52-pca-计算"><h3 class="- topic/title title topictitle3" id="ariaid-title30">5.2. PCA 计算</h3><div class="- topic/body body"><p class="- topic/p p"><code class="+ topic/ph pr-d/codeph ph codeph">pca</code>: 对数据源中指定列中的数据求主成分分析。</p><p class="- topic/p p">返回的结果是一个字典，包含以下键：</p><ul class="- topic/ul ul"><li class="- topic/li li">explainedVarianceRatio: 对应一个长度为k的向量，包含前k个主成分分别解释的方差权重。</li><li class="- topic/li li">singularValues: 对应一个长度为k的向量，包含主成分方差(协方差矩阵特征值)。</li><li class="- topic/li li">components: 对应长度为size(xColNames)*k的主成分分析矩阵。</li></ul><pre class="+ topic/pre pr-d/codeblock pre codeblock"><code>&gt;x = [7,1,1,0,5,2]
+&gt;y = [0.7, 0.9, 0.01, 0.8, 0.09, 0.23]
+&gt;t=table(x, y)
+&gt;ds = sqlDS(&lt;select * from t&gt;);
+
+&gt;pca(ds);
+components-&gt;
+#0        #1
+--------- ---------
+-0.999883 0.015306
+-0.015306 -0.999883
+
+explainedVarianceRatio-&gt;[0.980301,0.019699]
+singularValues-&gt;[6.110802,0.866243]</code></pre></div></article></article><article class="- topic/topic topic nested1" aria-labelledby="ariaid-title31" id="6-jit-的支持"><h2 class="- topic/title title topictitle2" id="ariaid-title31">6. JIT 的支持</h2><div class="- topic/body body"><p class="- topic/p p">从 1.20 版本开始，DolphinDB database 的 JIT 增加了对矩阵运算的支持。支持矩阵作为函数参数和返回值，支持矩阵的四则运算，函数 <code class="+ topic/ph pr-d/codeph ph codeph">det</code> 与 <code class="+ topic/ph pr-d/codeph ph codeph">flatten</code>，以及矩阵的转置、点乘等运算。</p><pre class="+ topic/pre pr-d/codeblock pre codeblock"><code>//定义对角矩阵，jit计算比非jit快了10倍左右
+@jit
+def diagonalMatrix_jit(data, m){
+	n=data.size()
+	res=m
+	for( i in 0:n){
+		//i in 0:n
+		res[i*n+i]=data[i]
+	}
+	return res
+}
+
+def diagonalMatrix(data, m){
+	n=data.size()
+	res=m
+	for( i in 0:n){
+	 	x=m[i]
+	 	for(j in 0:n){
+	 		if(i==j){
+	 			x[j]=data[i]
+	 		}
+	 	}
+		res[i]=x
+	}
+	return res
+}
+&gt;m = matrix(DOUBLE,32,32)
+&gt;data=1..32
+&gt;timer(1000) diagonalMatrix(data,m)
+Time elapsed: 420.021 ms
+&gt;timer(1000) diagonalMatrix_jit(data,m)
+Time elapsed:  41.026 ms
+
+
+//获取矩阵的上三角矩阵
+@jit
+def upperTriangularMatrix_jit(m, rowNum,colNum){
+	upperM=m
+  for( i in 0:colNum){
+		for(j in 0:rowNum){
+			if(i&lt;j){
+			  upperM[i*rowNum+j]=0
+			}
+		}
+	}
+	return upperM
+}
+
+def upperTriangularMatrix(m, rowNum,colNum){
+	upperM=m
+  for( i in 0:colNum){
+    col=flatten(m[i])
+		for(j in 0:rowNum){
+			if(i&lt;j){
+			  col[j]=0
+			}
+		}
+		upperM[i]=col
+	}
+	return upperM
+}
+&gt;m=1..1024$32:32
+timer(1000) upperTriangularMatrix_jit(m,32,32)
+Time elapsed: 24.049 ms
+&gt;timer(1000) upperTriangularMatrix(m,32,32)
+Time elapsed: 355.052 ms</code></pre><p class="- topic/p p">对于矩阵的转置、点乘等函数，由于函数实现已做优化，所以 JIT 和非 JIT 的性能差别不大，其实现的目的是方便用户在 JIT 函数中使用。</p></div></article></article></main></div>
+                        
+                        
+                        
+                        
+                        
+                        
+                    </div>
+                    
+                        <nav role="navigation" id="wh_topic_toc" aria-label="On this page" class="col-lg-2 d-none d-lg-block navbar d-print-none"> 
+                            <div id="wh_topic_toc_content">
+		                        
+	                            <div class=" wh_topic_toc "><div class="wh_topic_label">在本页上</div><ul><li class="topic-item"><a href="#1-%E7%9F%A9%E9%98%B5%E7%9A%84%E5%AD%98%E5%82%A8" data-tocid="1-矩阵的存储">1. 矩阵的存储</a></li><li class="topic-item"><a href="#2-%E7%9F%A9%E9%98%B5%E7%9A%84%E5%9F%BA%E7%A1%80%E6%93%8D%E4%BD%9C" data-tocid="2-矩阵的基础操作">2. 矩阵的基础操作</a><ul><li class="topic-item"><a href="#21-%E7%9F%A9%E9%98%B5%E7%9A%84%E5%88%9B%E5%BB%BA" data-tocid="21-矩阵的创建">2.1. 矩阵的创建</a></li><li class="topic-item"><a href="#22-%E8%AE%BF%E9%97%AE%E7%9F%A9%E9%98%B5" data-tocid="22-访问矩阵">2.2. 访问矩阵</a><ul><li class="topic-item"><a href="#221-%E6%A0%B9%E6%8D%AE%E8%A1%8C%E5%88%97%E7%B4%A2%E5%BC%95%E8%AE%BF%E9%97%AE%E7%9F%A9%E9%98%B5" data-tocid="221-根据行列索引访问矩阵">2.2.1. 根据行列索引访问矩阵</a></li><li class="topic-item"><a href="#222-%E6%A0%B9%E6%8D%AE%E6%A0%87%E7%AD%BE%E8%AE%BF%E9%97%AE%E7%9F%A9%E9%98%B5" data-tocid="222-根据标签访问矩阵">2.2.2. 根据标签访问矩阵</a></li></ul></li><li class="topic-item"><a href="#23-%E4%BF%AE%E6%94%B9%E7%9F%A9%E9%98%B5" data-tocid="23-修改矩阵">2.3. 修改矩阵</a><ul><li class="topic-item"><a href="#231-%E8%BF%BD%E5%8A%A0%E6%95%B0%E6%8D%AE" data-tocid="231-追加数据">2.3.1. 追加数据</a></li><li class="topic-item"><a href="#232-%E4%BF%AE%E6%94%B9%E6%95%B0%E6%8D%AE" data-tocid="232-修改数据">2.3.2. 修改数据</a></li></ul></li><li class="topic-item"><a href="#24-%E6%8C%89%E5%88%97%E5%AF%B9%E7%9F%A9%E9%98%B5%E8%BF%9B%E8%A1%8C%E8%BF%87%E6%BB%A4" data-tocid="24-按列对矩阵进行过滤">2.4. 按列对矩阵进行过滤</a></li><li class="topic-item"><a href="#25-%E7%9F%A9%E9%98%B5%E7%9A%84%E6%8B%BC%E6%8E%A5" data-tocid="25-矩阵的拼接">2.5. 矩阵的拼接</a></li><li class="topic-item"><a href="#26-%E7%9F%A9%E9%98%B5%E7%9A%84%E8%BF%9E%E6%8E%A5%E5%92%8C%E5%AF%B9%E9%BD%90" data-tocid="26-矩阵的连接和对齐">2.6. 矩阵的连接和对齐</a></li><li class="topic-item"><a href="#27-%E7%9F%A9%E9%98%B5%E7%A9%BA%E5%80%BC%E5%A4%84%E7%90%86" data-tocid="27-矩阵空值处理">2.7. 矩阵空值处理</a><ul><li class="topic-item"><a href="#271-%E5%A1%AB%E5%85%85%E7%A9%BA%E5%80%BC" data-tocid="271-填充空值">2.7.1. 填充空值</a></li><li class="topic-item"><a href="#272-%E5%8E%BB%E9%99%A4%E7%A9%BA%E8%A1%8C%E5%88%97" data-tocid="272-去除空行列">2.7.2. 去除空行/列</a></li></ul></li></ul></li><li class="topic-item"><a href="#3-%E7%9F%A9%E9%98%B5%E7%9A%84%E8%BF%90%E7%AE%97" data-tocid="3-矩阵的运算">3. 矩阵的运算</a><ul><li class="topic-item"><a href="#31-%E7%9F%A9%E9%98%B5%E5%9F%BA%E6%9C%AC%E8%BF%90%E7%AE%97" data-tocid="31-矩阵基本运算">3.1. 矩阵基本运算</a></li><li class="topic-item"><a href="#32-%E7%9F%A9%E9%98%B5%E7%9B%B8%E4%B9%98%E6%B1%82%E9%80%86%E8%BD%AC%E7%BD%AE%E6%B1%82%E7%9F%A9%E9%98%B5%E8%A1%8C%E5%88%97%E5%BC%8F" data-tocid="32-矩阵相乘求逆转置求矩阵行列式">3.2. 矩阵相乘，求逆，转置，求矩阵行列式</a></li><li class="topic-item"><a href="#33-%E6%8C%89%E8%A1%8C%E8%AE%A1%E7%AE%97%E5%92%8C%E6%8C%89%E5%88%97%E8%AE%A1%E7%AE%97" data-tocid="33-按行计算和按列计算">3.3. 按行计算和按列计算</a></li></ul></li><li class="topic-item"><a href="#4-%E7%9F%A9%E9%98%B5%E5%88%86%E8%A7%A3%E4%B8%8E%E6%B1%82%E8%A7%A3%E7%BA%BF%E6%80%A7%E6%96%B9%E7%A8%8B" data-tocid="4-矩阵分解与求解线性方程">4. 矩阵分解与求解线性方程</a><ul><li class="topic-item"><a href="#41-lu-%E5%88%86%E8%A7%A3" data-tocid="41-lu-分解">4.1. lu 分解</a></li><li class="topic-item"><a href="#42-qr-%E5%88%86%E8%A7%A3" data-tocid="42-qr-分解">4.2. qr 分解</a></li><li class="topic-item"><a href="#43-svd-%E5%88%86%E8%A7%A3" data-tocid="43-svd-分解">4.3. svd 分解</a></li><li class="topic-item"><a href="#44-cholesky-%E5%88%86%E8%A7%A3" data-tocid="44-cholesky-分解">4.4. cholesky 分解</a></li><li class="topic-item"><a href="#45-schur-%E5%88%86%E8%A7%A3" data-tocid="45-schur-分解">4.5. schur 分解</a></li><li class="topic-item"><a href="#46-%E6%B1%82%E8%A7%A3%E7%BA%BF%E6%80%A7%E6%96%B9%E7%A8%8B%E7%BB%84" data-tocid="46-求解线性方程组">4.6. 求解线性方程组</a></li></ul></li><li class="topic-item"><a href="#5-%E7%9F%A9%E9%98%B5%E9%AB%98%E7%BA%A7%E8%BF%90%E7%AE%97" data-tocid="5-矩阵高级运算">5. 矩阵高级运算</a><ul><li class="topic-item"><a href="#51-%E8%AE%A1%E7%AE%97%E7%9F%A9%E9%98%B5%E7%89%B9%E5%BE%81%E5%80%BC%E5%92%8C%E7%89%B9%E5%BE%81%E5%90%91%E9%87%8F" data-tocid="51-计算矩阵特征值和特征向量">5.1. 计算矩阵特征值和特征向量</a></li><li class="topic-item"><a href="#52-pca-%E8%AE%A1%E7%AE%97" data-tocid="52-pca-计算">5.2. PCA 计算</a></li></ul></li><li class="topic-item"><a href="#6-jit-%E7%9A%84%E6%94%AF%E6%8C%81" data-tocid="6-jit-的支持">6. JIT 的支持</a></li></ul></div>
+	                        	
+                        	</div>
+                        </nav>
+                    
+                </div>
+            </div>
+            
+            
+            
+        </div> 
+        <footer class="navbar navbar-default wh_footer">
+  <div class=" footer-container mx-auto ">
+<title>Copyright</title><p><b> ©2024 浙江智臾科技有限公司 浙ICP备18048711号-3</b></p>
+  </div>
+</footer>
+        
+        <div id="go2top" class="d-print-none">
+            <span class="oxy-icon oxy-icon-up"></span>
+        </div>
+        
+        <div id="modal_img_large" class="modal">
+            <span class="close oxy-icon oxy-icon-remove"></span>
+            <div id="modal_img_container"></div>
+            <div id="caption"></div>
+        </div>
+        
+        
+        
+    </body>
+</html>

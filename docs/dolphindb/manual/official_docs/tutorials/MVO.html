@@ -1,0 +1,866 @@
+<!DOCTYPE html><html xmlns="http://www.w3.org/1999/xhtml" xml:lang="zh" lang="zh" data-whc_version="26.0">
+    <head><link rel="shortcut icon" href="../favicon.ico"/><link rel="icon" href="../favicon.ico"/><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><meta http-equiv="X-UA-Compatible" content="IE=edge"/><meta name="description" content="线性规划和非线性规划是运筹学中重要的内容，在金融和经济领域的问题解决中具有广泛的应用。在金融量化领域的多因子量化模型中，组合权重优化起着至关重要的作用，组合权重优化包括两个要素：第一是组合权重优化的目标函数，如最大化期望收益率，最小化组合风险，最大化效用函数等，第二是目标函数相对应的约束条件，如等式约束和不等式约束。这些优化内容都是线性规划和非线性规划的重要应用问题。 ..."/><meta name="DC.rights.owner" content="(C) 版权 2024"/><meta name="copyright" content="(C) 版权 2024"/><meta name="generator" content="DITA-OT"/><meta name="DC.type" content="topic"/><meta name="DC.coverage" content=""/><meta name="DC.relation" content="../tutorials/about_tutorials.html"/><meta name="prodname" content="DolphinDB"/><meta name="brand" content="DolphinDB"/><meta name="DC.creator" content="DolphinDB"/><meta name="DC.publisher" content="DDB N/A DDB 200"/><meta name="DC.format" content="HTML5"/><meta name="DC.identifier" content="mvo_tutorial"/><title>优化投资组合：DolphinDB 最优化求解系列函数应用指南</title><!--  Generated with Oxygen version 26.0, build number 2024012323.  --><meta name="wh-path2root" content="../"/><meta name="wh-toc-id" content="mvo_tutorial-d9529e99369"/><meta name="wh-source-relpath" content="tutorials/MVO.dita"/><meta name="wh-out-relpath" content="tutorials/MVO.html"/>
+
+    <link rel="stylesheet" type="text/css" href="../oxygen-webhelp/app/commons.css?buildId=2024012323"/>
+    <link rel="stylesheet" type="text/css" href="../oxygen-webhelp/app/topic.css?buildId=2024012323"/>
+
+    <script src="../oxygen-webhelp/app/options/properties.js?buildId=20240704100525"></script>
+    <script src="../oxygen-webhelp/app/localization/strings.js?buildId=2024012323"></script>
+    <script src="../oxygen-webhelp/app/search/index/keywords.js?buildId=20240704100525"></script>
+    <script defer="defer" src="../oxygen-webhelp/app/commons.js?buildId=2024012323"></script>
+    <script defer="defer" src="../oxygen-webhelp/app/topic.js?buildId=2024012323"></script>
+<link rel="stylesheet" type="text/css" href="../oxygen-webhelp/template/styles.css?buildId=2024012323"/><script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script><script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script></head>
+
+    <body id="mvo_tutorial" class="wh_topic_page frmBody">
+        <a href="#wh_topic_body" class="sr-only sr-only-focusable">
+            跳转到主要内容
+        </a>
+        
+        
+        
+        
+        <header class="navbar navbar-default wh_header">
+    <div class="container-fluid">
+        <div xmlns:whc="http://www.oxygenxml.com/webhelp/components" class="wh_header_flex_container navbar-nav navbar-expand-md navbar-dark">
+            <div class="wh_logo_and_publication_title_container">
+                <div class="wh_logo_and_publication_title">
+                    
+                    <a href="https://www.dolphindb.cn" class=" wh_logo d-none d-sm-block "><img src="../logo.png" alt="  DolphinDB 文档中心  "/></a>
+                    <div class=" wh_publication_title "><a href="../index.html"><span class="booktitle">  <span class="ph mainbooktitle">DolphinDB 文档中心</span>  </span></a></div>
+                    
+                </div>
+                
+                
+            </div>
+
+            <div class="wh_top_menu_and_indexterms_link collapse navbar-collapse" id="wh_top_menu_and_indexterms_link">
+                
+                
+                
+                
+            </div>
+        <div class=" wh_search_input navbar-form wh_topic_page_search search " role="form">
+            
+            
+            
+            <form id="searchForm" method="get" role="search" action="../search.html"><div><input type="search" placeholder="搜索 " class="wh_search_textfield" id="textToSearch" name="searchQuery" aria-label="搜索查询" required="required"/><button type="submit" class="wh_search_button" aria-label="搜索"><span class="search_input_text">搜索</span></button></div></form>
+            
+            <script src="/vendors/react/umd/react.production.min.js" defer="defer"></script>
+<script src="/vendors/react-dom/umd/react-dom.production.min.js" defer="defer"></script>
+<script src="/vendors/dayjs/dayjs.min.js" defer="defer"></script>
+<script src="/vendors/antd/dist/antd.min.js" defer="defer"></script>
+<script src="/vendors/@ant-design/icons/dist/index.umd.min.js" defer="defer"></script>
+<script src="/zh/index.js" type="module"></script>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js" defer="defer"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML" defer="defer"><!--
+
+
+--></script>
+
+            
+        </div></div>
+    </div>
+</header>
+        
+        
+         
+        
+        
+        
+        <div class="container-fluid" id="wh_topic_container">
+            <div class="row">
+
+                <nav class="wh_tools d-print-none navbar-expand-md" aria-label="Tools">
+                    
+                    <div data-tooltip-position="bottom" class=" wh_breadcrumb "><ol class="d-print-none"><li><span class="home"><a href="../index.html"><span>主页</span></a></span></li><li><div class="topicref" data-id="about_tutorials"><div class="title"><a href="../tutorials/about_tutorials.html"><span class="keyword label">教程</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 产品使用教程</p></div></div></div></li><li><div class="topicref"><div class="title"><a href="../tutorials/dolphinscheduler_integration.html">金融场景案例</a></div></div></li><li class="active"><div class="topicref" data-id="mvo_tutorial"><div class="title"><a href="../tutorials/MVO.html">优化投资组合：DolphinDB 最优化求解系列函数应用指南</a></div></div></li></ol></div>
+                    
+                    
+                    
+                    <div class="wh_right_tools">
+                        <button class="wh_hide_highlight" aria-label="切换搜索突出显示" title="切换搜索突出显示"></button>
+                        <button class="webhelp_expand_collapse_sections" data-next-state="collapsed" aria-label="折叠截面" title="折叠截面"></button>
+                        
+                        
+                        
+                        
+                        <div class=" wh_print_link print d-none d-md-inline-block "><button onClick="window.print()" title="打印此页" aria-label="打印此页"></button></div>
+                        
+                        <button type="button" id="wh_toc_button" class="custom-toggler navbar-toggler collapsed wh_toggle_button navbar-light" aria-expanded="false" aria-label="Toggle publishing table of content" aria-controls="wh_publication_toc">
+                            <span class="navbar-toggler-icon"></span>
+                        </button>
+                    </div>
+                    
+                </nav>
+            </div>
+            
+            
+            
+            
+            <div class="wh_content_area">
+                <div class="row">
+                    
+                        <nav id="wh_publication_toc" class="col-lg-3 col-md-3 col-sm-12 d-md-block d-none d-print-none" aria-label="Table of Contents Container">
+                            <div id="wh_publication_toc_content">
+		                        
+                            	<div class=" wh_publication_toc " data-tooltip-position="right"><span class="expand-button-action-labels"><span id="button-expand-action" role="button" aria-label="Expand"></span><span id="button-collapse-action" role="button" aria-label="Collapse"></span><span id="button-pending-action" role="button" aria-label="Pending"></span></span><ul role="tree" aria-label="Table of Contents"><li role="treeitem"><div data-tocid="new_chap_about_sect_ddb_docs_intro-d9529e87" class="topicref" data-id="new_chap_about_sect_ddb_docs_intro" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../about/ddb_docs_intro.html" id="new_chap_about_sect_ddb_docs_intro-d9529e87-link">文档使用说明</a><div class="wh-tooltip"><p class="shortdesc">如何获取 DolphinDB 帮助信息</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="chap1_getstarted-d9529e140" class="topicref" data-id="chap1_getstarted" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action chap1_getstarted-d9529e140-link" class="wh-expand-btn"></span><div class="title"><a href="../getstarted/chap1_getstarted.html" id="chap1_getstarted-d9529e140-link"><span class="keyword label">快速上手</span></a><div class="wh-tooltip"><p class="shortdesc">如何快速部署 DolphinDB、建库建表、写入和查询数据</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="sectionddb_deployment-d9529e335" class="topicref" data-id="sectionddb_deployment" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action sectionddb_deployment-d9529e335-link" class="wh-expand-btn"></span><div class="title"><a href="../deploy/deploy_intro.html" id="sectionddb_deployment-d9529e335-link"><span class="keyword label">部署</span></a><div class="wh-tooltip"><p class="shortdesc">如何在不同的场景中部署 DolphinDB</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="new_chap_database_manage_new_chap_dbmanage_landing_page-d9529e2313" class="topicref" data-id="new_chap_database_manage_new_chap_dbmanage_landing_page" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action new_chap_database_manage_new_chap_dbmanage_landing_page-d9529e2313-link" class="wh-expand-btn"></span><div class="title"><a href="../db_distr_comp/cfg/db_intro.html" id="new_chap_database_manage_new_chap_dbmanage_landing_page-d9529e2313-link"><span class="keyword label">数据库</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 数据库的基本概念</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="chap7_tutorials_streaming-d9529e3490" class="topicref" data-id="chap7_tutorials_streaming" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action chap7_tutorials_streaming-d9529e3490-link" class="wh-expand-btn"></span><div class="title"><a href="../stream/str_intro.html" id="chap7_tutorials_streaming-d9529e3490-link"><span class="keyword label">流数据</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 流数据引擎及流数据计算的基本概念</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="tocId-d9529e7385" class="topicref" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action tocId-d9529e7385-link" class="wh-expand-btn"></span><div class="title"><a href="../db_distr_comp/db_oper/import_data.html" id="tocId-d9529e7385-link">数据迁移</a><div class="wh-tooltip"><p class="shortdesc">如何从不同数据源向 DolphinDB 迁移数据</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="chap7_tutorials_system_management-d9529e7812" class="topicref" data-id="chap7_tutorials_system_management" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action chap7_tutorials_system_management-d9529e7812-link" class="wh-expand-btn"></span><div class="title"><a href="../sys_man/om_intro.html" id="chap7_tutorials_system_management-d9529e7812-link"><span class="keyword label">系统运维</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 的系统运维功能及方法</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="about_language_resources-d9529e16490" class="topicref" data-id="about_language_resources" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action about_language_resources-d9529e16490-link" class="wh-expand-btn"></span><div class="title"><a href="../progr/progr_intro.html" id="about_language_resources-d9529e16490-link"><span class="keyword label">编程语言</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 编程基本概念与方法、SQL 在 DolphinDB 的应用</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="functions_references-d9529e26503" class="topicref" data-id="functions_references" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action functions_references-d9529e26503-link" class="wh-expand-btn"></span><div class="title"><a href="../funcs/funcs_intro.html" id="functions_references-d9529e26503-link"><span class="keyword label">函数参考</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 函数分类、语法、详解及示例</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="api_protocol-d9529e86456" class="topicref" data-id="api_protocol" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action api_protocol-d9529e86456-link" class="wh-expand-btn"></span><div class="title"><a href="../api/connapi_intro.html" id="api_protocol-d9529e86456-link"><span class="keyword label">连接器 &amp; API</span></a><div class="wh-tooltip"><p class="shortdesc">面向不同编程语言的 DolphinDB API 及连接器，相关协议和用法</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="chap6_plugin-d9529e91976" class="topicref" data-id="chap6_plugin" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action chap6_plugin-d9529e91976-link" class="wh-expand-btn"></span><div class="title"><a href="../plugins/plg_intro.html" id="chap6_plugin-d9529e91976-link"><span class="keyword label">插件</span></a><div class="wh-tooltip"><p class="shortdesc">多个应用场景的插件使用说明和插件开发指导</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="third_party-d9529e94749" class="topicref" data-id="third_party" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action third_party-d9529e94749-link" class="wh-expand-btn"></span><div class="title"><a href="../third_party.html" id="third_party-d9529e94749-link">第三方工具</a></div></div></li><li role="treeitem" aria-expanded="true"><div data-tocid="about_tutorials-d9529e94980" class="topicref" data-id="about_tutorials" data-state="expanded"><span role="button" tabindex="0" aria-labelledby="button-collapse-action about_tutorials-d9529e94980-link" class="wh-expand-btn"></span><div class="title"><a href="../tutorials/about_tutorials.html" id="about_tutorials-d9529e94980-link"><span class="keyword label">教程</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 产品使用教程</p></div></div></div><ul role="group" class="navbar-nav nav-list"><li role="treeitem" aria-expanded="false"><div data-tocid="tocId-d9529e95033" class="topicref" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action tocId-d9529e95033-link" class="wh-expand-btn"></span><div class="title"><a href="../tutorials/import_data.html" id="tocId-d9529e95033-link">数据导入</a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="tocId-d9529e95264" class="topicref" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action tocId-d9529e95264-link" class="wh-expand-btn"></span><div class="title"><a href="../tutorials/DolphinDB_TopN.html" id="tocId-d9529e95264-link">数据库</a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="tocId-d9529e95910" class="topicref" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action tocId-d9529e95910-link" class="wh-expand-btn"></span><div class="title"><a href="../tutorials/memory_management.html" id="tocId-d9529e95910-link">系统运维</a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="tocId-d9529e96325" class="topicref" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action tocId-d9529e96325-link" class="wh-expand-btn"></span><div class="title"><a href="../tutorials/hybrid_programming_paradigms.html" id="tocId-d9529e96325-link">编程语言</a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="tocId-d9529e97155" class="topicref" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action tocId-d9529e97155-link" class="wh-expand-btn"></span><div class="title"><a href="../tutorials/data_sync_among_clusters.html" id="tocId-d9529e97155-link">安全与容灾</a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="tocId-d9529e97386" class="topicref" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action tocId-d9529e97386-link" class="wh-expand-btn"></span><div class="title"><a href="../tutorials/streaming_tutorial.html" id="tocId-d9529e97386-link">流数据</a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="tocId-d9529e97893" class="topicref" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action tocId-d9529e97893-link" class="wh-expand-btn"></span><div class="title"><a href="../tutorials/DECIMAL.html" id="tocId-d9529e97893-link">数值处理</a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="chap7_tutorials_modules-d9529e97986" class="topicref" data-id="chap7_tutorials_modules" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action chap7_tutorials_modules-d9529e97986-link" class="wh-expand-btn"></span><div class="title"><a href="../tutorials/tu_modules.html" id="chap7_tutorials_modules-d9529e97986-link"><span class="keyword label">模块</span></a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="plugins_apply-d9529e98493" class="topicref" data-id="plugins_apply" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action plugins_apply-d9529e98493-link" class="wh-expand-btn"></span><div class="title"><a href="../tutorials/plugins_apply.html" id="plugins_apply-d9529e98493-link">插件应用</a></div></div></li><li role="treeitem" aria-expanded="true"><div data-tocid="tocId-d9529e98631" class="topicref" data-state="expanded"><span role="button" tabindex="0" aria-labelledby="button-collapse-action tocId-d9529e98631-link" class="wh-expand-btn"></span><div class="title"><a href="../tutorials/dolphinscheduler_integration.html" id="tocId-d9529e98631-link">金融场景案例</a></div></div><ul role="group" class="navbar-nav nav-list"><li role="treeitem"><div data-tocid="dolphindb-与-dolphinscheduler-的集成-d9529e98632" class="topicref" data-id="dolphindb-与-dolphinscheduler-的集成" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../tutorials/dolphinscheduler_integration.html" id="dolphindb-与-dolphinscheduler-的集成-d9529e98632-link">DolphinDB 与 DolphinScheduler 的集成</a></div></div></li><li role="treeitem"><div data-tocid="gplearn-d9529e98678" class="topicref" data-id="gplearn" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../tutorials/gplearn.html" id="gplearn-d9529e98678-link">Shark GPLearn 快速上手</a></div></div></li><li role="treeitem"><div data-tocid="量化金融范例-d9529e98724" class="topicref" data-id="量化金融范例" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../tutorials/quant_finance_examples.html" id="量化金融范例-d9529e98724-link">量化金融范例</a></div></div></li><li role="treeitem"><div data-tocid="利用缓存表快速实现-mysql-库间信息同步-d9529e98770" class="topicref" data-id="利用缓存表快速实现-mysql-库间信息同步" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../tutorials/cachedtable.html" id="利用缓存表快速实现-mysql-库间信息同步-d9529e98770-link">利用缓存表快速实现 MySQL 库间信息同步</a></div></div></li><li role="treeitem"><div data-tocid="机器学习-d9529e98816" class="topicref" data-id="机器学习" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../tutorials/machine_learning.html" id="机器学习-d9529e98816-link">机器学习</a></div></div></li><li role="treeitem"><div data-tocid="时区处理-d9529e98862" class="topicref" data-id="时区处理" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../tutorials/timezone.html" id="时区处理-d9529e98862-link">时区处理</a></div></div></li><li role="treeitem"><div data-tocid="实时计算高频因子-d9529e98908" class="topicref" data-id="实时计算高频因子" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../tutorials/hf_factor_streaming_2.html" id="实时计算高频因子-d9529e98908-link">实时计算高频因子</a></div></div></li><li role="treeitem"><div data-tocid="计算基金日频因子-d9529e98954" class="topicref" data-id="计算基金日频因子" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../tutorials/fund_factor_contrasted_by_py.html" id="计算基金日频因子-d9529e98954-link">计算基金日频因子</a></div></div></li><li role="treeitem"><div data-tocid="因子计算最佳实践-d9529e99000" class="topicref" data-id="因子计算最佳实践" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../tutorials/best_practice_for_factor_calculation.html" id="因子计算最佳实践-d9529e99000-link">因子计算最佳实践</a></div></div></li><li role="treeitem"><div data-tocid="因子计算平台构建-d9529e99046" class="topicref" data-id="因子计算平台构建" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../tutorials/Python_Celery.html" id="因子计算平台构建-d9529e99046-link">因子计算平台构建</a></div></div></li><li role="treeitem"><div data-tocid="金融因子流式实现-d9529e99092" class="topicref" data-id="金融因子流式实现" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../tutorials/str_comp_fin_quant_2.html" id="金融因子流式实现-d9529e99092-link">金融因子流式实现</a></div></div></li><li role="treeitem"><div data-tocid="中高频多因子库存储最佳实践-d9529e99139" class="topicref" data-id="中高频多因子库存储最佳实践" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../tutorials/best_practices_for_multi_factor.html" id="中高频多因子库存储最佳实践-d9529e99139-link">中高频多因子库存储最佳实践</a></div></div></li><li role="treeitem"><div data-tocid="python--hdf5-因子计算与-dolphindb-一体化因子计算方案对比-d9529e99185" class="topicref" data-id="python--hdf5-因子计算与-dolphindb-一体化因子计算方案对比" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../tutorials/Python_HDF5_vs_DolphinDB.html" id="python--hdf5-因子计算与-dolphindb-一体化因子计算方案对比-d9529e99185-link">Python + HDF5 因子计算与 DolphinDB 一体化因子计算方案对比</a></div></div></li><li role="treeitem"><div data-tocid="python--文件存储与-dolphindb-因子计算性能比较-d9529e99231" class="topicref" data-id="python--文件存储与-dolphindb-因子计算性能比较" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../tutorials/DolphinDB_VS_PythonFile_Storage.html" id="python--文件存储与-dolphindb-因子计算性能比较-d9529e99231-link">Python + 文件存储与 DolphinDB 因子计算性能比较</a></div></div></li><li role="treeitem"><div data-tocid="快速搭建-level-2-快照数据流批一体因子计算平台最佳实践-d9529e99277" class="topicref" data-id="快速搭建-level-2-快照数据流批一体因子计算平台最佳实践" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../tutorials/l2_snapshot_factor_calc_2.html" id="快速搭建-level-2-快照数据流批一体因子计算平台最佳实践-d9529e99277-link">快速搭建 Level-2 快照数据流批一体因子计算平台最佳实践</a></div></div></li><li role="treeitem"><div data-tocid="k-线计算-d9529e99323" class="topicref" data-id="k-线计算" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../tutorials/OHLC_2.html" id="k-线计算-d9529e99323-link">K 线计算</a></div></div></li><li role="treeitem" class="active"><div data-tocid="mvo_tutorial-d9529e99369" class="topicref" data-id="mvo_tutorial" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../tutorials/MVO.html" id="mvo_tutorial-d9529e99369-link">优化投资组合：DolphinDB 最优化求解系列函数应用指南</a></div></div></li><li role="treeitem"><div data-tocid="面板数据处理-d9529e99415" class="topicref" data-id="面板数据处理" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../tutorials/panel_data.html" id="面板数据处理-d9529e99415-link">面板数据处理</a></div></div></li><li role="treeitem"><div data-tocid="快照引擎-d9529e99461" class="topicref" data-id="快照引擎" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../tutorials/snapshot_engine.html" id="快照引擎-d9529e99461-link">快照引擎</a></div></div></li><li role="treeitem"><div data-tocid="国内股票行情数据导入实例-d9529e99507" class="topicref" data-id="国内股票行情数据导入实例" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../tutorials/stockdata_csv_import_demo.html" id="国内股票行情数据导入实例-d9529e99507-link">国内股票行情数据导入实例</a></div></div></li><li role="treeitem"><div data-tocid="搭建行情回放服务的最佳实践-d9529e99553" class="topicref" data-id="搭建行情回放服务的最佳实践" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../tutorials/appendices_market_replay_bp.html" id="搭建行情回放服务的最佳实践-d9529e99553-link">搭建行情回放服务的最佳实践</a></div></div></li><li role="treeitem"><div data-tocid="外汇掉期估值计算-d9529e99599" class="topicref" data-id="外汇掉期估值计算" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../tutorials/FxSwapValuation.html" id="外汇掉期估值计算-d9529e99599-link">外汇掉期估值计算</a></div></div></li><li role="treeitem"><div data-tocid="深度不平衡买卖压力指标波动率计算-d9529e99646" class="topicref" data-id="深度不平衡买卖压力指标波动率计算" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../tutorials/sql_performance_optimization_wap_di_rv.html" id="深度不平衡买卖压力指标波动率计算-d9529e99646-link">深度不平衡、买卖压力指标、波动率计算</a></div></div></li><li role="treeitem"><div data-tocid="金融实时实际波动率预测-d9529e99692" class="topicref" data-id="金融实时实际波动率预测" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../tutorials/ml_volatility_2.html" id="金融实时实际波动率预测-d9529e99692-link">金融实时实际波动率预测</a></div></div></li><li role="treeitem"><div data-tocid="股票行情回放-d9529e99738" class="topicref" data-id="股票行情回放" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../tutorials/stock_market_replay_2.html" id="股票行情回放-d9529e99738-link">股票行情回放</a></div></div></li><li role="treeitem"><div data-tocid="实时计算日累计逐单资金流-d9529e99784" class="topicref" data-id="实时计算日累计逐单资金流" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../tutorials/streaming_capital_flow_daily_2.html" id="实时计算日累计逐单资金流-d9529e99784-link">实时计算日累计逐单资金流</a></div></div></li><li role="treeitem"><div data-tocid="实时计算分钟资金流-d9529e99830" class="topicref" data-id="实时计算分钟资金流" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../tutorials/streaming_capital_flow_order_by_order_2.html" id="实时计算分钟资金流-d9529e99830-link">实时计算分钟资金流</a></div></div></li><li role="treeitem"><div data-tocid="基金份额参考价值-iopv-计算-d9529e99876" class="topicref" data-id="基金份额参考价值-iopv-计算" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../tutorials/streaming_IOPV_2.html" id="基金份额参考价值-iopv-计算-d9529e99876-link">基金份额参考价值 IOPV 计算</a></div></div></li><li role="treeitem"><div data-tocid="开发股票波动率预测模型的-676-个输入特征-d9529e99922" class="topicref" data-id="开发股票波动率预测模型的-676-个输入特征" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../tutorials/metacode_derived_features_2.html" id="开发股票波动率预测模型的-676-个输入特征-d9529e99922-link">开发股票波动率预测模型的 676 个输入特征</a></div></div></li><li role="treeitem"><div data-tocid="流式计算中证-1000-指数主买主卖交易量-d9529e99968" class="topicref" data-id="流式计算中证-1000-指数主买主卖交易量" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../tutorials/CSI_1000_2.html" id="流式计算中证-1000-指数主买主卖交易量-d9529e99968-link">流式计算中证 1000 指数主买/主卖交易量</a></div></div></li><li role="treeitem"><div data-tocid="利用-dolphindb-高效清洗数据-d9529e100014" class="topicref" data-id="利用-dolphindb-高效清洗数据" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../tutorials/data_ETL.html" id="利用-dolphindb-高效清洗数据-d9529e100014-link">利用 DolphinDB 高效清洗数据</a></div></div></li><li role="treeitem"><div data-tocid="公募基金历史数据基础分析教程-d9529e100060" class="topicref" data-id="公募基金历史数据基础分析教程" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../tutorials/public_fund_basic_analysis.html" id="公募基金历史数据基础分析教程-d9529e100060-link">公募基金历史数据基础分析教程</a></div></div></li><li role="treeitem"><div data-tocid="dolphindb-与-python-airflow-最佳实践-d9529e100106" class="topicref" data-id="dolphindb-与-python-airflow-最佳实践" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../tutorials/ddb_airflow.html" id="dolphindb-与-python-airflow-最佳实践-d9529e100106-link">DolphinDB 与 Python AirFlow 最佳实践</a></div></div></li><li role="treeitem"><div data-tocid="处理-level-2-行情数据实例-d9529e100153" class="topicref" data-id="处理-level-2-行情数据实例" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../tutorials/l2_stk_data_proc_2.html" id="处理-level-2-行情数据实例-d9529e100153-link">处理 Level-2 行情数据实例</a></div></div></li><li role="treeitem"><div data-tocid="金融-poc-用户历史数据导入指导手册之股票-level-2-逐笔篇-d9529e100199" class="topicref" data-id="金融-poc-用户历史数据导入指导手册之股票-level-2-逐笔篇" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../tutorials/LoadDataForPoc.html" id="金融-poc-用户历史数据导入指导手册之股票-level-2-逐笔篇-d9529e100199-link">金融 PoC 用户历史数据导入指导手册之股票 Level-2 逐笔篇</a></div></div></li><li role="treeitem"><div data-tocid="多数据源流式实时关联处理-d9529e100245" class="topicref" data-id="多数据源流式实时关联处理" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../tutorials/streaming-real-time-correlation-processing_2.html" id="多数据源流式实时关联处理-d9529e100245-link">多数据源流式实时关联处理</a></div></div></li><li role="treeitem"><div data-tocid="实时计算涨幅榜-d9529e100291" class="topicref" data-id="实时计算涨幅榜" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../tutorials/rt_stk_price_inc_calc_2.html" id="实时计算涨幅榜-d9529e100291-link">实时计算涨幅榜</a></div></div></li><li role="treeitem"><div data-tocid="python-parser-在金融量化分析场景的应用入门-d9529e100337" class="topicref" data-id="python-parser-在金融量化分析场景的应用入门" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../tutorials/py_parser__quant_fin.html" id="python-parser-在金融量化分析场景的应用入门-d9529e100337-link">Python Parser 在金融量化分析场景的应用入门</a></div></div></li><li role="treeitem"><div data-tocid="存储金融数据的分区方案最佳实践-d9529e100383" class="topicref" data-id="存储金融数据的分区方案最佳实践" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../tutorials/best_practices_for_partitioned_storage.html" id="存储金融数据的分区方案最佳实践-d9529e100383-link">存储金融数据的分区方案最佳实践</a></div></div></li><li role="treeitem"><div data-tocid="实时选取外汇行情多价源最优价-d9529e100429" class="topicref" data-id="实时选取外汇行情多价源最优价" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../tutorials/best_price_selection.html" id="实时选取外汇行情多价源最优价-d9529e100429-link">实时选取外汇行情多价源最优价</a></div></div></li><li role="treeitem"><div data-tocid="dolphindb-insight-行情插件最佳实践指南-d9529e100475" class="topicref" data-id="dolphindb-insight-行情插件最佳实践指南" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../tutorials/insight_plugin.html" id="dolphindb-insight-行情插件最佳实践指南-d9529e100475-link">DolphinDB INSIGHT 行情插件最佳实践指南</a></div></div></li><li role="treeitem"><div data-tocid="dolphindb-xtp-插件最佳实践-d9529e100521" class="topicref" data-id="dolphindb-xtp-插件最佳实践" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../tutorials/xtp.html" id="dolphindb-xtp-插件最佳实践-d9529e100521-link">DolphinDB XTP 插件最佳实践</a></div></div></li><li role="treeitem"><div data-tocid="dolphindb-教程概率统计分析-d9529e100567" class="topicref" data-id="dolphindb-教程概率统计分析" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../tutorials/probabilistic_and_statistical_analysis.html" id="dolphindb-教程概率统计分析-d9529e100567-link">DolphinDB 教程：概率统计分析</a></div></div></li><li role="treeitem"><div data-tocid="基于快照行情的股票和基金-k-线合成-d9529e100613" class="topicref" data-id="基于快照行情的股票和基金-k-线合成" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../tutorials/k.html" id="基于快照行情的股票和基金-k-线合成-d9529e100613-link">基于快照行情的股票和基金 K 线合成</a></div></div></li><li role="treeitem"><div data-tocid="alphalens-在-dolphindb-中的应用因子分析建模实践-d9529e100660" class="topicref" data-id="alphalens-在-dolphindb-中的应用因子分析建模实践" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../tutorials/Practical_Factor_Analysis_Modeling.html" id="alphalens-在-dolphindb-中的应用因子分析建模实践-d9529e100660-link">Alphalens 在 DolphinDB 中的应用：因子分析建模实践</a></div></div></li></ul></li><li role="treeitem" aria-expanded="false"><div data-tocid="tocId-d9529e100707" class="topicref" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action tocId-d9529e100707-link" class="wh-expand-btn"></span><div class="title"><a href="../tutorials/iot_examples.html" id="tocId-d9529e100707-link">物联网场景案例</a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="tocId-d9529e101629" class="topicref" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action tocId-d9529e101629-link" class="wh-expand-btn"></span><div class="title"><a href="../tutorials/cluster_scaleout_perf_test.html" id="tocId-d9529e101629-link">测试报告</a></div></div></li></ul></li><li role="treeitem" aria-expanded="false"><div data-tocid="tocId-d9529e101769" class="topicref" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action tocId-d9529e101769-link" class="wh-expand-btn"></span><div class="title"><a href="../rn/server/3_00_1.html" id="tocId-d9529e101769-link">版本说明</a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 版本发布历史</p></div></div></div></li></ul></div>
+		                        
+                            </div>
+                        </nav>
+                    
+                    
+                    <div class="col-lg-7 col-md-9 col-sm-12" id="wh_topic_body">
+                        <button id="wh_close_publication_toc_button" class="close-toc-button d-none" aria-label="Toggle publishing table of content" aria-controls="wh_publication_toc" aria-expanded="true">
+                            <span class="close-toc-icon-container">
+                                <span class="close-toc-icon"></span>     
+                            </span>
+                        </button>
+                        <button id="wh_close_topic_toc_button" class="close-toc-button d-none" aria-label="Toggle topic table of content" aria-controls="wh_topic_toc" aria-expanded="true">
+                            <span class="close-toc-icon-container">
+                                <span class="close-toc-icon"></span>     
+                            </span>
+                        </button>
+                        
+                        <div class=" wh_topic_content body "><main role="main"><article class="- topic/topic topic" role="article" aria-labelledby="ariaid-title1">
+    <h1 class="- topic/title title topictitle1" id="ariaid-title1">优化投资组合：DolphinDB 最优化求解系列函数应用指南</h1>
+    <div class="- topic/body body">
+        <p class="- topic/p p">线性规划和非线性规划是运筹学中重要的内容，在金融和经济领域的问题解决中具有广泛的应用。在金融量化领域的多因子量化模型中，组合权重优化起着至关重要的作用，组合权重优化包括两个要素：第一是组合权重优化的目标函数，如最大化期望收益率，最小化组合风险，最大化效用函数等，第二是目标函数相对应的约束条件，如等式约束和不等式约束。这些优化内容都是线性规划和非线性规划的重要应用问题。</p>
+        <p class="- topic/p p">在多因子量化投资领域中，不管使用什么因子，其最终目标都是组合优化得到标的的配置权重，这一步也称为战术配置，意在通过一些约束控制住风险。</p>
+        <p class="- topic/p p">多因子量化投资的整体逻辑是将 alpha 模型和 risk 模型结合在一起。我们下面以均值 - 方差组合优化框架（Mean-Varaince
+            Optimization，MVO）为例进行解释。MVO 是由 Markowitz 于 1952 年提出，假设<img class="- topic/image image" id="mvo_tutorial__image_p2k_52j_51c" src="images/mvo_images/image-20240220-100938.png"/>为 n
+            支股票的目标主动权重，其中：</p>
+        <p class="- topic/p p"><img class="- topic/image image" id="mvo_tutorial__image_bbn_m2d_51c" height="50" src="images/mvo_images/image-20240220-101049.png" width="100"/><img class="- topic/image image" id="mvo_tutorial__image_wpf_n2d_51c" src="images/mvo_images/image-20240220-101314.png"/> 为 alpha 模型得到的期望收益率，<img class="- topic/image image" id="mvo_tutorial__image_xpf_n2d_51c" src="images/mvo_images/image-20240220-101456.png"/>
+            为收益率的协方差矩阵。</p>
+        <p class="- topic/p p">MVO 的一般框架为：</p>
+        <dl class="- topic/dl dl" id="mvo_tutorial__dl_twm_gfj_51c" data-ofbid="mvo_tutorial__dl_twm_gfj_51c">
+            
+                <dt class="- topic/dt dt dlterm">目标函数</dt>
+                <dd class="- topic/dd dd">
+                    <br/><img class="- topic/image image" id="mvo_tutorial__image_vrp_n2d_51c" src="images/mvo_images/image-20240311-093436.png"/><br/>
+                </dd>
+            
+        </dl>
+        <p class="- topic/p p">约束如下：</p>
+        <dl class="- topic/dl dl" id="mvo_tutorial__dl_xzz_x2j_51c" data-ofbid="mvo_tutorial__dl_xzz_x2j_51c">
+            
+                <dt class="- topic/dt dt dlterm">权重关系</dt>
+                <dd class="- topic/dd dd">
+                    <br/><img class="- topic/image image" id="mvo_tutorial__image_vlg_42d_51c" src="images/mvo_images/0b1af30f-b19f-42fa-94d8-c476f8dfde54.png"/><br/>
+                </dd>
+            
+            
+                <dt class="- topic/dt dt dlterm">跟踪误差</dt>
+                <dd class="- topic/dd dd"><img class="- topic/image image" id="mvo_tutorial__image_uxg_p2d_51c" src="images/mvo_images/6776d73e-a10f-4194-9f02-b930570966b8.png"/></dd>
+            
+            
+                <dt class="- topic/dt dt dlterm">换手率约束</dt>
+                <dd class="- topic/dd dd">
+                    <br/><img class="- topic/image image" id="mvo_tutorial__image_bzw_p2d_51c" src="images/mvo_images/6776d73e-a10f-4194-9f02-b930570966b8.png"/><br/>
+                </dd>
+            
+            
+                <dt class="- topic/dt dt dlterm">权重上下限</dt>
+                <dd class="- topic/dd dd"><img class="- topic/image image" id="mvo_tutorial__image_z45_dfj_51c" src="images/mvo_images/c00cf790-b324-4f99-ac0a-dc702b50422c.png"/></dd>
+            
+            
+                <dt class="- topic/dt dt dlterm">风险因子暴露</dt>
+                <dd class="- topic/dd dd"><img class="- topic/image image" id="mvo_tutorial__image_zmr_2fj_51c" src="images/mvo_images/01ba1550-99ac-4164-aa92-34b1008593ae.png"/></dd>
+            
+            
+                <dt class="- topic/dt dt dlterm">股票数量约束</dt>
+                <dd class="- topic/dd dd"><img class="- topic/image image" id="mvo_tutorial__image_pzh_r2d_51c" src="images/mvo_images/image-20240311-094124.png"/></dd>
+            
+        </dl>
+        <p class="- topic/p p">其中<img class="- topic/image image" id="mvo_tutorial__image_qzh_r2d_51c" src="images/mvo_images/image-20240220-101608.png"/>为 n
+                支股票的目标绝对权重向量，<img class="- topic/image image" id="mvo_tutorial__image_rzh_r2d_51c" src="images/mvo_images/image-20240220-101641.png"/>为股票的初始权重向量，<img class="- topic/image image" id="mvo_tutorial__image_szh_r2d_51c" src="images/mvo_images/image-20240226-081840.png"/>为基准组合的权重向量，<img class="- topic/image image" id="mvo_tutorial__image_tzh_r2d_51c" src="images/mvo_images/image-20240220-101740.png"/>为交易成本的厌恶系数。</p>
+        <p class="- topic/p p">为了满足不同场景的需要，针对实际应用中不同的目标函数和约束条件建立的最优化模型，DolphinDB
+            提供了多个最优化函数。对于现实中的各种业务决策问题，我们都需要首先把业务问题建成数学规划模型，进而选择合适的求解器寻求最优解或者可行解，从而协助我们做出更理想的决策。通常的求解思路是：</p>
+        <ol class="- topic/ol ol" id="mvo_tutorial__ol_c5h_s2d_51c" data-ofbid="mvo_tutorial__ol_c5h_s2d_51c">
+            <li class="- topic/li li">明确业务条件与需求；</li>
+            <li class="- topic/li li">确定优化问题三要素：决策变量、目标函数、约束条件；</li>
+            <li class="- topic/li li">选择并建立合适的数学规划模型；</li>
+            <li class="- topic/li li">将该模型导入到求解器中去求解。</li>
+        </ol>
+        <p class="- topic/p p">本教程将从最优化模型与实际投资组合优化问题出发，对 DophinDB 中最优化求解函数的使用进行介绍。</p>
+    </div>
+    <article class="- topic/topic topic nested1" aria-labelledby="ariaid-title2" id="ysj_pdd_51c">
+        <h2 class="- topic/title title topictitle2" id="ariaid-title2">1. 最优化求解系列函数介绍</h2>
+        <div class="- topic/body body">
+            <p class="- topic/p p">DolphinDB 最优化求解函数主要有 linprog，quadprog，qclp，socp，用于求解不同约束下的多种规划问题。</p>
+        </div>
+        <article class="- topic/topic topic nested2" aria-labelledby="ariaid-title3" id="yqm_qdd_51c">
+            <h3 class="- topic/title title topictitle3" id="ariaid-title3">1.1 <code class="+ topic/ph pr-d/codeph ph codeph">linprog</code>（线性规划）函数</h3>
+            <div class="- topic/body body">
+                <p class="- topic/p p"><a class="- topic/xref xref" href="https://docs.dolphindb.cn/zh/funcs/l/linprog.html?hl=linprog" target="_blank" rel="external noopener">linprog</a> 完整名称为 Linear
+                    Programming，即线性规划，用于求解线性目标函数在线性约束条件下的极值。</p>
+                <dl class="- topic/dl dl" id="yqm_qdd_51c__dl_f4f_jdj_51c" data-ofbid="yqm_qdd_51c__dl_f4f_jdj_51c">
+                    
+                        <dt class="- topic/dt dt dlterm">数学模型</dt>
+                        <dd class="- topic/dd dd">
+                            <br/><img class="- topic/image image" id="yqm_qdd_51c__image_ev3_hdj_51c" src="images/mvo_images/image-20240220-101825.png"/><br/>
+                            <p class="- topic/p p">在上面的公式中，x 是未知变量，在优化问题中我们一般也称之为决策变量，</p>
+                            <p class="- topic/p p">min 表示求表达式 fTx 关于 x 的极小化，such that
+                                后面的内容表示约束条件，在大括号内的三个式子表示相应的等式约束和不等式约束。可以观察到上述表达式关于 x
+                                都是线性的，这种目标函数和约束条件都为线性的优化问题被称为线性规划问题。</p>
+                            <p class="- topic/p p">对于极大化问题，仅需在目标函数前面添加负号即可转换成极小化问题。</p>
+                        </dd>
+                    
+                </dl>
+            </div>
+        </article>
+        <article class="- topic/topic topic nested2" aria-labelledby="ariaid-title4" id="f21_rdd_51c">
+            <h3 class="- topic/title title topictitle3" id="ariaid-title4">1.2 <code class="+ topic/ph pr-d/codeph ph codeph">quadprog</code>（二次规划）函数</h3>
+            <div class="- topic/body body">
+                <p class="- topic/p p"><a class="- topic/xref xref" href="https://docs.dolphindb.cn/zh/funcs/q/quadprog.html?hl=quadprog" target="_blank" rel="external noopener">quadprog</a> 即 Quadratic
+                    Programming，用于求解二次目标函数在线性约束条件下的极值。</p>
+                <dl class="- topic/dl dl" id="f21_rdd_51c__dl_pf3_qdj_51c" data-ofbid="f21_rdd_51c__dl_pf3_qdj_51c">
+                    
+                        <dt class="- topic/dt dt dlterm">数学模型</dt>
+                        <dd class="- topic/dd dd">
+                            <p class="- topic/p p"><img class="- topic/image image" id="f21_rdd_51c__image_uvn_rdj_51c" src="images/mvo_images/image-20240220-102309.png"/> 其中 H 必须是对称正定矩阵。</p>
+                            <p class="- topic/p p">可以观察到与线性规划问题相比，该模型中的目标函数中多了关于 x 的二次项。</p>
+                        </dd>
+                    
+                </dl>
+            </div>
+        </article>
+        <article class="- topic/topic topic nested2" aria-labelledby="ariaid-title5" id="ork_rdd_51c">
+            <h3 class="- topic/title title topictitle3" id="ariaid-title5">1.3 <code class="+ topic/ph pr-d/codeph ph codeph">qclp</code>（二次约束线性规划）函数</h3>
+            <div class="- topic/body body">
+                <p class="- topic/p p"><a class="- topic/xref xref" href="https://docs.dolphindb.cn/zh/funcs/q/qclp.html?hl=qclp" target="_blank" rel="external noopener">qclp</a> 全称为 Quadratically Constrained Linear
+                    Programming，即二次约束线性规划，该函数用于求解线性目标函数在包含二次约束条件下的极值。</p>
+                <dl class="- topic/dl dl" id="ork_rdd_51c__dl_psr_sdj_51c" data-ofbid="ork_rdd_51c__dl_psr_sdj_51c">
+                    
+                        <dt class="- topic/dt dt dlterm">数学模型</dt>
+                        <dd class="- topic/dd dd">
+                            <br/><img class="- topic/image image" id="ork_rdd_51c__image_oqj_5dj_51c" src="images/mvo_images/image-20240220-102419.png"/><br/>
+                            <p class="- topic/p p">可以观察到与线性规划问题相比，该模型中增加了非线性不等式约束和向量绝对值不等式约束。</p>
+                        </dd>
+                    
+                </dl>
+            </div>
+        </article>
+        <article class="- topic/topic topic nested2" aria-labelledby="ariaid-title6" id="nb5_rdd_51c">
+            <h3 class="- topic/title title topictitle3" id="ariaid-title6">1.4 <code class="+ topic/ph pr-d/codeph ph codeph">socp</code>（二阶锥规划）函数</h3>
+            <div class="- topic/body body">
+                <p class="- topic/p p"><a class="- topic/xref xref" href="https://docs.dolphindb.cn/zh/funcs/s/socp.html?hl=socp" target="_blank" rel="external noopener">socp</a> 函数 用于求解二阶锥规划（SOCP, Second Order Cone
+                    Programming）问题，其数学模型具有更强的一般性，有很广泛的适用场景。socp 和 python 里的 cvxpy 库中的 ecos
+                    求解方法是同种算法。</p>
+                <dl class="- topic/dl dl" id="nb5_rdd_51c__dl_epw_5dj_51c" data-ofbid="nb5_rdd_51c__dl_epw_5dj_51c">
+                    
+                        <dt class="- topic/dt dt dlterm">数学模型</dt>
+                        <dd class="- topic/dd dd">
+                            <div class="- topic/p p">首先给出 k 维标准锥形式的定义：<br/><img class="- topic/image image" id="nb5_rdd_51c__image_s2y_v2d_51c" src="images/mvo_images/image-20240220-102458.png"/><br/></div>
+                            <div class="- topic/p p">二阶锥里面用到的是二范数：<br/><img class="- topic/image image" id="nb5_rdd_51c__image_vsw_w2d_51c" src="images/mvo_images/image-20240220-102515.png"/><br/></div>
+                            <p class="- topic/p p">SOCP 问题的锥表述形式为： <img class="- topic/image image" id="nb5_rdd_51c__image_kmz_c2j_51c" src="images/mvo_images/image-20240220-102833.png"/></p>
+                            <p class="- topic/p p">其中，<img class="- topic/image image" id="nb5_rdd_51c__image_lmz_c2j_51c" src="images/mvo_images/image-20240220-102853.png"/>为锥，s 为松弛变量，在实际 socp
+                                函数参数中无对应项，其值在优化过程中会被确定。</p>
+                            <p class="- topic/p p">SOCP 问题的标准形式： <img class="- topic/image image" id="nb5_rdd_51c__image_mmz_c2j_51c" src="images/mvo_images/image-20240220-102541.png"/></p>
+                            <p class="- topic/p p">其中<img class="- topic/image image" id="nb5_rdd_51c__image_nmz_c2j_51c" src="images/mvo_images/image-20240220-102956.png"/> 为锥约束。</p>
+                            <p class="- topic/p p">与锥表述形式相比，二阶锥的标准形式与 Gx + s = h 的对应关系为：</p>
+                            <p class="- topic/p p">矩阵 G 的形式为 <img class="- topic/image image" id="nb5_rdd_51c__image_omz_c2j_51c" src="images/mvo_images/image-20240220-103055.png"/> ，向量 h 的形式为<img class="- topic/image image" id="nb5_rdd_51c__image_pmz_c2j_51c" src="images/mvo_images/image-20240220-103140.png"/> 。</p>
+                        </dd>
+                    
+                </dl>
+            </div>
+        </article>
+        <article class="- topic/topic topic nested2" aria-labelledby="ariaid-title7" id="pwc_sdd_51c">
+            <h3 class="- topic/title title topictitle3" id="ariaid-title7">1.5 关于 gurobi 插件</h3>
+            <div class="- topic/body body">
+                <p class="- topic/p p">Gurobi 插件用于调用 <a class="- topic/xref xref" href="https://www.gurobi.com/" target="_blank" rel="external noopener">gurobi</a> 优化器。Gurobi
+                    是一个性能优异、求解问题类型丰富的优化器，在国内外市场有着众多成熟的案例与客户。该插件遵循了原用户的使用习惯，方便用户将基于 gurobi 构建的应用与
+                    DolphinDB 进行集成。除此之外，还解决了 gurobi 软件使用中的一些痛点问题：减少了数据在软件架构中的传输与计算成本，直接在 DolphinDB
+                    库内计算，提高整体求解的效率及降低上手难度（开发人员熟悉 DolphinDB 脚本语言即可）。目前插件支持对接 Gurobi Optimizer version
+                    10.0.2，支持 lp、qp、qclp 问题的求解，提供如下的接口。</p>
+                <div class="- topic/note note note note_note" id="pwc_sdd_51c__note_zmg_1fd_51c" data-ofbid="pwc_sdd_51c__note_zmg_1fd_51c"><span class="note__title">注：</span> 该插件预计 4 月初上线 DolphinDB 官网。</div>
+                <div class="table-container"><table class="- topic/table table" data-cols="3"><caption></caption><colgroup><col/><col/><col/></colgroup><thead class="- topic/thead thead">
+                            <tr class="- topic/row">
+                                <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="pwc_sdd_51c__entry__1">
+                                    <strong class="+ topic/ph hi-d/b ph b">接口</strong>
+                                </th>
+                                <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="pwc_sdd_51c__entry__2">
+                                    <strong class="+ topic/ph hi-d/b ph b">参数（如无注明均为必填项）</strong>
+                                </th>
+                                <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="pwc_sdd_51c__entry__3">
+                                    <strong class="+ topic/ph hi-d/b ph b">功能</strong>
+                                </th>
+                            </tr>
+                        </thead><tbody class="- topic/tbody tbody">
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="pwc_sdd_51c__entry__1">model</td>
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="pwc_sdd_51c__entry__2">params：配置项，可选。&lt;string, string&gt;
+                                    类型的字典，用于初始化模型</td>
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="pwc_sdd_51c__entry__3">初始化一个模型对象</td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="pwc_sdd_51c__entry__1">addVars</td>
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="pwc_sdd_51c__entry__2">model：模型对象 lb：变量的下限，double vectorub：变量的上限，double
+                                    vectortype：变量的类型，char vector，根据 gurobi C++ API 文档取值，可选
+                                    varName：变量的名称，string vector</td>
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="pwc_sdd_51c__entry__3">批量增加变量</td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="pwc_sdd_51c__entry__1">linExpr</td>
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="pwc_sdd_51c__entry__2">model：模型对象 coefficient：系数向量，类型为 double
+                                    vectorvarName：类型为 string vector</td>
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="pwc_sdd_51c__entry__3">增加线性表达式</td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="pwc_sdd_51c__entry__1">quadExpr</td>
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="pwc_sdd_51c__entry__2">model：模型对象 quadMatrix：类型为 double
+                                    matrixvarName：类型为 string vectorlinExpr：类型为 linExpr
+                                    handle</td>
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="pwc_sdd_51c__entry__3">增加二次表达式</td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="pwc_sdd_51c__entry__1">addConstr</td>
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="pwc_sdd_51c__entry__2">model：类型为 model handlelhsExpr：约束表达式 sense：类型为
+                                        char<code class="+ topic/ph pr-d/codeph ph codeph">'&lt;'</code>:
+                                        <code class="+ topic/ph pr-d/codeph ph codeph">GRB_LESS_EQUAL``'&gt;'</code>:
+                                        <code class="+ topic/ph pr-d/codeph ph codeph">GRB_GREATER_EQUAL``'='</code>:
+                                        <code class="+ topic/ph pr-d/codeph ph codeph">GRB_EQUAL</code>rhsVal：类型为 double</td>
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="pwc_sdd_51c__entry__3">增加线性/二次约束</td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="pwc_sdd_51c__entry__1">setObjective</td>
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="pwc_sdd_51c__entry__2">model：模型对象</td>
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="pwc_sdd_51c__entry__3">设定目标函数</td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="pwc_sdd_51c__entry__1">optimize</td>
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="pwc_sdd_51c__entry__2">model：模型对象</td>
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="pwc_sdd_51c__entry__3">执行优化</td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="pwc_sdd_51c__entry__1">getResult</td>
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="pwc_sdd_51c__entry__2">model：模型对象</td>
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="pwc_sdd_51c__entry__3">获取优化后的变量值</td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="pwc_sdd_51c__entry__1">getObjective</td>
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="pwc_sdd_51c__entry__2">model：模型对象</td>
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="pwc_sdd_51c__entry__3">获取优化结果</td>
+                            </tr>
+                        </tbody></table></div>
+                <p class="- topic/p p">下文测试数据基于 guorbi 单用户许可，限制 2000 个变量和约束。</p>
+            </div>
+        </article>
+    </article>
+    <article class="- topic/topic topic nested1" aria-labelledby="ariaid-title8" id="nf4_sdd_51c">
+        <h2 class="- topic/title title topictitle2" id="ariaid-title8">2. 常用规划问题转化为二阶锥规划形式</h2>
+        <div class="- topic/body body">
+            <p class="- topic/p p">在使用 socp 求解一般的规划问题时，需要将原问题转化为 SOCP 问题的标准形式，再根据二阶锥的锥表述形式与标准形式之间的对应关系得到最终 socp
+                函数的参数。</p>
+        </div>
+        <article class="- topic/topic topic nested2" aria-labelledby="ariaid-title9" id="oqx_sdd_51c">
+            <h3 class="- topic/title title topictitle3" id="ariaid-title9">2.1 线性规划的二阶锥形式</h3>
+            <div class="- topic/body body">
+                <div class="- topic/p p">对于线性不等式约束<img class="- topic/image image" src="images/mvo_images/image-20240223-091128.png"/>，移项后得到<br/><img class="- topic/image image" id="oqx_sdd_51c__image_ekl_bfd_51c" src="images/mvo_images/7ead9be4-58e7-43ed-9b25-f3bff9bfd2e7%20(1).png"/><br/></div>
+                <p class="- topic/p p">同理对 x 设定上界与下界的约束<img class="- topic/image image" src="images/mvo_images/image-20240223-091830.png"/>
+                    可以转化为：</p>
+                <br/><img class="- topic/image image" src="images/mvo_images/image-20240223-092138.png"/><br/>
+                <p class="- topic/p p">对应二阶锥的标准形式为 <img class="- topic/image image" src="images/mvo_images/image-20240223-093556.png"/></p>
+                <p class="- topic/p p">其中 E 为长度与 x 相同的单位矩阵。</p>
+                <p class="- topic/p p">因此得到二阶锥参数：</p>
+                <br/><img class="- topic/image image" src="images/mvo_images/image-20240223-094715.png"/><br/>
+            </div>
+        </article>
+        <article class="- topic/topic topic nested2" aria-labelledby="ariaid-title10" id="t5d_tdd_51c">
+            <h3 class="- topic/title title topictitle3" id="ariaid-title10">2.2 二次不等式约束的二阶锥形式</h3>
+            <div class="- topic/body body">
+                <p class="- topic/p p">对于二次不等式约束 <img class="- topic/image image" src="images/mvo_images/image-20240226-010938.png"/>，其中 V
+                    为正定矩阵，k 为正标量。V 可以通过 cholesky 分解得到 <img class="- topic/image image" src="images/mvo_images/image-20240226-064535.png"/>，则原约束可以转化为 <img class="- topic/image image" src="images/mvo_images/image-20240226-074959.png"/>，即可得到二阶锥的标准形式：<img class="- topic/image image" id="t5d_tdd_51c__image_zph_2fd_51c" src="images/mvo_images/image-20240226-075017.png"/></p>
+                <div class="- topic/p p"> 锥形式参数：<br/><img class="- topic/image image" id="t5d_tdd_51c__image_rys_2fd_51c" src="images/mvo_images/image-20240226-080445.png"/><br/></div>
+                <p class="- topic/p p">其中 n 为变量 x 的长度。</p>
+            </div>
+        </article>
+        <article class="- topic/topic topic nested2" aria-labelledby="ariaid-title11" id="xkq_tdd_51c">
+            <h3 class="- topic/title title topictitle3" id="ariaid-title11">2.3 绝对值约束的二阶锥形式</h3>
+            <div class="- topic/body body">
+                <p class="- topic/p p">对于包含绝对值约束的线性规划：</p>
+                <br/><img class="- topic/image image" src="images/mvo_images/image-20240220-103709.png"/><br/>
+                <p class="- topic/p p">其中 1 范数约束即为绝对值约束 <img class="- topic/image image" src="images/mvo_images/image-20240222-021127.png"/></p>
+                <p class="- topic/p p">引入辅助变量 <img class="- topic/image image" src="images/mvo_images/image-20240220-103842.png"/></p>
+                <p class="- topic/p p">将原问题改写为关于 [xT, u1, ··· , un]T 的优化问题即可转换为二阶锥规划的形式： <img class="- topic/image image" src="images/mvo_images/image-20240220-103927.png"/></p>
+            </div>
+        </article>
+        <article class="- topic/topic topic nested2" aria-labelledby="ariaid-title12" id="efz_tdd_51c">
+            <h3 class="- topic/title title topictitle3" id="ariaid-title12">2.4 二次规划的二阶锥形式</h3>
+            <div class="- topic/body body">
+                <p class="- topic/p p">对于目标函数中含有二次项的规划问题，引入辅助变量 <img class="- topic/image image" src="images/mvo_images/image-20240220-103340.png"/> ，由于 H 为正定矩阵，可以通过
+                    cholesky 分解得到<img class="- topic/image image" src="images/mvo_images/image-20240226-014650.png"/>，原问题改写为：</p>
+                <br/><img class="- topic/image image" src="images/mvo_images/image-20240227-015445.png"/><br/>
+                <div class="- topic/p p">又由四边形恒等式<img class="- topic/image image" src="images/mvo_images/image-20240227-013316.png"/>可以推出：<br/><img class="- topic/image image" id="efz_tdd_51c__image_wzw_3fd_51c" src="images/mvo_images/image-20240227-021244.png"/><br/></div>
+                <p class="- topic/p p">移项得到：<img class="- topic/image image" src="images/mvo_images/image-20240227-021445.png"/></p>
+                <p class="- topic/p p">代入到问题二次约束中即可得到 <img class="- topic/image image" src="images/mvo_images/image-20240227-013333.png"/></p>
+                <p class="- topic/p p">最终得到与原问题等价的规划问题 <img class="- topic/image image" src="images/mvo_images/image-20240220-103356.png"/></p>
+                <p class="- topic/p p">其中 <img class="- topic/image image" src="images/mvo_images/image-20240226-015235.png"/></p>
+            </div>
+        </article>
+    </article>
+    <article class="- topic/topic topic nested1" aria-labelledby="ariaid-title13" id="lqh_wdd_51c">
+        <h2 class="- topic/title title topictitle2" id="ariaid-title13">3. 应用场景示例</h2>
+        <article class="- topic/topic topic nested2" aria-labelledby="ariaid-title14" id="bcn_wdd_51c">
+            <h3 class="- topic/title title topictitle3" id="ariaid-title14">3.1 场景一：最大化期望收益率</h3>
+            <div class="- topic/body body">
+                <p class="- topic/p p">在股票组合优化问题中，可以在个股权重上下限约束，风险约束，行业约束的约束条件下求解股票投资组合的最大收益。假设有 10 支股票，预测它们未来的收益率分别为</p>
+                <p class="- topic/p p"><code class="+ topic/ph pr-d/codeph ph codeph">[0.1, 0.02, 0.01, 0.05, 0.17, 0.01, 0.07, 0.08, 0.09,
+                    0.10]</code>。这些股票属于消费、金融和科技三个行业，希望在每个行业的暴露不超过 8%，且每个股票权重分配不得多于
+                    15%，求最大化预期收益的投资组合。</p>
+                <section class="- topic/section section" id="bcn_wdd_51c__section_emh_bdj_51c" data-ofbid="bcn_wdd_51c__section_emh_bdj_51c"><h4 class="- topic/title title sectiontitle">linprog 函数求解</h4>
+                    
+                    <p class="- topic/p p">根据问题描述可以带入线性规划模型得到：</p>
+                    <p class="- topic/p p">预期收益率： <img class="- topic/image image" id="bcn_wdd_51c__image_lfx_bdj_51c" src="images/mvo_images/image-20240220-103953.png"/></p>
+                    <p class="- topic/p p">不等式约束： <img class="- topic/image image" id="bcn_wdd_51c__image_mfx_bdj_51c" src="images/mvo_images/image-20240220-104012.png"/>
+                        <img class="- topic/image image" id="bcn_wdd_51c__image_nfx_bdj_51c" src="images/mvo_images/image-20240220-104031.png"/> 等式约束：所有股票分配权重之和为 1。</p>
+                    <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="bcn_wdd_51c__codeblock_ofx_bdj_51c" data-ofbid="bcn_wdd_51c__codeblock_ofx_bdj_51c"><code>
+f = -1*[0.1,0.02,0.01,0.05,0.17,0.01,0.07,0.08,0.09,0.10]
+A = ([1,1,1,0,0,0,0,0,0,0,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0,0,1,1,1,1,-1,-1,-1,0,0,0,0,0,0,0,0,0,0,-1,-1,-1,0,0,0,0,0,0,0,0,0,0,-1,-1,-1,-1]$10:6).transpose()
+b = [0.3,0.4,0.3]
+//参数设置
+exposure = 0.08
+b = (b + exposure) join (exposure - b)
+Aeq = matrix(take(1, size(f))).transpose()
+beq = array(DOUBLE).append!(1)
+res = linprog(f, A, b, Aeq, beq, 0, 0.15)
+
+//输出结果 
+max_return = -res[0] 
+//max_return = 0.0861
+weights = res[1]
+//weights = [0.15,0.15,0,0.15,0.15,0.02,0,0.08,0.15,0.15]
+</code></pre>
+                </section>
+                <section class="- topic/section section" id="bcn_wdd_51c__section_brd_cdj_51c" data-ofbid="bcn_wdd_51c__section_brd_cdj_51c"><h4 class="- topic/title title sectiontitle">gurobi 插件求解</h4>
+                    
+                    <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="bcn_wdd_51c__codeblock_mwp_cdj_51c" data-ofbid="bcn_wdd_51c__codeblock_mwp_cdj_51c"><code>loadPlugin("plugins/gurobi/PluginGurobi.txt")
+model = gurobi::model()
+
+/// 增加变量
+numOfVars = 10
+lb = take(0, numOfVars)
+ub = take(0.15, numOfVars)
+stocks = ["A001", "A002", "A003", "A004", "A005", "A006", "A007", "A008", "A009", "A010"]
+vars = gurobi::addVars(model, lb, ub, , , stocks)
+
+/// 增加线性约束
+f = [0.1,0.02,0.01,0.05,0.17,0.01,0.07,0.08,0.09,0.10]
+A = ([1,1,1,0,0,0,0,0,0,0,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0,0,1,1,1,1,-1,-1,-1,0,0,0,0,0,0,0,0,0,0,-1,-1,-1,0,0,0,0,0,0,0,0,0,0,-1,-1,-1,-1]$10:6)
+rhs = 0.38 0.48 0.38 -0.22 -0.32 -0.22
+
+for (i in 0:6) {
+  lhsExpr = gurobi::linExpr(model, A[i], stocks)
+  gurobi::addConstr(model, lhsExpr, '&lt;', rhs[i])
+}
+
+lhsExpr = gurobi::linExpr(model, take(1, numOfVars), stocks)
+gurobi::addConstr(model, lhsExpr, '=', 1)
+
+// 设置目标函数
+obj = gurobi::linExpr(model, f, vars)
+gurobi::setObjective(model, obj, -1)
+
+// 执行优化
+gurobi::optimize(model) 
+
+// 获取优化结果
+result = gurobi::getResult(model)
+//股票权重：result = [0.15,0.15,0,0.15,0.15,0.02,0,0.08,0.15,0.15]
+obj = gurobi::getObjective(model)
+//目标值：obj = 0.0861</code></pre>
+                </section>
+            </div>
+        </article>
+        <article class="- topic/topic topic nested2" aria-labelledby="ariaid-title15" id="btt_wdd_51c">
+            <h3 class="- topic/title title topictitle3" id="ariaid-title15">3.2 场景二：最大化效用函数</h3>
+            <div class="- topic/body body">
+                <p class="- topic/p p">现代投资组合理论用均值和方差来刻画收益和风险这两个关键因素，效用函数期望则是尽可能的在最大化期望收益率和最小组合波动率之间取得一个平衡，二次目标函数的最优解也是组合权重优化的一部分，一般收益最大化的同时也要求组合风险最小。</p>
+                <p class="- topic/p p">假设有 2457 支股票，其投资组合收益率的协方差矩阵是一个单位矩阵，求解在取得最大效用函数的时各股票的权重分配。</p>
+                <section class="- topic/section section" id="btt_wdd_51c__section_nqs_scj_51c" data-ofbid="btt_wdd_51c__section_nqs_scj_51c"><h4 class="- topic/title title sectiontitle">quadprog 函数求解</h4>
+                    
+                    <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="btt_wdd_51c__codeblock_arh_tcj_51c" data-ofbid="btt_wdd_51c__codeblock_arh_tcj_51c"><code>baseDir = "/home/data/"
+f = dropna(flatten(float(matrix(select col1, col2, col3, col4, col5, col6, col7, col8, col9, col10 from loadText(baseDir + "C.csv") where rowNo(col1) &gt; 0)).transpose()))
+
+N = f.size()
+H = eye(N) //协方差矩阵
+A = matrix(select * from loadText(baseDir + "A_ub.csv"))
+b = 
+[0.025876723,	0.092515275,	0.035133942,	0.053184884,	0.067410565,	0.009709433,	0.04668745,	0.00636804,	0.022258664,	0.11027537,
+0.018488302,	0.027417204,	0.028585,	0.017228214,	0.008055527,	0.015727843,	0.026132369,	0.013646113,	0.066000808,	0.043606587,
+0.048325258,	0.033868626,	0.010790603,	0.017737391,	0.03252374,	0.039329965,	0.040665779,	0.010868773,	0.006819891,	0.015879314,
+0.008882335,	-0.025876723,	-0.092515275,	-0.035133942,	-0.053184884,	-0.067410565,	-0.009709433,	-0.04668745,	-0.00636804,	-0.022258664,
+-0.110275379,	-0.018488302,	-0.027417204,	-0.028585,	-0.017228214,	-0.008055527,	-0.015727843,	-0.026132369,	-0.013646113,	-0.066000808,
+-0.043606587,	-0.048325258,	-0.033868626,	-0.010790603,	-0.017737391,	-0.03252374,	-0.039329965,	-0.040665779,	-0.010868773,	-0.006819891,
+-0.015879314,	-0.008882335]
+
+//线性约束
+Aeq = matrix(take(1, N)).transpose()
+beq = array(DOUBLE).append!(1)
+res2 = quadprog(H, f, A, b, Aeq, beq)
+</code></pre>
+                </section>
+                <section class="- topic/section section" id="btt_wdd_51c__section_kgq_tcj_51c" data-ofbid="btt_wdd_51c__section_kgq_tcj_51c"><h4 class="- topic/title title sectiontitle">gurobi 插件求解</h4>
+                    
+                    <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="btt_wdd_51c__codeblock_yx3_5cj_51c" data-ofbid="btt_wdd_51c__codeblock_yx3_5cj_51c"><code>baseDir="/home/data/"
+f = dropna(flatten(double(matrix(select col1, col2, col3, col4, col5, col6, col7, col8, col9, col10 from loadText(baseDir + "C.csv") where rowNo(col1) &gt; 0)).transpose()))
+
+N = f.size()
+H = eye(N)
+A = matrix(select * from loadText(baseDir + "A_ub.csv")).transpose()
+b = 
+[0.025876723,	0.092515275,	0.035133942,	0.053184884,	0.067410565,	0.009709433,	0.04668745,	0.00636804,	0.022258664,	0.11027537,
+0.018488302,	0.027417204,	0.028585,	0.017228214,	0.008055527,	0.015727843,	0.026132369,	0.013646113,	0.066000808,	0.043606587,
+0.048325258,	0.033868626,	0.010790603,	0.017737391,	0.03252374,	0.039329965,	0.040665779,	0.010868773,	0.006819891,	0.015879314,
+0.008882335,	-0.025876723,	-0.092515275,	-0.035133942,	-0.053184884,	-0.067410565,	-0.009709433,	-0.04668745,	-0.00636804,	-0.022258664,
+-0.110275379,	-0.018488302,	-0.027417204,	-0.028585,	-0.017228214,	-0.008055527,	-0.015727843,	-0.026132369,	-0.013646113,	-0.066000808,
+-0.043606587,	-0.048325258,	-0.033868626,	-0.010790603,	-0.017737391,	-0.03252374,	-0.039329965,	-0.040665779,	-0.010868773,	-0.006819891,
+-0.015879314,	-0.008882335]
+
+model = gurobi::model()
+/// 增加变量
+lb = take(-10, N)
+ub = take(10, N)
+varName = "v" + string(1..N)
+vars = gurobi::addVars(model, lb, ub, , ,varName)
+
+//增加线性约束
+for (i in 0:N) {
+    lhsExpr = gurobi::linExpr(model, A[i], varName)
+    gurobi::addConstr(model, lhsExpr, '&lt;', b[i])
+}
+lhsExpr = gurobi::linExpr(model, take(1, N), varName)
+gurobi::addConstr(model, lhsExpr, '=', 1)
+
+// 增加目标值
+linExpr = gurobi::linExpr(model, f, vars)
+quadExpr = gurobi::quadExpr(model, H, varName, linExpr)
+gurobi::setObjective(model, quadExpr, 1)
+
+timer status = gurobi::optimize(model) 
+
+// 获取优化结果
+result = gurobi::getResult(model)
+obj = gurobi::getObjective(model)</code></pre>
+                </section>
+            </div>
+        </article>
+        <article class="- topic/topic topic nested2" aria-labelledby="ariaid-title16" id="xvx_xdd_51c">
+            <h3 class="- topic/title title topictitle3" id="ariaid-title16">3.3 场景三：带有换手率约束的投资组合问题</h3>
+            <div class="- topic/body body">
+                <p class="- topic/p p">同样是场景二中的 2457
+                    支股票，我们引入换手率约束。在投资组合问题中，换手率即为当前股票权重与初始股票权重的绝对值之和，衡量了股票的流通性大小。过高的换手率意味着较大的交易成本，本例中我们设置所有股票换手率之和不大于
+                    1，求解使投资组合达到最大收益率时的权重分配。</p>
+                <section class="- topic/section section" id="xvx_xdd_51c__section_zgf_vcj_51c" data-ofbid="xvx_xdd_51c__section_zgf_vcj_51c"><h4 class="- topic/title title sectiontitle">socp 函数求解</h4>
+                    
+                    <p class="- topic/p p">使用 socp 函数求解带有换手率约束的投资组合问题时，需将原问题转化为含有绝对值约束的二阶锥形式再进行求解。</p>
+                    <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="xvx_xdd_51c__codeblock_irx_vcj_51c" data-ofbid="xvx_xdd_51c__codeblock_irx_vcj_51c"><code> 
+baseDir = "/home/data/""
+f = dropna(flatten(float(matrix(select col1, col2, col3, col4, col5, col6, col7, col8, col9, col10 from loadText(baseDir + "C.csv") where rowNo(col1) &gt; 0)).transpose()))
+N = f.size()
+
+// Ax &lt;= b
+A = matrix(select * from loadText(baseDir + "A_ub.csv"))
+x = sum(A[0,])
+sum(x);
+
+b = 
+[0.025876723,	0.092515275,	0.035133942,	0.053184884,	0.067410565,	0.009709433,	0.04668745,	0.00636804,	0.022258664,	0.11027537,
+0.018488302,	0.027417204,	0.028585,	0.017228214,	0.008055527,	0.015727843,	0.026132369,	0.013646113,	0.066000808,	0.043606587,
+0.048325258,	0.033868626,	0.010790603,	0.017737391,	0.03252374,	0.039329965,	0.040665779,	0.010868773,	0.006819891,	0.015879314,
+0.008882335,	-0.025876723,	-0.092515275,	-0.035133942,	-0.053184884,	-0.067410565,	-0.009709433,	-0.04668745,	-0.00636804,	-0.022258664,
+-0.110275379,	-0.018488302,	-0.027417204,	-0.028585,	-0.017228214,	-0.008055527,	-0.015727843,	-0.026132369,	-0.013646113,	-0.066000808,
+-0.043606587,	-0.048325258,	-0.033868626,	-0.010790603,	-0.017737391,	-0.03252374,	-0.039329965,	-0.040665779,	-0.010868773,	-0.006819891,
+-0.015879314,	-0.008882335]
+
+x0 = exec w0 from  loadText(baseDir + "w0.csv") 
+
+
+// minimize f^T * x + 0 * u , c = [f, 0] 引入新的求解变量
+c = -f // f^T * x， 
+c.append!(take(0, N)) // 0 * u
+c;
+
+// 根据二阶锥的锥形式与标准形式对应关系设置矩阵 G 
+E = eye(N)
+zeros = matrix(DOUBLE, N, N, ,0)
+
+G = concatMatrix([-E,zeros]) // -x &lt;= -lb 
+G = concatMatrix([G, concatMatrix([E,zeros])], false) // x &lt;= ub
+G = concatMatrix([G, concatMatrix([E,-E])], false) // x_i -u_i &lt;= x`_i 
+G = concatMatrix([G, concatMatrix([-E,-E])], false) // -x_i-u_i &lt;= -x`_i
+
+G = concatMatrix([G, concatMatrix([matrix(DOUBLE,1,N,,0), matrix(DOUBLE,1,N,,1)])], false) // sum(u)=c
+G = concatMatrix([G, concatMatrix([A, matrix(DOUBLE,b.size(), N,,0)])], false) // A*x &lt;= b
+
+//根据二阶锥的锥形式与标准形式对应关系设置向量 h
+h = array(DOUBLE).append!(take(0, N)) // -x &lt;= -lb
+h.append!(take(0.3, N)) // x &lt;= ub
+h.append!(x0) // x_i -u_i &lt;= x`_i
+h.append!(-x0) // -x_i-u_i &lt;= -x`_i
+h.append!(1) // sum(u)&lt;=c 换手率约束
+h.append!(b) // A*x &lt;= b 
+
+// l, q
+l = 9891 // 所有约束都是线性的
+q = []
+
+// Aeq, beq
+Aeq = concatMatrix([matrix(DOUBLE, 1, N, ,1), matrix(DOUBLE, 1, N, ,0)])
+beq = array(DOUBLE).append!(1)
+
+res = socp(c, G, h, l, q, Aeq, beq);
+print(res)
+// output &gt; ("Problem solved to optimality",[4.030922466819474E-13,-1.38420918319221E-12,2.633003706864388E-12,7.170457424061185E-12,3.08367186410226E-13,-1.538707717541051E-12,0.00029999999826,4.494868392653513E-12,-1.046866787477076E-12,0.000799999998839,1.16264810755163E-12,1.610142862543512E-11,-1.056487154243985E-13,-2.157448203710766E-13,4.389916149869339E-12,1.875852354004975E-12,7.82477001121239E-12,0.001299999997416,4.727903065768357E-13,7.550671346161244E-13,5.591928646425624E-12,1.124989684680735E-11,5.482907889730026E-12,0.015985000026396,0.000700000000029,5.633638482685261E-12,1.67297174174449E-12,5.469150816162936E-12,-6.300522047286838E-13,2.303301153098362E-12...],0.964278008555949)
+</code></pre>
+                </section>
+                <section class="- topic/section section" id="xvx_xdd_51c__section_cxr_wcj_51c" data-ofbid="xvx_xdd_51c__section_cxr_wcj_51c"><h4 class="- topic/title title sectiontitle">gurobi 插件求解</h4>
+                    
+                    <p class="- topic/p p">暂不支持圆锥约束的求解。</p>
+                </section>
+            </div>
+        </article>
+        <article class="- topic/topic topic nested2" aria-labelledby="ariaid-title17" id="jwj_ydd_51c">
+            <h3 class="- topic/title title topictitle3" id="ariaid-title17">3.4 场景四：带有收益率波动约束的投资组合问题</h3>
+            <div class="- topic/body body">
+                <p class="- topic/p p">有三支股票，根据每支股票的预期收益与收益率协方差矩阵，决定最优投资组合。</p>
+                <p class="- topic/p p">约束条件为：</p>
+                <ol class="- topic/ol ol">
+                    <li class="- topic/li li">投资组合的收益率的波动率不超过 11%；</li>
+                    <li class="- topic/li li">每支股票的权重在 10% 到 50% 之间。</li>
+                </ol>
+                <section class="- topic/section section" id="jwj_ydd_51c__section_cjr_xcj_51c" data-ofbid="jwj_ydd_51c__section_cjr_xcj_51c"><h4 class="- topic/title title sectiontitle">qclp 函数求解</h4>
+                    
+                    <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="jwj_ydd_51c__codeblock_uqg_ycj_51c" data-ofbid="jwj_ydd_51c__codeblock_uqg_ycj_51c"><code>
+r = 0.18 0.25 0.36
+V = 0.0225 -0.003 -0.01125 -0.003 0.04 0.025 -0.01125 0.025 0.0625 $ 3:3
+k = pow(0.11, 2)
+A = (eye(3) join (-1 * eye(3))).transpose()
+b = 0.5 0.5 0.5 -0.1 -0.1 -0.1
+Aeq = (1 1 1)$1:3
+beq = [1]
+
+res = qclp(-r, V, k, A, b, Aeq, beq) 
+//输出结果
+max_return = res[0]
+//max_return = 0.2281
+weights = res[1]
+//weights = [0.50, 0.381, 0.119]</code></pre>
+                </section>
+                <section class="- topic/section section" id="jwj_ydd_51c__section_htq_ycj_51c" data-ofbid="jwj_ydd_51c__section_htq_ycj_51c"><h4 class="- topic/title title sectiontitle">gurobi 插件求解</h4>
+                    
+                    <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="jwj_ydd_51c__codeblock_i2d_zcj_51c" data-ofbid="jwj_ydd_51c__codeblock_i2d_zcj_51c"><code>r = 0.18 0.25 0.36
+V = 0.0225 -0.003 -0.01125 -0.003 0.04 0.025 -0.01125 0.025 0.0625 $ 3:3
+k = pow(0.11, 2)
+A = (eye(3) join (-1 * eye(3)))
+b = 0.5 0.5 0.5 -0.1 -0.1 -0.1
+
+// 初始化模型及变量
+model = gurobi::model()
+varNames = "v" + string(1..3)
+lb = 0 0 0
+ub = 1 1 1
+vars = gurobi::addVars(model, lb, ub,,, varNames)
+
+//增加线性约束
+for (i in 0:3) {
+    lhsExpr = gurobi::linExpr(model, A[i], vars)
+    gurobi::addConstr(model, lhsExpr, '&lt;', b[i])
+}
+lhsExpr = gurobi::linExpr(model, take(1, 3), vars)
+gurobi::addConstr(model, lhsExpr, '=', 1)
+
+// 增加二次约束
+quadExp = gurobi::quadExpr(model, V, vars)
+gurobi::addConstr(model, quadExp, '&lt;', k)
+
+//设置目标值并执行优化
+obj = gurobi::linExpr(model, r, vars)
+gurobi::setObjective(model, obj, 1)
+timer gurobi::optimize(model)
+
+// 获取优化结果
+result = gurobi::getResult(model) 
+// [0.50, 0.3808, 0.119158]
+obj = gurobi::getObjective(model)
+// 0.228107</code></pre>
+                </section>
+            </div>
+        </article>
+    </article>
+    <article class="- topic/topic topic nested1" aria-labelledby="ariaid-title18" id="p12_12d_51c">
+        <h2 class="- topic/title title topictitle2" id="ariaid-title18">4. DolphinDB 与 Python 求解最优化问题性能对比</h2>
+        <div class="- topic/body body">
+            <p class="- topic/p p">socp 作为 DolphinDB 最优化求解系列函数中适用场景最广泛的优化问题求解器，很多优化问题都可以转换为二阶锥规划后使用 socp
+                求解。并且由于二阶锥规划具有非常高效的求解算法，因此 socp 函数具有很高的求解效率。socp 和 python 里的 cvxpy 库中的 ecos
+                求解方法一致。</p>
+            <p class="- topic/p p">本节通过使用随机模拟数据对三类规划问题使用不同求解方法的性能进行了对比。需要注意的是，不同的数据可能会对运算性能产生一定影响，因此本测试用例仅供参考。</p>
+        </div>
+        <article class="- topic/topic topic nested2" aria-labelledby="ariaid-title19" id="fd4_12d_51c">
+            <h3 class="- topic/title title topictitle3" id="ariaid-title19">4.1 线性规划问题 (LP)</h3>
+            <div class="- topic/body body">
+                <div class="table-container"><table class="- topic/table table" data-cols="2"><caption></caption><colgroup><col/><col/></colgroup><thead class="- topic/thead thead">
+                            <tr class="- topic/row">
+                                <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="fd4_12d_51c__entry__1">
+                                    <strong class="+ topic/ph hi-d/b ph b">使用函数</strong>
+                                </th>
+                                <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="fd4_12d_51c__entry__2">
+                                    <strong class="+ topic/ph hi-d/b ph b">用时统计</strong>
+                                </th>
+                            </tr>
+                        </thead><tbody class="- topic/tbody tbody">
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="fd4_12d_51c__entry__1">linprog</td>
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="fd4_12d_51c__entry__2">25.9 ms</td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="fd4_12d_51c__entry__1">socp</td>
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="fd4_12d_51c__entry__2">111.6ms</td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="fd4_12d_51c__entry__1">scipy.optimize.linprog（python）</td>
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="fd4_12d_51c__entry__2">38.9 ms</td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="fd4_12d_51c__entry__1">gurobi 插件</td>
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="fd4_12d_51c__entry__2">1.0 ms</td>
+                            </tr>
+                        </tbody></table></div>
+                <p class="- topic/p p">本测试场景使用 200 个变量，其中插件的耗时包括从模型初始化至执行<code class="+ topic/ph pr-d/codeph ph codeph">optimize</code> 求解的全部过程（下同）。</p>
+            </div>
+        </article>
+        <article class="- topic/topic topic nested2" aria-labelledby="ariaid-title20" id="jhv_12d_51c">
+            <h3 class="- topic/title title topictitle3" id="ariaid-title20">4.2 二次规划问题 (QP)</h3>
+            <div class="- topic/body body">
+                <div class="table-container"><table class="- topic/table table" data-cols="2"><caption></caption><colgroup><col/><col/></colgroup><thead class="- topic/thead thead">
+                            <tr class="- topic/row">
+                                <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="jhv_12d_51c__entry__1">
+                                    <strong class="+ topic/ph hi-d/b ph b">使用函数</strong>
+                                </th>
+                                <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="jhv_12d_51c__entry__2">
+                                    <strong class="+ topic/ph hi-d/b ph b">用时统计</strong>
+                                </th>
+                            </tr>
+                        </thead><tbody class="- topic/tbody tbody">
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="jhv_12d_51c__entry__1">quadprog</td>
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="jhv_12d_51c__entry__2">2,877.6 ms</td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="jhv_12d_51c__entry__1">socp</td>
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="jhv_12d_51c__entry__2">11,625.3 ms</td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="jhv_12d_51c__entry__1">cvxpy（python）</td>
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="jhv_12d_51c__entry__2">8,809.7ms</td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="jhv_12d_51c__entry__1">gurobi 插件</td>
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="jhv_12d_51c__entry__2">4601.7 ms</td>
+                            </tr>
+                        </tbody></table></div>
+                <p class="- topic/p p">本测试场景使用 1000 个变量，其中 gurobi 插件在添加约束时耗时较大 (773.0 ms)，实际优化耗时 3,828.7 ms。</p>
+            </div>
+        </article>
+        <article class="- topic/topic topic nested2" aria-labelledby="ariaid-title21" id="scg_b2d_51c">
+            <h3 class="- topic/title title topictitle3" id="ariaid-title21">4.3 二次约束线性规划问题 (QCLP)</h3>
+            <div class="- topic/body body">
+                <div class="table-container"><table class="- topic/table table" data-cols="2"><caption></caption><colgroup><col/><col/></colgroup><thead class="- topic/thead thead">
+                            <tr class="- topic/row">
+                                <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="scg_b2d_51c__entry__1">
+                                    <strong class="+ topic/ph hi-d/b ph b">使用函数</strong>
+                                </th>
+                                <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="scg_b2d_51c__entry__2">
+                                    <strong class="+ topic/ph hi-d/b ph b">用时统计</strong>
+                                </th>
+                            </tr>
+                        </thead><tbody class="- topic/tbody tbody">
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="scg_b2d_51c__entry__1">qclp</td>
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="scg_b2d_51c__entry__2">121.6 ms</td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="scg_b2d_51c__entry__1">socp</td>
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="scg_b2d_51c__entry__2">30.1 ms</td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="scg_b2d_51c__entry__1">cvxpy(python)</td>
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="scg_b2d_51c__entry__2">353.6ms</td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="scg_b2d_51c__entry__1">gurobi 插件</td>
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="scg_b2d_51c__entry__2">1.1ms</td>
+                            </tr>
+                        </tbody></table></div>
+                <p class="- topic/p p">本测试场景使用 200 个变量。</p>
+                <p class="- topic/p p">从以上性能对比可以看出，总体而言，gurobi 插件展现出最佳的求解性能，而 DolphinDB 的内置函数相比 python
+                    的求解器也表现出更快的求解速率。此外使用 DolphinDB 最优化函数、gurobi 插件求解的结果与 Python
+                    的求解结果在小数点后至少四位内均达到一致。</p>
+            </div>
+        </article>
+    </article>
+    <article class="- topic/topic topic nested1" aria-labelledby="ariaid-title22" id="dj4_b2d_51c">
+        <h2 class="- topic/title title topictitle2" id="ariaid-title22">5. 小结</h2>
+        <div class="- topic/body body">
+            <p class="- topic/p p">对于组合优化的场景，DolphinDB
+                提供了内置的最优化函数及插件的解决方案。使用内置函数时，相较于其他最优化函数，二阶锥规划（socp）展现出广泛的适用范围和强大的运算性能。在实际应用中，通过将一般规划问题转化为二阶锥问题并进行求解，往往能够获得更优的结果。如果项目中已经使用了
+                gurobi 求解器，选择插件不失为一种优秀的工程方案。结合 DolphinDB 在高性能行情数据处理上的优势，便捷、高效地实现组合优化。</p>
+        </div>
+    </article>
+    <article class="- topic/topic topic nested1" aria-labelledby="ariaid-title23" id="xrw_b2d_51c">
+        <h2 class="- topic/title title topictitle2" id="ariaid-title23">6. 附录</h2>
+        <div class="- topic/body body">
+            <p class="- topic/p p">DolphinDB 与 Python 求解最优化问题以及性能对比的数据与实现脚本。</p>
+            <ul class="- topic/ul ul">
+                <li class="- topic/li li">
+                    <a class="- topic/xref xref" href="script/mvo/data.zip">data.zip</a>
+                </li>
+                <li class="- topic/li li">
+                    <a class="- topic/xref xref" href="script/mvo/script.zip">script.zip</a>
+                </li>
+            </ul>
+        </div>
+    </article>
+</article></main></div>
+                        
+                        
+                        
+                        
+                        
+                        
+                    </div>
+                    
+                        <nav role="navigation" id="wh_topic_toc" aria-label="On this page" class="col-lg-2 d-none d-lg-block navbar d-print-none"> 
+                            <div id="wh_topic_toc_content">
+		                        
+	                            <div class=" wh_topic_toc "><div class="wh_topic_label">在本页上</div><ul><li class="topic-item"><a href="#ysj_pdd_51c" data-tocid="ysj_pdd_51c">1. 最优化求解系列函数介绍</a><ul><li class="topic-item"><a href="#yqm_qdd_51c" data-tocid="yqm_qdd_51c">1.1 <code class="+ topic/ph pr-d/codeph ph codeph">linprog</code>（线性规划）函数</a></li><li class="topic-item"><a href="#f21_rdd_51c" data-tocid="f21_rdd_51c">1.2 <code class="+ topic/ph pr-d/codeph ph codeph">quadprog</code>（二次规划）函数</a></li><li class="topic-item"><a href="#ork_rdd_51c" data-tocid="ork_rdd_51c">1.3 <code class="+ topic/ph pr-d/codeph ph codeph">qclp</code>（二次约束线性规划）函数</a></li><li class="topic-item"><a href="#nb5_rdd_51c" data-tocid="nb5_rdd_51c">1.4 <code class="+ topic/ph pr-d/codeph ph codeph">socp</code>（二阶锥规划）函数</a></li><li class="topic-item"><a href="#pwc_sdd_51c" data-tocid="pwc_sdd_51c">1.5 关于 gurobi 插件</a></li></ul></li><li class="topic-item"><a href="#nf4_sdd_51c" data-tocid="nf4_sdd_51c">2. 常用规划问题转化为二阶锥规划形式</a><ul><li class="topic-item"><a href="#oqx_sdd_51c" data-tocid="oqx_sdd_51c">2.1 线性规划的二阶锥形式</a></li><li class="topic-item"><a href="#t5d_tdd_51c" data-tocid="t5d_tdd_51c">2.2 二次不等式约束的二阶锥形式</a></li><li class="topic-item"><a href="#xkq_tdd_51c" data-tocid="xkq_tdd_51c">2.3 绝对值约束的二阶锥形式</a></li><li class="topic-item"><a href="#efz_tdd_51c" data-tocid="efz_tdd_51c">2.4 二次规划的二阶锥形式</a></li></ul></li><li class="topic-item"><a href="#lqh_wdd_51c" data-tocid="lqh_wdd_51c">3. 应用场景示例</a><ul><li class="topic-item"><a href="#bcn_wdd_51c" data-tocid="bcn_wdd_51c">3.1 场景一：最大化期望收益率</a><ul><li class="section-item"><div class="section-title"><a href="#bcn_wdd_51c__section_emh_bdj_51c" data-tocid="bcn_wdd_51c__section_emh_bdj_51c">linprog 函数求解</a></div></li><li class="section-item"><div class="section-title"><a href="#bcn_wdd_51c__section_brd_cdj_51c" data-tocid="bcn_wdd_51c__section_brd_cdj_51c">gurobi 插件求解</a></div></li></ul></li><li class="topic-item"><a href="#btt_wdd_51c" data-tocid="btt_wdd_51c">3.2 场景二：最大化效用函数</a><ul><li class="section-item"><div class="section-title"><a href="#btt_wdd_51c__section_nqs_scj_51c" data-tocid="btt_wdd_51c__section_nqs_scj_51c">quadprog 函数求解</a></div></li><li class="section-item"><div class="section-title"><a href="#btt_wdd_51c__section_kgq_tcj_51c" data-tocid="btt_wdd_51c__section_kgq_tcj_51c">gurobi 插件求解</a></div></li></ul></li><li class="topic-item"><a href="#xvx_xdd_51c" data-tocid="xvx_xdd_51c">3.3 场景三：带有换手率约束的投资组合问题</a><ul><li class="section-item"><div class="section-title"><a href="#xvx_xdd_51c__section_zgf_vcj_51c" data-tocid="xvx_xdd_51c__section_zgf_vcj_51c">socp 函数求解</a></div></li><li class="section-item"><div class="section-title"><a href="#xvx_xdd_51c__section_cxr_wcj_51c" data-tocid="xvx_xdd_51c__section_cxr_wcj_51c">gurobi 插件求解</a></div></li></ul></li><li class="topic-item"><a href="#jwj_ydd_51c" data-tocid="jwj_ydd_51c">3.4 场景四：带有收益率波动约束的投资组合问题</a><ul><li class="section-item"><div class="section-title"><a href="#jwj_ydd_51c__section_cjr_xcj_51c" data-tocid="jwj_ydd_51c__section_cjr_xcj_51c">qclp 函数求解</a></div></li><li class="section-item"><div class="section-title"><a href="#jwj_ydd_51c__section_htq_ycj_51c" data-tocid="jwj_ydd_51c__section_htq_ycj_51c">gurobi 插件求解</a></div></li></ul></li></ul></li><li class="topic-item"><a href="#p12_12d_51c" data-tocid="p12_12d_51c">4. DolphinDB 与 Python 求解最优化问题性能对比</a><ul><li class="topic-item"><a href="#fd4_12d_51c" data-tocid="fd4_12d_51c">4.1 线性规划问题 (LP)</a></li><li class="topic-item"><a href="#jhv_12d_51c" data-tocid="jhv_12d_51c">4.2 二次规划问题 (QP)</a></li><li class="topic-item"><a href="#scg_b2d_51c" data-tocid="scg_b2d_51c">4.3 二次约束线性规划问题 (QCLP)</a></li></ul></li><li class="topic-item"><a href="#dj4_b2d_51c" data-tocid="dj4_b2d_51c">5. 小结</a></li><li class="topic-item"><a href="#xrw_b2d_51c" data-tocid="xrw_b2d_51c">6. 附录</a></li></ul></div>
+	                        	
+                        	</div>
+                        </nav>
+                    
+                </div>
+            </div>
+            
+            
+            
+        </div> 
+        <footer class="navbar navbar-default wh_footer">
+  <div class=" footer-container mx-auto ">
+<title>Copyright</title><p><b> ©2024 浙江智臾科技有限公司 浙ICP备18048711号-3</b></p>
+  </div>
+</footer>
+        
+        <div id="go2top" class="d-print-none">
+            <span class="oxy-icon oxy-icon-up"></span>
+        </div>
+        
+        <div id="modal_img_large" class="modal">
+            <span class="close oxy-icon oxy-icon-remove"></span>
+            <div id="modal_img_container"></div>
+            <div id="caption"></div>
+        </div>
+        
+        
+        
+    </body>
+</html>

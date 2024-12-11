@@ -1,0 +1,470 @@
+<!DOCTYPE html><html xmlns="http://www.w3.org/1999/xhtml" xml:lang="zh" lang="zh" data-whc_version="26.0">
+    <head><link rel="shortcut icon" href="../../favicon.ico"/><link rel="icon" href="../../favicon.ico"/><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><meta http-equiv="X-UA-Compatible" content="IE=edge"/><meta name="description" content="获取时间变量的部分信息 获取时间变量的部分信息的用法如下： year(2016.02.14); // output 2016 monthOfYear(2016.02.14); // output 2 dayOfMonth(2016.02.14); // output 14 x=01:02:03.456; hour(x); // output 1 minuteOfHour(x); // output ..."/><meta name="DC.rights.owner" content="(C) 版权 2024"/><meta name="copyright" content="(C) 版权 2024"/><meta name="generator" content="DITA-OT"/><meta name="DC.type" content="topic"/><meta name="DC.coverage" content=""/><meta name="DC.relation" content="../../progr/data_mani/temporal_obj.html"/><meta name="prodname" content="DolphinDB"/><meta name="brand" content="DolphinDB"/><meta name="DC.creator" content="DolphinDB"/><meta name="DC.publisher" content="DDB N/A DDB 200"/><meta name="DC.format" content="HTML5"/><meta name="DC.identifier" content="时序对象的操作"/><title>时序对象的操作</title><!--  Generated with Oxygen version 26.0, build number 2024012323.  --><meta name="wh-path2root" content="../../"/><meta name="wh-toc-id" content="时序对象的操作-d9529e21226"/><meta name="wh-source-relpath" content="progr/data_mani/temp_obj_mani.dita"/><meta name="wh-out-relpath" content="progr/data_mani/temp_obj_mani.html"/>
+
+    <link rel="stylesheet" type="text/css" href="../../oxygen-webhelp/app/commons.css?buildId=2024012323"/>
+    <link rel="stylesheet" type="text/css" href="../../oxygen-webhelp/app/topic.css?buildId=2024012323"/>
+
+    <script src="../../oxygen-webhelp/app/options/properties.js?buildId=20240704100525"></script>
+    <script src="../../oxygen-webhelp/app/localization/strings.js?buildId=2024012323"></script>
+    <script src="../../oxygen-webhelp/app/search/index/keywords.js?buildId=20240704100525"></script>
+    <script defer="defer" src="../../oxygen-webhelp/app/commons.js?buildId=2024012323"></script>
+    <script defer="defer" src="../../oxygen-webhelp/app/topic.js?buildId=2024012323"></script>
+<link rel="stylesheet" type="text/css" href="../../oxygen-webhelp/template/styles.css?buildId=2024012323"/><script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script><script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script></head>
+
+    <body id="时序对象的操作" class="wh_topic_page frmBody">
+        <a href="#wh_topic_body" class="sr-only sr-only-focusable">
+            跳转到主要内容
+        </a>
+        
+        
+        
+        
+        <header class="navbar navbar-default wh_header">
+    <div class="container-fluid">
+        <div xmlns:whc="http://www.oxygenxml.com/webhelp/components" class="wh_header_flex_container navbar-nav navbar-expand-md navbar-dark">
+            <div class="wh_logo_and_publication_title_container">
+                <div class="wh_logo_and_publication_title">
+                    
+                    <a href="https://www.dolphindb.cn" class=" wh_logo d-none d-sm-block "><img src="../../logo.png" alt="  DolphinDB 文档中心  "/></a>
+                    <div class=" wh_publication_title "><a href="../../index.html"><span class="booktitle">  <span class="ph mainbooktitle">DolphinDB 文档中心</span>  </span></a></div>
+                    
+                </div>
+                
+                
+            </div>
+
+            <div class="wh_top_menu_and_indexterms_link collapse navbar-collapse" id="wh_top_menu_and_indexterms_link">
+                
+                
+                
+                
+            </div>
+        <div class=" wh_search_input navbar-form wh_topic_page_search search " role="form">
+            
+            
+            
+            <form id="searchForm" method="get" role="search" action="../../search.html"><div><input type="search" placeholder="搜索 " class="wh_search_textfield" id="textToSearch" name="searchQuery" aria-label="搜索查询" required="required"/><button type="submit" class="wh_search_button" aria-label="搜索"><span class="search_input_text">搜索</span></button></div></form>
+            
+            <script src="/vendors/react/umd/react.production.min.js" defer="defer"></script>
+<script src="/vendors/react-dom/umd/react-dom.production.min.js" defer="defer"></script>
+<script src="/vendors/dayjs/dayjs.min.js" defer="defer"></script>
+<script src="/vendors/antd/dist/antd.min.js" defer="defer"></script>
+<script src="/vendors/@ant-design/icons/dist/index.umd.min.js" defer="defer"></script>
+<script src="/zh/index.js" type="module"></script>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js" defer="defer"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML" defer="defer"><!--
+
+
+--></script>
+
+            
+        </div></div>
+    </div>
+</header>
+        
+        
+         
+        
+        
+        
+        <div class="container-fluid" id="wh_topic_container">
+            <div class="row">
+
+                <nav class="wh_tools d-print-none navbar-expand-md" aria-label="Tools">
+                    
+                    <div data-tooltip-position="bottom" class=" wh_breadcrumb "><ol class="d-print-none"><li><span class="home"><a href="../../index.html"><span>主页</span></a></span></li><li><div class="topicref" data-id="about_language_resources"><div class="title"><a href="../../progr/progr_intro.html"><span class="keyword label">编程语言</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 编程基本概念与方法、SQL 在 DolphinDB 的应用</p></div></div></div></li><li><div class="topicref" data-id="chap4_db_programming"><div class="title"><a href="../../progr/lang_intro.html"><span class="keyword label">DolphinDB 脚本语言</span></a><div class="wh-tooltip"><p class="shortdesc"> 脚本编程相关概念参考，包括：数据类型与形式、对象、运算符、编程语句、数据操作、函数化编程、文件操作和 SQL 语句。 </p></div></div></div></li><li><div class="topicref" data-id="chap4_sect_data_manipulation"><div class="title"><a href="../../progr/data_mani/dm_intro.html"><span class="keyword label">数据操作</span></a></div></div></li><li><div class="topicref" data-id="时间序列对象"><div class="title"><a href="../../progr/data_mani/temporal_obj.html"><span class="keyword label">时间序列对象</span></a></div></div></li><li class="active"><div class="topicref" data-id="时序对象的操作"><div class="title"><a href="../../progr/data_mani/temp_obj_mani.html"><span class="keyword label">时序对象的操作</span></a></div></div></li></ol></div>
+                    
+                    
+                    
+                    <div class="wh_right_tools">
+                        <button class="wh_hide_highlight" aria-label="切换搜索突出显示" title="切换搜索突出显示"></button>
+                        <button class="webhelp_expand_collapse_sections" data-next-state="collapsed" aria-label="折叠截面" title="折叠截面"></button>
+                        
+                        
+                        
+                        
+                        <div class=" wh_print_link print d-none d-md-inline-block "><button onClick="window.print()" title="打印此页" aria-label="打印此页"></button></div>
+                        
+                        <button type="button" id="wh_toc_button" class="custom-toggler navbar-toggler collapsed wh_toggle_button navbar-light" aria-expanded="false" aria-label="Toggle publishing table of content" aria-controls="wh_publication_toc">
+                            <span class="navbar-toggler-icon"></span>
+                        </button>
+                    </div>
+                    
+                </nav>
+            </div>
+            
+            
+            
+            
+            <div class="wh_content_area">
+                <div class="row">
+                    
+                        <nav id="wh_publication_toc" class="col-lg-3 col-md-3 col-sm-12 d-md-block d-none d-print-none" aria-label="Table of Contents Container">
+                            <div id="wh_publication_toc_content">
+		                        
+                            	<div class=" wh_publication_toc " data-tooltip-position="right"><span class="expand-button-action-labels"><span id="button-expand-action" role="button" aria-label="Expand"></span><span id="button-collapse-action" role="button" aria-label="Collapse"></span><span id="button-pending-action" role="button" aria-label="Pending"></span></span><ul role="tree" aria-label="Table of Contents"><li role="treeitem"><div data-tocid="new_chap_about_sect_ddb_docs_intro-d9529e87" class="topicref" data-id="new_chap_about_sect_ddb_docs_intro" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../about/ddb_docs_intro.html" id="new_chap_about_sect_ddb_docs_intro-d9529e87-link">文档使用说明</a><div class="wh-tooltip"><p class="shortdesc">如何获取 DolphinDB 帮助信息</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="chap1_getstarted-d9529e140" class="topicref" data-id="chap1_getstarted" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action chap1_getstarted-d9529e140-link" class="wh-expand-btn"></span><div class="title"><a href="../../getstarted/chap1_getstarted.html" id="chap1_getstarted-d9529e140-link"><span class="keyword label">快速上手</span></a><div class="wh-tooltip"><p class="shortdesc">如何快速部署 DolphinDB、建库建表、写入和查询数据</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="sectionddb_deployment-d9529e335" class="topicref" data-id="sectionddb_deployment" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action sectionddb_deployment-d9529e335-link" class="wh-expand-btn"></span><div class="title"><a href="../../deploy/deploy_intro.html" id="sectionddb_deployment-d9529e335-link"><span class="keyword label">部署</span></a><div class="wh-tooltip"><p class="shortdesc">如何在不同的场景中部署 DolphinDB</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="new_chap_database_manage_new_chap_dbmanage_landing_page-d9529e2313" class="topicref" data-id="new_chap_database_manage_new_chap_dbmanage_landing_page" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action new_chap_database_manage_new_chap_dbmanage_landing_page-d9529e2313-link" class="wh-expand-btn"></span><div class="title"><a href="../../db_distr_comp/cfg/db_intro.html" id="new_chap_database_manage_new_chap_dbmanage_landing_page-d9529e2313-link"><span class="keyword label">数据库</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 数据库的基本概念</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="chap7_tutorials_streaming-d9529e3490" class="topicref" data-id="chap7_tutorials_streaming" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action chap7_tutorials_streaming-d9529e3490-link" class="wh-expand-btn"></span><div class="title"><a href="../../stream/str_intro.html" id="chap7_tutorials_streaming-d9529e3490-link"><span class="keyword label">流数据</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 流数据引擎及流数据计算的基本概念</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="tocId-d9529e7385" class="topicref" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action tocId-d9529e7385-link" class="wh-expand-btn"></span><div class="title"><a href="../../db_distr_comp/db_oper/import_data.html" id="tocId-d9529e7385-link">数据迁移</a><div class="wh-tooltip"><p class="shortdesc">如何从不同数据源向 DolphinDB 迁移数据</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="chap7_tutorials_system_management-d9529e7812" class="topicref" data-id="chap7_tutorials_system_management" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action chap7_tutorials_system_management-d9529e7812-link" class="wh-expand-btn"></span><div class="title"><a href="../../sys_man/om_intro.html" id="chap7_tutorials_system_management-d9529e7812-link"><span class="keyword label">系统运维</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 的系统运维功能及方法</p></div></div></div></li><li role="treeitem" aria-expanded="true"><div data-tocid="about_language_resources-d9529e16490" class="topicref" data-id="about_language_resources" data-state="expanded"><span role="button" tabindex="0" aria-labelledby="button-collapse-action about_language_resources-d9529e16490-link" class="wh-expand-btn"></span><div class="title"><a href="../../progr/progr_intro.html" id="about_language_resources-d9529e16490-link"><span class="keyword label">编程语言</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 编程基本概念与方法、SQL 在 DolphinDB 的应用</p></div></div></div><ul role="group" class="navbar-nav nav-list"><li role="treeitem" aria-expanded="true"><div data-tocid="chap4_db_programming-d9529e16543" class="topicref" data-id="chap4_db_programming" data-state="expanded"><span role="button" tabindex="0" aria-labelledby="button-collapse-action chap4_db_programming-d9529e16543-link" class="wh-expand-btn"></span><div class="title"><a href="../../progr/lang_intro.html" id="chap4_db_programming-d9529e16543-link"><span class="keyword label">DolphinDB 脚本语言</span></a><div class="wh-tooltip"><p class="shortdesc"> 脚本编程相关概念参考，包括：数据类型与形式、对象、运算符、编程语句、数据操作、函数化编程、文件操作和 SQL 语句。 </p></div></div></div><ul role="group" class="navbar-nav nav-list"><li role="treeitem" aria-expanded="false"><div data-tocid="chap4_sect_datatypes_forms-d9529e16594" class="topicref" data-id="chap4_sect_datatypes_forms" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action chap4_sect_datatypes_forms-d9529e16594-link" class="wh-expand-btn"></span><div class="title"><a href="../../progr/data_types_forms_intro.html" id="chap4_sect_datatypes_forms-d9529e16594-link"><span class="keyword">数据类型与形式</span></a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="chap4_sect_objects-d9529e17632" class="topicref" data-id="chap4_sect_objects" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action chap4_sect_objects-d9529e17632-link" class="wh-expand-btn"></span><div class="title"><a href="../../progr/objs/objects.html" id="chap4_sect_objects-d9529e17632-link"><span class="keyword label">对象</span></a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="chap4_sect_operators-d9529e18069" class="topicref" data-id="chap4_sect_operators" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action chap4_sect_operators-d9529e18069-link" class="wh-expand-btn"></span><div class="title"><a href="../../progr/operators/operators.html" id="chap4_sect_operators-d9529e18069-link"><span class="keyword label">运算符</span></a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="chap4_sect_programming_statements-d9529e19654" class="topicref" data-id="chap4_sect_programming_statements" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action chap4_sect_programming_statements-d9529e19654-link" class="wh-expand-btn"></span><div class="title"><a href="../../progr/statements/statements_intro.html" id="chap4_sect_programming_statements-d9529e19654-link"><span class="keyword label">编程语句</span></a></div></div></li><li role="treeitem" aria-expanded="true"><div data-tocid="chap4_sect_data_manipulation-d9529e20900" class="topicref" data-id="chap4_sect_data_manipulation" data-state="expanded"><span role="button" tabindex="0" aria-labelledby="button-collapse-action chap4_sect_data_manipulation-d9529e20900-link" class="wh-expand-btn"></span><div class="title"><a href="../../progr/data_mani/dm_intro.html" id="chap4_sect_data_manipulation-d9529e20900-link"><span class="keyword label">数据操作</span></a></div></div><ul role="group" class="navbar-nav nav-list"><li role="treeitem" aria-expanded="false"><div data-tocid="字符串对象-d9529e20947" class="topicref" data-id="字符串对象" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action 字符串对象-d9529e20947-link" class="wh-expand-btn"></span><div class="title"><a href="../../progr/data_mani/string_obj.html" id="字符串对象-d9529e20947-link"><span class="keyword label">字符串对象</span></a></div></div></li><li role="treeitem" aria-expanded="true"><div data-tocid="时间序列对象-d9529e21132" class="topicref" data-id="时间序列对象" data-state="expanded"><span role="button" tabindex="0" aria-labelledby="button-collapse-action 时间序列对象-d9529e21132-link" class="wh-expand-btn"></span><div class="title"><a href="../../progr/data_mani/temporal_obj.html" id="时间序列对象-d9529e21132-link"><span class="keyword label">时间序列对象</span></a></div></div><ul role="group" class="navbar-nav nav-list"><li role="treeitem"><div data-tocid="日期和时间的调整及格式-d9529e21179" class="topicref" data-id="日期和时间的调整及格式" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../progr/data_mani/format_temp_obj.html" id="日期和时间的调整及格式-d9529e21179-link"><span class="keyword label">日期和时间的调整及格式</span></a></div></div></li><li role="treeitem" class="active"><div data-tocid="时序对象的操作-d9529e21226" class="topicref" data-id="时序对象的操作" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../progr/data_mani/temp_obj_mani.html" id="时序对象的操作-d9529e21226-link"><span class="keyword label">时序对象的操作</span></a></div></div></li><li role="treeitem"><div data-tocid="时序类型和转换-d9529e21273" class="topicref" data-id="时序类型和转换" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../progr/data_mani/temp_type_conv.html" id="时序类型和转换-d9529e21273-link"><span class="keyword label">时序类型和转换</span></a></div></div></li><li role="treeitem"><div data-tocid="时区和时区转换-d9529e21320" class="topicref" data-id="时区和时区转换" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../progr/data_mani/tzone_conv.html" id="时区和时区转换-d9529e21320-link"><span class="keyword label">时区和时区转换</span></a></div></div></li></ul></li><li role="treeitem" aria-expanded="false"><div data-tocid="null-值的操作-d9529e21367" class="topicref" data-id="null-值的操作" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action null-值的操作-d9529e21367-link" class="wh-expand-btn"></span><div class="title"><a href="../../progr/data_mani/null_oper.html" id="null-值的操作-d9529e21367-link">NULL 值的操作</a></div></div></li></ul></li><li role="treeitem" aria-expanded="false"><div data-tocid="chap4_sect_func_programming-d9529e21873" class="topicref" data-id="chap4_sect_func_programming" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action chap4_sect_func_programming-d9529e21873-link" class="wh-expand-btn"></span><div class="title"><a href="../../progr/func_progr.html" id="chap4_sect_func_programming-d9529e21873-link"><span class="keyword label">函数化编程</span></a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="元编程-d9529e22197" class="topicref" data-id="元编程" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action 元编程-d9529e22197-link" class="wh-expand-btn"></span><div class="title"><a href="../../progr/objs/meta_progr.html" id="元编程-d9529e22197-link"><span class="keyword label">元编程</span></a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="oop-d9529e22337" class="topicref" data-id="oop" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action oop-d9529e22337-link" class="wh-expand-btn"></span><div class="title"><a href="../../progr/oop.html" id="oop-d9529e22337-link">面向对象编程</a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="文件操作-d9529e22705" class="topicref" data-id="文件操作" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action 文件操作-d9529e22705-link" class="wh-expand-btn"></span><div class="title"><a href="../../progr/file_io/file_oper.html" id="文件操作-d9529e22705-link"><span class="keyword label">文件操作</span></a></div></div></li></ul></li><li role="treeitem" aria-expanded="false"><div data-tocid="chap4_sect_sql_statements-d9529e22890" class="topicref" data-id="chap4_sect_sql_statements" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action chap4_sect_sql_statements-d9529e22890-link" class="wh-expand-btn"></span><div class="title"><a href="../../progr/sql/sql_intro.html" id="chap4_sect_sql_statements-d9529e22890-link"><span class="keyword label">SQL 语句</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 中 SQL 语句的基本语法和用法</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="python-parser-简介-d9529e25535" class="topicref" data-id="python-parser-简介" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action python-parser-简介-d9529e25535-link" class="wh-expand-btn"></span><div class="title"><a href="../../progr/py_parser/py_par_intro.html" id="python-parser-简介-d9529e25535-link"><span class="keyword label">Python Parser</span></a></div></div></li></ul></li><li role="treeitem" aria-expanded="false"><div data-tocid="functions_references-d9529e26503" class="topicref" data-id="functions_references" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action functions_references-d9529e26503-link" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/funcs_intro.html" id="functions_references-d9529e26503-link"><span class="keyword label">函数参考</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 函数分类、语法、详解及示例</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="api_protocol-d9529e86456" class="topicref" data-id="api_protocol" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action api_protocol-d9529e86456-link" class="wh-expand-btn"></span><div class="title"><a href="../../api/connapi_intro.html" id="api_protocol-d9529e86456-link"><span class="keyword label">连接器 &amp; API</span></a><div class="wh-tooltip"><p class="shortdesc">面向不同编程语言的 DolphinDB API 及连接器，相关协议和用法</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="chap6_plugin-d9529e91976" class="topicref" data-id="chap6_plugin" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action chap6_plugin-d9529e91976-link" class="wh-expand-btn"></span><div class="title"><a href="../../plugins/plg_intro.html" id="chap6_plugin-d9529e91976-link"><span class="keyword label">插件</span></a><div class="wh-tooltip"><p class="shortdesc">多个应用场景的插件使用说明和插件开发指导</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="third_party-d9529e94749" class="topicref" data-id="third_party" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action third_party-d9529e94749-link" class="wh-expand-btn"></span><div class="title"><a href="../../third_party.html" id="third_party-d9529e94749-link">第三方工具</a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="about_tutorials-d9529e94980" class="topicref" data-id="about_tutorials" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action about_tutorials-d9529e94980-link" class="wh-expand-btn"></span><div class="title"><a href="../../tutorials/about_tutorials.html" id="about_tutorials-d9529e94980-link"><span class="keyword label">教程</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 产品使用教程</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="tocId-d9529e101769" class="topicref" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action tocId-d9529e101769-link" class="wh-expand-btn"></span><div class="title"><a href="../../rn/server/3_00_1.html" id="tocId-d9529e101769-link">版本说明</a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 版本发布历史</p></div></div></div></li></ul></div>
+		                        
+                            </div>
+                        </nav>
+                    
+                    
+                    <div class="col-lg-7 col-md-9 col-sm-12" id="wh_topic_body">
+                        <button id="wh_close_publication_toc_button" class="close-toc-button d-none" aria-label="Toggle publishing table of content" aria-controls="wh_publication_toc" aria-expanded="true">
+                            <span class="close-toc-icon-container">
+                                <span class="close-toc-icon"></span>     
+                            </span>
+                        </button>
+                        <button id="wh_close_topic_toc_button" class="close-toc-button d-none" aria-label="Toggle topic table of content" aria-controls="wh_topic_toc" aria-expanded="true">
+                            <span class="close-toc-icon-container">
+                                <span class="close-toc-icon"></span>     
+                            </span>
+                        </button>
+                        
+                        <div class=" wh_topic_content body "><main role="main"><article class="- topic/topic topic" role="article" aria-labelledby="ariaid-title1">
+    <h1 class="- topic/title title topictitle1" id="ariaid-title1"><span class="- topic/keyword keyword label">时序对象的操作</span></h1>
+    <div class="- topic/body body">
+        <section class="- topic/section section" id="时序对象的操作__section_wzw_jp5_h1c" data-ofbid="时序对象的操作__section_wzw_jp5_h1c"><h2 class="- topic/title title sectiontitle">获取时间变量的部分信息</h2>
+            
+            <p class="- topic/p p" id="时序对象的操作__p_ihx_5hn_ryb" data-ofbid="时序对象的操作__p_ihx_5hn_ryb">获取时间变量的部分信息的用法如下：</p>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="时序对象的操作__codeblock_jhx_5hn_ryb" data-ofbid="时序对象的操作__codeblock_jhx_5hn_ryb"><code>year(2016.02.14);
+// output
+2016
+
+monthOfYear(2016.02.14);
+// output
+2
+
+dayOfMonth(2016.02.14);
+// output
+14
+
+x=01:02:03.456;
+hour(x);
+// output
+1
+
+minuteOfHour(x);
+// output
+2
+
+secondOfMinute(x);
+// output
+3
+
+x mod 1000;
+// output
+456</code></pre>
+        </section>
+        <section class="- topic/section section" id="时序对象的操作__section_otr_hp5_h1c" data-ofbid="时序对象的操作__section_otr_hp5_h1c"><h2 class="- topic/title title sectiontitle">用运算符调整时间变量值</h2>
+            
+            <p class="- topic/p p" id="时序对象的操作__p_khx_5hn_ryb" data-ofbid="时序对象的操作__p_khx_5hn_ryb">使用运算符"+"或"-"来调整时间变量的值。</p>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="时序对象的操作__codeblock_lhx_5hn_ryb" data-ofbid="时序对象的操作__codeblock_lhx_5hn_ryb"><code>2016.02M-13;
+// output
+2015.01M
+
+2018.02.17+100;
+// output
+2018.05.28
+
+01:20:15+200;
+// output
+01:23:35</code></pre>
+            <p class="- topic/p p" id="时序对象的操作__p_mhx_5hn_ryb" data-ofbid="时序对象的操作__p_mhx_5hn_ryb">对于minute, second,
+                time和nanotime类型的时间序列对象，表示这些对象的内部整数的最小值为0，最大值分别为1440-1, 86400-1,
+                86400000-1和86400000000000-1。如果进行运算调整之后，其中一个表示这些对象的内部整数小于0或大于相应的最大值，最终结果是内部整数除以相应的最大值的余数。</p>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="时序对象的操作__codeblock_nhx_5hn_ryb" data-ofbid="时序对象的操作__codeblock_nhx_5hn_ryb"><code>23:59m+10;
+// output
+00:09m
+
+00:00:01-2;
+// output
+23:59:59
+
+23:59:59.900+200;
+// output
+00:00:00.100</code></pre>
+        </section>
+        <section class="- topic/section section" id="时序对象的操作__section_lg5_2p5_h1c" data-ofbid="时序对象的操作__section_lg5_2p5_h1c"><h2 class="- topic/title title sectiontitle">用时间单位调整时间变量值</h2>
+            
+            <p class="- topic/p p" id="时序对象的操作__p_ohx_5hn_ryb" data-ofbid="时序对象的操作__p_ohx_5hn_ryb"><a class="- topic/xref xref" href="../../funcs/t/temporalAdd.html">temporalAdd</a>
+                函数以不同的时间单位调整时间变量的值。</p>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="时序对象的操作__codeblock_phx_5hn_ryb" data-ofbid="时序对象的操作__codeblock_phx_5hn_ryb"><code>temporalAdd(2017.01.16,1,"w");
+// output
+2017.01.23
+
+temporalAdd(2016.12M,2,"M");
+// output
+2017.02M
+
+temporalAdd(13:30m,-15,"m");
+// output
+13:15m</code></pre>
+        </section>
+        <section class="- topic/section section" id="时序对象的操作__section_hyq_cp5_h1c" data-ofbid="时序对象的操作__section_hyq_cp5_h1c"><h2 class="- topic/title title sectiontitle">合并日期与时间</h2>
+            
+            <p class="- topic/p p" id="时序对象的操作__p_qhx_5hn_ryb" data-ofbid="时序对象的操作__p_qhx_5hn_ryb"><a class="- topic/xref xref" href="../../funcs/c/concatDateTime.html">concatDateTime</a> 函数可以合并日期和时间。</p>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="时序对象的操作__codeblock_rhx_5hn_ryb" data-ofbid="时序对象的操作__codeblock_rhx_5hn_ryb"><code>concatDateTime(2019.06.15,13:25:10);
+// output
+2019.06.15T13:25:10
+
+concatDateTime(2019.06.15 2019.06.16 2019.06.17,[13:25:10, 13:25:12, 13:25:13]);
+// output
+[2019.06.15T13:25:10,2019.06.16T13:25:12,2019.06.17T13:25:13]</code></pre>
+        </section>
+        <section class="- topic/section section" id="时序对象的操作__section_cwb_1p5_h1c" data-ofbid="时序对象的操作__section_cwb_1p5_h1c"><h2 class="- topic/title title sectiontitle">与 DateOffset 相关的函数</h2>
+            
+            <ul class="- topic/ul ul" id="时序对象的操作__ul_thx_5hn_ryb" data-ofbid="时序对象的操作__ul_thx_5hn_ryb">
+                <li class="- topic/li li">
+                    <p class="- topic/p p" id="时序对象的操作__p_uhx_5hn_ryb" data-ofbid="时序对象的操作__p_uhx_5hn_ryb"><a class="- topic/xref xref" href="../../funcs/y/yearBegin.html">yearBegin</a>
+                        ：获取当年的第一天</p>
+                </li>
+                <li class="- topic/li li">
+                    <p class="- topic/p p" id="时序对象的操作__p_vhx_5hn_ryb" data-ofbid="时序对象的操作__p_vhx_5hn_ryb"><a class="- topic/xref xref" href="../../funcs/y/yearEnd.html">yearEnd</a>
+                        ：获取当年的最后一天</p>
+                </li>
+                <li class="- topic/li li">
+                    <p class="- topic/p p" id="时序对象的操作__p_whx_5hn_ryb" data-ofbid="时序对象的操作__p_whx_5hn_ryb"><a class="- topic/xref xref" href="../../funcs/b/businessYearBegin.html">businessYearBegin</a> ：获取当年的第一个工作日</p>
+                </li>
+                <li class="- topic/li li">
+                    <p class="- topic/p p" id="时序对象的操作__p_xhx_5hn_ryb" data-ofbid="时序对象的操作__p_xhx_5hn_ryb"><a class="- topic/xref xref" href="../../funcs/b/businessYearEnd.html">businessYearEnd</a> ：获取当年的最后一个工作日</p>
+                </li>
+                <li class="- topic/li li">
+                    <p class="- topic/p p" id="时序对象的操作__p_yhx_5hn_ryb" data-ofbid="时序对象的操作__p_yhx_5hn_ryb"><a class="- topic/xref xref" href="../../funcs/i/isYearStart.html">isYearStart</a> ：判断当天是否为年初第一天</p>
+                </li>
+                <li class="- topic/li li">
+                    <p class="- topic/p p" id="时序对象的操作__p_zhx_5hn_ryb" data-ofbid="时序对象的操作__p_zhx_5hn_ryb"><a class="- topic/xref xref" href="../../funcs/i/isYearEnd.html">isYearEnd</a>
+                        ：判断当天是否为年末最后一天</p>
+                </li>
+                <li class="- topic/li li">
+                    <p class="- topic/p p" id="时序对象的操作__p_a3x_5hn_ryb" data-ofbid="时序对象的操作__p_a3x_5hn_ryb"><a class="- topic/xref xref" href="../../funcs/i/isLeapYear.html">isLeapYear</a> ：判断当年是否为闰年</p>
+                </li>
+            </ul>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="时序对象的操作__codeblock_b3x_5hn_ryb" data-ofbid="时序对象的操作__codeblock_b3x_5hn_ryb"><code>yearBegin(2011.06.02);
+// output
+2011.01.01
+
+yearEnd(2011.06.02);
+// output
+2011.12.31
+
+businessYearBegin(2011.06.02);
+// output
+2011.01.03
+
+businessYearEnd(2011.06.12);
+// output
+2011.12.30
+
+isYearBegin(2011.01.01);
+// output
+true
+
+isYearEnd(2011.12.31);
+// output
+true
+
+isLeapYear(2012.06.25);
+// output
+true</code></pre>
+            <ul class="- topic/ul ul" id="时序对象的操作__ul_c3x_5hn_ryb" data-ofbid="时序对象的操作__ul_c3x_5hn_ryb">
+                <li class="- topic/li li">
+                    <p class="- topic/p p" id="时序对象的操作__p_d3x_5hn_ryb" data-ofbid="时序对象的操作__p_d3x_5hn_ryb"><a class="- topic/xref xref" href="../../funcs/m/monthBegin.html">monthBegin</a> ：获取当月的第一天</p>
+                </li>
+                <li class="- topic/li li">
+                    <p class="- topic/p p" id="时序对象的操作__p_e3x_5hn_ryb" data-ofbid="时序对象的操作__p_e3x_5hn_ryb"><a class="- topic/xref xref" href="../../funcs/m/monthEnd.html">monthEnd</a>
+                        ：获取当月的最后一天</p>
+                </li>
+                <li class="- topic/li li">
+                    <p class="- topic/p p" id="时序对象的操作__p_f3x_5hn_ryb" data-ofbid="时序对象的操作__p_f3x_5hn_ryb"><a class="- topic/xref xref" href="../../funcs/b/businessMonthBegin.html">businessMonthBegin</a> ：获取当月的第一个工作日</p>
+                </li>
+                <li class="- topic/li li">
+                    <p class="- topic/p p" id="时序对象的操作__p_g3x_5hn_ryb" data-ofbid="时序对象的操作__p_g3x_5hn_ryb"><a class="- topic/xref xref" href="../../funcs/b/businessMonthEnd.html">businessMonthEnd</a> ：获取当月的最后一个工作日</p>
+                </li>
+                <li class="- topic/li li">
+                    <p class="- topic/p p" id="时序对象的操作__p_h3x_5hn_ryb" data-ofbid="时序对象的操作__p_h3x_5hn_ryb"><a class="- topic/xref xref" href="../../funcs/s/semiMonthBegin.html">semiMonthBegin</a> ：获取当月开始的第15（或其他）天</p>
+                </li>
+                <li class="- topic/li li">
+                    <p class="- topic/p p" id="时序对象的操作__p_i3x_5hn_ryb" data-ofbid="时序对象的操作__p_i3x_5hn_ryb"><a class="- topic/xref xref" href="../../funcs/s/semiMonthEnd.html">semiMonthEnd</a> ：获取当月结束的第15（或其他）天</p>
+                </li>
+                <li class="- topic/li li">
+                    <p class="- topic/p p" id="时序对象的操作__p_j3x_5hn_ryb" data-ofbid="时序对象的操作__p_j3x_5hn_ryb"><a class="- topic/xref xref" href="../../funcs/i/isMonthStart.html">isMonthStart</a> ：判断当天是否为月初的第一天</p>
+                </li>
+                <li class="- topic/li li">
+                    <p class="- topic/p p" id="时序对象的操作__p_k3x_5hn_ryb" data-ofbid="时序对象的操作__p_k3x_5hn_ryb"><a class="- topic/xref xref" href="../../funcs/i/isMonthEnd.html">isMonthEnd</a> ：判断当天是否为月末的最后一天</p>
+                </li>
+                <li class="- topic/li li">
+                    <p class="- topic/p p" id="时序对象的操作__p_l3x_5hn_ryb" data-ofbid="时序对象的操作__p_l3x_5hn_ryb"><a class="- topic/xref xref" href="../../funcs/d/daysInMonth.html">daysInMonth</a> ：获取当月的天数</p>
+                </li>
+            </ul>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="时序对象的操作__codeblock_m3x_5hn_ryb" data-ofbid="时序对象的操作__codeblock_m3x_5hn_ryb"><code>monthBegin(2016.12.06);
+// output
+2016.12.01
+
+monthEnd(2016.12.06);
+// output
+2016.12.31
+
+businessMonthBegin(2016.10.06);
+// output
+2016.10.03
+
+businessMonthEnd(2016.07.06);
+// output
+2016.07.29
+
+semiMonthBegin(2016.12.26);
+// output
+2016.12.15
+
+semiMonthEnd(2016.12.06,15);
+// output
+2016.11.30
+
+isMonthStart(2011.01.01);
+// output
+true
+
+isMonthEnd(2011.12.31);
+// output
+true
+
+daysInMonth(2012.12.02);
+// output
+31</code></pre>
+            <ul class="- topic/ul ul" id="时序对象的操作__ul_n3x_5hn_ryb" data-ofbid="时序对象的操作__ul_n3x_5hn_ryb">
+                <li class="- topic/li li">
+                    <p class="- topic/p p" id="时序对象的操作__p_o3x_5hn_ryb" data-ofbid="时序对象的操作__p_o3x_5hn_ryb"><a class="- topic/xref xref" href="../../funcs/q/quarterBegin.html">quarterBegin</a> ：获取当前季度的第一天</p>
+                </li>
+                <li class="- topic/li li">
+                    <p class="- topic/p p" id="时序对象的操作__p_p3x_5hn_ryb" data-ofbid="时序对象的操作__p_p3x_5hn_ryb"><a class="- topic/xref xref" href="../../funcs/q/quarterEnd.html">quarterEnd</a> ：获取当前季度的最后一天</p>
+                </li>
+                <li class="- topic/li li">
+                    <p class="- topic/p p" id="时序对象的操作__p_q3x_5hn_ryb" data-ofbid="时序对象的操作__p_q3x_5hn_ryb"><a class="- topic/xref xref" href="../../funcs/b/businessQuarterBegin.html">businessQuarterBegin</a> ：获取当前季度的第一个工作日</p>
+                </li>
+                <li class="- topic/li li">
+                    <p class="- topic/p p" id="时序对象的操作__p_r3x_5hn_ryb" data-ofbid="时序对象的操作__p_r3x_5hn_ryb"><a class="- topic/xref xref" href="../../funcs/b/businessQuarterEnd.html">businessQuarterEnd</a> ：获取当前季度的最后一个工作日</p>
+                </li>
+                <li class="- topic/li li">
+                    <p class="- topic/p p" id="时序对象的操作__p_s3x_5hn_ryb" data-ofbid="时序对象的操作__p_s3x_5hn_ryb"><a class="- topic/xref xref" href="../../funcs/i/isQuarterStart.html">isQuarterStart</a> ：判断当天是否为季度的第一天</p>
+                </li>
+                <li class="- topic/li li">
+                    <p class="- topic/p p" id="时序对象的操作__p_t3x_5hn_ryb" data-ofbid="时序对象的操作__p_t3x_5hn_ryb"><a class="- topic/xref xref" href="../../funcs/i/isQuarterEnd.html">isQuarterEnd</a> ：判断当天是否为季度的最后一天</p>
+                </li>
+            </ul>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="时序对象的操作__codeblock_u3x_5hn_ryb" data-ofbid="时序对象的操作__codeblock_u3x_5hn_ryb"><code>quarterBegin(2012.06.12);
+// output
+2012.04.01
+
+quarterEnd(2012.06.12);
+// output
+2012.06.30
+
+businessQuarterBegin(2012.06.12);
+// output
+2012.04.02
+
+businessQuarterEnd(2012.06.12);
+// output
+2012.06.29
+
+isQuarterStart(2011.01.01);
+// output
+true
+
+isQuarterEnd(2011.12.31);
+// output
+true</code></pre>
+            <ul class="- topic/ul ul" id="时序对象的操作__ul_v3x_5hn_ryb" data-ofbid="时序对象的操作__ul_v3x_5hn_ryb">
+                <li class="- topic/li li">
+                    <p class="- topic/p p" id="时序对象的操作__p_w3x_5hn_ryb" data-ofbid="时序对象的操作__p_w3x_5hn_ryb"><a class="- topic/xref xref" href="../../funcs/w/weekEnd.html">weekEnd</a>
+                        ：获取当前星期或下一个星期的星期几（默认为星期一）</p>
+                </li>
+                <li class="- topic/li li">
+                    <p class="- topic/p p" id="时序对象的操作__p_x3x_5hn_ryb" data-ofbid="时序对象的操作__p_x3x_5hn_ryb"><a class="- topic/xref xref" href="../../funcs/w/weekBegin.html">weekBegin</a>
+                        ：获取当前星期或上一个星期的星期几（默认为星期一）</p>
+                </li>
+                <li class="- topic/li li">
+                    <p class="- topic/p p" id="时序对象的操作__p_y3x_5hn_ryb" data-ofbid="时序对象的操作__p_y3x_5hn_ryb"><a class="- topic/xref xref" href="../../funcs/l/lastWeekOfMonth.html">lastWeekOfMonth</a> ：获取当月或上一个月最后一周的星期几（默认为星期一）</p>
+                </li>
+                <li class="- topic/li li">
+                    <p class="- topic/p p" id="时序对象的操作__p_z3x_5hn_ryb" data-ofbid="时序对象的操作__p_z3x_5hn_ryb"><a class="- topic/xref xref" href="../../funcs/w/weekOfMonth.html">weekOfMonth</a> ：获取当月或上一个月第几周的星期几（默认为第一周的星期一）</p>
+                </li>
+            </ul>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="时序对象的操作__codeblock_ajx_5hn_ryb" data-ofbid="时序对象的操作__codeblock_ajx_5hn_ryb"><code>week(2019.11.24);
+// output
+2019.11.25
+
+weekBegin(2019.11.24);
+// output
+2019.11.18
+
+lastWeekOfMonth(2019.11.01);
+// output
+2019.10.28
+
+weekOfMonth(2019.11.01);
+// output
+2019.10.07</code></pre>
+            <ul class="- topic/ul ul" id="时序对象的操作__ul_bjx_5hn_ryb" data-ofbid="时序对象的操作__ul_bjx_5hn_ryb">
+                <li class="- topic/li li">
+                    <p class="- topic/p p" id="时序对象的操作__p_cjx_5hn_ryb" data-ofbid="时序对象的操作__p_cjx_5hn_ryb"><a class="- topic/xref xref" href="../../funcs/f/fy5253.html">fy5253</a>
+                        ：获取当前财年开始的第一天</p>
+                </li>
+                <li class="- topic/li li">
+                    <p class="- topic/p p" id="时序对象的操作__p_djx_5hn_ryb" data-ofbid="时序对象的操作__p_djx_5hn_ryb"><a class="- topic/xref xref" href="../../funcs/f/fy5253Quarter.html">fy5253Quarter</a> ：获取当前财季开始的第一天</p>
+                </li>
+            </ul>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="时序对象的操作__codeblock_ejx_5hn_ryb" data-ofbid="时序对象的操作__codeblock_ejx_5hn_ryb"><code>fy5253(2016.11.01);
+// output
+2016.02.01
+
+fy5253Quarter(2016.11.01);
+// output
+2016.10.31</code></pre>
+        </section>
+    </div>
+</article></main></div>
+                        
+                        
+                        
+                        
+                        
+                        
+                    </div>
+                    
+                        <nav role="navigation" id="wh_topic_toc" aria-label="On this page" class="col-lg-2 d-none d-lg-block navbar d-print-none"> 
+                            <div id="wh_topic_toc_content">
+		                        
+	                            <div class=" wh_topic_toc "><div class="wh_topic_label">在本页上</div><ul><li class="section-item"><div class="section-title"><a href="#%E6%97%B6%E5%BA%8F%E5%AF%B9%E8%B1%A1%E7%9A%84%E6%93%8D%E4%BD%9C__section_wzw_jp5_h1c" data-tocid="时序对象的操作__section_wzw_jp5_h1c">获取时间变量的部分信息</a></div></li><li class="section-item"><div class="section-title"><a href="#%E6%97%B6%E5%BA%8F%E5%AF%B9%E8%B1%A1%E7%9A%84%E6%93%8D%E4%BD%9C__section_otr_hp5_h1c" data-tocid="时序对象的操作__section_otr_hp5_h1c">用运算符调整时间变量值</a></div></li><li class="section-item"><div class="section-title"><a href="#%E6%97%B6%E5%BA%8F%E5%AF%B9%E8%B1%A1%E7%9A%84%E6%93%8D%E4%BD%9C__section_lg5_2p5_h1c" data-tocid="时序对象的操作__section_lg5_2p5_h1c">用时间单位调整时间变量值</a></div></li><li class="section-item"><div class="section-title"><a href="#%E6%97%B6%E5%BA%8F%E5%AF%B9%E8%B1%A1%E7%9A%84%E6%93%8D%E4%BD%9C__section_hyq_cp5_h1c" data-tocid="时序对象的操作__section_hyq_cp5_h1c">合并日期与时间</a></div></li><li class="section-item"><div class="section-title"><a href="#%E6%97%B6%E5%BA%8F%E5%AF%B9%E8%B1%A1%E7%9A%84%E6%93%8D%E4%BD%9C__section_cwb_1p5_h1c" data-tocid="时序对象的操作__section_cwb_1p5_h1c">与 DateOffset 相关的函数</a></div></li></ul></div>
+	                        	
+                        	</div>
+                        </nav>
+                    
+                </div>
+            </div>
+            
+            
+            
+        </div> 
+        <footer class="navbar navbar-default wh_footer">
+  <div class=" footer-container mx-auto ">
+<title>Copyright</title><p><b> ©2024 浙江智臾科技有限公司 浙ICP备18048711号-3</b></p>
+  </div>
+</footer>
+        
+        <div id="go2top" class="d-print-none">
+            <span class="oxy-icon oxy-icon-up"></span>
+        </div>
+        
+        <div id="modal_img_large" class="modal">
+            <span class="close oxy-icon oxy-icon-remove"></span>
+            <div id="modal_img_container"></div>
+            <div id="caption"></div>
+        </div>
+        
+        
+        
+    </body>
+</html>

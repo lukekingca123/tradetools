@@ -1,0 +1,675 @@
+<!DOCTYPE html><html xmlns="http://www.w3.org/1999/xhtml" xml:lang="zh" lang="zh" data-whc_version="26.0">
+    <head><link rel="shortcut icon" href="../favicon.ico"/><link rel="icon" href="../favicon.ico"/><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><meta http-equiv="X-UA-Compatible" content="IE=edge"/><meta name="description" content="数据类型表 分类 名称 ID 举例 符号 字节数 范围 VOID VOID 0 NULL 1 LOGICAL BOOL 1 1b, 0b, true, false b 1 0~1 INTEGRAL CHAR 2 ‘a’, 97c c 1 -2 7 +1~2 7 -1 SHORT 3 122h h 2 -2 15 +1~2 15 -1 INT 4 21 i 4 -2 31 +1~2 31 -1 ..."/><meta name="DC.rights.owner" content="(C) 版权 2024"/><meta name="copyright" content="(C) 版权 2024"/><meta name="generator" content="DITA-OT"/><meta name="DC.type" content="topic"/><meta name="DC.coverage" content=""/><meta name="DC.subject" content="数据类型"/><meta name="keywords" content="数据类型"/><meta name="indexterms" content="数据类型"/><meta name="DC.relation" content="../progr/data_types_forms_intro.html"/><meta name="DC.relation" content="../progr/data_types_forms/data_type_conv.html"/><meta name="prodname" content="DolphinDB"/><meta name="brand" content="DolphinDB"/><meta name="DC.creator" content="DolphinDB"/><meta name="DC.publisher" content="DDB N/A DDB 200"/><meta name="DC.format" content="HTML5"/><meta name="DC.identifier" content="chap4_sect_data_type_description"/><title>数据类型</title><!--  Generated with Oxygen version 26.0, build number 2024012323.  --><meta name="wh-path2root" content="../"/><meta name="wh-toc-id" content="chap4_sect_data_type_description-d9529e16655"/><meta name="wh-source-relpath" content="progr/data_types.dita"/><meta name="wh-out-relpath" content="progr/data_types.html"/>
+
+    <link rel="stylesheet" type="text/css" href="../oxygen-webhelp/app/commons.css?buildId=2024012323"/>
+    <link rel="stylesheet" type="text/css" href="../oxygen-webhelp/app/topic.css?buildId=2024012323"/>
+
+    <script src="../oxygen-webhelp/app/options/properties.js?buildId=20240704100525"></script>
+    <script src="../oxygen-webhelp/app/localization/strings.js?buildId=2024012323"></script>
+    <script src="../oxygen-webhelp/app/search/index/keywords.js?buildId=20240704100525"></script>
+    <script defer="defer" src="../oxygen-webhelp/app/commons.js?buildId=2024012323"></script>
+    <script defer="defer" src="../oxygen-webhelp/app/topic.js?buildId=2024012323"></script>
+<link rel="stylesheet" type="text/css" href="../oxygen-webhelp/template/styles.css?buildId=2024012323"/><script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script><script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script></head>
+
+    <body id="chap4_sect_data_type_description" class="wh_topic_page frmBody">
+        <a href="#wh_topic_body" class="sr-only sr-only-focusable">
+            跳转到主要内容
+        </a>
+        
+        
+        
+        
+        <header class="navbar navbar-default wh_header">
+    <div class="container-fluid">
+        <div xmlns:whc="http://www.oxygenxml.com/webhelp/components" class="wh_header_flex_container navbar-nav navbar-expand-md navbar-dark">
+            <div class="wh_logo_and_publication_title_container">
+                <div class="wh_logo_and_publication_title">
+                    
+                    <a href="https://www.dolphindb.cn" class=" wh_logo d-none d-sm-block "><img src="../logo.png" alt="  DolphinDB 文档中心  "/></a>
+                    <div class=" wh_publication_title "><a href="../index.html"><span class="booktitle">  <span class="ph mainbooktitle">DolphinDB 文档中心</span>  </span></a></div>
+                    
+                </div>
+                
+                
+            </div>
+
+            <div class="wh_top_menu_and_indexterms_link collapse navbar-collapse" id="wh_top_menu_and_indexterms_link">
+                
+                
+                
+                
+            </div>
+        <div class=" wh_search_input navbar-form wh_topic_page_search search " role="form">
+            
+            
+            
+            <form id="searchForm" method="get" role="search" action="../search.html"><div><input type="search" placeholder="搜索 " class="wh_search_textfield" id="textToSearch" name="searchQuery" aria-label="搜索查询" required="required"/><button type="submit" class="wh_search_button" aria-label="搜索"><span class="search_input_text">搜索</span></button></div></form>
+            
+            <script src="/vendors/react/umd/react.production.min.js" defer="defer"></script>
+<script src="/vendors/react-dom/umd/react-dom.production.min.js" defer="defer"></script>
+<script src="/vendors/dayjs/dayjs.min.js" defer="defer"></script>
+<script src="/vendors/antd/dist/antd.min.js" defer="defer"></script>
+<script src="/vendors/@ant-design/icons/dist/index.umd.min.js" defer="defer"></script>
+<script src="/zh/index.js" type="module"></script>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js" defer="defer"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML" defer="defer"><!--
+
+
+--></script>
+
+            
+        </div></div>
+    </div>
+</header>
+        
+        
+         
+        
+        
+        
+        <div class="container-fluid" id="wh_topic_container">
+            <div class="row">
+
+                <nav class="wh_tools d-print-none navbar-expand-md" aria-label="Tools">
+                    
+                    <div data-tooltip-position="bottom" class=" wh_breadcrumb "><ol class="d-print-none"><li><span class="home"><a href="../index.html"><span>主页</span></a></span></li><li><div class="topicref" data-id="about_language_resources"><div class="title"><a href="../progr/progr_intro.html"><span class="keyword label">编程语言</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 编程基本概念与方法、SQL 在 DolphinDB 的应用</p></div></div></div></li><li><div class="topicref" data-id="chap4_db_programming"><div class="title"><a href="../progr/lang_intro.html"><span class="keyword label">DolphinDB 脚本语言</span></a><div class="wh-tooltip"><p class="shortdesc"> 脚本编程相关概念参考，包括：数据类型与形式、对象、运算符、编程语句、数据操作、函数化编程、文件操作和 SQL 语句。 </p></div></div></div></li><li><div class="topicref" data-id="chap4_sect_datatypes_forms"><div class="title"><a href="../progr/data_types_forms_intro.html"><span class="keyword">数据类型与形式</span></a></div></div></li><li class="active"><div class="topicref" data-id="chap4_sect_data_type_description"><div class="title"><a href="../progr/data_types.html"><span class="keyword label">数据类型</span></a></div></div></li></ol></div>
+                    
+                    
+                    
+                    <div class="wh_right_tools">
+                        <button class="wh_hide_highlight" aria-label="切换搜索突出显示" title="切换搜索突出显示"></button>
+                        <button class="webhelp_expand_collapse_sections" data-next-state="collapsed" aria-label="折叠截面" title="折叠截面"></button>
+                        
+                        
+                        
+                        
+                        <div class=" wh_print_link print d-none d-md-inline-block "><button onClick="window.print()" title="打印此页" aria-label="打印此页"></button></div>
+                        
+                        <button type="button" id="wh_toc_button" class="custom-toggler navbar-toggler collapsed wh_toggle_button navbar-light" aria-expanded="false" aria-label="Toggle publishing table of content" aria-controls="wh_publication_toc">
+                            <span class="navbar-toggler-icon"></span>
+                        </button>
+                    </div>
+                    
+                </nav>
+            </div>
+            
+            
+            
+            
+            <div class="wh_content_area">
+                <div class="row">
+                    
+                        <nav id="wh_publication_toc" class="col-lg-3 col-md-3 col-sm-12 d-md-block d-none d-print-none" aria-label="Table of Contents Container">
+                            <div id="wh_publication_toc_content">
+		                        
+                            	<div class=" wh_publication_toc " data-tooltip-position="right"><span class="expand-button-action-labels"><span id="button-expand-action" role="button" aria-label="Expand"></span><span id="button-collapse-action" role="button" aria-label="Collapse"></span><span id="button-pending-action" role="button" aria-label="Pending"></span></span><ul role="tree" aria-label="Table of Contents"><li role="treeitem"><div data-tocid="new_chap_about_sect_ddb_docs_intro-d9529e87" class="topicref" data-id="new_chap_about_sect_ddb_docs_intro" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../about/ddb_docs_intro.html" id="new_chap_about_sect_ddb_docs_intro-d9529e87-link">文档使用说明</a><div class="wh-tooltip"><p class="shortdesc">如何获取 DolphinDB 帮助信息</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="chap1_getstarted-d9529e140" class="topicref" data-id="chap1_getstarted" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action chap1_getstarted-d9529e140-link" class="wh-expand-btn"></span><div class="title"><a href="../getstarted/chap1_getstarted.html" id="chap1_getstarted-d9529e140-link"><span class="keyword label">快速上手</span></a><div class="wh-tooltip"><p class="shortdesc">如何快速部署 DolphinDB、建库建表、写入和查询数据</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="sectionddb_deployment-d9529e335" class="topicref" data-id="sectionddb_deployment" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action sectionddb_deployment-d9529e335-link" class="wh-expand-btn"></span><div class="title"><a href="../deploy/deploy_intro.html" id="sectionddb_deployment-d9529e335-link"><span class="keyword label">部署</span></a><div class="wh-tooltip"><p class="shortdesc">如何在不同的场景中部署 DolphinDB</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="new_chap_database_manage_new_chap_dbmanage_landing_page-d9529e2313" class="topicref" data-id="new_chap_database_manage_new_chap_dbmanage_landing_page" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action new_chap_database_manage_new_chap_dbmanage_landing_page-d9529e2313-link" class="wh-expand-btn"></span><div class="title"><a href="../db_distr_comp/cfg/db_intro.html" id="new_chap_database_manage_new_chap_dbmanage_landing_page-d9529e2313-link"><span class="keyword label">数据库</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 数据库的基本概念</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="chap7_tutorials_streaming-d9529e3490" class="topicref" data-id="chap7_tutorials_streaming" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action chap7_tutorials_streaming-d9529e3490-link" class="wh-expand-btn"></span><div class="title"><a href="../stream/str_intro.html" id="chap7_tutorials_streaming-d9529e3490-link"><span class="keyword label">流数据</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 流数据引擎及流数据计算的基本概念</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="tocId-d9529e7385" class="topicref" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action tocId-d9529e7385-link" class="wh-expand-btn"></span><div class="title"><a href="../db_distr_comp/db_oper/import_data.html" id="tocId-d9529e7385-link">数据迁移</a><div class="wh-tooltip"><p class="shortdesc">如何从不同数据源向 DolphinDB 迁移数据</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="chap7_tutorials_system_management-d9529e7812" class="topicref" data-id="chap7_tutorials_system_management" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action chap7_tutorials_system_management-d9529e7812-link" class="wh-expand-btn"></span><div class="title"><a href="../sys_man/om_intro.html" id="chap7_tutorials_system_management-d9529e7812-link"><span class="keyword label">系统运维</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 的系统运维功能及方法</p></div></div></div></li><li role="treeitem" aria-expanded="true"><div data-tocid="about_language_resources-d9529e16490" class="topicref" data-id="about_language_resources" data-state="expanded"><span role="button" tabindex="0" aria-labelledby="button-collapse-action about_language_resources-d9529e16490-link" class="wh-expand-btn"></span><div class="title"><a href="../progr/progr_intro.html" id="about_language_resources-d9529e16490-link"><span class="keyword label">编程语言</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 编程基本概念与方法、SQL 在 DolphinDB 的应用</p></div></div></div><ul role="group" class="navbar-nav nav-list"><li role="treeitem" aria-expanded="true"><div data-tocid="chap4_db_programming-d9529e16543" class="topicref" data-id="chap4_db_programming" data-state="expanded"><span role="button" tabindex="0" aria-labelledby="button-collapse-action chap4_db_programming-d9529e16543-link" class="wh-expand-btn"></span><div class="title"><a href="../progr/lang_intro.html" id="chap4_db_programming-d9529e16543-link"><span class="keyword label">DolphinDB 脚本语言</span></a><div class="wh-tooltip"><p class="shortdesc"> 脚本编程相关概念参考，包括：数据类型与形式、对象、运算符、编程语句、数据操作、函数化编程、文件操作和 SQL 语句。 </p></div></div></div><ul role="group" class="navbar-nav nav-list"><li role="treeitem" aria-expanded="true"><div data-tocid="chap4_sect_datatypes_forms-d9529e16594" class="topicref" data-id="chap4_sect_datatypes_forms" data-state="expanded"><span role="button" tabindex="0" aria-labelledby="button-collapse-action chap4_sect_datatypes_forms-d9529e16594-link" class="wh-expand-btn"></span><div class="title"><a href="../progr/data_types_forms_intro.html" id="chap4_sect_datatypes_forms-d9529e16594-link"><span class="keyword">数据类型与形式</span></a></div></div><ul role="group" class="navbar-nav nav-list"><li role="treeitem" aria-expanded="true" class="active"><div data-tocid="chap4_sect_data_type_description-d9529e16655" class="topicref" data-id="chap4_sect_data_type_description" data-state="expanded"><span role="button" tabindex="0" aria-labelledby="button-collapse-action chap4_sect_data_type_description-d9529e16655-link" class="wh-expand-btn"></span><div class="title"><a href="../progr/data_types.html" id="chap4_sect_data_type_description-d9529e16655-link"><span class="keyword label">数据类型</span></a></div></div><ul role="group" class="navbar-nav nav-list"><li role="treeitem"><div data-tocid="数据类型转换-d9529e16710" class="topicref" data-id="数据类型转换" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../progr/data_types_forms/data_type_conv.html" id="数据类型转换-d9529e16710-link"><span class="keyword">数据类型转换</span></a></div></div></li></ul></li><li role="treeitem" aria-expanded="false"><div data-tocid="chap4_sect_dataforms-d9529e16771" class="topicref" data-id="chap4_sect_dataforms" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action chap4_sect_dataforms-d9529e16771-link" class="wh-expand-btn"></span><div class="title"><a href="../progr/data_forms.html" id="chap4_sect_dataforms-d9529e16771-link"><span class="keyword label">数据形式</span></a></div></div></li></ul></li><li role="treeitem" aria-expanded="false"><div data-tocid="chap4_sect_objects-d9529e17632" class="topicref" data-id="chap4_sect_objects" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action chap4_sect_objects-d9529e17632-link" class="wh-expand-btn"></span><div class="title"><a href="../progr/objs/objects.html" id="chap4_sect_objects-d9529e17632-link"><span class="keyword label">对象</span></a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="chap4_sect_operators-d9529e18069" class="topicref" data-id="chap4_sect_operators" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action chap4_sect_operators-d9529e18069-link" class="wh-expand-btn"></span><div class="title"><a href="../progr/operators/operators.html" id="chap4_sect_operators-d9529e18069-link"><span class="keyword label">运算符</span></a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="chap4_sect_programming_statements-d9529e19654" class="topicref" data-id="chap4_sect_programming_statements" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action chap4_sect_programming_statements-d9529e19654-link" class="wh-expand-btn"></span><div class="title"><a href="../progr/statements/statements_intro.html" id="chap4_sect_programming_statements-d9529e19654-link"><span class="keyword label">编程语句</span></a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="chap4_sect_data_manipulation-d9529e20900" class="topicref" data-id="chap4_sect_data_manipulation" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action chap4_sect_data_manipulation-d9529e20900-link" class="wh-expand-btn"></span><div class="title"><a href="../progr/data_mani/dm_intro.html" id="chap4_sect_data_manipulation-d9529e20900-link"><span class="keyword label">数据操作</span></a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="chap4_sect_func_programming-d9529e21873" class="topicref" data-id="chap4_sect_func_programming" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action chap4_sect_func_programming-d9529e21873-link" class="wh-expand-btn"></span><div class="title"><a href="../progr/func_progr.html" id="chap4_sect_func_programming-d9529e21873-link"><span class="keyword label">函数化编程</span></a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="元编程-d9529e22197" class="topicref" data-id="元编程" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action 元编程-d9529e22197-link" class="wh-expand-btn"></span><div class="title"><a href="../progr/objs/meta_progr.html" id="元编程-d9529e22197-link"><span class="keyword label">元编程</span></a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="oop-d9529e22337" class="topicref" data-id="oop" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action oop-d9529e22337-link" class="wh-expand-btn"></span><div class="title"><a href="../progr/oop.html" id="oop-d9529e22337-link">面向对象编程</a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="文件操作-d9529e22705" class="topicref" data-id="文件操作" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action 文件操作-d9529e22705-link" class="wh-expand-btn"></span><div class="title"><a href="../progr/file_io/file_oper.html" id="文件操作-d9529e22705-link"><span class="keyword label">文件操作</span></a></div></div></li></ul></li><li role="treeitem" aria-expanded="false"><div data-tocid="chap4_sect_sql_statements-d9529e22890" class="topicref" data-id="chap4_sect_sql_statements" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action chap4_sect_sql_statements-d9529e22890-link" class="wh-expand-btn"></span><div class="title"><a href="../progr/sql/sql_intro.html" id="chap4_sect_sql_statements-d9529e22890-link"><span class="keyword label">SQL 语句</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 中 SQL 语句的基本语法和用法</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="python-parser-简介-d9529e25535" class="topicref" data-id="python-parser-简介" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action python-parser-简介-d9529e25535-link" class="wh-expand-btn"></span><div class="title"><a href="../progr/py_parser/py_par_intro.html" id="python-parser-简介-d9529e25535-link"><span class="keyword label">Python Parser</span></a></div></div></li></ul></li><li role="treeitem" aria-expanded="false"><div data-tocid="functions_references-d9529e26503" class="topicref" data-id="functions_references" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action functions_references-d9529e26503-link" class="wh-expand-btn"></span><div class="title"><a href="../funcs/funcs_intro.html" id="functions_references-d9529e26503-link"><span class="keyword label">函数参考</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 函数分类、语法、详解及示例</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="api_protocol-d9529e86456" class="topicref" data-id="api_protocol" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action api_protocol-d9529e86456-link" class="wh-expand-btn"></span><div class="title"><a href="../api/connapi_intro.html" id="api_protocol-d9529e86456-link"><span class="keyword label">连接器 &amp; API</span></a><div class="wh-tooltip"><p class="shortdesc">面向不同编程语言的 DolphinDB API 及连接器，相关协议和用法</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="chap6_plugin-d9529e91976" class="topicref" data-id="chap6_plugin" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action chap6_plugin-d9529e91976-link" class="wh-expand-btn"></span><div class="title"><a href="../plugins/plg_intro.html" id="chap6_plugin-d9529e91976-link"><span class="keyword label">插件</span></a><div class="wh-tooltip"><p class="shortdesc">多个应用场景的插件使用说明和插件开发指导</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="third_party-d9529e94749" class="topicref" data-id="third_party" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action third_party-d9529e94749-link" class="wh-expand-btn"></span><div class="title"><a href="../third_party.html" id="third_party-d9529e94749-link">第三方工具</a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="about_tutorials-d9529e94980" class="topicref" data-id="about_tutorials" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action about_tutorials-d9529e94980-link" class="wh-expand-btn"></span><div class="title"><a href="../tutorials/about_tutorials.html" id="about_tutorials-d9529e94980-link"><span class="keyword label">教程</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 产品使用教程</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="tocId-d9529e101769" class="topicref" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action tocId-d9529e101769-link" class="wh-expand-btn"></span><div class="title"><a href="../rn/server/3_00_1.html" id="tocId-d9529e101769-link">版本说明</a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 版本发布历史</p></div></div></div></li></ul></div>
+		                        
+                            </div>
+                        </nav>
+                    
+                    
+                    <div class="col-lg-7 col-md-9 col-sm-12" id="wh_topic_body">
+                        <button id="wh_close_publication_toc_button" class="close-toc-button d-none" aria-label="Toggle publishing table of content" aria-controls="wh_publication_toc" aria-expanded="true">
+                            <span class="close-toc-icon-container">
+                                <span class="close-toc-icon"></span>     
+                            </span>
+                        </button>
+                        <button id="wh_close_topic_toc_button" class="close-toc-button d-none" aria-label="Toggle topic table of content" aria-controls="wh_topic_toc" aria-expanded="true">
+                            <span class="close-toc-icon-container">
+                                <span class="close-toc-icon"></span>     
+                            </span>
+                        </button>
+                        
+                        <div class=" wh_topic_content body "><main role="main"><article class="- topic/topic topic" role="article" aria-labelledby="chap4_sect_data_type_description__title_xby_s4v_nyb">
+    <h1 class="- topic/title title topictitle1" id="chap4_sect_data_type_description__title_xby_s4v_nyb"><span class="- topic/keyword keyword label">数据类型</span></h1>
+    <div class="- topic/body body">
+        <section class="- topic/section section" id="chap4_sect_data_type_description__datatypes_table" data-ofbid="chap4_sect_data_type_description__datatypes_table"><h2 class="- topic/title title sectiontitle"><span class="- topic/keyword keyword">数据类型表</span></h2>
+            
+            <div class="table-container"><table class="- topic/table table" id="chap4_sect_data_type_description__table_lm2_5kr_c1c" data-ofbid="chap4_sect_data_type_description__table_lm2_5kr_c1c" data-cols="7"><caption></caption><colgroup><col style="width:15.483119906868453%"/><col style="width:13.038416763678699%"/><col style="width:11.641443538998836%"/><col style="width:18.160651920838188%"/><col style="width:12.805587892898721%"/><col style="width:14.202561117578579%"/><col style="width:14.668218859138534%"/></colgroup><thead class="- topic/thead thead">
+                        <tr class="- topic/row">
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="chap4_sect_data_type_description__table_lm2_5kr_c1c__entry__1">分类</th>
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="chap4_sect_data_type_description__table_lm2_5kr_c1c__entry__2">名称</th>
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="chap4_sect_data_type_description__table_lm2_5kr_c1c__entry__3">ID</th>
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="chap4_sect_data_type_description__table_lm2_5kr_c1c__entry__4">举例</th>
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="chap4_sect_data_type_description__table_lm2_5kr_c1c__entry__5">符号</th>
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="chap4_sect_data_type_description__table_lm2_5kr_c1c__entry__6">字节数</th>
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="chap4_sect_data_type_description__table_lm2_5kr_c1c__entry__7">范围</th>
+                        </tr>
+                    </thead><tbody class="- topic/tbody tbody">
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="chap4_sect_data_type_description__table_lm2_5kr_c1c__entry__1">VOID</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="chap4_sect_data_type_description__table_lm2_5kr_c1c__entry__2">VOID</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="chap4_sect_data_type_description__table_lm2_5kr_c1c__entry__3">0</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="chap4_sect_data_type_description__table_lm2_5kr_c1c__entry__4">NULL</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="chap4_sect_data_type_description__table_lm2_5kr_c1c__entry__5"> </td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="chap4_sect_data_type_description__table_lm2_5kr_c1c__entry__6">1</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="chap4_sect_data_type_description__table_lm2_5kr_c1c__entry__7"> </td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="chap4_sect_data_type_description__table_lm2_5kr_c1c__entry__1">LOGICAL</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="chap4_sect_data_type_description__table_lm2_5kr_c1c__entry__2">BOOL</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="chap4_sect_data_type_description__table_lm2_5kr_c1c__entry__3">1</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="chap4_sect_data_type_description__table_lm2_5kr_c1c__entry__4">1b, 0b, true, false</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="chap4_sect_data_type_description__table_lm2_5kr_c1c__entry__5">b</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="chap4_sect_data_type_description__table_lm2_5kr_c1c__entry__6">1</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="chap4_sect_data_type_description__table_lm2_5kr_c1c__entry__7">0~1</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="chap4_sect_data_type_description__table_lm2_5kr_c1c__entry__1" rowspan="5">INTEGRAL</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="chap4_sect_data_type_description__table_lm2_5kr_c1c__entry__2">CHAR</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="chap4_sect_data_type_description__table_lm2_5kr_c1c__entry__3">2</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="chap4_sect_data_type_description__table_lm2_5kr_c1c__entry__4">‘a’, 97c</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="chap4_sect_data_type_description__table_lm2_5kr_c1c__entry__5">c</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="chap4_sect_data_type_description__table_lm2_5kr_c1c__entry__6">1</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="chap4_sect_data_type_description__table_lm2_5kr_c1c__entry__7">-2 <sup class="+ topic/ph hi-d/sup ph sup">7</sup> +1~2 <sup class="+ topic/ph hi-d/sup ph sup">7</sup> -1</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="chap4_sect_data_type_description__table_lm2_5kr_c1c__entry__2">SHORT</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="chap4_sect_data_type_description__table_lm2_5kr_c1c__entry__3">3</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="chap4_sect_data_type_description__table_lm2_5kr_c1c__entry__4">122h</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="chap4_sect_data_type_description__table_lm2_5kr_c1c__entry__5">h</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="chap4_sect_data_type_description__table_lm2_5kr_c1c__entry__6">2</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="chap4_sect_data_type_description__table_lm2_5kr_c1c__entry__7">-2 <sup class="+ topic/ph hi-d/sup ph sup">15</sup> +1~2 <sup class="+ topic/ph hi-d/sup ph sup">15</sup> -1</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="chap4_sect_data_type_description__table_lm2_5kr_c1c__entry__2">INT</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="chap4_sect_data_type_description__table_lm2_5kr_c1c__entry__3">4</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="chap4_sect_data_type_description__table_lm2_5kr_c1c__entry__4">21</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="chap4_sect_data_type_description__table_lm2_5kr_c1c__entry__5">i</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="chap4_sect_data_type_description__table_lm2_5kr_c1c__entry__6">4</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="chap4_sect_data_type_description__table_lm2_5kr_c1c__entry__7">-2 <sup class="+ topic/ph hi-d/sup ph sup">31</sup> +1~2 <sup class="+ topic/ph hi-d/sup ph sup">31</sup> -1</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="chap4_sect_data_type_description__table_lm2_5kr_c1c__entry__2">LONG</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="chap4_sect_data_type_description__table_lm2_5kr_c1c__entry__3">5</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="chap4_sect_data_type_description__table_lm2_5kr_c1c__entry__4">22l</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="chap4_sect_data_type_description__table_lm2_5kr_c1c__entry__5">l</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="chap4_sect_data_type_description__table_lm2_5kr_c1c__entry__6">8</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="chap4_sect_data_type_description__table_lm2_5kr_c1c__entry__7">-2 <sup class="+ topic/ph hi-d/sup ph sup">63</sup> +1~2 <sup class="+ topic/ph hi-d/sup ph sup">63</sup> -1</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="chap4_sect_data_type_description__table_lm2_5kr_c1c__entry__2">COMPRESSED</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="chap4_sect_data_type_description__table_lm2_5kr_c1c__entry__3">26</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="chap4_sect_data_type_description__table_lm2_5kr_c1c__entry__4"> </td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="chap4_sect_data_type_description__table_lm2_5kr_c1c__entry__5"> </td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="chap4_sect_data_type_description__table_lm2_5kr_c1c__entry__6">1</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="chap4_sect_data_type_description__table_lm2_5kr_c1c__entry__7">-2 <sup class="+ topic/ph hi-d/sup ph sup">7</sup> +1~2 <sup class="+ topic/ph hi-d/sup ph sup">7</sup> -1</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="chap4_sect_data_type_description__table_lm2_5kr_c1c__entry__1" rowspan="10">TEMPORAL</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="chap4_sect_data_type_description__table_lm2_5kr_c1c__entry__2">DATE</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="chap4_sect_data_type_description__table_lm2_5kr_c1c__entry__3">6</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="chap4_sect_data_type_description__table_lm2_5kr_c1c__entry__4">2013.06.13</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="chap4_sect_data_type_description__table_lm2_5kr_c1c__entry__5">d</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="chap4_sect_data_type_description__table_lm2_5kr_c1c__entry__6">4</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="chap4_sect_data_type_description__table_lm2_5kr_c1c__entry__7"> </td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="chap4_sect_data_type_description__table_lm2_5kr_c1c__entry__2">MONTH</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="chap4_sect_data_type_description__table_lm2_5kr_c1c__entry__3">7</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="chap4_sect_data_type_description__table_lm2_5kr_c1c__entry__4">2012.06M</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="chap4_sect_data_type_description__table_lm2_5kr_c1c__entry__5">M</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="chap4_sect_data_type_description__table_lm2_5kr_c1c__entry__6">4</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="chap4_sect_data_type_description__table_lm2_5kr_c1c__entry__7"> </td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="chap4_sect_data_type_description__table_lm2_5kr_c1c__entry__2">TIME</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="chap4_sect_data_type_description__table_lm2_5kr_c1c__entry__3">8</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="chap4_sect_data_type_description__table_lm2_5kr_c1c__entry__4">13:30:10.008</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="chap4_sect_data_type_description__table_lm2_5kr_c1c__entry__5">t</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="chap4_sect_data_type_description__table_lm2_5kr_c1c__entry__6">4</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="chap4_sect_data_type_description__table_lm2_5kr_c1c__entry__7"> </td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="chap4_sect_data_type_description__table_lm2_5kr_c1c__entry__2">MINUTE</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="chap4_sect_data_type_description__table_lm2_5kr_c1c__entry__3">9</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="chap4_sect_data_type_description__table_lm2_5kr_c1c__entry__4">13:30m</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="chap4_sect_data_type_description__table_lm2_5kr_c1c__entry__5">m</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="chap4_sect_data_type_description__table_lm2_5kr_c1c__entry__6">4</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="chap4_sect_data_type_description__table_lm2_5kr_c1c__entry__7"> </td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="chap4_sect_data_type_description__table_lm2_5kr_c1c__entry__2">SECOND</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="chap4_sect_data_type_description__table_lm2_5kr_c1c__entry__3">10</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="chap4_sect_data_type_description__table_lm2_5kr_c1c__entry__4">13:30:10</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="chap4_sect_data_type_description__table_lm2_5kr_c1c__entry__5">s</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="chap4_sect_data_type_description__table_lm2_5kr_c1c__entry__6">4</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="chap4_sect_data_type_description__table_lm2_5kr_c1c__entry__7"> </td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="chap4_sect_data_type_description__table_lm2_5kr_c1c__entry__2">DATETIME</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="chap4_sect_data_type_description__table_lm2_5kr_c1c__entry__3">11</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="chap4_sect_data_type_description__table_lm2_5kr_c1c__entry__4">2012.06.13 13:30:10 or 2012.06.13T13:30:10</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="chap4_sect_data_type_description__table_lm2_5kr_c1c__entry__5">D</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="chap4_sect_data_type_description__table_lm2_5kr_c1c__entry__6">4</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="chap4_sect_data_type_description__table_lm2_5kr_c1c__entry__7">[1901.12.13T20:45:53, 2038.01.19T03:14:07]</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="chap4_sect_data_type_description__table_lm2_5kr_c1c__entry__2">TIMESTAMP</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="chap4_sect_data_type_description__table_lm2_5kr_c1c__entry__3">12</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="chap4_sect_data_type_description__table_lm2_5kr_c1c__entry__4">2012.06.13 13:30:10.008 or
+                                2012.06.13T13:30:10.008</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="chap4_sect_data_type_description__table_lm2_5kr_c1c__entry__5">T</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="chap4_sect_data_type_description__table_lm2_5kr_c1c__entry__6">8</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="chap4_sect_data_type_description__table_lm2_5kr_c1c__entry__7"> </td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="chap4_sect_data_type_description__table_lm2_5kr_c1c__entry__2">NANOTIME</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="chap4_sect_data_type_description__table_lm2_5kr_c1c__entry__3">13</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="chap4_sect_data_type_description__table_lm2_5kr_c1c__entry__4">13:30:10.008007006</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="chap4_sect_data_type_description__table_lm2_5kr_c1c__entry__5">n</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="chap4_sect_data_type_description__table_lm2_5kr_c1c__entry__6">8</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="chap4_sect_data_type_description__table_lm2_5kr_c1c__entry__7"> </td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="chap4_sect_data_type_description__table_lm2_5kr_c1c__entry__2">NANOTIMESTAMP</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="chap4_sect_data_type_description__table_lm2_5kr_c1c__entry__3">14</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="chap4_sect_data_type_description__table_lm2_5kr_c1c__entry__4">2012.06.13 13:30:10.008007006 or
+                                2012.06.13T13:30:10.008007006</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="chap4_sect_data_type_description__table_lm2_5kr_c1c__entry__5">N</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="chap4_sect_data_type_description__table_lm2_5kr_c1c__entry__6">8</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="chap4_sect_data_type_description__table_lm2_5kr_c1c__entry__7">[1677.09.21T00:12:43.145224193,
+                                2262.04.11T23:47:16.854775807]</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="chap4_sect_data_type_description__table_lm2_5kr_c1c__entry__2">DATEHOUR</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="chap4_sect_data_type_description__table_lm2_5kr_c1c__entry__3">28</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="chap4_sect_data_type_description__table_lm2_5kr_c1c__entry__4">2012.06.13T13</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="chap4_sect_data_type_description__table_lm2_5kr_c1c__entry__5"> </td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="chap4_sect_data_type_description__table_lm2_5kr_c1c__entry__6">4</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="chap4_sect_data_type_description__table_lm2_5kr_c1c__entry__7"> </td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="chap4_sect_data_type_description__table_lm2_5kr_c1c__entry__1" rowspan="2">FLOATING</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="chap4_sect_data_type_description__table_lm2_5kr_c1c__entry__2">FLOAT</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="chap4_sect_data_type_description__table_lm2_5kr_c1c__entry__3">15</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="chap4_sect_data_type_description__table_lm2_5kr_c1c__entry__4">2.1f</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="chap4_sect_data_type_description__table_lm2_5kr_c1c__entry__5">f</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="chap4_sect_data_type_description__table_lm2_5kr_c1c__entry__6">4</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="chap4_sect_data_type_description__table_lm2_5kr_c1c__entry__7">有效位数: 06~09 位</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="chap4_sect_data_type_description__table_lm2_5kr_c1c__entry__2">DOUBLE</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="chap4_sect_data_type_description__table_lm2_5kr_c1c__entry__3">16</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="chap4_sect_data_type_description__table_lm2_5kr_c1c__entry__4">2.1</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="chap4_sect_data_type_description__table_lm2_5kr_c1c__entry__5">F</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="chap4_sect_data_type_description__table_lm2_5kr_c1c__entry__6">8</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="chap4_sect_data_type_description__table_lm2_5kr_c1c__entry__7">有效位数: 15~17 位</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="chap4_sect_data_type_description__table_lm2_5kr_c1c__entry__1" rowspan="3">LITERAL</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="chap4_sect_data_type_description__table_lm2_5kr_c1c__entry__2">SYMBOL</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="chap4_sect_data_type_description__table_lm2_5kr_c1c__entry__3">17</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="chap4_sect_data_type_description__table_lm2_5kr_c1c__entry__4"> </td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="chap4_sect_data_type_description__table_lm2_5kr_c1c__entry__5">S</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="chap4_sect_data_type_description__table_lm2_5kr_c1c__entry__6">4</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="chap4_sect_data_type_description__table_lm2_5kr_c1c__entry__7"> </td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="chap4_sect_data_type_description__table_lm2_5kr_c1c__entry__2">STRING</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="chap4_sect_data_type_description__table_lm2_5kr_c1c__entry__3">18</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="chap4_sect_data_type_description__table_lm2_5kr_c1c__entry__4">“Hello” or ‘Hello’ or `Hello</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="chap4_sect_data_type_description__table_lm2_5kr_c1c__entry__5">W</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="chap4_sect_data_type_description__table_lm2_5kr_c1c__entry__6">不超过 65,535</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="chap4_sect_data_type_description__table_lm2_5kr_c1c__entry__7"> </td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="chap4_sect_data_type_description__table_lm2_5kr_c1c__entry__2">BLOB</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="chap4_sect_data_type_description__table_lm2_5kr_c1c__entry__3">32</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="chap4_sect_data_type_description__table_lm2_5kr_c1c__entry__4"> </td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="chap4_sect_data_type_description__table_lm2_5kr_c1c__entry__5"> </td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="chap4_sect_data_type_description__table_lm2_5kr_c1c__entry__6"></td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="chap4_sect_data_type_description__table_lm2_5kr_c1c__entry__7"> </td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="chap4_sect_data_type_description__table_lm2_5kr_c1c__entry__1" rowspan="4">BINARY</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="chap4_sect_data_type_description__table_lm2_5kr_c1c__entry__2">INT128</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="chap4_sect_data_type_description__table_lm2_5kr_c1c__entry__3">31</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="chap4_sect_data_type_description__table_lm2_5kr_c1c__entry__4">e1671797c52e15f763380b45e841ec32</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="chap4_sect_data_type_description__table_lm2_5kr_c1c__entry__5"> </td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="chap4_sect_data_type_description__table_lm2_5kr_c1c__entry__6">16</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="chap4_sect_data_type_description__table_lm2_5kr_c1c__entry__7">-2 <sup class="+ topic/ph hi-d/sup ph sup">127</sup> +1~2 <sup class="+ topic/ph hi-d/sup ph sup">127</sup> -1</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="chap4_sect_data_type_description__table_lm2_5kr_c1c__entry__2">UUID</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="chap4_sect_data_type_description__table_lm2_5kr_c1c__entry__3">19</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="chap4_sect_data_type_description__table_lm2_5kr_c1c__entry__4">5d212a78-cc48-e3b1-4235-b4d91473ee87</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="chap4_sect_data_type_description__table_lm2_5kr_c1c__entry__5"> </td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="chap4_sect_data_type_description__table_lm2_5kr_c1c__entry__6">16</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="chap4_sect_data_type_description__table_lm2_5kr_c1c__entry__7"> </td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="chap4_sect_data_type_description__table_lm2_5kr_c1c__entry__2">IPADDR</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="chap4_sect_data_type_description__table_lm2_5kr_c1c__entry__3">30</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="chap4_sect_data_type_description__table_lm2_5kr_c1c__entry__4">192.168.1.13</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="chap4_sect_data_type_description__table_lm2_5kr_c1c__entry__5"> </td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="chap4_sect_data_type_description__table_lm2_5kr_c1c__entry__6">16</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="chap4_sect_data_type_description__table_lm2_5kr_c1c__entry__7"> </td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="chap4_sect_data_type_description__table_lm2_5kr_c1c__entry__2">POINT</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="chap4_sect_data_type_description__table_lm2_5kr_c1c__entry__3">35</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="chap4_sect_data_type_description__table_lm2_5kr_c1c__entry__4">(117.60972, 24.118418)</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="chap4_sect_data_type_description__table_lm2_5kr_c1c__entry__5"> </td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="chap4_sect_data_type_description__table_lm2_5kr_c1c__entry__6">16</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="chap4_sect_data_type_description__table_lm2_5kr_c1c__entry__7"> </td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="chap4_sect_data_type_description__table_lm2_5kr_c1c__entry__1" rowspan="6">SYSTEM</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="chap4_sect_data_type_description__table_lm2_5kr_c1c__entry__2">FUNCTIONDEF</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="chap4_sect_data_type_description__table_lm2_5kr_c1c__entry__3">20</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="chap4_sect_data_type_description__table_lm2_5kr_c1c__entry__4">def f1(a,b) {return a+b;}</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="chap4_sect_data_type_description__table_lm2_5kr_c1c__entry__5"> </td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="chap4_sect_data_type_description__table_lm2_5kr_c1c__entry__6"> </td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="chap4_sect_data_type_description__table_lm2_5kr_c1c__entry__7"> </td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="chap4_sect_data_type_description__table_lm2_5kr_c1c__entry__2">HANDLE</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="chap4_sect_data_type_description__table_lm2_5kr_c1c__entry__3">21</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="chap4_sect_data_type_description__table_lm2_5kr_c1c__entry__4">file handle, socket handle, and db handle</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="chap4_sect_data_type_description__table_lm2_5kr_c1c__entry__5"> </td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="chap4_sect_data_type_description__table_lm2_5kr_c1c__entry__6"> </td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="chap4_sect_data_type_description__table_lm2_5kr_c1c__entry__7"> </td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="chap4_sect_data_type_description__table_lm2_5kr_c1c__entry__2">CODE</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="chap4_sect_data_type_description__table_lm2_5kr_c1c__entry__3">22</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="chap4_sect_data_type_description__table_lm2_5kr_c1c__entry__4">&lt;1+2&gt;</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="chap4_sect_data_type_description__table_lm2_5kr_c1c__entry__5"> </td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="chap4_sect_data_type_description__table_lm2_5kr_c1c__entry__6"> </td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="chap4_sect_data_type_description__table_lm2_5kr_c1c__entry__7"> </td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="chap4_sect_data_type_description__table_lm2_5kr_c1c__entry__2">DATASOURCE</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="chap4_sect_data_type_description__table_lm2_5kr_c1c__entry__3">23</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="chap4_sect_data_type_description__table_lm2_5kr_c1c__entry__4"> </td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="chap4_sect_data_type_description__table_lm2_5kr_c1c__entry__5"> </td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="chap4_sect_data_type_description__table_lm2_5kr_c1c__entry__6"> </td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="chap4_sect_data_type_description__table_lm2_5kr_c1c__entry__7"> </td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="chap4_sect_data_type_description__table_lm2_5kr_c1c__entry__2">RESOURCE</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="chap4_sect_data_type_description__table_lm2_5kr_c1c__entry__3">24</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="chap4_sect_data_type_description__table_lm2_5kr_c1c__entry__4"> </td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="chap4_sect_data_type_description__table_lm2_5kr_c1c__entry__5"> </td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="chap4_sect_data_type_description__table_lm2_5kr_c1c__entry__6"> </td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="chap4_sect_data_type_description__table_lm2_5kr_c1c__entry__7"> </td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="chap4_sect_data_type_description__table_lm2_5kr_c1c__entry__2">DURATION</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="chap4_sect_data_type_description__table_lm2_5kr_c1c__entry__3">36</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="chap4_sect_data_type_description__table_lm2_5kr_c1c__entry__4">1s, 3M, 5y, 200ms</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="chap4_sect_data_type_description__table_lm2_5kr_c1c__entry__5"> </td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="chap4_sect_data_type_description__table_lm2_5kr_c1c__entry__6">4</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="chap4_sect_data_type_description__table_lm2_5kr_c1c__entry__7"> </td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="chap4_sect_data_type_description__table_lm2_5kr_c1c__entry__1" rowspan="2">MIXED</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="chap4_sect_data_type_description__table_lm2_5kr_c1c__entry__2">ANY</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="chap4_sect_data_type_description__table_lm2_5kr_c1c__entry__3">25</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="chap4_sect_data_type_description__table_lm2_5kr_c1c__entry__4">(1,2,3)</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="chap4_sect_data_type_description__table_lm2_5kr_c1c__entry__5"> </td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="chap4_sect_data_type_description__table_lm2_5kr_c1c__entry__6"> </td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="chap4_sect_data_type_description__table_lm2_5kr_c1c__entry__7"> </td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="chap4_sect_data_type_description__table_lm2_5kr_c1c__entry__2">ANY DICTIONARY</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="chap4_sect_data_type_description__table_lm2_5kr_c1c__entry__3">27</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="chap4_sect_data_type_description__table_lm2_5kr_c1c__entry__4">{a:1,b:2}</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="chap4_sect_data_type_description__table_lm2_5kr_c1c__entry__5"> </td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="chap4_sect_data_type_description__table_lm2_5kr_c1c__entry__6"> </td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="chap4_sect_data_type_description__table_lm2_5kr_c1c__entry__7"> </td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="chap4_sect_data_type_description__table_lm2_5kr_c1c__entry__1">OTHER</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="chap4_sect_data_type_description__table_lm2_5kr_c1c__entry__2">COMPLEX</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="chap4_sect_data_type_description__table_lm2_5kr_c1c__entry__3">34</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="chap4_sect_data_type_description__table_lm2_5kr_c1c__entry__4">2.3+4.0i</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="chap4_sect_data_type_description__table_lm2_5kr_c1c__entry__5"> </td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="chap4_sect_data_type_description__table_lm2_5kr_c1c__entry__6">16</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="chap4_sect_data_type_description__table_lm2_5kr_c1c__entry__7"> </td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="chap4_sect_data_type_description__table_lm2_5kr_c1c__entry__1" rowspan="3">DECIMAL</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="chap4_sect_data_type_description__table_lm2_5kr_c1c__entry__2">
+                                <p class="- topic/p p">DECIMAL32(S)</p>
+                                <p class="- topic/p p"> </p>
+                            </td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="chap4_sect_data_type_description__table_lm2_5kr_c1c__entry__3">37</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="chap4_sect_data_type_description__table_lm2_5kr_c1c__entry__4">3.1415926$DECIMAL32(3)</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="chap4_sect_data_type_description__table_lm2_5kr_c1c__entry__5"> </td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="chap4_sect_data_type_description__table_lm2_5kr_c1c__entry__6">4</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="chap4_sect_data_type_description__table_lm2_5kr_c1c__entry__7">(-1*10^(9-S), 1*10^(9-S))</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="chap4_sect_data_type_description__table_lm2_5kr_c1c__entry__2">
+                                <p class="- topic/p p">DECIMAL64(S)</p>
+                                <p class="- topic/p p"> </p>
+                            </td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="chap4_sect_data_type_description__table_lm2_5kr_c1c__entry__3">38</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="chap4_sect_data_type_description__table_lm2_5kr_c1c__entry__4">3.1415926$DECIMAL64(3), , 3.141P</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="chap4_sect_data_type_description__table_lm2_5kr_c1c__entry__5">P</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="chap4_sect_data_type_description__table_lm2_5kr_c1c__entry__6">8</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="chap4_sect_data_type_description__table_lm2_5kr_c1c__entry__7">(-1*10^(18-S), 1*10^(18-S))</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="chap4_sect_data_type_description__table_lm2_5kr_c1c__entry__2">
+                                <p class="- topic/p p">DECIMAL128(S)</p>
+                                <p class="- topic/p p"> </p>
+                            </td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="chap4_sect_data_type_description__table_lm2_5kr_c1c__entry__3">39</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="chap4_sect_data_type_description__table_lm2_5kr_c1c__entry__4">3.1415926$DECIMAL128(3)</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="chap4_sect_data_type_description__table_lm2_5kr_c1c__entry__5"> </td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="chap4_sect_data_type_description__table_lm2_5kr_c1c__entry__6">16</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="chap4_sect_data_type_description__table_lm2_5kr_c1c__entry__7">(-1*10^(38-S), 1*10^(38-S))</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="chap4_sect_data_type_description__table_lm2_5kr_c1c__entry__1">ARRAY</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="chap4_sect_data_type_description__table_lm2_5kr_c1c__entry__2">基础类型+方括号 “[]“，如 INT[]，DOUBLE[]，DECIMAL32(3)[]
+                                等，表示数组类型</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="chap4_sect_data_type_description__table_lm2_5kr_c1c__entry__3">基础类型 ID+64</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="chap4_sect_data_type_description__table_lm2_5kr_c1c__entry__4">array(INT[], 0, 10).append!([1 2 3, 4 5, 6 7 8, 9
+                                10])</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="chap4_sect_data_type_description__table_lm2_5kr_c1c__entry__5"> </td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="chap4_sect_data_type_description__table_lm2_5kr_c1c__entry__6"> </td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="chap4_sect_data_type_description__table_lm2_5kr_c1c__entry__7"> </td>
+                        </tr>
+                    </tbody></table></div>
+        <p class="- topic/p p" id="chap4_sect_data_type_description__p_jyq_yf2_myb" data-ofbid="chap4_sect_data_type_description__p_jyq_yf2_myb">说明：</p>
+        <ol class="- topic/ol ol" id="chap4_sect_data_type_description__ol_ch4_zzx_jxb" data-ofbid="chap4_sect_data_type_description__ol_ch4_zzx_jxb">
+            <li class="- topic/li li" id="chap4_sect_data_type_description__li_cdd_4g2_myb" data-ofbid="chap4_sect_data_type_description__li_cdd_4g2_myb">上表除以下类型外，都支持作为表字段：VOID, FUNCTIONDEF, HANDLE, CODE, DATASOURCE,
+                    RESOURCE, COMPRESS, DURATION。<span class="- topic/ph ph">在支持的类型中，仅内存表字段支持 ANY 类型，仅内存表和 TSDB 引擎支持 BLOB
+                        类型和 ARRAY VECTOR。</span></li>
+            <li class="- topic/li li" id="chap4_sect_data_type_description__li_ddd_4g2_myb" data-ofbid="chap4_sect_data_type_description__li_ddd_4g2_myb">
+                    <div class="- topic/p p">DolphinDB 中字符串类型包含 STRING, BLOB 与 SYMBOL 类型。<ul class="- topic/ul ul" id="chap4_sect_data_type_description__ul_tzk_b4v_yzb" data-ofbid="chap4_sect_data_type_description__ul_tzk_b4v_yzb">
+                            <li class="- topic/li li">SYMBOL 是特殊的字符串类型。某个表字段定义为 SYMBOL
+                                    类型时，必须保证该字段的不同取值小于2097152(2<sup class="+ topic/ph hi-d/sup ph sup">21</sup>)个，否则会报错 <code class="+ topic/ph pr-d/codeph ph codeph">"One
+                                    symbase's size can't exceed 2097152"</code>。 </li>
+                            <li class="- topic/li li">向分布式数据库写入数据时，1.30.23/2.00.11 版本新增了对 STRING, BLOB 及 SYMBOL
+                                    类型数据的大小限制：<ul class="- topic/ul ul" id="chap4_sect_data_type_description__ul_dqb_c4v_yzb" data-ofbid="chap4_sect_data_type_description__ul_dqb_c4v_yzb">
+                                    <li class="- topic/li li">写入的 STRING 类型数据应小于 64 KB，否则系统会截断到 65,535 字节（即 64 KB - 1 字节）；</li>
+                                    <li class="- topic/li li">写入的 BLOB 类型数据应小于 64 MB，否则系统会截断到 67,108,863 字节（即 64 MB - 1
+                                        字节）；</li>
+                                    <li class="- topic/li li">写入的 SYMBOL 类型数据超过 255 字节时，系统会抛出异常。</li>
+                                </ul><div class="- topic/note note note note_note" id="chap4_sect_data_type_description__note_vfv_l5b_n1c" data-ofbid="chap4_sect_data_type_description__note_vfv_l5b_n1c"><span class="note__title">注：</span> 已存在数据库中超出范围限制的数据仍然可以正常读取使用。</div></li>
+                        </ul></div>
+                </li>
+            <li class="- topic/li li" id="chap4_sect_data_type_description__li_edd_4g2_myb" data-ofbid="chap4_sect_data_type_description__li_edd_4g2_myb"> ANY DICTIONARY 是 DolphinDB 中表示 JSON 的数据类型。 </li>
+            <li class="- topic/li li" id="chap4_sect_data_type_description__li_fdd_4g2_myb" data-ofbid="chap4_sect_data_type_description__li_fdd_4g2_myb">COMPRESS 类型目前只能通过 <a class="- topic/xref xref" href="../funcs/c/compress.html">compress</a> 函数生成。 </li>
+                <li class="- topic/li li">BLOB 类型不支持任何计算。</li>
+            <li class="- topic/li li" id="chap4_sect_data_type_description__li_gdd_4g2_myb" data-ofbid="chap4_sect_data_type_description__li_gdd_4g2_myb">DURATION 类型可以通过 <a class="- topic/xref xref" href="../funcs/d/duration.html">duration</a> 函数生成或直接使用整数数字加以下时间单位（区分大小写）： y, M, w, d, B, H, m, s, ms,
+                    us, ns。DURATION 数据的范围为-2 <sup class="+ topic/ph hi-d/sup ph sup">31</sup> +1~2 <sup class="+ topic/ph hi-d/sup ph sup">31</sup>
+                    -1，如果数据溢出，则溢出的数据处理为空值。</li>
+            <li class="- topic/li li" id="chap4_sect_data_type_description__li_hdd_4g2_myb" data-ofbid="chap4_sect_data_type_description__li_hdd_4g2_myb">DOUBLE 和 FLOAT 类型精度遵循 IEEE 754 标准；该类型数据溢出时，会被处理为 NULL。 </li>
+                <li class="- topic/li li">DECIMAL32(S)，DECIMAL64(S) 及 DECIMAL128(S) 中的 S
+                    表示保留的小数位数，其中，DECIMAL32(S) 中 S 的有效范围为[0, 9]，DECIMAL64(S) 中 S 的有效范围为[0,
+                    18]，DECIMAL128(S) 中 S 的有效范围为 [0,38]。DECIMAL32 底层存储使用 int32_t 类型，占用4个字节；DECIMAL64
+                    底层存储使用 int64_t 类型，占用8个字节；DECIMAL128 底层存储使用 int128_t 类型，占用16个字节。DECIMAL32(0)
+                    可以表示的有效整数范围为 [-999999999, 999999999]， 而 4 字节整数（INT32）的范围为 [-2,147,483,648,
+                    2,147,483,647]。因此将数值型数据强制转换为 DECIMAL32 时，若该数值的整数部分超过 DECIMAL32 的有效数值范围， 但仍属于
+                    [-2147483648, 2147483647] 范围，可以转换成功。而将字符串强制转换成 DECIMAL32
+                        时，会进行位数校验，若字符串长度超过有效位数，则抛出异常。<pre class="+ topic/pre pr-d/codeblock pre codeblock" id="chap4_sect_data_type_description__codeblock_xzy_m45_tzb" data-ofbid="chap4_sect_data_type_description__codeblock_xzy_m45_tzb"><code>decimal32(1000000000, 0)</code></pre><p class="- topic/p p">得到：1000000000</p><pre class="+ topic/pre pr-d/codeblock pre codeblock" id="chap4_sect_data_type_description__codeblock_rtk_45b_n1c" data-ofbid="chap4_sect_data_type_description__codeblock_rtk_45b_n1c"><code>decimal32(`1000000000, 0)</code></pre><p class="- topic/p p">得到：<code class="+ topic/ph pr-d/codeph ph codeph">Can't
+                            convert STRING to DECIMAL32(0): parse <code class="+ topic/ph pr-d/codeph ph codeph">1000000000</code> to
+                            DECIMAL32(0) failed: decimal overflow</code></p></li>
+            
+        </ol>
+            </section>
+        
+        <section class="- topic/section section" id="chap4_sect_data_type_description__section_r4n_yby_jxb" data-ofbid="chap4_sect_data_type_description__section_r4n_yby_jxb"><h2 class="- topic/title title sectiontitle"><span class="- topic/keyword keyword">类型检查</span></h2>
+            
+            <p class="- topic/p p" id="chap4_sect_data_type_description__p_lyq_yf2_myb" data-ofbid="chap4_sect_data_type_description__p_lyq_yf2_myb"><a class="- topic/xref xref" href="../funcs/t/typestr.html">typestr</a> 和 <a class="- topic/xref xref" href="../funcs/t/type.html">type</a> 这两个函数用于检查数据类型。<strong class="+ topic/ph hi-d/b ph b">typestr</strong>
+                    返回的是数据类型的名称（字符串常量）；<strong class="+ topic/ph hi-d/b ph b">type</strong> 返回的是数据类型 ID（整数）。</p>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="chap4_sect_data_type_description__codeblock_p3d_cdy_jxb" data-ofbid="chap4_sect_data_type_description__codeblock_p3d_cdy_jxb"><code>typestr 3l;</code></pre>
+            <p class="- topic/p p">得到：LONG</p>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="chap4_sect_data_type_description__codeblock_dx4_r5b_n1c" data-ofbid="chap4_sect_data_type_description__codeblock_dx4_r5b_n1c"><code>type 3l;</code></pre>
+            <p class="- topic/p p">得到：5</p>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="chap4_sect_data_type_description__codeblock_upp_55b_n1c" data-ofbid="chap4_sect_data_type_description__codeblock_upp_55b_n1c"><code>x=3;
+if(type(x) == INT){y=10};
+y;</code></pre>
+            <p class="- topic/p p">得到：10</p>
+        </section>
+        <section class="- topic/section section" id="chap4_sect_data_type_description__section_fcm_ddy_jxb" data-ofbid="chap4_sect_data_type_description__section_fcm_ddy_jxb"><h2 class="- topic/title title sectiontitle">数据范围</h2>
+            
+            <p class="- topic/p p" id="chap4_sect_data_type_description__p_myq_yf2_myb" data-ofbid="chap4_sect_data_type_description__p_myq_yf2_myb">整型的数据范围在上面表格中已经列出。对于整数类型的数据，DolphinDB 使用允许最小值-1来表示其相应的 NULL
+                值。例如，-128c 是一个 NULL 字符。对于 NULL 值，参考： <a class="- topic/xref xref" href="data_mani/null_oper.html">NULL
+                    值</a>。</p>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="chap4_sect_data_type_description__codeblock_hlb_kdy_jxb" data-ofbid="chap4_sect_data_type_description__codeblock_hlb_kdy_jxb"><code>x=-128c;
+x;</code></pre>
+            <p class="- topic/p p">得到：00c</p>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="chap4_sect_data_type_description__codeblock_rbk_y5b_n1c" data-ofbid="chap4_sect_data_type_description__codeblock_rbk_y5b_n1c"><code>typestr x;</code></pre>
+            <p class="- topic/p p">返回：CHAR</p>
+        </section>
+        <section class="- topic/section section" id="chap4_sect_data_type_description__section_bqr_ldy_jxb" data-ofbid="chap4_sect_data_type_description__section_bqr_ldy_jxb"><h2 class="- topic/title title sectiontitle">数据类型符号</h2>
+            
+            <p class="- topic/p p" id="chap4_sect_data_type_description__p_nyq_yf2_myb" data-ofbid="chap4_sect_data_type_description__p_nyq_yf2_myb">数据类型符号用于声明常量的数据类型。在下面的第一个例子中，没有为3指定数据类型符号。在这种情况，3被默认作为整数存储在内存中。如果要保存为浮点数，则应声明为
+                3f(float) 或 3F(double)。</p>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="chap4_sect_data_type_description__codeblock_hlq_mdy_jxb" data-ofbid="chap4_sect_data_type_description__codeblock_hlq_mdy_jxb"><code>typestr 3;</code></pre>
+            <p class="- topic/p p">返回：INT</p>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="chap4_sect_data_type_description__codeblock_yst_cvb_n1c" data-ofbid="chap4_sect_data_type_description__codeblock_yst_cvb_n1c"><code>typestr 3f;</code></pre>
+            <p class="- topic/p p">返回：FLOAT</p>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="chap4_sect_data_type_description__codeblock_m4z_dvb_n1c" data-ofbid="chap4_sect_data_type_description__codeblock_m4z_dvb_n1c"><code>typestr 3F;</code></pre>
+            <p class="- topic/p p">返回：DOUBLE</p>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="chap4_sect_data_type_description__codeblock_um1_fvb_n1c" data-ofbid="chap4_sect_data_type_description__codeblock_um1_fvb_n1c"><code>typestr 3l;</code></pre>
+            <p class="- topic/p p">返回：LONG</p>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="chap4_sect_data_type_description__codeblock_rzz_fvb_n1c" data-ofbid="chap4_sect_data_type_description__codeblock_rzz_fvb_n1c"><code>typestr 3h;</code></pre>
+            <p class="- topic/p p">返回：SHORT</p>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="chap4_sect_data_type_description__codeblock_qb2_hvb_n1c" data-ofbid="chap4_sect_data_type_description__codeblock_qb2_hvb_n1c"><code>typestr 3c;</code></pre>
+            <p class="- topic/p p">返回：CHAR</p>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="chap4_sect_data_type_description__codeblock_mpk_3vb_n1c" data-ofbid="chap4_sect_data_type_description__codeblock_mpk_3vb_n1c"><code>typestr 3b;</code></pre>
+            <p class="- topic/p p">返回：BOOL</p>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="chap4_sect_data_type_description__codeblock_h1p_mvb_n1c" data-ofbid="chap4_sect_data_type_description__codeblock_h1p_mvb_n1c"><code>typestr 3P;</code></pre>
+            <p class="- topic/p p">返回：DECIMAL64</p>
+        </section>
+        <section class="- topic/section section" id="chap4_sect_data_type_description__section_m55_ndy_jxb" data-ofbid="chap4_sect_data_type_description__section_m55_ndy_jxb"><h2 class="- topic/title title sectiontitle">字符串</h2>
+            
+            <p class="- topic/p p" id="chap4_sect_data_type_description__p_oyq_yf2_myb" data-ofbid="chap4_sect_data_type_description__p_oyq_yf2_myb">我们可以在 DolphinDB 中把字符串保存为 symbol 类型数据。一个 symbol 类型数据被 DolphinDB
+                系统内部存储为一个整数，因此数据排序和比较更有效率。因此，使用 symbol
+                类型有可能提高系统性能，同时也可节省存储空间。但是，将字符串映射到整数（hash）需要时间，哈希表也会占用内存。以下规则可以帮助您决定是否使用 symbol
+                类型：</p>
+            <ul class="- topic/ul ul" id="chap4_sect_data_type_description__ul_qyq_yf2_myb" data-ofbid="chap4_sect_data_type_description__ul_qyq_yf2_myb">
+                <li class="- topic/li li" id="chap4_sect_data_type_description__li_jdd_4g2_myb" data-ofbid="chap4_sect_data_type_description__li_jdd_4g2_myb">如果字符串数据较少重复，应当避免使用 symbol 类型。</li>
+                <li class="- topic/li li" id="chap4_sect_data_type_description__li_kdd_4g2_myb" data-ofbid="chap4_sect_data_type_description__li_kdd_4g2_myb">如果字符串数据不会被排序、搜索或比较，应当避免使用 symbol 类型。</li>
+            </ul>
+            <div class="- topic/p p" id="chap4_sect_data_type_description__p_ryq_yf2_myb" data-ofbid="chap4_sect_data_type_description__p_ryq_yf2_myb">两个例子：<ul class="- topic/ul ul" id="chap4_sect_data_type_description__ul_nlk_5dy_jxb" data-ofbid="chap4_sect_data_type_description__ul_nlk_5dy_jxb">
+                    <li class="- topic/li li" id="chap4_sect_data_type_description__li_ldd_4g2_myb" data-ofbid="chap4_sect_data_type_description__li_ldd_4g2_myb">股票交易数据中的股票代码应该使用 symbol
+                        类型，因为股票代码的数量基本是固定的，在数据中重复极多；另外，股票代码经常被搜索和比较。</li>
+                    <li class="- topic/li li" id="chap4_sect_data_type_description__li_mdd_4g2_myb" data-ofbid="chap4_sect_data_type_description__li_mdd_4g2_myb">描述性字段不应该使用 symbol 类型，因为描述性字段很少重复，而且很少被搜索、排序或比较。</li>
+                </ul></div>
+            <p class="- topic/p p" id="chap4_sect_data_type_description__p_syq_yf2_myb" data-ofbid="chap4_sect_data_type_description__p_syq_yf2_myb">例1：排序比较：同样排序 300 万条记录，排序 SYMBOL 向量比 STRING 快 26 倍。 </p>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="chap4_sect_data_type_description__codeblock_vsl_ydy_jxb" data-ofbid="chap4_sect_data_type_description__codeblock_vsl_ydy_jxb"><code>n=3000000
+strs=array(STRING,0,n)
+strs.append!(rand(`IBM`C`MS`GOOG, n))
+timer sort strs;</code></pre>
+            <p class="- topic/p p">返回：Time elapsed: 184.642 ms</p>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="chap4_sect_data_type_description__codeblock_mcr_rvb_n1c" data-ofbid="chap4_sect_data_type_description__codeblock_mcr_rvb_n1c"><code>n=3000000
+syms=array(SYMBOL,0,n)
+syms.append!(rand(`IBM`C`MS`GOOG, n))
+timer sort syms;</code></pre>
+            <p class="- topic/p p">返回：Time elapsed: 7.001 ms</p>
+            <p class="- topic/p p" id="chap4_sect_data_type_description__p_tyq_yf2_myb" data-ofbid="chap4_sect_data_type_description__p_tyq_yf2_myb">例2：布尔运算比较：同样是 300 万条记录的运算，SYMBOL 向量几乎是 STRING 向量的 9 倍。 </p>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="chap4_sect_data_type_description__codeblock_ogf_12y_jxb" data-ofbid="chap4_sect_data_type_description__codeblock_ogf_12y_jxb"><code>timer(100){strs&gt;`C};</code></pre>
+            <p class="- topic/p p">返回：Time elapsed: 1463.841 ms</p>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="chap4_sect_data_type_description__codeblock_gpr_fwb_n1c" data-ofbid="chap4_sect_data_type_description__codeblock_gpr_fwb_n1c"><code>timer(100){syms&gt;`C};</code></pre>
+            <p class="- topic/p p">返回：Time elapsed: 157.962 ms</p>
+        </section>
+        <section class="- topic/section section" id="chap4_sect_data_type_description__section_tcq_j2y_jxb" data-ofbid="chap4_sect_data_type_description__section_tcq_j2y_jxb"><h2 class="- topic/title title sectiontitle"><strong class="+ topic/ph hi-d/b ph b">SYMBOL 类型向量的创建</strong></h2>
+            
+            <div class="- topic/p p" id="chap4_sect_data_type_description__p_uyq_yf2_myb" data-ofbid="chap4_sect_data_type_description__p_uyq_yf2_myb">
+                <ol class="- topic/ol ol" id="chap4_sect_data_type_description__ol_vyq_yf2_myb" data-ofbid="chap4_sect_data_type_description__ol_vyq_yf2_myb">
+                    <li class="- topic/li li" id="chap4_sect_data_type_description__li_ndd_4g2_myb" data-ofbid="chap4_sect_data_type_description__li_ndd_4g2_myb">使用函数 <a class="- topic/xref xref" href="../funcs/a/array.html">array</a>来创建。
+                            <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="chap4_sect_data_type_description__codeblock_p3p_mry_jxb" data-ofbid="chap4_sect_data_type_description__codeblock_p3p_mry_jxb"><code>syms=array(SYMBOL, 0, 100);    // 创建长度为100的空符号数组;
+typestr syms;</code></pre><p class="- topic/p p">返回：FAST SYMBOL
+                            VECTOR</p><pre class="+ topic/pre pr-d/codeblock pre codeblock" id="chap4_sect_data_type_description__codeblock_dkh_5wb_n1c" data-ofbid="chap4_sect_data_type_description__codeblock_dkh_5wb_n1c"><code>syms.append!(`IBM`C`MS);
+syms;</code></pre><p class="- topic/p p">返回：["IBM","C","MS"]</p></li>
+                    <li class="- topic/li li" id="chap4_sect_data_type_description__li_odd_4g2_myb" data-ofbid="chap4_sect_data_type_description__li_odd_4g2_myb">通过类型转换：<pre class="+ topic/pre pr-d/codeblock pre codeblock" id="chap4_sect_data_type_description__codeblock_cq3_wsy_jxb" data-ofbid="chap4_sect_data_type_description__codeblock_cq3_wsy_jxb"><code>syms=`IBM`C`MS;
+typestr syms;</code></pre><p class="- topic/p p">返回：STRING
+                            VECTOR</p><pre class="+ topic/pre pr-d/codeblock pre codeblock" id="chap4_sect_data_type_description__codeblock_u3x_1xb_n1c" data-ofbid="chap4_sect_data_type_description__codeblock_u3x_1xb_n1c"><code>sym=syms$SYMBOL; // 转换为符号向量;
+typestr sym;</code></pre><p class="- topic/p p">返回： FAST SYMBOL
+                            VECTOR</p><pre class="+ topic/pre pr-d/codeblock pre codeblock" id="chap4_sect_data_type_description__codeblock_jbs_dxb_n1c" data-ofbid="chap4_sect_data_type_description__codeblock_jbs_dxb_n1c"><code>typestr syms;</code></pre><p class="- topic/p p">返回：STRING
+                            VECTOR</p></li>
+                    <li class="- topic/li li" id="chap4_sect_data_type_description__li_pdd_4g2_myb" data-ofbid="chap4_sect_data_type_description__li_pdd_4g2_myb">使用随机函数 <a class="- topic/xref xref" href="../funcs/r/rand.html">rand</a>。<pre class="+ topic/pre pr-d/codeblock pre codeblock" id="chap4_sect_data_type_description__codeblock_fh3_bty_jxb" data-ofbid="chap4_sect_data_type_description__codeblock_fh3_bty_jxb"><code>syms=`IBM`C`MS;
+symRand=rand(syms, 10);  //生成一个随机的symbol类型向量
+symRand;</code></pre><p class="- topic/p p">得到：["IBM","IBM","IBM","MS","C","C","MS","IBM","C","MS"]</p><pre class="+ topic/pre pr-d/codeblock pre codeblock" id="chap4_sect_data_type_description__codeblock_twk_jxb_n1c" data-ofbid="chap4_sect_data_type_description__codeblock_twk_jxb_n1c"><code>typestr symRand;</code></pre><p class="- topic/p p">返回：FAST
+                            SYMBOL VECTOR</p><div class="- topic/note note note note_note" id="chap4_sect_data_type_description__note_xs2_mx4_ryb" data-ofbid="chap4_sect_data_type_description__note_xs2_mx4_ryb"><span class="note__title">注：</span> 在上面的例子中，当
+                                <code class="+ topic/ph pr-d/codeph ph codeph">rand</code> 函数的输入是一个字符串向量时，它会生成一个 symbol
+                                类型的向量。<code class="+ topic/ph pr-d/codeph ph codeph">rand</code>
+                            函数不会更改任何其他的输入数据类型。之所以设计这个函数时有意做出这个例外，这是因为基于字符串向量生成随机向量时，在大多数情况下，用户希望使用
+                            symbol 类型向量。</div></li>
+                </ol>
+            </div>
+        </section>
+        <section class="- topic/section section" id="chap4_sect_data_type_description__section_oxj_hty_jxb" data-ofbid="chap4_sect_data_type_description__section_oxj_hty_jxb"><h2 class="- topic/title title sectiontitle">整数溢出</h2>
+            
+            <p class="- topic/p p" id="chap4_sect_data_type_description__p_xyq_yf2_myb" data-ofbid="chap4_sect_data_type_description__p_xyq_yf2_myb">当运算的结果超出了运算中调用的变量的数据类型的范围时，就会出现溢出。在 DolphinDB 中，整数溢出的结果为 NULL。</p>
+            <p class="- topic/p p" id="chap4_sect_data_type_description__p_yyq_yf2_myb" data-ofbid="chap4_sect_data_type_description__p_yyq_yf2_myb">下例中，变量 x 的数据类型为 INT，它被赋予 INT 类型允许的最大值，为2 <sup class="+ topic/ph hi-d/sup ph sup">31-1</sup> 。x+1 的结果超出 INT 类型的上限，因此 x+1
+                的结果为 NULL。</p>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="chap4_sect_data_type_description__codeblock_zk1_kty_jxb" data-ofbid="chap4_sect_data_type_description__codeblock_zk1_kty_jxb"><code>x=(pow(2,31)-1)$INT;
+x+1;</code></pre>
+            <p class="- topic/p p">返回：<code class="+ topic/ph pr-d/codeph ph codeph">null</code></p>
+        </section>
+    </div>
+</article></main></div>
+                        
+                        
+                        
+                        
+                        
+                        
+                    </div>
+                    
+                        <nav role="navigation" id="wh_topic_toc" aria-label="On this page" class="col-lg-2 d-none d-lg-block navbar d-print-none"> 
+                            <div id="wh_topic_toc_content">
+		                        
+	                            <div class=" wh_topic_toc "><div class="wh_topic_label">在本页上</div><ul><li class="section-item"><div class="section-title"><a href="#chap4_sect_data_type_description__datatypes_table" data-tocid="chap4_sect_data_type_description__datatypes_table"><span class="- topic/keyword keyword">数据类型表</span></a></div></li><li class="section-item"><div class="section-title"><a href="#chap4_sect_data_type_description__section_r4n_yby_jxb" data-tocid="chap4_sect_data_type_description__section_r4n_yby_jxb"><span class="- topic/keyword keyword">类型检查</span></a></div></li><li class="section-item"><div class="section-title"><a href="#chap4_sect_data_type_description__section_fcm_ddy_jxb" data-tocid="chap4_sect_data_type_description__section_fcm_ddy_jxb">数据范围</a></div></li><li class="section-item"><div class="section-title"><a href="#chap4_sect_data_type_description__section_bqr_ldy_jxb" data-tocid="chap4_sect_data_type_description__section_bqr_ldy_jxb">数据类型符号</a></div></li><li class="section-item"><div class="section-title"><a href="#chap4_sect_data_type_description__section_m55_ndy_jxb" data-tocid="chap4_sect_data_type_description__section_m55_ndy_jxb">字符串</a></div></li><li class="section-item"><div class="section-title"><a href="#chap4_sect_data_type_description__section_tcq_j2y_jxb" data-tocid="chap4_sect_data_type_description__section_tcq_j2y_jxb"><strong class="+ topic/ph hi-d/b ph b">SYMBOL 类型向量的创建</strong></a></div></li><li class="section-item"><div class="section-title"><a href="#chap4_sect_data_type_description__section_oxj_hty_jxb" data-tocid="chap4_sect_data_type_description__section_oxj_hty_jxb">整数溢出</a></div></li></ul></div>
+	                        	
+                        	</div>
+                        </nav>
+                    
+                </div>
+            </div>
+            
+            
+            
+        </div> 
+        <footer class="navbar navbar-default wh_footer">
+  <div class=" footer-container mx-auto ">
+<title>Copyright</title><p><b> ©2024 浙江智臾科技有限公司 浙ICP备18048711号-3</b></p>
+  </div>
+</footer>
+        
+        <div id="go2top" class="d-print-none">
+            <span class="oxy-icon oxy-icon-up"></span>
+        </div>
+        
+        <div id="modal_img_large" class="modal">
+            <span class="close oxy-icon oxy-icon-remove"></span>
+            <div id="modal_img_container"></div>
+            <div id="caption"></div>
+        </div>
+        
+        
+        
+    </body>
+</html>

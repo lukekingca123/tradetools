@@ -1,0 +1,284 @@
+<!DOCTYPE html><html xmlns="http://www.w3.org/1999/xhtml" xml:lang="zh" lang="zh" data-whc_version="26.0">
+    <head><link rel="shortcut icon" href="../favicon.ico"/><link rel="icon" href="../favicon.ico"/><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><meta http-equiv="X-UA-Compatible" content="IE=edge"/><meta name="description" content="部分应用是指固定一个函数的部分参数，产生一个参数较少的函数。 &lt;functionName&gt;{parameters} 通过对象方法调用的方式生成部分应用： obj.method{parameters...}(newArgs...) 等价于 method{obj, parameters} obj.{method{parameters...}}(newArgs...) 等价于 ..."/><meta name="DC.rights.owner" content="(C) 版权 2024"/><meta name="copyright" content="(C) 版权 2024"/><meta name="generator" content="DITA-OT"/><meta name="DC.type" content="topic"/><meta name="DC.coverage" content=""/><meta name="DC.relation" content="../progr/func_progr.html"/><meta name="prodname" content="DolphinDB"/><meta name="brand" content="DolphinDB"/><meta name="DC.creator" content="DolphinDB"/><meta name="DC.publisher" content="DDB N/A DDB 200"/><meta name="DC.format" content="HTML5"/><meta name="DC.identifier" content="部分应用"/><title>部分应用</title><!--  Generated with Oxygen version 26.0, build number 2024012323.  --><meta name="wh-path2root" content="../"/><meta name="wh-toc-id" content="部分应用-d9529e22012"/><meta name="wh-source-relpath" content="progr/partial_app.dita"/><meta name="wh-out-relpath" content="progr/partial_app.html"/>
+
+    <link rel="stylesheet" type="text/css" href="../oxygen-webhelp/app/commons.css?buildId=2024012323"/>
+    <link rel="stylesheet" type="text/css" href="../oxygen-webhelp/app/topic.css?buildId=2024012323"/>
+
+    <script src="../oxygen-webhelp/app/options/properties.js?buildId=20240704100525"></script>
+    <script src="../oxygen-webhelp/app/localization/strings.js?buildId=2024012323"></script>
+    <script src="../oxygen-webhelp/app/search/index/keywords.js?buildId=20240704100525"></script>
+    <script defer="defer" src="../oxygen-webhelp/app/commons.js?buildId=2024012323"></script>
+    <script defer="defer" src="../oxygen-webhelp/app/topic.js?buildId=2024012323"></script>
+<link rel="stylesheet" type="text/css" href="../oxygen-webhelp/template/styles.css?buildId=2024012323"/><script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script><script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script></head>
+
+    <body id="部分应用" class="wh_topic_page frmBody">
+        <a href="#wh_topic_body" class="sr-only sr-only-focusable">
+            跳转到主要内容
+        </a>
+        
+        
+        
+        
+        <header class="navbar navbar-default wh_header">
+    <div class="container-fluid">
+        <div xmlns:whc="http://www.oxygenxml.com/webhelp/components" class="wh_header_flex_container navbar-nav navbar-expand-md navbar-dark">
+            <div class="wh_logo_and_publication_title_container">
+                <div class="wh_logo_and_publication_title">
+                    
+                    <a href="https://www.dolphindb.cn" class=" wh_logo d-none d-sm-block "><img src="../logo.png" alt="  DolphinDB 文档中心  "/></a>
+                    <div class=" wh_publication_title "><a href="../index.html"><span class="booktitle">  <span class="ph mainbooktitle">DolphinDB 文档中心</span>  </span></a></div>
+                    
+                </div>
+                
+                
+            </div>
+
+            <div class="wh_top_menu_and_indexterms_link collapse navbar-collapse" id="wh_top_menu_and_indexterms_link">
+                
+                
+                
+                
+            </div>
+        <div class=" wh_search_input navbar-form wh_topic_page_search search " role="form">
+            
+            
+            
+            <form id="searchForm" method="get" role="search" action="../search.html"><div><input type="search" placeholder="搜索 " class="wh_search_textfield" id="textToSearch" name="searchQuery" aria-label="搜索查询" required="required"/><button type="submit" class="wh_search_button" aria-label="搜索"><span class="search_input_text">搜索</span></button></div></form>
+            
+            <script src="/vendors/react/umd/react.production.min.js" defer="defer"></script>
+<script src="/vendors/react-dom/umd/react-dom.production.min.js" defer="defer"></script>
+<script src="/vendors/dayjs/dayjs.min.js" defer="defer"></script>
+<script src="/vendors/antd/dist/antd.min.js" defer="defer"></script>
+<script src="/vendors/@ant-design/icons/dist/index.umd.min.js" defer="defer"></script>
+<script src="/zh/index.js" type="module"></script>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js" defer="defer"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML" defer="defer"><!--
+
+
+--></script>
+
+            
+        </div></div>
+    </div>
+</header>
+        
+        
+         
+        
+        
+        
+        <div class="container-fluid" id="wh_topic_container">
+            <div class="row">
+
+                <nav class="wh_tools d-print-none navbar-expand-md" aria-label="Tools">
+                    
+                    <div data-tooltip-position="bottom" class=" wh_breadcrumb "><ol class="d-print-none"><li><span class="home"><a href="../index.html"><span>主页</span></a></span></li><li><div class="topicref" data-id="about_language_resources"><div class="title"><a href="../progr/progr_intro.html"><span class="keyword label">编程语言</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 编程基本概念与方法、SQL 在 DolphinDB 的应用</p></div></div></div></li><li><div class="topicref" data-id="chap4_db_programming"><div class="title"><a href="../progr/lang_intro.html"><span class="keyword label">DolphinDB 脚本语言</span></a><div class="wh-tooltip"><p class="shortdesc"> 脚本编程相关概念参考，包括：数据类型与形式、对象、运算符、编程语句、数据操作、函数化编程、文件操作和 SQL 语句。 </p></div></div></div></li><li><div class="topicref" data-id="chap4_sect_func_programming"><div class="title"><a href="../progr/func_progr.html"><span class="keyword label">函数化编程</span></a></div></div></li><li class="active"><div class="topicref" data-id="部分应用"><div class="title"><a href="../progr/partial_app.html">部分应用</a></div></div></li></ol></div>
+                    
+                    
+                    
+                    <div class="wh_right_tools">
+                        <button class="wh_hide_highlight" aria-label="切换搜索突出显示" title="切换搜索突出显示"></button>
+                        <button class="webhelp_expand_collapse_sections" data-next-state="collapsed" aria-label="折叠截面" title="折叠截面"></button>
+                        
+                        
+                        
+                        
+                        <div class=" wh_print_link print d-none d-md-inline-block "><button onClick="window.print()" title="打印此页" aria-label="打印此页"></button></div>
+                        
+                        <button type="button" id="wh_toc_button" class="custom-toggler navbar-toggler collapsed wh_toggle_button navbar-light" aria-expanded="false" aria-label="Toggle publishing table of content" aria-controls="wh_publication_toc">
+                            <span class="navbar-toggler-icon"></span>
+                        </button>
+                    </div>
+                    
+                </nav>
+            </div>
+            
+            
+            
+            
+            <div class="wh_content_area">
+                <div class="row">
+                    
+                        <nav id="wh_publication_toc" class="col-lg-3 col-md-3 col-sm-12 d-md-block d-none d-print-none" aria-label="Table of Contents Container">
+                            <div id="wh_publication_toc_content">
+		                        
+                            	<div class=" wh_publication_toc " data-tooltip-position="right"><span class="expand-button-action-labels"><span id="button-expand-action" role="button" aria-label="Expand"></span><span id="button-collapse-action" role="button" aria-label="Collapse"></span><span id="button-pending-action" role="button" aria-label="Pending"></span></span><ul role="tree" aria-label="Table of Contents"><li role="treeitem"><div data-tocid="new_chap_about_sect_ddb_docs_intro-d9529e87" class="topicref" data-id="new_chap_about_sect_ddb_docs_intro" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../about/ddb_docs_intro.html" id="new_chap_about_sect_ddb_docs_intro-d9529e87-link">文档使用说明</a><div class="wh-tooltip"><p class="shortdesc">如何获取 DolphinDB 帮助信息</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="chap1_getstarted-d9529e140" class="topicref" data-id="chap1_getstarted" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action chap1_getstarted-d9529e140-link" class="wh-expand-btn"></span><div class="title"><a href="../getstarted/chap1_getstarted.html" id="chap1_getstarted-d9529e140-link"><span class="keyword label">快速上手</span></a><div class="wh-tooltip"><p class="shortdesc">如何快速部署 DolphinDB、建库建表、写入和查询数据</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="sectionddb_deployment-d9529e335" class="topicref" data-id="sectionddb_deployment" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action sectionddb_deployment-d9529e335-link" class="wh-expand-btn"></span><div class="title"><a href="../deploy/deploy_intro.html" id="sectionddb_deployment-d9529e335-link"><span class="keyword label">部署</span></a><div class="wh-tooltip"><p class="shortdesc">如何在不同的场景中部署 DolphinDB</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="new_chap_database_manage_new_chap_dbmanage_landing_page-d9529e2313" class="topicref" data-id="new_chap_database_manage_new_chap_dbmanage_landing_page" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action new_chap_database_manage_new_chap_dbmanage_landing_page-d9529e2313-link" class="wh-expand-btn"></span><div class="title"><a href="../db_distr_comp/cfg/db_intro.html" id="new_chap_database_manage_new_chap_dbmanage_landing_page-d9529e2313-link"><span class="keyword label">数据库</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 数据库的基本概念</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="chap7_tutorials_streaming-d9529e3490" class="topicref" data-id="chap7_tutorials_streaming" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action chap7_tutorials_streaming-d9529e3490-link" class="wh-expand-btn"></span><div class="title"><a href="../stream/str_intro.html" id="chap7_tutorials_streaming-d9529e3490-link"><span class="keyword label">流数据</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 流数据引擎及流数据计算的基本概念</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="tocId-d9529e7385" class="topicref" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action tocId-d9529e7385-link" class="wh-expand-btn"></span><div class="title"><a href="../db_distr_comp/db_oper/import_data.html" id="tocId-d9529e7385-link">数据迁移</a><div class="wh-tooltip"><p class="shortdesc">如何从不同数据源向 DolphinDB 迁移数据</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="chap7_tutorials_system_management-d9529e7812" class="topicref" data-id="chap7_tutorials_system_management" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action chap7_tutorials_system_management-d9529e7812-link" class="wh-expand-btn"></span><div class="title"><a href="../sys_man/om_intro.html" id="chap7_tutorials_system_management-d9529e7812-link"><span class="keyword label">系统运维</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 的系统运维功能及方法</p></div></div></div></li><li role="treeitem" aria-expanded="true"><div data-tocid="about_language_resources-d9529e16490" class="topicref" data-id="about_language_resources" data-state="expanded"><span role="button" tabindex="0" aria-labelledby="button-collapse-action about_language_resources-d9529e16490-link" class="wh-expand-btn"></span><div class="title"><a href="../progr/progr_intro.html" id="about_language_resources-d9529e16490-link"><span class="keyword label">编程语言</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 编程基本概念与方法、SQL 在 DolphinDB 的应用</p></div></div></div><ul role="group" class="navbar-nav nav-list"><li role="treeitem" aria-expanded="true"><div data-tocid="chap4_db_programming-d9529e16543" class="topicref" data-id="chap4_db_programming" data-state="expanded"><span role="button" tabindex="0" aria-labelledby="button-collapse-action chap4_db_programming-d9529e16543-link" class="wh-expand-btn"></span><div class="title"><a href="../progr/lang_intro.html" id="chap4_db_programming-d9529e16543-link"><span class="keyword label">DolphinDB 脚本语言</span></a><div class="wh-tooltip"><p class="shortdesc"> 脚本编程相关概念参考，包括：数据类型与形式、对象、运算符、编程语句、数据操作、函数化编程、文件操作和 SQL 语句。 </p></div></div></div><ul role="group" class="navbar-nav nav-list"><li role="treeitem" aria-expanded="false"><div data-tocid="chap4_sect_datatypes_forms-d9529e16594" class="topicref" data-id="chap4_sect_datatypes_forms" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action chap4_sect_datatypes_forms-d9529e16594-link" class="wh-expand-btn"></span><div class="title"><a href="../progr/data_types_forms_intro.html" id="chap4_sect_datatypes_forms-d9529e16594-link"><span class="keyword">数据类型与形式</span></a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="chap4_sect_objects-d9529e17632" class="topicref" data-id="chap4_sect_objects" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action chap4_sect_objects-d9529e17632-link" class="wh-expand-btn"></span><div class="title"><a href="../progr/objs/objects.html" id="chap4_sect_objects-d9529e17632-link"><span class="keyword label">对象</span></a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="chap4_sect_operators-d9529e18069" class="topicref" data-id="chap4_sect_operators" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action chap4_sect_operators-d9529e18069-link" class="wh-expand-btn"></span><div class="title"><a href="../progr/operators/operators.html" id="chap4_sect_operators-d9529e18069-link"><span class="keyword label">运算符</span></a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="chap4_sect_programming_statements-d9529e19654" class="topicref" data-id="chap4_sect_programming_statements" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action chap4_sect_programming_statements-d9529e19654-link" class="wh-expand-btn"></span><div class="title"><a href="../progr/statements/statements_intro.html" id="chap4_sect_programming_statements-d9529e19654-link"><span class="keyword label">编程语句</span></a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="chap4_sect_data_manipulation-d9529e20900" class="topicref" data-id="chap4_sect_data_manipulation" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action chap4_sect_data_manipulation-d9529e20900-link" class="wh-expand-btn"></span><div class="title"><a href="../progr/data_mani/dm_intro.html" id="chap4_sect_data_manipulation-d9529e20900-link"><span class="keyword label">数据操作</span></a></div></div></li><li role="treeitem" aria-expanded="true"><div data-tocid="chap4_sect_func_programming-d9529e21873" class="topicref" data-id="chap4_sect_func_programming" data-state="expanded"><span role="button" tabindex="0" aria-labelledby="button-collapse-action chap4_sect_func_programming-d9529e21873-link" class="wh-expand-btn"></span><div class="title"><a href="../progr/func_progr.html" id="chap4_sect_func_programming-d9529e21873-link"><span class="keyword label">函数化编程</span></a></div></div><ul role="group" class="navbar-nav nav-list"><li role="treeitem"><div data-tocid="命名函数-d9529e21920" class="topicref" data-id="命名函数" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../progr/named_func.html" id="命名函数-d9529e21920-link">命名函数</a></div></div></li><li role="treeitem"><div data-tocid="匿名函数-d9529e21966" class="topicref" data-id="匿名函数" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../progr/anonym_func.html" id="匿名函数-d9529e21966-link">匿名函数</a></div></div></li><li role="treeitem" class="active"><div data-tocid="部分应用-d9529e22012" class="topicref" data-id="部分应用" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../progr/partial_app.html" id="部分应用-d9529e22012-link">部分应用</a></div></div></li><li role="treeitem"><div data-tocid="lambda表达式-d9529e22058" class="topicref" data-id="lambda表达式" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../progr/lambda.html" id="lambda表达式-d9529e22058-link"><span class="keyword label">Lambda 表达式</span></a></div></div></li><li role="treeitem"><div data-tocid="闭包-d9529e22105" class="topicref" data-id="闭包" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../progr/closure.html" id="闭包-d9529e22105-link">闭包</a></div></div></li><li role="treeitem"><div data-tocid="远程函数调用-d9529e22151" class="topicref" data-id="远程函数调用" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../progr/rfc.html" id="远程函数调用-d9529e22151-link">远程函数调用</a></div></div></li></ul></li><li role="treeitem" aria-expanded="false"><div data-tocid="元编程-d9529e22197" class="topicref" data-id="元编程" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action 元编程-d9529e22197-link" class="wh-expand-btn"></span><div class="title"><a href="../progr/objs/meta_progr.html" id="元编程-d9529e22197-link"><span class="keyword label">元编程</span></a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="oop-d9529e22337" class="topicref" data-id="oop" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action oop-d9529e22337-link" class="wh-expand-btn"></span><div class="title"><a href="../progr/oop.html" id="oop-d9529e22337-link">面向对象编程</a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="文件操作-d9529e22705" class="topicref" data-id="文件操作" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action 文件操作-d9529e22705-link" class="wh-expand-btn"></span><div class="title"><a href="../progr/file_io/file_oper.html" id="文件操作-d9529e22705-link"><span class="keyword label">文件操作</span></a></div></div></li></ul></li><li role="treeitem" aria-expanded="false"><div data-tocid="chap4_sect_sql_statements-d9529e22890" class="topicref" data-id="chap4_sect_sql_statements" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action chap4_sect_sql_statements-d9529e22890-link" class="wh-expand-btn"></span><div class="title"><a href="../progr/sql/sql_intro.html" id="chap4_sect_sql_statements-d9529e22890-link"><span class="keyword label">SQL 语句</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 中 SQL 语句的基本语法和用法</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="python-parser-简介-d9529e25535" class="topicref" data-id="python-parser-简介" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action python-parser-简介-d9529e25535-link" class="wh-expand-btn"></span><div class="title"><a href="../progr/py_parser/py_par_intro.html" id="python-parser-简介-d9529e25535-link"><span class="keyword label">Python Parser</span></a></div></div></li></ul></li><li role="treeitem" aria-expanded="false"><div data-tocid="functions_references-d9529e26503" class="topicref" data-id="functions_references" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action functions_references-d9529e26503-link" class="wh-expand-btn"></span><div class="title"><a href="../funcs/funcs_intro.html" id="functions_references-d9529e26503-link"><span class="keyword label">函数参考</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 函数分类、语法、详解及示例</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="api_protocol-d9529e86456" class="topicref" data-id="api_protocol" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action api_protocol-d9529e86456-link" class="wh-expand-btn"></span><div class="title"><a href="../api/connapi_intro.html" id="api_protocol-d9529e86456-link"><span class="keyword label">连接器 &amp; API</span></a><div class="wh-tooltip"><p class="shortdesc">面向不同编程语言的 DolphinDB API 及连接器，相关协议和用法</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="chap6_plugin-d9529e91976" class="topicref" data-id="chap6_plugin" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action chap6_plugin-d9529e91976-link" class="wh-expand-btn"></span><div class="title"><a href="../plugins/plg_intro.html" id="chap6_plugin-d9529e91976-link"><span class="keyword label">插件</span></a><div class="wh-tooltip"><p class="shortdesc">多个应用场景的插件使用说明和插件开发指导</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="third_party-d9529e94749" class="topicref" data-id="third_party" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action third_party-d9529e94749-link" class="wh-expand-btn"></span><div class="title"><a href="../third_party.html" id="third_party-d9529e94749-link">第三方工具</a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="about_tutorials-d9529e94980" class="topicref" data-id="about_tutorials" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action about_tutorials-d9529e94980-link" class="wh-expand-btn"></span><div class="title"><a href="../tutorials/about_tutorials.html" id="about_tutorials-d9529e94980-link"><span class="keyword label">教程</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 产品使用教程</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="tocId-d9529e101769" class="topicref" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action tocId-d9529e101769-link" class="wh-expand-btn"></span><div class="title"><a href="../rn/server/3_00_1.html" id="tocId-d9529e101769-link">版本说明</a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 版本发布历史</p></div></div></div></li></ul></div>
+		                        
+                            </div>
+                        </nav>
+                    
+                    
+                    <div class="col-lg-7 col-md-9 col-sm-12" id="wh_topic_body">
+                        <button id="wh_close_publication_toc_button" class="close-toc-button d-none" aria-label="Toggle publishing table of content" aria-controls="wh_publication_toc" aria-expanded="true">
+                            <span class="close-toc-icon-container">
+                                <span class="close-toc-icon"></span>     
+                            </span>
+                        </button>
+                        <button id="wh_close_topic_toc_button" class="close-toc-button d-none" aria-label="Toggle topic table of content" aria-controls="wh_topic_toc" aria-expanded="true">
+                            <span class="close-toc-icon-container">
+                                <span class="close-toc-icon"></span>     
+                            </span>
+                        </button>
+                        
+                        <div class=" wh_topic_content body "><main role="main"><article class="- topic/topic topic" role="article" aria-labelledby="ariaid-title1">
+    <h1 class="- topic/title title topictitle1" id="ariaid-title1">部分应用</h1>
+    <div class="- topic/body body">
+        <p class="- topic/p p" id="部分应用__p_xsx_5hn_ryb" data-ofbid="部分应用__p_xsx_5hn_ryb">部分应用是指固定一个函数的部分参数，产生一个参数较少的函数。</p>
+    </div>
+    <article class="- topic/topic topic nested1" aria-labelledby="ariaid-title2" id="语法">
+        <h2 class="- topic/title title topictitle2" id="ariaid-title2">语法</h2>
+        <div class="- topic/body body">
+            <p class="- topic/p p" id="语法__p_ysx_5hn_ryb" data-ofbid="语法__p_ysx_5hn_ryb">
+                <code class="+ topic/ph pr-d/codeph ph codeph">&lt;functionName&gt;{parameters}</code>
+            </p>
+            <p class="- topic/p p">通过对象方法调用的方式生成部分应用：</p>
+            <p class="- topic/p p"><code class="+ topic/ph pr-d/codeph ph codeph">obj.method{parameters...}(newArgs...)</code> 等价于
+                    <code class="+ topic/ph pr-d/codeph ph codeph">method{obj, parameters}</code></p>
+            <p class="- topic/p p"><code class="+ topic/ph pr-d/codeph ph codeph">obj.{method{parameters...}}(newArgs...)</code> 等价于
+                    <code class="+ topic/ph pr-d/codeph ph codeph">method{parameters...}(obj, newArgs...)</code></p>
+            <p class="- topic/p p">其中，最后一个语法通过 {} 包裹 <em class="+ topic/ph hi-d/i ph i">method</em> 和
+                <em class="+ topic/ph hi-d/i ph i">parameters</em>，将它们组合并生成一个部分应用，将 <em class="+ topic/ph hi-d/i ph i">obj</em> 作为这个部分应用的第一个参数。</p>
+        </div>
+    </article>
+    <article class="- topic/topic topic nested1" aria-labelledby="ariaid-title3" id="详情">
+        <h2 class="- topic/title title topictitle2" id="ariaid-title3">详情</h2>
+        <div class="- topic/body body">
+            <p class="- topic/p p" id="详情__p_zsx_5hn_ryb" data-ofbid="详情__p_zsx_5hn_ryb">使用位置参数时，如果只是想固定前几个参数，那么不需要指明剩余的参数；如果在已被固定的参数前有未固定参数，无论这些未固定参数是必须的还是可选的，都必须指明它们的位置。</p>
+            <p class="- topic/p p" id="详情__p_xxh_3y5_x1c" data-ofbid="详情__p_xxh_3y5_x1c">使用关键字参数时，只需指明需要固定的参数即可。</p>
+            <p class="- topic/p p" id="详情__p_pkm_jy5_x1c" data-ofbid="详情__p_pkm_jy5_x1c">生成部分应用时，可以使用常量 DFLT 将参数固定为默认值。特别注意当需要固定默认值为空值的可选参数时，应使用 DFLT 固定而非
+                NULL。而当需要固定默认值不为空值的可选参数时，可以使用默认值，也可以使用 DFLT。</p>
+            <p class="- topic/p p" id="详情__p_atx_5hn_ryb" data-ofbid="详情__p_atx_5hn_ryb">部分应用可与对参数有特定要求的高阶函数配合使用。</p>
+        </div>
+    </article>
+    <article class="- topic/topic topic nested1" aria-labelledby="ariaid-title4" id="例子">
+        <h2 class="- topic/title title topictitle2" id="ariaid-title4">例子</h2>
+        <div class="- topic/body body">
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="例子__codeblock_btx_5hn_ryb" data-ofbid="例子__codeblock_btx_5hn_ryb"><code>a=100
+g=add{a*a};
+g(8);</code></pre>
+            <p class="- topic/p p">返回：10008</p>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="例子__codeblock_bnl_fc3_r1c" data-ofbid="例子__codeblock_bnl_fc3_r1c"><code>add{a*a}(88);</code></pre>
+            <p class="- topic/p p">返回：10088</p>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="例子__codeblock_dyn_gc3_r1c" data-ofbid="例子__codeblock_dyn_gc3_r1c"><code>def f(a,b):a*exp(b)
+g=f{10};  // g(b)==f(10,b)
+
+g(0);</code></pre>
+            <p class="- topic/p p">返回：10</p>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="例子__codeblock_kgk_hc3_r1c" data-ofbid="例子__codeblock_kgk_hc3_r1c"><code>g(1);</code></pre>
+            <p class="- topic/p p">返回：27.182818</p>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="例子__codeblock_l5l_3c3_r1c" data-ofbid="例子__codeblock_l5l_3c3_r1c"><code>k=f{,1};  // k(a)==f(a,1)
+k(10);</code></pre>
+            <p class="- topic/p p">返回：27.182818</p>
+            <p class="- topic/p p">若已被固定的参数前面包含了可选参数，且没指明位置，则需要在调用部分应用函数时传入：</p>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="例子__codeblock_dtx_5hn_ryb" data-ofbid="例子__codeblock_dtx_5hn_ryb"><code>//计算矩阵 m 的奇异分解
+m=matrix([[2,1,0],[1,3,1],[0,1,4],[1,2,3]]);
+//svd 的语法为 svd(obj, [fullMatrices=true], [computeUV=true])，如下定义的 f1，因没有对可选参数 fullMatrices 进行固定，所以在执行 f1 时需要传入 fullMatrices，否则会报错
+f1 = svd{m, computeUV=true}
+f1(false)   //成功执行
+f1()  //报错：The function [svd] expects 1 argument(s), but the actual number of arguments is: 0</code></pre>
+            <div class="- topic/p p" id="例子__p_ctx_5hn_ryb" data-ofbid="例子__p_ctx_5hn_ryb">以下例子介绍如何通过对象方法调用的方式，生成自定义函数
+                    <code class="+ topic/ph pr-d/codeph ph codeph">myFunc</code>
+                的部分应用。<pre class="+ topic/pre pr-d/codeblock pre codeblock" id="例子__codeblock_cqp_vxh_r1c" data-ofbid="例子__codeblock_cqp_vxh_r1c"><code>//自定义函数 myFunc
+def myFunc(a,b,c){
+    return a*10+b*5+c*2
+}
+
+a1=[1,2,3]
+b1=5
+c1=9
+
+//固定第1个参数为 a1，生成2个参数的部分应用
+a1.myFunc{}(c1,b1)  //等价于 myFunc{a1}(c1,b1) </code></pre>输出：[65,75,85] </div>
+            <p class="- topic/p p">固定第1和第3个参数，生成只有1个参数的部分应用</p>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="例子__codeblock_ckq_xxh_r1c" data-ofbid="例子__codeblock_ckq_xxh_r1c"><code>b1.myFunc{,a1}(c1)  //等价于 myFunc{b1,,a1} (c1)</code></pre>
+            <p class="- topic/p p">输出：[97,99,101]</p>
+            <p class="- topic/p p">固定第2个参数，生成部分应用 myFunc{,a1}(b1,c1)，参数将依次传入</p>
+            <div class="- topic/p p">
+                <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="例子__codeblock_zxm_wxh_r1c" data-ofbid="例子__codeblock_zxm_wxh_r1c"><code>b1.{myFunc{,a1}}(c1)    // 等价于 myFunc(b1,a1,c1)</code></pre>
+            </div>
+            <p class="- topic/p p">输出：[73,78,83]</p>
+            <p class="- topic/p p">通过对象方法调用方式生成的部分应用与函数模式结合使用</p>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="例子__codeblock_ebs_yxh_r1c" data-ofbid="例子__codeblock_ebs_yxh_r1c"><code>a1.myFunc{b1}:E([4,5,6]) //等价于 each(a1.myFunc{b1},[4,5,6])</code></pre>
+            <p class="- topic/p p">输出一个矩阵：</p>
+            <div class="simpletable-container"><table class="- topic/simpletable simpletable frame-all" id="例子__simpletable_qps_q13_r1c" data-ofbid="例子__simpletable_qps_q13_r1c"><colgroup><col style="width:33.33333333333333%"/><col style="width:33.33333333333333%"/><col style="width:33.33333333333333%"/></colgroup><thead><tr class="- topic/sthead sthead">
+                    <th class="- topic/stentry stentry" scope="col" id="例子__simpletable_qps_q13_r1c__stentry__1">4</th>
+                    <th class="- topic/stentry stentry" scope="col" id="例子__simpletable_qps_q13_r1c__stentry__2">5</th>
+                    <th class="- topic/stentry stentry" scope="col" id="例子__simpletable_qps_q13_r1c__stentry__3">6</th>
+                </tr></thead><tbody><tr class="- topic/strow strow">
+                    <td class="- topic/stentry stentry" headers="例子__simpletable_qps_q13_r1c__stentry__1">43</td>
+                    <td class="- topic/stentry stentry" headers="例子__simpletable_qps_q13_r1c__stentry__2">45</td>
+                    <td class="- topic/stentry stentry" headers="例子__simpletable_qps_q13_r1c__stentry__3">47</td>
+                </tr><tr class="- topic/strow strow">
+                    <td class="- topic/stentry stentry" headers="例子__simpletable_qps_q13_r1c__stentry__1">53</td>
+                    <td class="- topic/stentry stentry" headers="例子__simpletable_qps_q13_r1c__stentry__2">55</td>
+                    <td class="- topic/stentry stentry" headers="例子__simpletable_qps_q13_r1c__stentry__3">57</td>
+                </tr><tr class="- topic/strow strow">
+                    <td class="- topic/stentry stentry" headers="例子__simpletable_qps_q13_r1c__stentry__1">63</td>
+                    <td class="- topic/stentry stentry" headers="例子__simpletable_qps_q13_r1c__stentry__2">65</td>
+                    <td class="- topic/stentry stentry" headers="例子__simpletable_qps_q13_r1c__stentry__3">67</td>
+                </tr></tbody></table></div>
+            <div class="- topic/p p">通过 {} 将固定参数和函数包裹，<em class="+ topic/ph hi-d/i ph i">obj</em> 作为部分应用的第一个入参。这种方式通常和函数模式结合使用。下例通过函数模式
+                :V
+                实现数组向量按列计算倾斜度。<pre class="+ topic/pre pr-d/codeblock pre codeblock" id="例子__codeblock_plz_2yh_r1c" data-ofbid="例子__codeblock_plz_2yh_r1c"><code>av = array(INT[],0,10).append!([2 6 6 9 3, 0 7 4 7 1, 4 2 4 8 7,0 9 8 9 7])
+av.{skew{,false}}:V()　//等价于 skew{,false}:V(av)，也等价于 byColumn(skew{,false},av)</code></pre></div>
+            <p class="- topic/p p">得到结果：[0.8545,-0.9406,0.8545,-0.8545,-0.3703]</p>
+            <div class="- topic/p p">如果不使用 {} 包裹，则 <em class="+ topic/ph hi-d/i ph i">obj</em> 将成为部分应用的第一个固定参数。下例中因为
+                    <code class="+ topic/ph pr-d/codeph ph codeph">skew</code>
+                无法接受3个参数而出现报错：<pre class="+ topic/pre pr-d/codeblock pre codeblock" id="例子__codeblock_wl2_gyh_r1c" data-ofbid="例子__codeblock_wl2_gyh_r1c"><code>av.skew{,false}:H() //等价于 skew{av,,false}:H()
+// 抛出异常</code></pre></div>
+            <p class="- topic/p p">内置函数 rank 的语法为<code class="+ topic/ph pr-d/codeph ph codeph">rank(X, [ascending=true], [groupNum], [ignoreNA=true],
+                    [tiesMethod='min'], [percent=false], [precision])</code>
+            </p>
+            <p class="- topic/p p">当需要固定参数 percent=true 时，可以使用位置参数：</p>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="例子__codeblock_tkf_ny5_x1c" data-ofbid="例子__codeblock_tkf_ny5_x1c"><code>f1 = rank{,,,,,true}</code></pre>
+            <p class="- topic/p p">也可以使用关键字参数</p>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="例子__codeblock_xjw_4y5_x1c" data-ofbid="例子__codeblock_xjw_4y5_x1c"><code>f2 = rank{percent=true}</code></pre>
+            <p class="- topic/p p">当需要固定参数 groupNum 为默认值时，须使用常量 DFLT</p>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="例子__codeblock_dmp_py5_x1c" data-ofbid="例子__codeblock_dmp_py5_x1c"><code>f3 = rank{groupNum=DFLT,percent=true}</code></pre>
+        </div>
+    </article>
+</article></main></div>
+                        
+                        
+                        
+                        
+                        
+                        
+                    </div>
+                    
+                        <nav role="navigation" id="wh_topic_toc" aria-label="On this page" class="col-lg-2 d-none d-lg-block navbar d-print-none"> 
+                            <div id="wh_topic_toc_content">
+		                        
+	                            <div class=" wh_topic_toc "><div class="wh_topic_label">在本页上</div><ul><li class="topic-item"><a href="#%E8%AF%AD%E6%B3%95" data-tocid="语法">语法</a></li><li class="topic-item"><a href="#%E8%AF%A6%E6%83%85" data-tocid="详情">详情</a></li><li class="topic-item"><a href="#%E4%BE%8B%E5%AD%90" data-tocid="例子">例子</a></li></ul></div>
+	                        	
+                        	</div>
+                        </nav>
+                    
+                </div>
+            </div>
+            
+            
+            
+        </div> 
+        <footer class="navbar navbar-default wh_footer">
+  <div class=" footer-container mx-auto ">
+<title>Copyright</title><p><b> ©2024 浙江智臾科技有限公司 浙ICP备18048711号-3</b></p>
+  </div>
+</footer>
+        
+        <div id="go2top" class="d-print-none">
+            <span class="oxy-icon oxy-icon-up"></span>
+        </div>
+        
+        <div id="modal_img_large" class="modal">
+            <span class="close oxy-icon oxy-icon-remove"></span>
+            <div id="modal_img_container"></div>
+            <div id="caption"></div>
+        </div>
+        
+        
+        
+    </body>
+</html>

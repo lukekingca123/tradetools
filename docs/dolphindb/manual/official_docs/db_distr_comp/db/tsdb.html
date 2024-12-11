@@ -1,0 +1,815 @@
+<!DOCTYPE html><html xmlns="http://www.w3.org/1999/xhtml" xml:lang="zh" lang="zh" data-whc_version="26.0">
+    <head><link rel="shortcut icon" href="../../favicon.ico"/><link rel="icon" href="../../favicon.ico"/><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><meta http-equiv="X-UA-Compatible" content="IE=edge"/><meta name="description" content="TSDB 引擎设计采用经典的 LSM-Tree（Log Structured Merge Tree）模型并引入辅助索引的排序列，进一步优化了性能。 LSM-Tree 是一种将数据存储在高效的数据结构中的技术，它将数据按照时间顺序组织并存储，以便于快速访问和查询。这种数据结构可以有效地处理大量的时间序列数据，并提供高性能的读写操作。相较于传统的 B+ 树而言，LSM-Tree ..."/><meta name="DC.rights.owner" content="(C) 版权 2024"/><meta name="copyright" content="(C) 版权 2024"/><meta name="generator" content="DITA-OT"/><meta name="DC.type" content="topic"/><meta name="DC.coverage" content=""/><meta name="DC.relation" content="../../db_distr_comp/cfg/db_intro.html"/><meta name="prodname" content="DolphinDB"/><meta name="brand" content="DolphinDB"/><meta name="DC.creator" content="DolphinDB"/><meta name="DC.publisher" content="DDB N/A DDB 200"/><meta name="DC.format" content="HTML5"/><meta name="DC.identifier" content="tsdb"/><title>TSDB 存储引擎</title><!--  Generated with Oxygen version 26.0, build number 2024012323.  --><meta name="wh-path2root" content="../../"/><meta name="wh-toc-id" content="tsdb-d9529e3349"/><meta name="wh-source-relpath" content="db_distr_comp/db/tsdb.dita"/><meta name="wh-out-relpath" content="db_distr_comp/db/tsdb.html"/>
+
+    <link rel="stylesheet" type="text/css" href="../../oxygen-webhelp/app/commons.css?buildId=2024012323"/>
+    <link rel="stylesheet" type="text/css" href="../../oxygen-webhelp/app/topic.css?buildId=2024012323"/>
+
+    <script src="../../oxygen-webhelp/app/options/properties.js?buildId=20240704100525"></script>
+    <script src="../../oxygen-webhelp/app/localization/strings.js?buildId=2024012323"></script>
+    <script src="../../oxygen-webhelp/app/search/index/keywords.js?buildId=20240704100525"></script>
+    <script defer="defer" src="../../oxygen-webhelp/app/commons.js?buildId=2024012323"></script>
+    <script defer="defer" src="../../oxygen-webhelp/app/topic.js?buildId=2024012323"></script>
+<link rel="stylesheet" type="text/css" href="../../oxygen-webhelp/template/styles.css?buildId=2024012323"/><script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script><script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script></head>
+
+    <body id="tsdb" class="wh_topic_page frmBody">
+        <a href="#wh_topic_body" class="sr-only sr-only-focusable">
+            跳转到主要内容
+        </a>
+        
+        
+        
+        
+        <header class="navbar navbar-default wh_header">
+    <div class="container-fluid">
+        <div xmlns:whc="http://www.oxygenxml.com/webhelp/components" class="wh_header_flex_container navbar-nav navbar-expand-md navbar-dark">
+            <div class="wh_logo_and_publication_title_container">
+                <div class="wh_logo_and_publication_title">
+                    
+                    <a href="https://www.dolphindb.cn" class=" wh_logo d-none d-sm-block "><img src="../../logo.png" alt="  DolphinDB 文档中心  "/></a>
+                    <div class=" wh_publication_title "><a href="../../index.html"><span class="booktitle">  <span class="ph mainbooktitle">DolphinDB 文档中心</span>  </span></a></div>
+                    
+                </div>
+                
+                
+            </div>
+
+            <div class="wh_top_menu_and_indexterms_link collapse navbar-collapse" id="wh_top_menu_and_indexterms_link">
+                
+                
+                
+                
+            </div>
+        <div class=" wh_search_input navbar-form wh_topic_page_search search " role="form">
+            
+            
+            
+            <form id="searchForm" method="get" role="search" action="../../search.html"><div><input type="search" placeholder="搜索 " class="wh_search_textfield" id="textToSearch" name="searchQuery" aria-label="搜索查询" required="required"/><button type="submit" class="wh_search_button" aria-label="搜索"><span class="search_input_text">搜索</span></button></div></form>
+            
+            <script src="/vendors/react/umd/react.production.min.js" defer="defer"></script>
+<script src="/vendors/react-dom/umd/react-dom.production.min.js" defer="defer"></script>
+<script src="/vendors/dayjs/dayjs.min.js" defer="defer"></script>
+<script src="/vendors/antd/dist/antd.min.js" defer="defer"></script>
+<script src="/vendors/@ant-design/icons/dist/index.umd.min.js" defer="defer"></script>
+<script src="/zh/index.js" type="module"></script>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js" defer="defer"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML" defer="defer"><!--
+
+
+--></script>
+
+            
+        </div></div>
+    </div>
+</header>
+        
+        
+         
+        
+        
+        
+        <div class="container-fluid" id="wh_topic_container">
+            <div class="row">
+
+                <nav class="wh_tools d-print-none navbar-expand-md" aria-label="Tools">
+                    
+                    <div data-tooltip-position="bottom" class=" wh_breadcrumb "><ol class="d-print-none"><li><span class="home"><a href="../../index.html"><span>主页</span></a></span></li><li><div class="topicref" data-id="new_chap_database_manage_new_chap_dbmanage_landing_page"><div class="title"><a href="../../db_distr_comp/cfg/db_intro.html"><span class="keyword label">数据库</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 数据库的基本概念</p></div></div></div></li><li class="active"><div class="topicref" data-id="tsdb"><div class="title"><a href="../../db_distr_comp/db/tsdb.html"><span class="keyword label">TSDB 存储引擎</span></a></div></div></li></ol></div>
+                    
+                    
+                    
+                    <div class="wh_right_tools">
+                        <button class="wh_hide_highlight" aria-label="切换搜索突出显示" title="切换搜索突出显示"></button>
+                        <button class="webhelp_expand_collapse_sections" data-next-state="collapsed" aria-label="折叠截面" title="折叠截面"></button>
+                        
+                        
+                        
+                        
+                        <div class=" wh_print_link print d-none d-md-inline-block "><button onClick="window.print()" title="打印此页" aria-label="打印此页"></button></div>
+                        
+                        <button type="button" id="wh_toc_button" class="custom-toggler navbar-toggler collapsed wh_toggle_button navbar-light" aria-expanded="false" aria-label="Toggle publishing table of content" aria-controls="wh_publication_toc">
+                            <span class="navbar-toggler-icon"></span>
+                        </button>
+                    </div>
+                    
+                </nav>
+            </div>
+            
+            
+            
+            
+            <div class="wh_content_area">
+                <div class="row">
+                    
+                        <nav id="wh_publication_toc" class="col-lg-3 col-md-3 col-sm-12 d-md-block d-none d-print-none" aria-label="Table of Contents Container">
+                            <div id="wh_publication_toc_content">
+		                        
+                            	<div class=" wh_publication_toc " data-tooltip-position="right"><span class="expand-button-action-labels"><span id="button-expand-action" role="button" aria-label="Expand"></span><span id="button-collapse-action" role="button" aria-label="Collapse"></span><span id="button-pending-action" role="button" aria-label="Pending"></span></span><ul role="tree" aria-label="Table of Contents"><li role="treeitem"><div data-tocid="new_chap_about_sect_ddb_docs_intro-d9529e87" class="topicref" data-id="new_chap_about_sect_ddb_docs_intro" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../about/ddb_docs_intro.html" id="new_chap_about_sect_ddb_docs_intro-d9529e87-link">文档使用说明</a><div class="wh-tooltip"><p class="shortdesc">如何获取 DolphinDB 帮助信息</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="chap1_getstarted-d9529e140" class="topicref" data-id="chap1_getstarted" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action chap1_getstarted-d9529e140-link" class="wh-expand-btn"></span><div class="title"><a href="../../getstarted/chap1_getstarted.html" id="chap1_getstarted-d9529e140-link"><span class="keyword label">快速上手</span></a><div class="wh-tooltip"><p class="shortdesc">如何快速部署 DolphinDB、建库建表、写入和查询数据</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="sectionddb_deployment-d9529e335" class="topicref" data-id="sectionddb_deployment" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action sectionddb_deployment-d9529e335-link" class="wh-expand-btn"></span><div class="title"><a href="../../deploy/deploy_intro.html" id="sectionddb_deployment-d9529e335-link"><span class="keyword label">部署</span></a><div class="wh-tooltip"><p class="shortdesc">如何在不同的场景中部署 DolphinDB</p></div></div></div></li><li role="treeitem" aria-expanded="true"><div data-tocid="new_chap_database_manage_new_chap_dbmanage_landing_page-d9529e2313" class="topicref" data-id="new_chap_database_manage_new_chap_dbmanage_landing_page" data-state="expanded"><span role="button" tabindex="0" aria-labelledby="button-collapse-action new_chap_database_manage_new_chap_dbmanage_landing_page-d9529e2313-link" class="wh-expand-btn"></span><div class="title"><a href="../../db_distr_comp/cfg/db_intro.html" id="new_chap_database_manage_new_chap_dbmanage_landing_page-d9529e2313-link"><span class="keyword label">数据库</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 数据库的基本概念</p></div></div></div><ul role="group" class="navbar-nav nav-list"><li role="treeitem" aria-expanded="false"><div data-tocid="chap3_sect_database_distributed_computing-d9529e2366" class="topicref" data-id="chap3_sect_database_distributed_computing" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action chap3_sect_database_distributed_computing-d9529e2366-link" class="wh-expand-btn"></span><div class="title"><a href="../../db_distr_comp/db_distr_comp.html" id="chap3_sect_database_distributed_computing-d9529e2366-link"><span class="keyword label">数据库操作</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 数据库的基本操作，例如创建数据库、表，增加列、分区，数据查询，表连接等。</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="topic_pg3_22w_ryb-d9529e2934" class="topicref" data-id="topic_pg3_22w_ryb" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action topic_pg3_22w_ryb-d9529e2934-link" class="wh-expand-btn"></span><div class="title"><a href="../../db_distr_comp/db/db_architecture.html" id="topic_pg3_22w_ryb-d9529e2934-link"><span class="keyword label">分布式架构</span></a></div></div></li><li role="treeitem" class="active"><div data-tocid="tsdb-d9529e3349" class="topicref" data-id="tsdb" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../db_distr_comp/db/tsdb.html" id="tsdb-d9529e3349-link"><span class="keyword label">TSDB 存储引擎</span></a></div></div></li><li role="treeitem"><div data-tocid="olap-d9529e3396" class="topicref" data-id="olap" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../db_distr_comp/db/olap.html" id="olap-d9529e3396-link"><span class="keyword label">OLAP 存储引擎</span></a></div></div></li><li role="treeitem"><div data-tocid="catalog-d9529e3443" class="topicref" data-id="catalog" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../db_distr_comp/db/catalog.html" id="catalog-d9529e3443-link">数据目录（catalog）</a></div></div></li></ul></li><li role="treeitem" aria-expanded="false"><div data-tocid="chap7_tutorials_streaming-d9529e3490" class="topicref" data-id="chap7_tutorials_streaming" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action chap7_tutorials_streaming-d9529e3490-link" class="wh-expand-btn"></span><div class="title"><a href="../../stream/str_intro.html" id="chap7_tutorials_streaming-d9529e3490-link"><span class="keyword label">流数据</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 流数据引擎及流数据计算的基本概念</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="tocId-d9529e7385" class="topicref" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action tocId-d9529e7385-link" class="wh-expand-btn"></span><div class="title"><a href="../../db_distr_comp/db_oper/import_data.html" id="tocId-d9529e7385-link">数据迁移</a><div class="wh-tooltip"><p class="shortdesc">如何从不同数据源向 DolphinDB 迁移数据</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="chap7_tutorials_system_management-d9529e7812" class="topicref" data-id="chap7_tutorials_system_management" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action chap7_tutorials_system_management-d9529e7812-link" class="wh-expand-btn"></span><div class="title"><a href="../../sys_man/om_intro.html" id="chap7_tutorials_system_management-d9529e7812-link"><span class="keyword label">系统运维</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 的系统运维功能及方法</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="about_language_resources-d9529e16490" class="topicref" data-id="about_language_resources" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action about_language_resources-d9529e16490-link" class="wh-expand-btn"></span><div class="title"><a href="../../progr/progr_intro.html" id="about_language_resources-d9529e16490-link"><span class="keyword label">编程语言</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 编程基本概念与方法、SQL 在 DolphinDB 的应用</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="functions_references-d9529e26503" class="topicref" data-id="functions_references" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action functions_references-d9529e26503-link" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/funcs_intro.html" id="functions_references-d9529e26503-link"><span class="keyword label">函数参考</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 函数分类、语法、详解及示例</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="api_protocol-d9529e86456" class="topicref" data-id="api_protocol" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action api_protocol-d9529e86456-link" class="wh-expand-btn"></span><div class="title"><a href="../../api/connapi_intro.html" id="api_protocol-d9529e86456-link"><span class="keyword label">连接器 &amp; API</span></a><div class="wh-tooltip"><p class="shortdesc">面向不同编程语言的 DolphinDB API 及连接器，相关协议和用法</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="chap6_plugin-d9529e91976" class="topicref" data-id="chap6_plugin" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action chap6_plugin-d9529e91976-link" class="wh-expand-btn"></span><div class="title"><a href="../../plugins/plg_intro.html" id="chap6_plugin-d9529e91976-link"><span class="keyword label">插件</span></a><div class="wh-tooltip"><p class="shortdesc">多个应用场景的插件使用说明和插件开发指导</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="third_party-d9529e94749" class="topicref" data-id="third_party" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action third_party-d9529e94749-link" class="wh-expand-btn"></span><div class="title"><a href="../../third_party.html" id="third_party-d9529e94749-link">第三方工具</a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="about_tutorials-d9529e94980" class="topicref" data-id="about_tutorials" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action about_tutorials-d9529e94980-link" class="wh-expand-btn"></span><div class="title"><a href="../../tutorials/about_tutorials.html" id="about_tutorials-d9529e94980-link"><span class="keyword label">教程</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 产品使用教程</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="tocId-d9529e101769" class="topicref" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action tocId-d9529e101769-link" class="wh-expand-btn"></span><div class="title"><a href="../../rn/server/3_00_1.html" id="tocId-d9529e101769-link">版本说明</a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 版本发布历史</p></div></div></div></li></ul></div>
+		                        
+                            </div>
+                        </nav>
+                    
+                    
+                    <div class="col-lg-7 col-md-9 col-sm-12" id="wh_topic_body">
+                        <button id="wh_close_publication_toc_button" class="close-toc-button d-none" aria-label="Toggle publishing table of content" aria-controls="wh_publication_toc" aria-expanded="true">
+                            <span class="close-toc-icon-container">
+                                <span class="close-toc-icon"></span>     
+                            </span>
+                        </button>
+                        <button id="wh_close_topic_toc_button" class="close-toc-button d-none" aria-label="Toggle topic table of content" aria-controls="wh_topic_toc" aria-expanded="true">
+                            <span class="close-toc-icon-container">
+                                <span class="close-toc-icon"></span>     
+                            </span>
+                        </button>
+                        
+                        <div class=" wh_topic_content body "><main role="main"><article class="- topic/topic topic" role="article" aria-labelledby="ariaid-title1">
+    <h1 class="- topic/title title topictitle1" id="ariaid-title1"><span class="- topic/keyword keyword label">TSDB 存储引擎</span></h1>
+    <div class="- topic/body body">
+        <p class="- topic/p p" id="tsdb__p_ypm_54d_syb" data-ofbid="tsdb__p_ypm_54d_syb">TSDB 引擎设计采用经典的 LSM-Tree（Log Structured Merge
+            Tree）模型并引入辅助索引的排序列，进一步优化了性能。</p>
+        <p class="- topic/p p" id="tsdb__p_zpm_54d_syb" data-ofbid="tsdb__p_zpm_54d_syb">LSM-Tree
+            是一种将数据存储在高效的数据结构中的技术，它将数据按照时间顺序组织并存储，以便于快速访问和查询。这种数据结构可以有效地处理大量的时间序列数据，并提供高性能的读写操作。相较于传统的
+            B+ 树而言，LSM-Tree 的优势在于高吞吐写入与较低的随机写延迟。虽然没有 B+ 树那样高效的随机读和范围查询性能，LSM-Tree
+            依靠键值排序使得单个数据文件的范围查询也十分高效。TSDB 基于 LSM-Tree 设计，并进行了以下优化：</p>
+        <ul class="- topic/ul ul" id="tsdb__ul_u2d_pzv_rzb" data-ofbid="tsdb__ul_u2d_pzv_rzb">
+            <li class="- topic/li li">
+                <p class="- topic/p p"><strong class="+ topic/ph hi-d/b ph b">写入：</strong>与 LSM-Tree 直接写入一个有序的数据结构不同，DolphinDB TSDB
+                    引擎在写入数据到内存时，会先按写入顺序存储在一个写缓冲区域（unsorted write Buffer），当数据量累积到一定程度，再进行排序转化为一个
+                    sorted buffer。</p>
+            </li>
+            <li class="- topic/li li">
+                <p class="- topic/p p"><strong class="+ topic/ph hi-d/b ph b">查询：</strong>DolphinDB TSDB 引擎会预先遍历 Level File （对应 LSM-Tree 的 SSTable
+                    文件），读取查询涉及的分区下所有 Level File
+                    尾部的索引信息到内存的索引区域（一次性读，常驻内存）。后续查询时，系统会先查询内存中的索引，若命中，则可以快速定位到对应 Level File
+                    的数据块，无需再遍历磁盘上的文件。</p>
+            </li>
+        </ul>
+        <figure class="- topic/fig fig fignone" id="tsdb__fig_qlq_hlc_gzb" data-ofbid="tsdb__fig_qlq_hlc_gzb">
+            <br/><div class="imageleft"><img class="- topic/image image imageleft" id="tsdb__image_qn3_thn_ryb" src="../../images/db_distr_comp/TSDB%20%E5%BC%95%E6%93%8E%E6%9E%B6%E6%9E%84%E5%9B%BE.png" height="892" width="1035" alt="images"/></div><br/>
+        </figure>
+    </div>
+    <article class="- topic/topic topic nested1" aria-labelledby="ariaid-title2" id="redo-log和cache-engine">
+        <h2 class="- topic/title title topictitle2" id="ariaid-title2">排序列</h2>
+        <div class="- topic/body body">
+            <p class="- topic/p p">排序列是 TSDB 引擎特有的结构，它在 TSDB 引擎的存储和读取流程中发挥着重要作用。在深入讨论 TSDB 引擎之前，我们首先了解一下排序列的概念。在创建表时通过参数
+                sortColumns 来定义排序列，其中 sortColumns 的最后一列必须是时间类型，而除了最后一列之外的其他列被称为 sortKey，每个 sortKey
+                值对应的数据按列存储在一起。sortKey
+                字段的组合值作为索引键（sortKeyEntery），为数据查询提供了入口，能够迅速定位数据块的位置，从而降低查询时间。在写入过程中，每个事务中的数据会根据
+                sortColumns 进行排序和去重。</p>
+            <p class="- topic/p p">sortColumns 参数在 TSDB 引擎中起到三个作用：确定索引键值、数据排序、数据去重。</p>
+            <p class="- topic/p p"><strong class="+ topic/ph hi-d/b ph b"><dfn class="- topic/term term">确定索引键值</dfn></strong></p>
+            <p class="- topic/p p">TSDB 的索引机制可以提升查询性能。写入数据时，在 Cache Engine 中，数据会根据 sortColumns 指定的列进行排序，TSDB
+                引擎的索引列就是基于排序列建立的。sortColumns 由两部分组成： sortKey（可以是多列，其组合值作为数据的索引键）, timestamp（时间列）。若
+                sortColumns 只有一列，则该列将作为 sortKey。</p>
+            <p class="- topic/p p">假设 sortColumns 指定了 n 个字段，则系统取前 n-1 个字段的组合值，作为索引键 sortKey，每个 sortKey
+                值对应的数据按列存储在一起（如下图，假设 sortColumns 为 deviceId 和 timestamp）。</p>
+            <figure class="- topic/fig fig fignone" id="redo-log和cache-engine__fig_yjn_w1w_rzb" data-ofbid="redo-log和cache-engine__fig_yjn_w1w_rzb">
+                <img class="- topic/image image" id="redo-log和cache-engine__image_mky_bbw_rzb" src="../../images/db_distr_comp/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E5%9B%BE.png" height="277" width="690"/>
+            </figure>
+            <p class="- topic/p p">每个 sortKey 内部的数据仍然是按列存储的，其中每个列的数据又按记录数划分为多个 block（按固定行数划分，参见 Level File 层级示意图）。block
+                是内部最小的查询单元，也是数据压缩的单元，其内部数据按照时间列的顺序排序。</p>
+            <p class="- topic/p p">sortKey 需要合理设置，每个分区的 sortKey 值不宜过多。因为同等数据量下，sortKey 值越多，意味着每个 sortKey
+                对应的数据量越少，不仅会增加命中索引的开销，而且会增大读取每个 sortKey 元数据的开销，进而降低查询效率。</p>
+            <div class="- topic/p p">查询时，若查询条件包含 sortColumns 指定的字段，系统会先定位到对应的 sortKey 的数据所在的位置，然后根据 block 内部数据的有序性以及列之间
+                block 的对齐性，通过时间列快速定位到对应的 block，将相关列的 block 读取到内存中。 <div class="- topic/note note note note_note" id="redo-log和cache-engine__note_ndb_hbw_rzb" data-ofbid="redo-log和cache-engine__note_ndb_hbw_rzb"><span class="note__title">注：</span> 
+                    <ol class="- topic/ol ol" id="redo-log和cache-engine__ol_kf4_cgw_rzb" data-ofbid="redo-log和cache-engine__ol_kf4_cgw_rzb">
+                        <li class="- topic/li li">block 数据的有序性：block 内部数据是按照时间列排好序的，此外每个 sortKey 的元数据都记录了对应每个 block
+                            的第一条数据，因此根据和每个 block 的第一条数据比较，可以快速过滤掉一些不必要的 block 的查询，从而提升查询性能。</li>
+                        <li class="- topic/li li">block 的对齐性：由于 block 的数据量都是固定的，因此根据时间列快速定位到时间列所在的 block，就能根据该 block 的
+                            offset 快速定位到其他列的 block。</li>
+                    </ol>
+                </div></div>
+            <p class="- topic/p p"><strong class="+ topic/ph hi-d/b ph b"><dfn class="- topic/term term">数据排序</dfn></strong></p>
+            <p class="- topic/p p">在 TSDB Cache Engine 中，每批刷盘的数据会根据 sortColumns 进行排序，然后再写入磁盘，可以推断：</p>
+            <ul class="- topic/ul ul" id="redo-log和cache-engine__ul_zrl_lbw_rzb" data-ofbid="redo-log和cache-engine__ul_zrl_lbw_rzb">
+                <li class="- topic/li li">
+                    <p class="- topic/p p">每个写入事务的数据一定是有序的。</p>
+                </li>
+                <li class="- topic/li li">
+                    <p class="- topic/p p">单个 Level File 文件内的数据一定是有序的。</p>
+                </li>
+                <li class="- topic/li li">
+                    <p class="- topic/p p">Level File 之间数据的顺序无法保证。</p>
+                </li>
+                <li class="- topic/li li">
+                    <p class="- topic/p p">每个分区的数据的有序性无法保证。</p>
+                </li>
+            </ul>
+            <p class="- topic/p p">sortColumns 的数据排序功能，不保证数据整体的有序性，而只是保证 Level File 内数据按 sortKey 有序排列，以及每个 sortKey 中
+                block 内数据的有序性，这有助于：</p>
+            <ul class="- topic/ul ul" id="redo-log和cache-engine__ul_asl_lbw_rzb" data-ofbid="redo-log和cache-engine__ul_asl_lbw_rzb">
+                <li class="- topic/li li">
+                    <p class="- topic/p p">查询条件包含 sortKey 字段的范围查询或第一个 sortKey 字段的等值查询时，加速内存查找索引的效率。</p>
+                </li>
+                <li class="- topic/li li">
+                    <p class="- topic/p p">命中 sortKey 索引时，可以根据 sortKey 的元数据信息，加速 block 的定位。</p>
+                </li>
+            </ul>
+            <p class="- topic/p p"><strong class="+ topic/ph hi-d/b ph b"><dfn class="- topic/term term">数据去重</dfn></strong></p>
+            <p class="- topic/p p">TSDB 的去重机制主要用于同一个时间点产生多条数据，需要去重的场景。</p>
+            <p class="- topic/p p">去重是基于 sortColumns 进行的，发生在写入时数据排序阶段以及 Level File 的合并阶段。其对应的配置参数为
+                keepDuplicates（在建表是设置），有三个可选项：ALL（保留所有数据，为默认值）， LAST（仅保留最新数据），FIRST（仅保留第一条数据）。</p>
+            <p class="- topic/p p">不同去重机制可能会对更新操作产生影响（具体参见 2.2.3 数据更新流程）：若
+                keepDuplicates=ALL/FIRST，那么每次更新，都需要将分区数据读取到内存更新后再写回磁盘；若
+                keepDuplicates=LAST，则更新数据将以追加的方式写入，真正的更新操作将会在 Level File 合并阶段进行。</p>
+            <div class="- topic/note note note note_note" id="redo-log和cache-engine__note_g4p_qbw_rzb" data-ofbid="redo-log和cache-engine__note_g4p_qbw_rzb"><span class="note__title">注：</span> 
+                <ol class="- topic/ol ol" id="redo-log和cache-engine__ol_wqw_bgv_tzb" data-ofbid="redo-log和cache-engine__ol_wqw_bgv_tzb">
+                    <li class="- topic/li li">
+                        <p class="- topic/p p">去重策略不能保证磁盘上存储数据不存在冗余，只能保证查询时不会返回冗余结果。查询数据时，会将对应 sortKey 所在各个 Level File
+                            中的数据块读出，然后在内存中进行去重，再返回查询结果。</p>
+                    </li>
+                    <li class="- topic/li li">
+                        <p class="- topic/p p">DolphinDB 不支持约束。现实场景下，很多用户会利用 sortColumns 的去重机制，将数据中的主键或唯一约束设置为
+                            sortColumns，造成一个 sortKey 键值对应的数据量很少，从而导致 TSDB 数据库数据膨胀。</p>
+                    </li>
+                </ol>
+            </div>
+        </div>
+    </article>
+    <article class="- topic/topic topic nested1" aria-labelledby="ariaid-title3" id="存储结构">
+        <h2 class="- topic/title title topictitle2" id="ariaid-title3">存储结构</h2>
+        <div class="- topic/body body">
+            <p class="- topic/p p">TSDB 存储引擎中的数据分为两部分：基线数据和增量数据。基线数据是已经被写入和存储在 LSM-Tree 中的主要数据，它们是持久的、可读取的数据，被称作 Level
+                File。增量数据是新写入的还在 Cache Engine
+                中的数据，它们在一段时间后会被合并到基线数据中。这两种数据都采用列式存储，即同一列的数据连续存储在一起，不同列的数据则分开存储。数据首先按分区分组后写入 Cache
+                Engine，Cache Engine 中的数据未被压缩，当缓存的数据量达到刷盘条件时，存储到 Level File 文件中，在转储的过程中对数据进行压缩，因此
+                Level File 存储的是压缩后的数据。</p>
+            <section class="- topic/section section" id="存储结构__section_y2k_k2w_rzb" data-ofbid="存储结构__section_y2k_k2w_rzb"><h3 class="- topic/title title sectiontitle">数据压缩</h3>
+                
+                <p class="- topic/p p">对数据进行压缩，可以在通讯场景下传输更多的数据，显著地提升数据传输吞吐量。TSDB 支持无损压缩，其按照 block 的方式去组装构建索引和压缩数据，在数据从
+                    Cache Engine 写入磁盘时进行压缩。可选压缩算法：</p>
+                <ul class="- topic/ul ul" id="存储结构__ul_fzj_jcw_rzb" data-ofbid="存储结构__ul_fzj_jcw_rzb">
+                    <li class="- topic/li li">
+                        <p class="- topic/p p">默认采用 LZ4 压缩算法，适用于一般情况。LZ4主要针对重复字符进行压缩，压缩率与数据重复频率相关。如果同一列中有较多重复项，LZ4
+                            算法可以获得较高的压缩速度。但相对于 Delta 压缩算法，压缩率提升可能不太明显。</p>
+                    </li>
+                    <li class="- topic/li li">
+                        <p class="- topic/p p">zstd 压缩算法：zstd 适用于几乎所有数据类型，其压缩比高于 LZ4，但解压缩速度较 LZ4 慢约1倍。</p>
+                    </li>
+                    <li class="- topic/li li">
+                        <p class="- topic/p p">对于时间类型或者变化较小的整型数据，建议采用 Delta（delta-of-delta encoding） 压缩算法。Delta
+                            是专门针对时间戳等连续且等间隔的数据提出的算法，能够极大降低时间戳的存储空间，因此特别适合时间列的压缩。</p>
+                    </li>
+                    <li class="- topic/li li">
+                        <p class="- topic/p p">对于重复较高的字符串，可采用 SYMBOL 类型存储。系统对 SYMBOL
+                            类型数据会使用字典编码，将字符串转化为整型，减少字符串的存储空间。</p>
+                    </li>
+                </ul>
+                <p class="- topic/p p">在现实场景下，金融数据存盘的压缩率一般可达到 20% 到 30% 左右。</p>
+            </section>
+            <section class="- topic/section section" id="存储结构__section_cs3_tdw_rzb" data-ofbid="存储结构__section_cs3_tdw_rzb"><h3 class="- topic/title title sectiontitle">Level File 文件</h3><strong class="+ topic/ph hi-d/b ph b"><dfn class="- topic/term term">Level File
+                        结构</dfn></strong><p class="- topic/p p">TSDB 引擎存储的数据文件在 DolphinDB 中被称为 Level File，即 LSMTree
+                    架构中各层级的文件。Level File 内部采用了行列混存（Partition Attributes Across，简称 PAX），即数据先按照
+                    sortKey 的属性切分数据，每个 sortKey 对应的数据仍然按列存储，其中每列的数据按照固定行数划分为多个 block，并在 Level File
+                    的尾部记录这些 block 的地址及其对应的 sortKey 信息。block 是最小的查询单元，也是数据压缩的单元，其内部数据按照时间列的顺序排序。Level
+                    File 文件的结构如下：</p><figure class="- topic/fig fig fignone" id="存储结构__fig_efk_tcw_rzb" data-ofbid="存储结构__fig_efk_tcw_rzb">
+                    <img class="- topic/image image" id="存储结构__image_b4m_xcw_rzb" src="../../images/db_distr_comp/level_file_struc.png" height="59" width="435"/>
+                </figure><p class="- topic/p p">其中：</p><ul class="- topic/ul ul" id="存储结构__ul_on4_ycw_rzb" data-ofbid="存储结构__ul_on4_ycw_rzb">
+                    <li class="- topic/li li">
+                        <p class="- topic/p p">header：记录了一些保留字段、表结构以及事务相关的信息。</p>
+                    </li>
+                    <li class="- topic/li li">
+                        <p class="- topic/p p">sorted col data：按 sortKey 顺序排列，每个 sortKey 依次存储了每列的 block 数据块。</p>
+                    </li>
+                    <li class="- topic/li li">
+                        <p class="- topic/p p">zonemap：存储了数据的预聚合信息（每列每个 sortKey 对应数据的 min，max，sum，notnullcount）。</p>
+                    </li>
+                    <li class="- topic/li li">
+                        <p class="- topic/p p">indexes：sorted col data 的索引信息，记录了sortKey 个数，每个 sortKey 的记录数、每列 block
+                            数据块在文件中的偏移量信息，checksum 等。</p>
+                    </li>
+                    <li class="- topic/li li">
+                        <p class="- topic/p p">footer：存储 zonemap 的起始位置，用来定位预聚合和索引区域。</p>
+                    </li>
+                </ul><p class="- topic/p p"> Level File 的 zonemap 和 indexes 部分在查询时会加载到内存中，用于索引。</p><strong class="+ topic/ph hi-d/b ph b"><dfn class="- topic/term term">Level File
+                        层级组织</dfn></strong><p class="- topic/p p">Level File 各层级间的组织形式如下：</p><figure class="- topic/fig fig fignone" id="存储结构__fig_r2p_cdw_rzb" data-ofbid="存储结构__fig_r2p_cdw_rzb">
+                    <img class="- topic/image image" id="存储结构__image_ywx_fdw_rzb" src="../../images/db_distr_comp/Level_file.png" height="390" width="1003"/>
+                </figure><p class="- topic/p p">磁盘的 Level File 共分为 4 个层级， 即 Level 0, 1, 2, 3层。层级越高，Level File 文件大小越大，每个
+                    Level File 中数据划分的 block 大小也越大。</p><figure class="- topic/fig fig fignone" id="存储结构__fig_iqj_lwm_tzb" data-ofbid="存储结构__fig_iqj_lwm_tzb">
+                    <img class="- topic/image image" id="存储结构__image_bxm_qdw_rzb" src="../../images/db_distr_comp/level_file_disk.png"/>
+                </figure><strong class="+ topic/ph hi-d/b ph b"><dfn class="- topic/term term">Level File 合并及数据去重</dfn></strong><p class="- topic/p p">多次写入后，相同的 sortKey 的数据可能分散在不同的 Level
+                    File 里。为减少无效文件数量，TSDB
+                    引擎设计了文件合并的机制，通过合并操作（compaction）可以提高磁盘空间利用率（压缩率提升）以及提升查询性能。</p><ul class="- topic/ul ul" id="存储结构__ul_jhc_32w_rzb" data-ofbid="存储结构__ul_jhc_32w_rzb">
+                    <li class="- topic/li li"><strong class="+ topic/ph hi-d/b ph b"><dfn class="- topic/term term">合并机制</dfn></strong><p class="- topic/p p">当较低层级的 Level File 的数量超过10个或该层所有 Level File
+                            的大小超过更高一层单个 Level File 文件的大小时，系统会将这些 Level File 合并为更高一层的 Level
+                                File<strong class="+ topic/ph hi-d/b ph b">。</strong>每层 Level File 单个文件的大小参考上文的 Level File
+                            分层组织。</p><p class="- topic/p p">默认情况下，TSDB Level File
+                            文件满足合并要求时，由系统自动触发合并，对用户透明。在某些特殊情况，可能出现文件过多，却没有合并，DolphinDB
+                            也提供了函数实现手动触发合并。</p></li>
+                    <li class="- topic/li li"><strong class="+ topic/ph hi-d/b ph b"><dfn class="- topic/term term">数据去重</dfn></strong><p class="- topic/p p">TSDB 根据 sortColumns
+                            进行去重，建表时通过参数指定去重模式。包含三种去重模式：保留所有数据，仅保留最新数据，仅保留第一条数据。去重发生在写入时数据排序阶段以及
+                            Level File
+                            合并阶段。不同去重机制会对更新操作产生影响：若采用保留所有数据或仅保留第一条数据，则每次更新时都需要将分区数据读取到内存更新后再写回磁盘；若采用仅保留最新数据，则更新数据将以追加的方式写入，真正的更新操作将会在
+                            Level File 合并阶段进行。请注意：</p><ul class="- topic/ul ul" id="存储结构__ul_lhc_32w_rzb" data-ofbid="存储结构__ul_lhc_32w_rzb">
+                            <li class="- topic/li li">
+                                <p class="- topic/p p">TSDB 去重策略无法确保磁盘上无冗余，只保证查询时无冗余结果。查询时，读取各 Level File 中 sortKey
+                                    对应的数据块，在内存中去重后返回结果。</p>
+                            </li>
+                            <li class="- topic/li li">
+                                <p class="- topic/p p">DolphinDB 不支持约束。不建议将数据中的主键或唯一约束设置为 sortColumns。</p>
+                            </li>
+                        </ul></li>
+                </ul></section>
+        </div>
+    </article>
+    <article class="- topic/topic topic nested1" aria-labelledby="ariaid-title4" id="数据写入">
+        <h2 class="- topic/title title topictitle2" id="ariaid-title4">数据写入</h2>
+        <div class="- topic/body body">
+            <p class="- topic/p p">TSDB 引擎写入整体上和 OLAP 一致，都是通过两阶段协议进行提交。写入时，先写 Redo Log（每个写事务都会产生一个 Redo Log），并写入 Cache
+                Engine 缓存，最后 由后台线程异步批量写入磁盘。需要注意的是，TSDB 引擎和 OLAP 引擎各自单独维护 Redo 以及 Cache
+                Engine，用户需要通过不同的配置项去设置两个引擎的 Cache Engine 大小，分别为 OLAPCacheEngineSize 和
+                TSDBCacheEngineSize。</p>
+            <p class="- topic/p p"><strong class="+ topic/ph hi-d/b ph b"><dfn class="- topic/term term">写入流程如下：</dfn></strong></p>
+            <ol class="- topic/ol ol" id="数据写入__ol_m4x_r2w_rzb" data-ofbid="数据写入__ol_m4x_r2w_rzb">
+                <li class="- topic/li li">
+                    <p class="- topic/p p"><strong class="+ topic/ph hi-d/b ph b">写 Redo：</strong>先将数据写入 TSDB Redo Log。</p>
+                </li>
+                <li class="- topic/li li">
+                    <div class="- topic/p p"><strong class="+ topic/ph hi-d/b ph b">写 Cache Engine：</strong>写 Redo Log 的同时，将数据写入 TSDB Cache Engine 的 CacheTable，并在
+                        CacheTable 内部完成数据的排序过程。<figure class="- topic/fig fig fignone" id="数据写入__fig_rhy_s2w_rzb" data-ofbid="数据写入__fig_rhy_s2w_rzb">
+                            <img class="- topic/image image" id="数据写入__image_qhm_52w_rzb" src="../../images/db_distr_comp/TSDB_write.png" height="450" width="1422"/>
+                        </figure></div>
+                    <p class="- topic/p p">CacheTable 分为两个部分：首先是 write buffer，数据刚写入时会追加到 write buffer 的尾部，该 buffer
+                        的数据是未排序的。当 write buffer 超过 <em class="+ topic/ph hi-d/i ph i">TSDBCacheTableBufferThreshold </em>的配置值（默认
+                        16384 行），则按照 sortColumns 指定的列排序，转成一个 sorted buffer (该内存是 read only 的)，同时清空
+                        write buffer。</p>
+                </li>
+                <li class="- topic/li li">
+                    <p class="- topic/p p"><strong class="+ topic/ph hi-d/b ph b">写磁盘：</strong>若某写事务到来时，Cache Engine 中的数据累计超过了
+                        <em class="+ topic/ph hi-d/i ph i">TSDBCacheEngineSize</em>，或经过一定时间，系统将进行一次刷盘操作。</p>
+                    <ul class="- topic/ul ul" id="数据写入__ul_o4x_r2w_rzb" data-ofbid="数据写入__ul_o4x_r2w_rzb">
+                        <li class="- topic/li li">
+                            <p class="- topic/p p">刷盘前，系统会将 CacheTable 的所有数据按照 sortColumns 进行归并排序，再按分区写入磁盘 Level 0 层的
+                                Level File 文件中（大小为 32M）。</p>
+                        </li>
+                        <li class="- topic/li li">
+                            <div class="- topic/p p">刷盘时，若单个分区的数据量很大，按 32 M 拆分可能产生多个 Level File 文件（见下注1）；若单个分区写入数据量不足 32
+                                M或拆分后最后一部分数据不足 32 M，也会写为一个 Level File。由于 Level File
+                                一旦写入就是不可变的，下次写入不会向磁盘的 Level File 文件追加数据 。<div class="- topic/note note note note_note" id="数据写入__note_sns_v2w_rzb" data-ofbid="数据写入__note_sns_v2w_rzb"><span class="note__title">注：</span> 
+                                    <ol class="- topic/ol ol" type="a" id="数据写入__ol_hdp_x2w_rzb" data-ofbid="数据写入__ol_hdp_x2w_rzb">
+                                        <li class="- topic/li li">同属于一个 sortKey 值的数据不会被拆分到不同的 Level File 文件。因此实际场景我们会发现一个
+                                            Level File 的文件可能会大于 32 M，若一个 sortKey
+                                            值对应的数据量特别巨大，甚至可能达到更高！</li>
+                                        <li class="- topic/li li">可以通过设置刷盘的工作线程数配置项 <em class="+ topic/ph hi-d/i ph i">TSDBCacheFlushWorkNum</em>
+                                            来提高刷盘效率。</li>
+                                        <li class="- topic/li li">根据步骤 2，3，可以发现刷盘前数据先局部排序（sorted
+                                            buffer），再整体排序，共执行了两次排序操作。实际就是通过分治的思想，提升了排序的效率。</li>
+                                    </ol>
+                                </div></div>
+                        </li>
+                    </ul>
+                </li>
+            </ol>
+            <p class="- topic/p p">若刷盘过程中，又有新的数据写入 Cache Engine，则系统会分配新的 Cache Engine 空间来进行写入。在极端情况下，TSDB 的 Cache Engine
+                占用的内存会达到两倍的 <em class="+ topic/ph hi-d/i ph i">TSDBCacheEngineSize</em>（配置项）的指定值。在配置 TSDBCacheEngineSize 大小和
+                    <em class="+ topic/ph hi-d/i ph i">maxMemSize</em>，需要注意这一点，以免造成内存溢出的情况。</p>
+        </div>
+    </article>
+    <article class="- topic/topic topic nested1" aria-labelledby="ariaid-title5" id="数据查询">
+        <h2 class="- topic/title title topictitle2" id="ariaid-title5">数据查询</h2>
+        <div class="- topic/body body">
+            <p class="- topic/p p">相较于 OLAP 引擎，TSDB 引擎增加了索引的机制，因此更适用于点查场景，因此在配置 TSDB 引擎的 sortKey
+                字段时，可以优先考虑从频繁查询的字段中进行选取（如需了解更多 sortColumns 的设置原则，参考：<a class="- topic/xref xref" href="#topic_ahz_2gw_rzb__sortColumns_section">合理设置排序字段</a>）。</p>
+            <p class="- topic/p p"><strong class="+ topic/ph hi-d/b ph b"><dfn class="- topic/term term">查询流程如下：</dfn></strong></p>
+            <ol class="- topic/ol ol" id="数据查询__ol_h3s_2fw_rzb" data-ofbid="数据查询__ol_h3s_2fw_rzb">
+                <li class="- topic/li li">
+                    <p class="- topic/p p"><strong class="+ topic/ph hi-d/b ph b">分区剪枝：</strong>根据查询语句进行分区剪枝，缩窄查询范围。</p>
+                </li>
+                <li class="- topic/li li">
+                    <p class="- topic/p p"><strong class="+ topic/ph hi-d/b ph b">加载索引：</strong>遍历涉及到的分区下的所有 Level
+                        File，将其尾部的索引信息加载到内存中（索引信息采用惰性缓存策略，即不会在节点启动时被立即加载进内存，而是在第一次查询命中该分区时才被加载进内存）。查询命中的分区的索引信息一旦被加载到内存后，会一直缓存在内存中（除非因内存不够被置换），后续查询若涉及该分区则不会重复此步骤，而是直接从内存中读取索引信息。</p>
+                    <div class="- topic/note note note note_note" id="数据查询__note_psk_j4r_szb" data-ofbid="数据查询__note_psk_j4r_szb"><span class="note__title">注：</span> 内存中存放索引的区域大小由配置项 <em class="+ topic/ph hi-d/i ph i">TSDBLevelFileIndexCacheSize</em>
+                        决定，用户可以通过函数 <a class="- topic/xref xref" href="../../funcs/g/getLevelFileIndexCacheStats.html">getLevelFileIndexCacheStats</a>
+                        在线查询内存中的索引占用。若加载的索引大小超过了该值，内部会通过一些缓存淘汰算法进行置换，用户可配置
+                            <em class="+ topic/ph hi-d/i ph i">TSDBLevelFileIndexCacheInvalidPercent</em> 来调整缓存淘汰算法的阈值。</div>
+                </li>
+                <li class="- topic/li li">
+                    <p class="- topic/p p"><strong class="+ topic/ph hi-d/b ph b">查找内存中的数据：</strong>先搜索 TSDB Cache Engine中的数据。若数据在 write buffer 中，则采用顺序扫描的方式查找；若在
+                        sorted buffer 种，则利用其有序性，采用二分查找。</p>
+                </li>
+                <li class="- topic/li li">
+                    <p class="- topic/p p"><strong class="+ topic/ph hi-d/b ph b">查找磁盘上的数据：</strong>根据索引查找磁盘 Level File 中各查询字段的数据块，解压到内存。若查询的过滤条件包含 sortKey
+                        字段，即可根据索引加速查询。</p>
+                </li>
+                <li class="- topic/li li">
+                    <p class="- topic/p p"><strong class="+ topic/ph hi-d/b ph b">返回查询结果：</strong>合并上述两步的结果并返回。</p>
+                </li>
+            </ol>
+            <div class="- topic/p p">其中，索引流程为：<figure class="- topic/fig fig fignone" id="数据查询__fig_nzr_3fw_rzb" data-ofbid="数据查询__fig_nzr_3fw_rzb">
+                    <img class="- topic/image image" id="数据查询__image_w5n_mfw_rzb" src="../../images/db_distr_comp/index.png" height="381" width="870"/>
+                </figure></div>
+            <p class="- topic/p p">内存索引包含两个部分：sortKey 维护的 block 的偏移量信息（对应 Level File indexes 部分），zonemap 信息（对应 Level
+                File zonemap 部分）。</p>
+            <ol class="- topic/ol ol" id="数据查询__ol_xlk_4fw_rzb" data-ofbid="数据查询__ol_xlk_4fw_rzb">
+                <li class="- topic/li li">
+                    <p class="- topic/p p"><strong class="+ topic/ph hi-d/b ph b">查询 indexes 定位 sortKey：</strong>indexes 中记录了每个 Level File 中每个 sortKey 值下每个字段的
+                        block 的地址偏移量。若查询条件包含 sortKey 字段，则可以根据索引剪枝，缩窄查询范围。命中 sortKey 索引后，即可获取到对应
+                        sortKey 下所有 block 的地址偏移量信息。 </p>
+                    <p class="- topic/p p">例如，上图 sortColumns=`deviceId`location`time，查询条件 deviceId = 0，则可以快速定位到所有 Level
+                        File 中 deviceId= 0 的 sortKey 及其对应所有字段的 block 数据。</p>
+                </li>
+                <li class="- topic/li li">
+                    <p class="- topic/p p"><strong class="+ topic/ph hi-d/b ph b">根据 zonemap 定位 block：</strong>由 1 定位到 sortKey 后，系统会查询对应 sortKey 在 zonemap
+                        里的最值信息（min，max）。如果查询条件提供了 sortKey 以外的字段范围，则可以进一步过滤掉一些不在查询范围内的 block 数据。</p>
+                    <p class="- topic/p p">例如，上图 sortColumns="deviceId""location""time"，查询条件 time between 13:30 and
+                        15:00， 则可以根据 time 列的 zonemap 信息，快速定位到查询数据所在的 block 为 “block2”。系统根据该信息再去
+                        indexes 找到 block2 的地址偏移量信息，然后根据索引到的所有 Level File 的 block2 的地址，把 block
+                        数据从磁盘中读取出来，再根据去重策略过滤结果后返回给用户端。 </p>
+                </li>
+            </ol>
+        </div>
+    </article>
+    <article class="- topic/topic topic nested1" aria-labelledby="ariaid-title6" id="数据更新">
+        <h2 class="- topic/title title topictitle2" id="ariaid-title6">数据更新</h2>
+        <div class="- topic/body body">
+            <p class="- topic/p p">TSDB 引擎的更新效率取决于 keepDuplicates 参数配置的去重机制。</p>
+            <ul class="- topic/ul ul" id="数据更新__ul_h3k_qfw_rzb" data-ofbid="数据更新__ul_h3k_qfw_rzb">
+                <li class="- topic/li li">
+                    <p class="- topic/p p">keepDuplicates=ALL/FIRST 时的更新流程：</p>
+                    <ol class="- topic/ol ol" id="数据更新__ol_i3k_qfw_rzb" data-ofbid="数据更新__ol_i3k_qfw_rzb">
+                        <li class="- topic/li li">
+                            <p class="- topic/p p"><strong class="+ topic/ph hi-d/b ph b">分区剪枝：</strong>根据查询语句进行分区剪枝，缩窄查询范围。</p>
+                        </li>
+                        <li class="- topic/li li">
+                            <p class="- topic/p p"><strong class="+ topic/ph hi-d/b ph b">查到内存更新：</strong>取出对应分区所有数据到内存后，更新数据。</p>
+                        </li>
+                        <li class="- topic/li li">
+                            <p class="- topic/p p"><strong class="+ topic/ph hi-d/b ph b">写回更新后的分区数据到新目录：</strong>将更新后的数据重新写入数据库，系统会使用一个新的版本目录（默认是
+                                “物理表名_cid”）来保存更新后的分区数据，旧版本的分区数据文件将被定时回收（默认 30 min）。</p>
+                        </li>
+                    </ol>
+                </li>
+                <li class="- topic/li li">
+                    <p class="- topic/p p">keepDuplicates=LAST 时的更新流程：</p>
+                    <ol class="- topic/ol ol" id="数据更新__ol_l3k_qfw_rzb" data-ofbid="数据更新__ol_l3k_qfw_rzb">
+                        <li class="- topic/li li">
+                            <p class="- topic/p p"><strong class="+ topic/ph hi-d/b ph b">分区剪枝：</strong>根据查询语句进行分区剪枝，缩窄查询范围。</p>
+                        </li>
+                        <li class="- topic/li li">
+                            <p class="- topic/p p"><strong class="+ topic/ph hi-d/b ph b">查到内存更新：</strong>根据查询条件，查询出需要更新的数据。（查询步骤见 <a class="- topic/xref xref" href="#%E6%95%B0%E6%8D%AE%E6%9F%A5%E8%AF%A2">TSDB
+                                    数据查询</a>）</p>
+                        </li>
+                        <li class="- topic/li li">
+                            <p class="- topic/p p"><strong class="+ topic/ph hi-d/b ph b">直接以写数据的方式追加写入：</strong>更新后，直接追加写入数据库。</p>
+                        </li>
+                    </ol>
+                </li>
+            </ul>
+            <p class="- topic/p p">更新后的数据和旧的数据可能同时存储在磁盘上，但查询时，由于会按照 LAST 机制进行去重，因此可以保证不会查询出旧的数据。旧数据会在 Level File
+                合并操作时进行删除。</p>
+            <p class="- topic/p p">针对不同的数据更新需求，DolphinDB 提供 3 种更新表的方法：</p>
+            <ul class="- topic/ul ul" id="数据更新__数据更新_ul_y4g_2md_syb" data-ofbid="数据更新__数据更新_ul_y4g_2md_syb">
+                <li class="- topic/li li">
+                    <p class="- topic/p p"><a class="- topic/xref xref" href="../../progr/sql/update.html">update</a>：标准 SQL 的update语法</p>
+                </li>
+                <li class="- topic/li li">
+                    <p class="- topic/p p"><a class="- topic/xref xref" href="../../funcs/s/sqlUpdate.html">sqlUpdate</a>：动态生成 SQL update
+                        语句的元代码。</p>
+                </li>
+                <li class="- topic/li li">
+                    <p class="- topic/p p"><a class="- topic/xref xref" href="../../funcs/u/upsert_.html">upsert!</a>：用于更新键值内存表、索引内存表或分布式表。进行更新时，若新数据的主键值已存在，则更新该主键值的数据；否则添加数据。</p>
+                </li>
+            </ul>
+        </div>
+    </article>
+    <article class="- topic/topic topic nested1" aria-labelledby="ariaid-title7" id="数据删除">
+        <h2 class="- topic/title title topictitle2" id="ariaid-title7">数据删除</h2>
+        <div class="- topic/body body">
+            <p class="- topic/p p">TSDB 引擎的删除流程和 keepDuplicates=ALL/FIRST 时的更新流程基本一致，即按分区取数，删除后写入一个新版本的目录。</p>
+            <p class="- topic/p p"><strong class="+ topic/ph hi-d/b ph b">具体流程：</strong></p>
+            <ol class="- topic/ol ol" id="数据删除__ol_bl5_rfw_rzb" data-ofbid="数据删除__ol_bl5_rfw_rzb">
+                <li class="- topic/li li">
+                    <p class="- topic/p p"><strong class="+ topic/ph hi-d/b ph b">分区剪枝：</strong>根据查询语句进行分区剪枝，缩窄查询范围。</p>
+                </li>
+                <li class="- topic/li li">
+                    <p class="- topic/p p"><strong class="+ topic/ph hi-d/b ph b">查到内存删除：</strong>取出对应分区所有数据到内存后，根据条件删除数据。</p>
+                </li>
+                <li class="- topic/li li">
+                    <p class="- topic/p p"><strong class="+ topic/ph hi-d/b ph b">写回删除后的分区数据到新目录：</strong>将删除后的数据重新写入数据库，系统会使用一个新的 CHUNK 目录（默认是
+                        “物理表名_cid”）来保存写入的数据，旧的文件将被定时回收（默认 30 min）。</p>
+                </li>
+            </ol>
+            <div class="- topic/note note note note_note" id="数据删除__note_hpd_5fw_rzb" data-ofbid="数据删除__note_hpd_5fw_rzb"><span class="note__title">注：</span> 
+                <ol class="- topic/ol ol" id="数据删除__ol_osf_xhf_tzb" data-ofbid="数据删除__ol_osf_xhf_tzb">
+                    
+                    <li class="- topic/li li">
+                        <p class="- topic/p p">更新操作（keepDuplicates=ALL /
+                            FIRST）和删除操作是按分区全量修改，因此需要确保每次更新删除操作涉及分区总大小不会超过系统的可用内存大小，否正会造成内存溢出。</p>
+                    </li>
+                    <li class="- topic/li li">
+                        <p class="- topic/p p">更新操作（keepDuplicates=LAST）是按照直接追加的方式增量修改，更新效率更高，若业务场景需要高频更新，可以配置此策略。</p>
+                    </li>
+                </ol>
+            </div>
+            <p class="- topic/p p">针对不同的数据删除需求，DolphinDB 提供以下方法删除数据：</p>
+            <ul class="- topic/ul ul" id="数据删除__ul_hq3_wtq_szb" data-ofbid="数据删除__ul_hq3_wtq_szb">
+                <li class="- topic/li li">
+                    <p class="- topic/p p">dropPartition：删除整个分区的数据，不保留分区结构。</p>
+                </li>
+                <li class="- topic/li li">
+                    <p class="- topic/p p">delete：删除分区的数据，保留分区结构。</p>
+                </li>
+                <li class="- topic/li li">
+                    <p class="- topic/p p">sqlDelete：动态生成 SQL delete 语句。</p>
+                </li>
+                <li class="- topic/li li">
+                    <p class="- topic/p p">dropTable：删除整个表的数据，不保留表结构。</p>
+                </li>
+                <li class="- topic/li li">
+                    <p class="- topic/p p">truncate：删除整个表的数据，保留表结构。</p>
+                </li>
+            </ul>
+        </div>
+    </article>
+    <article class="- topic/topic topic nested1" aria-labelledby="ariaid-title8" id="特点">
+        <h2 class="- topic/title title topictitle2" id="ariaid-title8">TSDB引擎特点</h2>
+        <div class="- topic/body body">
+            <ul class="- topic/ul ul" id="特点__ul_jrm_54d_syb" data-ofbid="特点__ul_jrm_54d_syb">
+                <li class="- topic/li li" id="特点__li_krm_54d_syb" data-ofbid="特点__li_krm_54d_syb">过滤条件使用分区列以及分区内排序字段的点查询非常高效。</li>
+                <li class="- topic/li li" id="特点__li_lrm_54d_syb" data-ofbid="特点__li_lrm_54d_syb">可以在写入时对数据进行排序和去重。</li>
+                <li class="- topic/li li" id="特点__li_mrm_54d_syb" data-ofbid="特点__li_mrm_54d_syb">适合存储几百几千列的宽表，也适合存储 array
+                    vector 和 BLOB 类型的数据。</li>
+                <li class="- topic/li li" id="特点__li_nrm_54d_syb" data-ofbid="特点__li_nrm_54d_syb">若指定去重时保留最后一条记录（设置 keepDuplicates=LAST），则修改数据时重写数据所在 Level
+                    File 即可，不需要重写整个分区。</li>
+                <li class="- topic/li li" id="特点__li_orm_54d_syb" data-ofbid="特点__li_orm_54d_syb">写入吞吐量低。TSDB 引擎中，数据需在 Cache Engine 中进行排序；Level File
+                    会进行合并与压缩。</li>
+                <li class="- topic/li li" id="特点__li_prm_54d_syb" data-ofbid="特点__li_prm_54d_syb">可以在写入时对数据进行排序和去重。</li>
+                <li class="- topic/li li" id="特点__li_qrm_54d_syb" data-ofbid="特点__li_qrm_54d_syb">读取整个分区数据或整个分区的某几列数据时，效率低于 OLAP。</li>
+            </ul>     
+        </div>
+    </article>
+    <article class="- topic/topic topic nested1" aria-labelledby="ariaid-title9" id="topic_ahz_2gw_rzb">
+        <h2 class="- topic/title title topictitle2" id="ariaid-title9">TSDB 引擎使用示例</h2>
+        <div class="- topic/body body">
+            <section class="- topic/section section" id="topic_ahz_2gw_rzb__section_mxm_hgw_rzb" data-ofbid="topic_ahz_2gw_rzb__section_mxm_hgw_rzb"><h3 class="- topic/title title sectiontitle">数据库部署</h3>
+                
+                <p class="- topic/p p">在使用 TSDB 引擎前，可以按需调整系统的配置项，以充分发挥系统的性能。本节主要介绍其中几个重点参数：</p>
+                <ul class="- topic/ul ul" id="topic_ahz_2gw_rzb__ul_o5s_3gw_rzb" data-ofbid="topic_ahz_2gw_rzb__ul_o5s_3gw_rzb">
+                    <li class="- topic/li li">
+                        <p class="- topic/p p">TSDBRedoLogDir：为了提高写入效率，建议将 TSDB redo log 配置在 SSD 盘。</p>
+                    </li>
+                    <li class="- topic/li li">
+                        <p class="- topic/p p">TSDBCacheEngineSize：默认是 1G，写入压力较大的场景可以适当调大该值。</p>
+                        <ul class="- topic/ul ul" id="topic_ahz_2gw_rzb__ul_p5s_3gw_rzb" data-ofbid="topic_ahz_2gw_rzb__ul_p5s_3gw_rzb">
+                            <li class="- topic/li li">
+                                <p class="- topic/p p">若设置过小，可能导致 cache engine 频繁刷盘，影响系统性能；</p>
+                            </li>
+                            <li class="- topic/li li">
+                                <p class="- topic/p p">若设置过大，由于 cache engine 内缓存的数据量很大，但由于未达到 cache engine
+                                    的大小（且未达到十分钟），因此数据尚未刷盘，此时若发生了机器断电或关机，重启后就需要回放大量事务，导致系统启动过慢。</p>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="- topic/li li">
+                        <p class="- topic/p p">TSDBLevelFileIndexCacheSize：默认是 5% * maxMemSize，该配置项确定了索引数据（Level File
+                            indexes 和 zonemap）的上限，若配置过小，会造成索引频繁置换。在索引部分，较占内存空间的是 zonemap 部分，用户可以根据
+                            “分区数量 × sortKey 数量 × （4 × 各字段字节数的和）” 估算 zonemap 所占内存大小。其中， 4 表示 4 种预聚合指标
+                            min，max，sum，notnullcount）。</p>
+                    </li>
+                    <li class="- topic/li li">
+                        <p class="- topic/p p">TSDBAsyncSortingWorkerNum：非负整数，默认值为1，用于指定 TSDB cache engine 异步排序的工作线程数。在
+                            CPU 资源充足的情况下，可以适当增大该值，以提高写入性能。</p>
+                    </li>
+                    <li class="- topic/li li">
+                        <p class="- topic/p p">TSDBCacheFlushWorkNum：TSDB cache engine 刷盘的工作线程数，默认值是 volumes
+                            指定的磁盘卷数。若配置值小于磁盘卷数，则仍取默认值。通常无需修改此配置。</p>
+                    </li>
+                </ul>
+            </section>
+            <section class="- topic/section section" id="topic_ahz_2gw_rzb__section_cns_jgw_rzb" data-ofbid="topic_ahz_2gw_rzb__section_cns_jgw_rzb"><h3 class="- topic/title title sectiontitle">创建数据库</h3>
+                
+                <p class="- topic/p p">下述脚本以创建一个组合分区的数据库为例，和 OLAP 引擎创库时的区别仅在于 engine 设置不同：</p>
+                <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="topic_ahz_2gw_rzb__codeblock_ehy_kgw_rzb" data-ofbid="topic_ahz_2gw_rzb__codeblock_ehy_kgw_rzb"><code>dbName="dfs://test_tsdb"
+db1 = database(, VALUE, 2020.01.01..2021.01.01)
+db2 = database(, HASH, [SYMBOL, 100])
+db = database(directory=dbName, partitionType=COMPO, partitionScheme=[db1, db2], engine="TSDB")</code></pre>
+                <ul class="- topic/ul ul" id="topic_ahz_2gw_rzb__ul_fhy_kgw_rzb" data-ofbid="topic_ahz_2gw_rzb__ul_fhy_kgw_rzb">
+                    <li class="- topic/li li">
+                        <p class="- topic/p p"><strong class="+ topic/ph hi-d/b ph b">库表对应关系：</strong>设计分布式数据库时，若存储的是分布式表，推荐一库一表，因为对于不同的表按照同一分区方案进行分区，可能造成每个分区的数据量不合理；若存储的是维度表，推荐一库多表，集中管理，因为维度表只有一个分区，且一次加载常驻内存。</p>
+                    </li>
+                    <li class="- topic/li li">
+                        <p class="- topic/p p"><strong class="+ topic/ph hi-d/b ph b">分区设计：</strong></p>
+                        <ul class="- topic/ul ul" id="topic_ahz_2gw_rzb__ul_ghy_kgw_rzb" data-ofbid="topic_ahz_2gw_rzb__ul_ghy_kgw_rzb">
+                            <li class="- topic/li li">
+                                <p class="- topic/p p"><strong class="+ topic/ph hi-d/b ph b">TSDB 引擎单个分区推荐大小</strong>： 400MB - 1GB（压缩前）</p>
+                                <p class="- topic/p p">分布式查询按照分区加载数据进行并行计算（包括查询、删除、修改等操作），若分区粒度过大，可能会造成内存不足、查询并行度降低、更新删除效率降低等问题；若分区粒度过小，可能会产生大量子任务增加节点负荷、大量小文件独写增加系统负荷、控制节点元数据爆炸等问题。</p>
+                            </li>
+                            <li class="- topic/li li">
+                                <p class="- topic/p p"><strong class="+ topic/ph hi-d/b ph b">分区设计步骤：</strong></p>
+                                <ol class="- topic/ol ol" id="topic_ahz_2gw_rzb__ol_hhy_kgw_rzb" data-ofbid="topic_ahz_2gw_rzb__ol_hhy_kgw_rzb">
+                                    <li class="- topic/li li">
+                                        <p class="- topic/p p">以推荐大小作为参照，先根据表中的记录数和每个字段的大小估算数据量，再根据分区方案计算的分区数（如天+股票HASH10
+                                            的组合分区，可以按天数 * 10），通过数据量/分区数计算得到每个分区的大小。</p>
+                                    </li>
+                                    <li class="- topic/li li">
+                                        <p class="- topic/p p">若分区粒度不合理，调整分区粒度可以参考以下方案：</p>
+                                        <ul class="- topic/ul ul" id="topic_ahz_2gw_rzb__ul_ihy_kgw_rzb" data-ofbid="topic_ahz_2gw_rzb__ul_ihy_kgw_rzb">
+                                            <li class="- topic/li li">
+                                                <p class="- topic/p p">粒度过小：若采用了值分区可以考虑改成范围分区，例如按天改成按月；若采用了 HASH
+                                                  分区，可以考虑改小 HASH 分区数。</p>
+                                            </li>
+                                            <li class="- topic/li li">
+                                                <p class="- topic/p p">粒度过大：若采用了范围分区可以考虑改成值分区，例如按年改成按月；若采用了 HASH
+                                                  分区，可以考虑改大 HASH 分区数；若是一级分区，可以考虑用组合分区，此时新增一级通常是 HASH
+                                                  分区，例按天单分区，粒度过大，考虑二级按股票代码 HASH 分区。</p>
+                                            </li>
+                                        </ul>
+                                    </li>
+                                </ol>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+                <p class="- topic/p p">合理设置分区至关重要，如需了解详细的分区机制和如何设计合理的分区，可参见<a class="- topic/xref xref" href="../../tutorials/database.html">数据库分区</a>。</p>
+                <ul class="- topic/ul ul" id="topic_ahz_2gw_rzb__ul_hyd_qgw_rzb" data-ofbid="topic_ahz_2gw_rzb__ul_hyd_qgw_rzb">
+                    <li class="- topic/li li">
+                        <p class="- topic/p p"><strong class="+ topic/ph hi-d/b ph b">是否允许并发写入同一分区：</strong>　</p>
+                        <p class="- topic/p p">此外，为了支持用户多线程能够并发写数据且不会因写入分区冲突而失败，DolphinDB 在创建数据库时支持了一个特殊的配置参数
+                            atomic（该参数是 OLAP 和 TSDB 引擎共有参数）：</p>
+                        <ul class="- topic/ul ul" id="topic_ahz_2gw_rzb__ul_iyd_qgw_rzb" data-ofbid="topic_ahz_2gw_rzb__ul_iyd_qgw_rzb">
+                            <li class="- topic/li li">
+                                <p class="- topic/p p">默认为 ‘TRANS'，即不允许并发写入同一个 CHUNK 分区；</p>
+                            </li>
+                            <li class="- topic/li li">
+                                <p class="- topic/p p">设置为
+                                    ‘CHUNK'，则允许多线程并发写入同一分区。系统内部仍会串行执行写入任务，当一个线程正在写入某个分区时，其他写入该分区的线程检测到冲突会不断尝试重新写入。尝试
+                                    250 次（每次尝试间隔时间会随着尝试次数增加而增加，上限是 1s，整个尝试过程约持续 5
+                                    分钟）后仍然无法写入，则会写入失败。atomic='CHUNK'
+                                    配置可能会破坏事务的原子性，因为若某线程冲突重试达到上限后仍失败，则该部分数据将会丢失，需要谨慎设置。</p>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+                <p class="- topic/p p">实际场景下，若设置为 'CHUNK' 发生数据丢失，用户可能难以定位到具体的分区，针对该场景有几个较推荐的方案：</p>
+                <ol class="- topic/ol ol" id="topic_ahz_2gw_rzb__ol_jyd_qgw_rzb" data-ofbid="topic_ahz_2gw_rzb__ol_jyd_qgw_rzb">
+                    <li class="- topic/li li">
+                        <p class="- topic/p p">使用 tableInsert
+                            写入，该函数会返回写入数据的记录数，根据记录数可以定位到写入失败的线程任务，若线程涉及的分区没有重叠，可以删除相关分区数据后重新写入。</p>
+                    </li>
+                    <li class="- topic/li li">
+                        <p class="- topic/p p">若使用 TSDB 引擎，且去重策略设置为了 FIRST 或者
+                            LAST，则直接重复提交写入失败的线程任务，系统会进行去重，查询时不会读出重复数据。不适用于去重策略为 ALL 的场景，若为 ALL，则参照方案
+                            1。</p>
+                    </li>
+                </ol>
+            </section>
+            <section class="- topic/section section" id="topic_ahz_2gw_rzb__section_tzf_rgw_rzb" data-ofbid="topic_ahz_2gw_rzb__section_tzf_rgw_rzb"><h3 class="- topic/title title sectiontitle">创建数据表</h3>
+                
+                <p class="- topic/p p">创建分布式表/维度表时，与 OLAP 引擎不同， TSDB 需要额外设置 sortColumns 这个必选参数，以及 keepDuplicates,
+                    sortKeyMappingFunction 这两个可选参数。</p>
+                <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="topic_ahz_2gw_rzb__codeblock_fmb_sgw_rzb" data-ofbid="topic_ahz_2gw_rzb__codeblock_fmb_sgw_rzb"><code>// 通过函数创建
+createPartitionedTable(dbHandle, table, tableName, [partitionColumns],
+          [compressMethods], [sortColumns], [keepDuplicates=ALL], [sortKeyMappingFunction])
+ // 通过标准 SQL 创建
+create table dbPath.tableName (
+     schema[columnDescription] 
+) 
+[partitioned by partitionColumns],
+[sortColumns], [keepDuplicates=ALL],
+[sortKeyMappingFunction]</code></pre>
+                <p class="- topic/p p">这里以通过函数创建一个 TSDB 下的分布式表为例：</p>
+                <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="topic_ahz_2gw_rzb__codeblock_gmb_sgw_rzb" data-ofbid="topic_ahz_2gw_rzb__codeblock_gmb_sgw_rzb"><code>tbName="pt1"
+colName = "SecurityID""TradeDate""TradeTime""TradePrice""TradeQty""TradeAmount""BuyNo""SellNo"
+colType = "SYMBOL""DATE""TIME""DOUBLE""INT""DOUBLE""INT""INT" 
+tbSchema = table(1:0, colName, colType) 
+db.createPartitionedTable(table=tbSchema, tableName=tbName,
+partitionColumns="TradeDate""SecurityID", compressMethods={TradeTime:"delta"}, sortColumns="SecurityID""TradeDate""TradeTime", keepDuplicates=ALL)</code></pre>
+                <ul class="- topic/ul ul" id="topic_ahz_2gw_rzb__ul_hmb_sgw_rzb" data-ofbid="topic_ahz_2gw_rzb__ul_hmb_sgw_rzb">
+                    <li class="- topic/li li">
+                        <p class="- topic/p p"><strong class="+ topic/ph hi-d/b ph b"><dfn class="- topic/term term">根据字段选择恰当的压缩算法（compressMethods）</dfn></strong>：</p>
+                        <ul class="- topic/ul ul" id="topic_ahz_2gw_rzb__ul_imb_sgw_rzb" data-ofbid="topic_ahz_2gw_rzb__ul_imb_sgw_rzb">
+                            <li class="- topic/li li">
+                                <p class="- topic/p p">对重复较高的字符串，使用 SYMBOL 类型存储。需要注意单个分区下 SYMBOL 字段的唯一值数不能超过
+                                        2<sup class="+ topic/ph hi-d/sup ph sup">21</sup>(2097152) 个，否则会抛异常，见<a class="- topic/xref xref" href="../../error_codes/S00003.html">S00003</a>。</p>
+                            </li>
+                            <li class="- topic/li li">
+                                <p class="- topic/p p">对时序数据或顺序数据（整型）可以使用 delta （即 delta-of-delta
+                                        encoding）算法存储，压缩性能测试可以参考<a class="- topic/xref xref" href="../../tutorials/iot_examples.html">物联网应用范例</a>。</p>
+                            </li>
+                            <li class="- topic/li li">
+                                <p class="- topic/p p">其余默认 lz4 压缩算法。</p>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="- topic/li li" id="topic_ahz_2gw_rzb__sortColumns_section" data-ofbid="topic_ahz_2gw_rzb__sortColumns_section">
+                        <p class="- topic/p p"><strong class="+ topic/ph hi-d/b ph b"><dfn class="- topic/term term">合理设置排序字段（sortColumns）</dfn></strong>：</p>
+                        <ul class="- topic/ul ul" id="topic_ahz_2gw_rzb__ul_jmb_sgw_rzb" data-ofbid="topic_ahz_2gw_rzb__ul_jmb_sgw_rzb">
+                            <li class="- topic/li li">
+                                <p class="- topic/p p">确保一个分区的 sortKey 的组合数小于 1000。</p>
+                                <p class="- topic/p p">通常金融场景下会以 SecurityID+时间戳的组合、物联网场景下会以 deviceID+时间戳的组合来作为
+                                    sortColumns。</p>
+                                <p class="- topic/p p">在 <a class="- topic/xref xref" href="#%E5%AD%98%E5%82%A8%E7%BB%93%E6%9E%84__section_cs3_tdw_rzb">Level File 文件</a>
+                                    中提及，Level File 的每个 sortKey 都对应存储了许多索引信息，因此在数据量固定的情况下，如果 sortKey
+                                    的数量过多，元数据也会变多。极端场景下，数据库可能会膨胀 50 倍！因此不推荐把主键或唯一约束设置为
+                                    sortColumns。</p>
+                            </li>
+                            <li class="- topic/li li">
+                                <p class="- topic/p p">建议把查询频率高的字段作为 <em class="+ topic/ph hi-d/i ph i">sortColumns</em>中的前置列。</p>
+                                <p class="- topic/p p">索引键值是 sortKey 的组合值，查询时，如果过滤条件中包含 sortKey 字段，即可以快速定位索引，从而快速定位到数据块
+                                    block 加速查询。</p>
+                                <p class="- topic/p p">因为索引键在内存中是按照其组合值排序的，如果将频繁查询的字段前置，则若查询语句中包含前置的字段，则定位索引时可以通过二分查找进行加速，否则系统会对内存中的索引进行遍历。</p>
+                            </li>
+                            <li class="- topic/li li">
+                                <p class="- topic/p p">如果 sortColumns 只有一列，该列将作为 sortKey，块内数据是无序的。因此，对于每个 sortKey
+                                    需要遍历内部的每一个 block；如果 sortColumns 有多列，则除最后一列外的作为索引列 sortKey
+                                    ，最后一列必须是时间列，block 内部按时间排序，如果查询条件指定了时间列，可以无需对每个 sortKey 下的 block
+                                    进行遍历。</p>
+                            </li>
+                            <li class="- topic/li li">
+                                <p class="- topic/p p">类型限制：sortColumns 只支持 integer, temporal, string 或 symbol
+                                    类型；sortKey 不能为为 TIME, TIMESTAMP, NANOTIME, NANOTIMESTAMP 类型。</p>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="- topic/li li">
+                        <p class="- topic/p p"><strong class="+ topic/ph hi-d/b ph b"><dfn class="- topic/term term">索引降维（sortKeyMappingFunction）</dfn></strong>：</p>
+                        <p class="- topic/p p">如果单纯的依靠合理配置 sortColumns 仍然不能降低每个分区的 sortKey 数量，则可以通过指定该参数进行降维。</p>
+                        <p class="- topic/p p">例如： 5000 只股票，按照日期分区，设置股票代码和时间戳为 sortColumns，每个分区 sortKey 组合数约为
+                            5000，不满足每个分区 sortKey 组合数不超过 1000 的原则，则可以通过指定
+                            sortKeyMappingFunction=[hashBucket{, 500}] 进行降维，使每个分区的 sortKey 组合数降为
+                            500。</p>
+                        <ul class="- topic/ul ul" id="topic_ahz_2gw_rzb__ul_kmb_sgw_rzb" data-ofbid="topic_ahz_2gw_rzb__ul_kmb_sgw_rzb">
+                            <li class="- topic/li li">
+                                <p class="- topic/p p">降维是对每个 sortKey 的字段进行的，因此有几个 sortKey 字段就需要指定几个降维函数。</p>
+                            </li>
+                            <li class="- topic/li li">
+                                <p class="- topic/p p">常用的降维函数是 hashBucket，即进行哈希映射。</p>
+                            </li>
+                            <li class="- topic/li li">
+                                <p class="- topic/p p">降维后可以通过 <a class="- topic/xref xref" href="../../funcs/g/getTSDBSortKeyEntry.html">getTSDBSortKeyEntry</a> 查询每个分区的 sortKey
+                                    信息。</p>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="- topic/li li">
+                        <p class="- topic/p p"><strong class="+ topic/ph hi-d/b ph b"><dfn class="- topic/term term">数据去重（keepDuplicates）</dfn></strong>：</p>
+                        <ul class="- topic/ul ul" id="topic_ahz_2gw_rzb__ul_lmb_sgw_rzb" data-ofbid="topic_ahz_2gw_rzb__ul_lmb_sgw_rzb">
+                            <li class="- topic/li li">
+                                <p class="- topic/p p">对同一个时间点产生多条数据，需要去重的场景，可以根据业务需要设置 keepDuplicates=FIRST/LAST，分别对应每个
+                                    sortColumns 保留第一条还是最后一条数据。</p>
+                            </li>
+                            <li class="- topic/li li">
+                                <p class="- topic/p p">若对去重策略没有要求，则可以根据以下需求进行评估，以设置去重策略：</p>
+                                <ul class="- topic/ul ul" id="topic_ahz_2gw_rzb__ul_mmb_sgw_rzb" data-ofbid="topic_ahz_2gw_rzb__ul_mmb_sgw_rzb">
+                                    <li class="- topic/li li">
+                                        <p class="- topic/p p">高频更新：建议指定 keepDuplicates=LAST，因为 LAST
+                                                采用追加更新的方式效率更高，见<a class="- topic/xref xref" href="#%E6%95%B0%E6%8D%AE%E6%9B%B4%E6%96%B0">数据更新</a>。</p>
+                                    </li>
+                                    <li class="- topic/li li">
+                                        <p class="- topic/p p">查询性能：较推荐使用 keepDuplicates=ALL，因为其他去重策略查询时有额外的去重开销。</p>
+                                    </li>
+                                    <li class="- topic/li li">
+                                        <p class="- topic/p p">atomic=CHUNK：推荐使用
+                                            keepDuplicates=FIRST/LAST，若并发写入失败，直接重复写入即可，无需删除数据再写。</p>
+                                    </li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </section>
+        </div>
+    </article>
+</article></main></div>
+                        
+                        
+                        
+                        
+                        
+                        
+                    </div>
+                    
+                        <nav role="navigation" id="wh_topic_toc" aria-label="On this page" class="col-lg-2 d-none d-lg-block navbar d-print-none"> 
+                            <div id="wh_topic_toc_content">
+		                        
+	                            <div class=" wh_topic_toc "><div class="wh_topic_label">在本页上</div><ul><li class="topic-item"><a href="#redo-log%E5%92%8Ccache-engine" data-tocid="redo-log和cache-engine">排序列</a></li><li class="topic-item"><a href="#%E5%AD%98%E5%82%A8%E7%BB%93%E6%9E%84" data-tocid="存储结构">存储结构</a><ul><li class="section-item"><div class="section-title"><a href="#%E5%AD%98%E5%82%A8%E7%BB%93%E6%9E%84__section_y2k_k2w_rzb" data-tocid="存储结构__section_y2k_k2w_rzb">数据压缩</a></div></li><li class="section-item"><div class="section-title"><a href="#%E5%AD%98%E5%82%A8%E7%BB%93%E6%9E%84__section_cs3_tdw_rzb" data-tocid="存储结构__section_cs3_tdw_rzb">Level File 文件</a></div></li></ul></li><li class="topic-item"><a href="#%E6%95%B0%E6%8D%AE%E5%86%99%E5%85%A5" data-tocid="数据写入">数据写入</a></li><li class="topic-item"><a href="#%E6%95%B0%E6%8D%AE%E6%9F%A5%E8%AF%A2" data-tocid="数据查询">数据查询</a></li><li class="topic-item"><a href="#%E6%95%B0%E6%8D%AE%E6%9B%B4%E6%96%B0" data-tocid="数据更新">数据更新</a></li><li class="topic-item"><a href="#%E6%95%B0%E6%8D%AE%E5%88%A0%E9%99%A4" data-tocid="数据删除">数据删除</a></li><li class="topic-item"><a href="#%E7%89%B9%E7%82%B9" data-tocid="特点">TSDB引擎特点</a></li><li class="topic-item"><a href="#topic_ahz_2gw_rzb" data-tocid="topic_ahz_2gw_rzb">TSDB 引擎使用示例</a><ul><li class="section-item"><div class="section-title"><a href="#topic_ahz_2gw_rzb__section_mxm_hgw_rzb" data-tocid="topic_ahz_2gw_rzb__section_mxm_hgw_rzb">数据库部署</a></div></li><li class="section-item"><div class="section-title"><a href="#topic_ahz_2gw_rzb__section_cns_jgw_rzb" data-tocid="topic_ahz_2gw_rzb__section_cns_jgw_rzb">创建数据库</a></div></li><li class="section-item"><div class="section-title"><a href="#topic_ahz_2gw_rzb__section_tzf_rgw_rzb" data-tocid="topic_ahz_2gw_rzb__section_tzf_rgw_rzb">创建数据表</a></div></li></ul></li></ul></div>
+	                        	
+                        	</div>
+                        </nav>
+                    
+                </div>
+            </div>
+            
+            
+            
+        </div> 
+        <footer class="navbar navbar-default wh_footer">
+  <div class=" footer-container mx-auto ">
+<title>Copyright</title><p><b> ©2024 浙江智臾科技有限公司 浙ICP备18048711号-3</b></p>
+  </div>
+</footer>
+        
+        <div id="go2top" class="d-print-none">
+            <span class="oxy-icon oxy-icon-up"></span>
+        </div>
+        
+        <div id="modal_img_large" class="modal">
+            <span class="close oxy-icon oxy-icon-remove"></span>
+            <div id="modal_img_container"></div>
+            <div id="caption"></div>
+        </div>
+        
+        
+        
+    </body>
+</html>

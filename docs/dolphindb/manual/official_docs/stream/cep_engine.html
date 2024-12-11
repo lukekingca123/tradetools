@@ -1,0 +1,408 @@
+<!DOCTYPE html><html xmlns="http://www.w3.org/1999/xhtml" xml:lang="zh" lang="zh" data-whc_version="26.0">
+    <head><link rel="shortcut icon" href="../favicon.ico"/><link rel="icon" href="../favicon.ico"/><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><meta http-equiv="X-UA-Compatible" content="IE=edge"/><meta name="description" content="语法 createCEPEngine(name, monitors, dummyTable, eventSchema, [deserializeParallelism=1], [timeColumn], [eventQueueDepth=1024], [outputTable], [dispatchKey], [dispatchBucket], [useSystemTime=true]) 参数 ..."/><meta name="DC.rights.owner" content="(C) 版权 2024"/><meta name="copyright" content="(C) 版权 2024"/><meta name="generator" content="DITA-OT"/><meta name="DC.type" content="topic"/><meta name="DC.coverage" content=""/><meta name="DC.relation" content="../stream/cep.html"/><meta name="prodname" content="DolphinDB"/><meta name="brand" content="DolphinDB"/><meta name="DC.creator" content="DolphinDB"/><meta name="DC.publisher" content="DDB N/A DDB 200"/><meta name="DC.format" content="HTML5"/><meta name="DC.identifier" content="cep_engine"/><title>CEP 引擎</title><!--  Generated with Oxygen version 26.0, build number 2024012323.  --><meta name="wh-path2root" content="../"/><meta name="wh-toc-id" content="cep_engine-d9529e5626"/><meta name="wh-source-relpath" content="stream/cep_engine.dita"/><meta name="wh-out-relpath" content="stream/cep_engine.html"/>
+
+    <link rel="stylesheet" type="text/css" href="../oxygen-webhelp/app/commons.css?buildId=2024012323"/>
+    <link rel="stylesheet" type="text/css" href="../oxygen-webhelp/app/topic.css?buildId=2024012323"/>
+
+    <script src="../oxygen-webhelp/app/options/properties.js?buildId=20240704100525"></script>
+    <script src="../oxygen-webhelp/app/localization/strings.js?buildId=2024012323"></script>
+    <script src="../oxygen-webhelp/app/search/index/keywords.js?buildId=20240704100525"></script>
+    <script defer="defer" src="../oxygen-webhelp/app/commons.js?buildId=2024012323"></script>
+    <script defer="defer" src="../oxygen-webhelp/app/topic.js?buildId=2024012323"></script>
+<link rel="stylesheet" type="text/css" href="../oxygen-webhelp/template/styles.css?buildId=2024012323"/><script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script><script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script></head>
+
+    <body id="cep_engine" class="wh_topic_page frmBody">
+        <a href="#wh_topic_body" class="sr-only sr-only-focusable">
+            跳转到主要内容
+        </a>
+        
+        
+        
+        
+        <header class="navbar navbar-default wh_header">
+    <div class="container-fluid">
+        <div xmlns:whc="http://www.oxygenxml.com/webhelp/components" class="wh_header_flex_container navbar-nav navbar-expand-md navbar-dark">
+            <div class="wh_logo_and_publication_title_container">
+                <div class="wh_logo_and_publication_title">
+                    
+                    <a href="https://www.dolphindb.cn" class=" wh_logo d-none d-sm-block "><img src="../logo.png" alt="  DolphinDB 文档中心  "/></a>
+                    <div class=" wh_publication_title "><a href="../index.html"><span class="booktitle">  <span class="ph mainbooktitle">DolphinDB 文档中心</span>  </span></a></div>
+                    
+                </div>
+                
+                
+            </div>
+
+            <div class="wh_top_menu_and_indexterms_link collapse navbar-collapse" id="wh_top_menu_and_indexterms_link">
+                
+                
+                
+                
+            </div>
+        <div class=" wh_search_input navbar-form wh_topic_page_search search " role="form">
+            
+            
+            
+            <form id="searchForm" method="get" role="search" action="../search.html"><div><input type="search" placeholder="搜索 " class="wh_search_textfield" id="textToSearch" name="searchQuery" aria-label="搜索查询" required="required"/><button type="submit" class="wh_search_button" aria-label="搜索"><span class="search_input_text">搜索</span></button></div></form>
+            
+            <script src="/vendors/react/umd/react.production.min.js" defer="defer"></script>
+<script src="/vendors/react-dom/umd/react-dom.production.min.js" defer="defer"></script>
+<script src="/vendors/dayjs/dayjs.min.js" defer="defer"></script>
+<script src="/vendors/antd/dist/antd.min.js" defer="defer"></script>
+<script src="/vendors/@ant-design/icons/dist/index.umd.min.js" defer="defer"></script>
+<script src="/zh/index.js" type="module"></script>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js" defer="defer"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML" defer="defer"><!--
+
+
+--></script>
+
+            
+        </div></div>
+    </div>
+</header>
+        
+        
+         
+        
+        
+        
+        <div class="container-fluid" id="wh_topic_container">
+            <div class="row">
+
+                <nav class="wh_tools d-print-none navbar-expand-md" aria-label="Tools">
+                    
+                    <div data-tooltip-position="bottom" class=" wh_breadcrumb "><ol class="d-print-none"><li><span class="home"><a href="../index.html"><span>主页</span></a></span></li><li><div class="topicref" data-id="chap7_tutorials_streaming"><div class="title"><a href="../stream/str_intro.html"><span class="keyword label">流数据</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 流数据引擎及流数据计算的基本概念</p></div></div></div></li><li><div class="topicref" data-id="cep"><div class="title"><a href="../stream/cep.html">复杂事件处理（CEP）引擎</a></div></div></li><li class="active"><div class="topicref" data-id="cep_engine"><div class="title"><a href="../stream/cep_engine.html">CEP 引擎</a></div></div></li></ol></div>
+                    
+                    
+                    
+                    <div class="wh_right_tools">
+                        <button class="wh_hide_highlight" aria-label="切换搜索突出显示" title="切换搜索突出显示"></button>
+                        <button class="webhelp_expand_collapse_sections" data-next-state="collapsed" aria-label="折叠截面" title="折叠截面"></button>
+                        
+                        
+                        
+                        
+                        <div class=" wh_print_link print d-none d-md-inline-block "><button onClick="window.print()" title="打印此页" aria-label="打印此页"></button></div>
+                        
+                        <button type="button" id="wh_toc_button" class="custom-toggler navbar-toggler collapsed wh_toggle_button navbar-light" aria-expanded="false" aria-label="Toggle publishing table of content" aria-controls="wh_publication_toc">
+                            <span class="navbar-toggler-icon"></span>
+                        </button>
+                    </div>
+                    
+                </nav>
+            </div>
+            
+            
+            
+            
+            <div class="wh_content_area">
+                <div class="row">
+                    
+                        <nav id="wh_publication_toc" class="col-lg-3 col-md-3 col-sm-12 d-md-block d-none d-print-none" aria-label="Table of Contents Container">
+                            <div id="wh_publication_toc_content">
+		                        
+                            	<div class=" wh_publication_toc " data-tooltip-position="right"><span class="expand-button-action-labels"><span id="button-expand-action" role="button" aria-label="Expand"></span><span id="button-collapse-action" role="button" aria-label="Collapse"></span><span id="button-pending-action" role="button" aria-label="Pending"></span></span><ul role="tree" aria-label="Table of Contents"><li role="treeitem"><div data-tocid="new_chap_about_sect_ddb_docs_intro-d9529e87" class="topicref" data-id="new_chap_about_sect_ddb_docs_intro" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../about/ddb_docs_intro.html" id="new_chap_about_sect_ddb_docs_intro-d9529e87-link">文档使用说明</a><div class="wh-tooltip"><p class="shortdesc">如何获取 DolphinDB 帮助信息</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="chap1_getstarted-d9529e140" class="topicref" data-id="chap1_getstarted" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action chap1_getstarted-d9529e140-link" class="wh-expand-btn"></span><div class="title"><a href="../getstarted/chap1_getstarted.html" id="chap1_getstarted-d9529e140-link"><span class="keyword label">快速上手</span></a><div class="wh-tooltip"><p class="shortdesc">如何快速部署 DolphinDB、建库建表、写入和查询数据</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="sectionddb_deployment-d9529e335" class="topicref" data-id="sectionddb_deployment" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action sectionddb_deployment-d9529e335-link" class="wh-expand-btn"></span><div class="title"><a href="../deploy/deploy_intro.html" id="sectionddb_deployment-d9529e335-link"><span class="keyword label">部署</span></a><div class="wh-tooltip"><p class="shortdesc">如何在不同的场景中部署 DolphinDB</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="new_chap_database_manage_new_chap_dbmanage_landing_page-d9529e2313" class="topicref" data-id="new_chap_database_manage_new_chap_dbmanage_landing_page" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action new_chap_database_manage_new_chap_dbmanage_landing_page-d9529e2313-link" class="wh-expand-btn"></span><div class="title"><a href="../db_distr_comp/cfg/db_intro.html" id="new_chap_database_manage_new_chap_dbmanage_landing_page-d9529e2313-link"><span class="keyword label">数据库</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 数据库的基本概念</p></div></div></div></li><li role="treeitem" aria-expanded="true"><div data-tocid="chap7_tutorials_streaming-d9529e3490" class="topicref" data-id="chap7_tutorials_streaming" data-state="expanded"><span role="button" tabindex="0" aria-labelledby="button-collapse-action chap7_tutorials_streaming-d9529e3490-link" class="wh-expand-btn"></span><div class="title"><a href="../stream/str_intro.html" id="chap7_tutorials_streaming-d9529e3490-link"><span class="keyword label">流数据</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 流数据引擎及流数据计算的基本概念</p></div></div></div><ul role="group" class="navbar-nav nav-list"><li role="treeitem" aria-expanded="false"><div data-tocid="streamfunctions-d9529e3543" class="topicref" data-id="streamfunctions" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action streamfunctions-d9529e3543-link" class="wh-expand-btn"></span><div class="title"><a href="../stream/str_funcs.html" id="streamfunctions-d9529e3543-link">功能简介</a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="tocId-d9529e3821" class="topicref" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action tocId-d9529e3821-link" class="wh-expand-btn"></span><div class="title"><a href="../stream/try_example1.html" id="tocId-d9529e3821-link">入门示例</a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="内置流式计算算子-d9529e3914" class="topicref" data-id="内置流式计算算子" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action 内置流式计算算子-d9529e3914-link" class="wh-expand-btn"></span><div class="title"><a href="../stream/str_operator.html" id="内置流式计算算子-d9529e3914-link"><span class="keyword label">内置流式计算算子</span></a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="streamingEngineTopic-d9529e4099" class="topicref" data-id="streamingEngineTopic" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action streamingEngineTopic-d9529e4099-link" class="wh-expand-btn"></span><div class="title"><a href="../funcs/themes/streamingEngine.html" id="streamingEngineTopic-d9529e4099-link"><span class="keyword label">内置流式计算引擎</span></a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="chap7_tutorials_streaming-d9529e4376" class="topicref" data-id="chap7_tutorials_streaming" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action chap7_tutorials_streaming-d9529e4376-link" class="wh-expand-btn"></span><div class="title"><a href="../stream/str_join_engine.html" id="chap7_tutorials_streaming-d9529e4376-link"><span class="keyword label">内置多数据源流式关联引擎</span></a></div></div></li><li role="treeitem"><div data-tocid="streamha-d9529e4653" class="topicref" data-id="streamha" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../stream/str_ha.html" id="streamha-d9529e4653-link"><span class="keyword label">流数据高可用</span></a></div></div></li><li role="treeitem"><div data-tocid="流计算状态监控-d9529e4700" class="topicref" data-id="流计算状态监控" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../stream/str_monitor.html" id="流计算状态监控-d9529e4700-link">流计算状态监控</a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="replay-d9529e4746" class="topicref" data-id="replay" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action replay-d9529e4746-link" class="wh-expand-btn"></span><div class="title"><a href="../stream/str_replay.html" id="replay-d9529e4746-link"><span class="keyword label">历史数据回放</span></a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="流批一体功能-d9529e4931" class="topicref" data-id="流批一体功能" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action 流批一体功能-d9529e4931-link" class="wh-expand-btn"></span><div class="title"><a href="../stream/str_batch.html" id="流批一体功能-d9529e4931-link"><span class="keyword label">流批一体</span></a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="tocId-d9529e5024" class="topicref" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action tocId-d9529e5024-link" class="wh-expand-btn"></span><div class="title"><a href="../stream/str_api_python.html" id="tocId-d9529e5024-link">实时流数据接入</a></div></div></li><li role="treeitem" aria-expanded="true"><div data-tocid="cep-d9529e5442" class="topicref" data-id="cep" data-state="expanded"><span role="button" tabindex="0" aria-labelledby="button-collapse-action cep-d9529e5442-link" class="wh-expand-btn"></span><div class="title"><a href="../stream/cep.html" id="cep-d9529e5442-link">复杂事件处理（CEP）引擎</a></div></div><ul role="group" class="navbar-nav nav-list"><li role="treeitem"><div data-tocid="cep_basic_concept-d9529e5488" class="topicref" data-id="cep_basic_concept" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../stream/cep_basic_concept.html" id="cep_basic_concept-d9529e5488-link">基本概念</a></div></div></li><li role="treeitem"><div data-tocid="cep_intro-d9529e5534" class="topicref" data-id="cep_intro" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../stream/cep_events_defining.html" id="cep_intro-d9529e5534-link">定义事件</a></div></div></li><li role="treeitem"><div data-tocid="cep_intro-d9529e5580" class="topicref" data-id="cep_intro" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../stream/cep_monitor_defining.html" id="cep_intro-d9529e5580-link">定义 Monitor </a></div></div></li><li role="treeitem" class="active"><div data-tocid="cep_engine-d9529e5626" class="topicref" data-id="cep_engine" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../stream/cep_engine.html" id="cep_engine-d9529e5626-link">CEP 引擎</a></div></div></li><li role="treeitem"><div data-tocid="event_stream_serializer-d9529e5672" class="topicref" data-id="event_stream_serializer" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../stream/event_stream_serializer.html" id="event_stream_serializer-d9529e5672-link">事件流序列化器</a></div></div></li><li role="treeitem"><div data-tocid="event_stream_deserializer-d9529e5718" class="topicref" data-id="event_stream_deserializer" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../stream/event_stream_deserializer.html" id="event_stream_deserializer-d9529e5718-link">事件流反序列化器</a></div></div></li><li role="treeitem"><div data-tocid="cep_viewing-d9529e5764" class="topicref" data-id="cep_viewing" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../stream/cep_viewing.html" id="cep_viewing-d9529e5764-link">查看 CEP 引擎运行状态</a></div></div></li><li role="treeitem"><div data-tocid="cep_monitoring-d9529e5810" class="topicref" data-id="cep_monitoring" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../stream/cep_monitoring.html" id="cep_monitoring-d9529e5810-link">实时监控 CEP 引擎状态及数据</a></div></div></li><li role="treeitem"><div data-tocid="cep_application_scenario-d9529e5856" class="topicref" data-id="cep_application_scenario" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../stream/cep_application.html" id="cep_application_scenario-d9529e5856-link">应用场景</a></div></div></li><li role="treeitem"><div data-tocid="cep_application-d9529e5902" class="topicref" data-id="cep_application" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../stream/streaming_computing_engine_in_cep.html" id="cep_application-d9529e5902-link">流计算引擎在 CEP 中的应用</a></div></div></li><li role="treeitem"><div data-tocid="cep_terms-d9529e5949" class="topicref" data-id="cep_terms" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../stream/cep_terms.html" id="cep_terms-d9529e5949-link">术语表</a></div></div></li></ul></li><li role="treeitem" aria-expanded="false"><div data-tocid="tocId-d9529e5995" class="topicref" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action tocId-d9529e5995-link" class="wh-expand-btn"></span><div class="title"><a href="../stream/local_sub.html" id="tocId-d9529e5995-link">流处理结果交互方式</a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="tocId-d9529e6184" class="topicref" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action tocId-d9529e6184-link" class="wh-expand-btn"></span><div class="title"><a href="../stream/str_altair.html" id="tocId-d9529e6184-link">数据可视化工具</a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="tocId-d9529e6277" class="topicref" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action tocId-d9529e6277-link" class="wh-expand-btn"></span><div class="title"><a href="../tutorials/streaming_auto_sub.html" id="tocId-d9529e6277-link">金融场景应用案例</a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="tocId-d9529e6969" class="topicref" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action tocId-d9529e6969-link" class="wh-expand-btn"></span><div class="title"><a href="../tutorials/ddb_str_app_iot.html" id="tocId-d9529e6969-link">物联网场景应用案例</a></div></div></li></ul></li><li role="treeitem" aria-expanded="false"><div data-tocid="tocId-d9529e7385" class="topicref" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action tocId-d9529e7385-link" class="wh-expand-btn"></span><div class="title"><a href="../db_distr_comp/db_oper/import_data.html" id="tocId-d9529e7385-link">数据迁移</a><div class="wh-tooltip"><p class="shortdesc">如何从不同数据源向 DolphinDB 迁移数据</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="chap7_tutorials_system_management-d9529e7812" class="topicref" data-id="chap7_tutorials_system_management" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action chap7_tutorials_system_management-d9529e7812-link" class="wh-expand-btn"></span><div class="title"><a href="../sys_man/om_intro.html" id="chap7_tutorials_system_management-d9529e7812-link"><span class="keyword label">系统运维</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 的系统运维功能及方法</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="about_language_resources-d9529e16490" class="topicref" data-id="about_language_resources" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action about_language_resources-d9529e16490-link" class="wh-expand-btn"></span><div class="title"><a href="../progr/progr_intro.html" id="about_language_resources-d9529e16490-link"><span class="keyword label">编程语言</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 编程基本概念与方法、SQL 在 DolphinDB 的应用</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="functions_references-d9529e26503" class="topicref" data-id="functions_references" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action functions_references-d9529e26503-link" class="wh-expand-btn"></span><div class="title"><a href="../funcs/funcs_intro.html" id="functions_references-d9529e26503-link"><span class="keyword label">函数参考</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 函数分类、语法、详解及示例</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="api_protocol-d9529e86456" class="topicref" data-id="api_protocol" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action api_protocol-d9529e86456-link" class="wh-expand-btn"></span><div class="title"><a href="../api/connapi_intro.html" id="api_protocol-d9529e86456-link"><span class="keyword label">连接器 &amp; API</span></a><div class="wh-tooltip"><p class="shortdesc">面向不同编程语言的 DolphinDB API 及连接器，相关协议和用法</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="chap6_plugin-d9529e91976" class="topicref" data-id="chap6_plugin" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action chap6_plugin-d9529e91976-link" class="wh-expand-btn"></span><div class="title"><a href="../plugins/plg_intro.html" id="chap6_plugin-d9529e91976-link"><span class="keyword label">插件</span></a><div class="wh-tooltip"><p class="shortdesc">多个应用场景的插件使用说明和插件开发指导</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="third_party-d9529e94749" class="topicref" data-id="third_party" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action third_party-d9529e94749-link" class="wh-expand-btn"></span><div class="title"><a href="../third_party.html" id="third_party-d9529e94749-link">第三方工具</a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="about_tutorials-d9529e94980" class="topicref" data-id="about_tutorials" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action about_tutorials-d9529e94980-link" class="wh-expand-btn"></span><div class="title"><a href="../tutorials/about_tutorials.html" id="about_tutorials-d9529e94980-link"><span class="keyword label">教程</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 产品使用教程</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="tocId-d9529e101769" class="topicref" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action tocId-d9529e101769-link" class="wh-expand-btn"></span><div class="title"><a href="../rn/server/3_00_1.html" id="tocId-d9529e101769-link">版本说明</a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 版本发布历史</p></div></div></div></li></ul></div>
+		                        
+                            </div>
+                        </nav>
+                    
+                    
+                    <div class="col-lg-7 col-md-9 col-sm-12" id="wh_topic_body">
+                        <button id="wh_close_publication_toc_button" class="close-toc-button d-none" aria-label="Toggle publishing table of content" aria-controls="wh_publication_toc" aria-expanded="true">
+                            <span class="close-toc-icon-container">
+                                <span class="close-toc-icon"></span>     
+                            </span>
+                        </button>
+                        <button id="wh_close_topic_toc_button" class="close-toc-button d-none" aria-label="Toggle topic table of content" aria-controls="wh_topic_toc" aria-expanded="true">
+                            <span class="close-toc-icon-container">
+                                <span class="close-toc-icon"></span>     
+                            </span>
+                        </button>
+                        
+                        <div class=" wh_topic_content body "><main role="main"><article class="- topic/topic topic" role="article" aria-labelledby="ariaid-title1">
+    <h1 class="- topic/title title topictitle1" id="ariaid-title1">CEP 引擎</h1>
+    <article class="- topic/topic topic nested1" aria-labelledby="ariaid-title2" id="topic_owj_m1v_x1c">
+        <h2 class="- topic/title title topictitle2" id="ariaid-title2">创建 CEP 引擎</h2>
+        <div class="- topic/body body">
+            <p class="- topic/p p"><strong class="+ topic/ph hi-d/b ph b">语法</strong></p>
+            <p class="- topic/p p"><code class="+ topic/ph pr-d/codeph ph codeph">createCEPEngine(name, monitors, dummyTable, eventSchema,
+                    [deserializeParallelism=1], [timeColumn], [eventQueueDepth=1024], [outputTable],
+                    [dispatchKey], [dispatchBucket], [useSystemTime=true])</code></p>
+            <section class="- topic/section section" id="topic_owj_m1v_x1c__参数.1" data-ofbid="topic_owj_m1v_x1c__参数.1"><h3 class="- topic/title title sectiontitle">参数</h3>
+                
+                <p class="- topic/p p"><strong class="+ topic/ph hi-d/b ph b">name</strong> 字符串标量，表示 CEP 引擎的名称。可包含字母，数字和下划线，但必须以字母开头。</p>
+                <p class="- topic/p p"><strong class="+ topic/ph hi-d/b ph b">monitors</strong> 元代码或元代码元组，可包含一个或多个 Monitor 类的构造函数调用。如果指定了多个 Monitor 类的构造函数调用，在创建
+                    subEngine 时，将按照指定的顺序构造这些对象。Monitor 的创建方法参见 <a class="- topic/xref xref" href="cep_monitor_defining.html">简单的 Monitor 实例</a>。</p>
+                <p class="- topic/p p"><strong class="+ topic/ph hi-d/b ph b">dummyTable</strong> 一个表对象，和订阅的流数据表的 schema 一致。</p>
+                <div class="- topic/p p"><strong class="+ topic/ph hi-d/b ph b">eventSchema</strong>
+                    事件类型类的声明，用于指定为外部输入的事件类型，可以是一个标量或向量。例如：<pre class="+ topic/pre pr-d/codeblock pre codeblock" id="topic_owj_m1v_x1c__codeblock_gmt_1bv_x1c" data-ofbid="topic_owj_m1v_x1c__codeblock_gmt_1bv_x1c"><code>class event1 {
+  var1:: STRING
+  var2:: INT
+  def event1(){
+    var1 = ""
+    var2 = 0
+  }
+}
+
+class event2 {
+  var1:: DOUBLE
+  var2:: INT
+  def event2(){
+    var1 = 0.0
+    var2 = 0
+  }
+}
+
+//指定为标量
+eventSchema = event1
+//指定为向量
+eventSchema = [event1, event2]</code></pre></div>
+                <p class="- topic/p p"><strong class="+ topic/ph hi-d/b ph b">deserializeParallelism</strong> 整型标量，用于指定反序化的线程数，默认值为1。</p>
+                <p class="- topic/p p"><strong class="+ topic/ph hi-d/b ph b">timeColumn</strong> 指定 <em class="+ topic/ph hi-d/i ph i">dummyTable</em> 中的时间列。指定后，这列将作为事件时间。</p>
+                <p class="- topic/p p"><strong class="+ topic/ph hi-d/b ph b">eventQueueDepth</strong> 整型标量，用于指定子引擎接收事件队列和输出队列的最大深度，默认值是1024。</p>
+                <p class="- topic/p p"><strong class="+ topic/ph hi-d/b ph b">outputTable</strong> 一个表对象，用于输出事件以供后续操作使用。如果调用了 emitEvent 接口，则需要指定该参数为
+                        <code class="+ topic/ph pr-d/codeph ph codeph">StreamEventSerializer</code> 返回的表对象。</p>
+                <p class="- topic/p p"><strong class="+ topic/ph hi-d/b ph b">dispatchKey</strong> 字符串标量，用于指定事件中的属性，该属性中的每个唯一值被视为一个 key。若不指定
+                    <em class="+ topic/ph hi-d/i ph i">dispatchKey</em>，则引擎将创建一个名为 <em class="+ topic/ph hi-d/i ph i">name</em> 的子引擎（与 CEP 引擎同名）。</p>
+                <p class="- topic/p p"><strong class="+ topic/ph hi-d/b ph b">dispatchBucket</strong> 整型标量，表示哈希分组的数量。如果指定该参数，引擎将对 <em class="+ topic/ph hi-d/i ph i">dispatchKey
+                        </em>指定的字段进行哈希分组<em class="+ topic/ph hi-d/i ph i">。</em></p>
+                <p class="- topic/p p">CEP 引擎根据 <em class="+ topic/ph hi-d/i ph i">dispatchKey</em> 和 <em class="+ topic/ph hi-d/i ph i">dispatchBucket
+                    </em>自动创建子引擎，并行处理数据。各个子引擎之间互相独立。若未指定 <em class="+ topic/ph hi-d/i ph i">dispatchKey</em>，则 CEP
+                    引擎只有一个处理线程，即只创建一个子引擎。</p>
+                <p class="- topic/p p"><strong class="+ topic/ph hi-d/b ph b">useSystemTime</strong> 布尔值，表示是否使用数据注入引擎时的系统时间进行计算。</p>
+                <ul class="- topic/ul ul" id="topic_owj_m1v_x1c__ul_wlm_x1v_x1c" data-ofbid="topic_owj_m1v_x1c__ul_wlm_x1v_x1c">
+                    <li class="- topic/li li">
+                        <p class="- topic/p p">当 <em class="+ topic/ph hi-d/i ph i">useSystemTime</em> = true 时（缺省值）时，CEP
+                            引擎中的计算都基于数据注入引擎的时刻（以毫秒精度表示的本地系统时间）进行，与数据中的时间列无关。</p>
+                    </li>
+                    <li class="- topic/li li">
+                        <p class="- topic/p p">当 <em class="+ topic/ph hi-d/i ph i">useSystemTime</em> = false 时，CEP 引擎中的计算都基于数据中的 <em class="+ topic/ph hi-d/i ph i">timeColumn</em>
+                            列进行。</p>
+                    </li>
+                </ul>
+            </section>
+        </div>
+    </article>
+    <article class="- topic/topic topic nested1" aria-labelledby="ariaid-title3" id="topic_td1_n1v_x1c">
+        <h2 class="- topic/title title topictitle2" id="ariaid-title3">定义事件监听器</h2>
+        <div class="- topic/body body">
+            <p class="- topic/p p">在 CEP 引擎中，通过 <code class="+ topic/ph pr-d/codeph ph codeph">addEventListener</code> 指定事件匹配规则和回调函数。事件监听器只能在 Monitor
+                内调用，其观察注入引擎的每个事件，当事件或事件模式与匹配规则相匹配时，会触发执行回调函数。</p>
+            <p class="- topic/p p"><strong class="+ topic/ph hi-d/b ph b">语法</strong></p>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="topic_td1_n1v_x1c__codeblock_gyj_kbv_x1c" data-ofbid="topic_td1_n1v_x1c__codeblock_gyj_kbv_x1c"><code>addEventListener(handler, [eventType], [condition], [times="all"], [at], [wait], [within], [exceedTime])</code></pre>
+            <p class="- topic/p p"><strong class="+ topic/ph hi-d/b ph b">参数</strong></p>
+            
+            <ul class="- topic/ul ul" id="topic_td1_n1v_x1c__ul_hyj_kbv_x1c" data-ofbid="topic_td1_n1v_x1c__ul_hyj_kbv_x1c">
+                <li class="- topic/li li">
+                    <p class="- topic/p p">事件匹配：</p>
+                    <p class="- topic/p p"><strong class="+ topic/ph hi-d/b ph b">handler</strong> 回调函数，如果指定了 <em class="+ topic/ph hi-d/i ph i">eventType</em>
+                        则为一元函数，参数为匹配的事件。如果指定为按时间触发，则没有参数。</p>
+                    <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="topic_td1_n1v_x1c__codeblock_iyj_kbv_x1c" data-ofbid="topic_td1_n1v_x1c__codeblock_iyj_kbv_x1c"><code>def actions1(stockVal){
+    //将事件类型 stockVal 的属性写入一个共享表
+    insert into objByName("sharedUSPrices") values([stockVal.price, stockVal.qty])
+} </code></pre>
+                    <p class="- topic/p p"><em class="+ topic/ph hi-d/i ph i">handler</em> 中可以动态添加新的监听器：</p>
+                    <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="topic_td1_n1v_x1c__codeblock_jyj_kbv_x1c" data-ofbid="topic_td1_n1v_x1c__codeblock_jyj_kbv_x1c"><code>def actions1(stockVal){
+    //将事件类型 stockVal 的属性写入一个共享表
+    insert into objByName("sharedUSPrices") values([stockVal.price, stockVal.qty])
+    //新增加一个事件侦听器
+    addEventListener(handler=action2, eventType="Stock", condition=&lt;self.prices &gt; stockVal.price&gt;)
+}</code></pre>
+                    <p class="- topic/p p"><strong class="+ topic/ph hi-d/b ph b">eventType</strong>字符串标量，表示事件类型。若指定为 “any”，则表示任意事件。</p>
+                    <p class="- topic/p p"><strong class="+ topic/ph hi-d/b ph b">condition</strong> 元代码类型，指定匹配的事件条件，即事件匹配规则。元代码的返回结果必须是布尔值。例如 <em class="+ topic/ph hi-d/i ph i">eventType</em> 为
+                        Stock 时，指定 &lt;Stock.price &gt; 10 and Stock.qty &lt; 10&gt; 。</p>
+                    <p class="- topic/p p"><strong class="+ topic/ph hi-d/b ph b">times</strong> 可以是正整数或者 ”all”，表示在 <em class="+ topic/ph hi-d/i ph i">handler</em> 被触发指定次数后自动删除监听，默认为
+                        ”all”。例如，若设置为 5，表示 <em class="+ topic/ph hi-d/i ph i">handler</em> 被触发 5 次后，将删除该监听器；若设置为
+                        ”all”，则会持续监听事件，对每个匹配的事件都触发 <em class="+ topic/ph hi-d/i ph i">handler</em>，直至引擎被删除。</p>
+                </li>
+                <li class="- topic/li li">
+                     <p class="- topic/p p">按时间触发（此时不会进行事件匹配，因此不可指定 <em class="+ topic/ph hi-d/i ph i">eventType</em>）：</p>
+                    <p class="- topic/p p"><strong class="+ topic/ph hi-d/b ph b">at</strong> 一个长度为 6 的元组，用于指定触发 <em class="+ topic/ph hi-d/i ph i">handler</em> 的时间频率。其形式为 (seconds，minutes,
+                        hours, days_of_the_week，days_of_the_month, month )
+                            ，其中各元素依次表示秒（必须指定）、分钟、小时、一周中的第几天、当月的第几天、月份。如果<em class="+ topic/ph hi-d/i ph i">times</em>="all”，则表示每月/日/周几/小时/分钟的第
+                        seconds 秒触发 <em class="+ topic/ph hi-d/i ph i">handler</em>。例如：(0, 5, , , )，表示在每小时的 05 分触发 <em class="+ topic/ph hi-d/i ph i">handler</em>。如果
+                            <em class="+ topic/ph hi-d/i ph i">times</em> 指定为具体数字，则 <em class="+ topic/ph hi-d/i ph i">handler</em> 只会被触发指定次数。</p>
+                    <p class="- topic/p p"><strong class="+ topic/ph hi-d/b ph b">wait</strong> DURATION 类型，表示等待多长时间后触发 <em class="+ topic/ph hi-d/i ph i">handler</em>。如果
+                        <em class="+ topic/ph hi-d/i ph i">times</em>=”all”，则表示每隔多久触发 <em class="+ topic/ph hi-d/i ph i">handler</em>。例如：<em class="+ topic/ph hi-d/i ph i">wait </em>= 60s, <em class="+ topic/ph hi-d/i ph i">times
+                        </em>=”all”，每隔 60秒触发一次 <em class="+ topic/ph hi-d/i ph i">handler</em>。如果 <em class="+ topic/ph hi-d/i ph i">times</em> 指定为具体数字，则
+                            <em class="+ topic/ph hi-d/i ph i">handler</em> 只会被触发指定次数。</p>
+                </li>
+            <li class="- topic/li li">
+                        <p class="- topic/p p">同时限定时间和事件：</p>
+                    <p class="- topic/p p"><strong class="+ topic/ph hi-d/b ph b">within</strong> 仅在限定的时间内收到匹配的事件时才触发
+                        <em class="+ topic/ph hi-d/i ph i">handler</em>。例如：<em class="+ topic/ph hi-d/i ph i">eventType</em>="tickets", <em class="+ topic/ph hi-d/i ph i">within</em>=60s ，表示60秒内匹配到事件
+                        tickets，则触发 <em class="+ topic/ph hi-d/i ph i">handler</em>，否则删除这个监听器。</p>
+                    <p class="- topic/p p"><strong class="+ topic/ph hi-d/b ph b">exceedTime</strong> 仅在限定的时间内没有匹配的事件时才触发
+                        <em class="+ topic/ph hi-d/i ph i">handler</em>。例如：<em class="+ topic/ph hi-d/i ph i">eventType</em>="tickets",
+                        <em class="+ topic/ph hi-d/i ph i">exceedTime</em>=60s，表示若60秒内未匹配到事件 tickets，则触发
+                        <em class="+ topic/ph hi-d/i ph i">handler</em>，否则删除这个监听器。</p>
+             </li>
+            </ul>
+            <p class="- topic/p p">下面举例说明事件监听器的几种触发方式：</p>
+            <div class="table-container"><table class="- topic/table table frame-all" id="topic_td1_n1v_x1c__table_ymr_pc1_ybc" data-ofbid="topic_td1_n1v_x1c__table_ymr_pc1_ybc" data-cols="1"><caption></caption><colgroup><col style="width:100%"/></colgroup><tbody class="- topic/tbody tbody">
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry colsep-0 rowsep-1">
+                                <p class="- topic/p p"><strong class="+ topic/ph hi-d/b ph b">事件匹配：监听单一事件或者所有事件，并且限定事件条件</strong></p>
+                            </td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry colsep-0 rowsep-1"><p class="- topic/p p">监听价格大于10.0 的股票。下例中 <em class="+ topic/ph hi-d/i ph i">eventType</em> 为事件，<em class="+ topic/ph hi-d/i ph i">condition</em>
+                                为事件匹配条件，<em class="+ topic/ph hi-d/i ph i">handler</em> 为监听到符合条件的事件之后的回调函数。</p><ul class="- topic/ul ul" id="topic_td1_n1v_x1c__ul_opy_tc1_ybc" data-ofbid="topic_td1_n1v_x1c__ul_opy_tc1_ybc">
+                                    <li class="- topic/li li">
+                                        <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="topic_td1_n1v_x1c__codeblock_xh2_5c1_ybc" data-ofbid="topic_td1_n1v_x1c__codeblock_xh2_5c1_ybc"><code>addEventListener(handler=action, eventType=`Stock, condition=&lt;Stock.price &gt; 10.0&gt;)</code></pre>
+                                    </li>
+                                </ul><p class="- topic/p p">监听所有的股票</p><ul class="- topic/ul ul" id="topic_td1_n1v_x1c__ul_nhc_vc1_ybc" data-ofbid="topic_td1_n1v_x1c__ul_nhc_vc1_ybc">
+                                    <li class="- topic/li li">
+                                        <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="topic_td1_n1v_x1c__codeblock_e13_vc1_ybc" data-ofbid="topic_td1_n1v_x1c__codeblock_e13_vc1_ybc"><code>addEventListener(handler=action, eventType=`Stock)</code></pre>
+                                    </li>
+                                </ul><p class="- topic/p p">监听任意事件</p><ul class="- topic/ul ul" id="topic_td1_n1v_x1c__ul_vy3_wc1_ybc" data-ofbid="topic_td1_n1v_x1c__ul_vy3_wc1_ybc">
+                                    <li class="- topic/li li">
+                                        <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="topic_td1_n1v_x1c__codeblock_vvr_wc1_ybc" data-ofbid="topic_td1_n1v_x1c__codeblock_vvr_wc1_ybc"><code>addEventListener(handler=action, eventType="any")</code></pre>
+                                    </li>
+                                </ul></td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry colsep-0 rowsep-1">
+                                <p class="- topic/p p"><strong class="+ topic/ph hi-d/b ph b">按时间触发</strong></p>
+                            </td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry colsep-0 rowsep-1">
+                                <p class="- topic/p p">在固定时间触发，比如：在每天的 8:30 触发。</p>
+                                <p class="- topic/p p"><code class="+ topic/ph pr-d/codeph ph codeph">addEventListener(handler=action,
+                                    at=(0,30,8,,,))</code></p>
+                                <p class="- topic/p p">等待固定时间之后触发，比如：</p>
+                                <ul class="- topic/ul ul" id="topic_td1_n1v_x1c__ul_wjf_dd1_ybc" data-ofbid="topic_td1_n1v_x1c__ul_wjf_dd1_ybc">
+                                    <li class="- topic/li li"> <p class="- topic/p p">从监听器被添加开始，每隔60秒触发一次。</p>
+                                        <p class="- topic/p p"><code class="+ topic/ph pr-d/codeph ph codeph" id="topic_td1_n1v_x1c__codeblock_xjf_dd1_ybc">addEventListener(handler=action, wait=60s)</code></p>
+                                    </li>
+                                    <li class="- topic/li li"> <p class="- topic/p p">从监听器被添加开始，等待60秒触发一次。</p>
+                                        <p class="- topic/p p"><code class="+ topic/ph pr-d/codeph ph codeph" id="topic_td1_n1v_x1c__codeblock_i5b_3d1_ybc">addEventListener(handler=action,
+                                            wait=60s,times=1)</code></p>
+                                    </li>
+                                </ul>
+                            </td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry colsep-0 rowsep-1">
+                                <p class="- topic/p p"><strong class="+ topic/ph hi-d/b ph b">同时限定时间和事件</strong></p>
+                            </td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry colsep-0 rowsep-0">
+                                <p class="- topic/p p">在限定时间内匹配事件，比如在60秒内匹配到价格大于10.0的 Stock 事件，则执行回调函数。</p>
+                                <ul class="- topic/ul ul" id="topic_td1_n1v_x1c__ul_wbv_jd1_ybc" data-ofbid="topic_td1_n1v_x1c__ul_wbv_jd1_ybc">
+                                    <li class="- topic/li li">
+                                        <code class="+ topic/ph pr-d/codeph ph codeph" id="topic_td1_n1v_x1c__codeblock_xbv_jd1_ybc">addEventListener(handler=action, eventType=`Stock, condition=&lt;Stock.price &gt; 10.0&gt;，within = 60s,times=1)</code>
+                                    </li>
+                                </ul>
+                                <p class="- topic/p p">在限定时间内未匹配事件，如在60秒内没有匹配到价格大于10.0的 Stock 事件，则执行回调函数。</p>
+                                <ul class="- topic/ul ul" id="topic_td1_n1v_x1c__ul_ybv_jd1_ybc" data-ofbid="topic_td1_n1v_x1c__ul_ybv_jd1_ybc">
+                                    <li class="- topic/li li">
+                                        <code class="+ topic/ph pr-d/codeph ph codeph" id="topic_td1_n1v_x1c__codeblock_zbv_jd1_ybc">addEventListener(handler=action, eventType=`Stock, condition=&lt;Stock.price &gt; 10.0&gt;，exceedTime= 60s,times=1)</code>
+                                    </li>
+                                </ul>
+                            </td>
+                        </tr>
+                    </tbody></table></div>
+
+        </div>
+        <article class="- topic/topic topic nested2" aria-labelledby="ariaid-title4" id="topic_gkk_41v_x1c">
+            <h3 class="- topic/title title topictitle3" id="ariaid-title4">路由事件</h3>
+            <div class="- topic/body body">
+                <p class="- topic/p p">在 Monitor
+                    中，事件通常有四种流向：插入事件输入队列的队尾、插入输入处理队列的队首、继续进行模式匹配、以及插入事件输出队列等待输出。其中，继续进行模式匹配是在监听器的
+                        <em class="+ topic/ph hi-d/i ph i">handler</em>
+                    中定义的另一个监听器。若要添加监听器，请参考上一节内容。本节将主要介绍将事件插入事件输入队列队尾、插入事件输入队列的队首以及插入输出队列的方法。</p>
+            </div>
+            <article class="- topic/topic topic nested3" aria-labelledby="ariaid-title5" id="topic_j3l_p1v_x1c">
+                <h4 class="- topic/title title topictitle4" id="ariaid-title5">插入事件输入队列队尾</h4>
+                <div class="- topic/body body">
+                    <p class="- topic/p p">将事件插入到当前子引擎的事件处理队列的尾部。</p>
+                    <p class="- topic/p p"><strong class="+ topic/ph hi-d/b ph b">语法</strong></p>
+                    <p class="- topic/p p"><code class="+ topic/ph pr-d/codeph ph codeph">sendEvent(event)</code></p>
+                    <p class="- topic/p p"><strong class="+ topic/ph hi-d/b ph b">参数</strong></p>
+                    <p class="- topic/p p"><strong class="+ topic/ph hi-d/b ph b">event</strong> 事件类型实例。</p>
+                </div>
+            </article>
+            <article class="- topic/topic topic nested3" aria-labelledby="ariaid-title6" id="topic_m3d_q1v_x1c">
+                <h4 class="- topic/title title topictitle4" id="ariaid-title6">插入事件输入队列队首</h4>
+                <div class="- topic/body body">
+                    <p class="- topic/p p">将事件插入到当前子引擎的事件处理队列的队首。</p>
+                    <p class="- topic/p p"><strong class="+ topic/ph hi-d/b ph b">语法</strong></p>
+                    <p class="- topic/p p"><code class="+ topic/ph pr-d/codeph ph codeph">routeEvent(event)</code></p>
+                    <p class="- topic/p p"><strong class="+ topic/ph hi-d/b ph b">参数</strong></p>
+                    <p class="- topic/p p"><strong class="+ topic/ph hi-d/b ph b">event</strong> 事件类型实例。</p>
+                </div>
+            </article>
+            <article class="- topic/topic topic nested3" aria-labelledby="ariaid-title7" id="topic_bv4_q1v_x1c">
+                <h4 class="- topic/title title topictitle4" id="ariaid-title7">插入输出队列队尾</h4>
+                <div class="- topic/body body">
+                    <p class="- topic/p p">将事件插入到 CEP 引擎的事件输出队列的队尾。引擎会异步地将事件发送到输出队列。</p>
+                    <p class="- topic/p p"><strong class="+ topic/ph hi-d/b ph b">语法</strong></p>
+                    <p class="- topic/p p"><code class="+ topic/ph pr-d/codeph ph codeph">emitEvent(event, [eventTimeField])</code></p>
+                    <p class="- topic/p p"><strong class="+ topic/ph hi-d/b ph b">参数</strong></p>
+                    <p class="- topic/p p"><strong class="+ topic/ph hi-d/b ph b">event</strong> 事件类型实例。</p>
+                    <p class="- topic/p p"><strong class="+ topic/ph hi-d/b ph b">eventTimeField</strong> 字符串标量，表示事件中的时间字段名。若要指定此参数，<em class="+ topic/ph hi-d/i ph i">event</em> 必须包含时间字段。当
+                            <em class="+ topic/ph hi-d/i ph i">useSystemTime</em>=true 时，输出事件中的时间为系统时间；否则，输出最新事件时间。</p>
+                </div>
+            </article>
+            <article class="- topic/topic topic nested3" aria-labelledby="ariaid-title8" id="topic_zc2_r1v_x1c">
+                <h4 class="- topic/title title topictitle4" id="ariaid-title8">停止子引擎</h4>
+                <div class="- topic/body body">
+                    <p class="- topic/p p"><strong class="+ topic/ph hi-d/b ph b">语法</strong></p>
+                    <p class="- topic/p p"><code class="+ topic/ph pr-d/codeph ph codeph">stopSubEngine()</code></p>
+                    <p class="- topic/p p"><strong class="+ topic/ph hi-d/b ph b">详情</strong></p>
+                    <p class="- topic/p p">关闭执行此函数的 Monitor 实例所在的子引擎。在关闭子引擎前，将调用其内部所有 Monitor 实例中已声明的
+                            <code class="+ topic/ph pr-d/codeph ph codeph">onunload</code> 方法。如果存在通过 spawn 产生的 Monitor 实例，将首先调用这些由 spawn
+                        产生的 Monitor 实例中已声明的 <code class="+ topic/ph pr-d/codeph ph codeph">onDestroy</code> 方法。</p>
+                </div>
+            </article>
+        </article>
+    </article>
+</article></main></div>
+                        
+                        
+                        
+                        
+                        
+                        
+                    </div>
+                    
+                        <nav role="navigation" id="wh_topic_toc" aria-label="On this page" class="col-lg-2 d-none d-lg-block navbar d-print-none"> 
+                            <div id="wh_topic_toc_content">
+		                        
+	                            <div class=" wh_topic_toc "><div class="wh_topic_label">在本页上</div><ul><li class="topic-item"><a href="#topic_owj_m1v_x1c" data-tocid="topic_owj_m1v_x1c">创建 CEP 引擎</a><ul><li class="section-item"><div class="section-title"><a href="#topic_owj_m1v_x1c__%E5%8F%82%E6%95%B0.1" data-tocid="topic_owj_m1v_x1c__参数.1">参数</a></div></li></ul></li><li class="topic-item"><a href="#topic_td1_n1v_x1c" data-tocid="topic_td1_n1v_x1c">定义事件监听器</a><ul><li class="topic-item"><a href="#topic_gkk_41v_x1c" data-tocid="topic_gkk_41v_x1c">路由事件</a><ul><li class="topic-item"><a href="#topic_j3l_p1v_x1c" data-tocid="topic_j3l_p1v_x1c">插入事件输入队列队尾</a></li><li class="topic-item"><a href="#topic_m3d_q1v_x1c" data-tocid="topic_m3d_q1v_x1c">插入事件输入队列队首</a></li><li class="topic-item"><a href="#topic_bv4_q1v_x1c" data-tocid="topic_bv4_q1v_x1c">插入输出队列队尾</a></li><li class="topic-item"><a href="#topic_zc2_r1v_x1c" data-tocid="topic_zc2_r1v_x1c">停止子引擎</a></li></ul></li></ul></li></ul></div>
+	                        	
+                        	</div>
+                        </nav>
+                    
+                </div>
+            </div>
+            
+            
+            
+        </div> 
+        <footer class="navbar navbar-default wh_footer">
+  <div class=" footer-container mx-auto ">
+<title>Copyright</title><p><b> ©2024 浙江智臾科技有限公司 浙ICP备18048711号-3</b></p>
+  </div>
+</footer>
+        
+        <div id="go2top" class="d-print-none">
+            <span class="oxy-icon oxy-icon-up"></span>
+        </div>
+        
+        <div id="modal_img_large" class="modal">
+            <span class="close oxy-icon oxy-icon-remove"></span>
+            <div id="modal_img_container"></div>
+            <div id="caption"></div>
+        </div>
+        
+        
+        
+    </body>
+</html>

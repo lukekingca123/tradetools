@@ -1,0 +1,912 @@
+<!DOCTYPE html><html xmlns="http://www.w3.org/1999/xhtml" xml:lang="zh" lang="zh" data-whc_version="26.0">
+    <head><link rel="shortcut icon" href="../favicon.ico"/><link rel="icon" href="../favicon.ico"/><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><meta http-equiv="X-UA-Compatible" content="IE=edge"/><meta name="description" content="为了更直观优化数据查询的性能，DolphinDB提供查询SQL执行计划的功能，便于对SQL语句进行调优。 注：执行计划指一条SQL语句在DolphinDB数据库中具体的执行方式，如命中的分区数量，各步骤执行耗时等等。 功能发布版本：V1.30.16 / V2.00.4 ..."/><meta name="DC.rights.owner" content="(C) 版权 2024"/><meta name="copyright" content="(C) 版权 2024"/><meta name="generator" content="DITA-OT"/><meta name="DC.type" content="topic"/><meta name="DC.coverage" content=""/><meta name="DC.relation" content="../tutorials/about_tutorials.html"/><meta name="prodname" content="DolphinDB"/><meta name="brand" content="DolphinDB"/><meta name="DC.creator" content="DolphinDB"/><meta name="DC.publisher" content="DDB N/A DDB 200"/><meta name="DC.format" content="HTML5"/><meta name="DC.identifier" content="sql-执行计划"/><title>SQL 执行计划</title><!--  Generated with Oxygen version 26.0, build number 2024012323.  --><meta name="wh-path2root" content="../"/><meta name="wh-toc-id" content="&lt;?xml version=&#34;1.0&#34; encoding=&#34;UTF-8&#34;?&gt;&lt;?workdir /tmp/temp20240704100525325/tutorials?&gt;&lt;?workdir-uri file:/tmp/temp20240704100525325/tutorials/?&gt;&lt;?path2project ../?&gt;&lt;?path2project-uri ../?&gt;&lt;?path2rootmap-uri ../?&gt;&lt;topic xmlns:dita-ot=&#34;http://dita-ot.sourceforge.net/ns/201007/dita-ot&#34; xmlns:ditaarch=&#34;http://dita.oasis-open.org/architecture/2005/&#34; class=&#34;- topic/topic &#34; ditaarch:DITAArchVersion=&#34;2.0&#34; domains=&#34;a(props audience) a(props deliveryTarget) a(props otherprops) a(props platform) a(props product)&#34; id=&#34;sql-执行计划&#34; specializations=&#34;@props/audience @props/deliveryTarget @props/otherprops @props/platform @props/product&#34; xtrc=&#34;topic:1;1:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/DolphinDB_Explain.md&#34;&gt;&lt;title class=&#34;- topic/title &#34; xtrc=&#34;title:1;1:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/DolphinDB_Explain.md&#34;&gt;SQL 执行计划&lt;/title&gt;&lt;prolog class=&#34;- topic/prolog &#34;&gt;&lt;author class=&#34;- topic/author &#34; xtrc=&#34;author:1;12:17&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/ddb_doc_centre.ditamap&#34;&gt;DolphinDB&lt;/author&gt;&lt;publisherinformation class=&#34;- topic/publisher bookmap/publisherinformation &#34; xtrc=&#34;publisherinformation:1;14:31&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/ddb_doc_centre.ditamap&#34;&gt; &lt;person class=&#34;- topic/data bookmap/person &#34; xtrc=&#34;person:1;15:21&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/ddb_doc_centre.ditamap&#34;&gt;DDB&lt;/person&gt; &lt;printlocation class=&#34;- topic/data bookmap/printlocation &#34; xtrc=&#34;printlocation:1;16:28&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/ddb_doc_centre.ditamap&#34;&gt;N/A&lt;/printlocation&gt; &lt;published class=&#34;- topic/data bookmap/published &#34; xtrc=&#34;published:1;17:24&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/ddb_doc_centre.ditamap&#34;&gt; &lt;person class=&#34;- topic/data bookmap/person &#34; xtrc=&#34;person:2;18:25&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/ddb_doc_centre.ditamap&#34;&gt;DDB&lt;/person&gt; &lt;publishtype class=&#34;- topic/data bookmap/publishtype &#34; value=&#34;HTML&#34; xtrc=&#34;publishtype:1;19:44&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/ddb_doc_centre.ditamap&#34;/&gt; &lt;revisionid class=&#34;- topic/ph bookmap/revisionid &#34; xtrc=&#34;revisionid:1;20:29&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/ddb_doc_centre.ditamap&#34;&gt;200&lt;/revisionid&gt; &lt;summary class=&#34;- topic/ph bookmap/summary &#34; xtrc=&#34;summary:1;22:27&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/ddb_doc_centre.ditamap&#34;/&gt; &lt;data class=&#34;- topic/data &#34; xtrc=&#34;data:1;23:24&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/ddb_doc_centre.ditamap&#34;/&gt; &lt;/published&gt; &lt;data class=&#34;- topic/data &#34; xtrc=&#34;data:2;25:20&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/ddb_doc_centre.ditamap&#34;/&gt; &lt;/publisherinformation&gt;&lt;metadata class=&#34;- topic/metadata &#34;&gt;&lt;audience class=&#34;- topic/audience &#34; xtrc=&#34;audience:2;39:20&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/ddb_doc_centre.ditamap&#34;/&gt;&lt;audience class=&#34;- topic/audience &#34; xtrc=&#34;audience:1;28:24&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/ddb_doc_centre.ditamap&#34;/&gt;&lt;category class=&#34;- topic/category &#34; xtrc=&#34;category:1;29:24&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/ddb_doc_centre.ditamap&#34;/&gt;&lt;prodinfo class=&#34;- topic/prodinfo &#34; xtrc=&#34;prodinfo:1;34:23&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/ddb_doc_centre.ditamap&#34;&gt; &lt;prodname class=&#34;- topic/prodname &#34; xtrc=&#34;prodname:1;35:27&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/ddb_doc_centre.ditamap&#34;&gt;DolphinDB&lt;/prodname&gt; &lt;brand class=&#34;- topic/brand &#34; xtrc=&#34;brand:1;36:24&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/ddb_doc_centre.ditamap&#34;&gt;DolphinDB&lt;/brand&gt; &lt;/prodinfo&gt;&lt;/metadata&gt;&lt;/prolog&gt;&lt;body class=&#34;- topic/body &#34; xtrc=&#34;body:1;1:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/DolphinDB_Explain.md&#34;&gt;&lt;p class=&#34;- topic/p &#34; xtrc=&#34;p:1;3:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/DolphinDB_Explain.md&#34;&gt;为了更直观优化数据查询的性能，DolphinDB提供查询SQL执行计划的功能，便于对SQL语句进行调优。&lt;/p&gt;&lt;p class=&#34;- topic/p &#34; xtrc=&#34;p:2;5:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/DolphinDB_Explain.md&#34;&gt;注：执行计划指一条SQL语句在DolphinDB数据库中具体的执行方式，如命中的分区数量，各步骤执行耗时等等。&lt;/p&gt;&lt;p class=&#34;- topic/p &#34; xtrc=&#34;p:3;7:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/DolphinDB_Explain.md&#34;&gt;&lt;codeph class=&#34;+ topic/ph pr-d/codeph &#34; xtrc=&#34;codeph:1;7:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/DolphinDB_Explain.md&#34;&gt;功能发布版本：V1.30.16 / V2.00.4&lt;/codeph&gt;&lt;/p&gt;&lt;p class=&#34;- topic/p &#34; xtrc=&#34;p:4;10:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/DolphinDB_Explain.md&#34;&gt;注：查看执行计划的同时内部会完整执行该条SQL语句。若对应SQL语句执行耗时较长或者可能命中的分区数较多，可以选择对SQL语句进行拆分，对拆分后各个子句进行检测；或者通过&lt;codeph class=&#34;+ topic/ph pr-d/codeph &#34; xtrc=&#34;codeph:2;10:86&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/DolphinDB_Explain.md&#34;&gt;sqlDS&lt;/codeph&gt;函数获取命中分区，在对应分区分别检测SQL执行计划（请参考手册的sqlDS介绍。&lt;/p&gt;&lt;/body&gt;&lt;related-links class=&#34;- topic/related-links &#34;&gt;&lt;linkpool class=&#34;- topic/linkpool &#34; xtrc=&#34;topicref:44;63:80&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/chap_tutorials.ditamap&#34;&gt;&lt;link class=&#34;- topic/link &#34; format=&#34;dita&#34; href=&#34;../tutorials/about_tutorials.dita&#34; mapclass=&#34;- map/topicref bookmap/chapter &#34; role=&#34;parent&#34; scope=&#34;local&#34; type=&#34;topic&#34; xtrc=&#34;topicref:1;5:53&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/chap_tutorials.ditamap&#34;&gt;&lt;?ditaot usertext?&gt;&lt;linktext class=&#34;- topic/linktext &#34;&gt;&lt;?ditaot usertext?&gt;教程&lt;/linktext&gt;&lt;?ditaot usershortdesc?&gt;&lt;desc class=&#34;- topic/desc &#34;&gt;DolphinDB 产品使用教程&lt;/desc&gt;&lt;/link&gt;&lt;/linkpool&gt;&lt;/related-links&gt;&lt;topic class=&#34;- topic/topic &#34; ditaarch:DITAArchVersion=&#34;2.0&#34; domains=&#34;a(props audience) a(props deliveryTarget) a(props otherprops) a(props platform) a(props product)&#34; id=&#34;1-如何获取执行计划&#34; specializations=&#34;@props/audience @props/deliveryTarget @props/otherprops @props/platform @props/product&#34; xtrc=&#34;topic:2;12:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/DolphinDB_Explain.md&#34;&gt;&lt;title class=&#34;- topic/title &#34; xtrc=&#34;title:2;12:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/DolphinDB_Explain.md&#34;&gt;1. 如何获取执行计划&lt;/title&gt;&lt;body class=&#34;- topic/body &#34; xtrc=&#34;body:2;12:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/DolphinDB_Explain.md&#34;&gt;&lt;p class=&#34;- topic/p &#34; xtrc=&#34;p:5;14:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/DolphinDB_Explain.md&#34;&gt;若要获取SQL语句的执行计划，需要在select或者exec后面增加：&lt;codeph class=&#34;+ topic/ph pr-d/codeph &#34; xtrc=&#34;codeph:3;14:36&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/DolphinDB_Explain.md&#34;&gt;[HINT_EXPLAIN]&lt;/codeph&gt;，该关键字必须&lt;b class=&#34;+ topic/ph hi-d/b &#34; xtrc=&#34;b:1;14:59&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/DolphinDB_Explain.md&#34;&gt;紧跟&lt;/b&gt;在select或者exec后，然后再增加查询所需字段。&lt;/p&gt;&lt;p class=&#34;- topic/p &#34; xtrc=&#34;p:6;16:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/DolphinDB_Explain.md&#34;&gt;示例如下：&lt;/p&gt;&lt;codeblock class=&#34;+ topic/pre pr-d/codeblock &#34; xml:space=&#34;preserve&#34; xtrc=&#34;codeblock:1;19:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/DolphinDB_Explain.md&#34;&gt;select [HINT_EXPLAIN] * from pt;&lt;/codeblock&gt;&lt;p class=&#34;- topic/p &#34; xtrc=&#34;p:7;23:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/DolphinDB_Explain.md&#34;&gt;注：对于UPDATE或者DELETE语句，暂不支持查看执行计划。&lt;/p&gt;&lt;/body&gt;&lt;/topic&gt;&lt;topic class=&#34;- topic/topic &#34; ditaarch:DITAArchVersion=&#34;2.0&#34; domains=&#34;a(props audience) a(props deliveryTarget) a(props otherprops) a(props platform) a(props product)&#34; id=&#34;2-看懂执行计划&#34; specializations=&#34;@props/audience @props/deliveryTarget @props/otherprops @props/platform @props/product&#34; xtrc=&#34;topic:3;25:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/DolphinDB_Explain.md&#34;&gt;&lt;title class=&#34;- topic/title &#34; xtrc=&#34;title:3;25:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/DolphinDB_Explain.md&#34;&gt;2. 看懂执行计划&lt;/title&gt;&lt;body class=&#34;- topic/body &#34; xtrc=&#34;body:3;25:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/DolphinDB_Explain.md&#34;&gt;&lt;p class=&#34;- topic/p &#34; xtrc=&#34;p:8;27:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/DolphinDB_Explain.md&#34;&gt;DolphinDB的执行计划返回的是一个JSON格式的字符串，不过与其他数据库执行计划不同的是，DolphinDB的执行计划规则为：&lt;/p&gt;&lt;ul class=&#34;- topic/ul &#34; xtrc=&#34;ul:1;29:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/DolphinDB_Explain.md&#34;&gt;&lt;li class=&#34;- topic/li &#34; xtrc=&#34;li:1;29:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/DolphinDB_Explain.md&#34;&gt;同级从上到下表示执行先后顺序。&lt;/li&gt;&lt;li class=&#34;- topic/li &#34; xtrc=&#34;li:2;30:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/DolphinDB_Explain.md&#34;&gt;缩进表示子句/子过程的执行顺序。&lt;/li&gt;&lt;/ul&gt;&lt;p class=&#34;- topic/p &#34; xtrc=&#34;p:9;32:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/DolphinDB_Explain.md&#34;&gt;这里以简单地查询一个表所有的数据为例，分析SQL的执行计划。&lt;/p&gt;&lt;codeblock class=&#34;+ topic/pre pr-d/codeblock &#34; xml:space=&#34;preserve&#34; xtrc=&#34;codeblock:2;33:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/DolphinDB_Explain.md&#34;&gt;// valuedb 数据库 n=1000000 month=take(2000.01M..2016.12M, n) x=rand(1.0, n) id = rand(1..9,n) t=table(month, x, id) db=database(&#34;dfs://valuedb&#34;, VALUE, 2000.01M..2016.12M) pt = db.createPartitionedTable(t, `pt, `month) pt.append!(t) // 查询 select [HINT_EXPLAIN] * from loadTable(&#34;dfs://valuedb&#34;,`pt);&lt;/codeblock&gt;&lt;p class=&#34;- topic/p &#34; xtrc=&#34;p:10;48:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/DolphinDB_Explain.md&#34;&gt;获取到的执行计划如下：&lt;/p&gt;&lt;codeblock class=&#34;+ topic/pre pr-d/codeblock &#34; xml:space=&#34;preserve&#34; xtrc=&#34;codeblock:3;49:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/DolphinDB_Explain.md&#34;&gt;{ &#34;measurement&#34;: &#34;microsecond&#34;, &#34;explain&#34;: { &#34;from&#34;: { &#34;cost&#34;: 13 }, &#34;map&#34;: { &#34;partitions&#34;: { &#34;local&#34;: 0, &#34;remote&#34;: 204 }, &#34;cost&#34;: 22260, &#34;detail&#34;: { &#34;most&#34;: { &#34;sql&#34;: &#34;select [114699] month,x,id from pt [partition = /valuedb/200009M/1kE]&#34;, &#34;explain&#34;: { &#34;rows&#34;: 4902, &#34;cost&#34;: 9962 } }, &#34;least&#34;: { &#34;sql&#34;: &#34;select [114699] month,x,id from pt [partition = /valuedb/200701M/1kE]&#34;, &#34;explain&#34;: { &#34;rows&#34;: 4902, &#34;cost&#34;: 64 } } } }, &#34;merge&#34;: { &#34;cost&#34;: 6163, &#34;rows&#34;: 1000000, &#34;detail&#34;: { &#34;most&#34;: { &#34;sql&#34;: &#34;select [114691] month,x,id from pt [partition = /valuedb/201604M/1kE]&#34;, &#34;explain&#34;: { &#34;from&#34;: { &#34;cost&#34;: 4 }, &#34;rows&#34;: 4902, &#34;cost&#34;: 157 } }, &#34;least&#34;: { &#34;sql&#34;: &#34;select [114699] month,x,id from pt [partition = /valuedb/201605M/1kE]&#34;, &#34;explain&#34;: { &#34;rows&#34;: 4901, &#34;cost&#34;: 81 } } } }, &#34;rows&#34;: 1000000, &#34;cost&#34;: 30988 } } 简单总结，按照从上到下的执行顺序： * 首先获取数据源`pt`的信息，耗时13μs； * 然后将SQL发到各个片区进行查询，涉及本地数据节点分区0个，非本地数据节点分区204个，该阶段总耗时22260μs；耗时最长的是，200009M分区，耗时9962μs，数据量4902行; * 最后在获取所有分区的查询结果后，进行`merge`汇总，这一步骤耗时6163μs，汇总后的结果是100万行，其中，201604M分区是返回结果最多的一个分区，总行数4902。 * SQL语句获取的总数据量为100万行，总耗时为30988μs。 &lt;/codeblock&gt;&lt;/body&gt;&lt;topic class=&#34;- topic/topic &#34; ditaarch:DITAArchVersion=&#34;2.0&#34; domains=&#34;a(props audience) a(props deliveryTarget) a(props otherprops) a(props platform) a(props product)&#34; id=&#34;21-执行计划结构概述&#34; specializations=&#34;@props/audience @props/deliveryTarget @props/otherprops @props/platform @props/product&#34; xtrc=&#34;topic:4;119:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/DolphinDB_Explain.md&#34;&gt;&lt;title class=&#34;- topic/title &#34; xtrc=&#34;title:4;119:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/DolphinDB_Explain.md&#34;&gt;2.1. 执行计划结构概述&lt;/title&gt;&lt;body class=&#34;- topic/body &#34; xtrc=&#34;body:4;119:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/DolphinDB_Explain.md&#34;&gt;&lt;p class=&#34;- topic/p &#34; xtrc=&#34;p:11;121:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/DolphinDB_Explain.md&#34;&gt;注：&#34;measurement&#34;: &#34;microsecond&#34;，表示执行计划中时间开销的单位为微秒。&lt;/p&gt;&lt;p class=&#34;- topic/p &#34; xtrc=&#34;p:12;123:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/DolphinDB_Explain.md&#34;&gt;一般来说，DolphinDB执行计划的所有内容都会包含在&lt;codeph class=&#34;+ topic/ph pr-d/codeph &#34; xtrc=&#34;codeph:4;123:29&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/DolphinDB_Explain.md&#34;&gt;explain&lt;/codeph&gt;结构里。但是若SQL中存在多个子查询，在执行计划中，则可能存在多个嵌套的&lt;codeph class=&#34;+ topic/ph pr-d/codeph &#34; xtrc=&#34;codeph:5;123:74&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/DolphinDB_Explain.md&#34;&gt;explain&lt;/codeph&gt;结构。&lt;/p&gt;&lt;p class=&#34;- topic/p &#34; xtrc=&#34;p:13;125:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/DolphinDB_Explain.md&#34;&gt;案例中的&lt;codeph class=&#34;+ topic/ph pr-d/codeph &#34; xtrc=&#34;codeph:6;125:5&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/DolphinDB_Explain.md&#34;&gt;explain&lt;/codeph&gt;结构中由四部分组成：&lt;codeph class=&#34;+ topic/ph pr-d/codeph &#34; xtrc=&#34;codeph:7;125:24&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/DolphinDB_Explain.md&#34;&gt;from&lt;/codeph&gt;、&lt;codeph class=&#34;+ topic/ph pr-d/codeph &#34; xtrc=&#34;codeph:8;125:31&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/DolphinDB_Explain.md&#34;&gt;map&lt;/codeph&gt;、&lt;codeph class=&#34;+ topic/ph pr-d/codeph &#34; xtrc=&#34;codeph:9;125:37&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/DolphinDB_Explain.md&#34;&gt;merge&lt;/codeph&gt;以及最后的统计信息&lt;codeph class=&#34;+ topic/ph pr-d/codeph &#34; xtrc=&#34;codeph:10;125:53&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/DolphinDB_Explain.md&#34;&gt;rows&lt;/codeph&gt;和&lt;codeph class=&#34;+ topic/ph pr-d/codeph &#34; xtrc=&#34;codeph:11;125:60&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/DolphinDB_Explain.md&#34;&gt;cost&lt;/codeph&gt;。&lt;/p&gt;&lt;/body&gt;&lt;/topic&gt;&lt;topic class=&#34;- topic/topic &#34; ditaarch:DITAArchVersion=&#34;2.0&#34; domains=&#34;a(props audience) a(props deliveryTarget) a(props otherprops) a(props platform) a(props product)&#34; id=&#34;22-from数据源分析&#34; specializations=&#34;@props/audience @props/deliveryTarget @props/otherprops @props/platform @props/product&#34; xtrc=&#34;topic:5;127:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/DolphinDB_Explain.md&#34;&gt;&lt;title class=&#34;- topic/title &#34; xtrc=&#34;title:5;127:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/DolphinDB_Explain.md&#34;&gt;2.2. from数据源分析&lt;/title&gt;&lt;body class=&#34;- topic/body &#34; xtrc=&#34;body:5;127:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/DolphinDB_Explain.md&#34;&gt;&lt;codeblock class=&#34;+ topic/pre pr-d/codeblock &#34; xml:space=&#34;preserve&#34; xtrc=&#34;codeblock:4;129:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/DolphinDB_Explain.md&#34;&gt;&#34;from&#34;: { &#34;cost&#34;: 13 }&lt;/codeblock&gt;&lt;p class=&#34;- topic/p &#34; xtrc=&#34;p:14;135:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/DolphinDB_Explain.md&#34;&gt;&lt;codeph class=&#34;+ topic/ph pr-d/codeph &#34; xtrc=&#34;codeph:12;135:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/DolphinDB_Explain.md&#34;&gt;from&lt;/codeph&gt;结构体种的内容是&lt;codeph class=&#34;+ topic/ph pr-d/codeph &#34; xtrc=&#34;codeph:13;135:15&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/DolphinDB_Explain.md&#34;&gt;cost&lt;/codeph&gt;，表示获取数据源信息的耗时，单位为μs。在上例中，我们使用&lt;codeph class=&#34;+ topic/ph pr-d/codeph &#34; xtrc=&#34;codeph:14;135:50&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/DolphinDB_Explain.md&#34;&gt;loadTable&lt;/codeph&gt;函数从数据库中加载valuedb的pt表（的元数据），耗时为13μs。&lt;/p&gt;&lt;/body&gt;&lt;/topic&gt;&lt;topic class=&#34;- topic/topic &#34; ditaarch:DITAArchVersion=&#34;2.0&#34; domains=&#34;a(props audience) a(props deliveryTarget) a(props otherprops) a(props platform) a(props product)&#34; id=&#34;23-map分区查询分析&#34; specializations=&#34;@props/audience @props/deliveryTarget @props/otherprops @props/platform @props/product&#34; xtrc=&#34;topic:6;138:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/DolphinDB_Explain.md&#34;&gt;&lt;title class=&#34;- topic/title &#34; xtrc=&#34;title:6;138:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/DolphinDB_Explain.md&#34;&gt;2.3. map分区查询分析&lt;/title&gt;&lt;body class=&#34;- topic/body &#34; xtrc=&#34;body:6;138:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/DolphinDB_Explain.md&#34;&gt;&lt;p class=&#34;- topic/p &#34; xtrc=&#34;p:15;140:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/DolphinDB_Explain.md&#34;&gt;DolphinDB数据库使用分布式文件系统，以分区为单位存储数据。当SQL查询涉及到多个分区时，DophinDB会首先尽可能进行分区剪枝，然后将查询语句分发到相关分区进行并行查询，最后将结果进行汇总。&lt;codeph class=&#34;+ topic/ph pr-d/codeph &#34; xtrc=&#34;codeph:15;140:101&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/DolphinDB_Explain.md&#34;&gt;map&lt;/codeph&gt;结构体说明了将查询任务发送到相关分区的执行情况。&lt;/p&gt;&lt;codeblock class=&#34;+ topic/pre pr-d/codeblock &#34; xml:space=&#34;preserve&#34; xtrc=&#34;codeblock:5;142:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/DolphinDB_Explain.md&#34;&gt;&#34;map&#34;: { &#34;partitions&#34;: { &#34;local&#34;: 0, &#34;remote&#34;: 204 }, &#34;cost&#34;: 22260, &#34;detail&#34;: { &#34;most&#34;: { &#34;sql&#34;: &#34;select [114699] month,x,id from pt [partition = /valuedb/200009M/1kE]&#34;, &#34;explain&#34;: { &#34;rows&#34;: 4902, &#34;cost&#34;: 9962 } }, &#34;least&#34;: { &#34;sql&#34;: &#34;select [114699] month,x,id from pt [partition = /valuedb/200701M/1kE]&#34;, &#34;explain&#34;: { &#34;rows&#34;: 4902, &#34;cost&#34;: 64 } } } }&lt;/codeblock&gt;&lt;ul class=&#34;- topic/ul &#34; xtrc=&#34;ul:2;168:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/DolphinDB_Explain.md&#34;&gt;&lt;li class=&#34;- topic/li &#34; xtrc=&#34;li:3;168:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/DolphinDB_Explain.md&#34;&gt;&lt;p class=&#34;- topic/p &#34; xtrc=&#34;p:16;168:3&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/DolphinDB_Explain.md&#34;&gt;&lt;codeph class=&#34;+ topic/ph pr-d/codeph &#34; xtrc=&#34;codeph:16;168:3&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/DolphinDB_Explain.md&#34;&gt;partitions&lt;/codeph&gt;：SQL涉及的分区，包含：&lt;/p&gt;&lt;ul class=&#34;- topic/ul &#34; xtrc=&#34;ul:3;170:5&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/DolphinDB_Explain.md&#34;&gt;&lt;li class=&#34;- topic/li &#34; xtrc=&#34;li:4;170:5&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/DolphinDB_Explain.md&#34;&gt;&lt;codeph class=&#34;+ topic/ph pr-d/codeph &#34; xtrc=&#34;codeph:17;170:7&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/DolphinDB_Explain.md&#34;&gt;local&lt;/codeph&gt;：本地数据节点涉及的分区数；&lt;/li&gt;&lt;li class=&#34;- topic/li &#34; xtrc=&#34;li:5;171:5&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/DolphinDB_Explain.md&#34;&gt;&lt;codeph class=&#34;+ topic/ph pr-d/codeph &#34; xtrc=&#34;codeph:18;171:7&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/DolphinDB_Explain.md&#34;&gt;remote&lt;/codeph&gt;：远程数据节点涉及的分区数。&lt;/li&gt;&lt;/ul&gt;&lt;p class=&#34;- topic/p &#34; xtrc=&#34;p:17;173:4&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/DolphinDB_Explain.md&#34;&gt;通过对比涉及的分区数与总分区数，有助于分析SQL是否进行了查询优化，如分区剪枝。&lt;/p&gt;&lt;/li&gt;&lt;li class=&#34;- topic/li &#34; xtrc=&#34;li:6;175:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/DolphinDB_Explain.md&#34;&gt;&lt;p class=&#34;- topic/p &#34; xtrc=&#34;p:18;175:3&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/DolphinDB_Explain.md&#34;&gt;&lt;codeph class=&#34;+ topic/ph pr-d/codeph &#34; xtrc=&#34;codeph:19;175:3&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/DolphinDB_Explain.md&#34;&gt;cost&lt;/codeph&gt;：总耗时，包含整个&lt;codeph class=&#34;+ topic/ph pr-d/codeph &#34; xtrc=&#34;codeph:20;175:18&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/DolphinDB_Explain.md&#34;&gt;map&lt;/codeph&gt;阶段的耗时，即分发查询任务到各个分区到分区返回查询结果的耗时。&lt;/p&gt;&lt;/li&gt;&lt;li class=&#34;- topic/li &#34; xtrc=&#34;li:7;177:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/DolphinDB_Explain.md&#34;&gt;&lt;p class=&#34;- topic/p &#34; xtrc=&#34;p:19;177:3&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/DolphinDB_Explain.md&#34;&gt;&lt;codeph class=&#34;+ topic/ph pr-d/codeph &#34; xtrc=&#34;codeph:21;177:3&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/DolphinDB_Explain.md&#34;&gt;detail&lt;/codeph&gt;：各分区子查询的详细执行计划。&lt;/p&gt;&lt;/li&gt;&lt;/ul&gt;&lt;p class=&#34;- topic/p &#34; xtrc=&#34;p:20;179:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/DolphinDB_Explain.md&#34;&gt;由于查询时涉及分区可能较多，这里只会展示耗时最长和耗时最短的分区。&lt;/p&gt;&lt;ul class=&#34;- topic/ul &#34; xtrc=&#34;ul:4;181:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/DolphinDB_Explain.md&#34;&gt;&lt;li class=&#34;- topic/li &#34; xtrc=&#34;li:8;181:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/DolphinDB_Explain.md&#34;&gt;&lt;p class=&#34;- topic/p &#34; xtrc=&#34;p:21;181:3&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/DolphinDB_Explain.md&#34;&gt;&lt;codeph class=&#34;+ topic/ph pr-d/codeph &#34; xtrc=&#34;codeph:22;181:3&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/DolphinDB_Explain.md&#34;&gt;most&lt;/codeph&gt;表示耗时最长的分区查询。其中：&lt;/p&gt;&lt;ul class=&#34;- topic/ul &#34; xtrc=&#34;ul:5;183:5&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/DolphinDB_Explain.md&#34;&gt;&lt;li class=&#34;- topic/li &#34; xtrc=&#34;li:9;183:5&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/DolphinDB_Explain.md&#34;&gt;&lt;codeph class=&#34;+ topic/ph pr-d/codeph &#34; xtrc=&#34;codeph:23;183:7&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/DolphinDB_Explain.md&#34;&gt;SQL&lt;/codeph&gt;字段会显示使用的查询语句以及涉及的分区；&lt;/li&gt;&lt;li class=&#34;- topic/li &#34; xtrc=&#34;li:10;184:5&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/DolphinDB_Explain.md&#34;&gt;嵌套的&lt;codeph class=&#34;+ topic/ph pr-d/codeph &#34; xtrc=&#34;codeph:24;184:10&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/DolphinDB_Explain.md&#34;&gt;explain&lt;/codeph&gt;会展示各个分区的查询计划。&lt;/li&gt;&lt;/ul&gt;&lt;/li&gt;&lt;li class=&#34;- topic/li &#34; xtrc=&#34;li:11;185:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/DolphinDB_Explain.md&#34;&gt;&lt;p class=&#34;- topic/p &#34; xtrc=&#34;p:22;185:3&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/DolphinDB_Explain.md&#34;&gt;&lt;codeph class=&#34;+ topic/ph pr-d/codeph &#34; xtrc=&#34;codeph:25;185:3&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/DolphinDB_Explain.md&#34;&gt;least&lt;/codeph&gt;展示耗时最短的分区查询，内容与&lt;codeph class=&#34;+ topic/ph pr-d/codeph &#34; xtrc=&#34;codeph:26;185:25&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/DolphinDB_Explain.md&#34;&gt;most&lt;/codeph&gt;结构相同。&lt;/p&gt;&lt;/li&gt;&lt;/ul&gt;&lt;/body&gt;&lt;/topic&gt;&lt;topic class=&#34;- topic/topic &#34; ditaarch:DITAArchVersion=&#34;2.0&#34; domains=&#34;a(props audience) a(props deliveryTarget) a(props otherprops) a(props platform) a(props product)&#34; id=&#34;24-merge合并分析&#34; specializations=&#34;@props/audience @props/deliveryTarget @props/otherprops @props/platform @props/product&#34; xtrc=&#34;topic:7;189:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/DolphinDB_Explain.md&#34;&gt;&lt;title class=&#34;- topic/title &#34; xtrc=&#34;title:7;189:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/DolphinDB_Explain.md&#34;&gt;2.4. merge合并分析&lt;/title&gt;&lt;body class=&#34;- topic/body &#34; xtrc=&#34;body:7;189:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/DolphinDB_Explain.md&#34;&gt;&lt;p class=&#34;- topic/p &#34; xtrc=&#34;p:23;191:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/DolphinDB_Explain.md&#34;&gt;在上一步，各分区查询完成后会将结果发送到发起查询任务的数据节点，并由该节点进行数据汇总，&lt;codeph class=&#34;+ topic/ph pr-d/codeph &#34; xtrc=&#34;codeph:27;191:45&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/DolphinDB_Explain.md&#34;&gt;merge&lt;/codeph&gt;用于说明汇总阶段的相关指标。&lt;/p&gt;&lt;codeblock class=&#34;+ topic/pre pr-d/codeblock &#34; xml:space=&#34;preserve&#34; xtrc=&#34;codeblock:6;193:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/DolphinDB_Explain.md&#34;&gt; &#34;merge&#34;: { &#34;cost&#34;: 6163, &#34;rows&#34;: 1000000, &#34;detail&#34;: { &#34;most&#34;: { &#34;sql&#34;: &#34;select [114691] month,x,id from pt [partition = /valuedb/201604M/1kE]&#34;, &#34;explain&#34;: { &#34;from&#34;: { &#34;cost&#34;: 4 }, &#34;rows&#34;: 4902, &#34;cost&#34;: 157 } }, &#34;least&#34;: { &#34;sql&#34;: &#34;select [114699] month,x,id from pt [partition = /valuedb/201605M/1kE]&#34;, &#34;explain&#34;: { &#34;rows&#34;: 4901, &#34;cost&#34;: 81 } } } },&lt;/codeblock&gt;&lt;p class=&#34;- topic/p &#34; xtrc=&#34;p:24;219:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/DolphinDB_Explain.md&#34;&gt;在分析的内容中，&lt;codeph class=&#34;+ topic/ph pr-d/codeph &#34; xtrc=&#34;codeph:28;219:9&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/DolphinDB_Explain.md&#34;&gt;cost&lt;/codeph&gt;为耗时，&lt;codeph class=&#34;+ topic/ph pr-d/codeph &#34; xtrc=&#34;codeph:29;219:19&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/DolphinDB_Explain.md&#34;&gt;rows&lt;/codeph&gt;为汇总之后的数据量；&lt;codeph class=&#34;+ topic/ph pr-d/codeph &#34; xtrc=&#34;codeph:30;219:35&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/DolphinDB_Explain.md&#34;&gt;detail&lt;/codeph&gt;包含的内容与&lt;codeph class=&#34;+ topic/ph pr-d/codeph &#34; xtrc=&#34;codeph:31;219:49&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/DolphinDB_Explain.md&#34;&gt;map&lt;/codeph&gt;中的&lt;codeph class=&#34;+ topic/ph pr-d/codeph &#34; xtrc=&#34;codeph:32;219:56&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/DolphinDB_Explain.md&#34;&gt;detail&lt;/codeph&gt;内容类似，区别在于，此处&lt;codeph class=&#34;+ topic/ph pr-d/codeph &#34; xtrc=&#34;codeph:33;219:76&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/DolphinDB_Explain.md&#34;&gt;detail&lt;/codeph&gt;嵌套的的&lt;codeph class=&#34;+ topic/ph pr-d/codeph &#34; xtrc=&#34;codeph:34;219:88&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/DolphinDB_Explain.md&#34;&gt;most&lt;/codeph&gt;和&lt;codeph class=&#34;+ topic/ph pr-d/codeph &#34; xtrc=&#34;codeph:35;219:95&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/DolphinDB_Explain.md&#34;&gt;least&lt;/codeph&gt;指的是返回结果最多与最少的分区，而非耗时最长与最短的分区。&lt;/p&gt;&lt;/body&gt;&lt;/topic&gt;&lt;topic class=&#34;- topic/topic &#34; ditaarch:DITAArchVersion=&#34;2.0&#34; domains=&#34;a(props audience) a(props deliveryTarget) a(props otherprops) a(props platform) a(props product)&#34; id=&#34;25-最后的数据统计&#34; specializations=&#34;@props/audience @props/deliveryTarget @props/otherprops @props/platform @props/product&#34; xtrc=&#34;topic:8;221:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/DolphinDB_Explain.md&#34;&gt;&lt;title class=&#34;- topic/title &#34; xtrc=&#34;title:8;221:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/DolphinDB_Explain.md&#34;&gt;2.5. 最后的数据统计&lt;/title&gt;&lt;body class=&#34;- topic/body &#34; xtrc=&#34;body:8;221:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/DolphinDB_Explain.md&#34;&gt;&lt;p class=&#34;- topic/p &#34; xtrc=&#34;p:25;223:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/DolphinDB_Explain.md&#34;&gt;最后的统计指标一般包括&lt;codeph class=&#34;+ topic/ph pr-d/codeph &#34; xtrc=&#34;codeph:36;223:12&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/DolphinDB_Explain.md&#34;&gt;rows&lt;/codeph&gt;（查询获得的总记录数）与&lt;codeph class=&#34;+ topic/ph pr-d/codeph &#34; xtrc=&#34;codeph:37;223:30&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/DolphinDB_Explain.md&#34;&gt;cost&lt;/codeph&gt;（查询总耗时，单位为μs）。&lt;/p&gt;&lt;p class=&#34;- topic/p &#34; xtrc=&#34;p:26;225:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/DolphinDB_Explain.md&#34;&gt;除此之外，在执行计划内容的中间部分也会报告&lt;codeph class=&#34;+ topic/ph pr-d/codeph &#34; xtrc=&#34;codeph:38;225:22&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/DolphinDB_Explain.md&#34;&gt;rows&lt;/codeph&gt;和&lt;codeph class=&#34;+ topic/ph pr-d/codeph &#34; xtrc=&#34;codeph:39;225:29&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/DolphinDB_Explain.md&#34;&gt;cost&lt;/codeph&gt;，为执行的某一个阶段的统计。&lt;/p&gt;&lt;p class=&#34;- topic/p &#34; xtrc=&#34;p:27;227:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/DolphinDB_Explain.md&#34;&gt;最后统计的查询总耗时可能多于各个阶段的耗时之和，这是因为在各个阶段中间可能会有一些数据格式的转换、数据在网络间的传输等额外的开销，而这些开销不会体现在执行计划中。&lt;/p&gt;&lt;/body&gt;&lt;/topic&gt;&lt;/topic&gt;&lt;topic class=&#34;- topic/topic &#34; ditaarch:DITAArchVersion=&#34;2.0&#34; domains=&#34;a(props audience) a(props deliveryTarget) a(props otherprops) a(props platform) a(props product)&#34; id=&#34;3-执行计划详解与优化建议&#34; specializations=&#34;@props/audience @props/deliveryTarget @props/otherprops @props/platform @props/product&#34; xtrc=&#34;topic:9;229:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/DolphinDB_Explain.md&#34;&gt;&lt;title class=&#34;- topic/title &#34; xtrc=&#34;title:9;229:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/DolphinDB_Explain.md&#34;&gt;3. 执行计划详解与优化建议&lt;/title&gt;&lt;body class=&#34;- topic/body &#34; xtrc=&#34;body:9;229:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/DolphinDB_Explain.md&#34;/&gt;&lt;topic class=&#34;- topic/topic &#34; ditaarch:DITAArchVersion=&#34;2.0&#34; domains=&#34;a(props audience) a(props deliveryTarget) a(props otherprops) a(props platform) a(props product)&#34; id=&#34;31-from&#34; specializations=&#34;@props/audience @props/deliveryTarget @props/otherprops @props/platform @props/product&#34; xtrc=&#34;topic:10;231:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/DolphinDB_Explain.md&#34;&gt;&lt;title class=&#34;- topic/title &#34; xtrc=&#34;title:10;231:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/DolphinDB_Explain.md&#34;&gt;3.1. from&lt;/title&gt;&lt;body class=&#34;- topic/body &#34; xtrc=&#34;body:10;231:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/DolphinDB_Explain.md&#34;&gt;&lt;p class=&#34;- topic/p &#34; xtrc=&#34;p:28;233:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/DolphinDB_Explain.md&#34;&gt;数据来源可以是内存表、流数据表、分布式表、多表连接结果或者嵌套的SQL语句。请注意，嵌套的SQL语句不能添加&lt;codeph class=&#34;+ topic/ph pr-d/codeph &#34; xtrc=&#34;codeph:40;233:55&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/DolphinDB_Explain.md&#34;&gt;[HINT_EXPLAIN]&lt;/codeph&gt;。&lt;/p&gt;&lt;/body&gt;&lt;topic class=&#34;- topic/topic &#34; ditaarch:DITAArchVersion=&#34;2.0&#34; domains=&#34;a(props audience) a(props deliveryTarget) a(props otherprops) a(props platform) a(props product)&#34; id=&#34;311-join&#34; specializations=&#34;@props/audience @props/deliveryTarget @props/otherprops @props/platform @props/product&#34; xtrc=&#34;topic:11;235:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/DolphinDB_Explain.md&#34;&gt;&lt;title class=&#34;- topic/title &#34; xtrc=&#34;title:11;235:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/DolphinDB_Explain.md&#34;&gt;3.1.1. JOIN&lt;/title&gt;&lt;body class=&#34;- topic/body &#34; xtrc=&#34;body:11;235:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/DolphinDB_Explain.md&#34;&gt;&lt;p class=&#34;- topic/p &#34; xtrc=&#34;p:29;236:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/DolphinDB_Explain.md&#34;&gt;若查询包含表连接操作，执行计划会显示&lt;codeph class=&#34;+ topic/ph pr-d/codeph &#34; xtrc=&#34;codeph:41;236:19&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/DolphinDB_Explain.md&#34;&gt;JOIN&lt;/codeph&gt;的相关信息。&lt;/p&gt;&lt;codeblock class=&#34;+ topic/pre pr-d/codeblock &#34; xml:space=&#34;preserve&#34; xtrc=&#34;codeblock:7;238:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/DolphinDB_Explain.md&#34;&gt;if(existsDatabase(&#34;dfs://valuedb&#34;)) dropDatabase(&#34;dfs://valuedb&#34;); if(existsDatabase(&#34;dfs://valuedb1&#34;)) dropDatabase(&#34;dfs://valuedb1&#34;); // valuedb 数据库 n=1000000 month=take(2000.01M..2016.12M, n) x=rand(1.0, n) id = rand(1..9,n) t1=table(month, x, id) db1=database(&#34;dfs://valuedb&#34;, VALUE, 2000.01M..2016.12M) pt1 = db1.createPartitionedTable(t1, `pt, `month).append!(t1); // valuedb1 数据库 id = rand(1..10,n) times = now()+ 1..n vals = take(1..20,n) + rand(1.0,n) t2 = table(id,times,vals) db2=database(&#34;dfs://valuedb1&#34;,VALUE, 1..10); pt2=db2.createPartitionedTable(t2, `pt, `id).append!(t2); // join 查询 select [HINT_EXPLAIN] times,vals,month from lsj(loadTable(&#34;dfs://valuedb&#34;,`pt),loadTable(&#34;dfs://valuedb1&#34;,`pt),`id)&lt;/codeblock&gt;&lt;p class=&#34;- topic/p &#34; xtrc=&#34;p:30;263:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/DolphinDB_Explain.md&#34;&gt;结果为：&lt;/p&gt;&lt;codeblock class=&#34;+ topic/pre pr-d/codeblock &#34; xml:space=&#34;preserve&#34; xtrc=&#34;codeblock:8;264:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/DolphinDB_Explain.md&#34;&gt;{ &#34;measurement&#34;: &#34;microsecond&#34;, &#34;explain&#34;: { &#34;from&#34;: { &#34;cost&#34;: 29, &#34;detail&#34;: &#34;materialize for JOIN&#34; }, &#34;map&#34;: { &#34;reshuffle&#34;: { &#34;cost&#34;: 9293 }, &#34;partitions&#34;: { &#34;local&#34;: 0, &#34;remote&#34;: 204 }, &#34;cost&#34;: 1961931, &#34;detail&#34;: { &#34;most&#34;: { &#34;sql&#34;: &#34;select [98305] times,vals,month from lsj(DataSource&amp;lt; select [65541] month,id from pt where hashBucket(id, 204) == 1 as pt &amp;gt;,DataSource&amp;lt; select [65541] vals,times,id from pt where hashBucket(id, 204) == 1 as pt &amp;gt;,\&#34;id\&#34;,\&#34;id\&#34;)&#34;, &#34;explain&#34;: { &#34;from&#34;: { &#34;cost&#34;: 55134, &#34;detail&#34;: &#34;materialize for JOIN&#34; }, &#34;join&#34;: { &#34;cost&#34;: 1701 }, &#34;rows&#34;: 110842, &#34;cost&#34;: 57877 } }, &#34;least&#34;: {...} } }, &#34;merge&#34;: { &#34;cost&#34;: 12358, &#34;rows&#34;: 1000000, &#34;detail&#34;: { &#34;most&#34;: { &#34;sql&#34;: &#34;select [98305] times,vals,month from lsj(DataSource&amp;lt; select [65541] month,id from pt where hashBucket(id, 204) == 3 as pt &amp;gt;,DataSource&amp;lt; select [65541] vals,times,id from pt where hashBucket(id, 204) == 3 as pt &amp;gt;,\&#34;id\&#34;,\&#34;id\&#34;)&#34;, &#34;explain&#34;: { &#34;from&#34;: { &#34;cost&#34;: 29406, &#34;detail&#34;: &#34;materialize for JOIN&#34; }, &#34;join&#34;: { &#34;cost&#34;: 2535 }, &#34;rows&#34;: 111496, &#34;cost&#34;: 34450 } }, &#34;least&#34;: {...} } }, &#34;rows&#34;: 1000000, &#34;cost&#34;: 1979077 } }&lt;/codeblock&gt;&lt;p class=&#34;- topic/p &#34; xtrc=&#34;p:31;326:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/DolphinDB_Explain.md&#34;&gt;较第二节中的例子相比，本例的执行计划在&lt;codeph class=&#34;+ topic/ph pr-d/codeph &#34; xtrc=&#34;codeph:42;326:20&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/DolphinDB_Explain.md&#34;&gt;from&lt;/codeph&gt;部分中增加了 &#34;detail&#34;: &#34;materialize for JOIN&#34;。请注意这里&lt;codeph class=&#34;+ topic/ph pr-d/codeph &#34; xtrc=&#34;codeph:43;326:71&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/DolphinDB_Explain.md&#34;&gt;from&lt;/codeph&gt;中的耗时并不是表连接操作的耗时，而是准备用于连接的2个数据源的时间。表连接将在map阶段执行。&lt;/p&gt;&lt;p class=&#34;- topic/p &#34; xtrc=&#34;p:32;329:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/DolphinDB_Explain.md&#34;&gt;根据&lt;codeph class=&#34;+ topic/ph pr-d/codeph &#34; xtrc=&#34;codeph:44;329:3&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/DolphinDB_Explain.md&#34;&gt;map&lt;/codeph&gt;部分的统计，耗时最长的分区中，&lt;codeph class=&#34;+ topic/ph pr-d/codeph &#34; xtrc=&#34;codeph:45;329:23&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/DolphinDB_Explain.md&#34;&gt;join&lt;/codeph&gt;耗时1701μs；根据&lt;codeph class=&#34;+ topic/ph pr-d/codeph &#34; xtrc=&#34;codeph:46;329:40&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/DolphinDB_Explain.md&#34;&gt;merge&lt;/codeph&gt;部分的统计，返回数据量最多的分区中，&lt;codeph class=&#34;+ topic/ph pr-d/codeph &#34; xtrc=&#34;codeph:47;329:65&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/DolphinDB_Explain.md&#34;&gt;join&lt;/codeph&gt;耗时2535μs。&lt;/p&gt;&lt;p class=&#34;- topic/p &#34; xtrc=&#34;p:33;331:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/DolphinDB_Explain.md&#34;&gt;&lt;codeph class=&#34;+ topic/ph pr-d/codeph &#34; xtrc=&#34;codeph:48;331:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/DolphinDB_Explain.md&#34;&gt;map&lt;/codeph&gt;部分中的&lt;codeph class=&#34;+ topic/ph pr-d/codeph &#34; xtrc=&#34;codeph:49;331:10&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/DolphinDB_Explain.md&#34;&gt;reshuffle&lt;/codeph&gt;部分显示的耗时，是准备将数据根据连接列连续存放到内存中以进行表连接的耗时，仅是准备过程的耗时，并没有包括将数据取到内存的耗时。若同一数据库下，进行多表连接且连接列是分区字段，则不会包含&lt;codeph class=&#34;+ topic/ph pr-d/codeph &#34; xtrc=&#34;codeph:50;331:113&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/DolphinDB_Explain.md&#34;&gt;reshuffle&lt;/codeph&gt;部分。（只有2.0版本支持分布式join）&lt;/p&gt;&lt;/body&gt;&lt;/topic&gt;&lt;topic class=&#34;- topic/topic &#34; ditaarch:DITAArchVersion=&#34;2.0&#34; domains=&#34;a(props audience) a(props deliveryTarget) a(props otherprops) a(props platform) a(props product)&#34; id=&#34;312-子查询&#34; specializations=&#34;@props/audience @props/deliveryTarget @props/otherprops @props/platform @props/product&#34; xtrc=&#34;topic:12;333:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/DolphinDB_Explain.md&#34;&gt;&lt;title class=&#34;- topic/title &#34; xtrc=&#34;title:12;333:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/DolphinDB_Explain.md&#34;&gt;3.1.2. 子查询&lt;/title&gt;&lt;body class=&#34;- topic/body &#34; xtrc=&#34;body:12;333:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/DolphinDB_Explain.md&#34;&gt;&lt;p class=&#34;- topic/p &#34; xtrc=&#34;p:34;335:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/DolphinDB_Explain.md&#34;&gt;如果&lt;codeph class=&#34;+ topic/ph pr-d/codeph &#34; xtrc=&#34;codeph:51;335:3&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/DolphinDB_Explain.md&#34;&gt;from&lt;/codeph&gt;子句的对象是一个SQL语句（嵌套子查询），则会在执行计划中嵌套显示子查询的执行计划。&lt;/p&gt;&lt;p class=&#34;- topic/p &#34; xtrc=&#34;p:35;337:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/DolphinDB_Explain.md&#34;&gt;下例将表先根据 month 字段分组，计算每组 x 字段的最大值，选取小于固定值记录。&lt;/p&gt;&lt;codeblock class=&#34;+ topic/pre pr-d/codeblock &#34; xml:space=&#34;preserve&#34; xtrc=&#34;codeblock:9;339:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/DolphinDB_Explain.md&#34;&gt;select [HINT_EXPLAIN] * from (select max(x) as maxx from loadTable(&#34;dfs://valuedb&#34;,`pt) group by month ) where maxx &amp;lt; 0.9994&lt;/codeblock&gt;&lt;p class=&#34;- topic/p &#34; xtrc=&#34;p:36;342:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/DolphinDB_Explain.md&#34;&gt;在获取的执行计划中，可以看到&lt;codeph class=&#34;+ topic/ph pr-d/codeph &#34; xtrc=&#34;codeph:52;342:15&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/DolphinDB_Explain.md&#34;&gt;from&lt;/codeph&gt;，&lt;codeph class=&#34;+ topic/ph pr-d/codeph &#34; xtrc=&#34;codeph:53;342:22&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/DolphinDB_Explain.md&#34;&gt;detail&lt;/codeph&gt;项增加了很多内容。&lt;/p&gt;&lt;p class=&#34;- topic/p &#34; xtrc=&#34;p:37;344:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/DolphinDB_Explain.md&#34;&gt;&#34;sql&#34;显示的是子查询的SQL语句，该标签后的&lt;codeph class=&#34;+ topic/ph pr-d/codeph &#34; xtrc=&#34;codeph:54;344:25&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/DolphinDB_Explain.md&#34;&gt;explain&lt;/codeph&gt;结构将展示这条子查询SQL语句的执行计划。子查询总共耗时为33571μs。&lt;/p&gt;&lt;codeblock class=&#34;+ topic/pre pr-d/codeblock &#34; xml:space=&#34;preserve&#34; xtrc=&#34;codeblock:10;345:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/DolphinDB_Explain.md&#34;&gt;{ &#34;measurement&#34;: &#34;microsecond&#34;, &#34;explain&#34;: { &#34;from&#34;: { &#34;cost&#34;: 33571, &#34;detail&#34;: { &#34;sql&#34;: &#34;select [98304] max(x) as maxx from loadTable(\&#34;dfs://valuedb\&#34;, \&#34;pt\&#34;) group by month&#34;, &#34;explain&#34;: { &#34;from&#34;: { &#34;cost&#34;: 16 }, &#34;map&#34;: { &#34;partitions&#34;: { &#34;local&#34;: 0, &#34;remote&#34;: 204 }, &#34;cost&#34;: 29744, &#34;detail&#34;: { &#34;most&#34;: { &#34;sql&#34;: &#34;select [114715] first(month) as month,max(x) as maxx from pt [partition = /valuedb/200412M]&#34;, &#34;explain&#34;: { &#34;from&#34;: { &#34;cost&#34;: 4 }, &#34;rows&#34;: 1, &#34;cost&#34;: 8224 } }, &#34;least&#34;: { &#34;sql&#34;: &#34;select [114715] first(month) as month,max(x) as maxx from pt [partition = /valuedb/200112M]&#34;, &#34;explain&#34;: { &#34;rows&#34;: 1, &#34;cost&#34;: 31 } } } }, &#34;merge&#34;: { &#34;cost&#34;: 1192, &#34;rows&#34;: 204, &#34;detail&#34;: { &#34;most&#34;: { &#34;sql&#34;: &#34;select [114715] first(month) as month,max(x) as maxx from pt [partition = /valuedb/201612M]&#34;, &#34;explain&#34;: { &#34;rows&#34;: 1, &#34;cost&#34;: 65 } }, &#34;least&#34;: { &#34;sql&#34;: &#34;select [114707] first(month) as month,max(x) as maxx from pt [partition = /valuedb/200001M]&#34;, &#34;explain&#34;: { &#34;from&#34;: { &#34;cost&#34;: 5 }, &#34;rows&#34;: 1, &#34;cost&#34;: 93 } } } }, &#34;rows&#34;: 204, &#34;cost&#34;: 33571 } } }, &#34;where&#34;: { &#34;rows&#34;: 9, &#34;cost&#34;: 13 }, &#34;rows&#34;: 9, &#34;cost&#34;: 33621 } }&lt;/codeblock&gt;&lt;/body&gt;&lt;/topic&gt;&lt;/topic&gt;&lt;topic class=&#34;- topic/topic &#34; ditaarch:DITAArchVersion=&#34;2.0&#34; domains=&#34;a(props audience) a(props deliveryTarget) a(props otherprops) a(props platform) a(props product)&#34; id=&#34;32-where&#34; specializations=&#34;@props/audience @props/deliveryTarget @props/otherprops @props/platform @props/product&#34; xtrc=&#34;topic:13;421:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/DolphinDB_Explain.md&#34;&gt;&lt;title class=&#34;- topic/title &#34; xtrc=&#34;title:13;421:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/DolphinDB_Explain.md&#34;&gt;3.2. where&lt;/title&gt;&lt;body class=&#34;- topic/body &#34; xtrc=&#34;body:13;421:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/DolphinDB_Explain.md&#34;&gt;&lt;p class=&#34;- topic/p &#34; xtrc=&#34;p:38;423:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/DolphinDB_Explain.md&#34;&gt;典型的&lt;codeph class=&#34;+ topic/ph pr-d/codeph &#34; xtrc=&#34;codeph:55;423:4&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/DolphinDB_Explain.md&#34;&gt;where&lt;/codeph&gt;部分中只有&lt;codeph class=&#34;+ topic/ph pr-d/codeph &#34; xtrc=&#34;codeph:56;423:16&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/DolphinDB_Explain.md&#34;&gt;rows&lt;/codeph&gt;和&lt;codeph class=&#34;+ topic/ph pr-d/codeph &#34; xtrc=&#34;codeph:57;423:23&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/DolphinDB_Explain.md&#34;&gt;cost&lt;/codeph&gt;两项。&lt;codeph class=&#34;+ topic/ph pr-d/codeph &#34; xtrc=&#34;codeph:58;423:32&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/DolphinDB_Explain.md&#34;&gt;cost&lt;/codeph&gt;表示进行条件过滤的耗时，而&lt;codeph class=&#34;+ topic/ph pr-d/codeph &#34; xtrc=&#34;codeph:59;423:51&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/DolphinDB_Explain.md&#34;&gt;rows&lt;/codeph&gt;表示过滤后获取的数据量。如上例中，&lt;codeph class=&#34;+ topic/ph pr-d/codeph &#34; xtrc=&#34;codeph:60;423:74&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/DolphinDB_Explain.md&#34;&gt;where&lt;/codeph&gt;条件过滤后只剩9行数据，耗时13μs。&lt;/p&gt;&lt;codeblock class=&#34;+ topic/pre pr-d/codeblock &#34; xml:space=&#34;preserve&#34; xtrc=&#34;codeblock:11;425:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/DolphinDB_Explain.md&#34;&gt; &#34;where&#34;: { &#34;rows&#34;: 9, &#34;cost&#34;: 13 },&lt;/codeblock&gt;&lt;/body&gt;&lt;/topic&gt;&lt;topic class=&#34;- topic/topic &#34; ditaarch:DITAArchVersion=&#34;2.0&#34; domains=&#34;a(props audience) a(props deliveryTarget) a(props otherprops) a(props platform) a(props product)&#34; id=&#34;33-map&#34; specializations=&#34;@props/audience @props/deliveryTarget @props/otherprops @props/platform @props/product&#34; xtrc=&#34;topic:14;505:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/DolphinDB_Explain.md&#34;&gt;&lt;title class=&#34;- topic/title &#34; xtrc=&#34;title:14;505:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/DolphinDB_Explain.md&#34;&gt;3.3. map&lt;/title&gt;&lt;body class=&#34;- topic/body &#34; xtrc=&#34;body:14;505:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/DolphinDB_Explain.md&#34;&gt;&lt;p class=&#34;- topic/p &#34; xtrc=&#34;p:39;507:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/DolphinDB_Explain.md&#34;&gt;&lt;codeph class=&#34;+ topic/ph pr-d/codeph &#34; xtrc=&#34;codeph:61;507:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/DolphinDB_Explain.md&#34;&gt;map&lt;/codeph&gt;阶段将任务分发给各个节点执行，执行计划展示了涉及的分区数、获取数据的行数、耗时、具体执行的SQL等信息。若SQL语句进行了优化，&lt;codeph class=&#34;+ topic/ph pr-d/codeph &#34; xtrc=&#34;codeph:62;507:70&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/DolphinDB_Explain.md&#34;&gt;map&lt;/codeph&gt;部分会包含&lt;codeph class=&#34;+ topic/ph pr-d/codeph &#34; xtrc=&#34;codeph:63;507:80&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/DolphinDB_Explain.md&#34;&gt;optimize&lt;/codeph&gt;部分，或者&lt;codeph class=&#34;+ topic/ph pr-d/codeph &#34; xtrc=&#34;codeph:64;507:95&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/DolphinDB_Explain.md&#34;&gt;map&lt;/codeph&gt;部分被&lt;codeph class=&#34;+ topic/ph pr-d/codeph &#34; xtrc=&#34;codeph:65;507:103&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/DolphinDB_Explain.md&#34;&gt;optimize&lt;/codeph&gt;部分取代。&lt;/p&gt;&lt;/body&gt;&lt;topic class=&#34;- topic/topic &#34; ditaarch:DITAArchVersion=&#34;2.0&#34; domains=&#34;a(props audience) a(props deliveryTarget) a(props otherprops) a(props platform) a(props product)&#34; id=&#34;331-分区剪枝&#34; specializations=&#34;@props/audience @props/deliveryTarget @props/otherprops @props/platform @props/product&#34; xtrc=&#34;topic:15;509:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/DolphinDB_Explain.md&#34;&gt;&lt;title class=&#34;- topic/title &#34; xtrc=&#34;title:15;509:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/DolphinDB_Explain.md&#34;&gt;3.3.1. 分区剪枝&lt;/title&gt;&lt;body class=&#34;- topic/body &#34; xtrc=&#34;body:15;509:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/DolphinDB_Explain.md&#34;&gt;&lt;p class=&#34;- topic/p &#34; xtrc=&#34;p:40;511:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/DolphinDB_Explain.md&#34;&gt;对于分布式查询，我们可以通过观察&lt;codeph class=&#34;+ topic/ph pr-d/codeph &#34; xtrc=&#34;codeph:66;511:17&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/DolphinDB_Explain.md&#34;&gt;map&lt;/codeph&gt;的&lt;codeph class=&#34;+ topic/ph pr-d/codeph &#34; xtrc=&#34;codeph:67;511:23&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/DolphinDB_Explain.md&#34;&gt;partitions&lt;/codeph&gt;来检查SQL涉及的分区数量是否与预期涉及的分区数量一致。如果执行计划中分区的数量与总分区数量一致，表示该SQL语句没有触发分区剪枝，遍历了所有的分区，此时参考用户手册关于分区剪枝的部分，可以对SQL语句进行优化。&lt;/p&gt;&lt;p class=&#34;- topic/p &#34; xtrc=&#34;p:41;513:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/DolphinDB_Explain.md&#34;&gt;建议在SQL查询前，估算一下涉及的分区数量，并与执行计划显示的分区数量进行比对，以此来判断SQL是否做到查询最少的数据。&lt;/p&gt;&lt;p class=&#34;- topic/p &#34; xtrc=&#34;p:42;515:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/DolphinDB_Explain.md&#34;&gt;下例按月创建了分区表，month为分区字段，总分区数量204个。现在查询2016年11月到2016年12月的数据，预期查询的分区数只有2个。&lt;/p&gt;&lt;codeblock class=&#34;+ topic/pre pr-d/codeblock &#34; xml:space=&#34;preserve&#34; xtrc=&#34;codeblock:12;516:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/DolphinDB_Explain.md&#34;&gt;// 创建数据库 if( existsDatabase(&#34;dfs://valuedb&#34;) ) dropDatabase(&#34;dfs://valuedb&#34;); // 100万，列：x,month;按month 值分区 n=1000000 month=take(2000.01M..2016.12M, n) x=rand(1.0, n) t=table(month, x) db=database(&#34;dfs://valuedb&#34;, VALUE, 2000.01M..2016.12M) pt = db.createPartitionedTable(t, `pt, `month) pt.append!(t) // 查询出来有204个分区 select count(*) from pnodeRun(getAllChunks) where dfsPath like '%valuedb/%' and type != 0 group by dfsPath select [HINT_EXPLAIN] * from pt where 2016.11M &amp;lt;= month&amp;lt;= 2016.12M&lt;/codeblock&gt;&lt;codeblock class=&#34;+ topic/pre pr-d/codeblock &#34; xml:space=&#34;preserve&#34; xtrc=&#34;codeblock:13;536:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/DolphinDB_Explain.md&#34;&gt;{ &#34;measurement&#34;: &#34;microsecond&#34;, &#34;explain&#34;: { &#34;from&#34;: { &#34;cost&#34;: 2 }, &#34;map&#34;: { &#34;partitions&#34;: { &#34;local&#34;: 0, &#34;remote&#34;: 204 }, &#34;cost&#34;: 12966, &#34;detail&#34;: { &#34;most&#34;: { &#34;sql&#34;: &#34;select [114699] month,x from pt where 2016.11M &amp;lt;= month &amp;lt;= 2016.12M [partition = /valuedb/200107M/2JCB]&#34;, &#34;explain&#34;: { ......[以下省略]&lt;/codeblock&gt;&lt;p class=&#34;- topic/p &#34; xtrc=&#34;p:43;555:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/DolphinDB_Explain.md&#34;&gt;以上执行计划显示，遍历了204个分区。这是因为查询条件 &lt;codeph class=&#34;+ topic/ph pr-d/codeph &#34; xtrc=&#34;codeph:68;555:29&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/DolphinDB_Explain.md&#34;&gt;2016.11M &amp;lt;= month &amp;lt;= 2016.12M&lt;/codeph&gt; 不能进行分区剪枝。若要分区剪枝，可使用&lt;codeph class=&#34;+ topic/ph pr-d/codeph &#34; xtrc=&#34;codeph:69;555:80&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/DolphinDB_Explain.md&#34;&gt;month between 2016.11M:2016.12M&lt;/codeph&gt;。&lt;/p&gt;&lt;codeblock class=&#34;+ topic/pre pr-d/codeblock &#34; xml:space=&#34;preserve&#34; xtrc=&#34;codeblock:14;557:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/DolphinDB_Explain.md&#34;&gt;select [HINT_EXPLAIN] * from pt where month between 2016.11M : 2016.12M&lt;/codeblock&gt;&lt;p class=&#34;- topic/p &#34; xtrc=&#34;p:44;560:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/DolphinDB_Explain.md&#34;&gt;执行计划：&lt;/p&gt;&lt;codeblock class=&#34;+ topic/pre pr-d/codeblock &#34; xml:space=&#34;preserve&#34; xtrc=&#34;codeblock:15;561:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/DolphinDB_Explain.md&#34;&gt;{ &#34;measurement&#34;: &#34;microsecond&#34;, &#34;explain&#34;: { &#34;from&#34;: { &#34;cost&#34;: 3 }, &#34;map&#34;: { &#34;partitions&#34;: { &#34;local&#34;: 0, &#34;remote&#34;: 2 }, &#34;cost&#34;: 912, &#34;detail&#34;: { &#34;most&#34;: { ......[以下省略]&lt;/codeblock&gt;&lt;/body&gt;&lt;/topic&gt;&lt;topic class=&#34;- topic/topic &#34; ditaarch:DITAArchVersion=&#34;2.0&#34; domains=&#34;a(props audience) a(props deliveryTarget) a(props otherprops) a(props platform) a(props product)&#34; id=&#34;332-使用分区字段减少耗时&#34; specializations=&#34;@props/audience @props/deliveryTarget @props/otherprops @props/platform @props/product&#34; xtrc=&#34;topic:16;579:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/DolphinDB_Explain.md&#34;&gt;&lt;title class=&#34;- topic/title &#34; xtrc=&#34;title:16;579:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/DolphinDB_Explain.md&#34;&gt;3.3.2. 使用分区字段减少耗时&lt;/title&gt;&lt;body class=&#34;- topic/body &#34; xtrc=&#34;body:16;579:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/DolphinDB_Explain.md&#34;&gt;&lt;p class=&#34;- topic/p &#34; xtrc=&#34;p:45;581:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/DolphinDB_Explain.md&#34;&gt;在SQL中，建议尽量在where或者groupby等条件中使用分区字段，这可以帮助减少查询的分区数，从而减少查询耗时。&lt;/p&gt;&lt;p class=&#34;- topic/p &#34; xtrc=&#34;p:46;583:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/DolphinDB_Explain.md&#34;&gt;比如在下面的例子中，我的表中存在，datea列和dateb列,两列数据相同，但是dateb列为分区使用的字段。同样是查询某一天的数据，使用datea列筛选的执行计划效果如下：&lt;/p&gt;&lt;codeblock class=&#34;+ topic/pre pr-d/codeblock &#34; xml:space=&#34;preserve&#34; xtrc=&#34;codeblock:16;584:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/DolphinDB_Explain.md&#34;&gt;if( existsDatabase(&#34;dfs://valuedb2&#34;) ) dropDatabase(&#34;dfs://valuedb2&#34;); n=1000000 datea=take(2000.01.01..2000.01.02, n) dateb=take(2000.01.01..2000.01.02, n) x=rand(1.0, n) t=table(datea,dateb, x) db=database(&#34;dfs://valuedb2&#34;, VALUE, 2000.01.01..2000.01.02) pt = db.createPartitionedTable(t, `pt, `dateb) pt.append!(t) select [HINT_EXPLAIN] * from pt where datea = 2000.01.01;&lt;/codeblock&gt;&lt;codeblock class=&#34;+ topic/pre pr-d/codeblock &#34; xml:space=&#34;preserve&#34; xtrc=&#34;codeblock:17;597:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/DolphinDB_Explain.md&#34;&gt;{ &#34;measurement&#34;: &#34;microsecond&#34;, &#34;explain&#34;: { &#34;from&#34;: { &#34;cost&#34;: 1 }, &#34;map&#34;: { &#34;partitions&#34;: { &#34;local&#34;: 0, &#34;remote&#34;: 2 }, &#34;cost&#34;: 10010, &#34;detail&#34;: { &#34;most&#34;: { &#34;sql&#34;: &#34;select [114699] datea,dateb,x from pt where datea == 2000.01.01 [partition = /valuedb2/20000101/OD]&#34;, &#34;explain&#34;: { &#34;where&#34;: { &#34;rows&#34;: 500000, &#34;cost&#34;: 3973 }, &#34;rows&#34;: 500000, &#34;cost&#34;: 9783 } }, &#34;least&#34;: { &#34;sql&#34;: &#34;select [114695] datea,dateb,x from pt where datea == 2000.01.01 [partition = /valuedb2/20000102/OD]&#34;, &#34;explain&#34;: { &#34;from&#34;: { &#34;cost&#34;: 8 }, &#34;where&#34;: { &#34;rows&#34;: 0, &#34;cost&#34;: 2392 }, &#34;rows&#34;: 0, &#34;cost&#34;: 2516 } } } }, &#34;merge&#34;: { &#34;cost&#34;: 2079, &#34;rows&#34;: 500000, &#34;detail&#34;: { &#34;most&#34;: { &#34;sql&#34;: &#34;select [114699] datea,dateb,x from pt where datea == 2000.01.01 [partition = /valuedb2/20000101/OD]&#34;, &#34;explain&#34;: { &#34;where&#34;: { &#34;rows&#34;: 500000, &#34;cost&#34;: 3973 }, &#34;rows&#34;: 500000, &#34;cost&#34;: 9783 } }, &#34;least&#34;: { &#34;sql&#34;: &#34;select [114695] datea,dateb,x from pt where datea == 2000.01.01 [partition = /valuedb2/20000102/OD]&#34;, &#34;explain&#34;: { &#34;from&#34;: { &#34;cost&#34;: 8 }, &#34;where&#34;: { &#34;rows&#34;: 0, &#34;cost&#34;: 2392 }, &#34;rows&#34;: 0, &#34;cost&#34;: 2516 } } } }, &#34;rows&#34;: 500000, &#34;cost&#34;: 13019 } }&lt;/codeblock&gt;&lt;p class=&#34;- topic/p &#34; xtrc=&#34;p:47;674:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/DolphinDB_Explain.md&#34;&gt;使用dateb列的执行计划效果如下：&lt;/p&gt;&lt;codeblock class=&#34;+ topic/pre pr-d/codeblock &#34; xml:space=&#34;preserve&#34; xtrc=&#34;codeblock:18;675:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/DolphinDB_Explain.md&#34;&gt;select [HINT_EXPLAIN] * from pt where dateb = 2000.01.01;&lt;/codeblock&gt;&lt;codeblock class=&#34;+ topic/pre pr-d/codeblock &#34; xml:space=&#34;preserve&#34; xtrc=&#34;codeblock:19;678:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/DolphinDB_Explain.md&#34;&gt;{ &#34;measurement&#34;: &#34;microsecond&#34;, &#34;explain&#34;: { &#34;from&#34;: { &#34;cost&#34;: 1 }, &#34;map&#34;: { &#34;partitions&#34;: { &#34;local&#34;: 0, &#34;remote&#34;: 1 }, &#34;cost&#34;: 1275, &#34;optimize&#34;: { &#34;cost&#34;: 27, &#34;field&#34;: &#34;single partition query&#34;, &#34;sql&#34;: &#34;select [98307] datea,dateb,x from pt [partition = /valuedb2/20000101/OD]&#34;, &#34;explain&#34;: { &#34;rows&#34;: 500000, &#34;cost&#34;: 1248 } } }, &#34;rows&#34;: 500000, &#34;cost&#34;: 2214 } }&lt;/codeblock&gt;&lt;p class=&#34;- topic/p &#34; xtrc=&#34;p:48;706:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/DolphinDB_Explain.md&#34;&gt;使用普通列DolphinDB无法进行查询优化，命中了所有的分区，但是使用分区字段就可以。在上面的示例中使用分区字段后直接找到了对应的分区，查询出预期的数据。&lt;/p&gt;&lt;p class=&#34;- topic/p &#34; xtrc=&#34;p:49;708:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/DolphinDB_Explain.md&#34;&gt;&lt;b class=&#34;+ topic/ph hi-d/b &#34; xtrc=&#34;b:2;708:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/DolphinDB_Explain.md&#34;&gt;在TSDB引擎中建表时增加了sortColumns选项，该选项可以作为索引快速定位到需要的数据。建议在筛选条件或者组合条件中，尽量使用分区字段和sortColumns字段，可以大大提高查询效率&lt;/b&gt;&lt;/p&gt;&lt;/body&gt;&lt;/topic&gt;&lt;topic class=&#34;- topic/topic &#34; ditaarch:DITAArchVersion=&#34;2.0&#34; domains=&#34;a(props audience) a(props deliveryTarget) a(props otherprops) a(props platform) a(props product)&#34; id=&#34;333-optimize场景优化&#34; specializations=&#34;@props/audience @props/deliveryTarget @props/otherprops @props/platform @props/product&#34; xtrc=&#34;topic:17;710:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/DolphinDB_Explain.md&#34;&gt;&lt;title class=&#34;- topic/title &#34; xtrc=&#34;title:17;710:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/DolphinDB_Explain.md&#34;&gt;3.3.3. optimize场景优化&lt;/title&gt;&lt;body class=&#34;- topic/body &#34; xtrc=&#34;body:17;710:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/DolphinDB_Explain.md&#34;&gt;&lt;p class=&#34;- topic/p &#34; xtrc=&#34;p:50;711:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/DolphinDB_Explain.md&#34;&gt;DolphinDB对于部分经典场景的SQL做了优化，比如对于物联网场景，经常需要查找某些设备最新的数据，DolphinDB在进行优化后，不需要在分发查询任务到每一个分区进行查询，而是采用新的寻径算法找到需要的数据。&lt;/p&gt;&lt;p class=&#34;- topic/p &#34; xtrc=&#34;p:51;713:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/DolphinDB_Explain.md&#34;&gt;在执行计划中，&lt;codeph class=&#34;+ topic/ph pr-d/codeph &#34; xtrc=&#34;codeph:70;713:8&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/DolphinDB_Explain.md&#34;&gt;map&lt;/codeph&gt;里面会在&lt;codeph class=&#34;+ topic/ph pr-d/codeph &#34; xtrc=&#34;codeph:71;713:17&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/DolphinDB_Explain.md&#34;&gt;optimize&lt;/codeph&gt;中展示优化的具体内容（该优化在版本&lt;codeph class=&#34;+ topic/ph pr-d/codeph &#34; xtrc=&#34;codeph:72;713:44&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/DolphinDB_Explain.md&#34;&gt;2.00.4&lt;/codeph&gt;中发布）。如下例查找指定的2个设备所有指标的最新数据：&lt;/p&gt;&lt;codeblock class=&#34;+ topic/pre pr-d/codeblock &#34; xml:space=&#34;preserve&#34; xtrc=&#34;codeblock:20;714:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/DolphinDB_Explain.md&#34;&gt;// 设备/指标/日期 1m 23s 23ms login(`admin,`123456);devices = 1..9;metrics = 'a'..'d';days = 2020.09.01+0..1; // 每个设备，每个指标，每天的数据量 n = 1000000; if(existsDatabase(&#34;dfs://svmDemo&#34;)) dropDatabase(&#34;dfs://svmDemo&#34;) dbName=&#34;dfs://svmDemo&#34;;tableName=&#34;sensors&#34;; tableSchema = table(1:0,`devId`metId`times`vals,[INT,CHAR,TIMESTAMP,FLOAT]); db1 = database(&#34;&#34;, VALUE, 2020.09.01+0..1) db2 = database(&#34;&#34;, HASH, [INT,3]) db = database(dbName,COMPO,[db1,db2],,'TSDB') dfsTable = db.createPartitionedTable(tableSchema,tableName,`times`devId,,`devId`metId`times) go; t = table(1:0,`devId`metId`times`vals,[INT,CHAR,TIMESTAMP,FLOAT]); for(day in days){ t.clear!(); for (device in devices){ for (metric in metrics){ take(device,n) tmp = table(take(device,n) as devId, take(metric,n) as metId, (day.timestamp()+(1..1000000)*80) as times, rand(1.0, n) as vals); t.append!(tmp) } } loadTable(dbName,tableName).append!(t); };go; select [HINT_EXPLAIN] * from loadTable(&#34;dfs://svmDemo&#34;,&#34;sensors&#34;) where devId in [5,9] context by devId csort times limit -1;&lt;/codeblock&gt;&lt;p class=&#34;- topic/p &#34; xtrc=&#34;p:52;744:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/DolphinDB_Explain.md&#34;&gt;得到的执行计划如下，其中&lt;codeph class=&#34;+ topic/ph pr-d/codeph &#34; xtrc=&#34;codeph:73;744:13&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/DolphinDB_Explain.md&#34;&gt;map&lt;/codeph&gt;进行了优化，执行效率得到了提升：&lt;/p&gt;&lt;codeblock class=&#34;+ topic/pre pr-d/codeblock &#34; xml:space=&#34;preserve&#34; xtrc=&#34;codeblock:21;745:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/DolphinDB_Explain.md&#34;&gt;{ &#34;measurement&#34;: &#34;microsecond&#34;, &#34;explain&#34;: { &#34;from&#34;: { &#34;cost&#34;: 16 }, &#34;map&#34;: { &#34;optimize&#34;: { &#34;cost&#34;: 3, &#34;field&#34;: &#34;optimize for CONTEXT BY + LIMIT: serial execution.&#34; }, &#34;cost&#34;: 6063225 }, &#34;rows&#34;: 2, &#34;cost&#34;: 6064123 } } &lt;/codeblock&gt;&lt;p class=&#34;- topic/p &#34; xtrc=&#34;p:53;765:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/DolphinDB_Explain.md&#34;&gt;&lt;codeph class=&#34;+ topic/ph pr-d/codeph &#34; xtrc=&#34;codeph:74;765:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/DolphinDB_Explain.md&#34;&gt;optimize&lt;/codeph&gt;里面的内容比较简单，&lt;codeph class=&#34;+ topic/ph pr-d/codeph &#34; xtrc=&#34;codeph:75;765:21&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/DolphinDB_Explain.md&#34;&gt;cost&lt;/codeph&gt;是完成优化的耗时，而&lt;codeph class=&#34;+ topic/ph pr-d/codeph &#34; xtrc=&#34;codeph:76;765:37&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/DolphinDB_Explain.md&#34;&gt;field&lt;/codeph&gt;展示的是具体优化措施，本例中就是，对 context by + csort + limit 组合进行执行优化。&lt;/p&gt;&lt;p class=&#34;- topic/p &#34; xtrc=&#34;p:54;767:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/DolphinDB_Explain.md&#34;&gt;除此之外，DolphinDB在一些特定的聚合中也有一些优化内容：&lt;/p&gt;&lt;ul class=&#34;- topic/ul &#34; xtrc=&#34;ul:6;768:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/DolphinDB_Explain.md&#34;&gt;&lt;li class=&#34;- topic/li &#34; xtrc=&#34;li:12;768:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/DolphinDB_Explain.md&#34;&gt;&lt;p class=&#34;- topic/p &#34; xtrc=&#34;p:55;768:3&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/DolphinDB_Explain.md&#34;&gt;sortKey&lt;/p&gt;&lt;p class=&#34;- topic/p &#34; xtrc=&#34;p:56;770:3&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/DolphinDB_Explain.md&#34;&gt;只有使用了TSDB引擎创建的表才会有sortKey。它可能出现在context by或者group by中，值为true或者false，表示聚合时是否使用了sortColumns列来进行排序。&lt;/p&gt;&lt;/li&gt;&lt;li class=&#34;- topic/li &#34; xtrc=&#34;li:13;772:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/DolphinDB_Explain.md&#34;&gt;&lt;p class=&#34;- topic/p &#34; xtrc=&#34;p:57;772:3&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/DolphinDB_Explain.md&#34;&gt;algo&lt;/p&gt;&lt;p class=&#34;- topic/p &#34; xtrc=&#34;p:58;774:3&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/DolphinDB_Explain.md&#34;&gt;使用算法只会出现在group by 中。目前优化的算法有：&#34;hash&#34;, &#34;vectorize&#34;, &#34;sort&#34;三种，具体是否可以使用以及使用哪种算法，由数据库判断。&lt;/p&gt;&lt;/li&gt;&lt;/ul&gt;&lt;p class=&#34;- topic/p &#34; xtrc=&#34;p:59;776:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/DolphinDB_Explain.md&#34;&gt;下例创建了一个按月分区的表，date为分区字段，导入数据时对日期进行了处理，分别以6月的日期和7月的日期导入了2次，总分区数量80个，其中6月和7月的分区各40个；&lt;/p&gt;&lt;p class=&#34;- topic/p &#34; xtrc=&#34;p:60;778:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/DolphinDB_Explain.md&#34;&gt;按股票代码，统计每个股票的数据量，因为股票代码是sortKey字段，执行计划sortKey的值为true，表示使用了股票代码字段进行了排序。&lt;/p&gt;&lt;codeblock class=&#34;+ topic/pre pr-d/codeblock &#34; xml:space=&#34;preserve&#34; xtrc=&#34;codeblock:22;779:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/DolphinDB_Explain.md&#34;&gt;// 导入股票数据，按月分区；csv的数据请见附录。 login(`admin,`123456); dbpath = &#34;dfs://stocks&#34;;if(existsDatabase(dbpath)) dropDatabase(dbpath); db1=database(,HASH,[SYMBOL,40]); db2=database(,VALUE,2020.01M..2022.01M); db=database(dbpath,COMPO,[db1, db2],,&#34;TSDB&#34;) // 这里YOURDIR替换为实际的目录 schema=extractTextSchema(&#34;YOURDIR/20200601.csv&#34;) t=table(1:0,schema.name,schema.type) db.createPartitionedTable(t,`quotes, `symbol`date,,`symbol`date`time) def transDate(mutable t, diff){ return t.replaceColumn!(`date,t.date+diff); } diffs = [20,60]; for(diff in diffs){ // 这里YOURDIR替换为实际的目录 loadTextEx(dbHandle=db,tableName=`quotes,partitionColumns=`symbol`date,filename=&#34;YOURDIR/20200601.csv&#34;,transform=transDate{,diff}) } select [HINT_EXPLAIN] symbol from loadTable(&#34;dfs://stocks&#34;,&#34;quotes&#34;) group by symbol;&lt;/codeblock&gt;&lt;p class=&#34;- topic/p &#34; xtrc=&#34;p:61;803:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/DolphinDB_Explain.md&#34;&gt;执行计划：&lt;/p&gt;&lt;codeblock class=&#34;+ topic/pre pr-d/codeblock &#34; xml:space=&#34;preserve&#34; xtrc=&#34;codeblock:23;804:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/DolphinDB_Explain.md&#34;&gt;{ &#34;measurement&#34;: &#34;microsecond&#34;, &#34;explain&#34;:{ &#34;from&#34;:{ &#34;cost&#34;:19 }, &#34;map&#34;:{ &#34;partitions&#34;:{ &#34;local&#34;:0, &#34;remote&#34;:80 }, &#34;cost&#34;:196081, &#34;detail&#34;:{ &#34;most&#34;:{ &#34;sql&#34;:&#34;select [114699] symbol from quotes group by symbol [partition = /stocks/Key7/202007M/gK]&#34;, &#34;explain&#34;:{ &#34;from&#34;:{ &#34;cost&#34;:6 }, &#34;groupBy&#34;:{ &#34;sortKey&#34;:true, &#34;cost&#34;:8727 }, &#34;rows&#34;:276, &#34;cost&#34;:20661 } }, &#34;least&#34;:{ &#34;sql&#34;:&#34;select [114699] symbol from quotes group by symbol [partition = /stocks/Key8/202007M/gK]&#34;, &#34;explain&#34;:{ &#34;groupBy&#34;:{ &#34;sortKey&#34;:true, &#34;cost&#34;:5247 }, &#34;rows&#34;:250, &#34;cost&#34;:10605 } } } }, &#34;merge&#34;:{ &#34;cost&#34;:2951, &#34;rows&#34;:23058, &#34;detail&#34;:{ &#34;most&#34;:{ &#34;sql&#34;:&#34;select [114699] symbol from quotes group by symbol [partition = /stocks/Key39/202007M/gK]&#34;, &#34;explain&#34;:{ &#34;from&#34;:{ &#34;cost&#34;:7 }, &#34;groupBy&#34;:{ &#34;sortKey&#34;:true, &#34;cost&#34;:6889 }, &#34;rows&#34;:327, &#34;cost&#34;:13987 } }, &#34;least&#34;:{ &#34;sql&#34;:&#34;select [114699] symbol from quotes group by symbol [partition = /stocks/Key8/202006M/gK]&#34;, &#34;explain&#34;:{ &#34;groupBy&#34;:{ &#34;sortKey&#34;:true, &#34;cost&#34;:5123 }, &#34;rows&#34;:250, &#34;cost&#34;:12908 } } } }, &#34;reduce&#34;:{ &#34;sql&#34;:&#34;select [98307] symbol from 105c5e0300000000 group by symbol&#34;, &#34;explain&#34;:{ &#34;groupBy&#34;:{ &#34;sortKey&#34;:false, &#34;algo&#34;:&#34;sort&#34;, &#34;cost&#34;:21147 }, &#34;rows&#34;:11529, &#34;cost&#34;:22139 } }, &#34;rows&#34;:11529, &#34;cost&#34;:232551 } }&lt;/codeblock&gt;&lt;/body&gt;&lt;/topic&gt;&lt;/topic&gt;&lt;topic class=&#34;- topic/topic &#34; ditaarch:DITAArchVersion=&#34;2.0&#34; domains=&#34;a(props audience) a(props deliveryTarget) a(props otherprops) a(props platform) a(props product)&#34; id=&#34;34-reduce&#34; specializations=&#34;@props/audience @props/deliveryTarget @props/otherprops @props/platform @props/product&#34; xtrc=&#34;topic:18;894:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/DolphinDB_Explain.md&#34;&gt;&lt;title class=&#34;- topic/title &#34; xtrc=&#34;title:18;894:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/DolphinDB_Explain.md&#34;&gt;3.4. reduce&lt;/title&gt;&lt;body class=&#34;- topic/body &#34; xtrc=&#34;body:18;894:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/DolphinDB_Explain.md&#34;&gt;&lt;p class=&#34;- topic/p &#34; xtrc=&#34;p:62;896:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/DolphinDB_Explain.md&#34;&gt;并不是所有的SQL查询都会包含&lt;codeph class=&#34;+ topic/ph pr-d/codeph &#34; xtrc=&#34;codeph:77;896:16&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/DolphinDB_Explain.md&#34;&gt;reduce&lt;/codeph&gt;阶段，通常在需要对合并后的查询结果进行进一步处理，在SQL执行计划中可能会包含&lt;codeph class=&#34;+ topic/ph pr-d/codeph &#34; xtrc=&#34;codeph:78;896:63&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/DolphinDB_Explain.md&#34;&gt;reduce&lt;/codeph&gt;。如：&lt;/p&gt;&lt;codeblock class=&#34;+ topic/pre pr-d/codeblock &#34; xml:space=&#34;preserve&#34; xtrc=&#34;codeblock:24;897:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/DolphinDB_Explain.md&#34;&gt;select [HINT_EXPLAIN] max(vals) from loadTable(&#34;dfs://svmDemo&#34;, `sensors) where devId = 1 ;&lt;/codeblock&gt;&lt;p class=&#34;- topic/p &#34; xtrc=&#34;p:63;900:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/DolphinDB_Explain.md&#34;&gt;在&lt;codeph class=&#34;+ topic/ph pr-d/codeph &#34; xtrc=&#34;codeph:79;900:2&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/DolphinDB_Explain.md&#34;&gt;merge&lt;/codeph&gt;阶段汇总结果之后，DolphinDB需要再进行一次处理，此时的执行计划如下：&lt;/p&gt;&lt;codeblock class=&#34;+ topic/pre pr-d/codeblock &#34; xml:space=&#34;preserve&#34; xtrc=&#34;codeblock:25;901:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/DolphinDB_Explain.md&#34;&gt;{ &#34;measurement&#34;: &#34;microsecond&#34;, &#34;explain&#34;: { &#34;from&#34;: { &#34;cost&#34;: 13 }, &#34;map&#34;: { &#34;partitions&#34;: { &#34;local&#34;: 0, &#34;remote&#34;: 2 }, &#34;cost&#34;: 1397982, &#34;detail&#34;: { &#34;most&#34;: {...}, &#34;least&#34;: {...} } }, &#34;merge&#34;: { &#34;cost&#34;: 35, &#34;rows&#34;: 2, &#34;detail&#34;: { &#34;most&#34;: { &#34;sql&#34;: &#34;select [114699] max(vals) as col_0_ from sensors where devId == 1 [partition = /svmDemo/20200902/Key1/gz]&#34;, &#34;explain&#34;: { &#34;rows&#34;: 1, &#34;cost&#34;: 1395804 } }, &#34;least&#34;: {...} } }, &#34;reduce&#34;: { &#34;sql&#34;: &#34;select [98307] ::max(col_0_) as max_vals from 105c5e0300000000&#34;, &#34;explain&#34;: { &#34;rows&#34;: 1, &#34;cost&#34;: 32 } }, &#34;rows&#34;: 1, &#34;cost&#34;: 1398888 } }&lt;/codeblock&gt;&lt;p class=&#34;- topic/p &#34; xtrc=&#34;p:64;945:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/DolphinDB_Explain.md&#34;&gt;在上例中，从各个片区返回的执行结果col_0进行&lt;codeph class=&#34;+ topic/ph pr-d/codeph &#34; xtrc=&#34;codeph:80;945:25&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/DolphinDB_Explain.md&#34;&gt;merge&lt;/codeph&gt;合并之后，在&lt;codeph class=&#34;+ topic/ph pr-d/codeph &#34; xtrc=&#34;codeph:81;945:38&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/DolphinDB_Explain.md&#34;&gt;reduce&lt;/codeph&gt;阶段继续查询最大的值max(col_0)，获得结果行数1条，耗时32μs。&lt;/p&gt;&lt;p class=&#34;- topic/p &#34; xtrc=&#34;p:65;947:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/DolphinDB_Explain.md&#34;&gt;&lt;codeph class=&#34;+ topic/ph pr-d/codeph &#34; xtrc=&#34;codeph:82;947:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/DolphinDB_Explain.md&#34;&gt;reduce&lt;/codeph&gt;阶段的执行计划可以便于观察使用函数的耗时，从而以此判断，是否使用的函数效率较低并做出针对性的优化。比如在&lt;codeph class=&#34;+ topic/ph pr-d/codeph &#34; xtrc=&#34;codeph:83;947:61&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/DolphinDB_Explain.md&#34;&gt;map&lt;/codeph&gt;阶段增加筛选减少需要的内容，减少&lt;codeph class=&#34;+ topic/ph pr-d/codeph &#34; xtrc=&#34;codeph:84;947:82&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/DolphinDB_Explain.md&#34;&gt;reduce&lt;/codeph&gt;阶段的计算等等。&lt;/p&gt;&lt;p class=&#34;- topic/p &#34; xtrc=&#34;p:66;949:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/DolphinDB_Explain.md&#34;&gt;以下面代码为例：&lt;/p&gt;&lt;codeblock class=&#34;+ topic/pre pr-d/codeblock &#34; xml:space=&#34;preserve&#34; xtrc=&#34;codeblock:26;951:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/DolphinDB_Explain.md&#34;&gt;// 继续使用前面导入的股票数据 select [HINT_EXPLAIN] last(askPrice1) \ first(askPrice1) - 1 from loadTable(&#34;dfs://stocks&#34;,&#34;quotes&#34;) where date &amp;gt;= 2020.06.21 group by symbol, segment(askLevel, false)&lt;/codeblock&gt;&lt;codeblock class=&#34;+ topic/pre pr-d/codeblock &#34; xml:space=&#34;preserve&#34; xtrc=&#34;codeblock:27;959:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/DolphinDB_Explain.md&#34;&gt;{ &#34;measurement&#34;: &#34;microsecond&#34;, &#34;explain&#34;: { &#34;from&#34;: { &#34;cost&#34;: 17 }, &#34;map&#34;: { &#34;partitions&#34;: { &#34;local&#34;: 0, &#34;remote&#34;: 80 }, &#34;cost&#34;: 1528495, &#34;detail&#34;: { &#34;most&#34;: {...}, &#34;least&#34;: {...} } }, &#34;merge&#34;: { &#34;cost&#34;: 18100, &#34;rows&#34;: 128206, &#34;detail&#34;: { &#34;most&#34;: { &#34;sql&#34;: &#34;select [114691] first(askPrice1) as col_1_,last(askPrice1) as col_0_ from quotes group by symbol,segment(askLevel, 0) as segment_askLevel [partition = /stocks/Key31/202007M/gK]&#34;, &#34;explain&#34;: { &#34;from&#34;: { &#34;cost&#34;: 8 }, &#34;groupBy&#34;: { &#34;sortKey&#34;: true, &#34;cost&#34;: 100960 }, &#34;rows&#34;: 2686, &#34;cost&#34;: 117555 } }, &#34;least&#34;: {...} } }, &#34;reduce&#34;: { &#34;sql&#34;: &#34;select [98307] ::last(col_0_) \ ::first(col_1_) - 1 as last_askPrice1_ratio from 105c5e0300000000 group by symbol,segment_askLevel&#34;, &#34;explain&#34;: { &#34;groupBy&#34;: { &#34;sortKey&#34;: false, &#34;algo&#34;: &#34;hash&#34;, &#34;cost&#34;: 47979 }, &#34;rows&#34;: 64103, &#34;cost&#34;: 48091 } }, &#34;rows&#34;: 64103, &#34;cost&#34;: 1602107 } }&lt;/codeblock&gt;&lt;/body&gt;&lt;/topic&gt;&lt;topic class=&#34;- topic/topic &#34; ditaarch:DITAArchVersion=&#34;2.0&#34; domains=&#34;a(props audience) a(props deliveryTarget) a(props otherprops) a(props platform) a(props product)&#34; id=&#34;35-执行计划对于dolphindb特有功能的解释&#34; specializations=&#34;@props/audience @props/deliveryTarget @props/otherprops @props/platform @props/product&#34; xtrc=&#34;topic:19;1016:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/DolphinDB_Explain.md&#34;&gt;&lt;title class=&#34;- topic/title &#34; xtrc=&#34;title:19;1016:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/DolphinDB_Explain.md&#34;&gt;3.5. 执行计划对于DolphinDB特有功能的解释&lt;/title&gt;&lt;body class=&#34;- topic/body &#34; xtrc=&#34;body:19;1016:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/DolphinDB_Explain.md&#34;&gt;&lt;p class=&#34;- topic/p &#34; xtrc=&#34;p:67;1018:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/DolphinDB_Explain.md&#34;&gt;DolphinDB有一些特有的创新功能，比如：cgroup by 、 context by 、 pivot by 、 interval 等等；通常情况下，执行计划会单独列举出来这些功能的执行耗时，方便进行性能比较，比如：&lt;/p&gt;&lt;codeblock class=&#34;+ topic/pre pr-d/codeblock &#34; xml:space=&#34;preserve&#34; xtrc=&#34;codeblock:28;1019:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/DolphinDB_Explain.md&#34;&gt;t = table(`A`A`A`A`B`B`B`B as sym, 09:30:06 09:30:28 09:31:46 09:31:59 09:30:19 09:30:43 09:31:23 09:31:56 as time, 10 20 10 30 20 40 30 30 as volume, 10.05 10.06 10.07 10.05 20.12 20.13 20.14 20.15 as price) select [HINT_EXPLAIN] wavg(price, volume) as wvap from t group by sym cgroup by minute(time) as minute order by sym, minute&lt;/codeblock&gt;&lt;p class=&#34;- topic/p &#34; xtrc=&#34;p:68;1030:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/DolphinDB_Explain.md&#34;&gt;执行计划如下，可以看出cgroup by耗时为328μs：&lt;/p&gt;&lt;codeblock class=&#34;+ topic/pre pr-d/codeblock &#34; xml:space=&#34;preserve&#34; xtrc=&#34;codeblock:29;1031:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/DolphinDB_Explain.md&#34;&gt;{ &#34;measurement&#34;: &#34;microsecond&#34;, &#34;explain&#34;: { &#34;from&#34;: { &#34;cost&#34;: 0 }, &#34;cgroupBy&#34;: { &#34;cost&#34;: 328 }, &#34;rows&#34;: 4, &#34;cost&#34;: 378 } }&lt;/codeblock&gt;&lt;p class=&#34;- topic/p &#34; xtrc=&#34;p:69;1047:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/DolphinDB_Explain.md&#34;&gt;pivot By举例：&lt;/p&gt;&lt;codeblock class=&#34;+ topic/pre pr-d/codeblock &#34; xml:space=&#34;preserve&#34; xtrc=&#34;codeblock:30;1048:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/DolphinDB_Explain.md&#34;&gt;select [HINT_EXPLAIN] rowSum(ffill(last(preClose))) from loadTable(&#34;dfs://stocks&#34;, `quotes) pivot by time, symbol&lt;/codeblock&gt;&lt;p class=&#34;- topic/p &#34; xtrc=&#34;p:70;1051:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/DolphinDB_Explain.md&#34;&gt;执行计划如下：&lt;/p&gt;&lt;codeblock class=&#34;+ topic/pre pr-d/codeblock &#34; xml:space=&#34;preserve&#34; xtrc=&#34;codeblock:31;1053:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/DolphinDB_Explain.md&#34;&gt;{ &#34;measurement&#34;: &#34;microsecond&#34;, &#34;explain&#34;:{ &#34;from&#34;:{ &#34;cost&#34;:20 }, &#34;map&#34;:{...}, &#34;merge&#34;:{...}, &#34;reduce&#34;:{ &#34;sql&#34;:&#34;select [98307] rowSum(ffill(::last(col_0_))) as rowSum from 105c5e0300000000 pivot by time,symbol&#34;, &#34;explain&#34;:{ &#34;pivotBy&#34;:{ &#34;cost&#34;:4086121 }, &#34;rows&#34;:15182, &#34;cost&#34;:4086176 } }, &#34;rows&#34;:15182, &#34;cost&#34;:22514617 } }&lt;/codeblock&gt;&lt;p class=&#34;- topic/p &#34; xtrc=&#34;p:71;1078:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/DolphinDB_Explain.md&#34;&gt;若SQL子句包含interval，则在执行计划中会包含&lt;codeph class=&#34;+ topic/ph pr-d/codeph &#34; xtrc=&#34;codeph:85;1078:28&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/DolphinDB_Explain.md&#34;&gt;fill&lt;/codeph&gt;，表示填充耗时：&lt;/p&gt;&lt;codeblock class=&#34;+ topic/pre pr-d/codeblock &#34; xml:space=&#34;preserve&#34; xtrc=&#34;codeblock:32;1079:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/DolphinDB_Explain.md&#34;&gt;N = 3653 t = table(2011.11.01..2021.10.31 as date, take(`AAPL, N) as code, rand([0.0573, -0.0231, 0.0765, 0.0174, -0.0025, 0.0267, 0.0304, -0.0143, -0.0256, 0.0412, 0.0810, -0.0159, 0.0058, -0.0107, -0.0090, 0.0209, -0.0053, 0.0317, -0.0117, 0.0123], N) as rate) select [HINT_EXPLAIN] std(rate) from t group by code, interval(date, 30d, &#34;none&#34;)&lt;/codeblock&gt;&lt;p class=&#34;- topic/p &#34; xtrc=&#34;p:72;1087:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/DolphinDB_Explain.md&#34;&gt;执行计划：&lt;/p&gt;&lt;codeblock class=&#34;+ topic/pre pr-d/codeblock &#34; xml:space=&#34;preserve&#34; xtrc=&#34;codeblock:33;1088:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/DolphinDB_Explain.md&#34;&gt;{ &#34;measurement&#34;: &#34;microsecond&#34;, &#34;explain&#34;: { &#34;from&#34;: { &#34;cost&#34;: 1 }, &#34;groupBy&#34;: { &#34;sortKey&#34;: false, &#34;algo&#34;: &#34;sort&#34;, &#34;fill&#34;: { &#34;cost&#34;: 1 }, &#34;cost&#34;: 1662 }, &#34;rows&#34;: 123, &#34;cost&#34;: 1736 } }&lt;/codeblock&gt;&lt;/body&gt;&lt;/topic&gt;&lt;/topic&gt;&lt;topic class=&#34;- topic/topic &#34; ditaarch:DITAArchVersion=&#34;2.0&#34; domains=&#34;a(props audience) a(props deliveryTarget) a(props otherprops) a(props platform) a(props product)&#34; id=&#34;4-附录&#34; specializations=&#34;@props/audience @props/deliveryTarget @props/otherprops @props/platform @props/product&#34; xtrc=&#34;topic:20;1110:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/DolphinDB_Explain.md&#34;&gt;&lt;title class=&#34;- topic/title &#34; xtrc=&#34;title:20;1110:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/DolphinDB_Explain.md&#34;&gt;4. 附录&lt;/title&gt;&lt;body class=&#34;- topic/body &#34; xtrc=&#34;body:20;1110:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/DolphinDB_Explain.md&#34;&gt;&lt;p class=&#34;- topic/p &#34; xtrc=&#34;p:73;1111:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/DolphinDB_Explain.md&#34;&gt;股票数据csv，参考链接：&lt;xref class=&#34;- topic/xref &#34; format=&#34;zip&#34; href=&#34;http://www.dolphindb.cn/downloads/tutorial/20200601.zip&#34; scope=&#34;external&#34; xtrc=&#34;xref:1;1111:14&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/tutorials/DolphinDB_Explain.md&#34;&gt;&lt;?ditaot usertext?&gt;20200601.csv&lt;/xref&gt;。&lt;/p&gt;&lt;/body&gt;&lt;/topic&gt;&lt;/topic&gt;"/><meta name="wh-source-relpath" content="tutorials/DolphinDB_Explain.md"/><meta name="wh-out-relpath" content="tutorials/DolphinDB_Explain.html"/>
+
+    <link rel="stylesheet" type="text/css" href="../oxygen-webhelp/app/commons.css?buildId=2024012323"/>
+    <link rel="stylesheet" type="text/css" href="../oxygen-webhelp/app/topic.css?buildId=2024012323"/>
+
+    <script src="../oxygen-webhelp/app/options/properties.js?buildId=20240704100525"></script>
+    <script src="../oxygen-webhelp/app/localization/strings.js?buildId=2024012323"></script>
+    <script src="../oxygen-webhelp/app/search/index/keywords.js?buildId=20240704100525"></script>
+    <script defer="defer" src="../oxygen-webhelp/app/commons.js?buildId=2024012323"></script>
+    <script defer="defer" src="../oxygen-webhelp/app/topic.js?buildId=2024012323"></script>
+<link rel="stylesheet" type="text/css" href="../oxygen-webhelp/template/styles.css?buildId=2024012323"/><script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script><script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script></head>
+
+    <body id="sql-执行计划" class="wh_topic_page frmBody">
+        <a href="#wh_topic_body" class="sr-only sr-only-focusable">
+            跳转到主要内容
+        </a>
+        
+        
+        
+        
+        <header class="navbar navbar-default wh_header">
+    <div class="container-fluid">
+        <div xmlns:whc="http://www.oxygenxml.com/webhelp/components" class="wh_header_flex_container navbar-nav navbar-expand-md navbar-dark">
+            <div class="wh_logo_and_publication_title_container">
+                <div class="wh_logo_and_publication_title">
+                    
+                    <a href="https://www.dolphindb.cn" class=" wh_logo d-none d-sm-block "><img src="../logo.png" alt="  DolphinDB 文档中心  "/></a>
+                    <div class=" wh_publication_title "><a href="../index.html"><span class="booktitle">  <span class="ph mainbooktitle">DolphinDB 文档中心</span>  </span></a></div>
+                    
+                </div>
+                
+                
+            </div>
+
+            <div class="wh_top_menu_and_indexterms_link collapse navbar-collapse" id="wh_top_menu_and_indexterms_link">
+                
+                
+                
+                
+            </div>
+        <div class=" wh_search_input navbar-form wh_topic_page_search search " role="form">
+            
+            
+            
+            <form id="searchForm" method="get" role="search" action="../search.html"><div><input type="search" placeholder="搜索 " class="wh_search_textfield" id="textToSearch" name="searchQuery" aria-label="搜索查询" required="required"/><button type="submit" class="wh_search_button" aria-label="搜索"><span class="search_input_text">搜索</span></button></div></form>
+            
+            <script src="/vendors/react/umd/react.production.min.js" defer="defer"></script>
+<script src="/vendors/react-dom/umd/react-dom.production.min.js" defer="defer"></script>
+<script src="/vendors/dayjs/dayjs.min.js" defer="defer"></script>
+<script src="/vendors/antd/dist/antd.min.js" defer="defer"></script>
+<script src="/vendors/@ant-design/icons/dist/index.umd.min.js" defer="defer"></script>
+<script src="/zh/index.js" type="module"></script>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js" defer="defer"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML" defer="defer"><!--
+
+
+--></script>
+
+            
+        </div></div>
+    </div>
+</header>
+        
+        
+         
+        
+        
+        
+        <div class="container-fluid" id="wh_topic_container">
+            <div class="row">
+
+                <nav class="wh_tools d-print-none navbar-expand-md" aria-label="Tools">
+                    
+                    <div data-tooltip-position="bottom" class=" wh_breadcrumb "><ol class="d-print-none"><li><span class="home"><a href="../index.html"><span>主页</span></a></span></li><li><div class="topicref" data-id="about_tutorials"><div class="title"><a href="../tutorials/about_tutorials.html"><span class="keyword label">教程</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 产品使用教程</p></div></div></div></li><li><div class="topicref"><div class="title"><a href="../tutorials/hybrid_programming_paradigms.html">编程语言</a></div></div></li><li class="active"><div class="topicref" data-id="sql-执行计划"><div class="title"><a href="../tutorials/DolphinDB_Explain.html">SQL 执行计划</a></div></div></li></ol></div>
+                    
+                    
+                    
+                    <div class="wh_right_tools">
+                        <button class="wh_hide_highlight" aria-label="切换搜索突出显示" title="切换搜索突出显示"></button>
+                        <button class="webhelp_expand_collapse_sections" data-next-state="collapsed" aria-label="折叠截面" title="折叠截面"></button>
+                        
+                        
+                        
+                        
+                        <div class=" wh_print_link print d-none d-md-inline-block "><button onClick="window.print()" title="打印此页" aria-label="打印此页"></button></div>
+                        
+                        <button type="button" id="wh_toc_button" class="custom-toggler navbar-toggler collapsed wh_toggle_button navbar-light" aria-expanded="false" aria-label="Toggle publishing table of content" aria-controls="wh_publication_toc">
+                            <span class="navbar-toggler-icon"></span>
+                        </button>
+                    </div>
+                    
+                </nav>
+            </div>
+            
+            
+            
+            
+            <div class="wh_content_area">
+                <div class="row">
+                    
+                        <nav id="wh_publication_toc" class="col-lg-3 col-md-3 col-sm-12 d-md-block d-none d-print-none" aria-label="Table of Contents Container">
+                            <div id="wh_publication_toc_content">
+		                        
+                            	<div class=" wh_publication_toc " data-tooltip-position="right"><span class="expand-button-action-labels"><span id="button-expand-action" role="button" aria-label="Expand"></span><span id="button-collapse-action" role="button" aria-label="Collapse"></span><span id="button-pending-action" role="button" aria-label="Pending"></span></span><ul role="tree" aria-label="Table of Contents"><li role="treeitem"><div data-tocid="new_chap_about_sect_ddb_docs_intro-d9529e87" class="topicref" data-id="new_chap_about_sect_ddb_docs_intro" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../about/ddb_docs_intro.html" id="new_chap_about_sect_ddb_docs_intro-d9529e87-link">文档使用说明</a><div class="wh-tooltip"><p class="shortdesc">如何获取 DolphinDB 帮助信息</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="chap1_getstarted-d9529e140" class="topicref" data-id="chap1_getstarted" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action chap1_getstarted-d9529e140-link" class="wh-expand-btn"></span><div class="title"><a href="../getstarted/chap1_getstarted.html" id="chap1_getstarted-d9529e140-link"><span class="keyword label">快速上手</span></a><div class="wh-tooltip"><p class="shortdesc">如何快速部署 DolphinDB、建库建表、写入和查询数据</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="sectionddb_deployment-d9529e335" class="topicref" data-id="sectionddb_deployment" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action sectionddb_deployment-d9529e335-link" class="wh-expand-btn"></span><div class="title"><a href="../deploy/deploy_intro.html" id="sectionddb_deployment-d9529e335-link"><span class="keyword label">部署</span></a><div class="wh-tooltip"><p class="shortdesc">如何在不同的场景中部署 DolphinDB</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="new_chap_database_manage_new_chap_dbmanage_landing_page-d9529e2313" class="topicref" data-id="new_chap_database_manage_new_chap_dbmanage_landing_page" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action new_chap_database_manage_new_chap_dbmanage_landing_page-d9529e2313-link" class="wh-expand-btn"></span><div class="title"><a href="../db_distr_comp/cfg/db_intro.html" id="new_chap_database_manage_new_chap_dbmanage_landing_page-d9529e2313-link"><span class="keyword label">数据库</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 数据库的基本概念</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="chap7_tutorials_streaming-d9529e3490" class="topicref" data-id="chap7_tutorials_streaming" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action chap7_tutorials_streaming-d9529e3490-link" class="wh-expand-btn"></span><div class="title"><a href="../stream/str_intro.html" id="chap7_tutorials_streaming-d9529e3490-link"><span class="keyword label">流数据</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 流数据引擎及流数据计算的基本概念</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="tocId-d9529e7385" class="topicref" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action tocId-d9529e7385-link" class="wh-expand-btn"></span><div class="title"><a href="../db_distr_comp/db_oper/import_data.html" id="tocId-d9529e7385-link">数据迁移</a><div class="wh-tooltip"><p class="shortdesc">如何从不同数据源向 DolphinDB 迁移数据</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="chap7_tutorials_system_management-d9529e7812" class="topicref" data-id="chap7_tutorials_system_management" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action chap7_tutorials_system_management-d9529e7812-link" class="wh-expand-btn"></span><div class="title"><a href="../sys_man/om_intro.html" id="chap7_tutorials_system_management-d9529e7812-link"><span class="keyword label">系统运维</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 的系统运维功能及方法</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="about_language_resources-d9529e16490" class="topicref" data-id="about_language_resources" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action about_language_resources-d9529e16490-link" class="wh-expand-btn"></span><div class="title"><a href="../progr/progr_intro.html" id="about_language_resources-d9529e16490-link"><span class="keyword label">编程语言</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 编程基本概念与方法、SQL 在 DolphinDB 的应用</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="functions_references-d9529e26503" class="topicref" data-id="functions_references" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action functions_references-d9529e26503-link" class="wh-expand-btn"></span><div class="title"><a href="../funcs/funcs_intro.html" id="functions_references-d9529e26503-link"><span class="keyword label">函数参考</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 函数分类、语法、详解及示例</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="api_protocol-d9529e86456" class="topicref" data-id="api_protocol" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action api_protocol-d9529e86456-link" class="wh-expand-btn"></span><div class="title"><a href="../api/connapi_intro.html" id="api_protocol-d9529e86456-link"><span class="keyword label">连接器 &amp; API</span></a><div class="wh-tooltip"><p class="shortdesc">面向不同编程语言的 DolphinDB API 及连接器，相关协议和用法</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="chap6_plugin-d9529e91976" class="topicref" data-id="chap6_plugin" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action chap6_plugin-d9529e91976-link" class="wh-expand-btn"></span><div class="title"><a href="../plugins/plg_intro.html" id="chap6_plugin-d9529e91976-link"><span class="keyword label">插件</span></a><div class="wh-tooltip"><p class="shortdesc">多个应用场景的插件使用说明和插件开发指导</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="third_party-d9529e94749" class="topicref" data-id="third_party" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action third_party-d9529e94749-link" class="wh-expand-btn"></span><div class="title"><a href="../third_party.html" id="third_party-d9529e94749-link">第三方工具</a></div></div></li><li role="treeitem" aria-expanded="true"><div data-tocid="about_tutorials-d9529e94980" class="topicref" data-id="about_tutorials" data-state="expanded"><span role="button" tabindex="0" aria-labelledby="button-collapse-action about_tutorials-d9529e94980-link" class="wh-expand-btn"></span><div class="title"><a href="../tutorials/about_tutorials.html" id="about_tutorials-d9529e94980-link"><span class="keyword label">教程</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 产品使用教程</p></div></div></div><ul role="group" class="navbar-nav nav-list"><li role="treeitem" aria-expanded="false"><div data-tocid="tocId-d9529e95033" class="topicref" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action tocId-d9529e95033-link" class="wh-expand-btn"></span><div class="title"><a href="../tutorials/import_data.html" id="tocId-d9529e95033-link">数据导入</a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="tocId-d9529e95264" class="topicref" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action tocId-d9529e95264-link" class="wh-expand-btn"></span><div class="title"><a href="../tutorials/DolphinDB_TopN.html" id="tocId-d9529e95264-link">数据库</a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="tocId-d9529e95910" class="topicref" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action tocId-d9529e95910-link" class="wh-expand-btn"></span><div class="title"><a href="../tutorials/memory_management.html" id="tocId-d9529e95910-link">系统运维</a></div></div></li><li role="treeitem" aria-expanded="true"><div data-tocid="tocId-d9529e96325" class="topicref" data-state="expanded"><span role="button" tabindex="0" aria-labelledby="button-collapse-action tocId-d9529e96325-link" class="wh-expand-btn"></span><div class="title"><a href="../tutorials/hybrid_programming_paradigms.html" id="tocId-d9529e96325-link">编程语言</a></div></div><ul role="group" class="navbar-nav nav-list"><li role="treeitem"><div data-tocid="多范式编程-d9529e96326" class="topicref" data-id="多范式编程" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../tutorials/hybrid_programming_paradigms.html" id="多范式编程-d9529e96326-link">多范式编程</a></div></div></li><li role="treeitem"><div data-tocid="array-vector-的最佳实践指南-d9529e96372" class="topicref" data-id="array-vector-的最佳实践指南" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../tutorials/Array_Vector.html" id="array-vector-的最佳实践指南-d9529e96372-link">Array Vector 的最佳实践指南</a></div></div></li><li role="treeitem"><div data-tocid="启动脚本-d9529e96418" class="topicref" data-id="启动脚本" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../tutorials/Startup.html" id="启动脚本-d9529e96418-link">启动脚本</a></div></div></li><li role="treeitem"><div data-tocid="函数化编程案例-d9529e96464" class="topicref" data-id="函数化编程案例" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../tutorials/func_progr_cases.html" id="函数化编程案例-d9529e96464-link">函数化编程案例</a></div></div></li><li role="treeitem"><div data-tocid="即时编译jit-d9529e96510" class="topicref" data-id="即时编译jit" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../tutorials/jit.html" id="即时编译jit-d9529e96510-link">即时编译（JIT）</a></div></div></li><li role="treeitem"><div data-tocid="元编程-d9529e96556" class="topicref" data-id="元编程" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../tutorials/meta_programming.html" id="元编程-d9529e96556-link">元编程</a></div></div></li><li role="treeitem"><div data-tocid="基于宏变量的元编程-d9529e96602" class="topicref" data-id="基于宏变量的元编程" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../tutorials/macro_var_based_metaprogramming.html" id="基于宏变量的元编程-d9529e96602-link">基于宏变量的元编程</a></div></div></li><li role="treeitem"><div data-tocid="自定义聚合函数-d9529e96648" class="topicref" data-id="自定义聚合函数" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../tutorials/udaf.html" id="自定义聚合函数-d9529e96648-link">自定义聚合函数</a></div></div></li><li role="treeitem"><div data-tocid="日期时间类型-d9529e96694" class="topicref" data-id="日期时间类型" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../tutorials/date_time.html" id="日期时间类型-d9529e96694-link">日期/时间类型</a></div></div></li><li role="treeitem"><div data-tocid="dolphindb-时间类型比较规则-d9529e96740" class="topicref" data-id="dolphindb-时间类型比较规则" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../tutorials/ddb_comparison_rules_of_time_types.html" id="dolphindb-时间类型比较规则-d9529e96740-link">DolphinDB 时间类型比较规则</a></div></div></li><li role="treeitem"><div data-tocid="通用计算-d9529e96786" class="topicref" data-id="通用计算" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../tutorials/general_computing.html" id="通用计算-d9529e96786-link">通用计算</a></div></div></li><li role="treeitem"><div data-tocid="窗口计算-d9529e96833" class="topicref" data-id="窗口计算" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../tutorials/window_cal.html" id="窗口计算-d9529e96833-link">窗口计算</a></div></div></li><li role="treeitem"><div data-tocid="矩阵运算-d9529e96879" class="topicref" data-id="矩阵运算" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../tutorials/matrix.html" id="矩阵运算-d9529e96879-link">矩阵运算</a></div></div></li><li role="treeitem"><div data-tocid="sql-编写案例-d9529e96925" class="topicref" data-id="sql-编写案例" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../tutorials/ddb_sql_cases.html" id="sql-编写案例-d9529e96925-link">SQL 编写案例</a></div></div></li><li role="treeitem" class="active"><div data-tocid="sql-执行计划-d9529e96971" class="topicref" data-id="sql-执行计划" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../tutorials/DolphinDB_Explain.html" id="sql-执行计划-d9529e96971-link">SQL 执行计划</a></div></div></li><li role="treeitem"><div data-tocid="python-到-dolphindb-的函数映射-d9529e97017" class="topicref" data-id="python-到-dolphindb-的函数映射" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../tutorials/function_mapping_py.html" id="python-到-dolphindb-的函数映射-d9529e97017-link">Python 到 DolphinDB 的函数映射</a></div></div></li><li role="treeitem"><div data-tocid="ai-dataloader-d9529e97063" class="topicref" data-id="ai-dataloader" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../tutorials/ai_dataloader_ml.html" id="ai-dataloader-d9529e97063-link">AI DataLoader</a></div></div></li><li role="treeitem"><div data-tocid="线程模型-d9529e97109" class="topicref" data-id="线程模型" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../tutorials/threading_model.html" id="线程模型-d9529e97109-link">线程模型</a></div></div></li></ul></li><li role="treeitem" aria-expanded="false"><div data-tocid="tocId-d9529e97155" class="topicref" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action tocId-d9529e97155-link" class="wh-expand-btn"></span><div class="title"><a href="../tutorials/data_sync_among_clusters.html" id="tocId-d9529e97155-link">安全与容灾</a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="tocId-d9529e97386" class="topicref" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action tocId-d9529e97386-link" class="wh-expand-btn"></span><div class="title"><a href="../tutorials/streaming_tutorial.html" id="tocId-d9529e97386-link">流数据</a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="tocId-d9529e97893" class="topicref" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action tocId-d9529e97893-link" class="wh-expand-btn"></span><div class="title"><a href="../tutorials/DECIMAL.html" id="tocId-d9529e97893-link">数值处理</a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="chap7_tutorials_modules-d9529e97986" class="topicref" data-id="chap7_tutorials_modules" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action chap7_tutorials_modules-d9529e97986-link" class="wh-expand-btn"></span><div class="title"><a href="../tutorials/tu_modules.html" id="chap7_tutorials_modules-d9529e97986-link"><span class="keyword label">模块</span></a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="plugins_apply-d9529e98493" class="topicref" data-id="plugins_apply" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action plugins_apply-d9529e98493-link" class="wh-expand-btn"></span><div class="title"><a href="../tutorials/plugins_apply.html" id="plugins_apply-d9529e98493-link">插件应用</a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="tocId-d9529e98631" class="topicref" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action tocId-d9529e98631-link" class="wh-expand-btn"></span><div class="title"><a href="../tutorials/dolphinscheduler_integration.html" id="tocId-d9529e98631-link">金融场景案例</a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="tocId-d9529e100707" class="topicref" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action tocId-d9529e100707-link" class="wh-expand-btn"></span><div class="title"><a href="../tutorials/iot_examples.html" id="tocId-d9529e100707-link">物联网场景案例</a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="tocId-d9529e101629" class="topicref" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action tocId-d9529e101629-link" class="wh-expand-btn"></span><div class="title"><a href="../tutorials/cluster_scaleout_perf_test.html" id="tocId-d9529e101629-link">测试报告</a></div></div></li></ul></li><li role="treeitem" aria-expanded="false"><div data-tocid="tocId-d9529e101769" class="topicref" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action tocId-d9529e101769-link" class="wh-expand-btn"></span><div class="title"><a href="../rn/server/3_00_1.html" id="tocId-d9529e101769-link">版本说明</a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 版本发布历史</p></div></div></div></li></ul></div>
+		                        
+                            </div>
+                        </nav>
+                    
+                    
+                    <div class="col-lg-7 col-md-9 col-sm-12" id="wh_topic_body">
+                        <button id="wh_close_publication_toc_button" class="close-toc-button d-none" aria-label="Toggle publishing table of content" aria-controls="wh_publication_toc" aria-expanded="true">
+                            <span class="close-toc-icon-container">
+                                <span class="close-toc-icon"></span>     
+                            </span>
+                        </button>
+                        <button id="wh_close_topic_toc_button" class="close-toc-button d-none" aria-label="Toggle topic table of content" aria-controls="wh_topic_toc" aria-expanded="true">
+                            <span class="close-toc-icon-container">
+                                <span class="close-toc-icon"></span>     
+                            </span>
+                        </button>
+                        
+                        <div class=" wh_topic_content body "><main role="main"><article class="- topic/topic topic" role="article" aria-labelledby="ariaid-title1"><h1 class="- topic/title title topictitle1" id="ariaid-title1">SQL 执行计划</h1><div class="- topic/body body"><p class="- topic/p p">为了更直观优化数据查询的性能，DolphinDB提供查询SQL执行计划的功能，便于对SQL语句进行调优。</p><p class="- topic/p p">注：执行计划指一条SQL语句在DolphinDB数据库中具体的执行方式，如命中的分区数量，各步骤执行耗时等等。</p><p class="- topic/p p"><code class="+ topic/ph pr-d/codeph ph codeph">功能发布版本：V1.30.16 / V2.00.4</code></p><p class="- topic/p p">注：查看执行计划的同时内部会完整执行该条SQL语句。若对应SQL语句执行耗时较长或者可能命中的分区数较多，可以选择对SQL语句进行拆分，对拆分后各个子句进行检测；或者通过<code class="+ topic/ph pr-d/codeph ph codeph">sqlDS</code>函数获取命中分区，在对应分区分别检测SQL执行计划（请参考手册的sqlDS介绍。</p></div><article class="- topic/topic topic nested1" aria-labelledby="ariaid-title2" id="1-如何获取执行计划"><h2 class="- topic/title title topictitle2" id="ariaid-title2">1. 如何获取执行计划</h2><div class="- topic/body body"><p class="- topic/p p">若要获取SQL语句的执行计划，需要在select或者exec后面增加：<code class="+ topic/ph pr-d/codeph ph codeph">[HINT_EXPLAIN]</code>，该关键字必须<strong class="+ topic/ph hi-d/b ph b">紧跟</strong>在select或者exec后，然后再增加查询所需字段。</p><p class="- topic/p p">示例如下：</p><pre class="+ topic/pre pr-d/codeblock pre codeblock"><code>select [HINT_EXPLAIN] * from pt;</code></pre><p class="- topic/p p">注：对于UPDATE或者DELETE语句，暂不支持查看执行计划。</p></div></article><article class="- topic/topic topic nested1" aria-labelledby="ariaid-title3" id="2-看懂执行计划"><h2 class="- topic/title title topictitle2" id="ariaid-title3">2. 看懂执行计划</h2><div class="- topic/body body"><p class="- topic/p p">DolphinDB的执行计划返回的是一个JSON格式的字符串，不过与其他数据库执行计划不同的是，DolphinDB的执行计划规则为：</p><ul class="- topic/ul ul"><li class="- topic/li li">同级从上到下表示执行先后顺序。</li><li class="- topic/li li">缩进表示子句/子过程的执行顺序。</li></ul><p class="- topic/p p">这里以简单地查询一个表所有的数据为例，分析SQL的执行计划。</p><pre class="+ topic/pre pr-d/codeblock pre codeblock"><code>// valuedb 数据库
+n=1000000
+month=take(2000.01M..2016.12M, n)
+x=rand(1.0, n)
+id = rand(1..9,n)
+t=table(month, x, id)
+
+db=database("dfs://valuedb", VALUE, 2000.01M..2016.12M)
+pt = db.createPartitionedTable(t, `pt, `month)
+pt.append!(t)
+
+// 查询
+select [HINT_EXPLAIN] * from loadTable("dfs://valuedb",`pt);</code></pre><p class="- topic/p p">获取到的执行计划如下：</p><pre class="+ topic/pre pr-d/codeblock pre codeblock"><code>{
+    "measurement": "microsecond",
+    "explain": {
+        "from": {
+            "cost": 13
+        },
+        "map": {
+            "partitions": {
+                "local": 0,
+                "remote": 204
+            },
+            "cost": 22260,
+            "detail": {
+                "most": {
+                    "sql": "select [114699] month,x,id from pt [partition = /valuedb/200009M/1kE]",
+                    "explain": {
+                        "rows": 4902,
+                        "cost": 9962
+                    }
+                },
+                "least": {
+                    "sql": "select [114699] month,x,id from pt [partition = /valuedb/200701M/1kE]",
+                    "explain": {
+                        "rows": 4902,
+                        "cost": 64
+                    }
+                }
+            }
+        },
+        "merge": {
+            "cost": 6163,
+            "rows": 1000000,
+            "detail": {
+                "most": {
+                    "sql": "select [114691] month,x,id from pt [partition = /valuedb/201604M/1kE]",
+                    "explain": {
+                        "from": {
+                            "cost": 4
+                        },
+                        "rows": 4902,
+                        "cost": 157
+                    }
+                },
+                "least": {
+                    "sql": "select [114699] month,x,id from pt [partition = /valuedb/201605M/1kE]",
+                    "explain": {
+                        "rows": 4901,
+                        "cost": 81
+                    }
+                }
+            }
+        },
+        "rows": 1000000,
+        "cost": 30988
+    }
+}
+
+简单总结，按照从上到下的执行顺序：
+
+* 首先获取数据源`pt`的信息，耗时13μs；
+
+* 然后将SQL发到各个片区进行查询，涉及本地数据节点分区0个，非本地数据节点分区204个，该阶段总耗时22260μs；耗时最长的是，200009M分区，耗时9962μs，数据量4902行;
+
+* 最后在获取所有分区的查询结果后，进行`merge`汇总，这一步骤耗时6163μs，汇总后的结果是100万行，其中，201604M分区是返回结果最多的一个分区，总行数4902。
+
+* SQL语句获取的总数据量为100万行，总耗时为30988μs。
+</code></pre></div><article class="- topic/topic topic nested2" aria-labelledby="ariaid-title4" id="21-执行计划结构概述"><h3 class="- topic/title title topictitle3" id="ariaid-title4">2.1. 执行计划结构概述</h3><div class="- topic/body body"><p class="- topic/p p">注："measurement": "microsecond"，表示执行计划中时间开销的单位为微秒。</p><p class="- topic/p p">一般来说，DolphinDB执行计划的所有内容都会包含在<code class="+ topic/ph pr-d/codeph ph codeph">explain</code>结构里。但是若SQL中存在多个子查询，在执行计划中，则可能存在多个嵌套的<code class="+ topic/ph pr-d/codeph ph codeph">explain</code>结构。</p><p class="- topic/p p">案例中的<code class="+ topic/ph pr-d/codeph ph codeph">explain</code>结构中由四部分组成：<code class="+ topic/ph pr-d/codeph ph codeph">from</code>、<code class="+ topic/ph pr-d/codeph ph codeph">map</code>、<code class="+ topic/ph pr-d/codeph ph codeph">merge</code>以及最后的统计信息<code class="+ topic/ph pr-d/codeph ph codeph">rows</code>和<code class="+ topic/ph pr-d/codeph ph codeph">cost</code>。</p></div></article><article class="- topic/topic topic nested2" aria-labelledby="ariaid-title5" id="22-from数据源分析"><h3 class="- topic/title title topictitle3" id="ariaid-title5">2.2. from数据源分析</h3><div class="- topic/body body"><pre class="+ topic/pre pr-d/codeblock pre codeblock"><code>"from": {
+	"cost": 13
+}</code></pre><p class="- topic/p p"><code class="+ topic/ph pr-d/codeph ph codeph">from</code>结构体种的内容是<code class="+ topic/ph pr-d/codeph ph codeph">cost</code>，表示获取数据源信息的耗时，单位为μs。在上例中，我们使用<code class="+ topic/ph pr-d/codeph ph codeph">loadTable</code>函数从数据库中加载valuedb的pt表（的元数据），耗时为13μs。</p></div></article><article class="- topic/topic topic nested2" aria-labelledby="ariaid-title6" id="23-map分区查询分析"><h3 class="- topic/title title topictitle3" id="ariaid-title6">2.3. map分区查询分析</h3><div class="- topic/body body"><p class="- topic/p p">DolphinDB数据库使用分布式文件系统，以分区为单位存储数据。当SQL查询涉及到多个分区时，DophinDB会首先尽可能进行分区剪枝，然后将查询语句分发到相关分区进行并行查询，最后将结果进行汇总。<code class="+ topic/ph pr-d/codeph ph codeph">map</code>结构体说明了将查询任务发送到相关分区的执行情况。</p><pre class="+ topic/pre pr-d/codeblock pre codeblock"><code>"map": {
+    "partitions": {
+        "local": 0,
+        "remote": 204
+    },
+    "cost": 22260,
+    "detail": {
+        "most": {
+            "sql": "select [114699] month,x,id from pt [partition = /valuedb/200009M/1kE]",
+            "explain": {
+                "rows": 4902,
+                "cost": 9962
+            }
+        },
+        "least": {
+            "sql": "select [114699] month,x,id from pt [partition = /valuedb/200701M/1kE]",
+            "explain": {
+                "rows": 4902,
+                "cost": 64
+            }
+        }
+    }
+  }</code></pre><ul class="- topic/ul ul"><li class="- topic/li li"><p class="- topic/p p"><code class="+ topic/ph pr-d/codeph ph codeph">partitions</code>：SQL涉及的分区，包含：</p><ul class="- topic/ul ul"><li class="- topic/li li"><code class="+ topic/ph pr-d/codeph ph codeph">local</code>：本地数据节点涉及的分区数；</li><li class="- topic/li li"><code class="+ topic/ph pr-d/codeph ph codeph">remote</code>：远程数据节点涉及的分区数。</li></ul><p class="- topic/p p">通过对比涉及的分区数与总分区数，有助于分析SQL是否进行了查询优化，如分区剪枝。</p></li><li class="- topic/li li"><p class="- topic/p p"><code class="+ topic/ph pr-d/codeph ph codeph">cost</code>：总耗时，包含整个<code class="+ topic/ph pr-d/codeph ph codeph">map</code>阶段的耗时，即分发查询任务到各个分区到分区返回查询结果的耗时。</p></li><li class="- topic/li li"><p class="- topic/p p"><code class="+ topic/ph pr-d/codeph ph codeph">detail</code>：各分区子查询的详细执行计划。</p></li></ul><p class="- topic/p p">由于查询时涉及分区可能较多，这里只会展示耗时最长和耗时最短的分区。</p><ul class="- topic/ul ul"><li class="- topic/li li"><p class="- topic/p p"><code class="+ topic/ph pr-d/codeph ph codeph">most</code>表示耗时最长的分区查询。其中：</p><ul class="- topic/ul ul"><li class="- topic/li li"><code class="+ topic/ph pr-d/codeph ph codeph">SQL</code>字段会显示使用的查询语句以及涉及的分区；</li><li class="- topic/li li">嵌套的<code class="+ topic/ph pr-d/codeph ph codeph">explain</code>会展示各个分区的查询计划。</li></ul></li><li class="- topic/li li"><p class="- topic/p p"><code class="+ topic/ph pr-d/codeph ph codeph">least</code>展示耗时最短的分区查询，内容与<code class="+ topic/ph pr-d/codeph ph codeph">most</code>结构相同。</p></li></ul></div></article><article class="- topic/topic topic nested2" aria-labelledby="ariaid-title7" id="24-merge合并分析"><h3 class="- topic/title title topictitle3" id="ariaid-title7">2.4. merge合并分析</h3><div class="- topic/body body"><p class="- topic/p p">在上一步，各分区查询完成后会将结果发送到发起查询任务的数据节点，并由该节点进行数据汇总，<code class="+ topic/ph pr-d/codeph ph codeph">merge</code>用于说明汇总阶段的相关指标。</p><pre class="+ topic/pre pr-d/codeblock pre codeblock"><code>        "merge": {
+            "cost": 6163,
+            "rows": 1000000,
+            "detail": {
+                "most": {
+                    "sql": "select [114691] month,x,id from pt [partition = /valuedb/201604M/1kE]",
+                    "explain": {
+                        "from": {
+                            "cost": 4
+                        },
+                        "rows": 4902,
+                        "cost": 157
+                    }
+                },
+                "least": {
+                    "sql": "select [114699] month,x,id from pt [partition = /valuedb/201605M/1kE]",
+                    "explain": {
+                        "rows": 4901,
+                        "cost": 81
+                    }
+                }
+            }
+        },</code></pre><p class="- topic/p p">在分析的内容中，<code class="+ topic/ph pr-d/codeph ph codeph">cost</code>为耗时，<code class="+ topic/ph pr-d/codeph ph codeph">rows</code>为汇总之后的数据量；<code class="+ topic/ph pr-d/codeph ph codeph">detail</code>包含的内容与<code class="+ topic/ph pr-d/codeph ph codeph">map</code>中的<code class="+ topic/ph pr-d/codeph ph codeph">detail</code>内容类似，区别在于，此处<code class="+ topic/ph pr-d/codeph ph codeph">detail</code>嵌套的的<code class="+ topic/ph pr-d/codeph ph codeph">most</code>和<code class="+ topic/ph pr-d/codeph ph codeph">least</code>指的是返回结果最多与最少的分区，而非耗时最长与最短的分区。</p></div></article><article class="- topic/topic topic nested2" aria-labelledby="ariaid-title8" id="25-最后的数据统计"><h3 class="- topic/title title topictitle3" id="ariaid-title8">2.5. 最后的数据统计</h3><div class="- topic/body body"><p class="- topic/p p">最后的统计指标一般包括<code class="+ topic/ph pr-d/codeph ph codeph">rows</code>（查询获得的总记录数）与<code class="+ topic/ph pr-d/codeph ph codeph">cost</code>（查询总耗时，单位为μs）。</p><p class="- topic/p p">除此之外，在执行计划内容的中间部分也会报告<code class="+ topic/ph pr-d/codeph ph codeph">rows</code>和<code class="+ topic/ph pr-d/codeph ph codeph">cost</code>，为执行的某一个阶段的统计。</p><p class="- topic/p p">最后统计的查询总耗时可能多于各个阶段的耗时之和，这是因为在各个阶段中间可能会有一些数据格式的转换、数据在网络间的传输等额外的开销，而这些开销不会体现在执行计划中。</p></div></article></article><article class="- topic/topic topic nested1" aria-labelledby="ariaid-title9" id="3-执行计划详解与优化建议"><h2 class="- topic/title title topictitle2" id="ariaid-title9">3. 执行计划详解与优化建议</h2><div class="- topic/body body"></div><article class="- topic/topic topic nested2" aria-labelledby="ariaid-title10" id="31-from"><h3 class="- topic/title title topictitle3" id="ariaid-title10">3.1. from</h3><div class="- topic/body body"><p class="- topic/p p">数据来源可以是内存表、流数据表、分布式表、多表连接结果或者嵌套的SQL语句。请注意，嵌套的SQL语句不能添加<code class="+ topic/ph pr-d/codeph ph codeph">[HINT_EXPLAIN]</code>。</p></div><article class="- topic/topic topic nested3" aria-labelledby="ariaid-title11" id="311-join"><h4 class="- topic/title title topictitle4" id="ariaid-title11">3.1.1. JOIN</h4><div class="- topic/body body"><p class="- topic/p p">若查询包含表连接操作，执行计划会显示<code class="+ topic/ph pr-d/codeph ph codeph">JOIN</code>的相关信息。</p><pre class="+ topic/pre pr-d/codeblock pre codeblock"><code>if(existsDatabase("dfs://valuedb")) dropDatabase("dfs://valuedb");
+if(existsDatabase("dfs://valuedb1")) dropDatabase("dfs://valuedb1");
+// valuedb 数据库
+n=1000000
+month=take(2000.01M..2016.12M, n)
+x=rand(1.0, n)
+id = rand(1..9,n)
+t1=table(month, x, id)
+db1=database("dfs://valuedb", VALUE, 2000.01M..2016.12M)
+
+pt1 = db1.createPartitionedTable(t1, `pt, `month).append!(t1);
+
+// valuedb1 数据库
+id = rand(1..10,n)
+times = now()+ 1..n
+vals = take(1..20,n) + rand(1.0,n)
+t2 = table(id,times,vals)
+db2=database("dfs://valuedb1",VALUE, 1..10);
+pt2=db2.createPartitionedTable(t2, `pt, `id).append!(t2);
+
+// join 查询
+select [HINT_EXPLAIN] times,vals,month from lsj(loadTable("dfs://valuedb",`pt),loadTable("dfs://valuedb1",`pt),`id)</code></pre><p class="- topic/p p">结果为：</p><pre class="+ topic/pre pr-d/codeblock pre codeblock"><code>{
+  "measurement": "microsecond",
+  "explain": {
+    "from": {
+      "cost": 29,
+      "detail": "materialize for JOIN"
+    },
+    "map": {
+      "reshuffle": {
+        "cost": 9293
+      },
+      "partitions": {
+        "local": 0,
+        "remote": 204
+      },
+      "cost": 1961931,
+      "detail": {
+        "most": {
+          "sql": "select [98305] times,vals,month from lsj(DataSource&lt; select [65541] month,id from pt where hashBucket(id, 204) == 1 as pt &gt;,DataSource&lt; select [65541] vals,times,id from pt where hashBucket(id, 204) == 1 as pt &gt;,\"id\",\"id\")",
+          "explain": {
+            "from": {
+              "cost": 55134,
+              "detail": "materialize for JOIN"
+            },
+            "join": {
+              "cost": 1701
+            },
+            "rows": 110842,
+            "cost": 57877
+          }
+        },
+        "least": {...}
+      }
+    },
+    "merge": {
+      "cost": 12358,
+      "rows": 1000000,
+      "detail": {
+        "most": {
+          "sql": "select [98305] times,vals,month from lsj(DataSource&lt; select [65541] month,id from pt where hashBucket(id, 204) == 3 as pt &gt;,DataSource&lt; select [65541] vals,times,id from pt where hashBucket(id, 204) == 3 as pt &gt;,\"id\",\"id\")",
+          "explain": {
+            "from": {
+              "cost": 29406,
+              "detail": "materialize for JOIN"
+            },
+            "join": {
+              "cost": 2535
+            },
+            "rows": 111496,
+            "cost": 34450
+          }
+        },
+        "least": {...}
+      }
+    },
+    "rows": 1000000,
+    "cost": 1979077
+  }
+}</code></pre><p class="- topic/p p">较第二节中的例子相比，本例的执行计划在<code class="+ topic/ph pr-d/codeph ph codeph">from</code>部分中增加了 "detail": "materialize for JOIN"。请注意这里<code class="+ topic/ph pr-d/codeph ph codeph">from</code>中的耗时并不是表连接操作的耗时，而是准备用于连接的2个数据源的时间。表连接将在map阶段执行。</p><p class="- topic/p p">根据<code class="+ topic/ph pr-d/codeph ph codeph">map</code>部分的统计，耗时最长的分区中，<code class="+ topic/ph pr-d/codeph ph codeph">join</code>耗时1701μs；根据<code class="+ topic/ph pr-d/codeph ph codeph">merge</code>部分的统计，返回数据量最多的分区中，<code class="+ topic/ph pr-d/codeph ph codeph">join</code>耗时2535μs。</p><p class="- topic/p p"><code class="+ topic/ph pr-d/codeph ph codeph">map</code>部分中的<code class="+ topic/ph pr-d/codeph ph codeph">reshuffle</code>部分显示的耗时，是准备将数据根据连接列连续存放到内存中以进行表连接的耗时，仅是准备过程的耗时，并没有包括将数据取到内存的耗时。若同一数据库下，进行多表连接且连接列是分区字段，则不会包含<code class="+ topic/ph pr-d/codeph ph codeph">reshuffle</code>部分。（只有2.0版本支持分布式join）</p></div></article><article class="- topic/topic topic nested3" aria-labelledby="ariaid-title12" id="312-子查询"><h4 class="- topic/title title topictitle4" id="ariaid-title12">3.1.2. 子查询</h4><div class="- topic/body body"><p class="- topic/p p">如果<code class="+ topic/ph pr-d/codeph ph codeph">from</code>子句的对象是一个SQL语句（嵌套子查询），则会在执行计划中嵌套显示子查询的执行计划。</p><p class="- topic/p p">下例将表先根据 month 字段分组，计算每组 x 字段的最大值，选取小于固定值记录。</p><pre class="+ topic/pre pr-d/codeblock pre codeblock"><code>select [HINT_EXPLAIN] * from (select max(x) as maxx from loadTable("dfs://valuedb",`pt) group by month ) where maxx &lt; 0.9994</code></pre><p class="- topic/p p">在获取的执行计划中，可以看到<code class="+ topic/ph pr-d/codeph ph codeph">from</code>，<code class="+ topic/ph pr-d/codeph ph codeph">detail</code>项增加了很多内容。</p><p class="- topic/p p">"sql"显示的是子查询的SQL语句，该标签后的<code class="+ topic/ph pr-d/codeph ph codeph">explain</code>结构将展示这条子查询SQL语句的执行计划。子查询总共耗时为33571μs。</p><pre class="+ topic/pre pr-d/codeblock pre codeblock"><code>{
+  "measurement": "microsecond",
+  "explain": {
+    "from": {
+      "cost": 33571,
+      "detail": {
+        "sql": "select [98304] max(x) as maxx from loadTable(\"dfs://valuedb\", \"pt\") group by month",
+        "explain": {
+          "from": {
+            "cost": 16
+          },
+          "map": {
+            "partitions": {
+              "local": 0,
+              "remote": 204
+            },
+            "cost": 29744,
+            "detail": {
+              "most": {
+                "sql": "select [114715] first(month) as month,max(x) as maxx from pt [partition = /valuedb/200412M]",
+                "explain": {
+                  "from": {
+                    "cost": 4
+                  },
+                  "rows": 1,
+                  "cost": 8224
+                }
+              },
+              "least": {
+                "sql": "select [114715] first(month) as month,max(x) as maxx from pt [partition = /valuedb/200112M]",
+                "explain": {
+                  "rows": 1,
+                  "cost": 31
+                }
+              }
+            }
+          },
+          "merge": {
+            "cost": 1192,
+            "rows": 204,
+            "detail": {
+              "most": {
+                "sql": "select [114715] first(month) as month,max(x) as maxx from pt [partition = /valuedb/201612M]",
+                "explain": {
+                  "rows": 1,
+                  "cost": 65
+                }
+              },
+              "least": {
+                "sql": "select [114707] first(month) as month,max(x) as maxx from pt [partition = /valuedb/200001M]",
+                "explain": {
+                  "from": {
+                    "cost": 5
+                  },
+                  "rows": 1,
+                  "cost": 93
+                }
+              }
+            }
+          },
+          "rows": 204,
+          "cost": 33571
+        }
+      }
+    },
+    "where": {
+      "rows": 9,
+      "cost": 13
+    },
+    "rows": 9,
+    "cost": 33621
+  }
+}</code></pre></div></article></article><article class="- topic/topic topic nested2" aria-labelledby="ariaid-title13" id="32-where"><h3 class="- topic/title title topictitle3" id="ariaid-title13">3.2. where</h3><div class="- topic/body body"><p class="- topic/p p">典型的<code class="+ topic/ph pr-d/codeph ph codeph">where</code>部分中只有<code class="+ topic/ph pr-d/codeph ph codeph">rows</code>和<code class="+ topic/ph pr-d/codeph ph codeph">cost</code>两项。<code class="+ topic/ph pr-d/codeph ph codeph">cost</code>表示进行条件过滤的耗时，而<code class="+ topic/ph pr-d/codeph ph codeph">rows</code>表示过滤后获取的数据量。如上例中，<code class="+ topic/ph pr-d/codeph ph codeph">where</code>条件过滤后只剩9行数据，耗时13μs。</p><pre class="+ topic/pre pr-d/codeblock pre codeblock"><code>    "where": {
+      "rows": 9,
+      "cost": 13
+    },</code></pre></div></article><article class="- topic/topic topic nested2" aria-labelledby="ariaid-title14" id="33-map"><h3 class="- topic/title title topictitle3" id="ariaid-title14">3.3. map</h3><div class="- topic/body body"><p class="- topic/p p"><code class="+ topic/ph pr-d/codeph ph codeph">map</code>阶段将任务分发给各个节点执行，执行计划展示了涉及的分区数、获取数据的行数、耗时、具体执行的SQL等信息。若SQL语句进行了优化，<code class="+ topic/ph pr-d/codeph ph codeph">map</code>部分会包含<code class="+ topic/ph pr-d/codeph ph codeph">optimize</code>部分，或者<code class="+ topic/ph pr-d/codeph ph codeph">map</code>部分被<code class="+ topic/ph pr-d/codeph ph codeph">optimize</code>部分取代。</p></div><article class="- topic/topic topic nested3" aria-labelledby="ariaid-title15" id="331-分区剪枝"><h4 class="- topic/title title topictitle4" id="ariaid-title15">3.3.1. 分区剪枝</h4><div class="- topic/body body"><p class="- topic/p p">对于分布式查询，我们可以通过观察<code class="+ topic/ph pr-d/codeph ph codeph">map</code>的<code class="+ topic/ph pr-d/codeph ph codeph">partitions</code>来检查SQL涉及的分区数量是否与预期涉及的分区数量一致。如果执行计划中分区的数量与总分区数量一致，表示该SQL语句没有触发分区剪枝，遍历了所有的分区，此时参考用户手册关于分区剪枝的部分，可以对SQL语句进行优化。</p><p class="- topic/p p">建议在SQL查询前，估算一下涉及的分区数量，并与执行计划显示的分区数量进行比对，以此来判断SQL是否做到查询最少的数据。</p><p class="- topic/p p">下例按月创建了分区表，month为分区字段，总分区数量204个。现在查询2016年11月到2016年12月的数据，预期查询的分区数只有2个。</p><pre class="+ topic/pre pr-d/codeblock pre codeblock"><code>// 创建数据库
+if( existsDatabase("dfs://valuedb") ) dropDatabase("dfs://valuedb");
+// 100万，列：x,month;按month 值分区
+n=1000000
+month=take(2000.01M..2016.12M, n)
+x=rand(1.0, n)
+t=table(month, x)
+
+db=database("dfs://valuedb", VALUE, 2000.01M..2016.12M)
+
+pt = db.createPartitionedTable(t, `pt, `month)
+pt.append!(t)
+
+// 查询出来有204个分区
+select count(*) from pnodeRun(getAllChunks) where dfsPath like '%valuedb/%' and type != 0 group by dfsPath
+
+select [HINT_EXPLAIN] * from pt where 2016.11M &lt;= month&lt;= 2016.12M</code></pre><pre class="+ topic/pre pr-d/codeblock pre codeblock"><code>{
+    "measurement": "microsecond",
+    "explain": {
+        "from": {
+            "cost": 2
+        },
+        "map": {
+            "partitions": {
+                "local": 0,
+                "remote": 204
+            },
+            "cost": 12966,
+            "detail": {
+                "most": {
+                    "sql": "select [114699] month,x from pt where 2016.11M &lt;= month &lt;= 2016.12M [partition = /valuedb/200107M/2JCB]",
+                    "explain": {
+        ......[以下省略]</code></pre><p class="- topic/p p">以上执行计划显示，遍历了204个分区。这是因为查询条件 <code class="+ topic/ph pr-d/codeph ph codeph">2016.11M &lt;= month &lt;= 2016.12M</code> 不能进行分区剪枝。若要分区剪枝，可使用<code class="+ topic/ph pr-d/codeph ph codeph">month between 2016.11M:2016.12M</code>。</p><pre class="+ topic/pre pr-d/codeblock pre codeblock"><code>select [HINT_EXPLAIN] * from pt where month between 2016.11M : 2016.12M</code></pre><p class="- topic/p p">执行计划：</p><pre class="+ topic/pre pr-d/codeblock pre codeblock"><code>{
+    "measurement": "microsecond",
+    "explain": {
+        "from": {
+            "cost": 3
+        },
+        "map": {
+            "partitions": {
+                "local": 0,
+                "remote": 2
+            },
+            "cost": 912,
+            "detail": {
+                "most": {
+    ......[以下省略]</code></pre></div></article><article class="- topic/topic topic nested3" aria-labelledby="ariaid-title16" id="332-使用分区字段减少耗时"><h4 class="- topic/title title topictitle4" id="ariaid-title16">3.3.2. 使用分区字段减少耗时</h4><div class="- topic/body body"><p class="- topic/p p">在SQL中，建议尽量在where或者groupby等条件中使用分区字段，这可以帮助减少查询的分区数，从而减少查询耗时。</p><p class="- topic/p p">比如在下面的例子中，我的表中存在，datea列和dateb列,两列数据相同，但是dateb列为分区使用的字段。同样是查询某一天的数据，使用datea列筛选的执行计划效果如下：</p><pre class="+ topic/pre pr-d/codeblock pre codeblock"><code>if( existsDatabase("dfs://valuedb2") ) dropDatabase("dfs://valuedb2");
+n=1000000
+datea=take(2000.01.01..2000.01.02, n)
+dateb=take(2000.01.01..2000.01.02, n)
+x=rand(1.0, n)
+t=table(datea,dateb, x)
+db=database("dfs://valuedb2", VALUE, 2000.01.01..2000.01.02)
+pt = db.createPartitionedTable(t, `pt, `dateb)
+pt.append!(t)
+
+select [HINT_EXPLAIN] * from pt where datea = 2000.01.01;</code></pre><pre class="+ topic/pre pr-d/codeblock pre codeblock"><code>{
+  "measurement": "microsecond",
+  "explain": {
+    "from": {
+      "cost": 1
+    },
+    "map": {
+      "partitions": {
+        "local": 0,
+        "remote": 2
+      },
+      "cost": 10010,
+      "detail": {
+        "most": {
+          "sql": "select [114699] datea,dateb,x from pt where datea == 2000.01.01 [partition = /valuedb2/20000101/OD]",
+          "explain": {
+            "where": {
+              "rows": 500000,
+              "cost": 3973
+            },
+            "rows": 500000,
+            "cost": 9783
+          }
+        },
+        "least": {
+          "sql": "select [114695] datea,dateb,x from pt where datea == 2000.01.01 [partition = /valuedb2/20000102/OD]",
+          "explain": {
+            "from": {
+              "cost": 8
+            },
+            "where": {
+              "rows": 0,
+              "cost": 2392
+            },
+            "rows": 0,
+            "cost": 2516
+          }
+        }
+      }
+    },
+    "merge": {
+      "cost": 2079,
+      "rows": 500000,
+      "detail": {
+        "most": {
+          "sql": "select [114699] datea,dateb,x from pt where datea == 2000.01.01 [partition = /valuedb2/20000101/OD]",
+          "explain": {
+            "where": {
+              "rows": 500000,
+              "cost": 3973
+            },
+            "rows": 500000,
+            "cost": 9783
+          }
+        },
+        "least": {
+          "sql": "select [114695] datea,dateb,x from pt where datea == 2000.01.01 [partition = /valuedb2/20000102/OD]",
+          "explain": {
+            "from": {
+              "cost": 8
+            },
+            "where": {
+              "rows": 0,
+              "cost": 2392
+            },
+            "rows": 0,
+            "cost": 2516
+          }
+        }
+      }
+    },
+    "rows": 500000,
+    "cost": 13019
+  }
+}</code></pre><p class="- topic/p p">使用dateb列的执行计划效果如下：</p><pre class="+ topic/pre pr-d/codeblock pre codeblock"><code>select [HINT_EXPLAIN] * from pt where dateb = 2000.01.01;</code></pre><pre class="+ topic/pre pr-d/codeblock pre codeblock"><code>{
+  "measurement": "microsecond",
+  "explain": {
+    "from": {
+      "cost": 1
+    },
+    "map": {
+      "partitions": {
+        "local": 0,
+        "remote": 1
+      },
+      "cost": 1275,
+      "optimize": {
+        "cost": 27,
+        "field": "single partition query",
+        "sql": "select [98307] datea,dateb,x from pt [partition = /valuedb2/20000101/OD]",
+        "explain": {
+          "rows": 500000,
+          "cost": 1248
+        }
+      }
+    },
+    "rows": 500000,
+    "cost": 2214
+  }
+}</code></pre><p class="- topic/p p">使用普通列DolphinDB无法进行查询优化，命中了所有的分区，但是使用分区字段就可以。在上面的示例中使用分区字段后直接找到了对应的分区，查询出预期的数据。</p><p class="- topic/p p"><strong class="+ topic/ph hi-d/b ph b">在TSDB引擎中建表时增加了sortColumns选项，该选项可以作为索引快速定位到需要的数据。建议在筛选条件或者组合条件中，尽量使用分区字段和sortColumns字段，可以大大提高查询效率</strong></p></div></article><article class="- topic/topic topic nested3" aria-labelledby="ariaid-title17" id="333-optimize场景优化"><h4 class="- topic/title title topictitle4" id="ariaid-title17">3.3.3. optimize场景优化</h4><div class="- topic/body body"><p class="- topic/p p">DolphinDB对于部分经典场景的SQL做了优化，比如对于物联网场景，经常需要查找某些设备最新的数据，DolphinDB在进行优化后，不需要在分发查询任务到每一个分区进行查询，而是采用新的寻径算法找到需要的数据。</p><p class="- topic/p p">在执行计划中，<code class="+ topic/ph pr-d/codeph ph codeph">map</code>里面会在<code class="+ topic/ph pr-d/codeph ph codeph">optimize</code>中展示优化的具体内容（该优化在版本<code class="+ topic/ph pr-d/codeph ph codeph">2.00.4</code>中发布）。如下例查找指定的2个设备所有指标的最新数据：</p><pre class="+ topic/pre pr-d/codeblock pre codeblock"><code>// 设备/指标/日期 1m 23s 23ms
+login(`admin,`123456);devices = 1..9;metrics = 'a'..'d';days = 2020.09.01+0..1;
+// 每个设备，每个指标，每天的数据量
+n = 1000000;
+
+if(existsDatabase("dfs://svmDemo"))	dropDatabase("dfs://svmDemo")
+dbName="dfs://svmDemo";tableName="sensors";
+tableSchema = table(1:0,`devId`metId`times`vals,[INT,CHAR,TIMESTAMP,FLOAT]);
+db1 = database("", VALUE, 2020.09.01+0..1)
+db2 = database("", HASH, [INT,3])
+db = database(dbName,COMPO,[db1,db2],,'TSDB')
+dfsTable = db.createPartitionedTable(tableSchema,tableName,`times`devId,,`devId`metId`times)
+go;
+t = table(1:0,`devId`metId`times`vals,[INT,CHAR,TIMESTAMP,FLOAT]);
+for(day in days){
+	t.clear!();	
+	for (device in devices){
+		for (metric in metrics){
+			take(device,n)
+			tmp = table(take(device,n) as devId, take(metric,n) as metId, 
+				(day.timestamp()+(1..1000000)*80) as times, rand(1.0, n) as vals);
+			t.append!(tmp)
+		}
+	}
+	loadTable(dbName,tableName).append!(t);
+};go;
+
+select [HINT_EXPLAIN] * from loadTable("dfs://svmDemo","sensors") where devId in [5,9] context by devId csort times limit -1;</code></pre><p class="- topic/p p">得到的执行计划如下，其中<code class="+ topic/ph pr-d/codeph ph codeph">map</code>进行了优化，执行效率得到了提升：</p><pre class="+ topic/pre pr-d/codeblock pre codeblock"><code>{
+    "measurement": "microsecond",
+    "explain": {
+        "from": {
+            "cost": 16
+        },
+        "map": {
+            "optimize": {
+                "cost": 3,
+                "field": "optimize for CONTEXT BY + LIMIT: serial execution."
+            },
+            "cost": 6063225
+        },
+        "rows": 2,
+        "cost": 6064123
+    }
+}
+ </code></pre><p class="- topic/p p"><code class="+ topic/ph pr-d/codeph ph codeph">optimize</code>里面的内容比较简单，<code class="+ topic/ph pr-d/codeph ph codeph">cost</code>是完成优化的耗时，而<code class="+ topic/ph pr-d/codeph ph codeph">field</code>展示的是具体优化措施，本例中就是，对 context by + csort + limit 组合进行执行优化。</p><p class="- topic/p p">除此之外，DolphinDB在一些特定的聚合中也有一些优化内容：</p><ul class="- topic/ul ul"><li class="- topic/li li"><p class="- topic/p p">sortKey</p><p class="- topic/p p">只有使用了TSDB引擎创建的表才会有sortKey。它可能出现在context by或者group by中，值为true或者false，表示聚合时是否使用了sortColumns列来进行排序。</p></li><li class="- topic/li li"><p class="- topic/p p">algo</p><p class="- topic/p p">使用算法只会出现在group by 中。目前优化的算法有："hash", "vectorize", "sort"三种，具体是否可以使用以及使用哪种算法，由数据库判断。</p></li></ul><p class="- topic/p p">下例创建了一个按月分区的表，date为分区字段，导入数据时对日期进行了处理，分别以6月的日期和7月的日期导入了2次，总分区数量80个，其中6月和7月的分区各40个；</p><p class="- topic/p p">按股票代码，统计每个股票的数据量，因为股票代码是sortKey字段，执行计划sortKey的值为true，表示使用了股票代码字段进行了排序。</p><pre class="+ topic/pre pr-d/codeblock pre codeblock"><code>// 导入股票数据，按月分区；csv的数据请见附录。
+login(`admin,`123456);
+dbpath = "dfs://stocks";if(existsDatabase(dbpath)) dropDatabase(dbpath);
+
+db1=database(,HASH,[SYMBOL,40]);
+db2=database(,VALUE,2020.01M..2022.01M);
+db=database(dbpath,COMPO,[db1, db2],,"TSDB")
+// 这里YOURDIR替换为实际的目录
+schema=extractTextSchema("YOURDIR/20200601.csv")
+t=table(1:0,schema.name,schema.type)
+db.createPartitionedTable(t,`quotes, `symbol`date,,`symbol`date`time)
+
+def transDate(mutable t, diff){
+	return t.replaceColumn!(`date,t.date+diff);
+}
+diffs = [20,60];
+for(diff in diffs){
+    // 这里YOURDIR替换为实际的目录
+	loadTextEx(dbHandle=db,tableName=`quotes,partitionColumns=`symbol`date,filename="YOURDIR/20200601.csv",transform=transDate{,diff})
+}
+
+select [HINT_EXPLAIN] symbol from loadTable("dfs://stocks","quotes") group by symbol;</code></pre><p class="- topic/p p">执行计划：</p><pre class="+ topic/pre pr-d/codeblock pre codeblock"><code>{
+    "measurement": "microsecond",
+    "explain":{
+        "from":{
+            "cost":19
+        },
+        "map":{
+            "partitions":{
+                "local":0,
+                "remote":80
+            },
+            "cost":196081,
+            "detail":{
+                "most":{
+                    "sql":"select [114699] symbol from quotes group by symbol [partition = /stocks/Key7/202007M/gK]",
+                    "explain":{
+                        "from":{
+                            "cost":6
+                        },
+                        "groupBy":{
+                            "sortKey":true,
+                            "cost":8727
+                        },
+                        "rows":276,
+                        "cost":20661
+                    }
+                },
+                "least":{
+                    "sql":"select [114699] symbol from quotes group by symbol [partition = /stocks/Key8/202007M/gK]",
+                    "explain":{
+                        "groupBy":{
+                            "sortKey":true,
+                            "cost":5247
+                        },
+                        "rows":250,
+                        "cost":10605
+                    }
+                }
+            }
+        },
+        "merge":{
+            "cost":2951,
+            "rows":23058,
+            "detail":{
+                "most":{
+                    "sql":"select [114699] symbol from quotes group by symbol [partition = /stocks/Key39/202007M/gK]",
+                    "explain":{
+                        "from":{
+                            "cost":7
+                        },
+                        "groupBy":{
+                            "sortKey":true,
+                            "cost":6889
+                        },
+                        "rows":327,
+                        "cost":13987
+                    }
+                },
+                "least":{
+                    "sql":"select [114699] symbol from quotes group by symbol [partition = /stocks/Key8/202006M/gK]",
+                    "explain":{
+                        "groupBy":{
+                            "sortKey":true,
+                            "cost":5123
+                        },
+                        "rows":250,
+                        "cost":12908
+                    }
+                }
+            }
+        },
+        "reduce":{
+            "sql":"select [98307] symbol from 105c5e0300000000 group by symbol",
+            "explain":{
+                "groupBy":{
+                    "sortKey":false,
+                    "algo":"sort",
+                    "cost":21147
+                },
+                "rows":11529,
+                "cost":22139
+            }
+        },
+        "rows":11529,
+        "cost":232551
+    }
+}</code></pre></div></article></article><article class="- topic/topic topic nested2" aria-labelledby="ariaid-title18" id="34-reduce"><h3 class="- topic/title title topictitle3" id="ariaid-title18">3.4. reduce</h3><div class="- topic/body body"><p class="- topic/p p">并不是所有的SQL查询都会包含<code class="+ topic/ph pr-d/codeph ph codeph">reduce</code>阶段，通常在需要对合并后的查询结果进行进一步处理，在SQL执行计划中可能会包含<code class="+ topic/ph pr-d/codeph ph codeph">reduce</code>。如：</p><pre class="+ topic/pre pr-d/codeblock pre codeblock"><code>select [HINT_EXPLAIN] max(vals) from loadTable("dfs://svmDemo", `sensors) where devId = 1 ;</code></pre><p class="- topic/p p">在<code class="+ topic/ph pr-d/codeph ph codeph">merge</code>阶段汇总结果之后，DolphinDB需要再进行一次处理，此时的执行计划如下：</p><pre class="+ topic/pre pr-d/codeblock pre codeblock"><code>{
+    "measurement": "microsecond",
+    "explain": {
+        "from": {
+            "cost": 13
+        },
+        "map": {
+            "partitions": {
+                "local": 0,
+                "remote": 2
+            },
+            "cost": 1397982,
+            "detail": {
+                "most": {...},
+                "least": {...}
+            }
+        },
+        "merge": {
+            "cost": 35,
+            "rows": 2,
+            "detail": {
+                "most": {
+                    "sql": "select [114699] max(vals) as col_0_ from sensors where devId == 1 [partition = /svmDemo/20200902/Key1/gz]",
+                    "explain": {
+                        "rows": 1,
+                        "cost": 1395804
+                    }
+                },
+                "least": {...}
+            }
+        },
+        "reduce": {
+            "sql": "select [98307] ::max(col_0_) as max_vals from 105c5e0300000000",
+            "explain": {
+                "rows": 1,
+                "cost": 32
+            }
+        },
+        "rows": 1,
+        "cost": 1398888
+    }
+}</code></pre><p class="- topic/p p">在上例中，从各个片区返回的执行结果col_0进行<code class="+ topic/ph pr-d/codeph ph codeph">merge</code>合并之后，在<code class="+ topic/ph pr-d/codeph ph codeph">reduce</code>阶段继续查询最大的值max(col_0)，获得结果行数1条，耗时32μs。</p><p class="- topic/p p"><code class="+ topic/ph pr-d/codeph ph codeph">reduce</code>阶段的执行计划可以便于观察使用函数的耗时，从而以此判断，是否使用的函数效率较低并做出针对性的优化。比如在<code class="+ topic/ph pr-d/codeph ph codeph">map</code>阶段增加筛选减少需要的内容，减少<code class="+ topic/ph pr-d/codeph ph codeph">reduce</code>阶段的计算等等。</p><p class="- topic/p p">以下面代码为例：</p><pre class="+ topic/pre pr-d/codeblock pre codeblock"><code>// 继续使用前面导入的股票数据
+select [HINT_EXPLAIN] last(askPrice1) \ first(askPrice1) - 1 
+          from loadTable("dfs://stocks","quotes")  
+          where date &gt;= 2020.06.21
+          group by symbol, segment(askLevel, false)</code></pre><pre class="+ topic/pre pr-d/codeblock pre codeblock"><code>{
+    "measurement": "microsecond",
+    "explain": {
+        "from": {
+            "cost": 17
+        },
+        "map": {
+            "partitions": {
+                "local": 0,
+                "remote": 80
+            },
+            "cost": 1528495,
+            "detail": {
+                "most": {...},
+                "least": {...}
+            }
+        },
+        "merge": {
+            "cost": 18100,
+            "rows": 128206,
+            "detail": {
+                "most": {
+                    "sql": "select [114691] first(askPrice1) as col_1_,last(askPrice1) as col_0_ from quotes group by symbol,segment(askLevel, 0) as segment_askLevel [partition = /stocks/Key31/202007M/gK]",
+                    "explain": {
+                        "from": {
+                            "cost": 8
+                        },
+                        "groupBy": {
+                            "sortKey": true,
+                            "cost": 100960
+                        },
+                        "rows": 2686,
+                        "cost": 117555
+                    }
+                },
+                "least": {...}
+            }
+        },
+        "reduce": {
+            "sql": "select [98307] ::last(col_0_) \ ::first(col_1_) - 1 as last_askPrice1_ratio from 105c5e0300000000 group by symbol,segment_askLevel",
+            "explain": {
+                "groupBy": {
+                    "sortKey": false,
+                    "algo": "hash",
+                    "cost": 47979
+                },
+                "rows": 64103,
+                "cost": 48091
+            }
+        },
+        "rows": 64103,
+        "cost": 1602107
+    }
+}</code></pre></div></article><article class="- topic/topic topic nested2" aria-labelledby="ariaid-title19" id="35-执行计划对于dolphindb特有功能的解释"><h3 class="- topic/title title topictitle3" id="ariaid-title19">3.5. 执行计划对于DolphinDB特有功能的解释</h3><div class="- topic/body body"><p class="- topic/p p">DolphinDB有一些特有的创新功能，比如：cgroup by 、 context by 、 pivot by 、 interval 等等；通常情况下，执行计划会单独列举出来这些功能的执行耗时，方便进行性能比较，比如：</p><pre class="+ topic/pre pr-d/codeblock pre codeblock"><code>t = table(`A`A`A`A`B`B`B`B as sym, 
+          09:30:06 09:30:28 09:31:46 09:31:59 09:30:19 09:30:43 09:31:23 09:31:56 as time, 
+          10 20 10 30 20 40 30 30 as volume, 
+          10.05 10.06 10.07 10.05 20.12 20.13 20.14 20.15 as price)
+
+select [HINT_EXPLAIN] wavg(price, volume) as wvap from t 
+					 group by sym 
+					 cgroup by minute(time) as minute 
+					 order by sym, minute</code></pre><p class="- topic/p p">执行计划如下，可以看出cgroup by耗时为328μs：</p><pre class="+ topic/pre pr-d/codeblock pre codeblock"><code>{
+    "measurement": "microsecond",
+    "explain": {
+        "from": {
+            "cost": 0
+        },
+        "cgroupBy": {
+            "cost": 328
+        },
+        "rows": 4,
+        "cost": 378
+    }
+}</code></pre><p class="- topic/p p">pivot By举例：</p><pre class="+ topic/pre pr-d/codeblock pre codeblock"><code>select [HINT_EXPLAIN] rowSum(ffill(last(preClose))) from loadTable("dfs://stocks", `quotes) pivot by time, symbol</code></pre><p class="- topic/p p">执行计划如下：</p><pre class="+ topic/pre pr-d/codeblock pre codeblock"><code>{
+    "measurement": "microsecond",
+    "explain":{
+        "from":{
+            "cost":20
+        },
+        "map":{...},
+        "merge":{...},
+        "reduce":{
+            "sql":"select [98307] rowSum(ffill(::last(col_0_))) as rowSum from 105c5e0300000000 pivot by time,symbol",
+            "explain":{
+                "pivotBy":{
+                    "cost":4086121
+                },
+                "rows":15182,
+                "cost":4086176
+            }
+        },
+        "rows":15182,
+        "cost":22514617
+    }
+}</code></pre><p class="- topic/p p">若SQL子句包含interval，则在执行计划中会包含<code class="+ topic/ph pr-d/codeph ph codeph">fill</code>，表示填充耗时：</p><pre class="+ topic/pre pr-d/codeblock pre codeblock"><code>N = 3653
+t = table(2011.11.01..2021.10.31 as date, 
+          take(`AAPL, N) as code, 
+          rand([0.0573, -0.0231, 0.0765, 0.0174, -0.0025, 0.0267, 0.0304, -0.0143, -0.0256, 0.0412, 0.0810, -0.0159, 0.0058, -0.0107, -0.0090, 0.0209, -0.0053, 0.0317, -0.0117, 0.0123], N) as rate)
+
+select [HINT_EXPLAIN] std(rate) from t group by code, interval(date, 30d, "none")</code></pre><p class="- topic/p p">执行计划：</p><pre class="+ topic/pre pr-d/codeblock pre codeblock"><code>{
+    "measurement": "microsecond",
+    "explain": {
+        "from": {
+            "cost": 1
+        },
+        "groupBy": {
+            "sortKey": false,
+            "algo": "sort",
+            "fill": {
+                "cost": 1
+            },
+            "cost": 1662
+        },
+        "rows": 123,
+        "cost": 1736
+    }
+}</code></pre></div></article></article><article class="- topic/topic topic nested1" aria-labelledby="ariaid-title20" id="4-附录"><h2 class="- topic/title title topictitle2" id="ariaid-title20">4. 附录</h2><div class="- topic/body body"><p class="- topic/p p">股票数据csv，参考链接：<a class="- topic/xref xref" href="http://www.dolphindb.cn/downloads/tutorial/20200601.zip" target="_blank" rel="external noopener">20200601.csv</a>。</p></div></article></article></main></div>
+                        
+                        
+                        
+                        
+                        
+                        
+                    </div>
+                    
+                        <nav role="navigation" id="wh_topic_toc" aria-label="On this page" class="col-lg-2 d-none d-lg-block navbar d-print-none"> 
+                            <div id="wh_topic_toc_content">
+		                        
+	                            <div class=" wh_topic_toc "><div class="wh_topic_label">在本页上</div><ul><li class="topic-item"><a href="#1-%E5%A6%82%E4%BD%95%E8%8E%B7%E5%8F%96%E6%89%A7%E8%A1%8C%E8%AE%A1%E5%88%92" data-tocid="1-如何获取执行计划">1. 如何获取执行计划</a></li><li class="topic-item"><a href="#2-%E7%9C%8B%E6%87%82%E6%89%A7%E8%A1%8C%E8%AE%A1%E5%88%92" data-tocid="2-看懂执行计划">2. 看懂执行计划</a><ul><li class="topic-item"><a href="#21-%E6%89%A7%E8%A1%8C%E8%AE%A1%E5%88%92%E7%BB%93%E6%9E%84%E6%A6%82%E8%BF%B0" data-tocid="21-执行计划结构概述">2.1. 执行计划结构概述</a></li><li class="topic-item"><a href="#22-from%E6%95%B0%E6%8D%AE%E6%BA%90%E5%88%86%E6%9E%90" data-tocid="22-from数据源分析">2.2. from数据源分析</a></li><li class="topic-item"><a href="#23-map%E5%88%86%E5%8C%BA%E6%9F%A5%E8%AF%A2%E5%88%86%E6%9E%90" data-tocid="23-map分区查询分析">2.3. map分区查询分析</a></li><li class="topic-item"><a href="#24-merge%E5%90%88%E5%B9%B6%E5%88%86%E6%9E%90" data-tocid="24-merge合并分析">2.4. merge合并分析</a></li><li class="topic-item"><a href="#25-%E6%9C%80%E5%90%8E%E7%9A%84%E6%95%B0%E6%8D%AE%E7%BB%9F%E8%AE%A1" data-tocid="25-最后的数据统计">2.5. 最后的数据统计</a></li></ul></li><li class="topic-item"><a href="#3-%E6%89%A7%E8%A1%8C%E8%AE%A1%E5%88%92%E8%AF%A6%E8%A7%A3%E4%B8%8E%E4%BC%98%E5%8C%96%E5%BB%BA%E8%AE%AE" data-tocid="3-执行计划详解与优化建议">3. 执行计划详解与优化建议</a><ul><li class="topic-item"><a href="#31-from" data-tocid="31-from">3.1. from</a><ul><li class="topic-item"><a href="#311-join" data-tocid="311-join">3.1.1. JOIN</a></li><li class="topic-item"><a href="#312-%E5%AD%90%E6%9F%A5%E8%AF%A2" data-tocid="312-子查询">3.1.2. 子查询</a></li></ul></li><li class="topic-item"><a href="#32-where" data-tocid="32-where">3.2. where</a></li><li class="topic-item"><a href="#33-map" data-tocid="33-map">3.3. map</a><ul><li class="topic-item"><a href="#331-%E5%88%86%E5%8C%BA%E5%89%AA%E6%9E%9D" data-tocid="331-分区剪枝">3.3.1. 分区剪枝</a></li><li class="topic-item"><a href="#332-%E4%BD%BF%E7%94%A8%E5%88%86%E5%8C%BA%E5%AD%97%E6%AE%B5%E5%87%8F%E5%B0%91%E8%80%97%E6%97%B6" data-tocid="332-使用分区字段减少耗时">3.3.2. 使用分区字段减少耗时</a></li><li class="topic-item"><a href="#333-optimize%E5%9C%BA%E6%99%AF%E4%BC%98%E5%8C%96" data-tocid="333-optimize场景优化">3.3.3. optimize场景优化</a></li></ul></li><li class="topic-item"><a href="#34-reduce" data-tocid="34-reduce">3.4. reduce</a></li><li class="topic-item"><a href="#35-%E6%89%A7%E8%A1%8C%E8%AE%A1%E5%88%92%E5%AF%B9%E4%BA%8Edolphindb%E7%89%B9%E6%9C%89%E5%8A%9F%E8%83%BD%E7%9A%84%E8%A7%A3%E9%87%8A" data-tocid="35-执行计划对于dolphindb特有功能的解释">3.5. 执行计划对于DolphinDB特有功能的解释</a></li></ul></li><li class="topic-item"><a href="#4-%E9%99%84%E5%BD%95" data-tocid="4-附录">4. 附录</a></li></ul></div>
+	                        	
+                        	</div>
+                        </nav>
+                    
+                </div>
+            </div>
+            
+            
+            
+        </div> 
+        <footer class="navbar navbar-default wh_footer">
+  <div class=" footer-container mx-auto ">
+<title>Copyright</title><p><b> ©2024 浙江智臾科技有限公司 浙ICP备18048711号-3</b></p>
+  </div>
+</footer>
+        
+        <div id="go2top" class="d-print-none">
+            <span class="oxy-icon oxy-icon-up"></span>
+        </div>
+        
+        <div id="modal_img_large" class="modal">
+            <span class="close oxy-icon oxy-icon-remove"></span>
+            <div id="modal_img_container"></div>
+            <div id="caption"></div>
+        </div>
+        
+        
+        
+    </body>
+</html>

@@ -1,0 +1,670 @@
+<!DOCTYPE html><html xmlns="http://www.w3.org/1999/xhtml" xml:lang="zh" lang="zh" data-whc_version="26.0">
+    <head><link rel="shortcut icon" href="../favicon.ico"/><link rel="icon" href="../favicon.ico"/><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><meta http-equiv="X-UA-Compatible" content="IE=edge"/><meta name="description" content="量化金融的研究和实盘中，越来越多的机构需要根据高频的行情数据（L1/L2 以及逐笔委托数据）来计算量价因子，每只股票的每一条新数据的注入都会更新该只股票的所有因子值。这些因子通常是有状态的：不仅与当前的多个指标有关，而且与多个指标的历史状态相关。以国内的股票市场为例，每 3 秒收到一个快照，每个股票每天 4800 ..."/><meta name="DC.rights.owner" content="(C) 版权 2024"/><meta name="copyright" content="(C) 版权 2024"/><meta name="generator" content="DITA-OT"/><meta name="DC.type" content="topic"/><meta name="DC.coverage" content=""/><meta name="DC.relation" content="../funcs/themes/streamingEngine.html"/><meta name="prodname" content="DolphinDB"/><meta name="brand" content="DolphinDB"/><meta name="DC.creator" content="DolphinDB"/><meta name="DC.publisher" content="DDB N/A DDB 200"/><meta name="DC.format" content="HTML5"/><meta name="DC.identifier" content="reactive_state_engine"/><title>响应式状态引擎</title><!--  Generated with Oxygen version 26.0, build number 2024012323.  --><meta name="wh-path2root" content="../"/><meta name="wh-toc-id" content="reactive_state_engine-d9529e4238"/><meta name="wh-source-relpath" content="stream/reactive_state_engine.dita"/><meta name="wh-out-relpath" content="stream/reactive_state_engine.html"/>
+
+    <link rel="stylesheet" type="text/css" href="../oxygen-webhelp/app/commons.css?buildId=2024012323"/>
+    <link rel="stylesheet" type="text/css" href="../oxygen-webhelp/app/topic.css?buildId=2024012323"/>
+
+    <script src="../oxygen-webhelp/app/options/properties.js?buildId=20240704100525"></script>
+    <script src="../oxygen-webhelp/app/localization/strings.js?buildId=2024012323"></script>
+    <script src="../oxygen-webhelp/app/search/index/keywords.js?buildId=20240704100525"></script>
+    <script defer="defer" src="../oxygen-webhelp/app/commons.js?buildId=2024012323"></script>
+    <script defer="defer" src="../oxygen-webhelp/app/topic.js?buildId=2024012323"></script>
+<link rel="stylesheet" type="text/css" href="../oxygen-webhelp/template/styles.css?buildId=2024012323"/><script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script><script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script></head>
+
+    <body id="reactive_state_engine" class="wh_topic_page frmBody">
+        <a href="#wh_topic_body" class="sr-only sr-only-focusable">
+            跳转到主要内容
+        </a>
+        
+        
+        
+        
+        <header class="navbar navbar-default wh_header">
+    <div class="container-fluid">
+        <div xmlns:whc="http://www.oxygenxml.com/webhelp/components" class="wh_header_flex_container navbar-nav navbar-expand-md navbar-dark">
+            <div class="wh_logo_and_publication_title_container">
+                <div class="wh_logo_and_publication_title">
+                    
+                    <a href="https://www.dolphindb.cn" class=" wh_logo d-none d-sm-block "><img src="../logo.png" alt="  DolphinDB 文档中心  "/></a>
+                    <div class=" wh_publication_title "><a href="../index.html"><span class="booktitle">  <span class="ph mainbooktitle">DolphinDB 文档中心</span>  </span></a></div>
+                    
+                </div>
+                
+                
+            </div>
+
+            <div class="wh_top_menu_and_indexterms_link collapse navbar-collapse" id="wh_top_menu_and_indexterms_link">
+                
+                
+                
+                
+            </div>
+        <div class=" wh_search_input navbar-form wh_topic_page_search search " role="form">
+            
+            
+            
+            <form id="searchForm" method="get" role="search" action="../search.html"><div><input type="search" placeholder="搜索 " class="wh_search_textfield" id="textToSearch" name="searchQuery" aria-label="搜索查询" required="required"/><button type="submit" class="wh_search_button" aria-label="搜索"><span class="search_input_text">搜索</span></button></div></form>
+            
+            <script src="/vendors/react/umd/react.production.min.js" defer="defer"></script>
+<script src="/vendors/react-dom/umd/react-dom.production.min.js" defer="defer"></script>
+<script src="/vendors/dayjs/dayjs.min.js" defer="defer"></script>
+<script src="/vendors/antd/dist/antd.min.js" defer="defer"></script>
+<script src="/vendors/@ant-design/icons/dist/index.umd.min.js" defer="defer"></script>
+<script src="/zh/index.js" type="module"></script>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js" defer="defer"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML" defer="defer"><!--
+
+
+--></script>
+
+            
+        </div></div>
+    </div>
+</header>
+        
+        
+         
+        
+        
+        
+        <div class="container-fluid" id="wh_topic_container">
+            <div class="row">
+
+                <nav class="wh_tools d-print-none navbar-expand-md" aria-label="Tools">
+                    
+                    <div data-tooltip-position="bottom" class=" wh_breadcrumb "><ol class="d-print-none"><li><span class="home"><a href="../index.html"><span>主页</span></a></span></li><li><div class="topicref" data-id="chap7_tutorials_streaming"><div class="title"><a href="../stream/str_intro.html"><span class="keyword label">流数据</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 流数据引擎及流数据计算的基本概念</p></div></div></div></li><li><div class="topicref" data-id="streamingEngineTopic"><div class="title"><a href="../funcs/themes/streamingEngine.html"><span class="keyword label">内置流式计算引擎</span></a></div></div></li><li class="active"><div class="topicref" data-id="reactive_state_engine"><div class="title"><a href="../stream/reactive_state_engine.html">响应式状态引擎</a></div></div></li></ol></div>
+                    
+                    
+                    
+                    <div class="wh_right_tools">
+                        <button class="wh_hide_highlight" aria-label="切换搜索突出显示" title="切换搜索突出显示"></button>
+                        <button class="webhelp_expand_collapse_sections" data-next-state="collapsed" aria-label="折叠截面" title="折叠截面"></button>
+                        
+                        
+                        
+                        
+                        <div class=" wh_print_link print d-none d-md-inline-block "><button onClick="window.print()" title="打印此页" aria-label="打印此页"></button></div>
+                        
+                        <button type="button" id="wh_toc_button" class="custom-toggler navbar-toggler collapsed wh_toggle_button navbar-light" aria-expanded="false" aria-label="Toggle publishing table of content" aria-controls="wh_publication_toc">
+                            <span class="navbar-toggler-icon"></span>
+                        </button>
+                    </div>
+                    
+                </nav>
+            </div>
+            
+            
+            
+            
+            <div class="wh_content_area">
+                <div class="row">
+                    
+                        <nav id="wh_publication_toc" class="col-lg-3 col-md-3 col-sm-12 d-md-block d-none d-print-none" aria-label="Table of Contents Container">
+                            <div id="wh_publication_toc_content">
+		                        
+                            	<div class=" wh_publication_toc " data-tooltip-position="right"><span class="expand-button-action-labels"><span id="button-expand-action" role="button" aria-label="Expand"></span><span id="button-collapse-action" role="button" aria-label="Collapse"></span><span id="button-pending-action" role="button" aria-label="Pending"></span></span><ul role="tree" aria-label="Table of Contents"><li role="treeitem"><div data-tocid="new_chap_about_sect_ddb_docs_intro-d9529e87" class="topicref" data-id="new_chap_about_sect_ddb_docs_intro" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../about/ddb_docs_intro.html" id="new_chap_about_sect_ddb_docs_intro-d9529e87-link">文档使用说明</a><div class="wh-tooltip"><p class="shortdesc">如何获取 DolphinDB 帮助信息</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="chap1_getstarted-d9529e140" class="topicref" data-id="chap1_getstarted" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action chap1_getstarted-d9529e140-link" class="wh-expand-btn"></span><div class="title"><a href="../getstarted/chap1_getstarted.html" id="chap1_getstarted-d9529e140-link"><span class="keyword label">快速上手</span></a><div class="wh-tooltip"><p class="shortdesc">如何快速部署 DolphinDB、建库建表、写入和查询数据</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="sectionddb_deployment-d9529e335" class="topicref" data-id="sectionddb_deployment" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action sectionddb_deployment-d9529e335-link" class="wh-expand-btn"></span><div class="title"><a href="../deploy/deploy_intro.html" id="sectionddb_deployment-d9529e335-link"><span class="keyword label">部署</span></a><div class="wh-tooltip"><p class="shortdesc">如何在不同的场景中部署 DolphinDB</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="new_chap_database_manage_new_chap_dbmanage_landing_page-d9529e2313" class="topicref" data-id="new_chap_database_manage_new_chap_dbmanage_landing_page" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action new_chap_database_manage_new_chap_dbmanage_landing_page-d9529e2313-link" class="wh-expand-btn"></span><div class="title"><a href="../db_distr_comp/cfg/db_intro.html" id="new_chap_database_manage_new_chap_dbmanage_landing_page-d9529e2313-link"><span class="keyword label">数据库</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 数据库的基本概念</p></div></div></div></li><li role="treeitem" aria-expanded="true"><div data-tocid="chap7_tutorials_streaming-d9529e3490" class="topicref" data-id="chap7_tutorials_streaming" data-state="expanded"><span role="button" tabindex="0" aria-labelledby="button-collapse-action chap7_tutorials_streaming-d9529e3490-link" class="wh-expand-btn"></span><div class="title"><a href="../stream/str_intro.html" id="chap7_tutorials_streaming-d9529e3490-link"><span class="keyword label">流数据</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 流数据引擎及流数据计算的基本概念</p></div></div></div><ul role="group" class="navbar-nav nav-list"><li role="treeitem" aria-expanded="false"><div data-tocid="streamfunctions-d9529e3543" class="topicref" data-id="streamfunctions" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action streamfunctions-d9529e3543-link" class="wh-expand-btn"></span><div class="title"><a href="../stream/str_funcs.html" id="streamfunctions-d9529e3543-link">功能简介</a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="tocId-d9529e3821" class="topicref" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action tocId-d9529e3821-link" class="wh-expand-btn"></span><div class="title"><a href="../stream/try_example1.html" id="tocId-d9529e3821-link">入门示例</a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="内置流式计算算子-d9529e3914" class="topicref" data-id="内置流式计算算子" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action 内置流式计算算子-d9529e3914-link" class="wh-expand-btn"></span><div class="title"><a href="../stream/str_operator.html" id="内置流式计算算子-d9529e3914-link"><span class="keyword label">内置流式计算算子</span></a></div></div></li><li role="treeitem" aria-expanded="true"><div data-tocid="streamingEngineTopic-d9529e4099" class="topicref" data-id="streamingEngineTopic" data-state="expanded"><span role="button" tabindex="0" aria-labelledby="button-collapse-action streamingEngineTopic-d9529e4099-link" class="wh-expand-btn"></span><div class="title"><a href="../funcs/themes/streamingEngine.html" id="streamingEngineTopic-d9529e4099-link"><span class="keyword label">内置流式计算引擎</span></a></div></div><ul role="group" class="navbar-nav nav-list"><li role="treeitem"><div data-tocid="时序聚合引擎-d9529e4146" class="topicref" data-id="时序聚合引擎" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../stream/time_series_engine.html" id="时序聚合引擎-d9529e4146-link">时序聚合引擎</a></div></div></li><li role="treeitem"><div data-tocid="cross_sectional_engine-d9529e4192" class="topicref" data-id="cross_sectional_engine" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../stream/cross_sectional_engine.html" id="cross_sectional_engine-d9529e4192-link">横截面引擎</a></div></div></li><li role="treeitem" class="active"><div data-tocid="reactive_state_engine-d9529e4238" class="topicref" data-id="reactive_state_engine" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../stream/reactive_state_engine.html" id="reactive_state_engine-d9529e4238-link">响应式状态引擎</a></div></div></li><li role="treeitem"><div data-tocid="session_window_engine-d9529e4284" class="topicref" data-id="session_window_engine" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../stream/session_window_engine.html" id="session_window_engine-d9529e4284-link">会话窗口引擎</a></div></div></li><li role="treeitem"><div data-tocid="anomaly_detection_engine-d9529e4330" class="topicref" data-id="anomaly_detection_engine" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../stream/anomaly_detection_engine.html" id="anomaly_detection_engine-d9529e4330-link">异常检测引擎</a></div></div></li></ul></li><li role="treeitem" aria-expanded="false"><div data-tocid="chap7_tutorials_streaming-d9529e4376" class="topicref" data-id="chap7_tutorials_streaming" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action chap7_tutorials_streaming-d9529e4376-link" class="wh-expand-btn"></span><div class="title"><a href="../stream/str_join_engine.html" id="chap7_tutorials_streaming-d9529e4376-link"><span class="keyword label">内置多数据源流式关联引擎</span></a></div></div></li><li role="treeitem"><div data-tocid="streamha-d9529e4653" class="topicref" data-id="streamha" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../stream/str_ha.html" id="streamha-d9529e4653-link"><span class="keyword label">流数据高可用</span></a></div></div></li><li role="treeitem"><div data-tocid="流计算状态监控-d9529e4700" class="topicref" data-id="流计算状态监控" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../stream/str_monitor.html" id="流计算状态监控-d9529e4700-link">流计算状态监控</a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="replay-d9529e4746" class="topicref" data-id="replay" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action replay-d9529e4746-link" class="wh-expand-btn"></span><div class="title"><a href="../stream/str_replay.html" id="replay-d9529e4746-link"><span class="keyword label">历史数据回放</span></a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="流批一体功能-d9529e4931" class="topicref" data-id="流批一体功能" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action 流批一体功能-d9529e4931-link" class="wh-expand-btn"></span><div class="title"><a href="../stream/str_batch.html" id="流批一体功能-d9529e4931-link"><span class="keyword label">流批一体</span></a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="tocId-d9529e5024" class="topicref" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action tocId-d9529e5024-link" class="wh-expand-btn"></span><div class="title"><a href="../stream/str_api_python.html" id="tocId-d9529e5024-link">实时流数据接入</a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="cep-d9529e5442" class="topicref" data-id="cep" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action cep-d9529e5442-link" class="wh-expand-btn"></span><div class="title"><a href="../stream/cep.html" id="cep-d9529e5442-link">复杂事件处理（CEP）引擎</a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="tocId-d9529e5995" class="topicref" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action tocId-d9529e5995-link" class="wh-expand-btn"></span><div class="title"><a href="../stream/local_sub.html" id="tocId-d9529e5995-link">流处理结果交互方式</a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="tocId-d9529e6184" class="topicref" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action tocId-d9529e6184-link" class="wh-expand-btn"></span><div class="title"><a href="../stream/str_altair.html" id="tocId-d9529e6184-link">数据可视化工具</a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="tocId-d9529e6277" class="topicref" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action tocId-d9529e6277-link" class="wh-expand-btn"></span><div class="title"><a href="../tutorials/streaming_auto_sub.html" id="tocId-d9529e6277-link">金融场景应用案例</a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="tocId-d9529e6969" class="topicref" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action tocId-d9529e6969-link" class="wh-expand-btn"></span><div class="title"><a href="../tutorials/ddb_str_app_iot.html" id="tocId-d9529e6969-link">物联网场景应用案例</a></div></div></li></ul></li><li role="treeitem" aria-expanded="false"><div data-tocid="tocId-d9529e7385" class="topicref" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action tocId-d9529e7385-link" class="wh-expand-btn"></span><div class="title"><a href="../db_distr_comp/db_oper/import_data.html" id="tocId-d9529e7385-link">数据迁移</a><div class="wh-tooltip"><p class="shortdesc">如何从不同数据源向 DolphinDB 迁移数据</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="chap7_tutorials_system_management-d9529e7812" class="topicref" data-id="chap7_tutorials_system_management" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action chap7_tutorials_system_management-d9529e7812-link" class="wh-expand-btn"></span><div class="title"><a href="../sys_man/om_intro.html" id="chap7_tutorials_system_management-d9529e7812-link"><span class="keyword label">系统运维</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 的系统运维功能及方法</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="about_language_resources-d9529e16490" class="topicref" data-id="about_language_resources" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action about_language_resources-d9529e16490-link" class="wh-expand-btn"></span><div class="title"><a href="../progr/progr_intro.html" id="about_language_resources-d9529e16490-link"><span class="keyword label">编程语言</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 编程基本概念与方法、SQL 在 DolphinDB 的应用</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="functions_references-d9529e26503" class="topicref" data-id="functions_references" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action functions_references-d9529e26503-link" class="wh-expand-btn"></span><div class="title"><a href="../funcs/funcs_intro.html" id="functions_references-d9529e26503-link"><span class="keyword label">函数参考</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 函数分类、语法、详解及示例</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="api_protocol-d9529e86456" class="topicref" data-id="api_protocol" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action api_protocol-d9529e86456-link" class="wh-expand-btn"></span><div class="title"><a href="../api/connapi_intro.html" id="api_protocol-d9529e86456-link"><span class="keyword label">连接器 &amp; API</span></a><div class="wh-tooltip"><p class="shortdesc">面向不同编程语言的 DolphinDB API 及连接器，相关协议和用法</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="chap6_plugin-d9529e91976" class="topicref" data-id="chap6_plugin" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action chap6_plugin-d9529e91976-link" class="wh-expand-btn"></span><div class="title"><a href="../plugins/plg_intro.html" id="chap6_plugin-d9529e91976-link"><span class="keyword label">插件</span></a><div class="wh-tooltip"><p class="shortdesc">多个应用场景的插件使用说明和插件开发指导</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="third_party-d9529e94749" class="topicref" data-id="third_party" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action third_party-d9529e94749-link" class="wh-expand-btn"></span><div class="title"><a href="../third_party.html" id="third_party-d9529e94749-link">第三方工具</a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="about_tutorials-d9529e94980" class="topicref" data-id="about_tutorials" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action about_tutorials-d9529e94980-link" class="wh-expand-btn"></span><div class="title"><a href="../tutorials/about_tutorials.html" id="about_tutorials-d9529e94980-link"><span class="keyword label">教程</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 产品使用教程</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="tocId-d9529e101769" class="topicref" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action tocId-d9529e101769-link" class="wh-expand-btn"></span><div class="title"><a href="../rn/server/3_00_1.html" id="tocId-d9529e101769-link">版本说明</a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 版本发布历史</p></div></div></div></li></ul></div>
+		                        
+                            </div>
+                        </nav>
+                    
+                    
+                    <div class="col-lg-7 col-md-9 col-sm-12" id="wh_topic_body">
+                        <button id="wh_close_publication_toc_button" class="close-toc-button d-none" aria-label="Toggle publishing table of content" aria-controls="wh_publication_toc" aria-expanded="true">
+                            <span class="close-toc-icon-container">
+                                <span class="close-toc-icon"></span>     
+                            </span>
+                        </button>
+                        <button id="wh_close_topic_toc_button" class="close-toc-button d-none" aria-label="Toggle topic table of content" aria-controls="wh_topic_toc" aria-expanded="true">
+                            <span class="close-toc-icon-container">
+                                <span class="close-toc-icon"></span>     
+                            </span>
+                        </button>
+                        
+                        <div class=" wh_topic_content body "><main role="main"><article class="- topic/topic topic" role="article" aria-labelledby="ariaid-title1">
+    <h1 class="- topic/title title topictitle1" id="ariaid-title1">响应式状态引擎</h1>
+    <div class="- topic/body body">
+        <p class="- topic/p p">量化金融的研究和实盘中，越来越多的机构需要根据高频的行情数据（L1/L2
+            以及逐笔委托数据）来计算量价因子，每只股票的每一条新数据的注入都会更新该只股票的所有因子值。这些因子通常是有状态的：不仅与当前的多个指标有关，而且与多个指标的历史状态相关。以国内的股票市场为例，每
+            3 秒收到一个快照，每个股票每天 4800 个快照，计算因子时可能会用到之前若干个快照的数据，甚至之前若干天的数据。绝大多数机构的研发环境系统（例如
+            Python）与生产环境系统（例如 C++）不同，要维护两套代码，是非常沉重的负担。</p>
+        <p class="- topic/p p">本教程介绍如何使用 DolphinDB 1.30.3 版本发布的响应式状态引擎（Reactive State
+            Engine），实现流批统一计算带有状态的高频因子。状态引擎接受在历史数据批量处理（研发阶段）中编写的表达式或函数作为输入进行流式计算，并确保流式计算的结果与批量计算完全一致。只要在历史数据的批量计算中验证正确，即可保证流数据的实时计算正确。这避免了在生产环境中重写研发代码的高额成本，以及维护研发和生产两套代码的负担。</p>
+    </div>
+    <article class="- topic/topic topic nested1" aria-labelledby="ariaid-title2" id="topic_lnb_ssk_xzb">
+        <h2 class="- topic/title title topictitle2" id="ariaid-title2">金融高频因子计算示例</h2>
+        <div class="- topic/body body">
+            <p class="- topic/p p">本节通过一个金融高频因子计算的示例，介绍高频因子计算中的挑战。以下的因子表达式以 DolphinDB
+                    脚本语言编写，使用了用户自定义函数<code class="+ topic/ph pr-d/codeph ph codeph">sum\_diff</code>和内置函数<code class="+ topic/ph pr-d/codeph ph codeph">ema</code>
+                (exponential moving
+                    average)。<code class="+ topic/ph pr-d/codeph ph codeph">sum_diff</code>是一个无状态函数，<code class="+ topic/ph pr-d/codeph ph codeph">ema</code>是一个有状态的函数，依赖历史数据。更为棘手的是，如以下计算分解图所示，需要使用<code class="+ topic/ph pr-d/codeph ph codeph">ema</code>函数的多重嵌套。</p>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock language-python" id="topic_lnb_ssk_xzb__codeblock_ncm_fkf_rzb" data-ofbid="topic_lnb_ssk_xzb__codeblock_ncm_fkf_rzb"><strong class="hl-keyword">def</strong> sum_diff(x, y){
+    <strong class="hl-keyword">return</strong> (x-y)/(x+y)
+}
+
+ema(<span class="hl-number">1000</span> * sum_diff(ema(price, <span class="hl-number">20</span>), ema(price, <span class="hl-number">40</span>)),<span class="hl-number">10</span>) -  ema(<span class="hl-number">1000</span> * sum_diff(ema(price, <span class="hl-number">20</span>), ema(price, <span class="hl-number">40</span>)), <span class="hl-number">20</span>)</pre>
+            <figure class="- topic/fig fig fignone" id="topic_lnb_ssk_xzb__fig_lvm_bpf_tzb" data-ofbid="topic_lnb_ssk_xzb__fig_lvm_bpf_tzb">
+                <img class="- topic/image image" id="topic_lnb_ssk_xzb__image_ocm_fkf_rzb" src="images/reactive_state_engine_1.png" height="742" width="602"/>
+            </figure>
+            <p class="- topic/p p">面对此类场景，我们需要解决以下几个问题：</p>
+            <ul class="- topic/ul ul" id="topic_lnb_ssk_xzb__ul_pcm_fkf_rzb" data-ofbid="topic_lnb_ssk_xzb__ul_pcm_fkf_rzb">
+                <li class="- topic/li li">
+                    <p class="- topic/p p">投研阶段能否使用历史数据快速为每只股票计算 100~1000 个类似的因子？</p>
+                </li>
+                <li class="- topic/li li">
+                    <p class="- topic/p p">实盘阶段能否在每个行情tick数据到来时为每只股票计算 100~1000 个类似的因子？</p>
+                </li>
+                <li class="- topic/li li">
+                    <p class="- topic/p p">批处理和流计算的代码实现是否高效？批和流能否统一代码？正确性校验是否便捷？</p>
+                </li>
+            </ul>
+        </div>
+    </article>
+    <article class="- topic/topic topic nested1" aria-labelledby="ariaid-title3" id="topic_ycp_wsk_xzb">
+        <h2 class="- topic/title title topictitle2" id="ariaid-title3">现有解决方案的优缺点</h2>
+        <div class="- topic/body body">
+            <p class="- topic/p p">Python pandas/numpy 目前是研究阶段最常用的高频因子解决方案。pandas
+                对历史面板数据处理有非常成熟的解决方案，而且内置了大部分高频因子计算需要用到的算子，可快速开发高频因子。但 pandas
+                无论对历史数据计算，还是对实时数据计算的性能都较差。对历史数据计算时，单线程的计算性能也存在较大提升空间，此外，由于 python 的 Global
+                interpreter lock 的限制，无法进行并行计算；对实时数据进行计算时，由于 python
+                仅支持全量计算，不支持增量计算，所以无法达到实时计算的性能要求。</p>
+            <p class="- topic/p p">为生产环境中的性能考虑，很多机构会用 C++
+                重新实现研究（历史数据）代码。不过，这种方法需要维护两套代码，开发成本（时间和人力）会大幅增加。此外，还要耗费大量精力确保两套系统的结果完全一致。</p>
+            <p class="- topic/p p">Flink 是一种批流统一的解决方案。Flink 支持 SQL 和窗口函数，高频因子用到的基本算子在 Flink 中已经内置实现。因此，简单的因子用 Flink
+                实现比较高效，运行性能也较好。但 Flink 最大的问题是无法实现复杂的高频因子计算。如前一章中提到的例子，需要多个窗口函数的嵌套，无法直接用 Flink
+                实现。这也正是 DolphinDB 开发响应式状态引擎的动机所在。</p>
+        </div>
+    </article>
+    <article class="- topic/topic topic nested1" aria-labelledby="ariaid-title4" id="topic_vsp_zsk_xzb">
+        <h2 class="- topic/title title topictitle2" id="ariaid-title4">响应式状态引擎（Reactive State Engine)</h2>
+        <div class="- topic/body body">
+            <p class="- topic/p p">响应式状态引擎（Reactive State Engine）实际上是一个计算黑盒，输入在历史数据上已经验证的 DolphinDB
+                因子代码（表达式或函数）以及实时行情数据，输出实时因子值。由于在静态的历史数据集上开发和验证高频因子远比在流数据上开发更为简单，响应式状态引擎显著降低了流式高频因子的开发成本和难度。</p>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock language-python" id="topic_vsp_zsk_xzb__codeblock_qcm_fkf_rzb" data-ofbid="topic_vsp_zsk_xzb__codeblock_qcm_fkf_rzb"><strong class="hl-keyword">def</strong> sum_diff(x, y){
+    <strong class="hl-keyword">return</strong> (x-y)/(x+y)
+}
+factor1 = &lt;ema(<span class="hl-number">1000</span> * sum_diff(ema(price, <span class="hl-number">20</span>), ema(price, <span class="hl-number">40</span>)),<span class="hl-number">10</span>) -  ema(<span class="hl-number">1000</span> * sum_diff(ema(price, <span class="hl-number">20</span>), ema(price, <span class="hl-number">40</span>)), <span class="hl-number">20</span>)&gt;
+
+share streamTable(<span class="hl-number">1</span>:<span class="hl-number">0</span>, `sym`price, [STRING,DOUBLE]) <strong class="hl-keyword">as</strong> tickStream
+result = table(<span class="hl-number">1000</span>:<span class="hl-number">0</span>, `sym`factor1, [STRING,DOUBLE])
+rse = createReactiveStateEngine(name=<span class="hl-string">"reactiveDemo"</span>, metrics=factor1, dummyTable=tickStream, outputTable=result, keyColumn=<span class="hl-string">"sym"</span>)
+subscribeTable(tableName=`tickStream, actionName=<span class="hl-string">"factors"</span>, handler=tableInsert{rse})</pre>
+            <p class="- topic/p p">以上代码在 DolphinDB 中实现前述因子的流式计算。factor1 是前述因子在历史数据上的实现，不做任何改变，直接传递给响应式状态引擎
+                    rse，即可实现流式计算。通过订阅函数<code class="+ topic/ph pr-d/codeph ph codeph">subscribeTable</code>，将流数据表 <em class="+ topic/ph hi-d/i ph i">tickStream</em> 与状态引擎
+                rse 进行关联。每一批次实时数据的注入，都会触发状态引擎的计算，并输出因子值到结果表 <em class="+ topic/ph hi-d/i ph i">result</em>。以下代码产生随机数据，并注入到流数据表。结果与通过
+                SQL 语句计算的结果完全相同。</p>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock language-python" id="topic_vsp_zsk_xzb__codeblock_rcm_fkf_rzb" data-ofbid="topic_vsp_zsk_xzb__codeblock_rcm_fkf_rzb">data = table(take(<span class="hl-string">"A"</span>, <span class="hl-number">100</span>) <strong class="hl-keyword">as</strong> sym, rand(<span class="hl-number">10.0</span>, <span class="hl-number">100</span>) <strong class="hl-keyword">as</strong> price)
+tickStream.append!(data)
+factor1Hist = select sym, ema(<span class="hl-number">1000</span> * sum_diff(ema(price, <span class="hl-number">20</span>), ema(price, <span class="hl-number">40</span>)),<span class="hl-number">10</span>) -  ema(<span class="hl-number">1000</span> * sum_diff(ema(price, <span class="hl-number">20</span>), ema(price, <span class="hl-number">40</span>)), <span class="hl-number">20</span>) <strong class="hl-keyword">as</strong> factor1 <strong class="hl-keyword">from</strong> data context by sym
+<strong class="hl-keyword">assert</strong> each(eqObj, result.values(), factor1Hist.values())</pre>
+        </div>
+        <article class="- topic/topic topic nested2" aria-labelledby="ariaid-title5" id="topic_ibz_ftk_xzb">
+            <h3 class="- topic/title title topictitle3" id="ariaid-title5">工作原理</h3>
+            <div class="- topic/body body">
+                <p class="- topic/p p">如图1所示，一个有状态的高频因子计算过程可以分解成有一个有向无环图（DAG）。图中的节点有3种：（1）数据源，如 price（2）有状态的算子，如 a, b,
+                    d, e （3）无状态的算子，如 c 和
+                    result。从数据源节点开始，按照既定的路径，层层推进，得到最后的因子输出。这非常类似excel中的单元格链式计算。当一个单元格的数据发生变化时，相关联的单元格依次发生变化。响应式状态引擎的名称也是从这一点引申出来的。</p>
+                <p class="- topic/p p">无状态的算子比较简单，使用 DolphinDB 已有的脚本引擎，就可以表示和计算。因此，问题转化为两点：（1）如何解析得到一个优化的
+                    DAG，（2）如何优化每个有状态的算子的计算。</p>
+            </div>
+        </article>
+        <article class="- topic/topic topic nested2" aria-labelledby="ariaid-title6" id="id_j1w_ltk_xzb">
+            <h3 class="- topic/title title topictitle3" id="ariaid-title6">解析和优化</h3>
+            <div class="- topic/body body">
+                <p class="- topic/p p">DolphinDB 的脚本语言是支持向量化和函数化的多范式编程语言。通过函数的调用关系，不难得到计算步骤的 DAG。在解析的时候，因为输入消息的 schema
+                    是已知的，我们可以快速推断出每一个节点的输入数据类型和输出数据类型。输入参数类型确定，函数名称确定，每个状态算子的具体实例就可以创建出来。</p>
+                <p class="- topic/p p">每一个算子（有状态和无状态）在 DolphinDB 中都可以转化为一个唯一的字符串序列。据此，我们可以删除重复的算子，提高计算效率。</p>
+            </div>
+        </article>
+        <article class="- topic/topic topic nested2" aria-labelledby="ariaid-title7" id="id_tl4_ntk_xzb">
+            <h3 class="- topic/title title topictitle3" id="ariaid-title7">内置状态函数</h3>
+            <div class="- topic/body body">
+                <p class="- topic/p p">状态算子计算时需要用到历史状态。如果每一次计算都使用全量数据，性能不佳。状态函数的优化，也就是增量方式的流式实现非常关键。下列状态函数在 DolphinDB
+                    的响应式状态引擎中的实现均得到了优化。目前，状态引擎不允许使用未经优化的状态函数，且需避免使用聚合函数。</p>
+                <ul class="- topic/ul ul" id="id_tl4_ntk_xzb__ul_scm_fkf_rzb" data-ofbid="id_tl4_ntk_xzb__ul_scm_fkf_rzb">
+                    <li class="- topic/li li">
+                        <p class="- topic/p p">累计窗口函数：cumavg, cumsum, cumprod, cumcount, cummin, cummax, cumvar,
+                            cumvarp, cumstd, cumstdp, cumcorr, cumcovar, cumbeta, cumwsum, cumwavg,
+                            cumfirstNot, cumlastNot, cummed, cumpercentile, cumPositiveStreak</p>
+                    </li>
+                    <li class="- topic/li li">
+                        <p class="- topic/p p">滑动窗口函数：ema, mavg, msum, mcount, mprod, mvar, mvarp, mstd, mstdp, mskew,
+                            mkurtosis, mmin, mmax, mimin, mimax, mmed, mpercentile, mrank, mcorr,
+                            mcovar, mbeta, mwsum, mwavg, mmad, mfirst, mlast, mmaxPositiveStreak,
+                            mslr, tmove, tmfirst, tmlast, tmsum, tmavg, tmcount, tmvar, tmvarp,
+                            tmstd, tmstdp, tmprod, tmskew, tmkurtosis, tmmin, tmmax, tmmed,
+                            tmpercentile, tmrank, tmcovar, tmbeta, tmcorr, tmwavg, tmwsum, tmoving,
+                            moving, sma,wma, dema, tema, trima, linearTimeTrend, talib, t3, ma,
+                            mmaxPostiveStreak</p>
+                    </li>
+                    <li class="- topic/li li">
+                        <p class="- topic/p p">序列相关函数：deltas, ratios, ffill, move, prev, iterate, ewmMean, ewmVar,
+                            ewmStd, ewmCov, ewmCorr, prevState</p>
+                    </li>
+                    <li class="- topic/li li">
+                        <p class="- topic/p p">topN相关函数：msumTopN, mavgTopN, mstdpTopN, mstdTopN, mvarpTopN, mvarTopN,
+                            mcorrTopN, mbetaTopN, mcovarTopN, mwsumTopN</p>
+                    </li>
+                    <li class="- topic/li li">
+                        <p class="- topic/p p">高阶函数：segmentby（参数 <em class="+ topic/ph hi-d/i ph i">func</em> 暂支持 cumsum, cummax, cummin, cumcount,
+                            cumavg, cumstd, cumvar, cumstdp, cumvarp）</p>
+                    </li>
+                    <li class="- topic/li li">
+                        <p class="- topic/p p">其他函数：talibNull, dynamicGroupCumsum, dynamicGroupCumcount, topRange,
+                            lowRange, trueRange</p>
+                    </li>
+                </ul>
+                <div class="- topic/note note note note_note" id="id_tl4_ntk_xzb__note_km3_2pf_tzb" data-ofbid="id_tl4_ntk_xzb__note_km3_2pf_tzb"><span class="note__title">注：</span> <code class="+ topic/ph pr-d/codeph ph codeph">talib</code> 作为状态函数时，第一个参数 <em class="+ topic/ph hi-d/i ph i">func</em>
+                    只能是响应式状态引擎支持的状态函数。在后续的版本中，DolphinDB 将允许用户用插件来开发自己的状态函数，注册后即可在状态引擎中使用。</div>
+            </div>
+        </article>
+        <article class="- topic/topic topic nested2" aria-labelledby="ariaid-title8" id="topic_v24_ltk_xzb">
+            <h3 class="- topic/title title topictitle3" id="ariaid-title8">自定义状态函数</h3>
+            <div class="- topic/body body">
+                <p class="- topic/p p">响应式状态引擎中可使用自定义状态函数。需要注意以下几点：</p>
+                <ul class="- topic/ul ul" id="topic_v24_ltk_xzb__ul_tcm_fkf_rzb" data-ofbid="topic_v24_ltk_xzb__ul_tcm_fkf_rzb">
+                    <li class="- topic/li li">
+                        <p class="- topic/p p">函数定义前，使用 @state 表示函数是自定义的状态函数。</p>
+                    </li>
+                    <li class="- topic/li li">
+                        <p class="- topic/p p">自定义状态函数中只能使用赋值语句和 <code class="+ topic/ph pr-d/codeph ph codeph">return</code> 语句。<code class="+ topic/ph pr-d/codeph ph codeph">return</code>
+                            语句必须是最后一个语句，可返回多个值。</p>
+                    </li>
+                    <li class="- topic/li li">
+                        <p class="- topic/p p">使用 <code class="+ topic/ph pr-d/codeph ph codeph">iif</code> 函数表示 if...else 的逻辑。</p>
+                    </li>
+                </ul>
+                <p class="- topic/p p">如果仅允许使用一个表达式来表示一个因子，会带来很多局限性。首先，在某些情况下，仅使用表达式，无法实现一个完整的因子。下面的例子返回线性回归的 alpha，beta
+                    和 residual。</p>
+                <pre class="+ topic/pre pr-d/codeblock pre codeblock language-python" id="topic_v24_ltk_xzb__codeblock_qzj_xnf_rzb" data-ofbid="topic_v24_ltk_xzb__codeblock_qzj_xnf_rzb"><em><span class="hl-annotation">@state</span></em>
+<strong class="hl-keyword">def</strong> slr(y, x){
+    alpha, beta = mslr(y, x, <span class="hl-number">12</span>)
+    residual = mavg(y, <span class="hl-number">12</span>) - beta * mavg(x, <span class="hl-number">12</span>) - alpha
+    <strong class="hl-keyword">return</strong> alpha, beta, residual
+}</pre>
+                <p class="- topic/p p">其次，很多因子可能会使用共同的中间结果，定义多个因子时，代码会更简洁。自定义函数可以同时返回多个结果。下面的函数
+                        <code class="+ topic/ph pr-d/codeph ph codeph">multiFactors</code> 定义了 5 个因子。</p>
+                <pre class="+ topic/pre pr-d/codeblock pre codeblock language-python" id="topic_v24_ltk_xzb__codeblock_ijn_ynf_rzb" data-ofbid="topic_v24_ltk_xzb__codeblock_ijn_ynf_rzb"><em><span class="hl-annotation">@state</span></em>
+<strong class="hl-keyword">def</strong> multiFactors(lowPrice, highPrice, volumeTrade, closePrice, buy_active, sell_active, tradePrice, askPrice1, bidPrice1, askPrice10, agg_vol, agg_amt){
+    a = ema(askPrice10, <span class="hl-number">30</span>)
+    term0 = ema((lowPrice - a) / (ema(highPrice, <span class="hl-number">30</span>) - a), <span class="hl-number">50</span>)
+    term1 = mrank((highPrice - a) / (ema(highPrice, <span class="hl-number">5</span>) - a), true,  <span class="hl-number">15</span>)
+    term2 = mcorr(askPrice10, volumeTrade, <span class="hl-number">10</span>) * mrank(mstd(closePrice, <span class="hl-number">20</span>, <span class="hl-number">20</span>), true, <span class="hl-number">10</span>)
+    buy_vol_ma = mavg(buy_active, <span class="hl-number">6</span>)
+    sell_vol_ma = mavg(sell_active, <span class="hl-number">6</span>)
+    zero_free_vol = iif(agg_vol==<span class="hl-number">0</span>, <span class="hl-number">1</span>, agg_vol)
+    stl_prc = ffill(agg_amt \ zero_free_vol \ <span class="hl-number">20</span>).nullFill(tradePrice)
+    buy_prop = stl_prc
+	
+    spd = askPrice1 - bidPrice1
+    spd_ma = round(mavg(iif(spd &lt; <span class="hl-number">0</span>, <span class="hl-number">0</span>, spd), <span class="hl-number">6</span>), <span class="hl-number">5</span>)
+    term3 = buy_prop * spd_ma
+    term4 = iif(spd_ma == <span class="hl-number">0</span>, <span class="hl-number">0</span>, buy_prop / spd_ma)
+    <strong class="hl-keyword">return</strong> term0, term1, term2, term3, term4
+}</pre>
+                <p class="- topic/p p">最后，某些表达式冗长，缺乏可读性。第一节中的因子表达式改为下面的自定义状态函数 <code class="+ topic/ph pr-d/codeph ph codeph">factor1</code> 后，计算逻辑简洁明了。</p>
+                <pre class="+ topic/pre pr-d/codeblock pre codeblock language-python" id="topic_v24_ltk_xzb__codeblock_kp4_znf_rzb" data-ofbid="topic_v24_ltk_xzb__codeblock_kp4_znf_rzb"><em><span class="hl-annotation">@state</span></em>
+<strong class="hl-keyword">def</strong> factor1(price) {
+    a = ema(price, <span class="hl-number">20</span>)
+    b = ema(price, <span class="hl-number">40</span>)
+    c = <span class="hl-number">1000</span> * sum_diff(a, b)
+    <strong class="hl-keyword">return</strong>  ema(c, <span class="hl-number">10</span>) - ema(c, <span class="hl-number">20</span>)
+}</pre>
+            </div>
+        </article>
+        <article class="- topic/topic topic nested2" aria-labelledby="ariaid-title9" id="topic_lng_wtk_xzb">
+            <h3 class="- topic/title title topictitle3" id="ariaid-title9">输出结果过滤</h3>
+            <div class="- topic/body body">
+                <p class="- topic/p p">状态引擎会对输入的每一条消息做出计算响应，产生一条记录作为结果，计算的结果在默认情况下都会输出到结果表，也就是说输入 n
+                    个消息，输出n条记录。如果希望仅输出一部分结果，可以启用过滤条件，只有满足条件的结果才会输出。</p>
+                <p class="- topic/p p">下面的例子检查股票价格是否有变化，只有价格变化的记录才会输出。</p>
+                <pre class="+ topic/pre pr-d/codeblock pre codeblock language-python" id="topic_lng_wtk_xzb__codeblock_vcm_fkf_rzb" data-ofbid="topic_lng_wtk_xzb__codeblock_vcm_fkf_rzb">share streamTable(<span class="hl-number">1</span>:<span class="hl-number">0</span>, `sym`price, [STRING,DOUBLE]) <strong class="hl-keyword">as</strong> tickStream
+result = table(<span class="hl-number">1000</span>:<span class="hl-number">0</span>, `sym`price, [STRING,DOUBLE])
+rse = createReactiveStateEngine(name=<span class="hl-string">"reactiveFilter"</span>, metrics =[&lt;price&gt;], dummyTable=tickStream, outputTable=result, keyColumn=<span class="hl-string">"sym"</span>, filter=&lt;prev(price) != price&gt;)
+subscribeTable(tableName=`tickStream, actionName=<span class="hl-string">"filter"</span>, handler=tableInsert{rse})</pre>
+            </div>
+        </article>
+        <article class="- topic/topic topic nested2" aria-labelledby="ariaid-title10" id="topic_a2t_ytk_xzb">
+            <h3 class="- topic/title title topictitle3" id="ariaid-title10">快照机制</h3>
+            <div class="- topic/body body">
+                <p class="- topic/p p">为了满足生产环境业务持续性的需要，DolphinDB 内置的流式计算引擎包括响应式状态引擎均支持快照（snapshot）输出。</p>
+                <p class="- topic/p p">响应式状态引擎的快照包括已处理的最后一条消息的 ID
+                    以及引擎当前的状态（中间计算结果）。当系统出现异常，重新初始化状态引擎时，可恢复到最后一个快照的状态，并且从已处理的消息的下一条开始订阅。</p>
+                <pre class="+ topic/pre pr-d/codeblock pre codeblock language-python" id="topic_a2t_ytk_xzb__codeblock_wcm_fkf_rzb" data-ofbid="topic_a2t_ytk_xzb__codeblock_wcm_fkf_rzb"><strong class="hl-keyword">def</strong> sum_diff(x, y){
+    <strong class="hl-keyword">return</strong> (x-y)/(x+y)
+}
+factor1 = &lt;ema(<span class="hl-number">1000</span> * sum_diff(ema(price, <span class="hl-number">20</span>), ema(price, <span class="hl-number">40</span>)),<span class="hl-number">10</span>) -  ema(<span class="hl-number">1000</span> * sum_diff(ema(price, <span class="hl-number">20</span>), ema(price, <span class="hl-number">40</span>)), <span class="hl-number">20</span>)&gt;
+
+share streamTable(<span class="hl-number">1</span>:<span class="hl-number">0</span>, `sym`price, [STRING,DOUBLE]) <strong class="hl-keyword">as</strong> tickStream
+result = table(<span class="hl-number">1000</span>:<span class="hl-number">0</span>, `sym`factor1, [STRING,DOUBLE])
+rse = createReactiveStateEngine(name=<span class="hl-string">"reactiveDemo"</span>, metrics =factor1, dummyTable=tickStream, outputTable=result, keyColumn=<span class="hl-string">"sym"</span>, snapshotDir= <span class="hl-string">"/home/data/snapshot"</span>, snapshotIntervalInMsgCount=<span class="hl-number">400000</span>)
+msgId = getSnapshotMsgId(rse)
+<strong class="hl-keyword">if</strong>(msgId &gt;= <span class="hl-number">0</span>) msgId += <span class="hl-number">1</span>
+subscribeTable(tableName=`tickStream, actionName=<span class="hl-string">"factors"</span>, offset=msgId, handler=appendMsg{rse}, handlerNeedMsgId=true)</pre>
+                <p class="- topic/p p">响应式状态引擎要启用快照机制，创建时需要指定两个额外的参数 <em class="+ topic/ph hi-d/i ph i">snapshotDir</em> 和
+                        <em class="+ topic/ph hi-d/i ph i">snapshotIntervalInMsgCount</em>。<em class="+ topic/ph hi-d/i ph i">snapshotDir</em>
+                        用于指定存储快照的目录。<em class="+ topic/ph hi-d/i ph i">snapshotIntervalInMsgCount</em>
+                    指定处理多少条消息后产生一个快照。引擎初始化时，系统会检查快照目录下是否存在一个以引擎名称命名，后缀为 snapshot 的文件。以上面的代码为例，如果存在文件
+                    /home/data/snapshot/reactiveDemo.snapshot，加载这个快照。函数
+                        <code class="+ topic/ph pr-d/codeph ph codeph">getSnapshotMsgId</code> 可以获取最近一个快照对应的 msgId。如果不存在快照，返回 -1。</p>
+                <p class="- topic/p p">状态引擎要启用快照机制，调用 <code class="+ topic/ph pr-d/codeph ph codeph">subscribeTable</code> 函数也需相应的修改：</p>
+                <ul class="- topic/ul ul" id="topic_a2t_ytk_xzb__ul_xcm_fkf_rzb" data-ofbid="topic_a2t_ytk_xzb__ul_xcm_fkf_rzb">
+                    <li class="- topic/li li">
+                        <p class="- topic/p p">首先必须指定消息的 offset。</p>
+                    </li>
+                    <li class="- topic/li li">
+                        <p class="- topic/p p">其次，<em class="+ topic/ph hi-d/i ph i">handler</em> 必须使用 <code class="+ topic/ph pr-d/codeph ph codeph">appendMsg</code>
+                                函数。<code class="+ topic/ph pr-d/codeph ph codeph">appendMsg</code> 函数接受两个参数，<em class="+ topic/ph hi-d/i ph i">msgBody</em> 和
+                            <em class="+ topic/ph hi-d/i ph i">msgId</em>。</p>
+                    </li>
+                    <li class="- topic/li li">
+                        <p class="- topic/p p">再次，参数 <em class="+ topic/ph hi-d/i ph i">handlerNeedMsgId</em> 必须指定为 true。</p>
+                    </li>
+                </ul>
+            </div>
+        </article>
+        <article class="- topic/topic topic nested2" aria-labelledby="ariaid-title11" id="topic_epd_b5k_xzb">
+            <h3 class="- topic/title title topictitle3" id="ariaid-title11">并行处理</h3>
+            <div class="- topic/body body">
+                <p class="- topic/p p">当需要处理大量消息时，可在 DolphinDB 消息订阅函数<code class="+ topic/ph pr-d/codeph ph codeph">subscribeTable</code>中指定可选参数
+                        <em class="+ topic/ph hi-d/i ph i">filter</em> 与 <em class="+ topic/ph hi-d/i ph i">hash</em>，让多个订阅客户端并行处理消息。</p>
+                <ul class="- topic/ul ul" id="topic_epd_b5k_xzb__ul_ycm_fkf_rzb" data-ofbid="topic_epd_b5k_xzb__ul_ycm_fkf_rzb">
+                    <li class="- topic/li li">
+                        <p class="- topic/p p">参数 <em class="+ topic/ph hi-d/i ph i">filter</em> 用于指定消息过滤逻辑。目前支持三种过滤方式，分别为值过滤，范围过滤和哈希过滤。</p>
+                    </li>
+                    <li class="- topic/li li">
+                        <p class="- topic/p p">参数 <em class="+ topic/ph hi-d/i ph i">hash</em> 可以指定一个哈希值，确定这个订阅由哪个线程来执行。例如，配置参数 <em class="+ topic/ph hi-d/i ph i">subExecutors</em> 为
+                            4，用户指定了哈希值 5，那么该订阅的计算任务将由第二个线程来执行。</p>
+                    </li>
+                </ul>
+                <p class="- topic/p p">下面是响应式状态引擎并行计算因子的例子。假设配置参数 <em class="+ topic/ph hi-d/i ph i">subExecutors</em> = 4，创建 4
+                    个状态引擎，每个状态引擎根据流数据表的股票代码的哈希值来订阅不同股票的数据，并且指定不同的订阅线程来处理，最终将结果输出到同一个输出表中。</p>
+                <pre class="+ topic/pre pr-d/codeblock pre codeblock language-python" id="topic_epd_b5k_xzb__codeblock_zcm_fkf_rzb" data-ofbid="topic_epd_b5k_xzb__codeblock_zcm_fkf_rzb"><strong class="hl-keyword">def</strong> sum_diff(x, y){
+    <strong class="hl-keyword">return</strong> (x-y)/(x+y)
+}
+factor1 = &lt;ema(<span class="hl-number">1000</span> * sum_diff(ema(price, <span class="hl-number">20</span>), ema(price, <span class="hl-number">40</span>)),<span class="hl-number">10</span>) -  ema(<span class="hl-number">1000</span> * sum_diff(ema(price, <span class="hl-number">20</span>), ema(price, <span class="hl-number">40</span>)), <span class="hl-number">20</span>)&gt;
+
+share streamTable(<span class="hl-number">1</span>:<span class="hl-number">0</span>, `sym`price, [STRING,DOUBLE]) <strong class="hl-keyword">as</strong> tickStream
+setStreamTableFilterColumn(tickStream, `sym)
+share streamTable(<span class="hl-number">1000</span>:<span class="hl-number">0</span>, `sym`factor1, [STRING,DOUBLE]) <strong class="hl-keyword">as</strong> resultStream
+
+<strong class="hl-keyword">for</strong>(i <strong class="hl-keyword">in</strong> <span class="hl-number">0.</span><span class="hl-number">.3</span>){
+    rse = createReactiveStateEngine(name=<span class="hl-string">"reactiveDemo"</span>+string(i), metrics =factor1, dummyTable=tickStream, outputTable=resultStream, keyColumn=<span class="hl-string">"sym"</span>)
+    subscribeTable(tableName=`tickStream, actionName=<span class="hl-string">"sub"</span>+string(i), handler=tableInsert{rse}, msgAsTable = true, hash = i, filter = (<span class="hl-number">4</span>,i))
+}
+
+n=<span class="hl-number">2000000</span>
+tmp = table(take(<span class="hl-string">"A"</span>+string(<span class="hl-number">1.</span><span class="hl-number">.4000</span>), n) <strong class="hl-keyword">as</strong> sym, rand(<span class="hl-number">10.0</span>, n) <strong class="hl-keyword">as</strong> price)
+tickStream.append!(tmp)</pre>
+                <div class="- topic/note note important note_important" id="topic_epd_b5k_xzb__note_n1p_kpb_wzb" data-ofbid="topic_epd_b5k_xzb__note_n1p_kpb_wzb"><span class="note__title">重要：</span> 如果多个状态引擎是同一个输出表，该输出表必须是一个共享表。没有共享的表不是线程安全的，并行写入可能会导致系统崩溃。</div>
+            </div>
+        </article>
+    </article>
+    <article class="- topic/topic topic nested1" aria-labelledby="ariaid-title12" id="topic_czq_35k_xzb">
+        <h2 class="- topic/title title topictitle2" id="ariaid-title12">流批统一解决方案</h2>
+        <div class="- topic/body body">
+            <p class="- topic/p p">金融高频因子的流批统一处理在 DolphinDB 中有两种实现方法。</p>
+            <p class="- topic/p p">第一种方法，使用函数或表达式实现金融高频因子，代入不同的计算引擎进行历史数据或流数据的计算。代入 SQL
+                引擎，可以实现对历史数据的计算；代入响应式状态引擎，可以实现对流数据的计算。这在第3章的序言部分已经举例说明。在这种模式下用 DolphinDB
+                脚本语言表示的表达式或函数实际上是对因子语义的一种描述，而不是具体的实现。因子计算的具体实现交由相应的计算引擎来完成，从而实现不同场景下的最佳性能。</p>
+            <p class="- topic/p p">第二种方法，历史数据通过回放，转变成流数据，然后使用流数据计算引擎来完成计算。我们仍然以教程开始部分的因子为例，唯一的区别是流数据表 <em class="+ topic/ph hi-d/i ph i">tickStream</em>
+                的数据源来自于历史数据库的 replay。使用这种方法计算历史数据的因子值，效率不高是一个缺点。</p>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock language-python" id="topic_czq_35k_xzb__codeblock_adm_fkf_rzb" data-ofbid="topic_czq_35k_xzb__codeblock_adm_fkf_rzb"><strong class="hl-keyword">def</strong> sum_diff(x, y){
+    <strong class="hl-keyword">return</strong> (x-y)/(x+y)
+}
+factor1 = &lt;ema(<span class="hl-number">1000</span> * sum_diff(ema(price, <span class="hl-number">20</span>), ema(price, <span class="hl-number">40</span>)),<span class="hl-number">10</span>) -  ema(<span class="hl-number">1000</span> * sum_diff(ema(price, <span class="hl-number">20</span>), ema(price, <span class="hl-number">40</span>)), <span class="hl-number">20</span>)&gt;
+
+share streamTable(<span class="hl-number">1</span>:<span class="hl-number">0</span>, `sym`date`time`price, [STRING,DATE,TIME,DOUBLE]) <strong class="hl-keyword">as</strong> tickStream
+result = table(<span class="hl-number">1000</span>:<span class="hl-number">0</span>, `sym`factor1, [STRING,DOUBLE])
+rse = createReactiveStateEngine(name=<span class="hl-string">"reactiveDemo"</span>, metrics =factor1, dummyTable=tickStream, outputTable=result, keyColumn=<span class="hl-string">"sym"</span>)
+subscribeTable(tableName=`tickStream, actionName=<span class="hl-string">"factors"</span>, handler=tableInsert{rse})
+
+//从历史数据库dfs://TAQ的trades表中加载一天的数据，回放到流数据表 tickStream 中
+inputDS = replayDS(&lt;select sym, date, time, price <strong class="hl-keyword">from</strong> loadTable(<span class="hl-string">"dfs://TAQ"</span>, <span class="hl-string">"trades"</span>) where date=<span class="hl-number">2021.03</span>.<span class="hl-number">08</span>&gt;, `date, `time, <span class="hl-number">08</span>:<span class="hl-number">00</span>:<span class="hl-number">00.000</span> + (<span class="hl-number">1.</span><span class="hl-number">.10</span>) * <span class="hl-number">3600000</span>)
+replay(inputDS, tickStream, `date, `time, <span class="hl-number">1000</span>, true, <span class="hl-number">2</span>)</pre>
+        </div>
+    </article>
+    <article class="- topic/topic topic nested1" aria-labelledby="ariaid-title13" id="topic_xjc_l5k_xzb">
+        <h2 class="- topic/title title topictitle2" id="ariaid-title13">性能测试</h2>
+        <div class="- topic/body body">
+            <p class="- topic/p p">我们测试了响应式状态引擎计算因子的性能。测试使用模拟数据，并使用 <code class="+ topic/ph pr-d/codeph ph codeph">warmupStreamEngine</code>
+                函数模拟状态引擎已经处理部分数据的情况。测试共包括 20 个不同复杂度度的因子，其中两个自定义状态函数分别返回 3 个和 5
+                个因子。为方便测试，计算仅使用单线程处理。</p>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock language-python" id="topic_xjc_l5k_xzb__codeblock_bdm_fkf_rzb" data-ofbid="topic_xjc_l5k_xzb__codeblock_bdm_fkf_rzb"><em><span class="hl-annotation">@state</span></em>
+<strong class="hl-keyword">def</strong> slr(y, x){
+    alpha, beta = mslr(y, x, <span class="hl-number">12</span>)
+    residual = mavg(y, <span class="hl-number">12</span>) - beta * mavg(x, <span class="hl-number">12</span>) - alpha
+    <strong class="hl-keyword">return</strong> alpha, beta, residual
+}
+
+<em><span class="hl-annotation">@state</span></em>
+<strong class="hl-keyword">def</strong> multiFactors(lowPrice, highPrice, volumeTrade, closePrice, buy_active, sell_active, tradePrice, askPrice1, bidPrice1, askPrice10, agg_vol, agg_amt){
+    a = ema(askPrice10, <span class="hl-number">30</span>)
+    term0 = ema((lowPrice - a) / (ema(highPrice, <span class="hl-number">30</span>) - a), <span class="hl-number">50</span>)
+    term1 = mrank((highPrice - a) / (ema(highPrice, <span class="hl-number">5</span>) - a), true,  <span class="hl-number">15</span>)
+    term2 = mcorr(askPrice10, volumeTrade, <span class="hl-number">10</span>) * mrank(mstd(closePrice, <span class="hl-number">20</span>, <span class="hl-number">20</span>), true, <span class="hl-number">10</span>)
+    buy_vol_ma = mavg(buy_active, <span class="hl-number">6</span>)
+    sell_vol_ma = mavg(sell_active, <span class="hl-number">6</span>)
+    zero_free_vol = iif(agg_vol==<span class="hl-number">0</span>, <span class="hl-number">1</span>, agg_vol)
+    stl_prc = ffill(agg_amt \ zero_free_vol \ <span class="hl-number">20</span>).nullFill(tradePrice)
+    buy_prop = stl_prc
+	
+    spd = askPrice1 - bidPrice1
+    spd_ma = round(mavg(iif(spd &lt; <span class="hl-number">0</span>, <span class="hl-number">0</span>, spd), <span class="hl-number">6</span>), <span class="hl-number">5</span>)
+    term3 = buy_prop * spd_ma
+    term4 = iif(spd_ma == <span class="hl-number">0</span>, <span class="hl-number">0</span>, buy_prop / spd_ma)
+    <strong class="hl-keyword">return</strong> term0, term1, term2, term3, term4
+}
+
+metrics = array(ANY, <span class="hl-number">14</span>)
+metrics[<span class="hl-number">0</span>] = &lt;ema(<span class="hl-number">1000</span> * sum_diff(ema(close, <span class="hl-number">20</span>), ema(close, <span class="hl-number">40</span>)),<span class="hl-number">10</span>) -  ema(<span class="hl-number">1000</span> * sum_diff(ema(close, <span class="hl-number">20</span>), ema(close, <span class="hl-number">40</span>)), <span class="hl-number">20</span>)&gt;
+metrics[<span class="hl-number">1</span>] = &lt;mslr(high, volume, <span class="hl-number">8</span>)[<span class="hl-number">1</span>]&gt;
+metrics[<span class="hl-number">2</span>] = &lt;mcorr(low, high, <span class="hl-number">11</span>)&gt;
+metrics[<span class="hl-number">3</span>] = &lt;mstdp(low, <span class="hl-number">15</span>)&gt;
+metrics[<span class="hl-number">4</span>] = &lt;mbeta(high, value, <span class="hl-number">63</span>)&gt;
+metrics[<span class="hl-number">5</span>] = &lt;mcovar(low, value, <span class="hl-number">71</span>)&gt;
+metrics[<span class="hl-number">6</span>] = &lt;(close/mavg(close, <span class="hl-number">1.</span><span class="hl-number">.6</span>)-<span class="hl-number">1</span>)*<span class="hl-number">100</span>&gt;
+metrics[<span class="hl-number">7</span>] = &lt;mmin(high, <span class="hl-number">15</span>)&gt;
+metrics[<span class="hl-number">8</span>] = &lt;mavg(((high+low)/<span class="hl-number">2</span>+(mavg(high, <span class="hl-number">2</span>)+mavg(low, <span class="hl-number">2</span>))/<span class="hl-number">2</span>)*(high-low)/volume, <span class="hl-number">7</span>, <span class="hl-number">2</span>)&gt;
+metrics[<span class="hl-number">9</span>] = &lt;mslr(mavg(close, <span class="hl-number">14</span>), volume, <span class="hl-number">63</span>)[<span class="hl-number">1</span>]&gt;
+metrics[<span class="hl-number">10</span>] = &lt;mcorr(mavg(open, <span class="hl-number">25</span>), volume, <span class="hl-number">71</span>)&gt;
+metrics[<span class="hl-number">11</span>] = &lt;mbeta(high, mstdp(close, <span class="hl-number">8</span>), <span class="hl-number">77</span>)&gt;
+metrics[<span class="hl-number">12</span>] = &lt;slr(close, volume)&gt;
+metrics[<span class="hl-number">13</span>] = &lt;multiFactors(low, high, volume, close, numTrade, numTrade, close, value, close, open, volume, numTrade)&gt;
+
+dummy = streamTable(<span class="hl-number">10000</span>:<span class="hl-number">0</span>, `symbol`market`date`time`quote_type`preclose`open`high`low`close`numTrade`volume`value`position`recvtime,[SYMBOL,SHORT,DATE,TIME,SHORT,DOUBLE,DOUBLE,DOUBLE,DOUBLE,DOUBLE,DOUBLE,LONG,DOUBLE,LONG,TIMESTAMP])
+
+<strong class="hl-keyword">def</strong> prepareData(tickNum, batch){
+    total = tickNum*batch
+    data=table(total:total, `symbol`market`date`time`quote_type`preclose`open`high`low`close`numTrade`volume`value`position`recvtime,[SYMBOL,SHORT,DATE,TIME,SHORT,DOUBLE,DOUBLE,DOUBLE,DOUBLE,DOUBLE,DOUBLE,LONG,DOUBLE,LONG,TIMESTAMP])
+    data[`market]=rand(<span class="hl-number">10</span>, total)
+    data[`date]=take(date(now()), total)
+    data[`time]=take(time(now()), total)
+    data[`symbol]=take(<span class="hl-string">"A"</span>+string(<span class="hl-number">1.</span>.tickNum), total)
+    data[`open]=rand(<span class="hl-number">100.0</span>, total)
+    data[`high]=rand(<span class="hl-number">100.0</span>, total)
+    data[`low]=rand(<span class="hl-number">100.0</span>, total)
+    data[`close]=rand(<span class="hl-number">100.0</span>, total)
+    data[`numTrade]=rand(<span class="hl-number">100</span>, total)
+    data[`volume]=rand(<span class="hl-number">100</span>, total)
+    data[`value]=rand(<span class="hl-number">100.0</span>, total)
+    data[`recvtime]=take(now(), total)
+    <strong class="hl-keyword">return</strong> data
+}
+
+dropStreamEngine(<span class="hl-string">"demo1"</span>)
+dropStreamEngine(<span class="hl-string">"demo2"</span>)
+dropStreamEngine(<span class="hl-string">"demo3"</span>)
+dropStreamEngine(<span class="hl-string">"demo4"</span>)
+
+//<span class="hl-number">4000</span> 个股票，<span class="hl-number">20</span> 个因子
+hisData = prepareData(<span class="hl-number">4000</span>, <span class="hl-number">100</span>)
+realData = prepareData(<span class="hl-number">4000</span>, <span class="hl-number">1</span>)
+colNames = [<span class="hl-string">"symbol"</span>].append!(<span class="hl-string">"factor"</span>+string(<span class="hl-number">0.</span><span class="hl-number">.19</span>))
+colTypes = [SYMBOL].append!(take(DOUBLE, <span class="hl-number">20</span>))
+resultTable = streamTable(<span class="hl-number">10000</span>:<span class="hl-number">0</span>, colNames, colTypes)
+engine1 = createReactiveStateEngine(name=<span class="hl-string">"demo1"</span>, metrics=metrics, dummyTable=dummy, outputTable=resultTable, keyColumn=<span class="hl-string">"symbol"</span>)
+warmupStreamEngine(engine1, hisData)
+timer(<span class="hl-number">10</span>) engine1.append!(realData)
+dropAggregator(<span class="hl-string">"demo1"</span>)
+
+//<span class="hl-number">1</span> 个股票，<span class="hl-number">20</span> 个因子
+hisData = prepareData(<span class="hl-number">1</span>, <span class="hl-number">100</span>)
+realData = prepareData(<span class="hl-number">1</span>, <span class="hl-number">1</span>)
+colNames = [<span class="hl-string">"symbol"</span>].append!(<span class="hl-string">"factor"</span>+string(<span class="hl-number">0.</span><span class="hl-number">.19</span>))
+colTypes = [SYMBOL].append!(take(DOUBLE, <span class="hl-number">20</span>))
+resultTable = streamTable(<span class="hl-number">10000</span>:<span class="hl-number">0</span>, colNames, colTypes)
+engine2 = createReactiveStateEngine(name=<span class="hl-string">"demo2"</span>, metrics=metrics, dummyTable=dummy, outputTable=resultTable, keyColumn=<span class="hl-string">"symbol"</span>)
+warmupStreamEngine(engine2, hisData)
+timer(<span class="hl-number">10</span>) engine2.append!(realData)
+dropAggregator(<span class="hl-string">"demo2"</span>)
+
+//<span class="hl-number">4000</span> 个股票，<span class="hl-number">1</span> 个因子
+hisData = prepareData(<span class="hl-number">4000</span>, <span class="hl-number">100</span>)
+realData = prepareData(<span class="hl-number">4000</span>, <span class="hl-number">1</span>)
+metrics3 = metrics[<span class="hl-number">0</span>]
+colNames = [<span class="hl-string">"symbol"</span>, <span class="hl-string">"factor0"</span>]
+colTypes = [SYMBOL, DOUBLE]
+resultTable = streamTable(<span class="hl-number">10000</span>:<span class="hl-number">0</span>, colNames, colTypes)
+engine3 = createReactiveStateEngine(name=<span class="hl-string">"demo3"</span>, metrics=metrics3, dummyTable=dummy, outputTable=resultTable, keyColumn=<span class="hl-string">"symbol"</span>)
+warmupStreamEngine(engine3, hisData)
+timer(<span class="hl-number">10</span>) engine3.append!(realData)
+
+//<span class="hl-number">200</span> 个股票，<span class="hl-number">20</span> 个因子
+hisData = prepareData(<span class="hl-number">200</span>, <span class="hl-number">100</span>)
+realData = prepareData(<span class="hl-number">200</span>, <span class="hl-number">1</span>)
+colNames = [<span class="hl-string">"symbol"</span>].append!(<span class="hl-string">"factor"</span>+string(<span class="hl-number">0.</span><span class="hl-number">.19</span>))
+colTypes = [SYMBOL].append!(take(DOUBLE, <span class="hl-number">20</span>))
+resultTable = streamTable(<span class="hl-number">10000</span>:<span class="hl-number">0</span>, colNames, colTypes)
+engine4 = createReactiveStateEngine(name=<span class="hl-string">"demo4"</span>, metrics=metrics, dummyTable=dummy, outputTable=resultTable, keyColumn=<span class="hl-string">"symbol"</span>)
+warmupStreamEngine(engine4, hisData)
+timer(<span class="hl-number">10</span>) engine4.append!(realData)
+</pre>
+            <p class="- topic/p p">我们统计了 10 次的总耗时，取平均值作为单次的耗时。测试使用的服务器 CPU 为 Intel(R) Xeon(R) Silver 4216 CPU @
+                2.10GHz。单线程情况下，测试结果如下：</p>
+            <div class="table-container"><table class="- topic/table table" id="topic_xjc_l5k_xzb__table_cdm_fkf_rzb" data-ofbid="topic_xjc_l5k_xzb__table_cdm_fkf_rzb" data-cols="3"><caption></caption><colgroup><col/><col/><col/></colgroup><thead class="- topic/thead thead">
+                        <tr class="- topic/row">
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="topic_xjc_l5k_xzb__table_cdm_fkf_rzb__entry__1">
+                                <p class="- topic/p p">股票个数</p>
+                            </th>
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="topic_xjc_l5k_xzb__table_cdm_fkf_rzb__entry__2">
+                                <p class="- topic/p p">因子个数</p>
+                            </th>
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="topic_xjc_l5k_xzb__table_cdm_fkf_rzb__entry__3">
+                                <p class="- topic/p p">耗时(单位：ms)</p>
+                            </th>
+                        </tr>
+                    </thead><tbody class="- topic/tbody tbody">
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="topic_xjc_l5k_xzb__table_cdm_fkf_rzb__entry__1">4000</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="topic_xjc_l5k_xzb__table_cdm_fkf_rzb__entry__2">20</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="topic_xjc_l5k_xzb__table_cdm_fkf_rzb__entry__3">6</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="topic_xjc_l5k_xzb__table_cdm_fkf_rzb__entry__1">1</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="topic_xjc_l5k_xzb__table_cdm_fkf_rzb__entry__2">20</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="topic_xjc_l5k_xzb__table_cdm_fkf_rzb__entry__3">0.07</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="topic_xjc_l5k_xzb__table_cdm_fkf_rzb__entry__1">4000</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="topic_xjc_l5k_xzb__table_cdm_fkf_rzb__entry__2">1</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="topic_xjc_l5k_xzb__table_cdm_fkf_rzb__entry__3">0.8</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="topic_xjc_l5k_xzb__table_cdm_fkf_rzb__entry__1">200</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="topic_xjc_l5k_xzb__table_cdm_fkf_rzb__entry__2">20</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="topic_xjc_l5k_xzb__table_cdm_fkf_rzb__entry__3">0.2</td>
+                        </tr>
+                    </tbody></table></div>
+        </div>
+    </article>
+    <article class="- topic/topic topic nested1" aria-labelledby="ariaid-title14" id="topic_axy_m5k_xzb">
+        <h2 class="- topic/title title topictitle2" id="ariaid-title14">多个引擎的流水线处理</h2>
+        <div class="- topic/body body">
+            <p class="- topic/p p">DolphinDB
+                内置的流计算引擎包括响应式状态引擎，时间序列聚合引擎，横截面引擎和异常检测引擎。这些引擎均实现了数据表（table）的接口，因此多个引擎流水线处理变得异常简单，只要将后一个引擎作为前一个引擎的输出即可。引入流水线处理，可以解决更为复杂的因子计算问题。譬如，因子计算经常需要使用面板数据，完成时间序列和横截面两个维度的计算，只要把响应式状态引擎和横截面两个引擎串联处理即可完成。</p>
+            <p class="- topic/p p">下面的例子是 World Quant 101个 Alpha 因子中的 1 号因子公式的流数据实现。<code class="+ topic/ph pr-d/codeph ph codeph">rank</code>
+                    函数是一个横截面操作。<code class="+ topic/ph pr-d/codeph ph codeph">rank</code> 的参数部分用响应式状态引擎实现。<code class="+ topic/ph pr-d/codeph ph codeph">rank</code>
+                函数本身用横截面引擎实现。横截面引擎作为状态引擎的输出。</p>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock language-python" id="topic_axy_m5k_xzb__codeblock_gdm_fkf_rzb" data-ofbid="topic_axy_m5k_xzb__codeblock_gdm_fkf_rzb">Alpha<em class="hl-comment">#001公式：rank(Ts_ArgMax(SignedPower((returns&lt;0?stddev(returns,20):close), 2), 5))-0.5</em>
+
+//创建横截面引擎，计算每个股票的 rank
+dummy = table(<span class="hl-number">1</span>:<span class="hl-number">0</span>, `sym`time`maxIndex, [SYMBOL, TIMESTAMP, DOUBLE])
+resultTable = streamTable(<span class="hl-number">10000</span>:<span class="hl-number">0</span>, `time`sym`factor1, [TIMESTAMP, SYMBOL, DOUBLE])
+ccsRank = createCrossSectionalAggregator(name=<span class="hl-string">"alpha1CCS"</span>, metrics=&lt;[sym, rank(maxIndex, percent=true) - <span class="hl-number">0.5</span>]&gt;,  dummyTable=dummy, outputTable=resultTable,  keyColumn=`sym, triggeringPattern=<span class="hl-string">'keyCount'</span>, triggeringInterval=<span class="hl-number">3000</span>, timeColumn=`time)
+
+<em><span class="hl-annotation">@state</span></em>
+<strong class="hl-keyword">def</strong> wqAlpha1TS(close){
+    ret = ratios(close) - <span class="hl-number">1</span>
+    v = iif(ret &lt; <span class="hl-number">0</span>, mstd(ret, <span class="hl-number">20</span>), close)
+    <strong class="hl-keyword">return</strong> mimax(signum(v)*v*v, <span class="hl-number">5</span>)
+}
+
+//创建响应式状态引擎，输出到前面的横截面引擎 ccsRank
+input = table(<span class="hl-number">1</span>:<span class="hl-number">0</span>, `sym`time`close, [SYMBOL, TIMESTAMP, DOUBLE])
+rse = createReactiveStateEngine(name=<span class="hl-string">"alpha1"</span>, metrics=&lt;[time, wqAlpha1TS(close)]&gt;, dummyTable=input, outputTable=ccsRank, keyColumn=<span class="hl-string">"sym"</span>)
+</pre>
+            <p class="- topic/p p">流水线处理（也称为引擎多级级联）和多个流数据表的级联处理有很大的区别。两者可以完成相同的任务，但是效率上有很大的区别。后者涉及多个流数据表与多次订阅。前者实际上只有一次订阅，所有的计算均在一个线程中依次顺序完成，因而有更好的性能。</p>
+            <p class="- topic/p p">上面的例子是由用户来区分哪一部分是横截面操作，哪一部分是时间序列操作以实现多个引擎的流水线。在 1.30.16/2.00.4 及之后的版本中，新增函数
+                    <code class="+ topic/ph pr-d/codeph ph codeph">streamEngineParser</code>，支持将 <em class="+ topic/ph hi-d/i ph i">metrics</em>
+                    自动分解成多个内置流计算引擎的流水线。在<code class="+ topic/ph pr-d/codeph ph codeph">streamEngineParser</code>中以行函数（<code class="+ topic/ph pr-d/codeph ph codeph">rowRank</code>，<code class="+ topic/ph pr-d/codeph ph codeph">rowSum</code>等）表示横截面操作的语义，以
+                    <code class="+ topic/ph pr-d/codeph ph codeph">rolling</code>
+                    函数表示时间序列操作，从而系统能够自动识别一个因子中的横截面操作和时间序列操作，进一步自动构建引擎流水线。因此，上述因子可以用<code class="+ topic/ph pr-d/codeph ph codeph">streamEngineParser</code>更简洁的实现，<em class="+ topic/ph hi-d/i ph i">metrics</em>
+                几乎等同于因子的数学公式表达，而不需要考虑不同类型引擎的选择：</p>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock language-python" id="topic_axy_m5k_xzb__codeblock_hdm_fkf_rzb" data-ofbid="topic_axy_m5k_xzb__codeblock_hdm_fkf_rzb"><em><span class="hl-annotation">@state</span></em>
+<strong class="hl-keyword">def</strong> wqAlpha1TS(close){
+	ret = ratios(close) - <span class="hl-number">1</span>
+	v = iif(ret &lt; <span class="hl-number">0</span>, mstd(ret, <span class="hl-number">20</span>), close)
+	<strong class="hl-keyword">return</strong> mimax(signum(v)*v*v, <span class="hl-number">5</span>)
+}
+
+//构建计算因子
+metrics=&lt;[sym, rowRank(wqAlpha1TS(close), percent=true)- <span class="hl-number">0.5</span>]&gt;
+
+streamEngine=streamEngineParser(name=<span class="hl-string">"alpha1_parser"</span>, metrics=metrics, dummyTable=input, outputTable=resultTable, keyColumn=`sym, timeColumn=`time, triggeringPattern=<span class="hl-string">'keyCount'</span>, triggeringInterval=<span class="hl-number">3000</span>)</pre>
+        </div>
+    </article>
+</article></main></div>
+                        
+                        
+                        
+                        
+                        
+                        
+                    </div>
+                    
+                        <nav role="navigation" id="wh_topic_toc" aria-label="On this page" class="col-lg-2 d-none d-lg-block navbar d-print-none"> 
+                            <div id="wh_topic_toc_content">
+		                        
+	                            <div class=" wh_topic_toc "><div class="wh_topic_label">在本页上</div><ul><li class="topic-item"><a href="#topic_lnb_ssk_xzb" data-tocid="topic_lnb_ssk_xzb">金融高频因子计算示例</a></li><li class="topic-item"><a href="#topic_ycp_wsk_xzb" data-tocid="topic_ycp_wsk_xzb">现有解决方案的优缺点</a></li><li class="topic-item"><a href="#topic_vsp_zsk_xzb" data-tocid="topic_vsp_zsk_xzb">响应式状态引擎（Reactive State Engine)</a><ul><li class="topic-item"><a href="#topic_ibz_ftk_xzb" data-tocid="topic_ibz_ftk_xzb">工作原理</a></li><li class="topic-item"><a href="#id_j1w_ltk_xzb" data-tocid="id_j1w_ltk_xzb">解析和优化</a></li><li class="topic-item"><a href="#id_tl4_ntk_xzb" data-tocid="id_tl4_ntk_xzb">内置状态函数</a></li><li class="topic-item"><a href="#topic_v24_ltk_xzb" data-tocid="topic_v24_ltk_xzb">自定义状态函数</a></li><li class="topic-item"><a href="#topic_lng_wtk_xzb" data-tocid="topic_lng_wtk_xzb">输出结果过滤</a></li><li class="topic-item"><a href="#topic_a2t_ytk_xzb" data-tocid="topic_a2t_ytk_xzb">快照机制</a></li><li class="topic-item"><a href="#topic_epd_b5k_xzb" data-tocid="topic_epd_b5k_xzb">并行处理</a></li></ul></li><li class="topic-item"><a href="#topic_czq_35k_xzb" data-tocid="topic_czq_35k_xzb">流批统一解决方案</a></li><li class="topic-item"><a href="#topic_xjc_l5k_xzb" data-tocid="topic_xjc_l5k_xzb">性能测试</a></li><li class="topic-item"><a href="#topic_axy_m5k_xzb" data-tocid="topic_axy_m5k_xzb">多个引擎的流水线处理</a></li></ul></div>
+	                        	
+                        	</div>
+                        </nav>
+                    
+                </div>
+            </div>
+            
+            
+            
+        </div> 
+        <footer class="navbar navbar-default wh_footer">
+  <div class=" footer-container mx-auto ">
+<title>Copyright</title><p><b> ©2024 浙江智臾科技有限公司 浙ICP备18048711号-3</b></p>
+  </div>
+</footer>
+        
+        <div id="go2top" class="d-print-none">
+            <span class="oxy-icon oxy-icon-up"></span>
+        </div>
+        
+        <div id="modal_img_large" class="modal">
+            <span class="close oxy-icon oxy-icon-remove"></span>
+            <div id="modal_img_container"></div>
+            <div id="caption"></div>
+        </div>
+        
+        
+        
+    </body>
+</html>

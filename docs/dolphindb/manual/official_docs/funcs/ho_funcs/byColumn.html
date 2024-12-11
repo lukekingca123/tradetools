@@ -1,0 +1,407 @@
+<!DOCTYPE html><html xmlns="http://www.w3.org/1999/xhtml" xml:lang="zh" lang="zh" data-whc_version="26.0">
+    <head><link rel="shortcut icon" href="../../favicon.ico"/><link rel="icon" href="../../favicon.ico"/><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><meta http-equiv="X-UA-Compatible" content="IE=edge"/><meta name="description" content="byColumn(func, X , [Y] ) 或 func:V(X) 或 func:V(X, [Y]) func 一个单目函数，支持以部分应用的形式传入。该函数可以是向量函数（输入与输出为等长的向量），亦可为聚合函数。 X 一个矩阵 、表、元组、数组向量、列式元组 。 Y 矩阵、表、元组、数组向量、列式元组。 func 为单目函数时， 对 X 的每一列应用指定函数； func 为双目函数时，对 ..."/><meta name="DC.rights.owner" content="(C) 版权 2024"/><meta name="copyright" content="(C) 版权 2024"/><meta name="generator" content="DITA-OT"/><meta name="DC.type" content="topic"/><meta name="DC.coverage" content=""/><meta name="DC.relation" content="../../funcs/ho_funcs/ho_funcs.html"/><meta name="prodname" content="DolphinDB"/><meta name="brand" content="DolphinDB"/><meta name="DC.creator" content="DolphinDB"/><meta name="DC.publisher" content="DDB N/A DDB 200"/><meta name="DC.format" content="HTML5"/><meta name="DC.identifier" content="bycolumn"/><title>byColumn</title><!--  Generated with Oxygen version 26.0, build number 2024012323.  --><meta name="wh-path2root" content="../../"/><meta name="wh-toc-id" content="bycolumn-d9529e85089"/><meta name="wh-source-relpath" content="funcs/ho_funcs/byColumn.dita"/><meta name="wh-out-relpath" content="funcs/ho_funcs/byColumn.html"/>
+
+    <link rel="stylesheet" type="text/css" href="../../oxygen-webhelp/app/commons.css?buildId=2024012323"/>
+    <link rel="stylesheet" type="text/css" href="../../oxygen-webhelp/app/topic.css?buildId=2024012323"/>
+
+    <script src="../../oxygen-webhelp/app/options/properties.js?buildId=20240704100525"></script>
+    <script src="../../oxygen-webhelp/app/localization/strings.js?buildId=2024012323"></script>
+    <script src="../../oxygen-webhelp/app/search/index/keywords.js?buildId=20240704100525"></script>
+    <script defer="defer" src="../../oxygen-webhelp/app/commons.js?buildId=2024012323"></script>
+    <script defer="defer" src="../../oxygen-webhelp/app/topic.js?buildId=2024012323"></script>
+<link rel="stylesheet" type="text/css" href="../../oxygen-webhelp/template/styles.css?buildId=2024012323"/><script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script><script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script></head>
+
+    <body id="bycolumn" class="wh_topic_page frmBody">
+        <a href="#wh_topic_body" class="sr-only sr-only-focusable">
+            跳转到主要内容
+        </a>
+        
+        
+        
+        
+        <header class="navbar navbar-default wh_header">
+    <div class="container-fluid">
+        <div xmlns:whc="http://www.oxygenxml.com/webhelp/components" class="wh_header_flex_container navbar-nav navbar-expand-md navbar-dark">
+            <div class="wh_logo_and_publication_title_container">
+                <div class="wh_logo_and_publication_title">
+                    
+                    <a href="https://www.dolphindb.cn" class=" wh_logo d-none d-sm-block "><img src="../../logo.png" alt="  DolphinDB 文档中心  "/></a>
+                    <div class=" wh_publication_title "><a href="../../index.html"><span class="booktitle">  <span class="ph mainbooktitle">DolphinDB 文档中心</span>  </span></a></div>
+                    
+                </div>
+                
+                
+            </div>
+
+            <div class="wh_top_menu_and_indexterms_link collapse navbar-collapse" id="wh_top_menu_and_indexterms_link">
+                
+                
+                
+                
+            </div>
+        <div class=" wh_search_input navbar-form wh_topic_page_search search " role="form">
+            
+            
+            
+            <form id="searchForm" method="get" role="search" action="../../search.html"><div><input type="search" placeholder="搜索 " class="wh_search_textfield" id="textToSearch" name="searchQuery" aria-label="搜索查询" required="required"/><button type="submit" class="wh_search_button" aria-label="搜索"><span class="search_input_text">搜索</span></button></div></form>
+            
+            <script src="/vendors/react/umd/react.production.min.js" defer="defer"></script>
+<script src="/vendors/react-dom/umd/react-dom.production.min.js" defer="defer"></script>
+<script src="/vendors/dayjs/dayjs.min.js" defer="defer"></script>
+<script src="/vendors/antd/dist/antd.min.js" defer="defer"></script>
+<script src="/vendors/@ant-design/icons/dist/index.umd.min.js" defer="defer"></script>
+<script src="/zh/index.js" type="module"></script>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js" defer="defer"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML" defer="defer"><!--
+
+
+--></script>
+
+            
+        </div></div>
+    </div>
+</header>
+        
+        
+         
+        
+        
+        
+        <div class="container-fluid" id="wh_topic_container">
+            <div class="row">
+
+                <nav class="wh_tools d-print-none navbar-expand-md" aria-label="Tools">
+                    
+                    <div data-tooltip-position="bottom" class=" wh_breadcrumb "><ol class="d-print-none"><li><span class="home"><a href="../../index.html"><span>主页</span></a></span></li><li><div class="topicref" data-id="functions_references"><div class="title"><a href="../../funcs/funcs_intro.html"><span class="keyword label">函数参考</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 函数分类、语法、详解及示例</p></div></div></div></li><li><div class="topicref" data-id="高阶函数"><div class="title"><a href="../../funcs/ho_funcs/ho_funcs.html">高阶函数</a></div></div></li><li class="active"><div class="topicref" data-id="bycolumn"><div class="title"><a href="../../funcs/ho_funcs/byColumn.html"><span class="keyword">byColumn</span></a></div></div></li></ol></div>
+                    
+                    
+                    
+                    <div class="wh_right_tools">
+                        <button class="wh_hide_highlight" aria-label="切换搜索突出显示" title="切换搜索突出显示"></button>
+                        <button class="webhelp_expand_collapse_sections" data-next-state="collapsed" aria-label="折叠截面" title="折叠截面"></button>
+                        
+                        
+                        
+                        
+                        <div class=" wh_print_link print d-none d-md-inline-block "><button onClick="window.print()" title="打印此页" aria-label="打印此页"></button></div>
+                        
+                        <button type="button" id="wh_toc_button" class="custom-toggler navbar-toggler collapsed wh_toggle_button navbar-light" aria-expanded="false" aria-label="Toggle publishing table of content" aria-controls="wh_publication_toc">
+                            <span class="navbar-toggler-icon"></span>
+                        </button>
+                    </div>
+                    
+                </nav>
+            </div>
+            
+            
+            
+            
+            <div class="wh_content_area">
+                <div class="row">
+                    
+                        <nav id="wh_publication_toc" class="col-lg-3 col-md-3 col-sm-12 d-md-block d-none d-print-none" aria-label="Table of Contents Container">
+                            <div id="wh_publication_toc_content">
+		                        
+                            	<div class=" wh_publication_toc " data-tooltip-position="right"><span class="expand-button-action-labels"><span id="button-expand-action" role="button" aria-label="Expand"></span><span id="button-collapse-action" role="button" aria-label="Collapse"></span><span id="button-pending-action" role="button" aria-label="Pending"></span></span><ul role="tree" aria-label="Table of Contents"><li role="treeitem"><div data-tocid="new_chap_about_sect_ddb_docs_intro-d9529e87" class="topicref" data-id="new_chap_about_sect_ddb_docs_intro" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../about/ddb_docs_intro.html" id="new_chap_about_sect_ddb_docs_intro-d9529e87-link">文档使用说明</a><div class="wh-tooltip"><p class="shortdesc">如何获取 DolphinDB 帮助信息</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="chap1_getstarted-d9529e140" class="topicref" data-id="chap1_getstarted" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action chap1_getstarted-d9529e140-link" class="wh-expand-btn"></span><div class="title"><a href="../../getstarted/chap1_getstarted.html" id="chap1_getstarted-d9529e140-link"><span class="keyword label">快速上手</span></a><div class="wh-tooltip"><p class="shortdesc">如何快速部署 DolphinDB、建库建表、写入和查询数据</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="sectionddb_deployment-d9529e335" class="topicref" data-id="sectionddb_deployment" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action sectionddb_deployment-d9529e335-link" class="wh-expand-btn"></span><div class="title"><a href="../../deploy/deploy_intro.html" id="sectionddb_deployment-d9529e335-link"><span class="keyword label">部署</span></a><div class="wh-tooltip"><p class="shortdesc">如何在不同的场景中部署 DolphinDB</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="new_chap_database_manage_new_chap_dbmanage_landing_page-d9529e2313" class="topicref" data-id="new_chap_database_manage_new_chap_dbmanage_landing_page" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action new_chap_database_manage_new_chap_dbmanage_landing_page-d9529e2313-link" class="wh-expand-btn"></span><div class="title"><a href="../../db_distr_comp/cfg/db_intro.html" id="new_chap_database_manage_new_chap_dbmanage_landing_page-d9529e2313-link"><span class="keyword label">数据库</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 数据库的基本概念</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="chap7_tutorials_streaming-d9529e3490" class="topicref" data-id="chap7_tutorials_streaming" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action chap7_tutorials_streaming-d9529e3490-link" class="wh-expand-btn"></span><div class="title"><a href="../../stream/str_intro.html" id="chap7_tutorials_streaming-d9529e3490-link"><span class="keyword label">流数据</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 流数据引擎及流数据计算的基本概念</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="tocId-d9529e7385" class="topicref" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action tocId-d9529e7385-link" class="wh-expand-btn"></span><div class="title"><a href="../../db_distr_comp/db_oper/import_data.html" id="tocId-d9529e7385-link">数据迁移</a><div class="wh-tooltip"><p class="shortdesc">如何从不同数据源向 DolphinDB 迁移数据</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="chap7_tutorials_system_management-d9529e7812" class="topicref" data-id="chap7_tutorials_system_management" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action chap7_tutorials_system_management-d9529e7812-link" class="wh-expand-btn"></span><div class="title"><a href="../../sys_man/om_intro.html" id="chap7_tutorials_system_management-d9529e7812-link"><span class="keyword label">系统运维</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 的系统运维功能及方法</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="about_language_resources-d9529e16490" class="topicref" data-id="about_language_resources" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action about_language_resources-d9529e16490-link" class="wh-expand-btn"></span><div class="title"><a href="../../progr/progr_intro.html" id="about_language_resources-d9529e16490-link"><span class="keyword label">编程语言</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 编程基本概念与方法、SQL 在 DolphinDB 的应用</p></div></div></div></li><li role="treeitem" aria-expanded="true"><div data-tocid="functions_references-d9529e26503" class="topicref" data-id="functions_references" data-state="expanded"><span role="button" tabindex="0" aria-labelledby="button-collapse-action functions_references-d9529e26503-link" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/funcs_intro.html" id="functions_references-d9529e26503-link"><span class="keyword label">函数参考</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 函数分类、语法、详解及示例</p></div></div></div><ul role="group" class="navbar-nav nav-list"><li role="treeitem"><div data-tocid="funcs_by_topics-d9529e26556" class="topicref" data-id="funcs_by_topics" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/funcs_by_topics.html" id="funcs_by_topics-d9529e26556-link"><span class="keyword label">函数分类</span></a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="tocId-d9529e26603" class="topicref" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action tocId-d9529e26603-link" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/a/abs.html" id="tocId-d9529e26603-link">函数一览</a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="chap8_sect_series_o_funcs-d9529e84433" class="topicref" data-id="chap8_sect_series_o_funcs" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action chap8_sect_series_o_funcs-d9529e84433-link" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/themes/themes.html" id="chap8_sect_series_o_funcs-d9529e84433-link">系列函数</a></div></div></li><li role="treeitem" aria-expanded="true"><div data-tocid="高阶函数-d9529e84855" class="topicref" data-id="高阶函数" data-state="expanded"><span role="button" tabindex="0" aria-labelledby="button-collapse-action 高阶函数-d9529e84855-link" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/ho_funcs/ho_funcs.html" id="高阶函数-d9529e84855-link">高阶函数</a></div></div><ul role="group" class="navbar-nav nav-list"><li role="treeitem"><div data-tocid="accumulate-a-d9529e84901" class="topicref" data-id="accumulate-a" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/ho_funcs/accumulate.html" id="accumulate-a-d9529e84901-link"><span class="keyword">accumulate</span></a></div></div></li><li role="treeitem"><div data-tocid="aggrtopn-d9529e84948" class="topicref" data-id="aggrtopn" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/ho_funcs/aggrTopN.html" id="aggrtopn-d9529e84948-link"><span class="keyword">aggrTopN</span></a></div></div></li><li role="treeitem"><div data-tocid="all-d9529e84995" class="topicref" data-id="all" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/ho_funcs/all.html" id="all-d9529e84995-link"><span class="keyword">all</span></a></div></div></li><li role="treeitem"><div data-tocid="any-d9529e85042" class="topicref" data-id="any" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/ho_funcs/any.html" id="any-d9529e85042-link"><span class="keyword">any</span></a></div></div></li><li role="treeitem" class="active"><div data-tocid="bycolumn-d9529e85089" class="topicref" data-id="bycolumn" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/ho_funcs/byColumn.html" id="bycolumn-d9529e85089-link"><span class="keyword">byColumn</span></a></div></div></li><li role="treeitem"><div data-tocid="byrow-d9529e85136" class="topicref" data-id="byrow" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/ho_funcs/byRow.html" id="byrow-d9529e85136-link"><span class="keyword">byRow</span></a></div></div></li><li role="treeitem"><div data-tocid="call-d9529e85183" class="topicref" data-id="call" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/ho_funcs/call.html" id="call-d9529e85183-link"><span class="keyword">call</span></a></div></div></li><li role="treeitem"><div data-tocid="contextby-x-d9529e85230" class="topicref" data-id="contextby-x" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/ho_funcs/contextby.html" id="contextby-x-d9529e85230-link"><span class="keyword">contextby</span></a></div></div></li><li role="treeitem"><div data-tocid="cross-c-d9529e85277" class="topicref" data-id="cross-c" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/ho_funcs/cross.html" id="cross-c-d9529e85277-link"><span class="keyword">cross</span></a></div></div></li><li role="treeitem"><div data-tocid="each-e-d9529e85324" class="topicref" data-id="each-e" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/ho_funcs/each.html" id="each-e-d9529e85324-link"><span class="keyword">each</span></a></div></div></li><li role="treeitem"><div data-tocid="eachleft-l-d9529e85372" class="topicref" data-id="eachleft-l" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/ho_funcs/eachLeft.html" id="eachleft-l-d9529e85372-link"><span class="keyword">eachLeft</span></a></div></div></li><li role="treeitem"><div data-tocid="eachpost-o-d9529e85419" class="topicref" data-id="eachpost-o" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/ho_funcs/eachPost.html" id="eachpost-o-d9529e85419-link"><span class="keyword">eachPost</span></a></div></div></li><li role="treeitem"><div data-tocid="eachpre-p-d9529e85466" class="topicref" data-id="eachpre-p" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/ho_funcs/eachPre.html" id="eachpre-p-d9529e85466-link"><span class="keyword">eachPre</span></a></div></div></li><li role="treeitem"><div data-tocid="eachright-r-d9529e85513" class="topicref" data-id="eachright-r" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/ho_funcs/eachRight.html" id="eachright-r-d9529e85513-link"><span class="keyword">eachRight</span></a></div></div></li><li role="treeitem"><div data-tocid="groupby-g-d9529e85560" class="topicref" data-id="groupby-g" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/ho_funcs/groupby.html" id="groupby-g-d9529e85560-link"><span class="keyword">groupby</span></a></div></div></li><li role="treeitem"><div data-tocid="loop-d9529e85607" class="topicref" data-id="loop" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/ho_funcs/loop.html" id="loop-d9529e85607-link"><span class="keyword">loop</span></a></div></div></li><li role="treeitem"><div data-tocid="moving-d9529e85654" class="topicref" data-id="moving" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/ho_funcs/moving.html" id="moving-d9529e85654-link"><span class="keyword">moving</span></a></div></div></li><li role="treeitem"><div data-tocid="nullcompare-d9529e85701" class="topicref" data-id="nullcompare" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/ho_funcs/nullCompare.html" id="nullcompare-d9529e85701-link"><span class="keyword">nullCompare</span></a></div></div></li><li role="treeitem"><div data-tocid="pcall-d9529e85748" class="topicref" data-id="pcall" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/ho_funcs/pcall.html" id="pcall-d9529e85748-link"><span class="keyword">pcall</span></a></div></div></li><li role="treeitem"><div data-tocid="pcross-d9529e85795" class="topicref" data-id="pcross" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/ho_funcs/pcross.html" id="pcross-d9529e85795-link"><span class="keyword">pcross</span></a></div></div></li><li role="treeitem"><div data-tocid="peach-d9529e85842" class="topicref" data-id="peach" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/ho_funcs/peach.html" id="peach-d9529e85842-link"><span class="keyword">peach</span></a></div></div></li><li role="treeitem"><div data-tocid="pivot-d9529e85890" class="topicref" data-id="pivot" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/ho_funcs/pivot.html" id="pivot-d9529e85890-link"><span class="keyword">pivot</span></a></div></div></li><li role="treeitem"><div data-tocid="ploop-d9529e85937" class="topicref" data-id="ploop" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/ho_funcs/ploop.html" id="ploop-d9529e85937-link"><span class="keyword">ploop</span></a></div></div></li><li role="treeitem"><div data-tocid="reduce-t-d9529e85984" class="topicref" data-id="reduce-t" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/ho_funcs/reduce.html" id="reduce-t-d9529e85984-link"><span class="keyword">reduce</span></a></div></div></li><li role="treeitem"><div data-tocid="rolling-d9529e86031" class="topicref" data-id="rolling" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/ho_funcs/rolling.html" id="rolling-d9529e86031-link"><span class="keyword">rolling</span></a></div></div></li><li role="treeitem"><div data-tocid="rowgroupby-d9529e86078" class="topicref" data-id="rowgroupby" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/ho_funcs/rowgroupby.html" id="rowgroupby-d9529e86078-link">rowGroupby</a></div></div></li><li role="treeitem"><div data-tocid="segmentby-d9529e86124" class="topicref" data-id="segmentby" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/ho_funcs/segmentby.html" id="segmentby-d9529e86124-link"><span class="keyword">segmentby</span></a></div></div></li><li role="treeitem"><div data-tocid="talib-d9529e86171" class="topicref" data-id="talib" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/ho_funcs/talib.html" id="talib-d9529e86171-link"><span class="keyword">talib</span></a></div></div></li><li role="treeitem"><div data-tocid="tmoving-d9529e86218" class="topicref" data-id="tmoving" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/ho_funcs/tmoving.html" id="tmoving-d9529e86218-link"><span class="keyword">tmoving</span></a></div></div></li><li role="treeitem"><div data-tocid="twindow-d9529e86265" class="topicref" data-id="twindow" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/ho_funcs/twindow.html" id="twindow-d9529e86265-link"><span class="keyword">twindow</span></a></div></div></li><li role="treeitem"><div data-tocid="unifiedcall-d9529e86312" class="topicref" data-id="unifiedcall" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/ho_funcs/unifiedCall.html" id="unifiedcall-d9529e86312-link"><span class="keyword">unifiedCall</span></a></div></div></li><li role="treeitem"><div data-tocid="window-d9529e86359" class="topicref" data-id="window" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/ho_funcs/window.html" id="window-d9529e86359-link"><span class="keyword">window</span></a></div></div></li><li role="treeitem"><div data-tocid="withnullfill-d9529e86407" class="topicref" data-id="withnullfill" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/ho_funcs/withNullFill.html" id="withnullfill-d9529e86407-link"><span class="keyword">withNullFill</span></a></div></div></li></ul></li></ul></li><li role="treeitem" aria-expanded="false"><div data-tocid="api_protocol-d9529e86456" class="topicref" data-id="api_protocol" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action api_protocol-d9529e86456-link" class="wh-expand-btn"></span><div class="title"><a href="../../api/connapi_intro.html" id="api_protocol-d9529e86456-link"><span class="keyword label">连接器 &amp; API</span></a><div class="wh-tooltip"><p class="shortdesc">面向不同编程语言的 DolphinDB API 及连接器，相关协议和用法</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="chap6_plugin-d9529e91976" class="topicref" data-id="chap6_plugin" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action chap6_plugin-d9529e91976-link" class="wh-expand-btn"></span><div class="title"><a href="../../plugins/plg_intro.html" id="chap6_plugin-d9529e91976-link"><span class="keyword label">插件</span></a><div class="wh-tooltip"><p class="shortdesc">多个应用场景的插件使用说明和插件开发指导</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="third_party-d9529e94749" class="topicref" data-id="third_party" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action third_party-d9529e94749-link" class="wh-expand-btn"></span><div class="title"><a href="../../third_party.html" id="third_party-d9529e94749-link">第三方工具</a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="about_tutorials-d9529e94980" class="topicref" data-id="about_tutorials" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action about_tutorials-d9529e94980-link" class="wh-expand-btn"></span><div class="title"><a href="../../tutorials/about_tutorials.html" id="about_tutorials-d9529e94980-link"><span class="keyword label">教程</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 产品使用教程</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="tocId-d9529e101769" class="topicref" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action tocId-d9529e101769-link" class="wh-expand-btn"></span><div class="title"><a href="../../rn/server/3_00_1.html" id="tocId-d9529e101769-link">版本说明</a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 版本发布历史</p></div></div></div></li></ul></div>
+		                        
+                            </div>
+                        </nav>
+                    
+                    
+                    <div class="col-lg-7 col-md-9 col-sm-12" id="wh_topic_body">
+                        <button id="wh_close_publication_toc_button" class="close-toc-button d-none" aria-label="Toggle publishing table of content" aria-controls="wh_publication_toc" aria-expanded="true">
+                            <span class="close-toc-icon-container">
+                                <span class="close-toc-icon"></span>     
+                            </span>
+                        </button>
+                        <button id="wh_close_topic_toc_button" class="close-toc-button d-none" aria-label="Toggle topic table of content" aria-controls="wh_topic_toc" aria-expanded="true">
+                            <span class="close-toc-icon-container">
+                                <span class="close-toc-icon"></span>     
+                            </span>
+                        </button>
+                        
+                        <div class=" wh_topic_content body "><main role="main"><article class="- topic/topic topic" role="article" aria-labelledby="ariaid-title1">
+    <h1 class="- topic/title title topictitle1" id="ariaid-title1"><span class="- topic/keyword keyword">byColumn</span></h1>
+    
+    <article class="- topic/topic topic nested1" aria-labelledby="ariaid-title2" id="语法">
+        <h2 class="- topic/title title topictitle2" id="ariaid-title2">语法</h2>
+        <div class="- topic/body body">
+            <p class="- topic/p p" id="语法__p_ovt_5hn_ryb" data-ofbid="语法__p_ovt_5hn_ryb">
+                <code class="+ topic/ph pr-d/codeph ph codeph">byColumn(func, X<span class="- topic/ph ph">, [Y]</span>)</code></p>
+            <p class="- topic/p p">或</p>
+            <p class="- topic/p p"><code class="+ topic/ph pr-d/codeph ph codeph">func:V(X)</code>
+            </p>
+            <p class="- topic/p p">或</p>
+            <p class="- topic/p p"><code class="+ topic/ph pr-d/codeph ph codeph">func:V(X, [Y])</code></p>
+        </div>
+    </article>
+    <article class="- topic/topic topic nested1" aria-labelledby="ariaid-title3" id="参数">
+        <h2 class="- topic/title title topictitle2" id="ariaid-title3">参数</h2>
+        <div class="- topic/body body">
+            <ul class="- topic/ul ul" id="参数__ul_pvt_5hn_ryb" data-ofbid="参数__ul_pvt_5hn_ryb">
+                <li class="- topic/li li">
+                    <p class="- topic/p p" id="参数__p_qvt_5hn_ryb" data-ofbid="参数__p_qvt_5hn_ryb"><strong class="+ topic/ph hi-d/b ph b">func</strong>
+                        一个单目函数，支持以部分应用的形式传入。该函数可以是向量函数（输入与输出为等长的向量），亦可为聚合函数。</p>
+                </li>
+                <li class="- topic/li li">
+                    <p class="- topic/p p" id="参数__p_rvt_5hn_ryb" data-ofbid="参数__p_rvt_5hn_ryb"><strong class="+ topic/ph hi-d/b ph b">X</strong> 一个矩阵<span class="- topic/ph ph">、表、元组、数组向量、列式元组</span>。</p>
+                </li>
+                <li class="- topic/li li"><strong class="+ topic/ph hi-d/b ph b">Y</strong> 矩阵、表、元组、数组向量、列式元组。</li>
+            </ul>
+        </div>
+    </article>
+    <article class="- topic/topic topic nested1" aria-labelledby="ariaid-title4" id="详情">
+        <h2 class="- topic/title title topictitle2" id="ariaid-title4">详情</h2>
+        <div class="- topic/body body">
+            <p class="- topic/p p"><span class="- topic/ph ph"><em class="+ topic/ph hi-d/i ph i">func</em> 为单目函数时，</span>对 <em class="+ topic/ph hi-d/i ph i">X</em> 的每一列应用指定函数；<span class="- topic/ph ph"><em class="+ topic/ph hi-d/i ph i">func</em> 为双目函数时，对 <em class="+ topic/ph hi-d/i ph i">X</em> 和 <em class="+ topic/ph hi-d/i ph i">Y</em> 的每列执行 func(Xi, Yi)
+                    。</span></p>
+            <p class="- topic/p p">同时指定 X 和 Y 时，则对 X 和 Y 的每列执行 func(Xi, Yi) 。</p>
+            <p class="- topic/p p" id="详情__p_tvt_5hn_ryb" data-ofbid="详情__p_tvt_5hn_ryb">支持在响应式状态引擎中使用 <code class="+ topic/ph pr-d/codeph ph codeph">byColumn</code> 函数。</p>
+            <p class="- topic/p p"><strong class="+ topic/ph hi-d/b ph b"><dfn class="- topic/term term">计算规则</dfn></strong>：</p>
+            <ul class="- topic/ul ul" id="详情__ul_kzz_tdk_g1c" data-ofbid="详情__ul_kzz_tdk_g1c">
+                <li class="- topic/li li">
+                    <p class="- topic/p p">如果 <em class="+ topic/ph hi-d/i ph i">X/Y </em>是矩阵、表或元组，byColumn 对 X/Y 的每一列数据应用指定的函数。</p>
+                </li>
+                <li class="- topic/li li">
+                    <p class="- topic/p p">如果 X/Y 是数组向量或列式元组：byColumn 首先将对象转置，然后对转置后的对象的每一行应用指定函数。</p>
+                    <ul class="- topic/ul ul" id="详情__ul_lzz_tdk_g1c" data-ofbid="详情__ul_lzz_tdk_g1c">
+                        <li class="- topic/li li">
+                            <p class="- topic/p p">当 <em class="+ topic/ph hi-d/i ph i">func</em> 是向量函数时，byColumn 会把 <em class="+ topic/ph hi-d/i ph i">func</em> 的计算结果转置后输出。</p>
+                        </li>
+                        <li class="- topic/li li">
+                            <p class="- topic/p p">当 <em class="+ topic/ph hi-d/i ph i">func</em> 是聚合函数时，输出结果是一个向量。特别地，当 <em class="+ topic/ph hi-d/i ph i">func</em> 是以下聚合函数时，由于 byColumn
+                                不对 X/Y 进行转置，从而提高了计算性能：sum, sum2, avg, min, max, count, imax, imin,
+                                imaxLast, iminLast, prod, std, stdp, var, varp, skew, kurtosis, any,
+                                all, corr, covar, wavg, wsum, beta, euclidean, dot, tanimoto</p>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+            <p class="- topic/p p"><strong class="+ topic/ph hi-d/b ph b"><dfn class="- topic/term term">返回值</dfn></strong>：</p>
+            <ul class="- topic/ul ul" id="详情__ul_ey5_gpb_zzb" data-ofbid="详情__ul_ey5_gpb_zzb">
+                <li class="- topic/li li">
+                    <p class="- topic/p p">当 <em class="+ topic/ph hi-d/i ph i">func</em> 是聚合函数时，</p>
+                    <ul class="- topic/ul ul" id="详情__ul_fy5_gpb_zzb" data-ofbid="详情__ul_fy5_gpb_zzb">
+                        <li class="- topic/li li">
+                            <p class="- topic/p p">如果 <em class="+ topic/ph hi-d/i ph i">X/Y </em>是矩阵、数组向量或列式元组，则输出结果是一个向量。向量的长度与 <em class="+ topic/ph hi-d/i ph i">X/Y </em>的列数相同。</p>
+                        </li>
+                        <li class="- topic/li li">
+                            <p class="- topic/p p">如果 <em class="+ topic/ph hi-d/i ph i">X/Y </em>是元组，则输出结果是一个元组。</p>
+                        </li>
+                        <li class="- topic/li li">
+                            <p class="- topic/p p">如果 <em class="+ topic/ph hi-d/i ph i">X/Y </em>是表，则输出结果是一个表。</p>
+                        </li>
+                    </ul>
+                </li>
+                <li class="- topic/li li">
+                    <p class="- topic/p p">当 <em class="+ topic/ph hi-d/i ph i">func</em> 是向量函数时，输出结果的形式、维度和 <em class="+ topic/ph hi-d/i ph i">X/Y </em>的形式、维度相同。</p>
+                </li>
+            </ul>
+        </div>
+    </article>
+    <article class="- topic/topic topic nested1" aria-labelledby="ariaid-title5" id="topic_rqz_hpb_zzb">
+        <h2 class="- topic/title title topictitle2" id="ariaid-title5">计算规则</h2>
+        <div class="- topic/body body">
+            <ul class="- topic/ul ul" id="topic_rqz_hpb_zzb__ul_g5b_jpb_zzb" data-ofbid="topic_rqz_hpb_zzb__ul_g5b_jpb_zzb">
+                <li class="- topic/li li">
+                    <p class="- topic/p p">如果 <em class="+ topic/ph hi-d/i ph i">X/Y </em>是矩阵、表或元组，byColumn 对 X/Y 的每一列数据应用指定的函数。</p>
+                </li>
+                <li class="- topic/li li">
+                    <p class="- topic/p p">如果 X/Y 是数组向量或列式元组：byColumn 首先将对象转置，然后对转置后的对象的每一行应用指定函数。</p>
+                    <ul class="- topic/ul ul" id="topic_rqz_hpb_zzb__ul_h5b_jpb_zzb" data-ofbid="topic_rqz_hpb_zzb__ul_h5b_jpb_zzb">
+                        <li class="- topic/li li">
+                            <p class="- topic/p p">当 <em class="+ topic/ph hi-d/i ph i">func</em> 是向量函数时，byColumn 会把 <em class="+ topic/ph hi-d/i ph i">func</em> 的计算结果转置后输出。</p>
+                        </li>
+                        <li class="- topic/li li">
+                            <p class="- topic/p p">当 <em class="+ topic/ph hi-d/i ph i">func</em> 是聚合函数时，输出结果是一个向量，无需进行转置操作。特别地，当 <em class="+ topic/ph hi-d/i ph i">func</em>
+                                是以下聚合函数时，byColumn 进行了优化，不会对 <em class="+ topic/ph hi-d/i ph i">X</em>/<em class="+ topic/ph hi-d/i ph i">Y</em>
+                                进行上步的转置操作，从而提高了计算性能：sum, sum2, avg, min, max, count, imax, imin,
+                                imaxLast, iminLast, prod, std, stdp, var, varp, skew, kurtosis, any,
+                                all, corr, covar, wavg, wsum, beta, euclidean, dot, tanimoto。</p>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+    </article>
+    <article class="- topic/topic topic nested1" aria-labelledby="ariaid-title6" id="例子">
+        <h2 class="- topic/title title topictitle2" id="ariaid-title6">例子</h2>
+        <div class="- topic/body body">
+            <p class="- topic/p p" id="例子__p_uvt_5hn_ryb" data-ofbid="例子__p_uvt_5hn_ryb">对于不支持矩阵运算的单目向量函数，通过 <code class="+ topic/ph pr-d/codeph ph codeph">byColumn</code> 进行按列计算，等效于 <code class="+ topic/ph pr-d/codeph ph codeph">each</code>。</p>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="例子__codeblock_vvt_5hn_ryb" data-ofbid="例子__codeblock_vvt_5hn_ryb"><code>def myvfunc(x): var(x).log()
+m = matrix(1.1 2.3 2.1 3.5 4.2, 3.3 2.5 4.2 5.1 0, -1 3.3 2 1.7 2.3)
+byColumn(myvfunc, m)</code></pre>
+            <p class="- topic/p p" id="例子__p_wvt_5hn_ryb" data-ofbid="例子__p_wvt_5hn_ryb">输出返回： [0.3974329364109,1.334211281249665,0.945072533299607]</p>
+            <p class="- topic/p p" id="例子__p_xvt_5hn_ryb" data-ofbid="例子__p_xvt_5hn_ryb">传入多元函数时，需要把该函数的其他参数通过部分应用进行固定，然后传入 <code class="+ topic/ph pr-d/codeph ph codeph">func</code>。</p>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="例子__codeblock_yvt_5hn_ryb" data-ofbid="例子__codeblock_yvt_5hn_ryb"><code>byColumn(autocorr{,2},m)</code></pre>
+            <p class="- topic/p p">返回：[-0.05,-0.28,-0.06]</p>
+            <p class="- topic/p p" id="例子__p_zvt_5hn_ryb" data-ofbid="例子__p_zvt_5hn_ryb">输出返回：</p>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="例子__codeblock_awt_5hn_ryb" data-ofbid="例子__codeblock_awt_5hn_ryb"><code>col1 col2 col3
+3.1  5.3  1
+4.3  4.5  5.3
+4.1  6.2  4
+5.5  7.1  3.7
+6.2  2    4.3</code></pre>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="例子__codeblock_bwt_5hn_ryb" data-ofbid="例子__codeblock_bwt_5hn_ryb"><code>byColumn(add{1 2 3 4 5}, m)</code></pre>
+            <p class="- topic/p p" id="例子__p_cwt_5hn_ryb" data-ofbid="例子__p_cwt_5hn_ryb">输出返回：</p>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="例子__codeblock_dwt_5hn_ryb" data-ofbid="例子__codeblock_dwt_5hn_ryb"><code>col1 col2 col3
+2.1  4.3  0
+4.3  4.5  5.3
+5.1  7.2  5
+7.5  9.1  5.7
+9.2  5    7.3</code></pre>
+            <p class="- topic/p p" id="例子__p_ewt_5hn_ryb" data-ofbid="例子__p_ewt_5hn_ryb"><code class="+ topic/ph pr-d/codeph ph codeph">func</code> 是一个自定义函数。</p>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="例子__codeblock_fwt_5hn_ryb" data-ofbid="例子__codeblock_fwt_5hn_ryb"><code>def my_func(x){
+   return iif(x &gt; 0, 1, -1)
+}
+m = matrix(3 -6 5 0, 2 -9 -4 5)
+byColumn(my_func, m)</code></pre>
+            <p class="- topic/p p" id="例子__p_gwt_5hn_ryb" data-ofbid="例子__p_gwt_5hn_ryb">输出返回：</p>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="例子__codeblock_hwt_5hn_ryb" data-ofbid="例子__codeblock_hwt_5hn_ryb"><code>col1 col2
+ 1    1
+-1   -1
+ 1    -1
+-1    1</code></pre>
+            <p class="- topic/p p" id="例子__p_iwt_5hn_ryb" data-ofbid="例子__p_iwt_5hn_ryb"><code class="+ topic/ph pr-d/codeph ph codeph">func</code> 是一个嵌套函数。</p>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="例子__codeblock_jwt_5hn_ryb" data-ofbid="例子__codeblock_jwt_5hn_ryb"><code>m = matrix(1 5 3 , 7 5 2)
+byColumn(accumulate{def (x, y):iif(x &gt; 5, y-1, y+1), ,1}, m)</code></pre>
+            <p class="- topic/p p" id="例子__p_kwt_5hn_ryb" data-ofbid="例子__p_kwt_5hn_ryb">输出返回：</p>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="例子__codeblock_lwt_5hn_ryb" data-ofbid="例子__codeblock_lwt_5hn_ryb"><code>col1 col2
+2    8
+6    4
+2    3</code></pre>
+            <p class="- topic/p p">入参是矩阵：</p>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="例子__codeblock_onf_ppb_zzb" data-ofbid="例子__codeblock_onf_ppb_zzb"><code>m=matrix([1 3 4 2,1 2 2 1])
+max:V(m)
+[4,2]
+
+cummax:V(m)
+
+col1	col2
+1	1
+3	2
+4	2
+4	2
+
+n=matrix([11 5 9 2,8 5 3 2])
+corr:V(m,n)
+[-0.09,-0.21]
+</code></pre>
+            <p class="- topic/p p">入参是表：</p>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="例子__codeblock_vt4_qpb_zzb" data-ofbid="例子__codeblock_vt4_qpb_zzb"><code>qty1 = 2200 1900 2100 3200 6800 5400 1300 2500 8800
+qty2 = 2100 1800  6800 5400 1300 2400 8500 4100 3200
+t = table(qty1, qty2);
+max:V(t) 
+
+qty1	qty2
+8,800	8,500
+
+cummax:V(t) 
+
+qty1	qty2
+2,200	2,100
+2,200	2,100
+2,200	6,800
+3,200	6,800
+6,800	6,800
+6,800	6,800
+6,800	8,500
+6,800	8,500
+8,800	8,500
+
+
+qty3 = 7800 5400 5300 2500 1800 2200 3900 3100 1200
+qty4 = 3200 2800 6400 8300 2300 3800 2900 1600 2900
+t1 = table(qty3, qty4);
+
+corr:V(t,t1)   
+
+qty1	qty2
+-0.7267	0.4088
+</code></pre>
+            <p class="- topic/p p">入参是元组：</p>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="例子__codeblock_ctl_rpb_zzb" data-ofbid="例子__codeblock_ctl_rpb_zzb"><code>tp=[1 3 4 2,1 2 2 1]
+sum:V(tp)  
+(10,6) 
+
+cummax:V(tp) 
+([1,3,4,4],[1,2,2,2]) 
+
+tp1=[11 23 14 21,10 12 32 21]
+
+corr:V(tp,tp1)  
+(0.25,0.37)</code></pre>
+            <p class="- topic/p p">入参是数组向量：</p>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="例子__codeblock_lnt_spb_zzb" data-ofbid="例子__codeblock_lnt_spb_zzb"><code>a=array(INT[], 0, 10).append!([1 2 3, 4 5 4, 6 7 8, 1 9 10]);
+sum:V(a) 
+[12,23,25] 
+
+cummax:V(a)
+[[1,2,3],[4,5,4],[6,7,8],[6,9,10]]
+
+b=array(DOUBLE[], 0, 10).append!([11.8 21.2 23.9, 83.3 90.2 78.2, 86.5 52 36.5, 10.1 12.4 16.8])
+corr:V(a,b)  
+
+[0.95,-0.13,-0.46]</code></pre>
+            <p class="- topic/p p">入参是列式元组：</p>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="例子__codeblock_mxr_tpb_zzb" data-ofbid="例子__codeblock_mxr_tpb_zzb"><code>ctp=[1 3 4 2,1 2 2 1]
+ctp.setColumnarTuple!()
+sum:V(ctp)  
+[2,5,6,3]
+
+cummax:V(ctp)
+([1,3,4,2],[1,3,4,2])
+
+ctp1=[11 23 14 21,10 12 32 21]
+ctp1.setColumnarTuple!()
+
+corr:V(ctp,ctp1) 
+[,1,-1,]</code></pre>
+        </div>
+        
+    </article>
+</article></main></div>
+                        
+                        
+                        <div class=" wh_related_links d-print-none "><nav aria-label="Related Links" role="navigation" class="- topic/related-links related-links"><div class="- topic/linklist linklist relinfo"><strong>相关信息</strong><ul class="linklist related_link"><li class="linklist"><a class="- topic/link link navheader_parent_path" href="byRow.html" title="byRow">byRow</a></li></ul></div></nav></div>
+                        
+                        
+                        
+                    </div>
+                    
+                        <nav role="navigation" id="wh_topic_toc" aria-label="On this page" class="col-lg-2 d-none d-lg-block navbar d-print-none"> 
+                            <div id="wh_topic_toc_content">
+		                        
+	                            <div class=" wh_topic_toc "><div class="wh_topic_label">在本页上</div><ul><li class="topic-item"><a href="#%E8%AF%AD%E6%B3%95" data-tocid="语法">语法</a></li><li class="topic-item"><a href="#%E5%8F%82%E6%95%B0" data-tocid="参数">参数</a></li><li class="topic-item"><a href="#%E8%AF%A6%E6%83%85" data-tocid="详情">详情</a></li><li class="topic-item"><a href="#topic_rqz_hpb_zzb" data-tocid="topic_rqz_hpb_zzb">计算规则</a></li><li class="topic-item"><a href="#%E4%BE%8B%E5%AD%90" data-tocid="例子">例子</a></li></ul></div>
+	                        	
+                        	</div>
+                        </nav>
+                    
+                </div>
+            </div>
+            
+            
+            
+        </div> 
+        <footer class="navbar navbar-default wh_footer">
+  <div class=" footer-container mx-auto ">
+<title>Copyright</title><p><b> ©2024 浙江智臾科技有限公司 浙ICP备18048711号-3</b></p>
+  </div>
+</footer>
+        
+        <div id="go2top" class="d-print-none">
+            <span class="oxy-icon oxy-icon-up"></span>
+        </div>
+        
+        <div id="modal_img_large" class="modal">
+            <span class="close oxy-icon oxy-icon-remove"></span>
+            <div id="modal_img_container"></div>
+            <div id="caption"></div>
+        </div>
+        
+        
+        
+    </body>
+</html>

@@ -1,0 +1,221 @@
+<!DOCTYPE html><html xmlns="http://www.w3.org/1999/xhtml" xml:lang="zh" lang="zh" data-whc_version="26.0">
+    <head><link rel="shortcut icon" href="../favicon.ico"/><link rel="icon" href="../favicon.ico"/><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><meta http-equiv="X-UA-Compatible" content="IE=edge"/><meta name="description" content="以下内容介绍如何快速部署 DolphinDB，以及如何使用 WEB 客户端。 注： 为简便部署以及快速上手，以下步骤均以社区版服务器为运行前提。 前往 DolphinDB 官网 下载社区版本的 DolphinDB Server 压缩包。 将 DolphinDB Server 压缩包解压到本地目录。 单节点部署。进入 \server\ 目录直接启动执行文件即可。以下是不同系统的启动指令示例： ..."/><meta name="DC.rights.owner" content="(C) 版权 2024"/><meta name="copyright" content="(C) 版权 2024"/><meta name="generator" content="DITA-OT"/><meta name="DC.type" content="topic"/><meta name="DC.coverage" content=""/><meta name="DC.relation" content="../getstarted/chap1_getstarted.html"/><meta name="DC.relation" content="../db_distr_comp/gui.html"/><meta name="DC.relation" content="../db_distr_comp/db_man/web/intro.html"/><meta name="DC.relation" content="../db_distr_comp/vscode.html"/><meta name="prodname" content="DolphinDB"/><meta name="brand" content="DolphinDB"/><meta name="DC.creator" content="DolphinDB"/><meta name="DC.publisher" content="DDB N/A DDB 200"/><meta name="DC.format" content="HTML5"/><meta name="DC.identifier" content="new_chap_getstarted_ddbserver_and_clients"/><title>快速部署</title><!--  Generated with Oxygen version 26.0, build number 2024012323.  --><meta name="wh-path2root" content="../"/><meta name="wh-toc-id" content="new_chap_getstarted_ddbserver_and_clients-d9529e193"/><meta name="wh-source-relpath" content="getstarted/use_clients_server.dita"/><meta name="wh-out-relpath" content="getstarted/use_clients_server.html"/>
+
+    <link rel="stylesheet" type="text/css" href="../oxygen-webhelp/app/commons.css?buildId=2024012323"/>
+    <link rel="stylesheet" type="text/css" href="../oxygen-webhelp/app/topic.css?buildId=2024012323"/>
+
+    <script src="../oxygen-webhelp/app/options/properties.js?buildId=20240704100525"></script>
+    <script src="../oxygen-webhelp/app/localization/strings.js?buildId=2024012323"></script>
+    <script src="../oxygen-webhelp/app/search/index/keywords.js?buildId=20240704100525"></script>
+    <script defer="defer" src="../oxygen-webhelp/app/commons.js?buildId=2024012323"></script>
+    <script defer="defer" src="../oxygen-webhelp/app/topic.js?buildId=2024012323"></script>
+<link rel="stylesheet" type="text/css" href="../oxygen-webhelp/template/styles.css?buildId=2024012323"/><script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script><script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script></head>
+
+    <body id="new_chap_getstarted_ddbserver_and_clients" class="wh_topic_page frmBody">
+        <a href="#wh_topic_body" class="sr-only sr-only-focusable">
+            跳转到主要内容
+        </a>
+        
+        
+        
+        
+        <header class="navbar navbar-default wh_header">
+    <div class="container-fluid">
+        <div xmlns:whc="http://www.oxygenxml.com/webhelp/components" class="wh_header_flex_container navbar-nav navbar-expand-md navbar-dark">
+            <div class="wh_logo_and_publication_title_container">
+                <div class="wh_logo_and_publication_title">
+                    
+                    <a href="https://www.dolphindb.cn" class=" wh_logo d-none d-sm-block "><img src="../logo.png" alt="  DolphinDB 文档中心  "/></a>
+                    <div class=" wh_publication_title "><a href="../index.html"><span class="booktitle">  <span class="ph mainbooktitle">DolphinDB 文档中心</span>  </span></a></div>
+                    
+                </div>
+                
+                
+            </div>
+
+            <div class="wh_top_menu_and_indexterms_link collapse navbar-collapse" id="wh_top_menu_and_indexterms_link">
+                
+                
+                
+                
+            </div>
+        <div class=" wh_search_input navbar-form wh_topic_page_search search " role="form">
+            
+            
+            
+            <form id="searchForm" method="get" role="search" action="../search.html"><div><input type="search" placeholder="搜索 " class="wh_search_textfield" id="textToSearch" name="searchQuery" aria-label="搜索查询" required="required"/><button type="submit" class="wh_search_button" aria-label="搜索"><span class="search_input_text">搜索</span></button></div></form>
+            
+            <script src="/vendors/react/umd/react.production.min.js" defer="defer"></script>
+<script src="/vendors/react-dom/umd/react-dom.production.min.js" defer="defer"></script>
+<script src="/vendors/dayjs/dayjs.min.js" defer="defer"></script>
+<script src="/vendors/antd/dist/antd.min.js" defer="defer"></script>
+<script src="/vendors/@ant-design/icons/dist/index.umd.min.js" defer="defer"></script>
+<script src="/zh/index.js" type="module"></script>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js" defer="defer"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML" defer="defer"><!--
+
+
+--></script>
+
+            
+        </div></div>
+    </div>
+</header>
+        
+        
+         
+        
+        
+        
+        <div class="container-fluid" id="wh_topic_container">
+            <div class="row">
+
+                <nav class="wh_tools d-print-none navbar-expand-md" aria-label="Tools">
+                    
+                    <div data-tooltip-position="bottom" class=" wh_breadcrumb "><ol class="d-print-none"><li><span class="home"><a href="../index.html"><span>主页</span></a></span></li><li><div class="topicref" data-id="chap1_getstarted"><div class="title"><a href="../getstarted/chap1_getstarted.html"><span class="keyword label">快速上手</span></a><div class="wh-tooltip"><p class="shortdesc">如何快速部署 DolphinDB、建库建表、写入和查询数据</p></div></div></div></li><li class="active"><div class="topicref" data-id="new_chap_getstarted_ddbserver_and_clients"><div class="title"><a href="../getstarted/use_clients_server.html"><span class="keyword label">快速部署</span></a></div></div></li></ol></div>
+                    
+                    
+                    
+                    <div class="wh_right_tools">
+                        <button class="wh_hide_highlight" aria-label="切换搜索突出显示" title="切换搜索突出显示"></button>
+                        <button class="webhelp_expand_collapse_sections" data-next-state="collapsed" aria-label="折叠截面" title="折叠截面"></button>
+                        
+                        
+                        
+                        
+                        <div class=" wh_print_link print d-none d-md-inline-block "><button onClick="window.print()" title="打印此页" aria-label="打印此页"></button></div>
+                        
+                        <button type="button" id="wh_toc_button" class="custom-toggler navbar-toggler collapsed wh_toggle_button navbar-light" aria-expanded="false" aria-label="Toggle publishing table of content" aria-controls="wh_publication_toc">
+                            <span class="navbar-toggler-icon"></span>
+                        </button>
+                    </div>
+                    
+                </nav>
+            </div>
+            
+            
+            
+            
+            <div class="wh_content_area">
+                <div class="row">
+                    
+                        <nav id="wh_publication_toc" class="col-lg-3 col-md-3 col-sm-12 d-md-block d-none d-print-none" aria-label="Table of Contents Container">
+                            <div id="wh_publication_toc_content">
+		                        
+                            	<div class=" wh_publication_toc " data-tooltip-position="right"><span class="expand-button-action-labels"><span id="button-expand-action" role="button" aria-label="Expand"></span><span id="button-collapse-action" role="button" aria-label="Collapse"></span><span id="button-pending-action" role="button" aria-label="Pending"></span></span><ul role="tree" aria-label="Table of Contents"><li role="treeitem"><div data-tocid="new_chap_about_sect_ddb_docs_intro-d9529e87" class="topicref" data-id="new_chap_about_sect_ddb_docs_intro" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../about/ddb_docs_intro.html" id="new_chap_about_sect_ddb_docs_intro-d9529e87-link">文档使用说明</a><div class="wh-tooltip"><p class="shortdesc">如何获取 DolphinDB 帮助信息</p></div></div></div></li><li role="treeitem" aria-expanded="true"><div data-tocid="chap1_getstarted-d9529e140" class="topicref" data-id="chap1_getstarted" data-state="expanded"><span role="button" tabindex="0" aria-labelledby="button-collapse-action chap1_getstarted-d9529e140-link" class="wh-expand-btn"></span><div class="title"><a href="../getstarted/chap1_getstarted.html" id="chap1_getstarted-d9529e140-link"><span class="keyword label">快速上手</span></a><div class="wh-tooltip"><p class="shortdesc">如何快速部署 DolphinDB、建库建表、写入和查询数据</p></div></div></div><ul role="group" class="navbar-nav nav-list"><li role="treeitem" class="active"><div data-tocid="new_chap_getstarted_ddbserver_and_clients-d9529e193" class="topicref" data-id="new_chap_getstarted_ddbserver_and_clients" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../getstarted/use_clients_server.html" id="new_chap_getstarted_ddbserver_and_clients-d9529e193-link"><span class="keyword label">快速部署</span></a></div></div></li><li role="treeitem"><div data-tocid="task_cws_vjw_rzb-d9529e240" class="topicref" data-id="task_cws_vjw_rzb" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../getstarted/create_dbtb.html" id="task_cws_vjw_rzb-d9529e240-link"><span class="keyword label">建库建表</span></a></div></div></li><li role="treeitem"><div data-tocid="new_chap_getstarted_import_data-d9529e287" class="topicref" data-id="new_chap_getstarted_import_data" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../getstarted/import_data_basics.html" id="new_chap_getstarted_import_data-d9529e287-link"><span class="keyword label">写入和查询</span></a></div></div></li></ul></li><li role="treeitem" aria-expanded="false"><div data-tocid="sectionddb_deployment-d9529e335" class="topicref" data-id="sectionddb_deployment" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action sectionddb_deployment-d9529e335-link" class="wh-expand-btn"></span><div class="title"><a href="../deploy/deploy_intro.html" id="sectionddb_deployment-d9529e335-link"><span class="keyword label">部署</span></a><div class="wh-tooltip"><p class="shortdesc">如何在不同的场景中部署 DolphinDB</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="new_chap_database_manage_new_chap_dbmanage_landing_page-d9529e2313" class="topicref" data-id="new_chap_database_manage_new_chap_dbmanage_landing_page" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action new_chap_database_manage_new_chap_dbmanage_landing_page-d9529e2313-link" class="wh-expand-btn"></span><div class="title"><a href="../db_distr_comp/cfg/db_intro.html" id="new_chap_database_manage_new_chap_dbmanage_landing_page-d9529e2313-link"><span class="keyword label">数据库</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 数据库的基本概念</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="chap7_tutorials_streaming-d9529e3490" class="topicref" data-id="chap7_tutorials_streaming" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action chap7_tutorials_streaming-d9529e3490-link" class="wh-expand-btn"></span><div class="title"><a href="../stream/str_intro.html" id="chap7_tutorials_streaming-d9529e3490-link"><span class="keyword label">流数据</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 流数据引擎及流数据计算的基本概念</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="tocId-d9529e7385" class="topicref" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action tocId-d9529e7385-link" class="wh-expand-btn"></span><div class="title"><a href="../db_distr_comp/db_oper/import_data.html" id="tocId-d9529e7385-link">数据迁移</a><div class="wh-tooltip"><p class="shortdesc">如何从不同数据源向 DolphinDB 迁移数据</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="chap7_tutorials_system_management-d9529e7812" class="topicref" data-id="chap7_tutorials_system_management" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action chap7_tutorials_system_management-d9529e7812-link" class="wh-expand-btn"></span><div class="title"><a href="../sys_man/om_intro.html" id="chap7_tutorials_system_management-d9529e7812-link"><span class="keyword label">系统运维</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 的系统运维功能及方法</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="about_language_resources-d9529e16490" class="topicref" data-id="about_language_resources" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action about_language_resources-d9529e16490-link" class="wh-expand-btn"></span><div class="title"><a href="../progr/progr_intro.html" id="about_language_resources-d9529e16490-link"><span class="keyword label">编程语言</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 编程基本概念与方法、SQL 在 DolphinDB 的应用</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="functions_references-d9529e26503" class="topicref" data-id="functions_references" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action functions_references-d9529e26503-link" class="wh-expand-btn"></span><div class="title"><a href="../funcs/funcs_intro.html" id="functions_references-d9529e26503-link"><span class="keyword label">函数参考</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 函数分类、语法、详解及示例</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="api_protocol-d9529e86456" class="topicref" data-id="api_protocol" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action api_protocol-d9529e86456-link" class="wh-expand-btn"></span><div class="title"><a href="../api/connapi_intro.html" id="api_protocol-d9529e86456-link"><span class="keyword label">连接器 &amp; API</span></a><div class="wh-tooltip"><p class="shortdesc">面向不同编程语言的 DolphinDB API 及连接器，相关协议和用法</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="chap6_plugin-d9529e91976" class="topicref" data-id="chap6_plugin" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action chap6_plugin-d9529e91976-link" class="wh-expand-btn"></span><div class="title"><a href="../plugins/plg_intro.html" id="chap6_plugin-d9529e91976-link"><span class="keyword label">插件</span></a><div class="wh-tooltip"><p class="shortdesc">多个应用场景的插件使用说明和插件开发指导</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="third_party-d9529e94749" class="topicref" data-id="third_party" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action third_party-d9529e94749-link" class="wh-expand-btn"></span><div class="title"><a href="../third_party.html" id="third_party-d9529e94749-link">第三方工具</a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="about_tutorials-d9529e94980" class="topicref" data-id="about_tutorials" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action about_tutorials-d9529e94980-link" class="wh-expand-btn"></span><div class="title"><a href="../tutorials/about_tutorials.html" id="about_tutorials-d9529e94980-link"><span class="keyword label">教程</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 产品使用教程</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="tocId-d9529e101769" class="topicref" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action tocId-d9529e101769-link" class="wh-expand-btn"></span><div class="title"><a href="../rn/server/3_00_1.html" id="tocId-d9529e101769-link">版本说明</a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 版本发布历史</p></div></div></div></li></ul></div>
+		                        
+                            </div>
+                        </nav>
+                    
+                    
+                    <div class="col-lg-7 col-md-9 col-sm-12" id="wh_topic_body">
+                        <button id="wh_close_publication_toc_button" class="close-toc-button d-none" aria-label="Toggle publishing table of content" aria-controls="wh_publication_toc" aria-expanded="true">
+                            <span class="close-toc-icon-container">
+                                <span class="close-toc-icon"></span>     
+                            </span>
+                        </button>
+                        <button id="wh_close_topic_toc_button" class="close-toc-button d-none" aria-label="Toggle topic table of content" aria-controls="wh_topic_toc" aria-expanded="true">
+                            <span class="close-toc-icon-container">
+                                <span class="close-toc-icon"></span>     
+                            </span>
+                        </button>
+                        
+                        <div class=" wh_topic_content body "><main role="main"><article class="- topic/topic topic" role="article" aria-labelledby="new_chap_getstarted_ddbserver_and_clients__title_kbr_s4v_nyb">
+    <h1 class="- topic/title title topictitle1" id="new_chap_getstarted_ddbserver_and_clients__title_kbr_s4v_nyb"><span class="- topic/keyword keyword label">快速部署</span></h1>
+    <div class="- topic/body body">
+        <p class="- topic/p p">以下内容介绍如何快速部署 DolphinDB，以及如何使用 WEB 客户端。</p>
+        <div class="- topic/note note note note_note" id="new_chap_getstarted_ddbserver_and_clients__note_zdg_1sj_gyb" data-ofbid="new_chap_getstarted_ddbserver_and_clients__note_zdg_1sj_gyb"><span class="note__title">注：</span> 为简便部署以及快速上手，以下步骤均以社区版服务器为运行前提。</div>
+
+        <ol class="- topic/ol ol" id="new_chap_getstarted_ddbserver_and_clients__steps_osn_yf2_myb" data-ofbid="new_chap_getstarted_ddbserver_and_clients__steps_osn_yf2_myb">
+            <li class="- topic/li li" id="new_chap_getstarted_ddbserver_and_clients__step_asb_4g2_myb" data-ofbid="new_chap_getstarted_ddbserver_and_clients__step_asb_4g2_myb">前往 <a class="- topic/xref xref" href="https://www.dolphindb.cn/product#downloads" target="_blank" rel="external noopener">DolphinDB 官网</a> 下载社区版本的 DolphinDB Server
+                    压缩包。<figure class="- topic/fig fig fignone" id="new_chap_getstarted_ddbserver_and_clients__fig_j5t_msj_gyb" data-ofbid="new_chap_getstarted_ddbserver_and_clients__fig_j5t_msj_gyb">
+                    <img class="- topic/image image" id="new_chap_getstarted_ddbserver_and_clients__image_fsg_4sj_gyb" src="../images/getstarted_download.png" height="309" width="264"/>
+                </figure></li>
+            <li class="- topic/li li" id="new_chap_getstarted_ddbserver_and_clients__step_csb_4g2_myb" data-ofbid="new_chap_getstarted_ddbserver_and_clients__step_csb_4g2_myb">将 DolphinDB Server 压缩包解压到本地目录。</li>
+            <li class="- topic/li li" id="new_chap_getstarted_ddbserver_and_clients__step_esb_4g2_myb" data-ofbid="new_chap_getstarted_ddbserver_and_clients__step_esb_4g2_myb">单节点部署。进入<span class="+ topic/ph sw-d/filepath ph filepath">\server\</span>目录直接启动执行文件即可。以下是不同系统的启动指令示例：<ul class="- topic/ul ul" id="new_chap_getstarted_ddbserver_and_clients__ul_cjh_tbn_dzb" data-ofbid="new_chap_getstarted_ddbserver_and_clients__ul_cjh_tbn_dzb">
+                    <li class="- topic/li li">Linux
+                        系统后台运行：<pre class="+ topic/pre pr-d/codeblock pre codeblock language-bourne" id="new_chap_getstarted_ddbserver_and_clients__codeblock_yv4_yml_jzb" data-ofbid="new_chap_getstarted_ddbserver_and_clients__codeblock_yv4_yml_jzb">sh startSingle.sh</pre></li>
+                    <li class="- topic/li li">Windows 系统：在 Windows 环境中，双击
+                            <span class="+ topic/ph sw-d/filepath ph filepath">dolphindb.exe</span>。弹出如下窗口表示启动成功。<figure class="- topic/fig fig fignone" id="new_chap_getstarted_ddbserver_and_clients__fig_nzx_55j_gyb" data-ofbid="new_chap_getstarted_ddbserver_and_clients__fig_nzx_55j_gyb">
+                            <img class="- topic/image image" id="new_chap_getstarted_ddbserver_and_clients__image_npq_w5j_gyb" src="../images/getstarted_singleserver_on.png"/>
+                        </figure></li>
+                </ul><div class="- topic/note note note note_note" id="new_chap_getstarted_ddbserver_and_clients__note_ykl_jbn_fzb" data-ofbid="new_chap_getstarted_ddbserver_and_clients__note_ykl_jbn_fzb"><span class="note__title">注：</span> 系统默认端口号为 8848，如需自定义端口，请编辑同级目录下的配置文件
+                        <em class="+ topic/ph hi-d/i ph i">dolphindb.cfg</em>，并修改 <em class="+ topic/ph hi-d/i ph i">localSite</em> 配置项。</div></li>
+            <li class="- topic/li li" id="new_chap_getstarted_ddbserver_and_clients__step_gsb_4g2_myb" data-ofbid="new_chap_getstarted_ddbserver_and_clients__step_gsb_4g2_myb">登录 Web 客户端。<ol class="- topic/ol ol" type="a" id="new_chap_getstarted_ddbserver_and_clients__choices_ejt_tvj_gyb" data-ofbid="new_chap_getstarted_ddbserver_and_clients__choices_ejt_tvj_gyb">
+                <li class="- topic/li li" id="new_chap_getstarted_ddbserver_and_clients__li_msb_4g2_myb" data-ofbid="new_chap_getstarted_ddbserver_and_clients__li_msb_4g2_myb">打开一个主流浏览器。<div class="- topic/note note note note_note" id="new_chap_getstarted_ddbserver_and_clients__note_lxy_cqz_21c" data-ofbid="new_chap_getstarted_ddbserver_and_clients__note_lxy_cqz_21c"><span class="note__title">注：</span> 使用 Web
+                                集群管理器前，请确保浏览器版本满足以下要求：<ul class="- topic/ul ul" id="new_chap_getstarted_ddbserver_and_clients__ul_zm2_gqz_21c" data-ofbid="new_chap_getstarted_ddbserver_and_clients__ul_zm2_gqz_21c">
+                                <li class="- topic/li li">Chrome/Firefox/Edge 浏览器：版本高于 100</li>
+                                <li class="- topic/li li">Safari 浏览器：版本高于 16</li>
+                            </ul></div></li>
+                    <li class="- topic/li li" id="new_chap_getstarted_ddbserver_and_clients__li_nsb_4g2_myb" data-ofbid="new_chap_getstarted_ddbserver_and_clients__li_nsb_4g2_myb">在浏览器地址栏中输入 <span class="+ topic/ph sw-d/filepath ph filepath">&lt;ip&gt;:&lt;port&gt;</span>，即
+                        DolphinDB 所在服务器的 IP 和端口号 <span class="+ topic/ph sw-d/filepath ph filepath">8848</span>。例如，通过 Web
+                        访问在本机部署的单节点服务器的地址为：<pre class="+ topic/pre pr-d/codeblock pre codeblock language-bourne" id="new_chap_getstarted_ddbserver_and_clients__codeblock_y4l_tnl_jzb" data-ofbid="new_chap_getstarted_ddbserver_and_clients__codeblock_y4l_tnl_jzb">http://localhost:<span class="hl-number">8848</span></pre></li>
+                </ol></li>
+        </ol>
+        <div class="- topic/note note note note_note" id="new_chap_getstarted_ddbserver_and_clients__note_avl_lr1_rzb" data-ofbid="new_chap_getstarted_ddbserver_and_clients__note_avl_lr1_rzb"><span class="note__title">注：</span> 未进行用户登录时，用户仅可以直接执行部分不需要权限的函数和脚本。对于需要权限的功能，例如创建数据库、创建表、管理作业、查看日志、查到当前脚本变量、查看运行结果或报错信息等，必须用户登录后方可使用。</div>
+        <section class="- topic/section section" id="new_chap_getstarted_ddbserver_and_clients__section_rdr_d4l_jzb" data-ofbid="new_chap_getstarted_ddbserver_and_clients__section_rdr_d4l_jzb"><h2 class="- topic/title title sectiontitle">WEB 中用户登录</h2>
+            
+            <ol class="- topic/ol ol" id="new_chap_getstarted_ddbserver_and_clients__ol_imz_zzb_gyb" data-ofbid="new_chap_getstarted_ddbserver_and_clients__ol_imz_zzb_gyb">
+                <li class="- topic/li li" id="new_chap_getstarted_ddbserver_and_clients__li_osb_4g2_myb" data-ofbid="new_chap_getstarted_ddbserver_and_clients__li_osb_4g2_myb">点击 WEB 客户端左侧靠上区域的 <span class="+ topic/keyword ui-d/wintitle keyword wintitle">去登录</span>。<figure class="- topic/fig fig fignone" id="new_chap_getstarted_ddbserver_and_clients__fig_z2p_tcc_gyb" data-ofbid="new_chap_getstarted_ddbserver_and_clients__fig_z2p_tcc_gyb">
+                        <br/><div class="imageleft"><img class="- topic/image image imageleft" id="new_chap_getstarted_ddbserver_and_clients__image_rs1_f1c_gyb" src="../images/web_login.png"/></div><br/>
+                    </figure></li>
+                <li class="- topic/li li" id="new_chap_getstarted_ddbserver_and_clients__li_psb_4g2_myb" data-ofbid="new_chap_getstarted_ddbserver_and_clients__li_psb_4g2_myb">在随后显示的登录界面中输入 <strong class="+ topic/ph hi-d/b ph b">用户名</strong> 和 <strong class="+ topic/ph hi-d/b ph b">密码</strong> 后点击
+                        <span class="+ topic/keyword ui-d/wintitle keyword wintitle">登录</span>。<figure class="- topic/fig fig fignone" id="new_chap_getstarted_ddbserver_and_clients__fig_stf_qcc_gyb" data-ofbid="new_chap_getstarted_ddbserver_and_clients__fig_stf_qcc_gyb">
+                        <br/><div class="imageleft"><img class="- topic/image image imageleft" id="new_chap_getstarted_ddbserver_and_clients__image_pnq_n1c_gyb" src="../images/getstarted_userlogin_web.png" height="167" width="214"/></div><br/>
+                    </figure><div class="- topic/note note tip note_tip" id="new_chap_getstarted_ddbserver_and_clients__note_klt_kdc_gyb" data-ofbid="new_chap_getstarted_ddbserver_and_clients__note_klt_kdc_gyb"><span class="note__title">提示：</span> 初次使用 DolphinDB
+                            时，请通过默认的管理员账号和密码登录：<code class="+ topic/ph pr-d/codeph ph codeph">admin/123456</code>。</div></li>
+            </ol>
+        </section>
+        <section class="- topic/section section" id="new_chap_getstarted_ddbserver_and_clients__section_ir2_wz1_wzb" data-ofbid="new_chap_getstarted_ddbserver_and_clients__section_ir2_wz1_wzb"><h2 class="- topic/title title sectiontitle">其他客户端</h2>
+            
+            <p class="- topic/p p">Web 客户端具有上手快速、简单易用的特点，但与同样具备图形界面的 DolphinDB GUI 客户端相比，功能较为单一。对于具有深度编程需求的用户，则建议使用
+                DolphinDB VS Code 插件。</p>
+        </section>
+
+    </div>
+    
+</article></main></div>
+                        
+                        
+                        <div class=" wh_related_links d-print-none "><nav aria-label="Related Links" role="navigation" class="- topic/related-links related-links"><div class="- topic/linklist linklist relinfo"><strong>相关信息</strong><ul class="linklist related_link"><li class="linklist"><a class="- topic/link link navheader_parent_path" href="../db_distr_comp/gui.html" title="GUI 客户端">GUI 客户端</a></li><li class="linklist"><a class="- topic/link link navheader_parent_path" href="../db_distr_comp/db_man/web/intro.html" title="Web 集群管理器">Web 集群管理器</a></li><li class="linklist"><a class="- topic/link link navheader_parent_path" href="../db_distr_comp/vscode.html" title="VS Code 插件">VS Code 插件</a></li></ul></div></nav></div>
+                        
+                        
+                        
+                    </div>
+                    
+                        <nav role="navigation" id="wh_topic_toc" aria-label="On this page" class="col-lg-2 d-none d-lg-block navbar d-print-none"> 
+                            <div id="wh_topic_toc_content">
+		                        
+	                            <div class=" wh_topic_toc "><div class="wh_topic_label">在本页上</div><ul><li class="section-item"><div class="section-title"><a href="#new_chap_getstarted_ddbserver_and_clients__section_rdr_d4l_jzb" data-tocid="new_chap_getstarted_ddbserver_and_clients__section_rdr_d4l_jzb">WEB 中用户登录</a></div></li><li class="section-item"><div class="section-title"><a href="#new_chap_getstarted_ddbserver_and_clients__section_ir2_wz1_wzb" data-tocid="new_chap_getstarted_ddbserver_and_clients__section_ir2_wz1_wzb">其他客户端</a></div></li></ul></div>
+	                        	
+                        	</div>
+                        </nav>
+                    
+                </div>
+            </div>
+            
+            
+            
+        </div> 
+        <footer class="navbar navbar-default wh_footer">
+  <div class=" footer-container mx-auto ">
+<title>Copyright</title><p><b> ©2024 浙江智臾科技有限公司 浙ICP备18048711号-3</b></p>
+  </div>
+</footer>
+        
+        <div id="go2top" class="d-print-none">
+            <span class="oxy-icon oxy-icon-up"></span>
+        </div>
+        
+        <div id="modal_img_large" class="modal">
+            <span class="close oxy-icon oxy-icon-remove"></span>
+            <div id="modal_img_container"></div>
+            <div id="caption"></div>
+        </div>
+        
+        
+        
+    </body>
+</html>

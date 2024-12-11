@@ -1,0 +1,284 @@
+<!DOCTYPE html><html xmlns="http://www.w3.org/1999/xhtml" xml:lang="zh" lang="zh" data-whc_version="26.0">
+    <head><link rel="shortcut icon" href="../favicon.ico"/><link rel="icon" href="../favicon.ico"/><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><meta http-equiv="X-UA-Compatible" content="IE=edge"/><meta name="description" content="搜索 在搜索过程中应用的规则包括： 可以使用引号进行多词短语的精确搜索（例如，“big array”只有在这两个词连续且与在搜索框中输入的内容完全一致时才返回结果）。这种类型的搜索称为短语搜索。 空格字符分隔关键词（例如， big array 被视为两个单独的关键词）。 布尔搜索支持使用以下运算符：and（与），or（或），not（非）。当两个相邻的搜索词没有运算符时，默认使用 or ..."/><meta name="DC.rights.owner" content="(C) 版权 2024"/><meta name="copyright" content="(C) 版权 2024"/><meta name="generator" content="DITA-OT"/><meta name="DC.type" content="topic"/><meta name="DC.coverage" content=""/><meta name="prodname" content="DolphinDB"/><meta name="brand" content="DolphinDB"/><meta name="DC.creator" content="DolphinDB"/><meta name="DC.publisher" content="DDB N/A DDB 200"/><meta name="DC.format" content="HTML5"/><meta name="DC.identifier" content="new_chap_about_sect_ddb_docs_intro"/><meta name="wh-search-title" content="文档使用说明"/><title>文档使用说明</title><!--  Generated with Oxygen version 26.0, build number 2024012323.  --><meta name="wh-path2root" content="../"/><meta name="wh-toc-id" content="new_chap_about_sect_ddb_docs_intro-d9529e87"/><meta name="wh-source-relpath" content="about/ddb_docs_intro.dita"/><meta name="wh-out-relpath" content="about/ddb_docs_intro.html"/>
+
+    <link rel="stylesheet" type="text/css" href="../oxygen-webhelp/app/commons.css?buildId=2024012323"/>
+    <link rel="stylesheet" type="text/css" href="../oxygen-webhelp/app/topic.css?buildId=2024012323"/>
+
+    <script src="../oxygen-webhelp/app/options/properties.js?buildId=20240704100525"></script>
+    <script src="../oxygen-webhelp/app/localization/strings.js?buildId=2024012323"></script>
+    <script src="../oxygen-webhelp/app/search/index/keywords.js?buildId=20240704100525"></script>
+    <script defer="defer" src="../oxygen-webhelp/app/commons.js?buildId=2024012323"></script>
+    <script defer="defer" src="../oxygen-webhelp/app/topic.js?buildId=2024012323"></script>
+<link rel="stylesheet" type="text/css" href="../oxygen-webhelp/template/styles.css?buildId=2024012323"/><script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script><script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script></head>
+
+    <body id="new_chap_about_sect_ddb_docs_intro" class="wh_topic_page frmBody">
+        <a href="#wh_topic_body" class="sr-only sr-only-focusable">
+            跳转到主要内容
+        </a>
+        
+        
+        
+        
+        <header class="navbar navbar-default wh_header">
+    <div class="container-fluid">
+        <div xmlns:whc="http://www.oxygenxml.com/webhelp/components" class="wh_header_flex_container navbar-nav navbar-expand-md navbar-dark">
+            <div class="wh_logo_and_publication_title_container">
+                <div class="wh_logo_and_publication_title">
+                    
+                    <a href="https://www.dolphindb.cn" class=" wh_logo d-none d-sm-block "><img src="../logo.png" alt="  DolphinDB 文档中心  "/></a>
+                    <div class=" wh_publication_title "><a href="../index.html"><span class="booktitle">  <span class="ph mainbooktitle">DolphinDB 文档中心</span>  </span></a></div>
+                    
+                </div>
+                
+                
+            </div>
+
+            <div class="wh_top_menu_and_indexterms_link collapse navbar-collapse" id="wh_top_menu_and_indexterms_link">
+                
+                
+                
+                
+            </div>
+        <div class=" wh_search_input navbar-form wh_topic_page_search search " role="form">
+            
+            
+            
+            <form id="searchForm" method="get" role="search" action="../search.html"><div><input type="search" placeholder="搜索 " class="wh_search_textfield" id="textToSearch" name="searchQuery" aria-label="搜索查询" required="required"/><button type="submit" class="wh_search_button" aria-label="搜索"><span class="search_input_text">搜索</span></button></div></form>
+            
+            <script src="/vendors/react/umd/react.production.min.js" defer="defer"></script>
+<script src="/vendors/react-dom/umd/react-dom.production.min.js" defer="defer"></script>
+<script src="/vendors/dayjs/dayjs.min.js" defer="defer"></script>
+<script src="/vendors/antd/dist/antd.min.js" defer="defer"></script>
+<script src="/vendors/@ant-design/icons/dist/index.umd.min.js" defer="defer"></script>
+<script src="/zh/index.js" type="module"></script>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js" defer="defer"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML" defer="defer"><!--
+
+
+--></script>
+
+            
+        </div></div>
+    </div>
+</header>
+        
+        
+         
+        
+        
+        
+        <div class="container-fluid" id="wh_topic_container">
+            <div class="row">
+
+                <nav class="wh_tools d-print-none navbar-expand-md" aria-label="Tools">
+                    
+                    <div data-tooltip-position="bottom" class=" wh_breadcrumb "><ol class="d-print-none"><li><span class="home"><a href="../index.html"><span>主页</span></a></span></li><li class="active"><div class="topicref" data-id="new_chap_about_sect_ddb_docs_intro"><div class="title"><a href="../about/ddb_docs_intro.html">文档使用说明</a><div class="wh-tooltip"><p class="shortdesc">如何获取 DolphinDB 帮助信息</p></div></div></div></li></ol></div>
+                    
+                    
+                    
+                    <div class="wh_right_tools">
+                        <button class="wh_hide_highlight" aria-label="切换搜索突出显示" title="切换搜索突出显示"></button>
+                        <button class="webhelp_expand_collapse_sections" data-next-state="collapsed" aria-label="折叠截面" title="折叠截面"></button>
+                        
+                        
+                        
+                        
+                        <div class=" wh_print_link print d-none d-md-inline-block "><button onClick="window.print()" title="打印此页" aria-label="打印此页"></button></div>
+                        
+                        <button type="button" id="wh_toc_button" class="custom-toggler navbar-toggler collapsed wh_toggle_button navbar-light" aria-expanded="false" aria-label="Toggle publishing table of content" aria-controls="wh_publication_toc">
+                            <span class="navbar-toggler-icon"></span>
+                        </button>
+                    </div>
+                    
+                </nav>
+            </div>
+            
+            
+            
+            
+            <div class="wh_content_area">
+                <div class="row">
+                    
+                        <nav id="wh_publication_toc" class="col-lg-3 col-md-3 col-sm-12 d-md-block d-none d-print-none" aria-label="Table of Contents Container">
+                            <div id="wh_publication_toc_content">
+		                        
+                            	<div class=" wh_publication_toc " data-tooltip-position="right"><span class="expand-button-action-labels"><span id="button-expand-action" role="button" aria-label="Expand"></span><span id="button-collapse-action" role="button" aria-label="Collapse"></span><span id="button-pending-action" role="button" aria-label="Pending"></span></span><ul role="tree" aria-label="Table of Contents"><li role="treeitem" class="active"><div data-tocid="new_chap_about_sect_ddb_docs_intro-d9529e87" class="topicref" data-id="new_chap_about_sect_ddb_docs_intro" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../about/ddb_docs_intro.html" id="new_chap_about_sect_ddb_docs_intro-d9529e87-link">文档使用说明</a><div class="wh-tooltip"><p class="shortdesc">如何获取 DolphinDB 帮助信息</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="chap1_getstarted-d9529e140" class="topicref" data-id="chap1_getstarted" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action chap1_getstarted-d9529e140-link" class="wh-expand-btn"></span><div class="title"><a href="../getstarted/chap1_getstarted.html" id="chap1_getstarted-d9529e140-link"><span class="keyword label">快速上手</span></a><div class="wh-tooltip"><p class="shortdesc">如何快速部署 DolphinDB、建库建表、写入和查询数据</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="sectionddb_deployment-d9529e335" class="topicref" data-id="sectionddb_deployment" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action sectionddb_deployment-d9529e335-link" class="wh-expand-btn"></span><div class="title"><a href="../deploy/deploy_intro.html" id="sectionddb_deployment-d9529e335-link"><span class="keyword label">部署</span></a><div class="wh-tooltip"><p class="shortdesc">如何在不同的场景中部署 DolphinDB</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="new_chap_database_manage_new_chap_dbmanage_landing_page-d9529e2313" class="topicref" data-id="new_chap_database_manage_new_chap_dbmanage_landing_page" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action new_chap_database_manage_new_chap_dbmanage_landing_page-d9529e2313-link" class="wh-expand-btn"></span><div class="title"><a href="../db_distr_comp/cfg/db_intro.html" id="new_chap_database_manage_new_chap_dbmanage_landing_page-d9529e2313-link"><span class="keyword label">数据库</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 数据库的基本概念</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="chap7_tutorials_streaming-d9529e3490" class="topicref" data-id="chap7_tutorials_streaming" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action chap7_tutorials_streaming-d9529e3490-link" class="wh-expand-btn"></span><div class="title"><a href="../stream/str_intro.html" id="chap7_tutorials_streaming-d9529e3490-link"><span class="keyword label">流数据</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 流数据引擎及流数据计算的基本概念</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="tocId-d9529e7385" class="topicref" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action tocId-d9529e7385-link" class="wh-expand-btn"></span><div class="title"><a href="../db_distr_comp/db_oper/import_data.html" id="tocId-d9529e7385-link">数据迁移</a><div class="wh-tooltip"><p class="shortdesc">如何从不同数据源向 DolphinDB 迁移数据</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="chap7_tutorials_system_management-d9529e7812" class="topicref" data-id="chap7_tutorials_system_management" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action chap7_tutorials_system_management-d9529e7812-link" class="wh-expand-btn"></span><div class="title"><a href="../sys_man/om_intro.html" id="chap7_tutorials_system_management-d9529e7812-link"><span class="keyword label">系统运维</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 的系统运维功能及方法</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="about_language_resources-d9529e16490" class="topicref" data-id="about_language_resources" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action about_language_resources-d9529e16490-link" class="wh-expand-btn"></span><div class="title"><a href="../progr/progr_intro.html" id="about_language_resources-d9529e16490-link"><span class="keyword label">编程语言</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 编程基本概念与方法、SQL 在 DolphinDB 的应用</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="functions_references-d9529e26503" class="topicref" data-id="functions_references" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action functions_references-d9529e26503-link" class="wh-expand-btn"></span><div class="title"><a href="../funcs/funcs_intro.html" id="functions_references-d9529e26503-link"><span class="keyword label">函数参考</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 函数分类、语法、详解及示例</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="api_protocol-d9529e86456" class="topicref" data-id="api_protocol" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action api_protocol-d9529e86456-link" class="wh-expand-btn"></span><div class="title"><a href="../api/connapi_intro.html" id="api_protocol-d9529e86456-link"><span class="keyword label">连接器 &amp; API</span></a><div class="wh-tooltip"><p class="shortdesc">面向不同编程语言的 DolphinDB API 及连接器，相关协议和用法</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="chap6_plugin-d9529e91976" class="topicref" data-id="chap6_plugin" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action chap6_plugin-d9529e91976-link" class="wh-expand-btn"></span><div class="title"><a href="../plugins/plg_intro.html" id="chap6_plugin-d9529e91976-link"><span class="keyword label">插件</span></a><div class="wh-tooltip"><p class="shortdesc">多个应用场景的插件使用说明和插件开发指导</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="third_party-d9529e94749" class="topicref" data-id="third_party" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action third_party-d9529e94749-link" class="wh-expand-btn"></span><div class="title"><a href="../third_party.html" id="third_party-d9529e94749-link">第三方工具</a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="about_tutorials-d9529e94980" class="topicref" data-id="about_tutorials" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action about_tutorials-d9529e94980-link" class="wh-expand-btn"></span><div class="title"><a href="../tutorials/about_tutorials.html" id="about_tutorials-d9529e94980-link"><span class="keyword label">教程</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 产品使用教程</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="tocId-d9529e101769" class="topicref" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action tocId-d9529e101769-link" class="wh-expand-btn"></span><div class="title"><a href="../rn/server/3_00_1.html" id="tocId-d9529e101769-link">版本说明</a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 版本发布历史</p></div></div></div></li></ul></div>
+		                        
+                            </div>
+                        </nav>
+                    
+                    
+                    <div class="col-lg-7 col-md-9 col-sm-12" id="wh_topic_body">
+                        <button id="wh_close_publication_toc_button" class="close-toc-button d-none" aria-label="Toggle publishing table of content" aria-controls="wh_publication_toc" aria-expanded="true">
+                            <span class="close-toc-icon-container">
+                                <span class="close-toc-icon"></span>     
+                            </span>
+                        </button>
+                        <button id="wh_close_topic_toc_button" class="close-toc-button d-none" aria-label="Toggle topic table of content" aria-controls="wh_topic_toc" aria-expanded="true">
+                            <span class="close-toc-icon-container">
+                                <span class="close-toc-icon"></span>     
+                            </span>
+                        </button>
+                        
+                        <div class=" wh_topic_content body "><main role="main"><article class="- topic/topic topic" role="article" aria-labelledby="new_chap_about_sect_ddb_docs_intro__title_urq_s4v_nyb">
+    <h1 class="- topic/title title topictitle1" id="new_chap_about_sect_ddb_docs_intro__title_urq_s4v_nyb"><span class="- topic/keyword keyword label">文档使用说明</span></h1>
+    <div class="- topic/body body">
+        <section class="- topic/section section" id="new_chap_about_sect_ddb_docs_intro__section_b5f_jnd_2yb" data-ofbid="new_chap_about_sect_ddb_docs_intro__section_b5f_jnd_2yb"><h2 class="- topic/title title sectiontitle">搜索</h2>
+            
+            <p class="- topic/p p">在搜索过程中应用的规则包括：</p>
+            <ul class="- topic/ul ul" id="new_chap_about_sect_ddb_docs_intro__ul_obp_knd_2yb" data-ofbid="new_chap_about_sect_ddb_docs_intro__ul_obp_knd_2yb">
+                <li class="- topic/li li">可以使用引号进行多词短语的精确搜索（例如，“big
+                    array”只有在这两个词连续且与在搜索框中输入的内容完全一致时才返回结果）。这种类型的搜索称为短语搜索。</li>
+                <li class="- topic/li li">空格字符分隔关键词（例如，<em class="+ topic/ph hi-d/i ph i">big array</em> 被视为两个单独的关键词）。</li>
+                <li class="- topic/li li">布尔搜索支持使用以下运算符：and（与），or（或），not（非）。当两个相邻的搜索词没有运算符时，默认使用 or 作为搜索运算符（例如，<em class="+ topic/ph hi-d/i ph i">big
+                        array</em> 等同于 <em class="+ topic/ph hi-d/i ph i">big</em> or <em class="+ topic/ph hi-d/i ph i">array</em>）。</li>
+                <li class="- topic/li li">由冒号（“:”）、减号（“-”）、下划线（“_”）或点号（“.”）组合而成的词被视为一个单词。</li>
+                <li class="- topic/li li" id="new_chap_about_sect_ddb_docs_intro__li_uqb_4g2_myb" data-ofbid="new_chap_about_sect_ddb_docs_intro__li_uqb_4g2_myb">出现多个搜索关键词时，例如在搜索栏输入“A B C”时，这三个关键词在搜索时是“或”关系。</li>
+                <li class="- topic/li li" id="new_chap_about_sect_ddb_docs_intro__li_vqb_4g2_myb" data-ofbid="new_chap_about_sect_ddb_docs_intro__li_vqb_4g2_myb">每一个搜索结果右下方显示的星型符号，反映了搜索关键词在该结果中的出现次数。星型符号数量与搜索关键词命中次数成正比。</li>
+            </ul>
+        </section>
+        <section class="- topic/section section" id="new_chap_about_sect_ddb_docs_intro__section_zkl_hqp_d1c" data-ofbid="new_chap_about_sect_ddb_docs_intro__section_zkl_hqp_d1c"><h2 class="- topic/title title sectiontitle">代码样例</h2>
+            
+            <p class="- topic/p p">DolphinDB 的函数页面、插件使用说明、API
+                接口说明以及教程提供了大量的代码样例以便用户在学习产品使用的过程中参考。参考这些代码样例中，需要注意以下几点：</p>
+            <ul class="- topic/ul ul" id="new_chap_about_sect_ddb_docs_intro__ul_bpm_pqp_d1c" data-ofbid="new_chap_about_sect_ddb_docs_intro__ul_bpm_pqp_d1c">
+                <li class="- topic/li li">配置项。尽管不同的配置项在教程中或某些产品说明页面中因上下文的行文逻辑和内容主旨，使用了不同于默认配置的设定，在实际的生产环境中，请根据实际的需求做出相应的配置调整。</li>
+                <li class="- topic/li li">文件路径。代码样例中使用的文件路径仅能反映编者在内容设计时使用的实际环境，与用户的实际部署环境或生产环境中的文件路径并不一定完全吻合。因此，在参考代码样例时，请用户务必根据实际部署环境中的文件目录做出相应的调整。</li>
+                <li class="- topic/li li">名称。代码样例中的数据库名、数据表名、列名等名称通常为自定义的。用户在参考代码样例的过程中应根据实际的场景，进行相应的调整。</li>
+                <li class="- topic/li li">环境清理。在某些涉及建库建表的例子脚本中使用了 dropDatabase
+                        函数清除数据库，例如：<pre class="+ topic/pre pr-d/codeblock pre codeblock" id="new_chap_about_sect_ddb_docs_intro__codeblock_dhp_lzf_r1c" data-ofbid="new_chap_about_sect_ddb_docs_intro__codeblock_dhp_lzf_r1c"><code>dbPath="dfs://db_value_date"
+if s.existsDatabase(dbPath):
+    s.dropDatabase(dbPath)</code></pre>这并非要求或鼓励用户在实际环境中随意删除数据库，而是由于为了相似的例子脚本能够顺利运行，需要清除同名的数据库。<div class="- topic/note note important note_important" id="new_chap_about_sect_ddb_docs_intro__note_wsj_mzf_r1c" data-ofbid="new_chap_about_sect_ddb_docs_intro__note_wsj_mzf_r1c"><span class="note__title">重要：</span> 在任何涉及到实际生产数据或重要数据的环境中，执行任何库表的删除操作前请<strong class="+ topic/ph hi-d/b ph b">务必谨慎</strong>，以免造成不必要的数据损失和业务影响。</div></li>
+            </ul>
+        </section>
+        <section class="- topic/section section" id="new_chap_about_sect_ddb_docs_intro__section_f3z_wh5_m1c" data-ofbid="new_chap_about_sect_ddb_docs_intro__section_f3z_wh5_m1c"><h2 class="- topic/title title sectiontitle">文档版本</h2>
+            
+
+            <p class="- topic/p p">用户点击页面右上方灰色箭头，进入 DolphinDB 版本切换的下拉菜单。选择版本查看需要注意以下几点：</p>
+            <ul class="- topic/ul ul" id="new_chap_about_sect_ddb_docs_intro__ul_bwc_v45_m1c" data-ofbid="new_chap_about_sect_ddb_docs_intro__ul_bwc_v45_m1c">
+                <li class="- topic/li li">版本查看。DolphinDB
+                        使用&lt;主要&gt;<strong class="+ topic/ph hi-d/b ph b">.</strong>&lt;中间&gt;<strong class="+ topic/ph hi-d/b ph b">.</strong>&lt;次要&gt;<strong class="+ topic/ph hi-d/b ph b">.</strong>&lt;补丁&gt;来标识版本（例如，2.00.11.2），四个数字的依次增大表示版本的更新。您也可以在下拉选择菜单中直接选择<strong class="+ topic/ph hi-d/b ph b">最新版</strong>查看。</li>
+
+                <li class="- topic/li li">版本变化。点击左侧目录中的<strong class="+ topic/ph hi-d/b ph b">版本说明</strong>，在 <strong class="+ topic/ph hi-d/b ph b">Server</strong>
+                        的下拉列表中选择版本号查看相应版本更新历史，其中包含对应的<strong class="+ topic/ph hi-d/b ph b">版本下载</strong>、<strong class="+ topic/ph hi-d/b ph b">新功能</strong>、<strong class="+ topic/ph hi-d/b ph b">功能改进</strong>和<strong class="+ topic/ph hi-d/b ph b">缺陷修复</strong>等内容：<ul class="- topic/ul ul" id="new_chap_about_sect_ddb_docs_intro__ul_v3t_hdv_m1c" data-ofbid="new_chap_about_sect_ddb_docs_intro__ul_v3t_hdv_m1c">
+                        <li class="- topic/li li">版本下载中明确了版本、兼容等级和版本号。</li>
+                        <li class="- topic/li li">新功能和功能改进标注了更新内容的对应版本号。</li>
+                       <li class="- topic/li li">下拉列表从下到上为版本依次更新。</li>
+                </ul></li>
+                <li class="- topic/li li">版本兼容。<ul class="- topic/ul ul" id="new_chap_about_sect_ddb_docs_intro__ul_npl_fdv_m1c" data-ofbid="new_chap_about_sect_ddb_docs_intro__ul_npl_fdv_m1c">
+                    <li class="- topic/li li">点击<a class="- topic/xref xref" href="../rn/compat_def.html">版本兼容性说明</a>查看 DolphinDB 版本兼容性等级标准。</li>
+                    <li class="- topic/li li">点击版本兼容性说明的下拉列表，选择查看每一级<strong class="+ topic/ph hi-d/b ph b">兼容性标准</strong>。</li>
+                        <li class="- topic/li li">对照兼容等级，查看对应版本兼容性标准的<strong class="+ topic/ph hi-d/b ph b">具体要求</strong>和<strong class="+ topic/ph hi-d/b ph b">升级指南</strong>，从而了解新版本对用户使用、系统兼容性的影响。</li>
+                    </ul></li>
+            </ul>
+        </section>
+        <section class="- topic/section section" id="new_chap_about_sect_ddb_docs_intro__section_xxd_mt4_pzb" data-ofbid="new_chap_about_sect_ddb_docs_intro__section_xxd_mt4_pzb"><h2 class="- topic/title title sectiontitle"><span class="- topic/keyword keyword label">技术支持</span></h2>
+            
+            <p class="- topic/p p">使用 DolphinDB 的过程中碰到了问题，解决不了怎么办？除文档中心外，DolphinDB 用户亦可通过以下途径获取帮助信息和技术支持：</p>
+            <dl class="- topic/dl dl" id="new_chap_about_sect_ddb_docs_intro__dl_qbd_k5q_5zb" data-ofbid="new_chap_about_sect_ddb_docs_intro__dl_qbd_k5q_5zb">
+                
+                
+                    <dt class="- topic/dt dt dlterm">Gitee 教程</dt>
+                    <dd class="- topic/dd dd">发布在 Gitee 社区的 <a class="- topic/xref xref" href="https://gitee.com/dolphindb/Tutorials_CN/tree/master" target="_blank" rel="external noopener">DolphinDB 教程</a>。可在 <a class="- topic/xref xref" href="https://gitee.com/dolphindb/release/blob/master/2.00/README_CN.md" target="_blank" rel="external noopener">此处</a> 查询历史版本发布信息。</dd>
+                
+                
+                    <dt class="- topic/dt dt dlterm">ASK 社区</dt>
+                    <dd class="- topic/dd dd">用户可在 <a class="- topic/xref xref" href="https://ask.dolphindb.net" target="_blank" rel="external noopener">DolphinDB 问答社区</a> 提问。技术支持人员会尽可能在 1 个工作日内回复。</dd>
+                
+                
+                    <dt class="- topic/dt dt dlterm">智臾科技知乎主页</dt>
+                    <dd class="- topic/dd dd">知乎上的 <a class="- topic/xref xref" href="https://www.zhihu.com/org/zhe-jiang-zhi-yu-ke-ji-you-xian-gong-si" target="_blank" rel="external noopener">智臾科技公司主页</a> 是 DolphinDB
+                            产品对外发布的主要社媒平台。与产品相关的技术和测评类文章，都可以在知乎上找到。常设专栏：<ul class="- topic/ul ul" id="new_chap_about_sect_ddb_docs_intro__ul_kll_sv4_pzb" data-ofbid="new_chap_about_sect_ddb_docs_intro__ul_kll_sv4_pzb">
+                            
+                            <li class="- topic/li li">
+                                <p class="- topic/p p"><a class="- topic/xref xref" href="https://www.zhihu.com/column/DolphinDBinQuantitativeFinance" target="_blank" rel="external noopener">DolphinDB 与量化金融</a></p>
+                            </li>
+                            <li class="- topic/li li">
+                                <p class="- topic/p p"><a class="- topic/xref xref" href="https://www.zhihu.com/column/DolphinDBinIoT" target="_blank" rel="external noopener">DolphinDB 与物联网</a></p>
+                            </li>
+                            <li class="- topic/li li">
+                                <p class="- topic/p p"><a class="- topic/xref xref" href="https://www.zhihu.com/column/orcapandas" target="_blank" rel="external noopener">DolphinDB 测评报告</a></p>
+                            </li>
+                            <li class="- topic/li li">
+                                <p class="- topic/p p"><a class="- topic/xref xref" href="https://www.zhihu.com/column/c_1330085975784333312" target="_blank" rel="external noopener">DolphinDB 视频教程</a></p>
+                            </li>
+                            <li class="- topic/li li">
+                                <p class="- topic/p p"><a class="- topic/xref xref" href="https://www.zhihu.com/column/c_1621476722632523776" target="_blank" rel="external noopener">DolphinDB 客户故事</a></p>
+                            </li>
+                        </ul></dd>
+                
+                
+                    <dt class="- topic/dt dt dlterm">电子邮件</dt>
+                    <dd class="- topic/dd dd">发邮件至：<a class="- topic/xref xref" href="http://support@dolphindb.com" target="_blank" rel="external noopener">DolphinDB 技术支持</a>。DolphinDB 技术支持人员尽可能在 1
+                            个工作日内回复您的问题。较为复杂的问题可能需要更多的时间进行分析和答复。请注意：<ul class="- topic/ul ul" id="new_chap_about_sect_ddb_docs_intro__ul_mjf_55q_5zb" data-ofbid="new_chap_about_sect_ddb_docs_intro__ul_mjf_55q_5zb">
+                            
+                            <li class="- topic/li li">
+                                <p class="- topic/p p">尽量详细描述您遇到的问题、软硬件环境、问题发生的业务场景等。</p>
+                            </li>
+                            <li class="- topic/li li">
+                                <p class="- topic/p p">尽可能附上电话或微信等联系方式，以便深入交流。</p>
+                            </li>
+                        </ul></dd>
+                
+                
+                    <dt class="- topic/dt dt dlterm">技术交流群</dt>
+                    <dd class="- topic/dd dd">微信扫描二维码加入技术交流群：<img class="- topic/image image" id="new_chap_about_sect_ddb_docs_intro__image_hcg_x5q_5zb" src="../tutorials/images/wecat.png" width="100"/></dd>
+                    <dd class="- topic/dd dd ddexpand">亦可添加客服微信：13306510479 由客服人员邀请入群。</dd>
+                
+            </dl>
+        </section>
+        <section class="- topic/section section" id="new_chap_about_sect_ddb_docs_intro__section_d2x_by4_pzb" data-ofbid="new_chap_about_sect_ddb_docs_intro__section_d2x_by4_pzb"><h2 class="- topic/title title sectiontitle">视频课程</h2>
+            
+            <p class="- topic/p p">DolphinDB 亦在国内外主流视频平台投放技术探讨、产品介绍、公开课录屏等精品视频：</p>
+            <ul class="- topic/ul ul" id="new_chap_about_sect_ddb_docs_intro__ul_acm_b1p_pzb" data-ofbid="new_chap_about_sect_ddb_docs_intro__ul_acm_b1p_pzb">
+                
+                <li class="- topic/li li"><a class="- topic/xref xref" href="https://www.youtube.com/@dolphindb8736" target="_blank" rel="external noopener">YouTube</a></li>
+                <li class="- topic/li li"><a class="- topic/xref xref" href="https://space.bilibili.com/1351925320" target="_blank" rel="external noopener">Bilibili</a></li>
+            </ul>
+        </section>
+    </div>
+</article></main></div>
+                        
+                        
+                        
+                        
+                        
+                        
+                    </div>
+                    
+                        <nav role="navigation" id="wh_topic_toc" aria-label="On this page" class="col-lg-2 d-none d-lg-block navbar d-print-none"> 
+                            <div id="wh_topic_toc_content">
+		                        
+	                            <div class=" wh_topic_toc "><div class="wh_topic_label">在本页上</div><ul><li class="section-item"><div class="section-title"><a href="#new_chap_about_sect_ddb_docs_intro__section_b5f_jnd_2yb" data-tocid="new_chap_about_sect_ddb_docs_intro__section_b5f_jnd_2yb">搜索</a></div></li><li class="section-item"><div class="section-title"><a href="#new_chap_about_sect_ddb_docs_intro__section_zkl_hqp_d1c" data-tocid="new_chap_about_sect_ddb_docs_intro__section_zkl_hqp_d1c">代码样例</a></div></li><li class="section-item"><div class="section-title"><a href="#new_chap_about_sect_ddb_docs_intro__section_f3z_wh5_m1c" data-tocid="new_chap_about_sect_ddb_docs_intro__section_f3z_wh5_m1c">文档版本</a></div></li><li class="section-item"><div class="section-title"><a href="#new_chap_about_sect_ddb_docs_intro__section_xxd_mt4_pzb" data-tocid="new_chap_about_sect_ddb_docs_intro__section_xxd_mt4_pzb"><span class="- topic/keyword keyword label">技术支持</span></a></div></li><li class="section-item"><div class="section-title"><a href="#new_chap_about_sect_ddb_docs_intro__section_d2x_by4_pzb" data-tocid="new_chap_about_sect_ddb_docs_intro__section_d2x_by4_pzb">视频课程</a></div></li></ul></div>
+	                        	
+                        	</div>
+                        </nav>
+                    
+                </div>
+            </div>
+            
+            
+            
+        </div> 
+        <footer class="navbar navbar-default wh_footer">
+  <div class=" footer-container mx-auto ">
+<title>Copyright</title><p><b> ©2024 浙江智臾科技有限公司 浙ICP备18048711号-3</b></p>
+  </div>
+</footer>
+        
+        <div id="go2top" class="d-print-none">
+            <span class="oxy-icon oxy-icon-up"></span>
+        </div>
+        
+        <div id="modal_img_large" class="modal">
+            <span class="close oxy-icon oxy-icon-remove"></span>
+            <div id="modal_img_container"></div>
+            <div id="caption"></div>
+        </div>
+        
+        
+        
+    </body>
+</html>

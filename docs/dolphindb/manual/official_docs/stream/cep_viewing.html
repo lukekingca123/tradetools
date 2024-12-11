@@ -1,0 +1,421 @@
+<!DOCTYPE html><html xmlns="http://www.w3.org/1999/xhtml" xml:lang="zh" lang="zh" data-whc_version="26.0">
+    <head><link rel="shortcut icon" href="../favicon.ico"/><link rel="icon" href="../favicon.ico"/><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><meta http-equiv="X-UA-Compatible" content="IE=edge"/><meta name="description" content="可通过 getStreamEngineStat().CEPEngine 查看当前所有 CEP 引擎的状态。返回一个表，包含以下字段： 列名 含义 name CEP 引擎名称 user 创建 CEP 引擎的用户名 status CEP 引擎状态 lastErrorMessage 最后一条错误信息 lastErrorTimestamp 最后一次错误信息的时间戳 useSystemTime ..."/><meta name="DC.rights.owner" content="(C) 版权 2024"/><meta name="copyright" content="(C) 版权 2024"/><meta name="generator" content="DITA-OT"/><meta name="DC.type" content="topic"/><meta name="DC.coverage" content=""/><meta name="DC.relation" content="../stream/cep.html"/><meta name="prodname" content="DolphinDB"/><meta name="brand" content="DolphinDB"/><meta name="DC.creator" content="DolphinDB"/><meta name="DC.publisher" content="DDB N/A DDB 200"/><meta name="DC.format" content="HTML5"/><meta name="DC.identifier" content="cep_viewing"/><title>查看 CEP 引擎运行状态</title><!--  Generated with Oxygen version 26.0, build number 2024012323.  --><meta name="wh-path2root" content="../"/><meta name="wh-toc-id" content="cep_viewing-d9529e5764"/><meta name="wh-source-relpath" content="stream/cep_viewing.dita"/><meta name="wh-out-relpath" content="stream/cep_viewing.html"/>
+
+    <link rel="stylesheet" type="text/css" href="../oxygen-webhelp/app/commons.css?buildId=2024012323"/>
+    <link rel="stylesheet" type="text/css" href="../oxygen-webhelp/app/topic.css?buildId=2024012323"/>
+
+    <script src="../oxygen-webhelp/app/options/properties.js?buildId=20240704100525"></script>
+    <script src="../oxygen-webhelp/app/localization/strings.js?buildId=2024012323"></script>
+    <script src="../oxygen-webhelp/app/search/index/keywords.js?buildId=20240704100525"></script>
+    <script defer="defer" src="../oxygen-webhelp/app/commons.js?buildId=2024012323"></script>
+    <script defer="defer" src="../oxygen-webhelp/app/topic.js?buildId=2024012323"></script>
+<link rel="stylesheet" type="text/css" href="../oxygen-webhelp/template/styles.css?buildId=2024012323"/><script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script><script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script></head>
+
+    <body id="cep_viewing" class="wh_topic_page frmBody">
+        <a href="#wh_topic_body" class="sr-only sr-only-focusable">
+            跳转到主要内容
+        </a>
+        
+        
+        
+        
+        <header class="navbar navbar-default wh_header">
+    <div class="container-fluid">
+        <div xmlns:whc="http://www.oxygenxml.com/webhelp/components" class="wh_header_flex_container navbar-nav navbar-expand-md navbar-dark">
+            <div class="wh_logo_and_publication_title_container">
+                <div class="wh_logo_and_publication_title">
+                    
+                    <a href="https://www.dolphindb.cn" class=" wh_logo d-none d-sm-block "><img src="../logo.png" alt="  DolphinDB 文档中心  "/></a>
+                    <div class=" wh_publication_title "><a href="../index.html"><span class="booktitle">  <span class="ph mainbooktitle">DolphinDB 文档中心</span>  </span></a></div>
+                    
+                </div>
+                
+                
+            </div>
+
+            <div class="wh_top_menu_and_indexterms_link collapse navbar-collapse" id="wh_top_menu_and_indexterms_link">
+                
+                
+                
+                
+            </div>
+        <div class=" wh_search_input navbar-form wh_topic_page_search search " role="form">
+            
+            
+            
+            <form id="searchForm" method="get" role="search" action="../search.html"><div><input type="search" placeholder="搜索 " class="wh_search_textfield" id="textToSearch" name="searchQuery" aria-label="搜索查询" required="required"/><button type="submit" class="wh_search_button" aria-label="搜索"><span class="search_input_text">搜索</span></button></div></form>
+            
+            <script src="/vendors/react/umd/react.production.min.js" defer="defer"></script>
+<script src="/vendors/react-dom/umd/react-dom.production.min.js" defer="defer"></script>
+<script src="/vendors/dayjs/dayjs.min.js" defer="defer"></script>
+<script src="/vendors/antd/dist/antd.min.js" defer="defer"></script>
+<script src="/vendors/@ant-design/icons/dist/index.umd.min.js" defer="defer"></script>
+<script src="/zh/index.js" type="module"></script>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js" defer="defer"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML" defer="defer"><!--
+
+
+--></script>
+
+            
+        </div></div>
+    </div>
+</header>
+        
+        
+         
+        
+        
+        
+        <div class="container-fluid" id="wh_topic_container">
+            <div class="row">
+
+                <nav class="wh_tools d-print-none navbar-expand-md" aria-label="Tools">
+                    
+                    <div data-tooltip-position="bottom" class=" wh_breadcrumb "><ol class="d-print-none"><li><span class="home"><a href="../index.html"><span>主页</span></a></span></li><li><div class="topicref" data-id="chap7_tutorials_streaming"><div class="title"><a href="../stream/str_intro.html"><span class="keyword label">流数据</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 流数据引擎及流数据计算的基本概念</p></div></div></div></li><li><div class="topicref" data-id="cep"><div class="title"><a href="../stream/cep.html">复杂事件处理（CEP）引擎</a></div></div></li><li class="active"><div class="topicref" data-id="cep_viewing"><div class="title"><a href="../stream/cep_viewing.html">查看 CEP 引擎运行状态</a></div></div></li></ol></div>
+                    
+                    
+                    
+                    <div class="wh_right_tools">
+                        <button class="wh_hide_highlight" aria-label="切换搜索突出显示" title="切换搜索突出显示"></button>
+                        <button class="webhelp_expand_collapse_sections" data-next-state="collapsed" aria-label="折叠截面" title="折叠截面"></button>
+                        
+                        
+                        
+                        
+                        <div class=" wh_print_link print d-none d-md-inline-block "><button onClick="window.print()" title="打印此页" aria-label="打印此页"></button></div>
+                        
+                        <button type="button" id="wh_toc_button" class="custom-toggler navbar-toggler collapsed wh_toggle_button navbar-light" aria-expanded="false" aria-label="Toggle publishing table of content" aria-controls="wh_publication_toc">
+                            <span class="navbar-toggler-icon"></span>
+                        </button>
+                    </div>
+                    
+                </nav>
+            </div>
+            
+            
+            
+            
+            <div class="wh_content_area">
+                <div class="row">
+                    
+                        <nav id="wh_publication_toc" class="col-lg-3 col-md-3 col-sm-12 d-md-block d-none d-print-none" aria-label="Table of Contents Container">
+                            <div id="wh_publication_toc_content">
+		                        
+                            	<div class=" wh_publication_toc " data-tooltip-position="right"><span class="expand-button-action-labels"><span id="button-expand-action" role="button" aria-label="Expand"></span><span id="button-collapse-action" role="button" aria-label="Collapse"></span><span id="button-pending-action" role="button" aria-label="Pending"></span></span><ul role="tree" aria-label="Table of Contents"><li role="treeitem"><div data-tocid="new_chap_about_sect_ddb_docs_intro-d9529e87" class="topicref" data-id="new_chap_about_sect_ddb_docs_intro" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../about/ddb_docs_intro.html" id="new_chap_about_sect_ddb_docs_intro-d9529e87-link">文档使用说明</a><div class="wh-tooltip"><p class="shortdesc">如何获取 DolphinDB 帮助信息</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="chap1_getstarted-d9529e140" class="topicref" data-id="chap1_getstarted" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action chap1_getstarted-d9529e140-link" class="wh-expand-btn"></span><div class="title"><a href="../getstarted/chap1_getstarted.html" id="chap1_getstarted-d9529e140-link"><span class="keyword label">快速上手</span></a><div class="wh-tooltip"><p class="shortdesc">如何快速部署 DolphinDB、建库建表、写入和查询数据</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="sectionddb_deployment-d9529e335" class="topicref" data-id="sectionddb_deployment" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action sectionddb_deployment-d9529e335-link" class="wh-expand-btn"></span><div class="title"><a href="../deploy/deploy_intro.html" id="sectionddb_deployment-d9529e335-link"><span class="keyword label">部署</span></a><div class="wh-tooltip"><p class="shortdesc">如何在不同的场景中部署 DolphinDB</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="new_chap_database_manage_new_chap_dbmanage_landing_page-d9529e2313" class="topicref" data-id="new_chap_database_manage_new_chap_dbmanage_landing_page" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action new_chap_database_manage_new_chap_dbmanage_landing_page-d9529e2313-link" class="wh-expand-btn"></span><div class="title"><a href="../db_distr_comp/cfg/db_intro.html" id="new_chap_database_manage_new_chap_dbmanage_landing_page-d9529e2313-link"><span class="keyword label">数据库</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 数据库的基本概念</p></div></div></div></li><li role="treeitem" aria-expanded="true"><div data-tocid="chap7_tutorials_streaming-d9529e3490" class="topicref" data-id="chap7_tutorials_streaming" data-state="expanded"><span role="button" tabindex="0" aria-labelledby="button-collapse-action chap7_tutorials_streaming-d9529e3490-link" class="wh-expand-btn"></span><div class="title"><a href="../stream/str_intro.html" id="chap7_tutorials_streaming-d9529e3490-link"><span class="keyword label">流数据</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 流数据引擎及流数据计算的基本概念</p></div></div></div><ul role="group" class="navbar-nav nav-list"><li role="treeitem" aria-expanded="false"><div data-tocid="streamfunctions-d9529e3543" class="topicref" data-id="streamfunctions" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action streamfunctions-d9529e3543-link" class="wh-expand-btn"></span><div class="title"><a href="../stream/str_funcs.html" id="streamfunctions-d9529e3543-link">功能简介</a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="tocId-d9529e3821" class="topicref" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action tocId-d9529e3821-link" class="wh-expand-btn"></span><div class="title"><a href="../stream/try_example1.html" id="tocId-d9529e3821-link">入门示例</a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="内置流式计算算子-d9529e3914" class="topicref" data-id="内置流式计算算子" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action 内置流式计算算子-d9529e3914-link" class="wh-expand-btn"></span><div class="title"><a href="../stream/str_operator.html" id="内置流式计算算子-d9529e3914-link"><span class="keyword label">内置流式计算算子</span></a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="streamingEngineTopic-d9529e4099" class="topicref" data-id="streamingEngineTopic" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action streamingEngineTopic-d9529e4099-link" class="wh-expand-btn"></span><div class="title"><a href="../funcs/themes/streamingEngine.html" id="streamingEngineTopic-d9529e4099-link"><span class="keyword label">内置流式计算引擎</span></a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="chap7_tutorials_streaming-d9529e4376" class="topicref" data-id="chap7_tutorials_streaming" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action chap7_tutorials_streaming-d9529e4376-link" class="wh-expand-btn"></span><div class="title"><a href="../stream/str_join_engine.html" id="chap7_tutorials_streaming-d9529e4376-link"><span class="keyword label">内置多数据源流式关联引擎</span></a></div></div></li><li role="treeitem"><div data-tocid="streamha-d9529e4653" class="topicref" data-id="streamha" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../stream/str_ha.html" id="streamha-d9529e4653-link"><span class="keyword label">流数据高可用</span></a></div></div></li><li role="treeitem"><div data-tocid="流计算状态监控-d9529e4700" class="topicref" data-id="流计算状态监控" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../stream/str_monitor.html" id="流计算状态监控-d9529e4700-link">流计算状态监控</a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="replay-d9529e4746" class="topicref" data-id="replay" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action replay-d9529e4746-link" class="wh-expand-btn"></span><div class="title"><a href="../stream/str_replay.html" id="replay-d9529e4746-link"><span class="keyword label">历史数据回放</span></a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="流批一体功能-d9529e4931" class="topicref" data-id="流批一体功能" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action 流批一体功能-d9529e4931-link" class="wh-expand-btn"></span><div class="title"><a href="../stream/str_batch.html" id="流批一体功能-d9529e4931-link"><span class="keyword label">流批一体</span></a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="tocId-d9529e5024" class="topicref" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action tocId-d9529e5024-link" class="wh-expand-btn"></span><div class="title"><a href="../stream/str_api_python.html" id="tocId-d9529e5024-link">实时流数据接入</a></div></div></li><li role="treeitem" aria-expanded="true"><div data-tocid="cep-d9529e5442" class="topicref" data-id="cep" data-state="expanded"><span role="button" tabindex="0" aria-labelledby="button-collapse-action cep-d9529e5442-link" class="wh-expand-btn"></span><div class="title"><a href="../stream/cep.html" id="cep-d9529e5442-link">复杂事件处理（CEP）引擎</a></div></div><ul role="group" class="navbar-nav nav-list"><li role="treeitem"><div data-tocid="cep_basic_concept-d9529e5488" class="topicref" data-id="cep_basic_concept" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../stream/cep_basic_concept.html" id="cep_basic_concept-d9529e5488-link">基本概念</a></div></div></li><li role="treeitem"><div data-tocid="cep_intro-d9529e5534" class="topicref" data-id="cep_intro" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../stream/cep_events_defining.html" id="cep_intro-d9529e5534-link">定义事件</a></div></div></li><li role="treeitem"><div data-tocid="cep_intro-d9529e5580" class="topicref" data-id="cep_intro" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../stream/cep_monitor_defining.html" id="cep_intro-d9529e5580-link">定义 Monitor </a></div></div></li><li role="treeitem"><div data-tocid="cep_engine-d9529e5626" class="topicref" data-id="cep_engine" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../stream/cep_engine.html" id="cep_engine-d9529e5626-link">CEP 引擎</a></div></div></li><li role="treeitem"><div data-tocid="event_stream_serializer-d9529e5672" class="topicref" data-id="event_stream_serializer" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../stream/event_stream_serializer.html" id="event_stream_serializer-d9529e5672-link">事件流序列化器</a></div></div></li><li role="treeitem"><div data-tocid="event_stream_deserializer-d9529e5718" class="topicref" data-id="event_stream_deserializer" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../stream/event_stream_deserializer.html" id="event_stream_deserializer-d9529e5718-link">事件流反序列化器</a></div></div></li><li role="treeitem" class="active"><div data-tocid="cep_viewing-d9529e5764" class="topicref" data-id="cep_viewing" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../stream/cep_viewing.html" id="cep_viewing-d9529e5764-link">查看 CEP 引擎运行状态</a></div></div></li><li role="treeitem"><div data-tocid="cep_monitoring-d9529e5810" class="topicref" data-id="cep_monitoring" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../stream/cep_monitoring.html" id="cep_monitoring-d9529e5810-link">实时监控 CEP 引擎状态及数据</a></div></div></li><li role="treeitem"><div data-tocid="cep_application_scenario-d9529e5856" class="topicref" data-id="cep_application_scenario" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../stream/cep_application.html" id="cep_application_scenario-d9529e5856-link">应用场景</a></div></div></li><li role="treeitem"><div data-tocid="cep_application-d9529e5902" class="topicref" data-id="cep_application" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../stream/streaming_computing_engine_in_cep.html" id="cep_application-d9529e5902-link">流计算引擎在 CEP 中的应用</a></div></div></li><li role="treeitem"><div data-tocid="cep_terms-d9529e5949" class="topicref" data-id="cep_terms" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../stream/cep_terms.html" id="cep_terms-d9529e5949-link">术语表</a></div></div></li></ul></li><li role="treeitem" aria-expanded="false"><div data-tocid="tocId-d9529e5995" class="topicref" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action tocId-d9529e5995-link" class="wh-expand-btn"></span><div class="title"><a href="../stream/local_sub.html" id="tocId-d9529e5995-link">流处理结果交互方式</a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="tocId-d9529e6184" class="topicref" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action tocId-d9529e6184-link" class="wh-expand-btn"></span><div class="title"><a href="../stream/str_altair.html" id="tocId-d9529e6184-link">数据可视化工具</a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="tocId-d9529e6277" class="topicref" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action tocId-d9529e6277-link" class="wh-expand-btn"></span><div class="title"><a href="../tutorials/streaming_auto_sub.html" id="tocId-d9529e6277-link">金融场景应用案例</a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="tocId-d9529e6969" class="topicref" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action tocId-d9529e6969-link" class="wh-expand-btn"></span><div class="title"><a href="../tutorials/ddb_str_app_iot.html" id="tocId-d9529e6969-link">物联网场景应用案例</a></div></div></li></ul></li><li role="treeitem" aria-expanded="false"><div data-tocid="tocId-d9529e7385" class="topicref" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action tocId-d9529e7385-link" class="wh-expand-btn"></span><div class="title"><a href="../db_distr_comp/db_oper/import_data.html" id="tocId-d9529e7385-link">数据迁移</a><div class="wh-tooltip"><p class="shortdesc">如何从不同数据源向 DolphinDB 迁移数据</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="chap7_tutorials_system_management-d9529e7812" class="topicref" data-id="chap7_tutorials_system_management" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action chap7_tutorials_system_management-d9529e7812-link" class="wh-expand-btn"></span><div class="title"><a href="../sys_man/om_intro.html" id="chap7_tutorials_system_management-d9529e7812-link"><span class="keyword label">系统运维</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 的系统运维功能及方法</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="about_language_resources-d9529e16490" class="topicref" data-id="about_language_resources" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action about_language_resources-d9529e16490-link" class="wh-expand-btn"></span><div class="title"><a href="../progr/progr_intro.html" id="about_language_resources-d9529e16490-link"><span class="keyword label">编程语言</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 编程基本概念与方法、SQL 在 DolphinDB 的应用</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="functions_references-d9529e26503" class="topicref" data-id="functions_references" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action functions_references-d9529e26503-link" class="wh-expand-btn"></span><div class="title"><a href="../funcs/funcs_intro.html" id="functions_references-d9529e26503-link"><span class="keyword label">函数参考</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 函数分类、语法、详解及示例</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="api_protocol-d9529e86456" class="topicref" data-id="api_protocol" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action api_protocol-d9529e86456-link" class="wh-expand-btn"></span><div class="title"><a href="../api/connapi_intro.html" id="api_protocol-d9529e86456-link"><span class="keyword label">连接器 &amp; API</span></a><div class="wh-tooltip"><p class="shortdesc">面向不同编程语言的 DolphinDB API 及连接器，相关协议和用法</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="chap6_plugin-d9529e91976" class="topicref" data-id="chap6_plugin" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action chap6_plugin-d9529e91976-link" class="wh-expand-btn"></span><div class="title"><a href="../plugins/plg_intro.html" id="chap6_plugin-d9529e91976-link"><span class="keyword label">插件</span></a><div class="wh-tooltip"><p class="shortdesc">多个应用场景的插件使用说明和插件开发指导</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="third_party-d9529e94749" class="topicref" data-id="third_party" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action third_party-d9529e94749-link" class="wh-expand-btn"></span><div class="title"><a href="../third_party.html" id="third_party-d9529e94749-link">第三方工具</a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="about_tutorials-d9529e94980" class="topicref" data-id="about_tutorials" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action about_tutorials-d9529e94980-link" class="wh-expand-btn"></span><div class="title"><a href="../tutorials/about_tutorials.html" id="about_tutorials-d9529e94980-link"><span class="keyword label">教程</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 产品使用教程</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="tocId-d9529e101769" class="topicref" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action tocId-d9529e101769-link" class="wh-expand-btn"></span><div class="title"><a href="../rn/server/3_00_1.html" id="tocId-d9529e101769-link">版本说明</a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 版本发布历史</p></div></div></div></li></ul></div>
+		                        
+                            </div>
+                        </nav>
+                    
+                    
+                    <div class="col-lg-7 col-md-9 col-sm-12" id="wh_topic_body">
+                        <button id="wh_close_publication_toc_button" class="close-toc-button d-none" aria-label="Toggle publishing table of content" aria-controls="wh_publication_toc" aria-expanded="true">
+                            <span class="close-toc-icon-container">
+                                <span class="close-toc-icon"></span>     
+                            </span>
+                        </button>
+                        <button id="wh_close_topic_toc_button" class="close-toc-button d-none" aria-label="Toggle topic table of content" aria-controls="wh_topic_toc" aria-expanded="true">
+                            <span class="close-toc-icon-container">
+                                <span class="close-toc-icon"></span>     
+                            </span>
+                        </button>
+                        
+                        <div class=" wh_topic_content body "><main role="main"><article class="- topic/topic topic" role="article" aria-labelledby="ariaid-title1">
+    <h1 class="- topic/title title topictitle1" id="ariaid-title1">查看 CEP 引擎运行状态</h1>
+    <article class="- topic/topic topic nested1" aria-labelledby="ariaid-title2" id="topic_xh3_51v_x1c">
+        <h2 class="- topic/title title topictitle2" id="ariaid-title2">查看当前所有 CEP 引擎状态</h2>
+        <div class="- topic/body body">
+            <p class="- topic/p p">可通过 <code class="+ topic/ph pr-d/codeph ph codeph">getStreamEngineStat().CEPEngine</code> 查看当前所有 CEP
+                引擎的状态。返回一个表，包含以下字段：</p>
+            <div class="table-container"><table class="- topic/table table frame-all" id="topic_xh3_51v_x1c__table_dwl_1cv_x1c" data-ofbid="topic_xh3_51v_x1c__table_dwl_1cv_x1c" data-cols="2"><caption></caption><colgroup><col style="width:35.46099290780141%"/><col style="width:64.53900709219857%"/></colgroup><thead class="- topic/thead thead">
+                        <tr class="- topic/row">
+                            <th class="- topic/entry entry colsep-1 rowsep-1" id="topic_xh3_51v_x1c__table_dwl_1cv_x1c__entry__1">
+                                <p class="- topic/p p">列名</p>
+                            </th>
+                            <th class="- topic/entry entry colsep-0 rowsep-1" id="topic_xh3_51v_x1c__table_dwl_1cv_x1c__entry__2">
+                                <p class="- topic/p p">含义</p>
+                            </th>
+                        </tr>
+                    </thead><tbody class="- topic/tbody tbody">
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry colsep-1 rowsep-1" headers="topic_xh3_51v_x1c__table_dwl_1cv_x1c__entry__1">name</td>
+                            <td class="- topic/entry entry colsep-0 rowsep-1" headers="topic_xh3_51v_x1c__table_dwl_1cv_x1c__entry__2">CEP 引擎名称</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry colsep-1 rowsep-1" headers="topic_xh3_51v_x1c__table_dwl_1cv_x1c__entry__1">user</td>
+                            <td class="- topic/entry entry colsep-0 rowsep-1" headers="topic_xh3_51v_x1c__table_dwl_1cv_x1c__entry__2">创建 CEP 引擎的用户名</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry colsep-1 rowsep-1" headers="topic_xh3_51v_x1c__table_dwl_1cv_x1c__entry__1">status</td>
+                            <td class="- topic/entry entry colsep-0 rowsep-1" headers="topic_xh3_51v_x1c__table_dwl_1cv_x1c__entry__2">CEP 引擎状态</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry colsep-1 rowsep-1" headers="topic_xh3_51v_x1c__table_dwl_1cv_x1c__entry__1">lastErrorMessage</td>
+                            <td class="- topic/entry entry colsep-0 rowsep-1" headers="topic_xh3_51v_x1c__table_dwl_1cv_x1c__entry__2">最后一条错误信息</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry colsep-1 rowsep-1" headers="topic_xh3_51v_x1c__table_dwl_1cv_x1c__entry__1">lastErrorTimestamp</td>
+                            <td class="- topic/entry entry colsep-0 rowsep-1" headers="topic_xh3_51v_x1c__table_dwl_1cv_x1c__entry__2">最后一次错误信息的时间戳</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry colsep-1 rowsep-1" headers="topic_xh3_51v_x1c__table_dwl_1cv_x1c__entry__1">useSystemTime</td>
+                            <td class="- topic/entry entry colsep-0 rowsep-1" headers="topic_xh3_51v_x1c__table_dwl_1cv_x1c__entry__2">是否使用系统时间</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry colsep-1 rowsep-1" headers="topic_xh3_51v_x1c__table_dwl_1cv_x1c__entry__1">numOfSubEngine</td>
+                            <td class="- topic/entry entry colsep-0 rowsep-1" headers="topic_xh3_51v_x1c__table_dwl_1cv_x1c__entry__2">当前子引擎数量</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry colsep-1 rowsep-1" headers="topic_xh3_51v_x1c__table_dwl_1cv_x1c__entry__1">queueDepth</td>
+                            <td class="- topic/entry entry colsep-0 rowsep-1" headers="topic_xh3_51v_x1c__table_dwl_1cv_x1c__entry__2">队列深度</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry colsep-1 rowsep-1" headers="topic_xh3_51v_x1c__table_dwl_1cv_x1c__entry__1">eventsReceived</td>
+                            <td class="- topic/entry entry colsep-0 rowsep-1" headers="topic_xh3_51v_x1c__table_dwl_1cv_x1c__entry__2">从外部收到的事件数量</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry colsep-1 rowsep-1" headers="topic_xh3_51v_x1c__table_dwl_1cv_x1c__entry__1">eventsEmitted</td>
+                            <td class="- topic/entry entry colsep-0 rowsep-1" headers="topic_xh3_51v_x1c__table_dwl_1cv_x1c__entry__2">向外发送的事件数量</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry colsep-1 rowsep-0" headers="topic_xh3_51v_x1c__table_dwl_1cv_x1c__entry__1">eventsOnOutputQueue</td>
+                            <td class="- topic/entry entry colsep-0 rowsep-0" headers="topic_xh3_51v_x1c__table_dwl_1cv_x1c__entry__2">向外发送的事件队列中的事件数量</td>
+                        </tr>
+                    </tbody></table></div>
+            <section class="- topic/section section" id="topic_xh3_51v_x1c__section_ast_ch1_ybc" data-ofbid="topic_xh3_51v_x1c__section_ast_ch1_ybc"><h3 class="- topic/title title sectiontitle">查看指定 CEP 引擎详情</h3>
+                
+                        <p class="- topic/p p">通过 <code class="+ topic/ph pr-d/codeph ph codeph">getCEPEngineStat</code> 查看指定 CEP 引擎当前的运行状态，包括 CEP
+                    引擎及其子引擎的状态。</p>
+                        <p class="- topic/p p"><strong class="+ topic/ph hi-d/b ph b">语法</strong></p>
+                        <p class="- topic/p p"><code class="+ topic/ph pr-d/codeph ph codeph">getCEPEngineStat(engine)</code></p>
+                        <p class="- topic/p p"><strong class="+ topic/ph hi-d/b ph b">参数</strong></p>
+                        <p class="- topic/p p"><strong class="+ topic/ph hi-d/b ph b">engine</strong> CEP 引擎的句柄。</p>
+                        <p class="- topic/p p"><code class="+ topic/ph pr-d/codeph ph codeph">getCEPEngineStat</code> 返回一个字典，包含以下字段：</p>
+                        <ul class="- topic/ul ul" id="topic_xh3_51v_x1c__ul_bst_ch1_ybc" data-ofbid="topic_xh3_51v_x1c__ul_bst_ch1_ybc">
+                            <li class="- topic/li li">
+                                <p class="- topic/p p">EngineStat：一个字典，记录 CEP 引擎的状态，和
+                                        <code class="+ topic/ph pr-d/codeph ph codeph">getStreamEngineStat().CEPEngine</code>
+                                    返回的信息一致。</p>
+                                <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="topic_xh3_51v_x1c__codeblock_cst_ch1_ybc" data-ofbid="topic_xh3_51v_x1c__codeblock_cst_ch1_ybc"><code>eventsOnOutputQueue-&gt;0
+lastErrorTimestamp-&gt;
+numOfSubEngine-&gt;15
+lastErrorMessage-&gt;
+eventsEmitted-&gt;0
+eventsReceived-&gt;15
+name-&gt;test_CEP
+queueDepth-&gt;1024
+user-&gt;admin
+useSystemTime-&gt;true
+status-&gt;OK</code></pre>
+                            </li>
+                            <li class="- topic/li li">
+                                <p class="- topic/p p">eventSchema：记录所有 CEP 引擎中进行反序列化的事件及其结构。</p>
+                                <div class="table-container"><table class="- topic/table table frame-all" id="topic_xh3_51v_x1c__table_dst_ch1_ybc" data-ofbid="topic_xh3_51v_x1c__table_dst_ch1_ybc" data-cols="2"><caption></caption><colgroup><col style="width:24.330900243309006%"/><col style="width:75.66909975669101%"/></colgroup><thead class="- topic/thead thead">
+                                            <tr class="- topic/row">
+                                                <th class="- topic/entry entry colsep-1 rowsep-1" id="topic_xh3_51v_x1c__table_dst_ch1_ybc__entry__1">
+                                                  <p class="- topic/p p">列名</p>
+                                                </th>
+                                                <th class="- topic/entry entry colsep-0 rowsep-1" id="topic_xh3_51v_x1c__table_dst_ch1_ybc__entry__2">
+                                                  <p class="- topic/p p">含义</p>
+                                                </th>
+                                            </tr>
+                                        </thead><tbody class="- topic/tbody tbody">
+                                            <tr class="- topic/row">
+                                                <td class="- topic/entry entry colsep-1 rowsep-1" headers="topic_xh3_51v_x1c__table_dst_ch1_ybc__entry__1">eventType</td>
+                                                <td class="- topic/entry entry colsep-0 rowsep-1" headers="topic_xh3_51v_x1c__table_dst_ch1_ybc__entry__2">事件类型</td>
+                                            </tr>
+                                            <tr class="- topic/row">
+                                                <td class="- topic/entry entry colsep-1 rowsep-1" headers="topic_xh3_51v_x1c__table_dst_ch1_ybc__entry__1">eventField</td>
+                                                <td class="- topic/entry entry colsep-0 rowsep-1" headers="topic_xh3_51v_x1c__table_dst_ch1_ybc__entry__2">事件类型中所声明的字段名。多个字段名之间以逗号（,）分隔</td>
+                                            </tr>
+                                            <tr class="- topic/row">
+                                                <td class="- topic/entry entry colsep-1 rowsep-1" headers="topic_xh3_51v_x1c__table_dst_ch1_ybc__entry__1">fieldType</td>
+                                                <td class="- topic/entry entry colsep-0 rowsep-1" headers="topic_xh3_51v_x1c__table_dst_ch1_ybc__entry__2">eventField
+                                                  中各字段对应的数据类型的名称，多个名称之间以逗号（,）分隔</td>
+                                            </tr>
+                                            <tr class="- topic/row">
+                                                <td class="- topic/entry entry colsep-1 rowsep-1" headers="topic_xh3_51v_x1c__table_dst_ch1_ybc__entry__1">fieldTypeId</td>
+                                                <td class="- topic/entry entry colsep-0 rowsep-1" headers="topic_xh3_51v_x1c__table_dst_ch1_ybc__entry__2">eventField 中各字段对应的数据类型的 ID。为整型数组向量</td>
+                                            </tr>
+                                            <tr class="- topic/row">
+                                                <td class="- topic/entry entry colsep-1 rowsep-0" headers="topic_xh3_51v_x1c__table_dst_ch1_ybc__entry__1">fieldFormId</td>
+                                                <td class="- topic/entry entry colsep-0 rowsep-0" headers="topic_xh3_51v_x1c__table_dst_ch1_ybc__entry__2">
+                                                  <p class="- topic/p p">eventField 中各字段对应的数据形式的 ID。整型数组向量，0：标量; 1：向量;
+                                                  2：数据对; 3：矩阵; 4：集合; 5：字典; 6：表 </p>
+                                                  <p class="- topic/p p">注意：目前只能指定标量和向量，其他形式需要以 ANY
+                                                  类型指定，因此这里的返回值只有0和1两种</p>
+                                                </td>
+                                            </tr>
+                                        </tbody></table></div>
+                            </li>
+                            <li class="- topic/li li">
+                                <p class="- topic/p p">subEngineStat：一个表，记录每个子引擎的详细状态。</p>
+                                <div class="table-container"><table class="- topic/table table frame-all" id="topic_xh3_51v_x1c__table_est_ch1_ybc" data-ofbid="topic_xh3_51v_x1c__table_est_ch1_ybc" data-cols="2"><caption></caption><colgroup><col style="width:30.959752321981426%"/><col style="width:69.04024767801857%"/></colgroup><thead class="- topic/thead thead">
+                                            <tr class="- topic/row">
+                                                <th class="- topic/entry entry colsep-1 rowsep-1" id="topic_xh3_51v_x1c__table_est_ch1_ybc__entry__1">
+                                                  <p class="- topic/p p">列名</p>
+                                                </th>
+                                                <th class="- topic/entry entry colsep-0 rowsep-1" id="topic_xh3_51v_x1c__table_est_ch1_ybc__entry__2">
+                                                  <p class="- topic/p p">含义</p>
+                                                </th>
+                                            </tr>
+                                        </thead><tbody class="- topic/tbody tbody">
+                                            <tr class="- topic/row">
+                                                <td class="- topic/entry entry colsep-1 rowsep-1" headers="topic_xh3_51v_x1c__table_est_ch1_ybc__entry__1">subEngineName</td>
+                                                <td class="- topic/entry entry colsep-0 rowsep-1" headers="topic_xh3_51v_x1c__table_est_ch1_ybc__entry__2">子引擎的名称</td>
+                                            </tr>
+                                            <tr class="- topic/row">
+                                                <td class="- topic/entry entry colsep-1 rowsep-1" headers="topic_xh3_51v_x1c__table_est_ch1_ybc__entry__1">eventsOnInputQueue</td>
+                                                <td class="- topic/entry entry colsep-0 rowsep-1" headers="topic_xh3_51v_x1c__table_est_ch1_ybc__entry__2">当前子引擎的事件队列中待处理的事件数量</td>
+                                            </tr>
+                                            <tr class="- topic/row">
+                                                <td class="- topic/entry entry colsep-1 rowsep-1" headers="topic_xh3_51v_x1c__table_est_ch1_ybc__entry__1">monitorNumber</td>
+                                                <td class="- topic/entry entry colsep-0 rowsep-1" headers="topic_xh3_51v_x1c__table_est_ch1_ybc__entry__2">当前 Monitor 数量</td>
+                                            </tr>
+                                            <tr class="- topic/row">
+                                                <td class="- topic/entry entry colsep-1 rowsep-1" headers="topic_xh3_51v_x1c__table_est_ch1_ybc__entry__1">listeners</td>
+                                                <td class="- topic/entry entry colsep-0 rowsep-1" headers="topic_xh3_51v_x1c__table_est_ch1_ybc__entry__2">事件监听器的数量</td>
+                                            </tr>
+                                            <tr class="- topic/row">
+                                                <td class="- topic/entry entry colsep-1 rowsep-1" headers="topic_xh3_51v_x1c__table_est_ch1_ybc__entry__1">timers</td>
+                                                <td class="- topic/entry entry colsep-0 rowsep-1" headers="topic_xh3_51v_x1c__table_est_ch1_ybc__entry__2">计时器数量，当 <code class="+ topic/ph pr-d/codeph ph codeph">addEventListener</code>
+                                                  中指定了以下参数的任意一个都会创建1个计时器：<em class="+ topic/ph hi-d/i ph i">at</em>，<em class="+ topic/ph hi-d/i ph i">wait</em>，<em class="+ topic/ph hi-d/i ph i">within</em>，<em class="+ topic/ph hi-d/i ph i">exceedTime</em></td>
+                                            </tr>
+                                            <tr class="- topic/row">
+                                                <td class="- topic/entry entry colsep-1 rowsep-1" headers="topic_xh3_51v_x1c__table_est_ch1_ybc__entry__1">eventsRouted</td>
+                                        <td class="- topic/entry entry colsep-0 rowsep-1" headers="topic_xh3_51v_x1c__table_est_ch1_ybc__entry__2">插入到子引擎事件队列队首的事件数量</td>
+                                            </tr>
+                                            <tr class="- topic/row">
+                                                <td class="- topic/entry entry colsep-1 rowsep-1" headers="topic_xh3_51v_x1c__table_est_ch1_ybc__entry__1">eventsSent</td>
+                                                <td class="- topic/entry entry colsep-0 rowsep-1" headers="topic_xh3_51v_x1c__table_est_ch1_ybc__entry__2">插入到子引擎事件队列尾部的事件数量</td>
+                                            </tr>
+                                            <tr class="- topic/row">
+                                                <td class="- topic/entry entry colsep-1 rowsep-1" headers="topic_xh3_51v_x1c__table_est_ch1_ybc__entry__1">eventsReceived</td>
+                                                <td class="- topic/entry entry colsep-0 rowsep-1" headers="topic_xh3_51v_x1c__table_est_ch1_ybc__entry__2">从外部收到的事件数量</td>
+                                            </tr>
+                                            <tr class="- topic/row">
+                                                <td class="- topic/entry entry colsep-1 rowsep-1" headers="topic_xh3_51v_x1c__table_est_ch1_ybc__entry__1">eventsConsumed</td>
+                                                <td class="- topic/entry entry colsep-0 rowsep-1" headers="topic_xh3_51v_x1c__table_est_ch1_ybc__entry__2">匹配成功的事件数量</td>
+                                            </tr>
+                                            <tr class="- topic/row">
+                                                <td class="- topic/entry entry colsep-1 rowsep-1" headers="topic_xh3_51v_x1c__table_est_ch1_ybc__entry__1">lastEventTime</td>
+                                                <td class="- topic/entry entry colsep-0 rowsep-1" headers="topic_xh3_51v_x1c__table_est_ch1_ybc__entry__2">最近收到的事件时间</td>
+                                            </tr>
+                                            <tr class="- topic/row">
+                                                <td class="- topic/entry entry colsep-1 rowsep-1" headers="topic_xh3_51v_x1c__table_est_ch1_ybc__entry__1">lastErrorMessage</td>
+                                                <td class="- topic/entry entry colsep-0 rowsep-1" headers="topic_xh3_51v_x1c__table_est_ch1_ybc__entry__2">最近一条错误信息</td>
+                                            </tr>
+                                            <tr class="- topic/row">
+                                                <td class="- topic/entry entry colsep-1 rowsep-0" headers="topic_xh3_51v_x1c__table_est_ch1_ybc__entry__1">lastErrorTimestamp</td>
+                                                <td class="- topic/entry entry colsep-0 rowsep-0" headers="topic_xh3_51v_x1c__table_est_ch1_ybc__entry__2">最近一次错误信息的时间戳</td>
+                                            </tr>
+                                        </tbody></table></div>
+                            </li>
+                            <li class="- topic/li li">
+                                <p class="- topic/p p">dataViewEngines：一个表，记录所有 dataView 引擎的状态。</p>
+                                <div class="table-container"><table class="- topic/table table frame-all" id="topic_xh3_51v_x1c__table_fst_ch1_ybc" data-ofbid="topic_xh3_51v_x1c__table_fst_ch1_ybc" data-cols="2"><caption></caption><colgroup><col style="width:28.985507246376812%"/><col style="width:71.01449275362319%"/></colgroup><thead class="- topic/thead thead">
+                                            <tr class="- topic/row">
+                                                <th class="- topic/entry entry colsep-1 rowsep-1" id="topic_xh3_51v_x1c__table_fst_ch1_ybc__entry__1">
+                                                  <p class="- topic/p p">列名</p>
+                                                </th>
+                                                <th class="- topic/entry entry colsep-0 rowsep-1" id="topic_xh3_51v_x1c__table_fst_ch1_ybc__entry__2">
+                                                  <p class="- topic/p p">含义</p>
+                                                </th>
+                                            </tr>
+                                        </thead><tbody class="- topic/tbody tbody">
+                                            <tr class="- topic/row">
+                                                <td class="- topic/entry entry colsep-1 rowsep-1" headers="topic_xh3_51v_x1c__table_fst_ch1_ybc__entry__1">name</td>
+                                                <td class="- topic/entry entry colsep-0 rowsep-1" headers="topic_xh3_51v_x1c__table_fst_ch1_ybc__entry__2">dataView 引擎的名称</td>
+                                            </tr>
+                                            <tr class="- topic/row">
+                                                <td class="- topic/entry entry colsep-1 rowsep-1" headers="topic_xh3_51v_x1c__table_fst_ch1_ybc__entry__1">user</td>
+                                                <td class="- topic/entry entry colsep-0 rowsep-1" headers="topic_xh3_51v_x1c__table_fst_ch1_ybc__entry__2">创建 dataView 引擎的用户名</td>
+                                            </tr>
+                                            <tr class="- topic/row">
+                                                <td class="- topic/entry entry colsep-1 rowsep-1" headers="topic_xh3_51v_x1c__table_fst_ch1_ybc__entry__1">status</td>
+                                                <td class="- topic/entry entry colsep-0 rowsep-1" headers="topic_xh3_51v_x1c__table_fst_ch1_ybc__entry__2">dataView 引擎状态</td>
+                                            </tr>
+                                            <tr class="- topic/row">
+                                                <td class="- topic/entry entry colsep-1 rowsep-1" headers="topic_xh3_51v_x1c__table_fst_ch1_ybc__entry__1">lastErrorMessage</td>
+                                                <td class="- topic/entry entry colsep-0 rowsep-1" headers="topic_xh3_51v_x1c__table_fst_ch1_ybc__entry__2">最后一条错误信息</td>
+                                            </tr>
+                                            <tr class="- topic/row">
+                                                <td class="- topic/entry entry colsep-1 rowsep-1" headers="topic_xh3_51v_x1c__table_fst_ch1_ybc__entry__1">lastErrorTimestamp</td>
+                                                <td class="- topic/entry entry colsep-0 rowsep-1" headers="topic_xh3_51v_x1c__table_fst_ch1_ybc__entry__2">最后一次错误信息的时间戳</td>
+                                            </tr>
+                                            <tr class="- topic/row">
+                                                <td class="- topic/entry entry colsep-1 rowsep-1" headers="topic_xh3_51v_x1c__table_fst_ch1_ybc__entry__1">keyColumns</td>
+                                                <td class="- topic/entry entry colsep-0 rowsep-1" headers="topic_xh3_51v_x1c__table_fst_ch1_ybc__entry__2">参数 keyColumns 指定的字段。多个字段之间以空格分隔</td>
+                                            </tr>
+                                            <tr class="- topic/row">
+                                                <td class="- topic/entry entry colsep-1 rowsep-1" headers="topic_xh3_51v_x1c__table_fst_ch1_ybc__entry__1">outputTableName</td>
+                                                <td class="- topic/entry entry colsep-0 rowsep-1" headers="topic_xh3_51v_x1c__table_fst_ch1_ybc__entry__2">输出表的名称</td>
+                                            </tr>
+                                            <tr class="- topic/row">
+                                                <td class="- topic/entry entry colsep-1 rowsep-1" headers="topic_xh3_51v_x1c__table_fst_ch1_ybc__entry__1">useSystemTime</td>
+                                                <td class="- topic/entry entry colsep-0 rowsep-1" headers="topic_xh3_51v_x1c__table_fst_ch1_ybc__entry__2">是否使用系统时间</td>
+                                            </tr>
+                                            <tr class="- topic/row">
+                                                <td class="- topic/entry entry colsep-1 rowsep-1" headers="topic_xh3_51v_x1c__table_fst_ch1_ybc__entry__1">throttle</td>
+                                                <td class="- topic/entry entry colsep-0 rowsep-1" headers="topic_xh3_51v_x1c__table_fst_ch1_ybc__entry__2">数据输出到 outputTable 的时间间隔。如果未指定 <em class="+ topic/ph hi-d/i ph i">throttle</em>
+                                                  参数，则输出为空</td>
+                                            </tr>
+                                            <tr class="- topic/row">
+                                                <td class="- topic/entry entry colsep-1 rowsep-1" headers="topic_xh3_51v_x1c__table_fst_ch1_ybc__entry__1">numItems</td>
+                                                <td class="- topic/entry entry colsep-0 rowsep-1" headers="topic_xh3_51v_x1c__table_fst_ch1_ybc__entry__2">dataView 引擎中的数据行数</td>
+                                            </tr>
+                                            <tr class="- topic/row">
+                                                <td class="- topic/entry entry colsep-1 rowsep-0" headers="topic_xh3_51v_x1c__table_fst_ch1_ybc__entry__1">memoryUsed</td>
+                                                <td class="- topic/entry entry colsep-0 rowsep-0" headers="topic_xh3_51v_x1c__table_fst_ch1_ybc__entry__2">dataView 引擎所占用的内存量，单位为字节</td>
+                                            </tr>
+                                        </tbody></table></div>
+                            </li>
+                        </ul>
+            </section>
+        </div>
+    </article>
+</article></main></div>
+                        
+                        
+                        
+                        
+                        
+                        
+                    </div>
+                    
+                        <nav role="navigation" id="wh_topic_toc" aria-label="On this page" class="col-lg-2 d-none d-lg-block navbar d-print-none"> 
+                            <div id="wh_topic_toc_content">
+		                        
+	                            <div class=" wh_topic_toc "><div class="wh_topic_label">在本页上</div><ul><li class="topic-item"><a href="#topic_xh3_51v_x1c" data-tocid="topic_xh3_51v_x1c">查看当前所有 CEP 引擎状态</a><ul><li class="section-item"><div class="section-title"><a href="#topic_xh3_51v_x1c__section_ast_ch1_ybc" data-tocid="topic_xh3_51v_x1c__section_ast_ch1_ybc">查看指定 CEP 引擎详情</a></div></li></ul></li></ul></div>
+	                        	
+                        	</div>
+                        </nav>
+                    
+                </div>
+            </div>
+            
+            
+            
+        </div> 
+        <footer class="navbar navbar-default wh_footer">
+  <div class=" footer-container mx-auto ">
+<title>Copyright</title><p><b> ©2024 浙江智臾科技有限公司 浙ICP备18048711号-3</b></p>
+  </div>
+</footer>
+        
+        <div id="go2top" class="d-print-none">
+            <span class="oxy-icon oxy-icon-up"></span>
+        </div>
+        
+        <div id="modal_img_large" class="modal">
+            <span class="close oxy-icon oxy-icon-remove"></span>
+            <div id="modal_img_container"></div>
+            <div id="caption"></div>
+        </div>
+        
+        
+        
+    </body>
+</html>

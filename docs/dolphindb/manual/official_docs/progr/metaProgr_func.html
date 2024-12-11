@@ -1,0 +1,1248 @@
+<!DOCTYPE html><html xmlns="http://www.w3.org/1999/xhtml" xml:lang="zh" lang="zh" data-whc_version="26.0">
+    <head><link rel="shortcut icon" href="../favicon.ico"/><link rel="icon" href="../favicon.ico"/><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><meta http-equiv="X-UA-Compatible" content="IE=edge"/><meta name="description" content="函数 expr 从对象，运算符或其他元代码生成元代码。 语法: expr(X1, X2, ......) ，其中X可以是对象，运算符或其他元代码。 expr(6,&lt;,8); // output &lt; 6 &lt; 8 &gt; expr(sum, 1 2 3); // output &lt; sum [1,2,3] &gt; a=6; expr(a,+,1); // output &lt; 6 + 1 &gt; ..."/><meta name="DC.rights.owner" content="(C) 版权 2024"/><meta name="copyright" content="(C) 版权 2024"/><meta name="generator" content="DITA-OT"/><meta name="DC.type" content="topic"/><meta name="DC.coverage" content=""/><meta name="DC.relation" content="../progr/objs/meta_progr.html"/><meta name="prodname" content="DolphinDB"/><meta name="brand" content="DolphinDB"/><meta name="DC.creator" content="DolphinDB"/><meta name="DC.publisher" content="DDB N/A DDB 200"/><meta name="DC.format" content="HTML5"/><meta name="DC.identifier" content="元编程"/><title>基于函数的元编程</title><!--  Generated with Oxygen version 26.0, build number 2024012323.  --><meta name="wh-path2root" content="../"/><meta name="wh-toc-id" content="元编程-d9529e22244"/><meta name="wh-source-relpath" content="progr/metaProgr_func.dita"/><meta name="wh-out-relpath" content="progr/metaProgr_func.html"/>
+
+    <link rel="stylesheet" type="text/css" href="../oxygen-webhelp/app/commons.css?buildId=2024012323"/>
+    <link rel="stylesheet" type="text/css" href="../oxygen-webhelp/app/topic.css?buildId=2024012323"/>
+
+    <script src="../oxygen-webhelp/app/options/properties.js?buildId=20240704100525"></script>
+    <script src="../oxygen-webhelp/app/localization/strings.js?buildId=2024012323"></script>
+    <script src="../oxygen-webhelp/app/search/index/keywords.js?buildId=20240704100525"></script>
+    <script defer="defer" src="../oxygen-webhelp/app/commons.js?buildId=2024012323"></script>
+    <script defer="defer" src="../oxygen-webhelp/app/topic.js?buildId=2024012323"></script>
+<link rel="stylesheet" type="text/css" href="../oxygen-webhelp/template/styles.css?buildId=2024012323"/><script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script><script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script></head>
+
+    <body id="元编程" class="wh_topic_page frmBody">
+        <a href="#wh_topic_body" class="sr-only sr-only-focusable">
+            跳转到主要内容
+        </a>
+        
+        
+        
+        
+        <header class="navbar navbar-default wh_header">
+    <div class="container-fluid">
+        <div xmlns:whc="http://www.oxygenxml.com/webhelp/components" class="wh_header_flex_container navbar-nav navbar-expand-md navbar-dark">
+            <div class="wh_logo_and_publication_title_container">
+                <div class="wh_logo_and_publication_title">
+                    
+                    <a href="https://www.dolphindb.cn" class=" wh_logo d-none d-sm-block "><img src="../logo.png" alt="  DolphinDB 文档中心  "/></a>
+                    <div class=" wh_publication_title "><a href="../index.html"><span class="booktitle">  <span class="ph mainbooktitle">DolphinDB 文档中心</span>  </span></a></div>
+                    
+                </div>
+                
+                
+            </div>
+
+            <div class="wh_top_menu_and_indexterms_link collapse navbar-collapse" id="wh_top_menu_and_indexterms_link">
+                
+                
+                
+                
+            </div>
+        <div class=" wh_search_input navbar-form wh_topic_page_search search " role="form">
+            
+            
+            
+            <form id="searchForm" method="get" role="search" action="../search.html"><div><input type="search" placeholder="搜索 " class="wh_search_textfield" id="textToSearch" name="searchQuery" aria-label="搜索查询" required="required"/><button type="submit" class="wh_search_button" aria-label="搜索"><span class="search_input_text">搜索</span></button></div></form>
+            
+            <script src="/vendors/react/umd/react.production.min.js" defer="defer"></script>
+<script src="/vendors/react-dom/umd/react-dom.production.min.js" defer="defer"></script>
+<script src="/vendors/dayjs/dayjs.min.js" defer="defer"></script>
+<script src="/vendors/antd/dist/antd.min.js" defer="defer"></script>
+<script src="/vendors/@ant-design/icons/dist/index.umd.min.js" defer="defer"></script>
+<script src="/zh/index.js" type="module"></script>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js" defer="defer"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML" defer="defer"><!--
+
+
+--></script>
+
+            
+        </div></div>
+    </div>
+</header>
+        
+        
+         
+        
+        
+        
+        <div class="container-fluid" id="wh_topic_container">
+            <div class="row">
+
+                <nav class="wh_tools d-print-none navbar-expand-md" aria-label="Tools">
+                    
+                    <div data-tooltip-position="bottom" class=" wh_breadcrumb "><ol class="d-print-none"><li><span class="home"><a href="../index.html"><span>主页</span></a></span></li><li><div class="topicref" data-id="about_language_resources"><div class="title"><a href="../progr/progr_intro.html"><span class="keyword label">编程语言</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 编程基本概念与方法、SQL 在 DolphinDB 的应用</p></div></div></div></li><li><div class="topicref" data-id="chap4_db_programming"><div class="title"><a href="../progr/lang_intro.html"><span class="keyword label">DolphinDB 脚本语言</span></a><div class="wh-tooltip"><p class="shortdesc"> 脚本编程相关概念参考，包括：数据类型与形式、对象、运算符、编程语句、数据操作、函数化编程、文件操作和 SQL 语句。 </p></div></div></div></li><li><div class="topicref" data-id="元编程"><div class="title"><a href="../progr/objs/meta_progr.html"><span class="keyword label">元编程</span></a></div></div></li><li class="active"><div class="topicref" data-id="元编程"><div class="title"><a href="../progr/metaProgr_func.html"><span class="keyword label">基于函数的元编程</span></a></div></div></li></ol></div>
+                    
+                    
+                    
+                    <div class="wh_right_tools">
+                        <button class="wh_hide_highlight" aria-label="切换搜索突出显示" title="切换搜索突出显示"></button>
+                        <button class="webhelp_expand_collapse_sections" data-next-state="collapsed" aria-label="折叠截面" title="折叠截面"></button>
+                        
+                        
+                        
+                        
+                        <div class=" wh_print_link print d-none d-md-inline-block "><button onClick="window.print()" title="打印此页" aria-label="打印此页"></button></div>
+                        
+                        <button type="button" id="wh_toc_button" class="custom-toggler navbar-toggler collapsed wh_toggle_button navbar-light" aria-expanded="false" aria-label="Toggle publishing table of content" aria-controls="wh_publication_toc">
+                            <span class="navbar-toggler-icon"></span>
+                        </button>
+                    </div>
+                    
+                </nav>
+            </div>
+            
+            
+            
+            
+            <div class="wh_content_area">
+                <div class="row">
+                    
+                        <nav id="wh_publication_toc" class="col-lg-3 col-md-3 col-sm-12 d-md-block d-none d-print-none" aria-label="Table of Contents Container">
+                            <div id="wh_publication_toc_content">
+		                        
+                            	<div class=" wh_publication_toc " data-tooltip-position="right"><span class="expand-button-action-labels"><span id="button-expand-action" role="button" aria-label="Expand"></span><span id="button-collapse-action" role="button" aria-label="Collapse"></span><span id="button-pending-action" role="button" aria-label="Pending"></span></span><ul role="tree" aria-label="Table of Contents"><li role="treeitem"><div data-tocid="new_chap_about_sect_ddb_docs_intro-d9529e87" class="topicref" data-id="new_chap_about_sect_ddb_docs_intro" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../about/ddb_docs_intro.html" id="new_chap_about_sect_ddb_docs_intro-d9529e87-link">文档使用说明</a><div class="wh-tooltip"><p class="shortdesc">如何获取 DolphinDB 帮助信息</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="chap1_getstarted-d9529e140" class="topicref" data-id="chap1_getstarted" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action chap1_getstarted-d9529e140-link" class="wh-expand-btn"></span><div class="title"><a href="../getstarted/chap1_getstarted.html" id="chap1_getstarted-d9529e140-link"><span class="keyword label">快速上手</span></a><div class="wh-tooltip"><p class="shortdesc">如何快速部署 DolphinDB、建库建表、写入和查询数据</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="sectionddb_deployment-d9529e335" class="topicref" data-id="sectionddb_deployment" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action sectionddb_deployment-d9529e335-link" class="wh-expand-btn"></span><div class="title"><a href="../deploy/deploy_intro.html" id="sectionddb_deployment-d9529e335-link"><span class="keyword label">部署</span></a><div class="wh-tooltip"><p class="shortdesc">如何在不同的场景中部署 DolphinDB</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="new_chap_database_manage_new_chap_dbmanage_landing_page-d9529e2313" class="topicref" data-id="new_chap_database_manage_new_chap_dbmanage_landing_page" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action new_chap_database_manage_new_chap_dbmanage_landing_page-d9529e2313-link" class="wh-expand-btn"></span><div class="title"><a href="../db_distr_comp/cfg/db_intro.html" id="new_chap_database_manage_new_chap_dbmanage_landing_page-d9529e2313-link"><span class="keyword label">数据库</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 数据库的基本概念</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="chap7_tutorials_streaming-d9529e3490" class="topicref" data-id="chap7_tutorials_streaming" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action chap7_tutorials_streaming-d9529e3490-link" class="wh-expand-btn"></span><div class="title"><a href="../stream/str_intro.html" id="chap7_tutorials_streaming-d9529e3490-link"><span class="keyword label">流数据</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 流数据引擎及流数据计算的基本概念</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="tocId-d9529e7385" class="topicref" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action tocId-d9529e7385-link" class="wh-expand-btn"></span><div class="title"><a href="../db_distr_comp/db_oper/import_data.html" id="tocId-d9529e7385-link">数据迁移</a><div class="wh-tooltip"><p class="shortdesc">如何从不同数据源向 DolphinDB 迁移数据</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="chap7_tutorials_system_management-d9529e7812" class="topicref" data-id="chap7_tutorials_system_management" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action chap7_tutorials_system_management-d9529e7812-link" class="wh-expand-btn"></span><div class="title"><a href="../sys_man/om_intro.html" id="chap7_tutorials_system_management-d9529e7812-link"><span class="keyword label">系统运维</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 的系统运维功能及方法</p></div></div></div></li><li role="treeitem" aria-expanded="true"><div data-tocid="about_language_resources-d9529e16490" class="topicref" data-id="about_language_resources" data-state="expanded"><span role="button" tabindex="0" aria-labelledby="button-collapse-action about_language_resources-d9529e16490-link" class="wh-expand-btn"></span><div class="title"><a href="../progr/progr_intro.html" id="about_language_resources-d9529e16490-link"><span class="keyword label">编程语言</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 编程基本概念与方法、SQL 在 DolphinDB 的应用</p></div></div></div><ul role="group" class="navbar-nav nav-list"><li role="treeitem" aria-expanded="true"><div data-tocid="chap4_db_programming-d9529e16543" class="topicref" data-id="chap4_db_programming" data-state="expanded"><span role="button" tabindex="0" aria-labelledby="button-collapse-action chap4_db_programming-d9529e16543-link" class="wh-expand-btn"></span><div class="title"><a href="../progr/lang_intro.html" id="chap4_db_programming-d9529e16543-link"><span class="keyword label">DolphinDB 脚本语言</span></a><div class="wh-tooltip"><p class="shortdesc"> 脚本编程相关概念参考，包括：数据类型与形式、对象、运算符、编程语句、数据操作、函数化编程、文件操作和 SQL 语句。 </p></div></div></div><ul role="group" class="navbar-nav nav-list"><li role="treeitem" aria-expanded="false"><div data-tocid="chap4_sect_datatypes_forms-d9529e16594" class="topicref" data-id="chap4_sect_datatypes_forms" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action chap4_sect_datatypes_forms-d9529e16594-link" class="wh-expand-btn"></span><div class="title"><a href="../progr/data_types_forms_intro.html" id="chap4_sect_datatypes_forms-d9529e16594-link"><span class="keyword">数据类型与形式</span></a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="chap4_sect_objects-d9529e17632" class="topicref" data-id="chap4_sect_objects" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action chap4_sect_objects-d9529e17632-link" class="wh-expand-btn"></span><div class="title"><a href="../progr/objs/objects.html" id="chap4_sect_objects-d9529e17632-link"><span class="keyword label">对象</span></a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="chap4_sect_operators-d9529e18069" class="topicref" data-id="chap4_sect_operators" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action chap4_sect_operators-d9529e18069-link" class="wh-expand-btn"></span><div class="title"><a href="../progr/operators/operators.html" id="chap4_sect_operators-d9529e18069-link"><span class="keyword label">运算符</span></a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="chap4_sect_programming_statements-d9529e19654" class="topicref" data-id="chap4_sect_programming_statements" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action chap4_sect_programming_statements-d9529e19654-link" class="wh-expand-btn"></span><div class="title"><a href="../progr/statements/statements_intro.html" id="chap4_sect_programming_statements-d9529e19654-link"><span class="keyword label">编程语句</span></a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="chap4_sect_data_manipulation-d9529e20900" class="topicref" data-id="chap4_sect_data_manipulation" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action chap4_sect_data_manipulation-d9529e20900-link" class="wh-expand-btn"></span><div class="title"><a href="../progr/data_mani/dm_intro.html" id="chap4_sect_data_manipulation-d9529e20900-link"><span class="keyword label">数据操作</span></a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="chap4_sect_func_programming-d9529e21873" class="topicref" data-id="chap4_sect_func_programming" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action chap4_sect_func_programming-d9529e21873-link" class="wh-expand-btn"></span><div class="title"><a href="../progr/func_progr.html" id="chap4_sect_func_programming-d9529e21873-link"><span class="keyword label">函数化编程</span></a></div></div></li><li role="treeitem" aria-expanded="true"><div data-tocid="元编程-d9529e22197" class="topicref" data-id="元编程" data-state="expanded"><span role="button" tabindex="0" aria-labelledby="button-collapse-action 元编程-d9529e22197-link" class="wh-expand-btn"></span><div class="title"><a href="../progr/objs/meta_progr.html" id="元编程-d9529e22197-link"><span class="keyword label">元编程</span></a></div></div><ul role="group" class="navbar-nav nav-list"><li role="treeitem" class="active"><div data-tocid="元编程-d9529e22244" class="topicref" data-id="元编程" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../progr/metaProgr_func.html" id="元编程-d9529e22244-link"><span class="keyword label">基于函数的元编程</span></a></div></div></li><li role="treeitem"><div data-tocid="macrovariations-d9529e22291" class="topicref" data-id="macrovariations" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../progr/macrovariations.html" id="macrovariations-d9529e22291-link">基于宏变量的元编程</a></div></div></li></ul></li><li role="treeitem" aria-expanded="false"><div data-tocid="oop-d9529e22337" class="topicref" data-id="oop" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action oop-d9529e22337-link" class="wh-expand-btn"></span><div class="title"><a href="../progr/oop.html" id="oop-d9529e22337-link">面向对象编程</a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="文件操作-d9529e22705" class="topicref" data-id="文件操作" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action 文件操作-d9529e22705-link" class="wh-expand-btn"></span><div class="title"><a href="../progr/file_io/file_oper.html" id="文件操作-d9529e22705-link"><span class="keyword label">文件操作</span></a></div></div></li></ul></li><li role="treeitem" aria-expanded="false"><div data-tocid="chap4_sect_sql_statements-d9529e22890" class="topicref" data-id="chap4_sect_sql_statements" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action chap4_sect_sql_statements-d9529e22890-link" class="wh-expand-btn"></span><div class="title"><a href="../progr/sql/sql_intro.html" id="chap4_sect_sql_statements-d9529e22890-link"><span class="keyword label">SQL 语句</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 中 SQL 语句的基本语法和用法</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="python-parser-简介-d9529e25535" class="topicref" data-id="python-parser-简介" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action python-parser-简介-d9529e25535-link" class="wh-expand-btn"></span><div class="title"><a href="../progr/py_parser/py_par_intro.html" id="python-parser-简介-d9529e25535-link"><span class="keyword label">Python Parser</span></a></div></div></li></ul></li><li role="treeitem" aria-expanded="false"><div data-tocid="functions_references-d9529e26503" class="topicref" data-id="functions_references" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action functions_references-d9529e26503-link" class="wh-expand-btn"></span><div class="title"><a href="../funcs/funcs_intro.html" id="functions_references-d9529e26503-link"><span class="keyword label">函数参考</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 函数分类、语法、详解及示例</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="api_protocol-d9529e86456" class="topicref" data-id="api_protocol" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action api_protocol-d9529e86456-link" class="wh-expand-btn"></span><div class="title"><a href="../api/connapi_intro.html" id="api_protocol-d9529e86456-link"><span class="keyword label">连接器 &amp; API</span></a><div class="wh-tooltip"><p class="shortdesc">面向不同编程语言的 DolphinDB API 及连接器，相关协议和用法</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="chap6_plugin-d9529e91976" class="topicref" data-id="chap6_plugin" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action chap6_plugin-d9529e91976-link" class="wh-expand-btn"></span><div class="title"><a href="../plugins/plg_intro.html" id="chap6_plugin-d9529e91976-link"><span class="keyword label">插件</span></a><div class="wh-tooltip"><p class="shortdesc">多个应用场景的插件使用说明和插件开发指导</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="third_party-d9529e94749" class="topicref" data-id="third_party" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action third_party-d9529e94749-link" class="wh-expand-btn"></span><div class="title"><a href="../third_party.html" id="third_party-d9529e94749-link">第三方工具</a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="about_tutorials-d9529e94980" class="topicref" data-id="about_tutorials" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action about_tutorials-d9529e94980-link" class="wh-expand-btn"></span><div class="title"><a href="../tutorials/about_tutorials.html" id="about_tutorials-d9529e94980-link"><span class="keyword label">教程</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 产品使用教程</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="tocId-d9529e101769" class="topicref" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action tocId-d9529e101769-link" class="wh-expand-btn"></span><div class="title"><a href="../rn/server/3_00_1.html" id="tocId-d9529e101769-link">版本说明</a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 版本发布历史</p></div></div></div></li></ul></div>
+		                        
+                            </div>
+                        </nav>
+                    
+                    
+                    <div class="col-lg-7 col-md-9 col-sm-12" id="wh_topic_body">
+                        <button id="wh_close_publication_toc_button" class="close-toc-button d-none" aria-label="Toggle publishing table of content" aria-controls="wh_publication_toc" aria-expanded="true">
+                            <span class="close-toc-icon-container">
+                                <span class="close-toc-icon"></span>     
+                            </span>
+                        </button>
+                        <button id="wh_close_topic_toc_button" class="close-toc-button d-none" aria-label="Toggle topic table of content" aria-controls="wh_topic_toc" aria-expanded="true">
+                            <span class="close-toc-icon-container">
+                                <span class="close-toc-icon"></span>     
+                            </span>
+                        </button>
+                        
+                        <div class=" wh_topic_content body "><main role="main"><article class="- topic/topic topic" role="article" aria-labelledby="ariaid-title1">
+    <h1 class="- topic/title title topictitle1" id="ariaid-title1"><span class="- topic/keyword keyword label">基于函数的元编程</span></h1>
+    <div class="- topic/body body"></div>
+    <article class="- topic/topic topic nested1" aria-labelledby="ariaid-title2" id="相关函数">
+        <h2 class="- topic/title title topictitle2" id="ariaid-title2">相关函数</h2>
+        <div class="- topic/body body">
+            <ul class="- topic/ul ul" id="相关函数__ol_sxv_5hn_ryb" data-ofbid="相关函数__ol_sxv_5hn_ryb">
+                <li class="- topic/li li">
+                    <p class="- topic/p p" id="相关函数__p_txv_5hn_ryb" data-ofbid="相关函数__p_txv_5hn_ryb">函数 <a class="- topic/xref xref" href="../funcs/e/expr.html">expr</a>
+                        从对象，运算符或其他元代码生成元代码。</p>
+                    <p class="- topic/p p" id="相关函数__p_uxv_5hn_ryb" data-ofbid="相关函数__p_uxv_5hn_ryb">语法: expr(X1, X2, ......) ，其中X可以是对象，运算符或其他元代码。</p>
+                    <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="相关函数__codeblock_vxv_5hn_ryb" data-ofbid="相关函数__codeblock_vxv_5hn_ryb"><code>expr(6,&lt;,8);
+// output
+&lt; 6 &lt; 8 &gt;
+
+expr(sum, 1 2 3);
+// output
+&lt; sum [1,2,3] &gt;
+
+a=6;
+expr(a,+,1);
+// output
+&lt; 6 + 1 &gt;
+
+expr(&lt;a&gt;,+,1);
+// output
+&lt; a + 1 &gt;
+
+expr(&lt;a&gt;,+,&lt;b&gt;);
+// output
+&lt; a + b &gt;
+
+expr(a+7,*,8);
+// output
+&lt; 13 * 8 &gt;
+
+expr(&lt;a+7&gt;,*,8);
+// output
+&lt; (a + 7) * 8 &gt;
+
+expr(not, &lt; a &gt;);
+// output
+&lt; ! a &gt;</code></pre>
+                </li>
+                <li class="- topic/li li">
+                    <p class="- topic/p p" id="相关函数__p_xxv_5hn_ryb" data-ofbid="相关函数__p_xxv_5hn_ryb">函数 <a class="- topic/xref xref" href="../funcs/e/eval.html">eval</a>
+                        执行给定的元代码。</p>
+                    <p class="- topic/p p" id="相关函数__p_yxv_5hn_ryb" data-ofbid="相关函数__p_yxv_5hn_ryb">语法: eval(&lt;X&gt;) ，其中X是被执行的元代码。</p>
+                    <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="相关函数__codeblock_zxv_5hn_ryb" data-ofbid="相关函数__codeblock_zxv_5hn_ryb"><code>eval(&lt;1+2&gt;);
+// output
+3
+
+eval(&lt;1+2+3=10&gt;);
+// output
+0
+
+eval(expr(6,&lt;,8));
+// output
+1
+
+eval(expr(sum, 1 2 3));
+// output
+6
+
+a=6; b=9;
+eval(expr(&lt;a&gt;,+,&lt;b&gt;));
+// output
+15</code></pre>
+                </li>
+                <li class="- topic/li li">
+                    <p class="- topic/p p" id="相关函数__p_byv_5hn_ryb" data-ofbid="相关函数__p_byv_5hn_ryb">函数 <a class="- topic/xref xref" href="../funcs/s/sqlCol.html">sqlCol</a>
+                        将列名转换为表达式。</p>
+                    <p class="- topic/p p" id="相关函数__p_cyv_5hn_ryb" data-ofbid="相关函数__p_cyv_5hn_ryb">语法：sqlCol(colNames)，其中colNames可以是列名标量或向量。每一个列名都要用反引号、双引号或单引号。</p>
+                    <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="相关函数__codeblock_dyv_5hn_ryb" data-ofbid="相关函数__codeblock_dyv_5hn_ryb"><code>sqlCol(`PRC);
+// output
+&lt; PRC &gt;
+
+sqlCol(["PRC", "RET", "DATE", "TICKER"]);
+// output
+(&lt; PRC &gt;,&lt; RET &gt;,&lt; DATE &gt;,&lt; TICKER &gt;)</code></pre>
+                </li>
+                <li class="- topic/li li">
+                    <p class="- topic/p p" id="相关函数__p_fyv_5hn_ryb" data-ofbid="相关函数__p_fyv_5hn_ryb">函数 <a class="- topic/xref xref" href="../funcs/s/sqlColAlias.html">sqlColAlias</a> 使用元代码和一个别名（可选参数）来定义一个列。计算列会经常使用此函数。</p>
+                    <p class="- topic/p p" id="相关函数__p_gyv_5hn_ryb" data-ofbid="相关函数__p_gyv_5hn_ryb">语法: sqlColAlias(&lt;metacode&gt;, [aliasName])</p>
+                    <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="相关函数__codeblock_hyv_5hn_ryb" data-ofbid="相关函数__codeblock_hyv_5hn_ryb"><code>sqlColAlias(&lt;x&gt;, `y);
+// output
+&lt; x as y &gt;
+
+sqlColAlias(&lt;avg(PRC)&gt;, `avgPRC);
+// output
+&lt; avg(PRC) as avgPRC &gt;
+
+sqlColAlias(&lt;avg(PRC)&gt;);
+// output
+&lt; avg(PRC) as avg_PRC &gt;</code></pre>
+                </li>
+                <li class="- topic/li li">
+                    <p class="- topic/p p" id="相关函数__p_jyv_5hn_ryb" data-ofbid="相关函数__p_jyv_5hn_ryb">函数 <a class="- topic/xref xref" href="../funcs/s/sql.html">sql</a>
+                        可以动态生成SQL语句。</p>
+                    <p class="- topic/p p" id="相关函数__p_kyv_5hn_ryb" data-ofbid="相关函数__p_kyv_5hn_ryb">语法: sql(select, from, [where], [groupBy], [groupFlag],
+                        [csort], [ascSort], [having], [orderBy], [ascOrder], [limit], [hint])</p>
+                    <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="相关函数__codeblock_lyv_5hn_ryb" data-ofbid="相关函数__codeblock_lyv_5hn_ryb"><code>symbol = take(`GE,6) join take(`MSFT,6) join take(`F,6)
+date=take(take(2017.01.03,2) join take(2017.01.04,4), 18)
+price=31.82 31.69 31.92 31.8  31.75 31.76 63.12 62.58 63.12 62.77 61.86 62.3 12.46 12.59 13.24 13.41 13.36 13.17
+volume=2300 3500 3700 2100 1200 4600 1800 3800 6400 4200 2300 6800 4200 5600 8900 2300 6300 9600
+t1 = table(symbol, date, price, volume);
+
+t1;</code></pre>
+                    <div class="table-container"><table class="- topic/table table" id="相关函数__table_myv_5hn_ryb" data-ofbid="相关函数__table_myv_5hn_ryb" data-cols="4"><caption></caption><colgroup><col/><col/><col/><col/></colgroup><thead class="- topic/thead thead">
+                                <tr class="- topic/row">
+                                    <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="相关函数__table_myv_5hn_ryb__entry__1">symbol</th>
+                                    <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="相关函数__table_myv_5hn_ryb__entry__2">date</th>
+                                    <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="相关函数__table_myv_5hn_ryb__entry__3">price</th>
+                                    <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="相关函数__table_myv_5hn_ryb__entry__4">volume</th>
+                                </tr>
+                            </thead><tbody class="- topic/tbody tbody">
+                                <tr class="- topic/row">
+                                    <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="相关函数__table_myv_5hn_ryb__entry__1">GE</td>
+                                    <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="相关函数__table_myv_5hn_ryb__entry__2">2017.01.03</td>
+                                    <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="相关函数__table_myv_5hn_ryb__entry__3">31.82</td>
+                                    <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="相关函数__table_myv_5hn_ryb__entry__4">2300</td>
+                                </tr>
+                                <tr class="- topic/row">
+                                    <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="相关函数__table_myv_5hn_ryb__entry__1">GE</td>
+                                    <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="相关函数__table_myv_5hn_ryb__entry__2">2017.01.03</td>
+                                    <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="相关函数__table_myv_5hn_ryb__entry__3">31.69</td>
+                                    <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="相关函数__table_myv_5hn_ryb__entry__4">3500</td>
+                                </tr>
+                                <tr class="- topic/row">
+                                    <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="相关函数__table_myv_5hn_ryb__entry__1">GE</td>
+                                    <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="相关函数__table_myv_5hn_ryb__entry__2">2017.01.04</td>
+                                    <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="相关函数__table_myv_5hn_ryb__entry__3">31.92</td>
+                                    <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="相关函数__table_myv_5hn_ryb__entry__4">3700</td>
+                                </tr>
+                                <tr class="- topic/row">
+                                    <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="相关函数__table_myv_5hn_ryb__entry__1">GE</td>
+                                    <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="相关函数__table_myv_5hn_ryb__entry__2">2017.01.04</td>
+                                    <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="相关函数__table_myv_5hn_ryb__entry__3">31.8</td>
+                                    <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="相关函数__table_myv_5hn_ryb__entry__4">2100</td>
+                                </tr>
+                                <tr class="- topic/row">
+                                    <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="相关函数__table_myv_5hn_ryb__entry__1">GE</td>
+                                    <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="相关函数__table_myv_5hn_ryb__entry__2">2017.01.04</td>
+                                    <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="相关函数__table_myv_5hn_ryb__entry__3">31.75</td>
+                                    <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="相关函数__table_myv_5hn_ryb__entry__4">1200</td>
+                                </tr>
+                                <tr class="- topic/row">
+                                    <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="相关函数__table_myv_5hn_ryb__entry__1">GE</td>
+                                    <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="相关函数__table_myv_5hn_ryb__entry__2">2017.01.04</td>
+                                    <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="相关函数__table_myv_5hn_ryb__entry__3">31.76</td>
+                                    <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="相关函数__table_myv_5hn_ryb__entry__4">4600</td>
+                                </tr>
+                                <tr class="- topic/row">
+                                    <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="相关函数__table_myv_5hn_ryb__entry__1">MSFT</td>
+                                    <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="相关函数__table_myv_5hn_ryb__entry__2">2017.01.03</td>
+                                    <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="相关函数__table_myv_5hn_ryb__entry__3">63.12</td>
+                                    <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="相关函数__table_myv_5hn_ryb__entry__4">1800</td>
+                                </tr>
+                                <tr class="- topic/row">
+                                    <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="相关函数__table_myv_5hn_ryb__entry__1">MSFT</td>
+                                    <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="相关函数__table_myv_5hn_ryb__entry__2">2017.01.03</td>
+                                    <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="相关函数__table_myv_5hn_ryb__entry__3">62.58</td>
+                                    <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="相关函数__table_myv_5hn_ryb__entry__4">3800</td>
+                                </tr>
+                                <tr class="- topic/row">
+                                    <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="相关函数__table_myv_5hn_ryb__entry__1">MSFT</td>
+                                    <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="相关函数__table_myv_5hn_ryb__entry__2">2017.01.04</td>
+                                    <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="相关函数__table_myv_5hn_ryb__entry__3">63.12</td>
+                                    <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="相关函数__table_myv_5hn_ryb__entry__4">6400</td>
+                                </tr>
+                                <tr class="- topic/row">
+                                    <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="相关函数__table_myv_5hn_ryb__entry__1">MSFT</td>
+                                    <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="相关函数__table_myv_5hn_ryb__entry__2">2017.01.04</td>
+                                    <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="相关函数__table_myv_5hn_ryb__entry__3">62.77</td>
+                                    <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="相关函数__table_myv_5hn_ryb__entry__4">4200</td>
+                                </tr>
+                                <tr class="- topic/row">
+                                    <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="相关函数__table_myv_5hn_ryb__entry__1">MSFT</td>
+                                    <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="相关函数__table_myv_5hn_ryb__entry__2">2017.01.04</td>
+                                    <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="相关函数__table_myv_5hn_ryb__entry__3">61.86</td>
+                                    <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="相关函数__table_myv_5hn_ryb__entry__4">2300</td>
+                                </tr>
+                                <tr class="- topic/row">
+                                    <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="相关函数__table_myv_5hn_ryb__entry__1">MSFT</td>
+                                    <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="相关函数__table_myv_5hn_ryb__entry__2">2017.01.04</td>
+                                    <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="相关函数__table_myv_5hn_ryb__entry__3">62.3</td>
+                                    <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="相关函数__table_myv_5hn_ryb__entry__4">6800</td>
+                                </tr>
+                                <tr class="- topic/row">
+                                    <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="相关函数__table_myv_5hn_ryb__entry__1">F</td>
+                                    <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="相关函数__table_myv_5hn_ryb__entry__2">2017.01.03</td>
+                                    <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="相关函数__table_myv_5hn_ryb__entry__3">12.46</td>
+                                    <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="相关函数__table_myv_5hn_ryb__entry__4">4200</td>
+                                </tr>
+                                <tr class="- topic/row">
+                                    <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="相关函数__table_myv_5hn_ryb__entry__1">F</td>
+                                    <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="相关函数__table_myv_5hn_ryb__entry__2">2017.01.03</td>
+                                    <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="相关函数__table_myv_5hn_ryb__entry__3">12.59</td>
+                                    <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="相关函数__table_myv_5hn_ryb__entry__4">5600</td>
+                                </tr>
+                                <tr class="- topic/row">
+                                    <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="相关函数__table_myv_5hn_ryb__entry__1">F</td>
+                                    <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="相关函数__table_myv_5hn_ryb__entry__2">2017.01.04</td>
+                                    <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="相关函数__table_myv_5hn_ryb__entry__3">13.24</td>
+                                    <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="相关函数__table_myv_5hn_ryb__entry__4">8900</td>
+                                </tr>
+                                <tr class="- topic/row">
+                                    <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="相关函数__table_myv_5hn_ryb__entry__1">F</td>
+                                    <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="相关函数__table_myv_5hn_ryb__entry__2">2017.01.04</td>
+                                    <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="相关函数__table_myv_5hn_ryb__entry__3">13.41</td>
+                                    <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="相关函数__table_myv_5hn_ryb__entry__4">2300</td>
+                                </tr>
+                                <tr class="- topic/row">
+                                    <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="相关函数__table_myv_5hn_ryb__entry__1">F</td>
+                                    <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="相关函数__table_myv_5hn_ryb__entry__2">2017.01.04</td>
+                                    <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="相关函数__table_myv_5hn_ryb__entry__3">13.36</td>
+                                    <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="相关函数__table_myv_5hn_ryb__entry__4">6300</td>
+                                </tr>
+                                <tr class="- topic/row">
+                                    <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="相关函数__table_myv_5hn_ryb__entry__1">F</td>
+                                    <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="相关函数__table_myv_5hn_ryb__entry__2">2017.01.04</td>
+                                    <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="相关函数__table_myv_5hn_ryb__entry__3">13.17</td>
+                                    <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="相关函数__table_myv_5hn_ryb__entry__4">9600</td>
+                                </tr>
+                            </tbody></table></div>
+                    <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="相关函数__codeblock_nyv_5hn_ryb" data-ofbid="相关函数__codeblock_nyv_5hn_ryb"><code>x=5000
+whereConditions = [&lt;symbol=`MSFT&gt;,&lt;volume&gt;x&gt;]
+havingCondition = &lt;sum(volume)&gt;200&gt;;
+
+sql(sqlCol("*"), t1);
+// output
+&lt; select * from t1 &gt;
+
+sql(sqlCol("*"), t1, whereConditions);
+// output
+&lt; select * from t1 where symbol == "MSFT",volume &gt; x &gt;
+
+sql(select=sqlColAlias(&lt;avg(price)&gt;), from=t1, where=whereConditions, groupBy=sqlCol(`date));
+// output
+&lt; select avg(price) as avg_price from t1 where symbol == "MSFT",volume &gt; x group by date &gt;
+
+sql(select=sqlColAlias(&lt;avg(price)&gt;), from=t1, groupBy=[sqlCol(`date),sqlCol(`symbol)]);
+// output
+&lt; select avg(price) as avg_price from t1 group by date,symbol &gt;
+
+sql(select=(sqlCol(`symbol),sqlCol(`date),sqlColAlias(&lt;cumsum(volume)&gt;, `cumVol)), from=t1, groupBy=sqlCol(`date`symbol), groupFlag=0);
+// output
+&lt; select symbol,date,cumsum(volume) as cumVol from t1 context by date,symbol &gt;
+
+sql(select=(sqlCol(`symbol),sqlCol(`date),sqlColAlias(&lt;cumsum(volume)&gt;, `cumVol)), from=t1, where=whereConditions, groupBy=sqlCol(`date), groupFlag=0);
+// output
+&lt; select symbol,date,cumsum(volume) as cumVol from t1 where symbol == "MSFT",volume &gt; x context by date &gt;
+
+sql(select=(sqlCol(`symbol),sqlCol(`date),sqlColAlias(&lt;cumsum(volume)&gt;, `cumVol)), from=t1, where=whereConditions, groupBy=sqlCol(`date), groupFlag=0, csort=sqlCol(`volume), ascSort=0);
+// output
+&lt; select symbol,date,cumsum(volume) as cumVol from t1 where symbol == "MSFT",volume &gt; x context by date csort volume desc &gt;
+
+sql(select=(sqlCol(`symbol),sqlCol(`date),sqlColAlias(&lt;cumsum(volume)&gt;, `cumVol)), from=t1, where=whereConditions, groupBy=sqlCol(`date), groupFlag=0, having=havingCondition);
+// output
+&lt; select symbol,date,cumsum(volume) as cumVol from t1 where symbol == "MSFT",volume &gt; x context by date having sum(volume) &gt; 200 &gt;
+
+sql(select=sqlCol("*"), from=t1, where=whereConditions, orderBy=sqlCol(`date), ascOrder=0);
+// output
+&lt; select * from t1 where symbol == "MSFT",volume &gt; x order by date desc &gt;
+
+sql(select=sqlCol("*"), from=t1, limit=1);
+// output
+&lt; select top 1 * from t1 &gt;
+
+sql(select=sqlCol("*"), from=t1, groupBy=sqlCol(`symbol), groupFlag=0, limit=1);
+// output
+&lt; select top 1 * from t1 context by symbol &gt;
+
+sql(select=(sqlCol(`symbol),sqlCol(`date),sqlColAlias(&lt;cumsum(volume)&gt;, `cumVol)), from=t1, groupBy=sqlCol(`date`symbol), groupFlag=0, hint=HINT_KEEPORDER);
+// output
+&lt; select [128] symbol,date,cumsum(volume) as cumVol from t1 context by date,symbol &gt;</code></pre>
+                    <p class="- topic/p p" id="相关函数__p_oyv_5hn_ryb" data-ofbid="相关函数__p_oyv_5hn_ryb">可以定义一个函数使用 <em class="+ topic/ph hi-d/i ph i">sql</em> 函数来动态生成SQL语句。</p>
+                    <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="相关函数__codeblock_pyv_5hn_ryb" data-ofbid="相关函数__codeblock_pyv_5hn_ryb"><code>def f1(t, sym, x){
+   whereConditions=[&lt;symbol=sym&gt;,&lt;volume&gt;x&gt;]
+   return sql(sqlCol("*"),t,whereConditions).eval()
+};
+
+f1(t1, `MSFT, 5000);</code></pre>
+                    <div class="table-container"><table class="- topic/table table" id="相关函数__table_qyv_5hn_ryb" data-ofbid="相关函数__table_qyv_5hn_ryb" data-cols="4"><caption></caption><colgroup><col/><col/><col/><col/></colgroup><thead class="- topic/thead thead">
+                                <tr class="- topic/row">
+                                    <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="相关函数__table_qyv_5hn_ryb__entry__1">symbol</th>
+                                    <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="相关函数__table_qyv_5hn_ryb__entry__2">date</th>
+                                    <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="相关函数__table_qyv_5hn_ryb__entry__3">price</th>
+                                    <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="相关函数__table_qyv_5hn_ryb__entry__4">volume</th>
+                                </tr>
+                            </thead><tbody class="- topic/tbody tbody">
+                                <tr class="- topic/row">
+                                    <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="相关函数__table_qyv_5hn_ryb__entry__1">MSFT</td>
+                                    <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="相关函数__table_qyv_5hn_ryb__entry__2">2017.01.04</td>
+                                    <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="相关函数__table_qyv_5hn_ryb__entry__3">63.12</td>
+                                    <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="相关函数__table_qyv_5hn_ryb__entry__4">6400</td>
+                                </tr>
+                                <tr class="- topic/row">
+                                    <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="相关函数__table_qyv_5hn_ryb__entry__1">MSFT</td>
+                                    <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="相关函数__table_qyv_5hn_ryb__entry__2">2017.01.04</td>
+                                    <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="相关函数__table_qyv_5hn_ryb__entry__3">62.3</td>
+                                    <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="相关函数__table_qyv_5hn_ryb__entry__4">6800</td>
+                                </tr>
+                            </tbody></table></div>
+                    <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="相关函数__codeblock_ryv_5hn_ryb" data-ofbid="相关函数__codeblock_ryv_5hn_ryb"><code>f1(t1, `F, 9000);</code></pre>
+                    <div class="table-container"><table class="- topic/table table" id="相关函数__table_syv_5hn_ryb" data-ofbid="相关函数__table_syv_5hn_ryb" data-cols="4"><caption></caption><colgroup><col/><col/><col/><col/></colgroup><thead class="- topic/thead thead">
+                                <tr class="- topic/row">
+                                    <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="相关函数__table_syv_5hn_ryb__entry__1">symbol</th>
+                                    <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="相关函数__table_syv_5hn_ryb__entry__2">date</th>
+                                    <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="相关函数__table_syv_5hn_ryb__entry__3">price</th>
+                                    <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="相关函数__table_syv_5hn_ryb__entry__4">volume</th>
+                                </tr>
+                            </thead><tbody class="- topic/tbody tbody">
+                                <tr class="- topic/row">
+                                    <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="相关函数__table_syv_5hn_ryb__entry__1">F</td>
+                                    <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="相关函数__table_syv_5hn_ryb__entry__2">2017.01.04</td>
+                                    <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="相关函数__table_syv_5hn_ryb__entry__3">13.17</td>
+                                    <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="相关函数__table_syv_5hn_ryb__entry__4">9600</td>
+                                </tr>
+                            </tbody></table></div>
+                    <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="相关函数__codeblock_tyv_5hn_ryb" data-ofbid="相关函数__codeblock_tyv_5hn_ryb"><code>def f2(t, sym, colNames, filterColumn, filterValue){
+   whereConditions=[&lt;symbol=sym&gt;,expr(sqlCol(filterColumn),&gt;,filterValue)]
+   return sql(sqlCol(colNames),t,whereConditions).eval()
+};
+
+f2(t1,`GE, `symbol`date`volume, `volume, 3000);</code></pre>
+                    <div class="table-container"><table class="- topic/table table" id="相关函数__table_uyv_5hn_ryb" data-ofbid="相关函数__table_uyv_5hn_ryb" data-cols="3"><caption></caption><colgroup><col/><col/><col/></colgroup><thead class="- topic/thead thead">
+                                <tr class="- topic/row">
+                                    <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="相关函数__table_uyv_5hn_ryb__entry__1">symbol</th>
+                                    <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="相关函数__table_uyv_5hn_ryb__entry__2">date</th>
+                                    <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="相关函数__table_uyv_5hn_ryb__entry__3">volume</th>
+                                </tr>
+                            </thead><tbody class="- topic/tbody tbody">
+                                <tr class="- topic/row">
+                                    <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="相关函数__table_uyv_5hn_ryb__entry__1">GE</td>
+                                    <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="相关函数__table_uyv_5hn_ryb__entry__2">2017.01.03</td>
+                                    <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="相关函数__table_uyv_5hn_ryb__entry__3">3500</td>
+                                </tr>
+                                <tr class="- topic/row">
+                                    <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="相关函数__table_uyv_5hn_ryb__entry__1">GE</td>
+                                    <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="相关函数__table_uyv_5hn_ryb__entry__2">2017.01.04</td>
+                                    <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="相关函数__table_uyv_5hn_ryb__entry__3">3700</td>
+                                </tr>
+                                <tr class="- topic/row">
+                                    <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="相关函数__table_uyv_5hn_ryb__entry__1">GE</td>
+                                    <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="相关函数__table_uyv_5hn_ryb__entry__2">2017.01.04</td>
+                                    <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="相关函数__table_uyv_5hn_ryb__entry__3">4600</td>
+                                </tr>
+                            </tbody></table></div>
+                    <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="相关函数__codeblock_vyv_5hn_ryb" data-ofbid="相关函数__codeblock_vyv_5hn_ryb"><code>f2(t1,`F, `symbol`date`volume,`price,13.2);</code></pre>
+                    <div class="table-container"><table class="- topic/table table" id="相关函数__table_wyv_5hn_ryb" data-ofbid="相关函数__table_wyv_5hn_ryb" data-cols="3"><caption></caption><colgroup><col/><col/><col/></colgroup><thead class="- topic/thead thead">
+                                <tr class="- topic/row">
+                                    <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="相关函数__table_wyv_5hn_ryb__entry__1">symbol</th>
+                                    <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="相关函数__table_wyv_5hn_ryb__entry__2">date</th>
+                                    <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="相关函数__table_wyv_5hn_ryb__entry__3">volume</th>
+                                </tr>
+                            </thead><tbody class="- topic/tbody tbody">
+                                <tr class="- topic/row">
+                                    <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="相关函数__table_wyv_5hn_ryb__entry__1">F</td>
+                                    <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="相关函数__table_wyv_5hn_ryb__entry__2">2017.01.04</td>
+                                    <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="相关函数__table_wyv_5hn_ryb__entry__3">8900</td>
+                                </tr>
+                                <tr class="- topic/row">
+                                    <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="相关函数__table_wyv_5hn_ryb__entry__1">F</td>
+                                    <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="相关函数__table_wyv_5hn_ryb__entry__2">2017.01.04</td>
+                                    <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="相关函数__table_wyv_5hn_ryb__entry__3">2300</td>
+                                </tr>
+                                <tr class="- topic/row">
+                                    <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="相关函数__table_wyv_5hn_ryb__entry__1">F</td>
+                                    <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="相关函数__table_wyv_5hn_ryb__entry__2">2017.01.04</td>
+                                    <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="相关函数__table_wyv_5hn_ryb__entry__3">6300</td>
+                                </tr>
+                            </tbody></table></div>
+                </li>
+                <li class="- topic/li li">
+                    <p class="- topic/p p" id="相关函数__p_yyv_5hn_ryb" data-ofbid="相关函数__p_yyv_5hn_ryb">函数 <a class="- topic/xref xref" href="../funcs/p/partial.html">partial</a>
+                        可以创建部分应用。</p>
+                    <p class="- topic/p p" id="相关函数__p_zyv_5hn_ryb" data-ofbid="相关函数__p_zyv_5hn_ryb">语法：<code class="+ topic/ph pr-d/codeph ph codeph">partial(func, args...)</code></p>
+                    <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="相关函数__codeblock_azv_5hn_ryb" data-ofbid="相关函数__codeblock_azv_5hn_ryb"><code>partial(add,1)(2);
+// output
+3
+
+def f(a,b):a pow b
+g=partial(f, 2)
+g(3);
+// output
+8</code></pre>
+                </li>
+                <li class="- topic/li li">
+                    <p class="- topic/p p" id="相关函数__p_czv_5hn_ryb" data-ofbid="相关函数__p_czv_5hn_ryb">函数 <a class="- topic/xref xref" href="../funcs/m/makeCall.html">makeCall</a>
+                        使用指定参数调用函数并生成脚本。与高阶函数 <a class="- topic/xref xref" href="../funcs/ho_funcs/call.html">call</a> 的区别是 <a class="- topic/xref xref" href="../funcs/m/makeCall.html">makeCall</a> 不执行脚本。</p>
+                    <p class="- topic/p p" id="相关函数__p_dzv_5hn_ryb" data-ofbid="相关函数__p_dzv_5hn_ryb">在下列例子中，我们创建了 <em class="+ topic/ph hi-d/i ph i">generateReport</em> 函数。它能够以指定格式显示表的某些列。</p>
+                    <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="相关函数__codeblock_ezv_5hn_ryb" data-ofbid="相关函数__codeblock_ezv_5hn_ryb"><code>def generateReport(tbl, colNames, colFormat): sql(sqlColAlias(each(makeCall{format},sqlCol(colNames),colFormat),colNames), tbl).eval()
+t = table(1..100 as id, (1..100 + 2018.01.01) as date, rand(100.0, 100) as price, rand(10000, 100) as qty, rand(`A`B`C`D`E`F`G, 100) as city);
+t;</code></pre>
+                    <div class="table-container"><table class="- topic/table table" id="相关函数__table_fzv_5hn_ryb" data-ofbid="相关函数__table_fzv_5hn_ryb" data-cols="5"><caption></caption><colgroup><col/><col/><col/><col/><col/></colgroup><thead class="- topic/thead thead">
+                                <tr class="- topic/row">
+                                    <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="相关函数__table_fzv_5hn_ryb__entry__1">id</th>
+                                    <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="相关函数__table_fzv_5hn_ryb__entry__2">date</th>
+                                    <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="相关函数__table_fzv_5hn_ryb__entry__3">price</th>
+                                    <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="相关函数__table_fzv_5hn_ryb__entry__4">qty</th>
+                                    <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="相关函数__table_fzv_5hn_ryb__entry__5">city</th>
+                                </tr>
+                            </thead><tbody class="- topic/tbody tbody">
+                                <tr class="- topic/row">
+                                    <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="相关函数__table_fzv_5hn_ryb__entry__1">1</td>
+                                    <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="相关函数__table_fzv_5hn_ryb__entry__2">2018.01.02</td>
+                                    <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="相关函数__table_fzv_5hn_ryb__entry__3">99.662328</td>
+                                    <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="相关函数__table_fzv_5hn_ryb__entry__4">6002</td>
+                                    <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="相关函数__table_fzv_5hn_ryb__entry__5">D</td>
+                                </tr>
+                                <tr class="- topic/row">
+                                    <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="相关函数__table_fzv_5hn_ryb__entry__1">2</td>
+                                    <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="相关函数__table_fzv_5hn_ryb__entry__2">2018.01.03</td>
+                                    <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="相关函数__table_fzv_5hn_ryb__entry__3">24.965461</td>
+                                    <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="相关函数__table_fzv_5hn_ryb__entry__4">5836</td>
+                                    <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="相关函数__table_fzv_5hn_ryb__entry__5">B</td>
+                                </tr>
+                                <tr class="- topic/row">
+                                    <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="相关函数__table_fzv_5hn_ryb__entry__1">3</td>
+                                    <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="相关函数__table_fzv_5hn_ryb__entry__2">2018.01.04</td>
+                                    <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="相关函数__table_fzv_5hn_ryb__entry__3">77.006418</td>
+                                    <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="相关函数__table_fzv_5hn_ryb__entry__4">5</td>
+                                    <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="相关函数__table_fzv_5hn_ryb__entry__5">G</td>
+                                </tr>
+                                <tr class="- topic/row">
+                                    <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="相关函数__table_fzv_5hn_ryb__entry__1">4</td>
+                                    <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="相关函数__table_fzv_5hn_ryb__entry__2">2018.01.05</td>
+                                    <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="相关函数__table_fzv_5hn_ryb__entry__3">93.930603</td>
+                                    <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="相关函数__table_fzv_5hn_ryb__entry__4">5141</td>
+                                    <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="相关函数__table_fzv_5hn_ryb__entry__5">G</td>
+                                </tr>
+                                <tr class="- topic/row">
+                                    <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="相关函数__table_fzv_5hn_ryb__entry__1">5</td>
+                                    <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="相关函数__table_fzv_5hn_ryb__entry__2">2018.01.06</td>
+                                    <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="相关函数__table_fzv_5hn_ryb__entry__3">70.994914</td>
+                                    <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="相关函数__table_fzv_5hn_ryb__entry__4">5778</td>
+                                    <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="相关函数__table_fzv_5hn_ryb__entry__5">C</td>
+                                </tr>
+                                <tr class="- topic/row">
+                                    <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="相关函数__table_fzv_5hn_ryb__entry__1">6</td>
+                                    <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="相关函数__table_fzv_5hn_ryb__entry__2">2018.01.07</td>
+                                    <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="相关函数__table_fzv_5hn_ryb__entry__3">11.221769</td>
+                                    <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="相关函数__table_fzv_5hn_ryb__entry__4">9403</td>
+                                    <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="相关函数__table_fzv_5hn_ryb__entry__5">G</td>
+                                </tr>
+                                <tr class="- topic/row">
+                                    <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="相关函数__table_fzv_5hn_ryb__entry__1">7</td>
+                                    <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="相关函数__table_fzv_5hn_ryb__entry__2">2018.01.08</td>
+                                    <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="相关函数__table_fzv_5hn_ryb__entry__3">59.387621</td>
+                                    <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="相关函数__table_fzv_5hn_ryb__entry__4">4632</td>
+                                    <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="相关函数__table_fzv_5hn_ryb__entry__5">G</td>
+                                </tr>
+                                <tr class="- topic/row">
+                                    <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="相关函数__table_fzv_5hn_ryb__entry__1">8</td>
+                                    <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="相关函数__table_fzv_5hn_ryb__entry__2">2018.01.09</td>
+                                    <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="相关函数__table_fzv_5hn_ryb__entry__3">86.830752</td>
+                                    <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="相关函数__table_fzv_5hn_ryb__entry__4">4574</td>
+                                    <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="相关函数__table_fzv_5hn_ryb__entry__5">C</td>
+                                </tr>
+                                <tr class="- topic/row">
+                                    <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="相关函数__table_fzv_5hn_ryb__entry__1">9</td>
+                                    <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="相关函数__table_fzv_5hn_ryb__entry__2">2018.01.10</td>
+                                    <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="相关函数__table_fzv_5hn_ryb__entry__3">53.928317</td>
+                                    <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="相关函数__table_fzv_5hn_ryb__entry__4">8397</td>
+                                    <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="相关函数__table_fzv_5hn_ryb__entry__5">G</td>
+                                </tr>
+                                <tr class="- topic/row">
+                                    <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="相关函数__table_fzv_5hn_ryb__entry__1">10</td>
+                                    <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="相关函数__table_fzv_5hn_ryb__entry__2">2018.01.11</td>
+                                    <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="相关函数__table_fzv_5hn_ryb__entry__3">21.123212</td>
+                                    <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="相关函数__table_fzv_5hn_ryb__entry__4">6615</td>
+                                    <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="相关函数__table_fzv_5hn_ryb__entry__5">B</td>
+                                </tr>
+                                <tr class="- topic/row">
+                                    <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="相关函数__table_fzv_5hn_ryb__entry__1">...</td>
+                                    <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="相关函数__table_fzv_5hn_ryb__entry__2">...</td>
+                                    <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="相关函数__table_fzv_5hn_ryb__entry__3">...</td>
+                                    <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="相关函数__table_fzv_5hn_ryb__entry__4">...</td>
+                                    <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="相关函数__table_fzv_5hn_ryb__entry__5">...</td>
+                                </tr>
+                            </tbody></table></div>
+                    <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="相关函数__codeblock_gzv_5hn_ryb" data-ofbid="相关函数__codeblock_gzv_5hn_ryb"><code>generateReport(t, ["id", "date","price","qty"], ["0", "MM/dd/yyyy", "0.00", "#,###"]);</code></pre>
+                    <div class="table-container"><table class="- topic/table table" id="相关函数__table_hzv_5hn_ryb" data-ofbid="相关函数__table_hzv_5hn_ryb" data-cols="4"><caption></caption><colgroup><col/><col/><col/><col/></colgroup><thead class="- topic/thead thead">
+                                <tr class="- topic/row">
+                                    <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="相关函数__table_hzv_5hn_ryb__entry__1">id</th>
+                                    <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="相关函数__table_hzv_5hn_ryb__entry__2">date</th>
+                                    <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="相关函数__table_hzv_5hn_ryb__entry__3">price</th>
+                                    <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="相关函数__table_hzv_5hn_ryb__entry__4">qty</th>
+                                </tr>
+                            </thead><tbody class="- topic/tbody tbody">
+                                <tr class="- topic/row">
+                                    <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="相关函数__table_hzv_5hn_ryb__entry__1">1</td>
+                                    <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="相关函数__table_hzv_5hn_ryb__entry__2">01/02/2018</td>
+                                    <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="相关函数__table_hzv_5hn_ryb__entry__3">16.32</td>
+                                    <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="相关函数__table_hzv_5hn_ryb__entry__4">9,972</td>
+                                </tr>
+                                <tr class="- topic/row">
+                                    <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="相关函数__table_hzv_5hn_ryb__entry__1">2</td>
+                                    <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="相关函数__table_hzv_5hn_ryb__entry__2">01/03/2018</td>
+                                    <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="相关函数__table_hzv_5hn_ryb__entry__3">63.10</td>
+                                    <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="相关函数__table_hzv_5hn_ryb__entry__4">7,785</td>
+                                </tr>
+                                <tr class="- topic/row">
+                                    <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="相关函数__table_hzv_5hn_ryb__entry__1">3</td>
+                                    <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="相关函数__table_hzv_5hn_ryb__entry__2">01/04/2018</td>
+                                    <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="相关函数__table_hzv_5hn_ryb__entry__3">30.43</td>
+                                    <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="相关函数__table_hzv_5hn_ryb__entry__4">3,629</td>
+                                </tr>
+                                <tr class="- topic/row">
+                                    <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="相关函数__table_hzv_5hn_ryb__entry__1">4</td>
+                                    <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="相关函数__table_hzv_5hn_ryb__entry__2">01/05/2018</td>
+                                    <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="相关函数__table_hzv_5hn_ryb__entry__3">33.57</td>
+                                    <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="相关函数__table_hzv_5hn_ryb__entry__4">2,178</td>
+                                </tr>
+                                <tr class="- topic/row">
+                                    <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="相关函数__table_hzv_5hn_ryb__entry__1">5</td>
+                                    <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="相关函数__table_hzv_5hn_ryb__entry__2">01/06/2018</td>
+                                    <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="相关函数__table_hzv_5hn_ryb__entry__3">61.12</td>
+                                    <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="相关函数__table_hzv_5hn_ryb__entry__4">9,406</td>
+                                </tr>
+                                <tr class="- topic/row">
+                                    <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="相关函数__table_hzv_5hn_ryb__entry__1">6</td>
+                                    <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="相关函数__table_hzv_5hn_ryb__entry__2">01/07/2018</td>
+                                    <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="相关函数__table_hzv_5hn_ryb__entry__3">43.29</td>
+                                    <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="相关函数__table_hzv_5hn_ryb__entry__4">6,955</td>
+                                </tr>
+                                <tr class="- topic/row">
+                                    <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="相关函数__table_hzv_5hn_ryb__entry__1">7</td>
+                                    <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="相关函数__table_hzv_5hn_ryb__entry__2">01/08/2018</td>
+                                    <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="相关函数__table_hzv_5hn_ryb__entry__3">54.97</td>
+                                    <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="相关函数__table_hzv_5hn_ryb__entry__4">9,914</td>
+                                </tr>
+                                <tr class="- topic/row">
+                                    <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="相关函数__table_hzv_5hn_ryb__entry__1">8</td>
+                                    <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="相关函数__table_hzv_5hn_ryb__entry__2">01/09/2018</td>
+                                    <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="相关函数__table_hzv_5hn_ryb__entry__3">86.20</td>
+                                    <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="相关函数__table_hzv_5hn_ryb__entry__4">6,696</td>
+                                </tr>
+                                <tr class="- topic/row">
+                                    <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="相关函数__table_hzv_5hn_ryb__entry__1">9</td>
+                                    <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="相关函数__table_hzv_5hn_ryb__entry__2">01/10/2018</td>
+                                    <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="相关函数__table_hzv_5hn_ryb__entry__3">90.82</td>
+                                    <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="相关函数__table_hzv_5hn_ryb__entry__4">6,141</td>
+                                </tr>
+                                <tr class="- topic/row">
+                                    <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="相关函数__table_hzv_5hn_ryb__entry__1">10</td>
+                                    <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="相关函数__table_hzv_5hn_ryb__entry__2">01/11/2018</td>
+                                    <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="相关函数__table_hzv_5hn_ryb__entry__3">4.29</td>
+                                    <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="相关函数__table_hzv_5hn_ryb__entry__4">3,774</td>
+                                </tr>
+                                <tr class="- topic/row">
+                                    <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="相关函数__table_hzv_5hn_ryb__entry__1">...</td>
+                                    <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="相关函数__table_hzv_5hn_ryb__entry__2">...</td>
+                                    <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="相关函数__table_hzv_5hn_ryb__entry__3">...</td>
+                                    <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="相关函数__table_hzv_5hn_ryb__entry__4">...</td>
+                                </tr>
+                            </tbody></table></div>
+                    <p class="- topic/p p" id="相关函数__p_izv_5hn_ryb" data-ofbid="相关函数__p_izv_5hn_ryb">与之等效的SQL脚本是</p>
+                    <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="相关函数__codeblock_jzv_5hn_ryb" data-ofbid="相关函数__codeblock_jzv_5hn_ryb"><code>def generateReportSQL(tbl, colNames, colFormat): sql(sqlColAlias(each(makeCall{format},sqlCol(colNames),colFormat),colNames), tbl)
+generateReportSQL(t, ["id", "date","price","qty"], ["0", "MM/dd/yyyy", "0.00", "#,###"]);
+// output
+&lt; select format(id, "0") as id,format(date, "MM/dd/yyyy") as date,format(price, "0.00") as price,format(qty, "#,###") as qty from t &gt;</code></pre>
+                </li>
+            </ul>
+            <p class="- topic/p p" id="相关函数__p_kzv_5hn_ryb" data-ofbid="相关函数__p_kzv_5hn_ryb">以下3个示例使用了3种不同的方法来创建一个生成SQL语句的函数：</p>
+            <p class="- topic/p p" id="相关函数__p_lzv_5hn_ryb" data-ofbid="相关函数__p_lzv_5hn_ryb">例1:</p>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="相关函数__codeblock_mzv_5hn_ryb" data-ofbid="相关函数__codeblock_mzv_5hn_ryb"><code>def f1(t, sym, x): select * from t where name=sym, vol&gt;x;
+f1(t1, `MSFT, 7000);</code></pre>
+            <div class="table-container"><table class="- topic/table table" id="相关函数__table_nzv_5hn_ryb" data-ofbid="相关函数__table_nzv_5hn_ryb" data-cols="4"><caption></caption><colgroup><col/><col/><col/><col/></colgroup><thead class="- topic/thead thead">
+                        <tr class="- topic/row">
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="相关函数__table_nzv_5hn_ryb__entry__1">name</th>
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="相关函数__table_nzv_5hn_ryb__entry__2">date</th>
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="相关函数__table_nzv_5hn_ryb__entry__3">PRC</th>
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="相关函数__table_nzv_5hn_ryb__entry__4">vol</th>
+                        </tr>
+                    </thead><tbody class="- topic/tbody tbody">
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="相关函数__table_nzv_5hn_ryb__entry__1">MSFT</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="相关函数__table_nzv_5hn_ryb__entry__2">2017.01.03</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="相关函数__table_nzv_5hn_ryb__entry__3">63.12</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="相关函数__table_nzv_5hn_ryb__entry__4">8800</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="相关函数__table_nzv_5hn_ryb__entry__1">MSFT</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="相关函数__table_nzv_5hn_ryb__entry__2">2017.01.03</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="相关函数__table_nzv_5hn_ryb__entry__3">62.58</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="相关函数__table_nzv_5hn_ryb__entry__4">7800</td>
+                        </tr>
+                    </tbody></table></div>
+            <p class="- topic/p p" id="相关函数__p_ozv_5hn_ryb" data-ofbid="相关函数__p_ozv_5hn_ryb">我们也可以使用函数 <a class="- topic/xref xref" href="../funcs/e/eval.html">eval</a>
+                和一个元代码块创建这个函数。</p>
+            <p class="- topic/p p" id="相关函数__p_pzv_5hn_ryb" data-ofbid="相关函数__p_pzv_5hn_ryb">例2:</p>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="相关函数__codeblock_qzv_5hn_ryb" data-ofbid="相关函数__codeblock_qzv_5hn_ryb"><code>def f2(t, sym, x): eval(&lt;select * from t where name=`MSFT, vol&gt;x &gt;);
+f2(t1,`MSFT, 7000);</code></pre>
+            <div class="table-container"><table class="- topic/table table" id="相关函数__table_rzv_5hn_ryb" data-ofbid="相关函数__table_rzv_5hn_ryb" data-cols="4"><caption></caption><colgroup><col/><col/><col/><col/></colgroup><thead class="- topic/thead thead">
+                        <tr class="- topic/row">
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="相关函数__table_rzv_5hn_ryb__entry__1">name</th>
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="相关函数__table_rzv_5hn_ryb__entry__2">date</th>
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="相关函数__table_rzv_5hn_ryb__entry__3">PRC</th>
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="相关函数__table_rzv_5hn_ryb__entry__4">vol</th>
+                        </tr>
+                    </thead><tbody class="- topic/tbody tbody">
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="相关函数__table_rzv_5hn_ryb__entry__1">MSFT</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="相关函数__table_rzv_5hn_ryb__entry__2">2017.01.03</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="相关函数__table_rzv_5hn_ryb__entry__3">63.12</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="相关函数__table_rzv_5hn_ryb__entry__4">8800</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="相关函数__table_rzv_5hn_ryb__entry__1">MSFT</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="相关函数__table_rzv_5hn_ryb__entry__2">2017.01.03</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="相关函数__table_rzv_5hn_ryb__entry__3">62.58</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="相关函数__table_rzv_5hn_ryb__entry__4">7800</td>
+                        </tr>
+                    </tbody></table></div>
+            <p class="- topic/p p" id="相关函数__p_szv_5hn_ryb" data-ofbid="相关函数__p_szv_5hn_ryb">我们还可以定义一个函数使用 <a class="- topic/xref xref" href="../funcs/s/sql.html">sql</a>
+                函数来生成SQL语句。当调用该函数时，代码中的sql函数动态地生成SQL语句并执行。对于生成更加复杂的查询，这种方法更加方便灵活。</p>
+            <p class="- topic/p p" id="相关函数__p_tzv_5hn_ryb" data-ofbid="相关函数__p_tzv_5hn_ryb">例3:</p>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="相关函数__codeblock_uzv_5hn_ryb" data-ofbid="相关函数__codeblock_uzv_5hn_ryb"><code>def f3(t, sym, x){
+whereConditions=[&lt;name=sym&gt;,&lt;vol&gt;x&gt;]
+return sql(sqlCol("*"),t,whereConditions).eval()
+};
+
+f3(t1, `MSFT, 7000);</code></pre>
+            <div class="table-container"><table class="- topic/table table" id="相关函数__table_vzv_5hn_ryb" data-ofbid="相关函数__table_vzv_5hn_ryb" data-cols="4"><caption></caption><colgroup><col/><col/><col/><col/></colgroup><thead class="- topic/thead thead">
+                        <tr class="- topic/row">
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="相关函数__table_vzv_5hn_ryb__entry__1">name</th>
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="相关函数__table_vzv_5hn_ryb__entry__2">date</th>
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="相关函数__table_vzv_5hn_ryb__entry__3">PRC</th>
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="相关函数__table_vzv_5hn_ryb__entry__4">vol</th>
+                        </tr>
+                    </thead><tbody class="- topic/tbody tbody">
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="相关函数__table_vzv_5hn_ryb__entry__1">MSFT</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="相关函数__table_vzv_5hn_ryb__entry__2">2017.01.03</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="相关函数__table_vzv_5hn_ryb__entry__3">63.12</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="相关函数__table_vzv_5hn_ryb__entry__4">8800</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="相关函数__table_vzv_5hn_ryb__entry__1">MSFT</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="相关函数__table_vzv_5hn_ryb__entry__2">2017.01.03</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="相关函数__table_vzv_5hn_ryb__entry__3">62.58</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="相关函数__table_vzv_5hn_ryb__entry__4">7800</td>
+                        </tr>
+                    </tbody></table></div>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="相关函数__codeblock_wzv_5hn_ryb" data-ofbid="相关函数__codeblock_wzv_5hn_ryb"><code>f3(t1, `F, 9000);</code></pre>
+            <div class="table-container"><table class="- topic/table table" id="相关函数__table_xzv_5hn_ryb" data-ofbid="相关函数__table_xzv_5hn_ryb" data-cols="4"><caption></caption><colgroup><col/><col/><col/><col/></colgroup><thead class="- topic/thead thead">
+                        <tr class="- topic/row">
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="相关函数__table_xzv_5hn_ryb__entry__1">name</th>
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="相关函数__table_xzv_5hn_ryb__entry__2">date</th>
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="相关函数__table_xzv_5hn_ryb__entry__3">PRC</th>
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="相关函数__table_xzv_5hn_ryb__entry__4">vol</th>
+                        </tr>
+                    </thead><tbody class="- topic/tbody tbody">
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="相关函数__table_xzv_5hn_ryb__entry__1">F</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="相关函数__table_xzv_5hn_ryb__entry__2">2017.01.04</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="相关函数__table_xzv_5hn_ryb__entry__3">13.17</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="相关函数__table_xzv_5hn_ryb__entry__4"> </td>
+                        </tr>
+                    </tbody></table></div>
+            <p class="- topic/p p" id="相关函数__p_yzv_5hn_ryb" data-ofbid="相关函数__p_yzv_5hn_ryb">在这3种方法中，函数 <em class="+ topic/ph hi-d/i ph i">sql</em> 最灵活。它可以动态地生成SQL语句。</p>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="相关函数__codeblock_zzv_5hn_ryb" data-ofbid="相关函数__codeblock_zzv_5hn_ryb"><code>def f4(t, sym, colNames, filterColumn, filterValue){
+whereConditions=[&lt;name=sym&gt;,expr(sqlCol(filterColumn),&gt;,filterValue)]
+return sql(sqlCol(colNames),t,whereConditions).eval()
+};
+f4(t1,`MSFT, `name`date`vol, `vol, 7000);</code></pre>
+            <div class="table-container"><table class="- topic/table table" id="相关函数__table_a1w_5hn_ryb" data-ofbid="相关函数__table_a1w_5hn_ryb" data-cols="3"><caption></caption><colgroup><col/><col/><col/></colgroup><thead class="- topic/thead thead">
+                        <tr class="- topic/row">
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="相关函数__table_a1w_5hn_ryb__entry__1">name</th>
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="相关函数__table_a1w_5hn_ryb__entry__2">date</th>
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="相关函数__table_a1w_5hn_ryb__entry__3">vol</th>
+                        </tr>
+                    </thead><tbody class="- topic/tbody tbody">
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="相关函数__table_a1w_5hn_ryb__entry__1">MSFT</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="相关函数__table_a1w_5hn_ryb__entry__2">2017.01.03</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="相关函数__table_a1w_5hn_ryb__entry__3">8800</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="相关函数__table_a1w_5hn_ryb__entry__1">MSFT</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="相关函数__table_a1w_5hn_ryb__entry__2">2017.01.03</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="相关函数__table_a1w_5hn_ryb__entry__3">7800</td>
+                        </tr>
+                    </tbody></table></div>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="相关函数__codeblock_b1w_5hn_ryb" data-ofbid="相关函数__codeblock_b1w_5hn_ryb"><code>f4(t1,`F, `name`date`vol,`PRC,13.2);</code></pre>
+            <div class="table-container"><table class="- topic/table table" id="相关函数__table_c1w_5hn_ryb" data-ofbid="相关函数__table_c1w_5hn_ryb" data-cols="3"><caption></caption><colgroup><col/><col/><col/></colgroup><thead class="- topic/thead thead">
+                        <tr class="- topic/row">
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="相关函数__table_c1w_5hn_ryb__entry__1">name</th>
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="相关函数__table_c1w_5hn_ryb__entry__2">date</th>
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="相关函数__table_c1w_5hn_ryb__entry__3">vol</th>
+                        </tr>
+                    </thead><tbody class="- topic/tbody tbody">
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="相关函数__table_c1w_5hn_ryb__entry__1">F</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="相关函数__table_c1w_5hn_ryb__entry__2">2017.01.04</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="相关函数__table_c1w_5hn_ryb__entry__3">8900</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="相关函数__table_c1w_5hn_ryb__entry__1">F</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="相关函数__table_c1w_5hn_ryb__entry__2">2017.01.04</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="相关函数__table_c1w_5hn_ryb__entry__3">2300</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="相关函数__table_c1w_5hn_ryb__entry__1">F</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="相关函数__table_c1w_5hn_ryb__entry__2">2017.01.04</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="相关函数__table_c1w_5hn_ryb__entry__3">6300</td>
+                        </tr>
+                    </tbody></table></div>
+            <ul class="- topic/ul ul" id="相关函数__ol_d1w_5hn_ryb" data-ofbid="相关函数__ol_d1w_5hn_ryb">
+                <li class="- topic/li li">
+                    <p class="- topic/p p" id="相关函数__p_e1w_5hn_ryb" data-ofbid="相关函数__p_e1w_5hn_ryb">函数 <a class="- topic/xref xref" href="../funcs/b/binaryExpr.html">binaryExpr</a> 可以生成一个二元运算的元代码。</p>
+                    <p class="- topic/p p" id="相关函数__p_f1w_5hn_ryb" data-ofbid="相关函数__p_f1w_5hn_ryb">语法：<code class="+ topic/ph pr-d/codeph ph codeph">binaryExpr(X, Y, optr)</code></p>
+                    <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="相关函数__codeblock_g1w_5hn_ryb" data-ofbid="相关函数__codeblock_g1w_5hn_ryb"><code>t = table(reshape(rand(1.0, 200), 20:10));
+n=10;
+weights = array(ANY, n).fill!(0..(n-1), 1..n)\n;
+names = t.colNames();
+tp = binaryExpr(sqlCol(names), weights, *);
+tp;
+// output
+(&lt; col0 * 0.1 &gt;,&lt; col1 * 0.2 &gt;,&lt; col2 * 0.3 &gt;,&lt; col3 * 0.4 &gt;,&lt; col4 * 0.5 &gt;,&lt; col5 * 0.6 &gt;,&lt; col6 * 0.7 &gt;,&lt; col7 * 0.8 &gt;,&lt; col8 * 0.9 &gt;,&lt; col9 * 1 &gt;)</code></pre>
+                </li>
+                <li class="- topic/li li">
+                    <p class="- topic/p p" id="相关函数__p_i1w_5hn_ryb" data-ofbid="相关函数__p_i1w_5hn_ryb">函数 <a class="- topic/xref xref" href="../funcs/u/unifiedExpr.html">unifiedExpr</a> 可以生成一个多元运算表达式的元代码。</p>
+                    <p class="- topic/p p" id="相关函数__p_j1w_5hn_ryb" data-ofbid="相关函数__p_j1w_5hn_ryb">语法： unifiedExpr(objs, optrs)</p>
+                    <p class="- topic/p p" id="相关函数__p_k1w_5hn_ryb" data-ofbid="相关函数__p_k1w_5hn_ryb">以下例子在binaryExpr例子的基础上，生成一个sql的select语句代码, 用于对每列的值加权求和：</p>
+                    <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="相关函数__codeblock_l1w_5hn_ryb" data-ofbid="相关函数__codeblock_l1w_5hn_ryb"><code>selects = sqlColAlias(unifiedExpr(binaryExpr(sqlCol(names), weights, *), take(+, n-1)), "weightedSum");
+re = sql(selects, t);
+re;
+// output
+&lt; select (col0 * 0.1) + (col1 * 0.2) + (col2 * 0.3) + (col3 * 0.4) + (col4 * 0.5) + (col5 * 0.6) + (col6 * 0.7) + (col7 * 0.8) + (col8 * 0.9) + (col9 * 1) as weightedSum from tc0ccbd6a00000000 &gt;
+re.eval()</code></pre>
+                    <div class="table-container"><table class="- topic/table table" id="相关函数__table_m1w_5hn_ryb" data-ofbid="相关函数__table_m1w_5hn_ryb" data-cols="1"><caption></caption><colgroup><col/></colgroup><thead class="- topic/thead thead">
+                                <tr class="- topic/row">
+                                    <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="相关函数__table_m1w_5hn_ryb__entry__1">weightedSum</th>
+                                </tr>
+                            </thead><tbody class="- topic/tbody tbody">
+                                <tr class="- topic/row">
+                                    <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="相关函数__table_m1w_5hn_ryb__entry__1">2.1239</td>
+                                </tr>
+                                <tr class="- topic/row">
+                                    <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="相关函数__table_m1w_5hn_ryb__entry__1">3.5725</td>
+                                </tr>
+                                <tr class="- topic/row">
+                                    <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="相关函数__table_m1w_5hn_ryb__entry__1">3.5009</td>
+                                </tr>
+                                <tr class="- topic/row">
+                                    <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="相关函数__table_m1w_5hn_ryb__entry__1">3.3487</td>
+                                </tr>
+                                <tr class="- topic/row">
+                                    <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="相关函数__table_m1w_5hn_ryb__entry__1">2.8268</td>
+                                </tr>
+                                <tr class="- topic/row">
+                                    <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="相关函数__table_m1w_5hn_ryb__entry__1">1.9753</td>
+                                </tr>
+                                <tr class="- topic/row">
+                                    <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="相关函数__table_m1w_5hn_ryb__entry__1">2.4287</td>
+                                </tr>
+                                <tr class="- topic/row">
+                                    <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="相关函数__table_m1w_5hn_ryb__entry__1">2.9222</td>
+                                </tr>
+                                <tr class="- topic/row">
+                                    <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="相关函数__table_m1w_5hn_ryb__entry__1">3.0469</td>
+                                </tr>
+                                <tr class="- topic/row">
+                                    <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="相关函数__table_m1w_5hn_ryb__entry__1">2.9751</td>
+                                </tr>
+                                <tr class="- topic/row">
+                                    <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="相关函数__table_m1w_5hn_ryb__entry__1">2.8848</td>
+                                </tr>
+                                <tr class="- topic/row">
+                                    <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="相关函数__table_m1w_5hn_ryb__entry__1">2.993</td>
+                                </tr>
+                                <tr class="- topic/row">
+                                    <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="相关函数__table_m1w_5hn_ryb__entry__1">2.7185</td>
+                                </tr>
+                                <tr class="- topic/row">
+                                    <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="相关函数__table_m1w_5hn_ryb__entry__1">2.2578</td>
+                                </tr>
+                                <tr class="- topic/row">
+                                    <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="相关函数__table_m1w_5hn_ryb__entry__1">2.6231</td>
+                                </tr>
+                                <tr class="- topic/row">
+                                    <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="相关函数__table_m1w_5hn_ryb__entry__1">2.3871</td>
+                                </tr>
+                                <tr class="- topic/row">
+                                    <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="相关函数__table_m1w_5hn_ryb__entry__1">3.0311</td>
+                                </tr>
+                                <tr class="- topic/row">
+                                    <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="相关函数__table_m1w_5hn_ryb__entry__1">2.0183</td>
+                                </tr>
+                                <tr class="- topic/row">
+                                    <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="相关函数__table_m1w_5hn_ryb__entry__1">2.897</td>
+                                </tr>
+                                <tr class="- topic/row">
+                                    <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="相关函数__table_m1w_5hn_ryb__entry__1">2.5982</td>
+                                </tr>
+                            </tbody></table></div>
+                </li>
+                <li class="- topic/li li">
+                    <p class="- topic/p p" id="相关函数__p_o1w_5hn_ryb" data-ofbid="相关函数__p_o1w_5hn_ryb">函数 <a class="- topic/xref xref" href="../funcs/m/makeUnifiedCall.html">makeUnifiedCall</a> 可以生成一个函数调用的元代码。高阶函数 <a class="- topic/xref xref" href="../funcs/ho_funcs/unifiedCall.html">unifiedCall</a> 与 <a class="- topic/xref xref" href="../funcs/m/makeUnifiedCall.html">makeUnifiedCall</a> 的区别是，<a class="- topic/xref xref" href="../funcs/m/makeUnifiedCall.html">makeUnifiedCall</a> 不执行脚本。</p>
+                    <p class="- topic/p p" id="相关函数__p_p1w_5hn_ryb" data-ofbid="相关函数__p_p1w_5hn_ryb">语法： makeUnifiedCall(func, args)</p>
+                    <p class="- topic/p p" id="相关函数__p_q1w_5hn_ryb" data-ofbid="相关函数__p_q1w_5hn_ryb">以下例子生成一个和9中例子等价的元代码：</p>
+                    <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="相关函数__codeblock_r1w_5hn_ryb" data-ofbid="相关函数__codeblock_r1w_5hn_ryb"><code>selects = sqlColAlias(makeCall(flatten, makeCall(dot, makeUnifiedCall(matrix, sqlCol(names)), 1..n\n)), "weightedSum");
+re = sql(selects, t);
+re;
+// output
+&lt; select flatten(dot(matrix(col0, col1, col2, col3, col4, col5, col6, col7, col8, col9), [0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1])) as weightedSum from tc0ccbd6a00000000 &gt;
+re.eval();</code></pre>
+                    <div class="table-container"><table class="- topic/table table" id="相关函数__table_s1w_5hn_ryb" data-ofbid="相关函数__table_s1w_5hn_ryb" data-cols="1"><caption></caption><colgroup><col/></colgroup><thead class="- topic/thead thead">
+                                <tr class="- topic/row">
+                                    <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="相关函数__table_s1w_5hn_ryb__entry__1">weightedSum</th>
+                                </tr>
+                            </thead><tbody class="- topic/tbody tbody">
+                                <tr class="- topic/row">
+                                    <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="相关函数__table_s1w_5hn_ryb__entry__1">2.1239</td>
+                                </tr>
+                                <tr class="- topic/row">
+                                    <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="相关函数__table_s1w_5hn_ryb__entry__1">3.5725</td>
+                                </tr>
+                                <tr class="- topic/row">
+                                    <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="相关函数__table_s1w_5hn_ryb__entry__1">3.5009</td>
+                                </tr>
+                                <tr class="- topic/row">
+                                    <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="相关函数__table_s1w_5hn_ryb__entry__1">3.3487</td>
+                                </tr>
+                                <tr class="- topic/row">
+                                    <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="相关函数__table_s1w_5hn_ryb__entry__1">2.8268</td>
+                                </tr>
+                                <tr class="- topic/row">
+                                    <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="相关函数__table_s1w_5hn_ryb__entry__1">1.9753</td>
+                                </tr>
+                                <tr class="- topic/row">
+                                    <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="相关函数__table_s1w_5hn_ryb__entry__1">2.4287</td>
+                                </tr>
+                                <tr class="- topic/row">
+                                    <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="相关函数__table_s1w_5hn_ryb__entry__1">2.9222</td>
+                                </tr>
+                                <tr class="- topic/row">
+                                    <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="相关函数__table_s1w_5hn_ryb__entry__1">3.0469</td>
+                                </tr>
+                                <tr class="- topic/row">
+                                    <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="相关函数__table_s1w_5hn_ryb__entry__1">2.9751</td>
+                                </tr>
+                                <tr class="- topic/row">
+                                    <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="相关函数__table_s1w_5hn_ryb__entry__1">2.8848</td>
+                                </tr>
+                                <tr class="- topic/row">
+                                    <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="相关函数__table_s1w_5hn_ryb__entry__1">2.993</td>
+                                </tr>
+                                <tr class="- topic/row">
+                                    <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="相关函数__table_s1w_5hn_ryb__entry__1">2.7185</td>
+                                </tr>
+                                <tr class="- topic/row">
+                                    <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="相关函数__table_s1w_5hn_ryb__entry__1">2.2578</td>
+                                </tr>
+                                <tr class="- topic/row">
+                                    <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="相关函数__table_s1w_5hn_ryb__entry__1">2.6231</td>
+                                </tr>
+                                <tr class="- topic/row">
+                                    <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="相关函数__table_s1w_5hn_ryb__entry__1">2.3871</td>
+                                </tr>
+                                <tr class="- topic/row">
+                                    <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="相关函数__table_s1w_5hn_ryb__entry__1">3.0311</td>
+                                </tr>
+                                <tr class="- topic/row">
+                                    <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="相关函数__table_s1w_5hn_ryb__entry__1">2.0183</td>
+                                </tr>
+                                <tr class="- topic/row">
+                                    <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="相关函数__table_s1w_5hn_ryb__entry__1">2.897</td>
+                                </tr>
+                                <tr class="- topic/row">
+                                    <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="相关函数__table_s1w_5hn_ryb__entry__1">2.5982</td>
+                                </tr>
+                            </tbody></table></div>
+                </li>
+            </ul>
+        </div>
+    </article>
+    <article class="- topic/topic topic nested1" aria-labelledby="ariaid-title3" id="使用元编程生成报表">
+        <h2 class="- topic/title title topictitle2" id="ariaid-title3">使用元编程生成报表</h2>
+        <div class="- topic/body body">
+            <p class="- topic/p p" id="使用元编程生成报表__p_t1w_5hn_ryb" data-ofbid="使用元编程生成报表__p_t1w_5hn_ryb">我们可以使用函数 <a class="- topic/xref xref" href="../funcs/f/format.html">format</a>
+                    函数生成报表。<code class="+ topic/ph pr-d/codeph ph codeph">format</code>
+                函数有两个参数：列名和对应的格式字符串。格式字符串与Java中的数字和日期格式字符串相似。我们使用6种符号(0/#/,/./%/E)来表示数字的格式，使用9种符号(y/M/d/H/h/m/s/S/n)表示时序数据的格式。例如：</p>
+            <div class="table-container"><table class="- topic/table table" id="使用元编程生成报表__table_u1w_5hn_ryb" data-ofbid="使用元编程生成报表__table_u1w_5hn_ryb" data-cols="3"><caption></caption><colgroup><col/><col/><col/></colgroup><thead class="- topic/thead thead">
+                        <tr class="- topic/row">
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="使用元编程生成报表__table_u1w_5hn_ryb__entry__1">输入数据</th>
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="使用元编程生成报表__table_u1w_5hn_ryb__entry__2">格式字符串</th>
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="使用元编程生成报表__table_u1w_5hn_ryb__entry__3">输出数据</th>
+                        </tr>
+                    </thead><tbody class="- topic/tbody tbody">
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="使用元编程生成报表__table_u1w_5hn_ryb__entry__1">2012.12.05T15:30:59.125</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="使用元编程生成报表__table_u1w_5hn_ryb__entry__2">yyyy-MM-dd HH:mm</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="使用元编程生成报表__table_u1w_5hn_ryb__entry__3">2012-12-05 15:30</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="使用元编程生成报表__table_u1w_5hn_ryb__entry__1">2012.12.05</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="使用元编程生成报表__table_u1w_5hn_ryb__entry__2">MMMddyyyy</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="使用元编程生成报表__table_u1w_5hn_ryb__entry__3">DEC052012</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="使用元编程生成报表__table_u1w_5hn_ryb__entry__1">0.1356</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="使用元编程生成报表__table_u1w_5hn_ryb__entry__2">0.0%</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="使用元编程生成报表__table_u1w_5hn_ryb__entry__3">13.6%</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="使用元编程生成报表__table_u1w_5hn_ryb__entry__1">1234567.42</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="使用元编程生成报表__table_u1w_5hn_ryb__entry__2">#,###.0</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="使用元编程生成报表__table_u1w_5hn_ryb__entry__3">1,234,567.4</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="使用元编程生成报表__table_u1w_5hn_ryb__entry__1">1234567.42</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="使用元编程生成报表__table_u1w_5hn_ryb__entry__2">0.00####E0</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="使用元编程生成报表__table_u1w_5hn_ryb__entry__3">1.234567E6</td>
+                        </tr>
+                    </tbody></table></div>
+            <p class="- topic/p p" id="使用元编程生成报表__p_v1w_5hn_ryb" data-ofbid="使用元编程生成报表__p_v1w_5hn_ryb">下面的例子创建了一个自定义函数，给定表、列名和每个列的格式字符串，就能生成报表。<em class="+ topic/ph hi-d/i ph i">sqlCol</em>、<em class="+ topic/ph hi-d/i ph i">sqlColAlias</em>、<em class="+ topic/ph hi-d/i ph i">sql</em> 和
+                    <em class="+ topic/ph hi-d/i ph i">makeCall</em> 函数可以用于生成SQL语句，调用 <em class="+ topic/ph hi-d/i ph i">eval</em> 函数来生成报表，<em class="+ topic/ph hi-d/i ph i">makeCall</em>
+                    函数调用脚本并生成一系列元代码，<em class="+ topic/ph hi-d/i ph i">makeCall</em> 函数的第一个参数是函数，其他参数是函数所需的参数。</p>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="使用元编程生成报表__codeblock_w1w_5hn_ryb" data-ofbid="使用元编程生成报表__codeblock_w1w_5hn_ryb"><code>def generateReport(tbl, colNames, colFormat){
+   colCount = colNames.size()
+   colDefs = array(ANY, colCount)
+   for(i in 0:colCount){
+      if(colFormat[i] == "")
+         colDefs[i] = sqlCol(colNames[i])
+      else
+         colDefs[i] = sqlCol(colNames[i], format{,colFormat[i]})
+   }
+   return sql(colDefs, tbl).eval()
+}</code></pre>
+            <p class="- topic/p p" id="使用元编程生成报表__p_x1w_5hn_ryb" data-ofbid="使用元编程生成报表__p_x1w_5hn_ryb">生成100行4列（列名为id, date, price和qty）的样本表，随后调用generateReport函数生成报表。</p>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="使用元编程生成报表__codeblock_y1w_5hn_ryb" data-ofbid="使用元编程生成报表__codeblock_y1w_5hn_ryb"><code>t = table(1..100 as id, (1..100 + 2018.01.01) as date, rand(100.0, 100) as price, rand(10000, 100) as qty);
+t;</code></pre>
+            <div class="table-container"><table class="- topic/table table" id="使用元编程生成报表__table_z1w_5hn_ryb" data-ofbid="使用元编程生成报表__table_z1w_5hn_ryb" data-cols="4"><caption></caption><colgroup><col/><col/><col/><col/></colgroup><thead class="- topic/thead thead">
+                        <tr class="- topic/row">
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="使用元编程生成报表__table_z1w_5hn_ryb__entry__1">id</th>
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="使用元编程生成报表__table_z1w_5hn_ryb__entry__2">date</th>
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="使用元编程生成报表__table_z1w_5hn_ryb__entry__3">price</th>
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="使用元编程生成报表__table_z1w_5hn_ryb__entry__4">qty</th>
+                        </tr>
+                    </thead><tbody class="- topic/tbody tbody">
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="使用元编程生成报表__table_z1w_5hn_ryb__entry__1">1</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="使用元编程生成报表__table_z1w_5hn_ryb__entry__2">2018.01.02</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="使用元编程生成报表__table_z1w_5hn_ryb__entry__3">61.483376</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="使用元编程生成报表__table_z1w_5hn_ryb__entry__4">8733</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="使用元编程生成报表__table_z1w_5hn_ryb__entry__1">2</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="使用元编程生成报表__table_z1w_5hn_ryb__entry__2">2018.01.03</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="使用元编程生成报表__table_z1w_5hn_ryb__entry__3">21.254616</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="使用元编程生成报表__table_z1w_5hn_ryb__entry__4">8365</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="使用元编程生成报表__table_z1w_5hn_ryb__entry__1">3</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="使用元编程生成报表__table_z1w_5hn_ryb__entry__2">2018.01.04</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="使用元编程生成报表__table_z1w_5hn_ryb__entry__3">37.408301</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="使用元编程生成报表__table_z1w_5hn_ryb__entry__4">444</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="使用元编程生成报表__table_z1w_5hn_ryb__entry__1">4</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="使用元编程生成报表__table_z1w_5hn_ryb__entry__2">2018.01.05</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="使用元编程生成报表__table_z1w_5hn_ryb__entry__3">70.608384</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="使用元编程生成报表__table_z1w_5hn_ryb__entry__4">9944</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="使用元编程生成报表__table_z1w_5hn_ryb__entry__1">5</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="使用元编程生成报表__table_z1w_5hn_ryb__entry__2">2018.01.06</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="使用元编程生成报表__table_z1w_5hn_ryb__entry__3">80.361811</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="使用元编程生成报表__table_z1w_5hn_ryb__entry__4">7185</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="使用元编程生成报表__table_z1w_5hn_ryb__entry__1">...</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="使用元编程生成报表__table_z1w_5hn_ryb__entry__2">...</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="使用元编程生成报表__table_z1w_5hn_ryb__entry__3">...</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="使用元编程生成报表__table_z1w_5hn_ryb__entry__4">...</td>
+                        </tr>
+                    </tbody></table></div>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="使用元编程生成报表__codeblock_abw_5hn_ryb" data-ofbid="使用元编程生成报表__codeblock_abw_5hn_ryb"><code>generateReport(t, ["id", "date","price","qty"], ["0", "MM/dd/yyyy", "0.00", "#,###"]);</code></pre>
+            <div class="table-container"><table class="- topic/table table" id="使用元编程生成报表__table_bbw_5hn_ryb" data-ofbid="使用元编程生成报表__table_bbw_5hn_ryb" data-cols="4"><caption></caption><colgroup><col/><col/><col/><col/></colgroup><thead class="- topic/thead thead">
+                        <tr class="- topic/row">
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="使用元编程生成报表__table_bbw_5hn_ryb__entry__1">id</th>
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="使用元编程生成报表__table_bbw_5hn_ryb__entry__2">date</th>
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="使用元编程生成报表__table_bbw_5hn_ryb__entry__3">price</th>
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="使用元编程生成报表__table_bbw_5hn_ryb__entry__4">qty</th>
+                        </tr>
+                    </thead><tbody class="- topic/tbody tbody">
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="使用元编程生成报表__table_bbw_5hn_ryb__entry__1">1</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="使用元编程生成报表__table_bbw_5hn_ryb__entry__2">01/02/2018</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="使用元编程生成报表__table_bbw_5hn_ryb__entry__3">61.48</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="使用元编程生成报表__table_bbw_5hn_ryb__entry__4">8,733</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="使用元编程生成报表__table_bbw_5hn_ryb__entry__1">2</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="使用元编程生成报表__table_bbw_5hn_ryb__entry__2">01/03/2018</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="使用元编程生成报表__table_bbw_5hn_ryb__entry__3">21.25</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="使用元编程生成报表__table_bbw_5hn_ryb__entry__4">8,365</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="使用元编程生成报表__table_bbw_5hn_ryb__entry__1">3</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="使用元编程生成报表__table_bbw_5hn_ryb__entry__2">01/04/2018</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="使用元编程生成报表__table_bbw_5hn_ryb__entry__3">37.41</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="使用元编程生成报表__table_bbw_5hn_ryb__entry__4">444</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="使用元编程生成报表__table_bbw_5hn_ryb__entry__1">4</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="使用元编程生成报表__table_bbw_5hn_ryb__entry__2">01/05/2018</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="使用元编程生成报表__table_bbw_5hn_ryb__entry__3">70.61</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="使用元编程生成报表__table_bbw_5hn_ryb__entry__4">9,944</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="使用元编程生成报表__table_bbw_5hn_ryb__entry__1">5</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="使用元编程生成报表__table_bbw_5hn_ryb__entry__2">01/06/2018</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="使用元编程生成报表__table_bbw_5hn_ryb__entry__3">80.36</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="使用元编程生成报表__table_bbw_5hn_ryb__entry__4">7,185</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="使用元编程生成报表__table_bbw_5hn_ryb__entry__1">...</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="使用元编程生成报表__table_bbw_5hn_ryb__entry__2">...</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="使用元编程生成报表__table_bbw_5hn_ryb__entry__3">...</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="使用元编程生成报表__table_bbw_5hn_ryb__entry__4">...</td>
+                        </tr>
+                    </tbody></table></div>
+            <p class="- topic/p p" id="使用元编程生成报表__p_cbw_5hn_ryb" data-ofbid="使用元编程生成报表__p_cbw_5hn_ryb">也可使用元编程生成过滤条件。</p>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="使用元编程生成报表__codeblock_dbw_5hn_ryb" data-ofbid="使用元编程生成报表__codeblock_dbw_5hn_ryb"><code>def generateReportWithFilter(tbl, colNames, colFormat, filter){
+   colCount = colNames.size()
+   colDefs = array(ANY, colCount)
+   for(i in 0:colCount){
+      if(colFormat[i] == "")
+         colDefs[i] = sqlCol(colNames[i])
+      else
+         colDefs[i] = sqlCol(colNames[i], format{,colFormat[i]})
+   }
+   return sql(colDefs, tbl, filter).eval()
+}
+generateReportWithFilter(t, ["id","date","price","qty"], ["","MM/dd/yyyy", "00.00", "#,###"], &lt; id&gt;10 and price&lt;20 &gt;);</code></pre>
+            <div class="table-container"><table class="- topic/table table" id="使用元编程生成报表__table_ebw_5hn_ryb" data-ofbid="使用元编程生成报表__table_ebw_5hn_ryb" data-cols="4"><caption></caption><colgroup><col/><col/><col/><col/></colgroup><thead class="- topic/thead thead">
+                        <tr class="- topic/row">
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="使用元编程生成报表__table_ebw_5hn_ryb__entry__1">id</th>
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="使用元编程生成报表__table_ebw_5hn_ryb__entry__2">date</th>
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="使用元编程生成报表__table_ebw_5hn_ryb__entry__3">price</th>
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="使用元编程生成报表__table_ebw_5hn_ryb__entry__4">qty</th>
+                        </tr>
+                    </thead><tbody class="- topic/tbody tbody">
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="使用元编程生成报表__table_ebw_5hn_ryb__entry__1">11</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="使用元编程生成报表__table_ebw_5hn_ryb__entry__2">01/12/2018</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="使用元编程生成报表__table_ebw_5hn_ryb__entry__3">11.21</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="使用元编程生成报表__table_ebw_5hn_ryb__entry__4">7,033</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="使用元编程生成报表__table_ebw_5hn_ryb__entry__1">18</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="使用元编程生成报表__table_ebw_5hn_ryb__entry__2">01/19/2018</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="使用元编程生成报表__table_ebw_5hn_ryb__entry__3">09.97</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="使用元编程生成报表__table_ebw_5hn_ryb__entry__4">6,136</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="使用元编程生成报表__table_ebw_5hn_ryb__entry__1">29</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="使用元编程生成报表__table_ebw_5hn_ryb__entry__2">01/30/2018</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="使用元编程生成报表__table_ebw_5hn_ryb__entry__3">06.33</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="使用元编程生成报表__table_ebw_5hn_ryb__entry__4">3,834</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="使用元编程生成报表__table_ebw_5hn_ryb__entry__1">31</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="使用元编程生成报表__table_ebw_5hn_ryb__entry__2">02/01/2018</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="使用元编程生成报表__table_ebw_5hn_ryb__entry__3">05.52</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="使用元编程生成报表__table_ebw_5hn_ryb__entry__4">6,851</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="使用元编程生成报表__table_ebw_5hn_ryb__entry__1">38</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="使用元编程生成报表__table_ebw_5hn_ryb__entry__2">02/08/2018</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="使用元编程生成报表__table_ebw_5hn_ryb__entry__3">14.55</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="使用元编程生成报表__table_ebw_5hn_ryb__entry__4">7,482</td>
+                        </tr>
+                    </tbody></table></div>
+        </div>
+    </article>
+</article></main></div>
+                        
+                        
+                        
+                        
+                        
+                        
+                    </div>
+                    
+                        <nav role="navigation" id="wh_topic_toc" aria-label="On this page" class="col-lg-2 d-none d-lg-block navbar d-print-none"> 
+                            <div id="wh_topic_toc_content">
+		                        
+	                            <div class=" wh_topic_toc "><div class="wh_topic_label">在本页上</div><ul><li class="topic-item"><a href="#%E7%9B%B8%E5%85%B3%E5%87%BD%E6%95%B0" data-tocid="相关函数">相关函数</a></li><li class="topic-item"><a href="#%E4%BD%BF%E7%94%A8%E5%85%83%E7%BC%96%E7%A8%8B%E7%94%9F%E6%88%90%E6%8A%A5%E8%A1%A8" data-tocid="使用元编程生成报表">使用元编程生成报表</a></li></ul></div>
+	                        	
+                        	</div>
+                        </nav>
+                    
+                </div>
+            </div>
+            
+            
+            
+        </div> 
+        <footer class="navbar navbar-default wh_footer">
+  <div class=" footer-container mx-auto ">
+<title>Copyright</title><p><b> ©2024 浙江智臾科技有限公司 浙ICP备18048711号-3</b></p>
+  </div>
+</footer>
+        
+        <div id="go2top" class="d-print-none">
+            <span class="oxy-icon oxy-icon-up"></span>
+        </div>
+        
+        <div id="modal_img_large" class="modal">
+            <span class="close oxy-icon oxy-icon-remove"></span>
+            <div id="modal_img_container"></div>
+            <div id="caption"></div>
+        </div>
+        
+        
+        
+    </body>
+</html>

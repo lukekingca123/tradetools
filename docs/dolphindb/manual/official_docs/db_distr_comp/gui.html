@@ -1,0 +1,331 @@
+<!DOCTYPE html><html xmlns="http://www.w3.org/1999/xhtml" xml:lang="zh" lang="zh" data-whc_version="26.0">
+    <head><link rel="shortcut icon" href="../favicon.ico"/><link rel="icon" href="../favicon.ico"/><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><meta http-equiv="X-UA-Compatible" content="IE=edge"/><meta name="description" content="DolphinDB GUI 客户端是基于 Java 的图形化编程以及数据浏览界面，可在任何支持 Java 的操作系统上使用，例如：Windows、Linux、Mac。该客户端运行速度快，功能齐全，用户友好，适用于管理和开发 DolphinDB 脚本、模块，以及数据库交互，查看运行结果等。 用户能够在 GUI ..."/><meta name="DC.rights.owner" content="(C) 版权 2024"/><meta name="copyright" content="(C) 版权 2024"/><meta name="generator" content="DITA-OT"/><meta name="DC.type" content="topic"/><meta name="DC.coverage" content=""/><meta name="DC.subject" content="GUI,gui"/><meta name="keywords" content="GUI, gui"/><meta name="indexterms" content="GUI, gui"/><meta name="DC.relation" content="../db_distr_comp/clients.html"/><meta name="prodname" content="DolphinDB"/><meta name="brand" content="DolphinDB"/><meta name="DC.creator" content="DolphinDB"/><meta name="DC.publisher" content="DDB N/A DDB 200"/><meta name="DC.format" content="HTML5"/><meta name="DC.identifier" content="gui_client"/><title>GUI 客户端</title><!--  Generated with Oxygen version 26.0, build number 2024012323.  --><meta name="wh-path2root" content="../"/><meta name="wh-toc-id" content="gui_client-d9529e1922"/><meta name="wh-source-relpath" content="db_distr_comp/gui.dita"/><meta name="wh-out-relpath" content="db_distr_comp/gui.html"/>
+
+    <link rel="stylesheet" type="text/css" href="../oxygen-webhelp/app/commons.css?buildId=2024012323"/>
+    <link rel="stylesheet" type="text/css" href="../oxygen-webhelp/app/topic.css?buildId=2024012323"/>
+
+    <script src="../oxygen-webhelp/app/options/properties.js?buildId=20240704100525"></script>
+    <script src="../oxygen-webhelp/app/localization/strings.js?buildId=2024012323"></script>
+    <script src="../oxygen-webhelp/app/search/index/keywords.js?buildId=20240704100525"></script>
+    <script defer="defer" src="../oxygen-webhelp/app/commons.js?buildId=2024012323"></script>
+    <script defer="defer" src="../oxygen-webhelp/app/topic.js?buildId=2024012323"></script>
+<link rel="stylesheet" type="text/css" href="../oxygen-webhelp/template/styles.css?buildId=2024012323"/><script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script><script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script></head>
+
+    <body id="gui_client" class="wh_topic_page frmBody">
+        <a href="#wh_topic_body" class="sr-only sr-only-focusable">
+            跳转到主要内容
+        </a>
+        
+        
+        
+        
+        <header class="navbar navbar-default wh_header">
+    <div class="container-fluid">
+        <div xmlns:whc="http://www.oxygenxml.com/webhelp/components" class="wh_header_flex_container navbar-nav navbar-expand-md navbar-dark">
+            <div class="wh_logo_and_publication_title_container">
+                <div class="wh_logo_and_publication_title">
+                    
+                    <a href="https://www.dolphindb.cn" class=" wh_logo d-none d-sm-block "><img src="../logo.png" alt="  DolphinDB 文档中心  "/></a>
+                    <div class=" wh_publication_title "><a href="../index.html"><span class="booktitle">  <span class="ph mainbooktitle">DolphinDB 文档中心</span>  </span></a></div>
+                    
+                </div>
+                
+                
+            </div>
+
+            <div class="wh_top_menu_and_indexterms_link collapse navbar-collapse" id="wh_top_menu_and_indexterms_link">
+                
+                
+                
+                
+            </div>
+        <div class=" wh_search_input navbar-form wh_topic_page_search search " role="form">
+            
+            
+            
+            <form id="searchForm" method="get" role="search" action="../search.html"><div><input type="search" placeholder="搜索 " class="wh_search_textfield" id="textToSearch" name="searchQuery" aria-label="搜索查询" required="required"/><button type="submit" class="wh_search_button" aria-label="搜索"><span class="search_input_text">搜索</span></button></div></form>
+            
+            <script src="/vendors/react/umd/react.production.min.js" defer="defer"></script>
+<script src="/vendors/react-dom/umd/react-dom.production.min.js" defer="defer"></script>
+<script src="/vendors/dayjs/dayjs.min.js" defer="defer"></script>
+<script src="/vendors/antd/dist/antd.min.js" defer="defer"></script>
+<script src="/vendors/@ant-design/icons/dist/index.umd.min.js" defer="defer"></script>
+<script src="/zh/index.js" type="module"></script>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js" defer="defer"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML" defer="defer"><!--
+
+
+--></script>
+
+            
+        </div></div>
+    </div>
+</header>
+        
+        
+         
+        
+        
+        
+        <div class="container-fluid" id="wh_topic_container">
+            <div class="row">
+
+                <nav class="wh_tools d-print-none navbar-expand-md" aria-label="Tools">
+                    
+                    <div data-tooltip-position="bottom" class=" wh_breadcrumb "><ol class="d-print-none"><li><span class="home"><a href="../index.html"><span>主页</span></a></span></li><li><div class="topicref" data-id="sectionddb_deployment"><div class="title"><a href="../deploy/deploy_intro.html"><span class="keyword label">部署</span></a><div class="wh-tooltip"><p class="shortdesc">如何在不同的场景中部署 DolphinDB</p></div></div></div></li><li><div class="topicref" data-id="chap1_sect_using_clients"><div class="title"><a href="../db_distr_comp/clients.html">数据库管理工具</a></div></div></li><li class="active"><div class="topicref" data-id="gui_client"><div class="title"><a href="../db_distr_comp/gui.html"><span class="keyword label">GUI 客户端</span></a></div></div></li></ol></div>
+                    
+                    
+                    
+                    <div class="wh_right_tools">
+                        <button class="wh_hide_highlight" aria-label="切换搜索突出显示" title="切换搜索突出显示"></button>
+                        <button class="webhelp_expand_collapse_sections" data-next-state="collapsed" aria-label="折叠截面" title="折叠截面"></button>
+                        
+                        
+                        
+                        
+                        <div class=" wh_print_link print d-none d-md-inline-block "><button onClick="window.print()" title="打印此页" aria-label="打印此页"></button></div>
+                        
+                        <button type="button" id="wh_toc_button" class="custom-toggler navbar-toggler collapsed wh_toggle_button navbar-light" aria-expanded="false" aria-label="Toggle publishing table of content" aria-controls="wh_publication_toc">
+                            <span class="navbar-toggler-icon"></span>
+                        </button>
+                    </div>
+                    
+                </nav>
+            </div>
+            
+            
+            
+            
+            <div class="wh_content_area">
+                <div class="row">
+                    
+                        <nav id="wh_publication_toc" class="col-lg-3 col-md-3 col-sm-12 d-md-block d-none d-print-none" aria-label="Table of Contents Container">
+                            <div id="wh_publication_toc_content">
+		                        
+                            	<div class=" wh_publication_toc " data-tooltip-position="right"><span class="expand-button-action-labels"><span id="button-expand-action" role="button" aria-label="Expand"></span><span id="button-collapse-action" role="button" aria-label="Collapse"></span><span id="button-pending-action" role="button" aria-label="Pending"></span></span><ul role="tree" aria-label="Table of Contents"><li role="treeitem"><div data-tocid="new_chap_about_sect_ddb_docs_intro-d9529e87" class="topicref" data-id="new_chap_about_sect_ddb_docs_intro" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../about/ddb_docs_intro.html" id="new_chap_about_sect_ddb_docs_intro-d9529e87-link">文档使用说明</a><div class="wh-tooltip"><p class="shortdesc">如何获取 DolphinDB 帮助信息</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="chap1_getstarted-d9529e140" class="topicref" data-id="chap1_getstarted" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action chap1_getstarted-d9529e140-link" class="wh-expand-btn"></span><div class="title"><a href="../getstarted/chap1_getstarted.html" id="chap1_getstarted-d9529e140-link"><span class="keyword label">快速上手</span></a><div class="wh-tooltip"><p class="shortdesc">如何快速部署 DolphinDB、建库建表、写入和查询数据</p></div></div></div></li><li role="treeitem" aria-expanded="true"><div data-tocid="sectionddb_deployment-d9529e335" class="topicref" data-id="sectionddb_deployment" data-state="expanded"><span role="button" tabindex="0" aria-labelledby="button-collapse-action sectionddb_deployment-d9529e335-link" class="wh-expand-btn"></span><div class="title"><a href="../deploy/deploy_intro.html" id="sectionddb_deployment-d9529e335-link"><span class="keyword label">部署</span></a><div class="wh-tooltip"><p class="shortdesc">如何在不同的场景中部署 DolphinDB</p></div></div></div><ul role="group" class="navbar-nav nav-list"><li role="treeitem" aria-expanded="false"><div data-tocid="tocId-d9529e388" class="topicref" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action tocId-d9529e388-link" class="wh-expand-btn"></span><div class="title"><a href="../tutorials/standalone_server.html" id="tocId-d9529e388-link">单节点部署与升级</a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="tocId-d9529e481" class="topicref" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action tocId-d9529e481-link" class="wh-expand-btn"></span><div class="title"><a href="../tutorials/single_machine_cluster_deploy.html" id="tocId-d9529e481-link">集群部署与升级</a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="tocId-d9529e666" class="topicref" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action tocId-d9529e666-link" class="wh-expand-btn"></span><div class="title"><a href="../tutorials/docker_single_deployment.html" id="tocId-d9529e666-link">云环境部署</a></div></div></li><li role="treeitem"><div data-tocid="linux-系统部署准备-d9529e943" class="topicref" data-id="linux-系统部署准备" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../tutorials/prep_linux_for_deploy.html" id="linux-系统部署准备-d9529e943-link">Linux 系统部署准备</a></div></div></li><li role="treeitem" aria-expanded="true"><div data-tocid="chap1_sect_using_clients-d9529e989" class="topicref" data-id="chap1_sect_using_clients" data-state="expanded"><span role="button" tabindex="0" aria-labelledby="button-collapse-action chap1_sect_using_clients-d9529e989-link" class="wh-expand-btn"></span><div class="title"><a href="../db_distr_comp/clients.html" id="chap1_sect_using_clients-d9529e989-link">数据库管理工具</a></div></div><ul role="group" class="navbar-nav nav-list"><li role="treeitem" aria-expanded="false"><div data-tocid="intro-d9529e1062" class="topicref" data-id="intro" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action intro-d9529e1062-link" class="wh-expand-btn"></span><div class="title"><a href="../db_distr_comp/db_man/web/intro.html" id="intro-d9529e1062-link"><span class="keyword label">Web 集群管理器</span></a></div></div></li><li role="treeitem"><div data-tocid="vscode_client-d9529e1848" class="topicref" data-id="vscode_client" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../db_distr_comp/vscode.html" id="vscode_client-d9529e1848-link"><span class="keyword label">VS Code 插件</span></a></div></div></li><li role="treeitem" class="active"><div data-tocid="gui_client-d9529e1922" class="topicref" data-id="gui_client" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../db_distr_comp/gui.html" id="gui_client-d9529e1922-link"><span class="keyword label">GUI 客户端</span></a></div></div></li><li role="treeitem"><div data-tocid="notebook_client-d9529e1983" class="topicref" data-id="notebook_client" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../db_distr_comp/jupyter.html" id="notebook_client-d9529e1983-link">Jupyter Notebook 客户端</a></div></div></li><li role="treeitem"><div data-tocid="terminal_client-d9529e2029" class="topicref" data-id="terminal_client" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../db_distr_comp/terminal.html" id="terminal_client-d9529e2029-link"><span class="keyword">DolphinDB 终端</span></a></div></div></li></ul></li><li role="treeitem" aria-expanded="false"><div data-tocid="parameters_configuration-d9529e2076" class="topicref" data-id="parameters_configuration" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action parameters_configuration-d9529e2076-link" class="wh-expand-btn"></span><div class="title"><a href="../db_distr_comp/cfg/para_cfg.html" id="parameters_configuration-d9529e2076-link"><span class="keyword label">参数配置</span></a></div></div></li></ul></li><li role="treeitem" aria-expanded="false"><div data-tocid="new_chap_database_manage_new_chap_dbmanage_landing_page-d9529e2313" class="topicref" data-id="new_chap_database_manage_new_chap_dbmanage_landing_page" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action new_chap_database_manage_new_chap_dbmanage_landing_page-d9529e2313-link" class="wh-expand-btn"></span><div class="title"><a href="../db_distr_comp/cfg/db_intro.html" id="new_chap_database_manage_new_chap_dbmanage_landing_page-d9529e2313-link"><span class="keyword label">数据库</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 数据库的基本概念</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="chap7_tutorials_streaming-d9529e3490" class="topicref" data-id="chap7_tutorials_streaming" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action chap7_tutorials_streaming-d9529e3490-link" class="wh-expand-btn"></span><div class="title"><a href="../stream/str_intro.html" id="chap7_tutorials_streaming-d9529e3490-link"><span class="keyword label">流数据</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 流数据引擎及流数据计算的基本概念</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="tocId-d9529e7385" class="topicref" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action tocId-d9529e7385-link" class="wh-expand-btn"></span><div class="title"><a href="../db_distr_comp/db_oper/import_data.html" id="tocId-d9529e7385-link">数据迁移</a><div class="wh-tooltip"><p class="shortdesc">如何从不同数据源向 DolphinDB 迁移数据</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="chap7_tutorials_system_management-d9529e7812" class="topicref" data-id="chap7_tutorials_system_management" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action chap7_tutorials_system_management-d9529e7812-link" class="wh-expand-btn"></span><div class="title"><a href="../sys_man/om_intro.html" id="chap7_tutorials_system_management-d9529e7812-link"><span class="keyword label">系统运维</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 的系统运维功能及方法</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="about_language_resources-d9529e16490" class="topicref" data-id="about_language_resources" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action about_language_resources-d9529e16490-link" class="wh-expand-btn"></span><div class="title"><a href="../progr/progr_intro.html" id="about_language_resources-d9529e16490-link"><span class="keyword label">编程语言</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 编程基本概念与方法、SQL 在 DolphinDB 的应用</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="functions_references-d9529e26503" class="topicref" data-id="functions_references" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action functions_references-d9529e26503-link" class="wh-expand-btn"></span><div class="title"><a href="../funcs/funcs_intro.html" id="functions_references-d9529e26503-link"><span class="keyword label">函数参考</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 函数分类、语法、详解及示例</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="api_protocol-d9529e86456" class="topicref" data-id="api_protocol" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action api_protocol-d9529e86456-link" class="wh-expand-btn"></span><div class="title"><a href="../api/connapi_intro.html" id="api_protocol-d9529e86456-link"><span class="keyword label">连接器 &amp; API</span></a><div class="wh-tooltip"><p class="shortdesc">面向不同编程语言的 DolphinDB API 及连接器，相关协议和用法</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="chap6_plugin-d9529e91976" class="topicref" data-id="chap6_plugin" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action chap6_plugin-d9529e91976-link" class="wh-expand-btn"></span><div class="title"><a href="../plugins/plg_intro.html" id="chap6_plugin-d9529e91976-link"><span class="keyword label">插件</span></a><div class="wh-tooltip"><p class="shortdesc">多个应用场景的插件使用说明和插件开发指导</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="third_party-d9529e94749" class="topicref" data-id="third_party" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action third_party-d9529e94749-link" class="wh-expand-btn"></span><div class="title"><a href="../third_party.html" id="third_party-d9529e94749-link">第三方工具</a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="about_tutorials-d9529e94980" class="topicref" data-id="about_tutorials" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action about_tutorials-d9529e94980-link" class="wh-expand-btn"></span><div class="title"><a href="../tutorials/about_tutorials.html" id="about_tutorials-d9529e94980-link"><span class="keyword label">教程</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 产品使用教程</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="tocId-d9529e101769" class="topicref" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action tocId-d9529e101769-link" class="wh-expand-btn"></span><div class="title"><a href="../rn/server/3_00_1.html" id="tocId-d9529e101769-link">版本说明</a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 版本发布历史</p></div></div></div></li></ul></div>
+		                        
+                            </div>
+                        </nav>
+                    
+                    
+                    <div class="col-lg-7 col-md-9 col-sm-12" id="wh_topic_body">
+                        <button id="wh_close_publication_toc_button" class="close-toc-button d-none" aria-label="Toggle publishing table of content" aria-controls="wh_publication_toc" aria-expanded="true">
+                            <span class="close-toc-icon-container">
+                                <span class="close-toc-icon"></span>     
+                            </span>
+                        </button>
+                        <button id="wh_close_topic_toc_button" class="close-toc-button d-none" aria-label="Toggle topic table of content" aria-controls="wh_topic_toc" aria-expanded="true">
+                            <span class="close-toc-icon-container">
+                                <span class="close-toc-icon"></span>     
+                            </span>
+                        </button>
+                        
+                        <div class=" wh_topic_content body "><main role="main"><article class="- topic/topic topic" role="article" aria-labelledby="ariaid-title1">
+    <h1 class="- topic/title title topictitle1" id="ariaid-title1"><span class="- topic/keyword keyword label">GUI 客户端</span></h1>
+    <div class="- topic/body body">
+        <p class="- topic/p p" id="gui_client__p_kfm_54d_syb" data-ofbid="gui_client__p_kfm_54d_syb">DolphinDB GUI 客户端是基于 Java 的图形化编程以及数据浏览界面，可在任何支持 Java
+            的操作系统上使用，例如：Windows、Linux、Mac。该客户端运行速度快，功能齐全，用户友好，适用于管理和开发 DolphinDB
+            脚本、模块，以及数据库交互，查看运行结果等。</p>
+        <p class="- topic/p p" id="gui_client__p_lfm_54d_syb" data-ofbid="gui_client__p_lfm_54d_syb">用户能够在 GUI 客户端进行以下操作：查找/替换文本、保留字高亮显示、系统函数提示、行号显示，选择部分代码执行、执行结果浏览、查看 log
+            信息、临时变量浏览、数据库浏览。通过 Project 浏览器，可以浏览所有项目。通过 Database 浏览器，可以浏览所有 DFS 数据库以及其分区表的
+            schema。此外，用户能够通过界面中的下拉列表选择已建立的 session，使用 SQL 语言进行脚本编写的用户能够从 SQL 方言兼容性列表中为当前 session 选择
+            MySQL、Oracle 或 DolphinDB 作为兼容的 SQL 方言。</p>
+        <section class="- topic/section section" id="gui_client__section_u1r_3g4_ryb" data-ofbid="gui_client__section_u1r_3g4_ryb"><h2 class="- topic/title title sectiontitle">安装与启动</h2>
+            
+            <p class="- topic/p p" id="gui_client__p_mfm_54d_syb" data-ofbid="gui_client__p_mfm_54d_syb">在启动 GUI 前，需要确保：</p>
+            <ul class="- topic/ul ul" id="gui_client__ul_e2p_jg4_ryb" data-ofbid="gui_client__ul_e2p_jg4_ryb">
+                <li class="- topic/li li" id="gui_client__li_nfm_54d_syb" data-ofbid="gui_client__li_nfm_54d_syb">
+                    <p class="- topic/p p" id="gui_client__p_ofm_54d_syb" data-ofbid="gui_client__p_ofm_54d_syb">安装 Java 运行环境。推荐使用 64 位的 Java 8 版本。如需查看 Java 的版本信息，可在命令行中使用
+                            <em class="+ topic/ph hi-d/i ph i">java -version</em> 命令，符合要求的 Java 版本如下：</p>
+                    <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="gui_client__codeblock_wfr_nh5_4zb" data-ofbid="gui_client__codeblock_wfr_nh5_4zb"><code>&gt; java -version
+java version "1.8.0_121"
+Java(TM) SE Runtime Environment (build 1.8.0_121-b13)
+Java HotSpot(TM) 64-Bit Server VM (build 25.121-b13, mixed mode)</code></pre>
+                    <p class="- topic/p p">若版本信息的最后一行如下，那么 DolphinDB GUI 无法正常启动。</p>
+                    <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="gui_client__codeblock_ypw_5m1_pzb" data-ofbid="gui_client__codeblock_ypw_5m1_pzb"><code>Java HotSpot(TM) Client VM</code></pre>
+                </li>
+                <li class="- topic/li li" id="gui_client__li_pfm_54d_syb" data-ofbid="gui_client__li_pfm_54d_syb">
+                    <p class="- topic/p p" id="gui_client__p_qfm_54d_syb" data-ofbid="gui_client__p_qfm_54d_syb">已将 JRE（Java Runtime Environment） 添加至系统路径中。</p>
+                </li>
+            </ul>
+            <p class="- topic/p p" id="gui_client__p_rfm_54d_syb" data-ofbid="gui_client__p_rfm_54d_syb">DolphinDB GUI 在 Windows 环境下，双击 <em class="+ topic/ph hi-d/i ph i">gui.bat</em> 即可直接运行。</p>
+            <p class="- topic/p p">在 Linux 和 Mac 环境下，在 Terminal 中使用 <code class="+ topic/ph pr-d/codeph ph codeph">cd</code> 命令前往 GUI 压缩包解压后的目录后输入：</p>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock language-bourne" id="gui_client__codeblock_f2p_jg4_ryb" data-ofbid="gui_client__codeblock_f2p_jg4_ryb">./gui.sh</pre>
+            <div class="- topic/note note note note_note" id="gui_client__note_wxf_xwn_y1c" data-ofbid="gui_client__note_wxf_xwn_y1c"><span class="note__title">注：</span> 使用 GUI 连接 3.00.00 或以上版本的 DolphinDB Server 时， 请确保 GUI 版本不低于
+                1.30.21.1。如需升级 GUI 版本，请前往 <a class="- topic/xref xref" href="https://dolphindb.cn/product#downloads" target="_blank" rel="external noopener">https://dolphindb.cn/product#downloads</a>。</div>
+        </section>
+    <p class="- topic/p p" id="gui_client__p_sfm_54d_syb" data-ofbid="gui_client__p_sfm_54d_syb">以下为 DolphinDB GUI 的主要功能：</p>
+        <section class="- topic/section section" id="gui_client__section_tfm_54d_syb" data-ofbid="gui_client__section_tfm_54d_syb"><h2 class="- topic/title title sectiontitle">Server</h2><p class="- topic/p p" id="gui_client__p_ufm_54d_syb" data-ofbid="gui_client__p_ufm_54d_syb">GUI 菜单中的
+                    <strong class="+ topic/ph hi-d/b ph b">server</strong> 是指 DolphinDB 数据库服务器。</p><p class="- topic/p p">点击 <strong class="+ topic/ph hi-d/b ph b">Add Server</strong>，添加需要连接的 DolphinDB
+                Server 节点。<img class="- topic/image image" id="gui_client__image_fq1_2rs_2bc" src="../images/GUI/new_add_server.png"/></p><p class="- topic/p p">填写以下 Server 信息：</p><ul class="- topic/ul ul" id="gui_client__ul_xdf_grs_2bc" data-ofbid="gui_client__ul_xdf_grs_2bc">
+                <li class="- topic/li li">
+                    <p class="- topic/p p"><strong class="+ topic/ph hi-d/b ph b">Name </strong>这个节点在本地添加的 Server 列表中的唯一标识。</p>
+                </li>
+                <li class="- topic/li li">
+                    <p class="- topic/p p"><strong class="+ topic/ph hi-d/b ph b">Host </strong>DolphinDB Server 所在的服务器 IP 。</p>
+                </li>
+                <li class="- topic/li li">
+                    <p class="- topic/p p"><strong class="+ topic/ph hi-d/b ph b">Port </strong>DolphinDB Server 待连接节点的端口号。</p>
+                </li>
+                <li class="- topic/li li">
+                    <p class="- topic/p p"><strong class="+ topic/ph hi-d/b ph b">Remote Directory </strong>远端目录，<a class="- topic/xref xref" href="#gui_client__section_a2l_fg4_ryb">数据同步</a>功能的目的路径。可以是绝对路径或相对路径，其中相对路径相对于 &lt;HomeDir&gt; 。&lt;HomeDir&gt;
+                        可通过函数 <a class="- topic/xref xref" href="../funcs/g/getHomeDir.html">getHomeDir</a> 获取。</p>
+                </li>
+                <li class="- topic/li li">
+                    <p class="- topic/p p"><strong class="+ topic/ph hi-d/b ph b">Username </strong>登录用户名。</p>
+                </li>
+                <li class="- topic/li li">
+                    <p class="- topic/p p"><strong class="+ topic/ph hi-d/b ph b">Password </strong>登录密码。</p>
+                </li>
+            </ul><img class="- topic/image image" id="gui_client__image_mfp_rrs_2bc" src="../images/GUI/userName.png"/><p class="- topic/p p">点击<strong class="+ topic/ph hi-d/b ph b"> Test
+                </strong>可以测试是否可与目标节点连接成功。</p><p class="- topic/p p">确认上述信息无误后，可以点击 <strong class="+ topic/ph hi-d/b ph b">Add </strong>完成本次添加。</p><p class="- topic/p p">完成添加后，会自动出现在
+                    <strong class="+ topic/ph hi-d/b ph b">server</strong> 下拉菜单中。</p><div class="- topic/note note tip note_tip" id="gui_client__note_hlz_tf4_ryb" data-ofbid="gui_client__note_hlz_tf4_ryb"><span class="note__title">提示：</span> 连接远端服务器时，建议连接数据节点，因为 DolphinDB 关于数据库的操作都是在数据节点上执行的。</div></section>
+        <section class="- topic/section section" id="gui_client__section_nps_5f4_ryb" data-ofbid="gui_client__section_nps_5f4_ryb"><h2 class="- topic/title title sectiontitle">Log in（登录）</h2>
+            
+            <p class="- topic/p p" id="gui_client__p_vfm_54d_syb" data-ofbid="gui_client__p_vfm_54d_syb">登录数据库服务器主要有三种方法：</p>
+            <ul class="- topic/ul ul" id="gui_client__ul_mcz_vf4_ryb" data-ofbid="gui_client__ul_mcz_vf4_ryb">
+                <li class="- topic/li li" id="gui_client__li_wfm_54d_syb" data-ofbid="gui_client__li_wfm_54d_syb">
+                    <p class="- topic/p p" id="gui_client__p_xfm_54d_syb" data-ofbid="gui_client__p_xfm_54d_syb">在添加 server 的时候指定用户名和密码。默认的管理员初始账号和密码为：admin/123456。</p>
+                </li>
+                <li class="- topic/li li" id="gui_client__li_yfm_54d_syb" data-ofbid="gui_client__li_yfm_54d_syb">
+                    <p class="- topic/p p" id="gui_client__p_zfm_54d_syb" data-ofbid="gui_client__p_zfm_54d_syb">点击界面中的 <img class="- topic/image image" id="gui_client__image_ytc_hcp_g1c" src="../images/GUI/gui.png"/> 按钮</p>
+                </li>
+                <li class="- topic/li li" id="gui_client__li_agm_54d_syb" data-ofbid="gui_client__li_agm_54d_syb">
+                    <p class="- topic/p p" id="gui_client__p_bgm_54d_syb" data-ofbid="gui_client__p_bgm_54d_syb">在脚本中使用 <code class="+ topic/ph pr-d/codeph ph codeph">login</code> 函数</p>
+                </li>
+            </ul>
+        </section>
+        <section class="- topic/section section" id="gui_client__section_x4r_xf4_ryb" data-ofbid="gui_client__section_x4r_xf4_ryb"><h2 class="- topic/title title sectiontitle">Workspace（工作空间）</h2>
+            
+            <p class="- topic/p p" id="gui_client__p_cgm_54d_syb" data-ofbid="gui_client__p_cgm_54d_syb">第一次启动 GUI 时，用户需指定 workspace 路径，用于项目管理。Workspace
+                下面可以有多个项目。一个用户只能同时使用一个 workspace。</p>
+        </section>
+        <section class="- topic/section section" id="gui_client__section_scw_yf4_ryb" data-ofbid="gui_client__section_scw_yf4_ryb"><h2 class="- topic/title title sectiontitle">Project（项目管理）</h2>
+            
+            <p class="- topic/p p" id="gui_client__p_dgm_54d_syb" data-ofbid="gui_client__p_dgm_54d_syb">指定 workspace 后，可以通过右击 workspace，点击 <strong class="+ topic/ph hi-d/b ph b">New Project</strong>
+                来创建新的项目，也可以通过 <strong class="+ topic/ph hi-d/b ph b">Import Folder</strong> 或 <strong class="+ topic/ph hi-d/b ph b">Import Project</strong> 导入已有的项目。</p>
+        </section>
+        <section class="- topic/section section" id="gui_client__section_zqm_1g4_ryb" data-ofbid="gui_client__section_zqm_1g4_ryb"><h2 class="- topic/title title sectiontitle">File（文件管理）</h2>
+            
+            <p class="- topic/p p" id="gui_client__p_egm_54d_syb" data-ofbid="gui_client__p_egm_54d_syb">创建 project 后，用户可以在新建 project 下通过 <strong class="+ topic/ph hi-d/b ph b">New Folder</strong>
+                创建脚本目录，并在新建文件夹下通过 <strong class="+ topic/ph hi-d/b ph b">New File</strong> 生成脚本文件。脚本文件创建之后，即可通过编辑器来编写、修改、执行脚本。</p>
+        </section>
+        <section class="- topic/section section" id="gui_client__section_syb_cg4_ryb" data-ofbid="gui_client__section_syb_cg4_ryb"><h2 class="- topic/title title sectiontitle">运行</h2>
+            
+            <p class="- topic/p p" id="gui_client__p_fgm_54d_syb" data-ofbid="gui_client__p_fgm_54d_syb">GUI
+                编程界面提供代码查询、修改、高亮显示、函数提示等功能。用户可以选择部分代码执行，也可以点击文件执行代码。执行完毕，可以立刻看到执行结果，以及查看所有的局部变量和共享变量的值。</p>
+            <figure class="- topic/fig fig fignone" id="gui_client__fig_exv_cg4_ryb" data-ofbid="gui_client__fig_exv_cg4_ryb"><figcaption data-caption-side="top" class="- topic/title title figcap"><span class="figtitleprefix fig--title-label">图<span class="fig--title-label-number"> 1</span><span class="fig--title-label-punctuation">. </span></span><span class="fig--title">脚本运行与结果</span></figcaption>
+                
+                <img class="- topic/image image" id="gui_client__image_rkn_2g4_ryb" src="../images/GUI/gui_1.png"/>
+            </figure>
+        </section>
+        <section class="- topic/section section" id="gui_client__section_a2l_fg4_ryb" data-ofbid="gui_client__section_a2l_fg4_ryb"><h2 class="- topic/title title sectiontitle">Synchronize to Server（数据同步）</h2>
+            
+            <p class="- topic/p p" id="gui_client__p_ggm_54d_syb" data-ofbid="gui_client__p_ggm_54d_syb">在远端服务器上执行一个脚本文件或者调用了一个 module 都会在该服务器上查找对应的脚本文件。当 GUI 和 DolphinDB
+                server 不在一个机器上时，可能需要把本地最新编辑的脚本文件同步到远程服务器上。为此，DolphinDB 提供了 Synchronize to
+                Server，即文件同步功能。在项目浏览器中右击需要同步的目录或者文件，并选择 <strong class="+ topic/ph hi-d/b ph b">Synchronize to
+                    server</strong>，将其传送到服务器的对应目录。<img class="- topic/image image" id="gui_client__image_uyr_wrs_2bc" src="../images/GUI/synchronize.png"/></p>
+            <p class="- topic/p p">通过以下方式指定 Remote Directory 后才可使用文件同步功能：</p>
+            <ul class="- topic/ul ul" id="gui_client__ul_vk4_hg4_ryb" data-ofbid="gui_client__ul_vk4_hg4_ryb">
+                <li class="- topic/li li" id="gui_client__li_hgm_54d_syb" data-ofbid="gui_client__li_hgm_54d_syb">
+                    <p class="- topic/p p" id="gui_client__p_igm_54d_syb" data-ofbid="gui_client__p_igm_54d_syb">添加远程服务器时通过 Remote Directory 指定相应目录；需要注意，远端服务器的用户必须拥有创建
+                        Remote Directory 的权限。</p>
+                </li>
+                <li class="- topic/li li" id="gui_client__li_jgm_54d_syb" data-ofbid="gui_client__li_jgm_54d_syb">
+                    <p class="- topic/p p" id="gui_client__p_kgm_54d_syb" data-ofbid="gui_client__p_kgm_54d_syb">若上步中未指定，则可通过 <strong class="+ topic/ph hi-d/b ph b">Server &gt; Edit Server</strong> 菜单来指定。</p>
+                </li>
+            </ul>
+            <p class="- topic/p p" id="gui_client__p_lgm_54d_syb" data-ofbid="gui_client__p_lgm_54d_syb">举个例子，如果将 Remote Directory 设置为 "/home/usr1"，并且需要同步的本地文件名是
+                "C:/users/usr1/Project/scripts/test.dos"，那么系统会在远端自动创建目录和相应文件
+                "/home/usr1/Project/scripts/test.dos"。</p>
+        </section>
+        <section class="- topic/section section" id="gui_client__section_yvr_lg4_ryb" data-ofbid="gui_client__section_yvr_lg4_ryb"><h2 class="- topic/title title sectiontitle">常见问题</h2>
+            
+            <ol class="- topic/ol ol" id="gui_client__ol_c2y_syp_wzb" data-ofbid="gui_client__ol_c2y_syp_wzb">
+                
+                <li class="- topic/li li"><strong class="+ topic/ph hi-d/b ph b"><dfn class="- topic/term term">无法正常启动</dfn></strong><p class="- topic/p p" id="gui_client__p_ngm_54d_syb" data-ofbid="gui_client__p_ngm_54d_syb">如果 DolphinDB GUI
+                        无法正常启动，可能有以下三个原因：</p><ul class="- topic/ul ul" id="gui_client__ul_rpt_ng4_ryb" data-ofbid="gui_client__ul_rpt_ng4_ryb">
+                        <li class="- topic/li li" id="gui_client__li_ogm_54d_syb" data-ofbid="gui_client__li_ogm_54d_syb">
+                            <p class="- topic/p p" id="gui_client__p_pgm_54d_syb" data-ofbid="gui_client__p_pgm_54d_syb">没有安装 Java。Java
+                                下载地址：https://www.oracle.com/technetwork/java/javase/downloads/index.html。</p>
+                        </li>
+                        <li class="- topic/li li" id="gui_client__li_qgm_54d_syb" data-ofbid="gui_client__li_qgm_54d_syb">
+                            <p class="- topic/p p" id="gui_client__p_rgm_54d_syb" data-ofbid="gui_client__p_rgm_54d_syb">Java 不在系统路径中。在 Windows 环境下，需要查看是否在
+                                    <code class="+ topic/ph pr-d/codeph ph codeph">Path</code> 中；在 Linux 环境中，需要查看是否在
+                                    <code class="+ topic/ph pr-d/codeph ph codeph">PATH</code> 中。</p>
+                        </li>
+                        <li class="- topic/li li" id="gui_client__li_sgm_54d_syb" data-ofbid="gui_client__li_sgm_54d_syb">
+                            <p class="- topic/p p" id="gui_client__p_tgm_54d_syb" data-ofbid="gui_client__p_tgm_54d_syb">安装的 Java 版本不符合要求。DolphinDB GUI 使用环境需要 64 位 Java 8
+                                及以上版本。32 位的 Java 即使版本正确，由于不支持 Server 模式，只有 Client 模式，将无法启动
+                                GUI。我们可以在命令行中使用 <code class="+ topic/ph pr-d/codeph ph codeph">java -version</code> 命令查看 Java 的版本信息。符合要求的
+                                Java 最低版本为 1.8.0。例如：</p>
+                            <pre class="+ topic/pre pr-d/codeblock pre codeblock language-java" id="gui_client__codeblock_spt_ng4_ryb" data-ofbid="gui_client__codeblock_spt_ng4_ryb">java -version
+
+java version <span class="hl-string">"1.8.0_121"</span>
+
+Java(TM) SE Runtime Environment (build <span class="hl-number">1.8</span>.<span class="hl-number">0</span>_<span class="hl-number">121</span>-b13)
+
+Java HotSpot(TM) <span class="hl-number">64</span>-Bit Server VM (build <span class="hl-number">25.121</span>-b13, mixed mode)</pre>
+                            <p class="- topic/p p" id="gui_client__p_ugm_54d_syb" data-ofbid="gui_client__p_ugm_54d_syb">如果版本信息的最后一行如下，那么 DolphinDB GUI 将无法正常启动。</p>
+                            <pre class="+ topic/pre pr-d/codeblock pre codeblock language-java" id="gui_client__codeblock_tpt_ng4_ryb" data-ofbid="gui_client__codeblock_tpt_ng4_ryb">Java HotSpot(TM) Client VM</pre>
+                        </li>
+                    </ul></li>
+                <li class="- topic/li li"><strong class="+ topic/ph hi-d/b ph b"><dfn class="- topic/term term">如何处理包含中文字符的脚本中的乱码</dfn></strong><p class="- topic/p p" id="gui_client__p_vgm_54d_syb" data-ofbid="gui_client__p_vgm_54d_syb">如果中文显示出现乱码，需要在
+                            <strong class="+ topic/ph hi-d/b ph b">File &gt; Preferences</strong> 中设置中文字体，例如微软雅黑（Microsoft Yahei）。 然后使用
+                            <code class="+ topic/ph pr-d/codeph ph codeph">print</code> 命令查看输出结果，乱码会消失。</p></li>
+                <li class="- topic/li li"><strong class="+ topic/ph hi-d/b ph b"><dfn class="- topic/term term">如何修改小数点后的精度显示</dfn></strong><p class="- topic/p p" id="gui_client__p_wgm_54d_syb" data-ofbid="gui_client__p_wgm_54d_syb">DolphinDB GUI 默认的小数点后精度是
+                        4 位。如需调整，在 <strong class="+ topic/ph hi-d/b ph b">File &gt; Preferences &gt; Default number of decimal
+                            places</strong> 中修改，例如修改为 8。</p></li>
+                <li class="- topic/li li"><strong class="+ topic/ph hi-d/b ph b"><dfn class="- topic/term term">处理内存溢出（OOM）错误</dfn></strong><p class="- topic/p p" id="gui_client__p_xgm_54d_syb" data-ofbid="gui_client__p_xgm_54d_syb">如果出现
+                            <code class="+ topic/ph pr-d/codeph ph codeph">java.lang.OutOfMemoryError: Java heap space</code> 的错误信息，说明
+                        GUI 的默认 2048MB 启动内存不能满足实际运行需要而导致内存溢出。可以通过修改 <em class="+ topic/ph hi-d/i ph i">gui/gui.bat</em> 或者
+                            <em class="+ topic/ph hi-d/i ph i">gui/gui.sh</em> 中的 <code class="+ topic/ph pr-d/codeph ph codeph">-Xmx</code>
+                    启动参数来扩大内存。例如：</p><pre class="+ topic/pre pr-d/codeblock pre codeblock language-bash" id="gui_client__codeblock_hvz_vg4_ryb" data-ofbid="gui_client__codeblock_hvz_vg4_ryb">start javaw -classpath dolphindb.jar;dolphingui.jar;jfreechart-1.0.1.jar;jcommon-1.0.0.jar;jxl-2.6.12.jar;rsyntaxarea.jar;autocomplete.jar -Dlook=cross -Xmx4096m com.xxdb.gui.XXDBMain</pre></li>
+            </ol>
+        </section>
+    </div>
+</article></main></div>
+                        
+                        
+                        
+                        
+                        
+                        
+                    </div>
+                    
+                        <nav role="navigation" id="wh_topic_toc" aria-label="On this page" class="col-lg-2 d-none d-lg-block navbar d-print-none"> 
+                            <div id="wh_topic_toc_content">
+		                        
+	                            <div class=" wh_topic_toc "><div class="wh_topic_label">在本页上</div><ul><li class="section-item"><div class="section-title"><a href="#gui_client__section_u1r_3g4_ryb" data-tocid="gui_client__section_u1r_3g4_ryb">安装与启动</a></div></li><li class="section-item"><div class="section-title"><a href="#gui_client__section_tfm_54d_syb" data-tocid="gui_client__section_tfm_54d_syb">Server</a></div></li><li class="section-item"><div class="section-title"><a href="#gui_client__section_nps_5f4_ryb" data-tocid="gui_client__section_nps_5f4_ryb">Log in（登录）</a></div></li><li class="section-item"><div class="section-title"><a href="#gui_client__section_x4r_xf4_ryb" data-tocid="gui_client__section_x4r_xf4_ryb">Workspace（工作空间）</a></div></li><li class="section-item"><div class="section-title"><a href="#gui_client__section_scw_yf4_ryb" data-tocid="gui_client__section_scw_yf4_ryb">Project（项目管理）</a></div></li><li class="section-item"><div class="section-title"><a href="#gui_client__section_zqm_1g4_ryb" data-tocid="gui_client__section_zqm_1g4_ryb">File（文件管理）</a></div></li><li class="section-item"><div class="section-title"><a href="#gui_client__section_syb_cg4_ryb" data-tocid="gui_client__section_syb_cg4_ryb">运行</a></div></li><li class="section-item"><div class="section-title"><a href="#gui_client__section_a2l_fg4_ryb" data-tocid="gui_client__section_a2l_fg4_ryb">Synchronize to Server（数据同步）</a></div></li><li class="section-item"><div class="section-title"><a href="#gui_client__section_yvr_lg4_ryb" data-tocid="gui_client__section_yvr_lg4_ryb">常见问题</a></div></li></ul></div>
+	                        	
+                        	</div>
+                        </nav>
+                    
+                </div>
+            </div>
+            
+            
+            
+        </div> 
+        <footer class="navbar navbar-default wh_footer">
+  <div class=" footer-container mx-auto ">
+<title>Copyright</title><p><b> ©2024 浙江智臾科技有限公司 浙ICP备18048711号-3</b></p>
+  </div>
+</footer>
+        
+        <div id="go2top" class="d-print-none">
+            <span class="oxy-icon oxy-icon-up"></span>
+        </div>
+        
+        <div id="modal_img_large" class="modal">
+            <span class="close oxy-icon oxy-icon-remove"></span>
+            <div id="modal_img_container"></div>
+            <div id="caption"></div>
+        </div>
+        
+        
+        
+    </body>
+</html>

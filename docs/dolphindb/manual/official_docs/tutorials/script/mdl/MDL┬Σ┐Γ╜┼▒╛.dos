@@ -1,0 +1,101 @@
+
+try {loadPlugin("./plugins/MDL/PluginMDL.txt");} catch(ex) { print(ex) }
+go
+
+// 清理环境
+try {
+	handle_sh = MDL::getHandle(`handle_sh)
+	MDL::deleteHandle(handle_sh)
+
+	handle_sz = MDL::getHandle(`handle_sz)
+	MDL::deleteHandle(handle_sz)
+} catch(ex) { print(ex) }
+
+try { unsubscribeTable(tableName="ngtsTable_sh", actionName="ngtsTableInsert") } catch(ex) { print(ex) }
+try { dropStreamTable(tableName="ngtsTable_sh") } catch(ex) { print(ex) }
+
+try { unsubscribeTable(tableName="transactionTable_sz", actionName="transactionTableInsert") } catch(ex) { print(ex) }
+try { unsubscribeTable(tableName="orderTable_sz", actionName="orderTableInsert") } catch(ex) { print(ex) }
+try { dropStreamTable(tableName="transactionTable_sz") } catch(ex) { print(ex) }
+try { dropStreamTable(tableName="orderTable_sz") } catch(ex) { print(ex) }
+
+undef all
+
+// 创建库表
+login("admin", "123456")
+go
+// 深交所股票逐笔成交
+transactionSchema = MDL::getSchema(`MDLSID_MDL_SZL2, 36);
+// 深交所股票逐笔委托
+orderSchema = MDL::getSchema(`MDLSID_MDL_SZL2, 33);
+// 上交所股票逐笔合并
+ngtsSchema = MDL::getSchema(`MDLSID_MDL_SHL2, 24);
+
+// 建立用于MDL行情接入的持久化流表
+cacheSize = 1000000
+
+enableTableShareAndPersistence(table=streamTable(cacheSize:0, transactionSchema[`name], transactionSchema[`type]), tableName=`transactionTable_sz, cacheSize=cacheSize)
+enableTableShareAndPersistence(table=streamTable(cacheSize:0, orderSchema[`name], orderSchema[`type]), tableName=`orderTable_sz, cacheSize=cacheSize)
+enableTableShareAndPersistence(table=streamTable(cacheSize:0, ngtsSchema[`name], ngtsSchema[`type]), tableName=`ngtsTable_sh, cacheSize=cacheSize)
+go
+transactionColName = transactionSchema[`name]
+transactionColName.append!("Date")
+transactionColType = transactionSchema[`type]
+transactionColType.append!(DATE)
+orderColName = orderSchema[`name]
+orderColName.append!("Date")
+orderColType = orderSchema[`type]
+orderColType.append!(DATE)
+ngtsColName = ngtsSchema[`name]
+ngtsColName.append!("Date")
+ngtsColType = ngtsSchema[`type]
+ngtsColType.append!(DATE)
+
+
+dbName = "dfs://Stock_TB"
+transactionTbName = "transactionTable_sz"
+orderTbName = "orderTable_sz"
+ngtsTbName = "ngtsTable_sh"
+
+dbDate = database(, partitionType=VALUE, partitionScheme=2024.01.01..2025.01.01)
+dbID = database(, partitionType=HASH, partitionScheme=[SYMBOL, 25])
+db = database(directory=dbName, partitionType=COMPO, partitionScheme=[dbDate, dbID],engine='TSDB',atomic='CHUNK')
+
+tbSchema = table(1:0, transactionColName, transactionColType)
+db.createPartitionedTable(table=tbSchema,tableName=transactionTbName,partitionColumns=`Date`SecurityID,sortColumns=`SecurityID`TransactTime)
+tbSchema = table(1:0, orderColName, orderColType)
+db.createPartitionedTable(table=tbSchema,tableName=orderTbName,partitionColumns=`Date`SecurityID,sortColumns=`SecurityID`TransactTime)
+tbSchema = table(1:0, ngtsColName, ngtsColType)
+db.createPartitionedTable(table=tbSchema,tableName=ngtsTbName,partitionColumns=`Date`SecurityID,sortColumns=`SecurityID`TickTime)
+
+Transaction = loadTable(database=dbName, tableName=transactionTbName)
+Order = loadTable(database=dbName, tableName=orderTbName)
+Ngts = loadTable(database=dbName, tableName=ngtsTbName)
+
+def handleInsert(tb, mutable msg) {
+	msg.addColumn("Date", DATE)
+	msg.replaceColumn!("Date", take(date(now()), msg.size()))
+	tableInsert(tb, msg)
+}
+
+subscribeTable(tableName="transactionTable_sz", actionName="transactionTableInsert", offset=-1, handler=handleInsert{Transaction}, msgAsTable=true, batchSize=20000, throttle=1, reconnect=true)
+subscribeTable(tableName="orderTable_sz", actionName="orderTableInsert", offset=-1, handler=handleInsert{Order}, msgAsTable=true, batchSize=20000, throttle=1, reconnect=true)
+subscribeTable(tableName="ngtsTable_sh", actionName="ngtsTableInsert", offset=-1, handler=handleInsert{Ngts}, msgAsTable=true, batchSize=20000, throttle=1, reconnect=true)
+
+
+HOST =  ["mdl-sse01.datayes.com","mdl01.datayes.com","mdl02.datayes.com","mdl01.datayes.com","mdl02.datayes.com","mdl01.datayes.com","mdl02.datayes.com","mdl01.datayes.com","mdl02.datayes.com","mdl-cloud-bj.datayes.com","mdl-cloud-sz.datayes.com","mdl01.datayes.com","mdl02.datayes.com"]
+PORT =  [19010,19011,19011,19010,19010,19013,19013,19012,19012,19012,19012,19018,19018]
+USERNAME = "D7GLHl7857C799D50979DFDE858EB1A7"
+
+
+handle_sh = MDL::createHandle(`handle_sh, HOST, PORT, USERNAME, 1)
+handle_sz = MDL::createHandle(`handle_sz, HOST, PORT, USERNAME, 1)
+
+// 深交所股票数据
+MDL::subscribe(handle_sz, orderTable_sz, `MDLSID_MDL_SZL2, `MDLVID_MDL_SZL2, 33)
+MDL::subscribe(handle_sz, transactionTable_sz, `MDLSID_MDL_SZL2, `MDLVID_MDL_SZL2, 36)
+// 上交所股票数据
+MDL::subscribe(handle_sh, ngtsTable_sh, `MDLSID_MDL_SHL2, `MDLVID_MDL_SHL2, 24)
+
+MDL::connectMDL(handle_sz)
+MDL::connectMDL(handle_sh)

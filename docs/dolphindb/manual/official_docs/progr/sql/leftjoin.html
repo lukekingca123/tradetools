@@ -1,0 +1,847 @@
+<!DOCTYPE html><html xmlns="http://www.w3.org/1999/xhtml" xml:lang="zh" lang="zh" data-whc_version="26.0">
+    <head><link rel="shortcut icon" href="../../favicon.ico"/><link rel="icon" href="../../favicon.ico"/><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><meta http-equiv="X-UA-Compatible" content="IE=edge"/><meta name="description" content="lj(leftTable, rightTable, matchingCols, [rightMatchingCols], [leftFilter], [rightFilter]) select column_name(s) from leftTable left [outer] join rightTable on ..."/><meta name="DC.rights.owner" content="(C) 版权 2024"/><meta name="copyright" content="(C) 版权 2024"/><meta name="generator" content="DITA-OT"/><meta name="DC.type" content="topic"/><meta name="DC.coverage" content=""/><meta name="DC.relation" content="../../progr/sql/tb_joiner_intro.html"/><meta name="prodname" content="DolphinDB"/><meta name="brand" content="DolphinDB"/><meta name="DC.creator" content="DolphinDB"/><meta name="DC.publisher" content="DDB N/A DDB 200"/><meta name="DC.format" content="HTML5"/><meta name="DC.identifier" content="left-joinleft-outer-join"/><title>left join/left outer join</title><!--  Generated with Oxygen version 26.0, build number 2024012323.  --><meta name="wh-path2root" content="../../"/><meta name="wh-toc-id" content="left-joinleft-outer-join-d9529e25026"/><meta name="wh-source-relpath" content="progr/sql/leftjoin.dita"/><meta name="wh-out-relpath" content="progr/sql/leftjoin.html"/>
+
+    <link rel="stylesheet" type="text/css" href="../../oxygen-webhelp/app/commons.css?buildId=2024012323"/>
+    <link rel="stylesheet" type="text/css" href="../../oxygen-webhelp/app/topic.css?buildId=2024012323"/>
+
+    <script src="../../oxygen-webhelp/app/options/properties.js?buildId=20240704100525"></script>
+    <script src="../../oxygen-webhelp/app/localization/strings.js?buildId=2024012323"></script>
+    <script src="../../oxygen-webhelp/app/search/index/keywords.js?buildId=20240704100525"></script>
+    <script defer="defer" src="../../oxygen-webhelp/app/commons.js?buildId=2024012323"></script>
+    <script defer="defer" src="../../oxygen-webhelp/app/topic.js?buildId=2024012323"></script>
+<link rel="stylesheet" type="text/css" href="../../oxygen-webhelp/template/styles.css?buildId=2024012323"/><script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script><script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script></head>
+
+    <body id="left-joinleft-outer-join" class="wh_topic_page frmBody">
+        <a href="#wh_topic_body" class="sr-only sr-only-focusable">
+            跳转到主要内容
+        </a>
+        
+        
+        
+        
+        <header class="navbar navbar-default wh_header">
+    <div class="container-fluid">
+        <div xmlns:whc="http://www.oxygenxml.com/webhelp/components" class="wh_header_flex_container navbar-nav navbar-expand-md navbar-dark">
+            <div class="wh_logo_and_publication_title_container">
+                <div class="wh_logo_and_publication_title">
+                    
+                    <a href="https://www.dolphindb.cn" class=" wh_logo d-none d-sm-block "><img src="../../logo.png" alt="  DolphinDB 文档中心  "/></a>
+                    <div class=" wh_publication_title "><a href="../../index.html"><span class="booktitle">  <span class="ph mainbooktitle">DolphinDB 文档中心</span>  </span></a></div>
+                    
+                </div>
+                
+                
+            </div>
+
+            <div class="wh_top_menu_and_indexterms_link collapse navbar-collapse" id="wh_top_menu_and_indexterms_link">
+                
+                
+                
+                
+            </div>
+        <div class=" wh_search_input navbar-form wh_topic_page_search search " role="form">
+            
+            
+            
+            <form id="searchForm" method="get" role="search" action="../../search.html"><div><input type="search" placeholder="搜索 " class="wh_search_textfield" id="textToSearch" name="searchQuery" aria-label="搜索查询" required="required"/><button type="submit" class="wh_search_button" aria-label="搜索"><span class="search_input_text">搜索</span></button></div></form>
+            
+            <script src="/vendors/react/umd/react.production.min.js" defer="defer"></script>
+<script src="/vendors/react-dom/umd/react-dom.production.min.js" defer="defer"></script>
+<script src="/vendors/dayjs/dayjs.min.js" defer="defer"></script>
+<script src="/vendors/antd/dist/antd.min.js" defer="defer"></script>
+<script src="/vendors/@ant-design/icons/dist/index.umd.min.js" defer="defer"></script>
+<script src="/zh/index.js" type="module"></script>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js" defer="defer"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML" defer="defer"><!--
+
+
+--></script>
+
+            
+        </div></div>
+    </div>
+</header>
+        
+        
+         
+        
+        
+        
+        <div class="container-fluid" id="wh_topic_container">
+            <div class="row">
+
+                <nav class="wh_tools d-print-none navbar-expand-md" aria-label="Tools">
+                    
+                    <div data-tooltip-position="bottom" class=" wh_breadcrumb "><ol class="d-print-none"><li><span class="home"><a href="../../index.html"><span>主页</span></a></span></li><li><div class="topicref" data-id="about_language_resources"><div class="title"><a href="../../progr/progr_intro.html"><span class="keyword label">编程语言</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 编程基本概念与方法、SQL 在 DolphinDB 的应用</p></div></div></div></li><li><div class="topicref" data-id="chap4_sect_sql_statements"><div class="title"><a href="../../progr/sql/sql_intro.html"><span class="keyword label">SQL 语句</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 中 SQL 语句的基本语法和用法</p></div></div></div></li><li><div class="topicref" data-id="table_joiners"><div class="title"><a href="../../progr/sql/tb_joiner_intro.html"><span class="keyword label">表连接</span></a></div></div></li><li class="active"><div class="topicref" data-id="left-joinleft-outer-join"><div class="title"><a href="../../progr/sql/leftjoin.html">left join/left outer join</a></div></div></li></ol></div>
+                    
+                    
+                    
+                    <div class="wh_right_tools">
+                        <button class="wh_hide_highlight" aria-label="切换搜索突出显示" title="切换搜索突出显示"></button>
+                        <button class="webhelp_expand_collapse_sections" data-next-state="collapsed" aria-label="折叠截面" title="折叠截面"></button>
+                        
+                        
+                        
+                        
+                        <div class=" wh_print_link print d-none d-md-inline-block "><button onClick="window.print()" title="打印此页" aria-label="打印此页"></button></div>
+                        
+                        <button type="button" id="wh_toc_button" class="custom-toggler navbar-toggler collapsed wh_toggle_button navbar-light" aria-expanded="false" aria-label="Toggle publishing table of content" aria-controls="wh_publication_toc">
+                            <span class="navbar-toggler-icon"></span>
+                        </button>
+                    </div>
+                    
+                </nav>
+            </div>
+            
+            
+            
+            
+            <div class="wh_content_area">
+                <div class="row">
+                    
+                        <nav id="wh_publication_toc" class="col-lg-3 col-md-3 col-sm-12 d-md-block d-none d-print-none" aria-label="Table of Contents Container">
+                            <div id="wh_publication_toc_content">
+		                        
+                            	<div class=" wh_publication_toc " data-tooltip-position="right"><span class="expand-button-action-labels"><span id="button-expand-action" role="button" aria-label="Expand"></span><span id="button-collapse-action" role="button" aria-label="Collapse"></span><span id="button-pending-action" role="button" aria-label="Pending"></span></span><ul role="tree" aria-label="Table of Contents"><li role="treeitem"><div data-tocid="new_chap_about_sect_ddb_docs_intro-d9529e87" class="topicref" data-id="new_chap_about_sect_ddb_docs_intro" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../about/ddb_docs_intro.html" id="new_chap_about_sect_ddb_docs_intro-d9529e87-link">文档使用说明</a><div class="wh-tooltip"><p class="shortdesc">如何获取 DolphinDB 帮助信息</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="chap1_getstarted-d9529e140" class="topicref" data-id="chap1_getstarted" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action chap1_getstarted-d9529e140-link" class="wh-expand-btn"></span><div class="title"><a href="../../getstarted/chap1_getstarted.html" id="chap1_getstarted-d9529e140-link"><span class="keyword label">快速上手</span></a><div class="wh-tooltip"><p class="shortdesc">如何快速部署 DolphinDB、建库建表、写入和查询数据</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="sectionddb_deployment-d9529e335" class="topicref" data-id="sectionddb_deployment" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action sectionddb_deployment-d9529e335-link" class="wh-expand-btn"></span><div class="title"><a href="../../deploy/deploy_intro.html" id="sectionddb_deployment-d9529e335-link"><span class="keyword label">部署</span></a><div class="wh-tooltip"><p class="shortdesc">如何在不同的场景中部署 DolphinDB</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="new_chap_database_manage_new_chap_dbmanage_landing_page-d9529e2313" class="topicref" data-id="new_chap_database_manage_new_chap_dbmanage_landing_page" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action new_chap_database_manage_new_chap_dbmanage_landing_page-d9529e2313-link" class="wh-expand-btn"></span><div class="title"><a href="../../db_distr_comp/cfg/db_intro.html" id="new_chap_database_manage_new_chap_dbmanage_landing_page-d9529e2313-link"><span class="keyword label">数据库</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 数据库的基本概念</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="chap7_tutorials_streaming-d9529e3490" class="topicref" data-id="chap7_tutorials_streaming" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action chap7_tutorials_streaming-d9529e3490-link" class="wh-expand-btn"></span><div class="title"><a href="../../stream/str_intro.html" id="chap7_tutorials_streaming-d9529e3490-link"><span class="keyword label">流数据</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 流数据引擎及流数据计算的基本概念</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="tocId-d9529e7385" class="topicref" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action tocId-d9529e7385-link" class="wh-expand-btn"></span><div class="title"><a href="../../db_distr_comp/db_oper/import_data.html" id="tocId-d9529e7385-link">数据迁移</a><div class="wh-tooltip"><p class="shortdesc">如何从不同数据源向 DolphinDB 迁移数据</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="chap7_tutorials_system_management-d9529e7812" class="topicref" data-id="chap7_tutorials_system_management" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action chap7_tutorials_system_management-d9529e7812-link" class="wh-expand-btn"></span><div class="title"><a href="../../sys_man/om_intro.html" id="chap7_tutorials_system_management-d9529e7812-link"><span class="keyword label">系统运维</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 的系统运维功能及方法</p></div></div></div></li><li role="treeitem" aria-expanded="true"><div data-tocid="about_language_resources-d9529e16490" class="topicref" data-id="about_language_resources" data-state="expanded"><span role="button" tabindex="0" aria-labelledby="button-collapse-action about_language_resources-d9529e16490-link" class="wh-expand-btn"></span><div class="title"><a href="../../progr/progr_intro.html" id="about_language_resources-d9529e16490-link"><span class="keyword label">编程语言</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 编程基本概念与方法、SQL 在 DolphinDB 的应用</p></div></div></div><ul role="group" class="navbar-nav nav-list"><li role="treeitem" aria-expanded="false"><div data-tocid="chap4_db_programming-d9529e16543" class="topicref" data-id="chap4_db_programming" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action chap4_db_programming-d9529e16543-link" class="wh-expand-btn"></span><div class="title"><a href="../../progr/lang_intro.html" id="chap4_db_programming-d9529e16543-link"><span class="keyword label">DolphinDB 脚本语言</span></a><div class="wh-tooltip"><p class="shortdesc"> 脚本编程相关概念参考，包括：数据类型与形式、对象、运算符、编程语句、数据操作、函数化编程、文件操作和 SQL 语句。 </p></div></div></div></li><li role="treeitem" aria-expanded="true"><div data-tocid="chap4_sect_sql_statements-d9529e22890" class="topicref" data-id="chap4_sect_sql_statements" data-state="expanded"><span role="button" tabindex="0" aria-labelledby="button-collapse-action chap4_sect_sql_statements-d9529e22890-link" class="wh-expand-btn"></span><div class="title"><a href="../../progr/sql/sql_intro.html" id="chap4_sect_sql_statements-d9529e22890-link"><span class="keyword label">SQL 语句</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 中 SQL 语句的基本语法和用法</p></div></div></div><ul role="group" class="navbar-nav nav-list"><li role="treeitem" aria-expanded="false"><div data-tocid="ddl-d9529e22941" class="topicref" data-id="ddl" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action ddl-d9529e22941-link" class="wh-expand-btn"></span><div class="title"><a href="../../progr/sql/sql_ddl.html" id="ddl-d9529e22941-link">DDL</a><div class="wh-tooltip"><p class="shortdesc">介绍 DolphinDB 中的数据定义（DDL）语言</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="dml-d9529e23129" class="topicref" data-id="dml" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action dml-d9529e23129-link" class="wh-expand-btn"></span><div class="title"><a href="../../progr/sql/sql_dml.html" id="dml-d9529e23129-link">DML</a><div class="wh-tooltip"><p class="shortdesc">介绍 DolphinDB 中的数据描述（DML）语言</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="dql-d9529e23317" class="topicref" data-id="dql" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action dql-d9529e23317-link" class="wh-expand-btn"></span><div class="title"><a href="../../progr/sql/sql_dql.html" id="dql-d9529e23317-link">DQL</a><div class="wh-tooltip"><p class="shortdesc">介绍 DolphinDB 中的数据查询（DQL）语言</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="predicates-d9529e24196" class="topicref" data-id="predicates" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action predicates-d9529e24196-link" class="wh-expand-btn"></span><div class="title"><a href="../../progr/sql/predicates.html" id="predicates-d9529e24196-link"><span class="keyword label">谓词</span></a></div></div></li><li role="treeitem" aria-expanded="true"><div data-tocid="table_joiners-d9529e24703" class="topicref" data-id="table_joiners" data-state="expanded"><span role="button" tabindex="0" aria-labelledby="button-collapse-action table_joiners-d9529e24703-link" class="wh-expand-btn"></span><div class="title"><a href="../../progr/sql/tb_joiner_intro.html" id="table_joiners-d9529e24703-link"><span class="keyword label">表连接</span></a></div></div><ul role="group" class="navbar-nav nav-list"><li role="treeitem"><div data-tocid="asof-join-d9529e24750" class="topicref" data-id="asof-join" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../progr/sql/asofjoin.html" id="asof-join-d9529e24750-link">asof join</a></div></div></li><li role="treeitem"><div data-tocid="cross-join-d9529e24796" class="topicref" data-id="cross-join" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../progr/sql/crossjoin.html" id="cross-join-d9529e24796-link">cross join</a></div></div></li><li role="treeitem"><div data-tocid="equi-join-d9529e24842" class="topicref" data-id="equi-join" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../progr/sql/equijoin.html" id="equi-join-d9529e24842-link">equi join</a></div></div></li><li role="treeitem"><div data-tocid="full-joinfull-outer-join-d9529e24888" class="topicref" data-id="full-joinfull-outer-join" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../progr/sql/fulljoin.html" id="full-joinfull-outer-join-d9529e24888-link">full join/full outer join</a></div></div></li><li role="treeitem"><div data-tocid="inner-join-d9529e24934" class="topicref" data-id="inner-join" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../progr/sql/innerjoin.html" id="inner-join-d9529e24934-link">inner join</a></div></div></li><li role="treeitem"><div data-tocid="join_sql-d9529e24980" class="topicref" data-id="join_sql" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../progr/sql/join.html" id="join_sql-d9529e24980-link">join</a></div></div></li><li role="treeitem" class="active"><div data-tocid="left-joinleft-outer-join-d9529e25026" class="topicref" data-id="left-joinleft-outer-join" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../progr/sql/leftjoin.html" id="left-joinleft-outer-join-d9529e25026-link">left join/left outer join</a></div></div></li><li role="treeitem"><div data-tocid="prefix-join-d9529e25072" class="topicref" data-id="prefix-join" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../progr/sql/prefixjoin.html" id="prefix-join-d9529e25072-link">prefix join</a></div></div></li><li role="treeitem"><div data-tocid="right-joinright-outer-join-d9529e25118" class="topicref" data-id="right-joinright-outer-join" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../progr/sql/rightjoin.html" id="right-joinright-outer-join-d9529e25118-link">right join/right outer join</a></div></div></li><li role="treeitem"><div data-tocid="window-join-d9529e25164" class="topicref" data-id="window-join" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../progr/sql/windowjoin.html" id="window-join-d9529e25164-link">window join</a></div></div></li></ul></li><li role="treeitem"><div data-tocid="执行顺序-d9529e25210" class="topicref" data-id="执行顺序" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../progr/sql/exe_order.html" id="执行顺序-d9529e25210-link"><span class="keyword label">执行顺序</span></a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="landingpage_sql_trace-d9529e25257" class="topicref" data-id="landingpage_sql_trace" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action landingpage_sql_trace-d9529e25257-link" class="wh-expand-btn"></span><div class="title"><a href="../../progr/sql/sql_trace.html" id="landingpage_sql_trace-d9529e25257-link"><span class="keyword label">SQL Trace</span></a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="hint-d9529e25442" class="topicref" data-id="hint" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action hint-d9529e25442-link" class="wh-expand-btn"></span><div class="title"><a href="../../progr/sql/hint.html" id="hint-d9529e25442-link"><span class="keyword label">HINT 关键字</span></a></div></div></li></ul></li><li role="treeitem" aria-expanded="false"><div data-tocid="python-parser-简介-d9529e25535" class="topicref" data-id="python-parser-简介" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action python-parser-简介-d9529e25535-link" class="wh-expand-btn"></span><div class="title"><a href="../../progr/py_parser/py_par_intro.html" id="python-parser-简介-d9529e25535-link"><span class="keyword label">Python Parser</span></a></div></div></li></ul></li><li role="treeitem" aria-expanded="false"><div data-tocid="functions_references-d9529e26503" class="topicref" data-id="functions_references" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action functions_references-d9529e26503-link" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/funcs_intro.html" id="functions_references-d9529e26503-link"><span class="keyword label">函数参考</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 函数分类、语法、详解及示例</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="api_protocol-d9529e86456" class="topicref" data-id="api_protocol" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action api_protocol-d9529e86456-link" class="wh-expand-btn"></span><div class="title"><a href="../../api/connapi_intro.html" id="api_protocol-d9529e86456-link"><span class="keyword label">连接器 &amp; API</span></a><div class="wh-tooltip"><p class="shortdesc">面向不同编程语言的 DolphinDB API 及连接器，相关协议和用法</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="chap6_plugin-d9529e91976" class="topicref" data-id="chap6_plugin" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action chap6_plugin-d9529e91976-link" class="wh-expand-btn"></span><div class="title"><a href="../../plugins/plg_intro.html" id="chap6_plugin-d9529e91976-link"><span class="keyword label">插件</span></a><div class="wh-tooltip"><p class="shortdesc">多个应用场景的插件使用说明和插件开发指导</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="third_party-d9529e94749" class="topicref" data-id="third_party" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action third_party-d9529e94749-link" class="wh-expand-btn"></span><div class="title"><a href="../../third_party.html" id="third_party-d9529e94749-link">第三方工具</a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="about_tutorials-d9529e94980" class="topicref" data-id="about_tutorials" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action about_tutorials-d9529e94980-link" class="wh-expand-btn"></span><div class="title"><a href="../../tutorials/about_tutorials.html" id="about_tutorials-d9529e94980-link"><span class="keyword label">教程</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 产品使用教程</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="tocId-d9529e101769" class="topicref" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action tocId-d9529e101769-link" class="wh-expand-btn"></span><div class="title"><a href="../../rn/server/3_00_1.html" id="tocId-d9529e101769-link">版本说明</a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 版本发布历史</p></div></div></div></li></ul></div>
+		                        
+                            </div>
+                        </nav>
+                    
+                    
+                    <div class="col-lg-7 col-md-9 col-sm-12" id="wh_topic_body">
+                        <button id="wh_close_publication_toc_button" class="close-toc-button d-none" aria-label="Toggle publishing table of content" aria-controls="wh_publication_toc" aria-expanded="true">
+                            <span class="close-toc-icon-container">
+                                <span class="close-toc-icon"></span>     
+                            </span>
+                        </button>
+                        <button id="wh_close_topic_toc_button" class="close-toc-button d-none" aria-label="Toggle topic table of content" aria-controls="wh_topic_toc" aria-expanded="true">
+                            <span class="close-toc-icon-container">
+                                <span class="close-toc-icon"></span>     
+                            </span>
+                        </button>
+                        
+                        <div class=" wh_topic_content body "><main role="main"><article class="- topic/topic topic" role="article" aria-labelledby="ariaid-title1">
+    <h1 class="- topic/title title topictitle1" id="ariaid-title1">left join/left outer join</h1>
+    
+    <article class="- topic/topic topic nested1" aria-labelledby="ariaid-title2" id="语法">
+        <h2 class="- topic/title title topictitle2" id="ariaid-title2">语法</h2>
+        
+        <article class="- topic/topic topic nested2" aria-labelledby="ariaid-title3" id="左连接">
+            <h3 class="- topic/title title topictitle3" id="ariaid-title3">左连接</h3>
+            <div class="- topic/body body">
+                <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="左连接__codeblock_ngy_5hn_ryb" data-ofbid="左连接__codeblock_ngy_5hn_ryb"><code>lj(leftTable, rightTable, matchingCols, [rightMatchingCols], [leftFilter], [rightFilter])</code></pre>
+            </div>
+        </article>
+        <article class="- topic/topic topic nested2" aria-labelledby="ariaid-title4" id="兼容sql的左连接语法">
+            <h3 class="- topic/title title topictitle3" id="ariaid-title4">兼容SQL的左连接语法</h3>
+            <div class="- topic/body body">
+                <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="兼容sql的左连接语法__codeblock_ogy_5hn_ryb" data-ofbid="兼容sql的左连接语法__codeblock_ogy_5hn_ryb"><code>select column_name(s)
+from leftTable left [outer] join rightTable
+on leftTable.matchingCol=rightTable.rightMatchingCol and [filter]</code></pre>
+            </div>
+        </article>
+        <article class="- topic/topic topic nested2" aria-labelledby="ariaid-title5" id="左半连接">
+            <h3 class="- topic/title title topictitle3" id="ariaid-title5">左半连接</h3>
+            <div class="- topic/body body">
+                <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="左半连接__codeblock_pgy_5hn_ryb" data-ofbid="左半连接__codeblock_pgy_5hn_ryb"><code>lsj(leftTable, rightTable, matchingCols, [rightMatchingCols], [leftFilter], [rightFilter])</code></pre>
+            </div>
+        </article>
+        <article class="- topic/topic topic nested2" aria-labelledby="ariaid-title6" id="兼容sql的左半连接语法">
+            <h3 class="- topic/title title topictitle3" id="ariaid-title6">兼容SQL的左半连接语法</h3>
+            <div class="- topic/body body">
+                <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="兼容sql的左半连接语法__codeblock_qgy_5hn_ryb" data-ofbid="兼容sql的左半连接语法__codeblock_qgy_5hn_ryb"><code>select column_name(s)
+from leftTable left semijoin rightTable
+on leftTable.matchingCol=rightTable.rightMatchingCol and [filter]</code></pre>
+                <p class="- topic/p p" id="兼容sql的左半连接语法__p_rgy_5hn_ryb" data-ofbid="兼容sql的左半连接语法__p_rgy_5hn_ryb"><strong class="+ topic/ph hi-d/b ph b">注意</strong>：兼容 SQL 语法的 left join 与 left semijoin 不支持以下几点：</p>
+                <ol class="- topic/ol ol" id="兼容sql的左半连接语法__ol_sgy_5hn_ryb" data-ofbid="兼容sql的左半连接语法__ol_sgy_5hn_ryb">
+                    <li class="- topic/li li">
+                        <p class="- topic/p p" id="兼容sql的左半连接语法__p_tgy_5hn_ryb" data-ofbid="兼容sql的左半连接语法__p_tgy_5hn_ryb">如果有多个连接列，必须使用 and 连接。</p>
+                    </li>
+                    <li class="- topic/li li">
+                        <p class="- topic/p p" id="兼容sql的左半连接语法__p_ugy_5hn_ryb" data-ofbid="兼容sql的左半连接语法__p_ugy_5hn_ryb">不能和 update 关键字一起使用。</p>
+                    </li>
+                    <li class="- topic/li li">
+                        <p class="- topic/p p" id="兼容sql的左半连接语法__p_vgy_5hn_ryb" data-ofbid="兼容sql的左半连接语法__p_vgy_5hn_ryb">若 <em class="+ topic/ph hi-d/i ph i">leftTable</em> 不是分布式表，则其 <em class="+ topic/ph hi-d/i ph i">rightTable</em> 也不能是分布式表。</p>
+                    </li>
+                </ol>
+            </div>
+        </article>
+    </article>
+    <article class="- topic/topic topic nested1" aria-labelledby="ariaid-title7" id="参数">
+        <h2 class="- topic/title title topictitle2" id="ariaid-title7">参数</h2>
+        <div class="- topic/body body">
+            <ul class="- topic/ul ul" id="参数__ul_wgy_5hn_ryb" data-ofbid="参数__ul_wgy_5hn_ryb">
+                <li class="- topic/li li">
+                    <p class="- topic/p p" id="参数__p_xgy_5hn_ryb" data-ofbid="参数__p_xgy_5hn_ryb"><strong class="+ topic/ph hi-d/b ph b">leftTable</strong> 和 <strong class="+ topic/ph hi-d/b ph b">rightTable</strong> 是连接的表。</p>
+                </li>
+                <li class="- topic/li li">
+                    <p class="- topic/p p" id="参数__p_ygy_5hn_ryb" data-ofbid="参数__p_ygy_5hn_ryb"><strong class="+ topic/ph hi-d/b ph b">matchingCols</strong> 是表示连接列的字符串标量或向量。</p>
+                </li>
+                <li class="- topic/li li">
+                    <p class="- topic/p p" id="参数__p_zgy_5hn_ryb" data-ofbid="参数__p_zgy_5hn_ryb"><strong class="+ topic/ph hi-d/b ph b">rightMatchingCols</strong> 是表示右表连接列的字符串标量或向量。当 <em class="+ topic/ph hi-d/i ph i">leftTable</em> 和
+                            <em class="+ topic/ph hi-d/i ph i">rightTable</em> 至少有一个连接列不同时，必须指定
+                        <em class="+ topic/ph hi-d/i ph i">rightMatchingCols</em>。返回结果中的连接列与左表的连接列名称相同。</p>
+                </li>
+                <li class="- topic/li li">
+                    <p class="- topic/p p" id="参数__p_ahy_5hn_ryb" data-ofbid="参数__p_ahy_5hn_ryb"><strong class="+ topic/ph hi-d/b ph b">filter</strong>为条件表达式，作为连接时的过滤条件。暂时只支持通过 and 连接多个过滤条件，不支持 or。</p>
+                </li>
+                <li class="- topic/li li">
+                    <p class="- topic/p p" id="参数__p_bhy_5hn_ryb" data-ofbid="参数__p_bhy_5hn_ryb"><strong class="+ topic/ph hi-d/b ph b">leftFilter</strong> 和 <strong class="+ topic/ph hi-d/b ph b">rightFilter</strong> 条件表达式，作为左右表字段的过滤条件。多个条件之间用 and 或 or
+                        连接。</p>
+                </li>
+            </ul>
+        </div>
+    </article>
+    <article class="- topic/topic topic nested1" aria-labelledby="ariaid-title8" id="详情">
+        <h2 class="- topic/title title topictitle2" id="ariaid-title8">详情</h2>
+        <div class="- topic/body body">
+            <p class="- topic/p p" id="详情__p_chy_5hn_ryb" data-ofbid="详情__p_chy_5hn_ryb">左连接(lj)返回左表中所有与右表匹配的记录。如果右表中没有匹配的记录，将会返回NULL。如果右表中有多条匹配记录，将会返回所有的匹配记录。因此，lj返回结果的行数有可能比左表的行数多。</p>
+            <p class="- topic/p p" id="详情__p_dhy_5hn_ryb" data-ofbid="详情__p_dhy_5hn_ryb">左半连接(lsj)和左连接(lj)的唯一区别是，如果右表中有多条匹配记录，lsj将会取第一条的匹配记录。因此，lsj返回结果的行数与左表的行数相等。</p>
+        </div>
+    </article>
+    <article class="- topic/topic topic nested1" aria-labelledby="ariaid-title9" id="例子">
+        <h2 class="- topic/title title topictitle2" id="ariaid-title9">例子</h2>
+        <div class="- topic/body body">
+            <p class="- topic/p p" id="例子__p_ehy_5hn_ryb" data-ofbid="例子__p_ehy_5hn_ryb">
+                <em class="+ topic/ph hi-d/i ph i">例1. 两个表左连接，除了连接列之外没有其他相同列名：</em>
+            </p>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="例子__codeblock_fhy_5hn_ryb" data-ofbid="例子__codeblock_fhy_5hn_ryb"><code>t1= table(1 2 3 3 as id, 7.8 4.6 5.1 0.1 as value)
+t2 = table(5 3 1 as id,  300 500 800 as qty);
+t1;</code></pre>
+            <div class="table-container"><table class="- topic/table table" id="例子__table_ghy_5hn_ryb" data-ofbid="例子__table_ghy_5hn_ryb" data-cols="2"><caption></caption><colgroup><col/><col/></colgroup><thead class="- topic/thead thead">
+                        <tr class="- topic/row">
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="例子__table_ghy_5hn_ryb__entry__1">id</th>
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="例子__table_ghy_5hn_ryb__entry__2">value</th>
+                        </tr>
+                    </thead><tbody class="- topic/tbody tbody">
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_ghy_5hn_ryb__entry__1">1</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_ghy_5hn_ryb__entry__2">7.8</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_ghy_5hn_ryb__entry__1">2</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_ghy_5hn_ryb__entry__2">4.6</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_ghy_5hn_ryb__entry__1">3</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_ghy_5hn_ryb__entry__2">5.1</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_ghy_5hn_ryb__entry__1">3</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_ghy_5hn_ryb__entry__2">0.1</td>
+                        </tr>
+                    </tbody></table></div>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="例子__codeblock_hhy_5hn_ryb" data-ofbid="例子__codeblock_hhy_5hn_ryb"><code>t2;</code></pre>
+            <div class="table-container"><table class="- topic/table table" id="例子__table_ihy_5hn_ryb" data-ofbid="例子__table_ihy_5hn_ryb" data-cols="2"><caption></caption><colgroup><col/><col/></colgroup><thead class="- topic/thead thead">
+                        <tr class="- topic/row">
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="例子__table_ihy_5hn_ryb__entry__1">id</th>
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="例子__table_ihy_5hn_ryb__entry__2">qty</th>
+                        </tr>
+                    </thead><tbody class="- topic/tbody tbody">
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_ihy_5hn_ryb__entry__1">5</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_ihy_5hn_ryb__entry__2">300</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_ihy_5hn_ryb__entry__1">3</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_ihy_5hn_ryb__entry__2">500</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_ihy_5hn_ryb__entry__1">1</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_ihy_5hn_ryb__entry__2">800</td>
+                        </tr>
+                    </tbody></table></div>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="例子__codeblock_jhy_5hn_ryb" data-ofbid="例子__codeblock_jhy_5hn_ryb"><code>select id, value, qty from lj(t1, t2, `id);
+//等价于  select id, value, qty from t1 left join t2 on t1.id=t2.id</code></pre>
+            <div class="table-container"><table class="- topic/table table" id="例子__table_khy_5hn_ryb" data-ofbid="例子__table_khy_5hn_ryb" data-cols="3"><caption></caption><colgroup><col/><col/><col/></colgroup><thead class="- topic/thead thead">
+                        <tr class="- topic/row">
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="例子__table_khy_5hn_ryb__entry__1">id</th>
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="例子__table_khy_5hn_ryb__entry__2">value</th>
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="例子__table_khy_5hn_ryb__entry__3">qty</th>
+                        </tr>
+                    </thead><tbody class="- topic/tbody tbody">
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_khy_5hn_ryb__entry__1">1</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_khy_5hn_ryb__entry__2">7.8</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_khy_5hn_ryb__entry__3">800</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_khy_5hn_ryb__entry__1">2</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_khy_5hn_ryb__entry__2">4.6</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_khy_5hn_ryb__entry__3"> </td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_khy_5hn_ryb__entry__1">3</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_khy_5hn_ryb__entry__2">5.1</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_khy_5hn_ryb__entry__3">500</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_khy_5hn_ryb__entry__1">3</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_khy_5hn_ryb__entry__2">0.1</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_khy_5hn_ryb__entry__3">500</td>
+                        </tr>
+                    </tbody></table></div>
+            <p class="- topic/p p" id="例子__p_lhy_5hn_ryb" data-ofbid="例子__p_lhy_5hn_ryb">我们无需指定value和qty来自哪个表。系统首先会在左表中定位这两个列，如果左表没有这两个列，系统会在右表定位。</p>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="例子__codeblock_mhy_5hn_ryb" data-ofbid="例子__codeblock_mhy_5hn_ryb"><code>select id, value, qty from lj(t2, t1, `id);
+//等价于  select id, value, qty from t2 left join t1 on t2.id=t1.id</code></pre>
+            <div class="table-container"><table class="- topic/table table" id="例子__table_nhy_5hn_ryb" data-ofbid="例子__table_nhy_5hn_ryb" data-cols="3"><caption></caption><colgroup><col/><col/><col/></colgroup><thead class="- topic/thead thead">
+                        <tr class="- topic/row">
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="例子__table_nhy_5hn_ryb__entry__1">id</th>
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="例子__table_nhy_5hn_ryb__entry__2">value</th>
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="例子__table_nhy_5hn_ryb__entry__3">qty</th>
+                        </tr>
+                    </thead><tbody class="- topic/tbody tbody">
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_nhy_5hn_ryb__entry__1">5</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_nhy_5hn_ryb__entry__2"> </td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_nhy_5hn_ryb__entry__3">300</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_nhy_5hn_ryb__entry__1">3</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_nhy_5hn_ryb__entry__2">5.1</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_nhy_5hn_ryb__entry__3">500</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_nhy_5hn_ryb__entry__1">3</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_nhy_5hn_ryb__entry__2">0.1</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_nhy_5hn_ryb__entry__3">500</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_nhy_5hn_ryb__entry__1">1</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_nhy_5hn_ryb__entry__2">7.8</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_nhy_5hn_ryb__entry__3">800</td>
+                        </tr>
+                    </tbody></table></div>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="例子__codeblock_ohy_5hn_ryb" data-ofbid="例子__codeblock_ohy_5hn_ryb"><code>select id, value, qty from lsj(t2, t1, `id);
+//等价于  select  id, value, qty from t2 left semijoin t1 on t2.id=t1.id</code></pre>
+            <div class="table-container"><table class="- topic/table table" id="例子__table_phy_5hn_ryb" data-ofbid="例子__table_phy_5hn_ryb" data-cols="3"><caption></caption><colgroup><col/><col/><col/></colgroup><thead class="- topic/thead thead">
+                        <tr class="- topic/row">
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="例子__table_phy_5hn_ryb__entry__1">id</th>
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="例子__table_phy_5hn_ryb__entry__2">value</th>
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="例子__table_phy_5hn_ryb__entry__3">qty</th>
+                        </tr>
+                    </thead><tbody class="- topic/tbody tbody">
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_phy_5hn_ryb__entry__1">5</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_phy_5hn_ryb__entry__2"> </td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_phy_5hn_ryb__entry__3">300</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_phy_5hn_ryb__entry__1">3</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_phy_5hn_ryb__entry__2">5.1</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_phy_5hn_ryb__entry__3">500</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_phy_5hn_ryb__entry__1">1</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_phy_5hn_ryb__entry__2">7.8</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_phy_5hn_ryb__entry__3">800</td>
+                        </tr>
+                    </tbody></table></div>
+            <p class="- topic/p p" id="例子__p_qhy_5hn_ryb" data-ofbid="例子__p_qhy_5hn_ryb">通过上面的例子，我们可以看到lj和lsj的区别。lj返回了右表中所有id=3的记录，lsj只返回了右表中第一条id=3的记录。</p>
+            <p class="- topic/p p" id="例子__p_rhy_5hn_ryb" data-ofbid="例子__p_rhy_5hn_ryb">
+                <em class="+ topic/ph hi-d/i ph i">例2. 两个表左连接，它们具有相同列名，但是不作为连接列：</em>
+            </p>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="例子__codeblock_shy_5hn_ryb" data-ofbid="例子__codeblock_shy_5hn_ryb"><code>t1 = table(1 2 3 3 as id, 7.8 4.6 5.1 0.1 as value, 4 3 2 1 as x)
+t2 = table(5 3 1 as id,  300 500 800 as qty, 44 66 88 as x);
+t1;</code></pre>
+            <div class="table-container"><table class="- topic/table table" id="例子__table_thy_5hn_ryb" data-ofbid="例子__table_thy_5hn_ryb" data-cols="3"><caption></caption><colgroup><col/><col/><col/></colgroup><thead class="- topic/thead thead">
+                        <tr class="- topic/row">
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="例子__table_thy_5hn_ryb__entry__1">id</th>
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="例子__table_thy_5hn_ryb__entry__2">value</th>
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="例子__table_thy_5hn_ryb__entry__3">x</th>
+                        </tr>
+                    </thead><tbody class="- topic/tbody tbody">
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_thy_5hn_ryb__entry__1">1</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_thy_5hn_ryb__entry__2">7.8</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_thy_5hn_ryb__entry__3">4</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_thy_5hn_ryb__entry__1">2</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_thy_5hn_ryb__entry__2">4.6</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_thy_5hn_ryb__entry__3">3</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_thy_5hn_ryb__entry__1">3</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_thy_5hn_ryb__entry__2">5.1</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_thy_5hn_ryb__entry__3">2</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_thy_5hn_ryb__entry__1">3</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_thy_5hn_ryb__entry__2">0.1</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_thy_5hn_ryb__entry__3">1</td>
+                        </tr>
+                    </tbody></table></div>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="例子__codeblock_uhy_5hn_ryb" data-ofbid="例子__codeblock_uhy_5hn_ryb"><code>t2;</code></pre>
+            <div class="table-container"><table class="- topic/table table" id="例子__table_vhy_5hn_ryb" data-ofbid="例子__table_vhy_5hn_ryb" data-cols="3"><caption></caption><colgroup><col/><col/><col/></colgroup><thead class="- topic/thead thead">
+                        <tr class="- topic/row">
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="例子__table_vhy_5hn_ryb__entry__1">id</th>
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="例子__table_vhy_5hn_ryb__entry__2">qty</th>
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="例子__table_vhy_5hn_ryb__entry__3">x</th>
+                        </tr>
+                    </thead><tbody class="- topic/tbody tbody">
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_vhy_5hn_ryb__entry__1">5</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_vhy_5hn_ryb__entry__2">300</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_vhy_5hn_ryb__entry__3">44</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_vhy_5hn_ryb__entry__1">3</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_vhy_5hn_ryb__entry__2">500</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_vhy_5hn_ryb__entry__3">66</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_vhy_5hn_ryb__entry__1">1</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_vhy_5hn_ryb__entry__2">800</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_vhy_5hn_ryb__entry__3">88</td>
+                        </tr>
+                    </tbody></table></div>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="例子__codeblock_why_5hn_ryb" data-ofbid="例子__codeblock_why_5hn_ryb"><code>select id, value, qty, x from lj(t1, t2, `id);
+//等价于  select  id, value, qty, x from t1 left join t2 on t1.id=t2.id</code></pre>
+            <div class="table-container"><table class="- topic/table table" id="例子__table_xhy_5hn_ryb" data-ofbid="例子__table_xhy_5hn_ryb" data-cols="4"><caption></caption><colgroup><col/><col/><col/><col/></colgroup><thead class="- topic/thead thead">
+                        <tr class="- topic/row">
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="例子__table_xhy_5hn_ryb__entry__1">id</th>
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="例子__table_xhy_5hn_ryb__entry__2">value</th>
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="例子__table_xhy_5hn_ryb__entry__3">qty</th>
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="例子__table_xhy_5hn_ryb__entry__4">x</th>
+                        </tr>
+                    </thead><tbody class="- topic/tbody tbody">
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_xhy_5hn_ryb__entry__1">1</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_xhy_5hn_ryb__entry__2">7.8</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_xhy_5hn_ryb__entry__3">800</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_xhy_5hn_ryb__entry__4">4</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_xhy_5hn_ryb__entry__1">2</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_xhy_5hn_ryb__entry__2">4.6</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_xhy_5hn_ryb__entry__3"> </td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_xhy_5hn_ryb__entry__4">3</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_xhy_5hn_ryb__entry__1">3</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_xhy_5hn_ryb__entry__2">5.1</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_xhy_5hn_ryb__entry__3">500</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_xhy_5hn_ryb__entry__4">2</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_xhy_5hn_ryb__entry__1">3</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_xhy_5hn_ryb__entry__2">0.1</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_xhy_5hn_ryb__entry__3">500</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_xhy_5hn_ryb__entry__4">1</td>
+                        </tr>
+                    </tbody></table></div>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="例子__codeblock_yhy_5hn_ryb" data-ofbid="例子__codeblock_yhy_5hn_ryb"><code>select id, value, qty, t2.x from lj(t1, t2, `id);
+//等价于  select  id, value, qty, t2.x from t1 left join t2 on t1.id=t2.id</code></pre>
+            <div class="table-container"><table class="- topic/table table" id="例子__table_zhy_5hn_ryb" data-ofbid="例子__table_zhy_5hn_ryb" data-cols="4"><caption></caption><colgroup><col/><col/><col/><col/></colgroup><thead class="- topic/thead thead">
+                        <tr class="- topic/row">
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="例子__table_zhy_5hn_ryb__entry__1">id</th>
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="例子__table_zhy_5hn_ryb__entry__2">value</th>
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="例子__table_zhy_5hn_ryb__entry__3">qty</th>
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="例子__table_zhy_5hn_ryb__entry__4">x</th>
+                        </tr>
+                    </thead><tbody class="- topic/tbody tbody">
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_zhy_5hn_ryb__entry__1">1</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_zhy_5hn_ryb__entry__2">7.8</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_zhy_5hn_ryb__entry__3">800</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_zhy_5hn_ryb__entry__4">88</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_zhy_5hn_ryb__entry__1">2</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_zhy_5hn_ryb__entry__2">4.6</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_zhy_5hn_ryb__entry__3"> </td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_zhy_5hn_ryb__entry__4"> </td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_zhy_5hn_ryb__entry__1">3</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_zhy_5hn_ryb__entry__2">5.1</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_zhy_5hn_ryb__entry__3">500</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_zhy_5hn_ryb__entry__4">66</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_zhy_5hn_ryb__entry__1">3</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_zhy_5hn_ryb__entry__2">0.1</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_zhy_5hn_ryb__entry__3">500</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_zhy_5hn_ryb__entry__4">66</td>
+                        </tr>
+                    </tbody></table></div>
+            <p class="- topic/p p" id="例子__p_a3y_5hn_ryb" data-ofbid="例子__p_a3y_5hn_ryb">如果左表(t1)和右表(t2)有除连接列以外其他相同的字段名(x)，我们从右表(t2)中选择字段名为x的数据时，需要指定x所在的表：t2.x。</p>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="例子__codeblock_b3y_5hn_ryb" data-ofbid="例子__codeblock_b3y_5hn_ryb"><code>lj(t1, t2, `id);</code></pre>
+            <div class="table-container"><table class="- topic/table table" id="例子__table_c3y_5hn_ryb" data-ofbid="例子__table_c3y_5hn_ryb" data-cols="5"><caption></caption><colgroup><col/><col/><col/><col/><col/></colgroup><thead class="- topic/thead thead">
+                        <tr class="- topic/row">
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="例子__table_c3y_5hn_ryb__entry__1">id</th>
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="例子__table_c3y_5hn_ryb__entry__2">value</th>
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="例子__table_c3y_5hn_ryb__entry__3">x</th>
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="例子__table_c3y_5hn_ryb__entry__4">qty</th>
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="例子__table_c3y_5hn_ryb__entry__5">t2_x</th>
+                        </tr>
+                    </thead><tbody class="- topic/tbody tbody">
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_c3y_5hn_ryb__entry__1">1</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_c3y_5hn_ryb__entry__2">7.8</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_c3y_5hn_ryb__entry__3">4</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_c3y_5hn_ryb__entry__4">800</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_c3y_5hn_ryb__entry__5">88</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_c3y_5hn_ryb__entry__1">2</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_c3y_5hn_ryb__entry__2">4.6</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_c3y_5hn_ryb__entry__3">3</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_c3y_5hn_ryb__entry__4"> </td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_c3y_5hn_ryb__entry__5"> </td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_c3y_5hn_ryb__entry__1">3</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_c3y_5hn_ryb__entry__2">5.1</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_c3y_5hn_ryb__entry__3">2</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_c3y_5hn_ryb__entry__4">500</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_c3y_5hn_ryb__entry__5">66</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_c3y_5hn_ryb__entry__1">3</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_c3y_5hn_ryb__entry__2">0.1</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_c3y_5hn_ryb__entry__3">1</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_c3y_5hn_ryb__entry__4">500</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_c3y_5hn_ryb__entry__5">66</td>
+                        </tr>
+                    </tbody></table></div>
+            <p class="- topic/p p" id="例子__p_d3y_5hn_ryb" data-ofbid="例子__p_d3y_5hn_ryb">在上面的例子中，从t1和t2选择字段名为x的数据，并且把结果中t2的x字段重命名为t2_x。</p>
+            <p class="- topic/p p" id="例子__p_e3y_5hn_ryb" data-ofbid="例子__p_e3y_5hn_ryb">
+                <em class="+ topic/ph hi-d/i ph i">例3. 多个连接列：</em>
+            </p>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="例子__codeblock_f3y_5hn_ryb" data-ofbid="例子__codeblock_f3y_5hn_ryb"><code>t1=table(1 1 2 2 3 3 as x, 1 2 2 3 3 4 as y, 1..6 as a);
+t2=table(0 1 1 2 2 3 as x, 1 2 3 3 4 5 as y, 11..16 as b);
+t1;</code></pre>
+            <div class="table-container"><table class="- topic/table table frame-all" id="例子__table_kfx_52t_lj" data-ofbid="例子__table_kfx_52t_lj" data-cols="3"><caption></caption><colgroup><col/><col/><col/></colgroup><thead class="- topic/thead thead">
+                        <tr class="- topic/row">
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="例子__table_kfx_52t_lj__entry__1">x</th>
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="例子__table_kfx_52t_lj__entry__2">y</th>
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="例子__table_kfx_52t_lj__entry__3">a</th>
+                        </tr>
+                    </thead><tbody class="- topic/tbody tbody">
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_kfx_52t_lj__entry__1">1</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_kfx_52t_lj__entry__2">1</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_kfx_52t_lj__entry__3">1</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_kfx_52t_lj__entry__1">1</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_kfx_52t_lj__entry__2">2</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_kfx_52t_lj__entry__3">2</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_kfx_52t_lj__entry__1">2</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_kfx_52t_lj__entry__2">2</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_kfx_52t_lj__entry__3">3</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_kfx_52t_lj__entry__1">2</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_kfx_52t_lj__entry__2">3</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_kfx_52t_lj__entry__3">4</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_kfx_52t_lj__entry__1">3</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_kfx_52t_lj__entry__2">3</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_kfx_52t_lj__entry__3">5</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_kfx_52t_lj__entry__1">3</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_kfx_52t_lj__entry__2">4</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_kfx_52t_lj__entry__3">6</td>
+                        </tr>
+                    </tbody></table></div>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="例子__codeblock_h3y_5hn_ryb" data-ofbid="例子__codeblock_h3y_5hn_ryb"><code>t2;</code></pre>
+            <div class="table-container"><table class="- topic/table table" id="例子__table_i3y_5hn_ryb" data-ofbid="例子__table_i3y_5hn_ryb" data-cols="3"><caption></caption><colgroup><col/><col/><col/></colgroup><thead class="- topic/thead thead">
+                        <tr class="- topic/row">
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="例子__table_i3y_5hn_ryb__entry__1">x</th>
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="例子__table_i3y_5hn_ryb__entry__2">y</th>
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="例子__table_i3y_5hn_ryb__entry__3">b</th>
+                        </tr>
+                    </thead><tbody class="- topic/tbody tbody">
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_i3y_5hn_ryb__entry__1">0</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_i3y_5hn_ryb__entry__2">1</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_i3y_5hn_ryb__entry__3">11</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_i3y_5hn_ryb__entry__1">1</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_i3y_5hn_ryb__entry__2">2</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_i3y_5hn_ryb__entry__3">12</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_i3y_5hn_ryb__entry__1">1</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_i3y_5hn_ryb__entry__2">3</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_i3y_5hn_ryb__entry__3">13</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_i3y_5hn_ryb__entry__1">2</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_i3y_5hn_ryb__entry__2">3</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_i3y_5hn_ryb__entry__3">14</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_i3y_5hn_ryb__entry__1">2</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_i3y_5hn_ryb__entry__2">4</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_i3y_5hn_ryb__entry__3">15</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_i3y_5hn_ryb__entry__1">3</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_i3y_5hn_ryb__entry__2">5</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_i3y_5hn_ryb__entry__3">16</td>
+                        </tr>
+                    </tbody></table></div>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="例子__codeblock_j3y_5hn_ryb" data-ofbid="例子__codeblock_j3y_5hn_ryb"><code>lj(t1, t2, `x`y);
+// x, y是连接列</code></pre>
+            <div class="table-container"><table class="- topic/table table" id="例子__table_k3y_5hn_ryb" data-ofbid="例子__table_k3y_5hn_ryb" data-cols="4"><caption></caption><colgroup><col/><col/><col/><col/></colgroup><thead class="- topic/thead thead">
+                        <tr class="- topic/row">
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="例子__table_k3y_5hn_ryb__entry__1">x</th>
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="例子__table_k3y_5hn_ryb__entry__2">y</th>
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="例子__table_k3y_5hn_ryb__entry__3">a</th>
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="例子__table_k3y_5hn_ryb__entry__4">b</th>
+                        </tr>
+                    </thead><tbody class="- topic/tbody tbody">
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_k3y_5hn_ryb__entry__1">1</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_k3y_5hn_ryb__entry__2">1</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_k3y_5hn_ryb__entry__3">1</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_k3y_5hn_ryb__entry__4"> </td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_k3y_5hn_ryb__entry__1">1</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_k3y_5hn_ryb__entry__2">2</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_k3y_5hn_ryb__entry__3">2</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_k3y_5hn_ryb__entry__4">12</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_k3y_5hn_ryb__entry__1">2</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_k3y_5hn_ryb__entry__2">2</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_k3y_5hn_ryb__entry__3">3</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_k3y_5hn_ryb__entry__4"> </td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_k3y_5hn_ryb__entry__1">2</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_k3y_5hn_ryb__entry__2">3</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_k3y_5hn_ryb__entry__3">4</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_k3y_5hn_ryb__entry__4">14</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_k3y_5hn_ryb__entry__1">3</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_k3y_5hn_ryb__entry__2">3</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_k3y_5hn_ryb__entry__3">5</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_k3y_5hn_ryb__entry__4"> </td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_k3y_5hn_ryb__entry__1">3</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_k3y_5hn_ryb__entry__2">4</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_k3y_5hn_ryb__entry__3">6</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_k3y_5hn_ryb__entry__4"> </td>
+                        </tr>
+                    </tbody></table></div>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="例子__codeblock_l3y_5hn_ryb" data-ofbid="例子__codeblock_l3y_5hn_ryb"><code>t2.rename!(`x`y, `x2`y2);</code></pre>
+            <div class="table-container"><table class="- topic/table table" id="例子__table_m3y_5hn_ryb" data-ofbid="例子__table_m3y_5hn_ryb" data-cols="3"><caption></caption><colgroup><col/><col/><col/></colgroup><thead class="- topic/thead thead">
+                        <tr class="- topic/row">
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="例子__table_m3y_5hn_ryb__entry__1">x2</th>
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="例子__table_m3y_5hn_ryb__entry__2">y2</th>
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="例子__table_m3y_5hn_ryb__entry__3">b</th>
+                        </tr>
+                    </thead><tbody class="- topic/tbody tbody">
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_m3y_5hn_ryb__entry__1">0</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_m3y_5hn_ryb__entry__2">1</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_m3y_5hn_ryb__entry__3">11</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_m3y_5hn_ryb__entry__1">1</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_m3y_5hn_ryb__entry__2">2</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_m3y_5hn_ryb__entry__3">12</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_m3y_5hn_ryb__entry__1">1</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_m3y_5hn_ryb__entry__2">3</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_m3y_5hn_ryb__entry__3">13</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_m3y_5hn_ryb__entry__1">2</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_m3y_5hn_ryb__entry__2">3</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_m3y_5hn_ryb__entry__3">14</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_m3y_5hn_ryb__entry__1">2</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_m3y_5hn_ryb__entry__2">4</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_m3y_5hn_ryb__entry__3">15</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_m3y_5hn_ryb__entry__1">3</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_m3y_5hn_ryb__entry__2">5</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_m3y_5hn_ryb__entry__3">16</td>
+                        </tr>
+                    </tbody></table></div>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="例子__codeblock_n3y_5hn_ryb" data-ofbid="例子__codeblock_n3y_5hn_ryb"><code>lj(t1, t2, `x`y, `x2`y2);
+// t1.x, t1.y t2.x2, t2.y2是连接列</code></pre>
+            <div class="table-container"><table class="- topic/table table" id="例子__table_o3y_5hn_ryb" data-ofbid="例子__table_o3y_5hn_ryb" data-cols="4"><caption></caption><colgroup><col/><col/><col/><col/></colgroup><thead class="- topic/thead thead">
+                        <tr class="- topic/row">
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="例子__table_o3y_5hn_ryb__entry__1">x</th>
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="例子__table_o3y_5hn_ryb__entry__2">y</th>
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="例子__table_o3y_5hn_ryb__entry__3">a</th>
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="例子__table_o3y_5hn_ryb__entry__4">b</th>
+                        </tr>
+                    </thead><tbody class="- topic/tbody tbody">
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_o3y_5hn_ryb__entry__1">1</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_o3y_5hn_ryb__entry__2">1</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_o3y_5hn_ryb__entry__3">1</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_o3y_5hn_ryb__entry__4"> </td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_o3y_5hn_ryb__entry__1">1</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_o3y_5hn_ryb__entry__2">2</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_o3y_5hn_ryb__entry__3">2</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_o3y_5hn_ryb__entry__4">12</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_o3y_5hn_ryb__entry__1">2</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_o3y_5hn_ryb__entry__2">2</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_o3y_5hn_ryb__entry__3">3</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_o3y_5hn_ryb__entry__4"> </td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_o3y_5hn_ryb__entry__1">2</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_o3y_5hn_ryb__entry__2">3</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_o3y_5hn_ryb__entry__3">4</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_o3y_5hn_ryb__entry__4">14</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_o3y_5hn_ryb__entry__1">3</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_o3y_5hn_ryb__entry__2">3</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_o3y_5hn_ryb__entry__3">5</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_o3y_5hn_ryb__entry__4"> </td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_o3y_5hn_ryb__entry__1">3</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_o3y_5hn_ryb__entry__2">4</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_o3y_5hn_ryb__entry__3">6</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_o3y_5hn_ryb__entry__4"> </td>
+                        </tr>
+                    </tbody></table></div>
+            <p class="- topic/p p" id="例子__p_p3y_5hn_ryb" data-ofbid="例子__p_p3y_5hn_ryb">
+                <em class="+ topic/ph hi-d/i ph i">例4. 指定过滤条件</em>
+            </p>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="例子__codeblock_q3y_5hn_ryb" data-ofbid="例子__codeblock_q3y_5hn_ryb"><code>t1= table(1 2 3 3 as id1, 7.8 4.6 5.1 0.1 as value)
+t2 = table(5 3 1 as id2, 300 500 800 as qty);
+select * from lj(t1, t2, `id1, `id2, t1.value&gt;1 and t1.value&lt;6, t2.qty&gt;300)</code></pre>
+            <div class="table-container"><table class="- topic/table table" id="例子__table_r3y_5hn_ryb" data-ofbid="例子__table_r3y_5hn_ryb" data-cols="3"><caption></caption><colgroup><col/><col/><col/></colgroup><thead class="- topic/thead thead">
+                        <tr class="- topic/row">
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="例子__table_r3y_5hn_ryb__entry__1">id1</th>
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="例子__table_r3y_5hn_ryb__entry__2">value</th>
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="例子__table_r3y_5hn_ryb__entry__3">qty</th>
+                        </tr>
+                    </thead><tbody class="- topic/tbody tbody">
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_r3y_5hn_ryb__entry__1">1</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_r3y_5hn_ryb__entry__2">7.8</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_r3y_5hn_ryb__entry__3"> </td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_r3y_5hn_ryb__entry__1">2</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_r3y_5hn_ryb__entry__2">4.6</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_r3y_5hn_ryb__entry__3"> </td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_r3y_5hn_ryb__entry__1">3</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_r3y_5hn_ryb__entry__2">5.1</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_r3y_5hn_ryb__entry__3">500</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_r3y_5hn_ryb__entry__1">3</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_r3y_5hn_ryb__entry__2">0.1</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_r3y_5hn_ryb__entry__3"> </td>
+                        </tr>
+                    </tbody></table></div>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="例子__codeblock_s3y_5hn_ryb" data-ofbid="例子__codeblock_s3y_5hn_ryb"><code>t1= table(1 2 3 3 6 8 as id, 7.8 4.6 5.1 0.1 0.5 1.2 as value)
+t2 = table(5 3 1 2 6 8 as id, 300 500 800 400 600 700 as qty);
+select * from t1 left join t2 on t1.id=t2.id and t2.qty&gt;=550</code></pre>
+            <div class="table-container"><table class="- topic/table table" id="例子__table_t3y_5hn_ryb" data-ofbid="例子__table_t3y_5hn_ryb" data-cols="3"><caption></caption><colgroup><col/><col/><col/></colgroup><thead class="- topic/thead thead">
+                        <tr class="- topic/row">
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="例子__table_t3y_5hn_ryb__entry__1">id</th>
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="例子__table_t3y_5hn_ryb__entry__2">value</th>
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="例子__table_t3y_5hn_ryb__entry__3">qty</th>
+                        </tr>
+                    </thead><tbody class="- topic/tbody tbody">
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_t3y_5hn_ryb__entry__1">1</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_t3y_5hn_ryb__entry__2">7.8</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_t3y_5hn_ryb__entry__3">800</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_t3y_5hn_ryb__entry__1">2</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_t3y_5hn_ryb__entry__2">4.6</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_t3y_5hn_ryb__entry__3"> </td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_t3y_5hn_ryb__entry__1">3</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_t3y_5hn_ryb__entry__2">5.1</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_t3y_5hn_ryb__entry__3"> </td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_t3y_5hn_ryb__entry__1">3</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_t3y_5hn_ryb__entry__2">0.1</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_t3y_5hn_ryb__entry__3"> </td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_t3y_5hn_ryb__entry__1">6</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_t3y_5hn_ryb__entry__2">0.5</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_t3y_5hn_ryb__entry__3">600</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_t3y_5hn_ryb__entry__1">8</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_t3y_5hn_ryb__entry__2">1.2</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_t3y_5hn_ryb__entry__3">700</td>
+                        </tr>
+                    </tbody></table></div>
+        </div>
+    </article>
+</article></main></div>
+                        
+                        
+                        
+                        
+                        
+                        
+                    </div>
+                    
+                        <nav role="navigation" id="wh_topic_toc" aria-label="On this page" class="col-lg-2 d-none d-lg-block navbar d-print-none"> 
+                            <div id="wh_topic_toc_content">
+		                        
+	                            <div class=" wh_topic_toc "><div class="wh_topic_label">在本页上</div><ul><li class="topic-item"><a href="#%E8%AF%AD%E6%B3%95" data-tocid="语法">语法</a><ul><li class="topic-item"><a href="#%E5%B7%A6%E8%BF%9E%E6%8E%A5" data-tocid="左连接">左连接</a></li><li class="topic-item"><a href="#%E5%85%BC%E5%AE%B9sql%E7%9A%84%E5%B7%A6%E8%BF%9E%E6%8E%A5%E8%AF%AD%E6%B3%95" data-tocid="兼容sql的左连接语法">兼容SQL的左连接语法</a></li><li class="topic-item"><a href="#%E5%B7%A6%E5%8D%8A%E8%BF%9E%E6%8E%A5" data-tocid="左半连接">左半连接</a></li><li class="topic-item"><a href="#%E5%85%BC%E5%AE%B9sql%E7%9A%84%E5%B7%A6%E5%8D%8A%E8%BF%9E%E6%8E%A5%E8%AF%AD%E6%B3%95" data-tocid="兼容sql的左半连接语法">兼容SQL的左半连接语法</a></li></ul></li><li class="topic-item"><a href="#%E5%8F%82%E6%95%B0" data-tocid="参数">参数</a></li><li class="topic-item"><a href="#%E8%AF%A6%E6%83%85" data-tocid="详情">详情</a></li><li class="topic-item"><a href="#%E4%BE%8B%E5%AD%90" data-tocid="例子">例子</a></li></ul></div>
+	                        	
+                        	</div>
+                        </nav>
+                    
+                </div>
+            </div>
+            
+            
+            
+        </div> 
+        <footer class="navbar navbar-default wh_footer">
+  <div class=" footer-container mx-auto ">
+<title>Copyright</title><p><b> ©2024 浙江智臾科技有限公司 浙ICP备18048711号-3</b></p>
+  </div>
+</footer>
+        
+        <div id="go2top" class="d-print-none">
+            <span class="oxy-icon oxy-icon-up"></span>
+        </div>
+        
+        <div id="modal_img_large" class="modal">
+            <span class="close oxy-icon oxy-icon-remove"></span>
+            <div id="modal_img_container"></div>
+            <div id="caption"></div>
+        </div>
+        
+        
+        
+    </body>
+</html>

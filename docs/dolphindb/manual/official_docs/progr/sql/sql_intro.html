@@ -1,0 +1,307 @@
+<!DOCTYPE html><html xmlns="http://www.w3.org/1999/xhtml" xml:lang="zh" lang="zh" data-whc_version="26.0">
+    <head><link rel="shortcut icon" href="../../favicon.ico"/><link rel="icon" href="../../favicon.ico"/><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><meta http-equiv="X-UA-Compatible" content="IE=edge"/><meta name="DC.rights.owner" content="(C) 版权 2024"/><meta name="copyright" content="(C) 版权 2024"/><meta name="generator" content="DITA-OT"/><meta name="DC.type" content="topic"/><meta name="description" content="DolphinDB 中 SQL 语句的基本语法和用法"/><meta name="DC.coverage" content=""/><meta name="DC.relation" content="../../progr/progr_intro.html"/><meta name="DC.relation" content="../../progr/sql/sql_ddl.html"/><meta name="DC.relation" content="../../progr/sql/sql_dml.html"/><meta name="DC.relation" content="../../progr/sql/sql_dql.html"/><meta name="DC.relation" content="../../progr/sql/predicates.html"/><meta name="DC.relation" content="../../progr/sql/tb_joiner_intro.html"/><meta name="DC.relation" content="../../progr/sql/exe_order.html"/><meta name="DC.relation" content="../../progr/sql/sql_trace.html"/><meta name="DC.relation" content="../../progr/sql/hint.html"/><meta name="prodname" content="DolphinDB"/><meta name="brand" content="DolphinDB"/><meta name="DC.creator" content="DolphinDB"/><meta name="DC.publisher" content="DDB N/A DDB 200"/><meta name="DC.format" content="HTML5"/><meta name="DC.identifier" content="chap4_sect_sql_statements"/>        
+      <title>SQL 语句</title><!--  Generated with Oxygen version 26.0, build number 2024012323.  --><meta name="wh-path2root" content="../../"/><meta name="wh-toc-id" content="chap4_sect_sql_statements-d9529e22890"/><meta name="wh-source-relpath" content="progr/sql/sql_intro.dita"/><meta name="wh-out-relpath" content="progr/sql/sql_intro.html"/>
+
+    <link rel="stylesheet" type="text/css" href="../../oxygen-webhelp/app/commons.css?buildId=2024012323"/>
+    <link rel="stylesheet" type="text/css" href="../../oxygen-webhelp/app/topic.css?buildId=2024012323"/>
+
+    <script src="../../oxygen-webhelp/app/options/properties.js?buildId=20240704100525"></script>
+    <script src="../../oxygen-webhelp/app/localization/strings.js?buildId=2024012323"></script>
+    <script src="../../oxygen-webhelp/app/search/index/keywords.js?buildId=20240704100525"></script>
+    <script defer="defer" src="../../oxygen-webhelp/app/commons.js?buildId=2024012323"></script>
+    <script defer="defer" src="../../oxygen-webhelp/app/topic.js?buildId=2024012323"></script>
+<link rel="stylesheet" type="text/css" href="../../oxygen-webhelp/template/styles.css?buildId=2024012323"/><script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script><script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script></head>
+
+    <body id="chap4_sect_sql_statements" class="wh_topic_page frmBody">
+        <a href="#wh_topic_body" class="sr-only sr-only-focusable">
+            跳转到主要内容
+        </a>
+        
+        
+        
+        
+        <header class="navbar navbar-default wh_header">
+    <div class="container-fluid">
+        <div xmlns:whc="http://www.oxygenxml.com/webhelp/components" class="wh_header_flex_container navbar-nav navbar-expand-md navbar-dark">
+            <div class="wh_logo_and_publication_title_container">
+                <div class="wh_logo_and_publication_title">
+                    
+                    <a href="https://www.dolphindb.cn" class=" wh_logo d-none d-sm-block "><img src="../../logo.png" alt="  DolphinDB 文档中心  "/></a>
+                    <div class=" wh_publication_title "><a href="../../index.html"><span class="booktitle">  <span class="ph mainbooktitle">DolphinDB 文档中心</span>  </span></a></div>
+                    
+                </div>
+                
+                
+            </div>
+
+            <div class="wh_top_menu_and_indexterms_link collapse navbar-collapse" id="wh_top_menu_and_indexterms_link">
+                
+                
+                
+                
+            </div>
+        <div class=" wh_search_input navbar-form wh_topic_page_search search " role="form">
+            
+            
+            
+            <form id="searchForm" method="get" role="search" action="../../search.html"><div><input type="search" placeholder="搜索 " class="wh_search_textfield" id="textToSearch" name="searchQuery" aria-label="搜索查询" required="required"/><button type="submit" class="wh_search_button" aria-label="搜索"><span class="search_input_text">搜索</span></button></div></form>
+            
+            <script src="/vendors/react/umd/react.production.min.js" defer="defer"></script>
+<script src="/vendors/react-dom/umd/react-dom.production.min.js" defer="defer"></script>
+<script src="/vendors/dayjs/dayjs.min.js" defer="defer"></script>
+<script src="/vendors/antd/dist/antd.min.js" defer="defer"></script>
+<script src="/vendors/@ant-design/icons/dist/index.umd.min.js" defer="defer"></script>
+<script src="/zh/index.js" type="module"></script>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js" defer="defer"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML" defer="defer"><!--
+
+
+--></script>
+
+            
+        </div></div>
+    </div>
+</header>
+        
+        
+         
+        
+        
+        
+        <div class="container-fluid" id="wh_topic_container">
+            <div class="row">
+
+                <nav class="wh_tools d-print-none navbar-expand-md" aria-label="Tools">
+                    
+                    <div data-tooltip-position="bottom" class=" wh_breadcrumb "><ol class="d-print-none"><li><span class="home"><a href="../../index.html"><span>主页</span></a></span></li><li><div class="topicref" data-id="about_language_resources"><div class="title"><a href="../../progr/progr_intro.html"><span class="keyword label">编程语言</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 编程基本概念与方法、SQL 在 DolphinDB 的应用</p></div></div></div></li><li class="active"><div class="topicref" data-id="chap4_sect_sql_statements"><div class="title"><a href="../../progr/sql/sql_intro.html"><span class="keyword label">SQL 语句</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 中 SQL 语句的基本语法和用法</p></div></div></div></li></ol></div>
+                    
+                    
+                    
+                    <div class="wh_right_tools">
+                        <button class="wh_hide_highlight" aria-label="切换搜索突出显示" title="切换搜索突出显示"></button>
+                        <button class="webhelp_expand_collapse_sections" data-next-state="collapsed" aria-label="折叠截面" title="折叠截面"></button>
+                        
+                        
+                        
+                        
+                        <div class=" wh_print_link print d-none d-md-inline-block "><button onClick="window.print()" title="打印此页" aria-label="打印此页"></button></div>
+                        
+                        <button type="button" id="wh_toc_button" class="custom-toggler navbar-toggler collapsed wh_toggle_button navbar-light" aria-expanded="false" aria-label="Toggle publishing table of content" aria-controls="wh_publication_toc">
+                            <span class="navbar-toggler-icon"></span>
+                        </button>
+                    </div>
+                    
+                </nav>
+            </div>
+            
+            
+            
+            
+            <div class="wh_content_area">
+                <div class="row">
+                    
+                        <nav id="wh_publication_toc" class="col-lg-3 col-md-3 col-sm-12 d-md-block d-none d-print-none" aria-label="Table of Contents Container">
+                            <div id="wh_publication_toc_content">
+		                        
+                            	<div class=" wh_publication_toc " data-tooltip-position="right"><span class="expand-button-action-labels"><span id="button-expand-action" role="button" aria-label="Expand"></span><span id="button-collapse-action" role="button" aria-label="Collapse"></span><span id="button-pending-action" role="button" aria-label="Pending"></span></span><ul role="tree" aria-label="Table of Contents"><li role="treeitem"><div data-tocid="new_chap_about_sect_ddb_docs_intro-d9529e87" class="topicref" data-id="new_chap_about_sect_ddb_docs_intro" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../about/ddb_docs_intro.html" id="new_chap_about_sect_ddb_docs_intro-d9529e87-link">文档使用说明</a><div class="wh-tooltip"><p class="shortdesc">如何获取 DolphinDB 帮助信息</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="chap1_getstarted-d9529e140" class="topicref" data-id="chap1_getstarted" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action chap1_getstarted-d9529e140-link" class="wh-expand-btn"></span><div class="title"><a href="../../getstarted/chap1_getstarted.html" id="chap1_getstarted-d9529e140-link"><span class="keyword label">快速上手</span></a><div class="wh-tooltip"><p class="shortdesc">如何快速部署 DolphinDB、建库建表、写入和查询数据</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="sectionddb_deployment-d9529e335" class="topicref" data-id="sectionddb_deployment" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action sectionddb_deployment-d9529e335-link" class="wh-expand-btn"></span><div class="title"><a href="../../deploy/deploy_intro.html" id="sectionddb_deployment-d9529e335-link"><span class="keyword label">部署</span></a><div class="wh-tooltip"><p class="shortdesc">如何在不同的场景中部署 DolphinDB</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="new_chap_database_manage_new_chap_dbmanage_landing_page-d9529e2313" class="topicref" data-id="new_chap_database_manage_new_chap_dbmanage_landing_page" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action new_chap_database_manage_new_chap_dbmanage_landing_page-d9529e2313-link" class="wh-expand-btn"></span><div class="title"><a href="../../db_distr_comp/cfg/db_intro.html" id="new_chap_database_manage_new_chap_dbmanage_landing_page-d9529e2313-link"><span class="keyword label">数据库</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 数据库的基本概念</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="chap7_tutorials_streaming-d9529e3490" class="topicref" data-id="chap7_tutorials_streaming" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action chap7_tutorials_streaming-d9529e3490-link" class="wh-expand-btn"></span><div class="title"><a href="../../stream/str_intro.html" id="chap7_tutorials_streaming-d9529e3490-link"><span class="keyword label">流数据</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 流数据引擎及流数据计算的基本概念</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="tocId-d9529e7385" class="topicref" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action tocId-d9529e7385-link" class="wh-expand-btn"></span><div class="title"><a href="../../db_distr_comp/db_oper/import_data.html" id="tocId-d9529e7385-link">数据迁移</a><div class="wh-tooltip"><p class="shortdesc">如何从不同数据源向 DolphinDB 迁移数据</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="chap7_tutorials_system_management-d9529e7812" class="topicref" data-id="chap7_tutorials_system_management" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action chap7_tutorials_system_management-d9529e7812-link" class="wh-expand-btn"></span><div class="title"><a href="../../sys_man/om_intro.html" id="chap7_tutorials_system_management-d9529e7812-link"><span class="keyword label">系统运维</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 的系统运维功能及方法</p></div></div></div></li><li role="treeitem" aria-expanded="true"><div data-tocid="about_language_resources-d9529e16490" class="topicref" data-id="about_language_resources" data-state="expanded"><span role="button" tabindex="0" aria-labelledby="button-collapse-action about_language_resources-d9529e16490-link" class="wh-expand-btn"></span><div class="title"><a href="../../progr/progr_intro.html" id="about_language_resources-d9529e16490-link"><span class="keyword label">编程语言</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 编程基本概念与方法、SQL 在 DolphinDB 的应用</p></div></div></div><ul role="group" class="navbar-nav nav-list"><li role="treeitem" aria-expanded="false"><div data-tocid="chap4_db_programming-d9529e16543" class="topicref" data-id="chap4_db_programming" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action chap4_db_programming-d9529e16543-link" class="wh-expand-btn"></span><div class="title"><a href="../../progr/lang_intro.html" id="chap4_db_programming-d9529e16543-link"><span class="keyword label">DolphinDB 脚本语言</span></a><div class="wh-tooltip"><p class="shortdesc"> 脚本编程相关概念参考，包括：数据类型与形式、对象、运算符、编程语句、数据操作、函数化编程、文件操作和 SQL 语句。 </p></div></div></div></li><li role="treeitem" aria-expanded="true" class="active"><div data-tocid="chap4_sect_sql_statements-d9529e22890" class="topicref" data-id="chap4_sect_sql_statements" data-state="expanded"><span role="button" tabindex="0" aria-labelledby="button-collapse-action chap4_sect_sql_statements-d9529e22890-link" class="wh-expand-btn"></span><div class="title"><a href="../../progr/sql/sql_intro.html" id="chap4_sect_sql_statements-d9529e22890-link"><span class="keyword label">SQL 语句</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 中 SQL 语句的基本语法和用法</p></div></div></div><ul role="group" class="navbar-nav nav-list"><li role="treeitem" aria-expanded="false"><div data-tocid="ddl-d9529e22941" class="topicref" data-id="ddl" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action ddl-d9529e22941-link" class="wh-expand-btn"></span><div class="title"><a href="../../progr/sql/sql_ddl.html" id="ddl-d9529e22941-link">DDL</a><div class="wh-tooltip"><p class="shortdesc">介绍 DolphinDB 中的数据定义（DDL）语言</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="dml-d9529e23129" class="topicref" data-id="dml" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action dml-d9529e23129-link" class="wh-expand-btn"></span><div class="title"><a href="../../progr/sql/sql_dml.html" id="dml-d9529e23129-link">DML</a><div class="wh-tooltip"><p class="shortdesc">介绍 DolphinDB 中的数据描述（DML）语言</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="dql-d9529e23317" class="topicref" data-id="dql" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action dql-d9529e23317-link" class="wh-expand-btn"></span><div class="title"><a href="../../progr/sql/sql_dql.html" id="dql-d9529e23317-link">DQL</a><div class="wh-tooltip"><p class="shortdesc">介绍 DolphinDB 中的数据查询（DQL）语言</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="predicates-d9529e24196" class="topicref" data-id="predicates" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action predicates-d9529e24196-link" class="wh-expand-btn"></span><div class="title"><a href="../../progr/sql/predicates.html" id="predicates-d9529e24196-link"><span class="keyword label">谓词</span></a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="table_joiners-d9529e24703" class="topicref" data-id="table_joiners" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action table_joiners-d9529e24703-link" class="wh-expand-btn"></span><div class="title"><a href="../../progr/sql/tb_joiner_intro.html" id="table_joiners-d9529e24703-link"><span class="keyword label">表连接</span></a></div></div></li><li role="treeitem"><div data-tocid="执行顺序-d9529e25210" class="topicref" data-id="执行顺序" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../progr/sql/exe_order.html" id="执行顺序-d9529e25210-link"><span class="keyword label">执行顺序</span></a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="landingpage_sql_trace-d9529e25257" class="topicref" data-id="landingpage_sql_trace" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action landingpage_sql_trace-d9529e25257-link" class="wh-expand-btn"></span><div class="title"><a href="../../progr/sql/sql_trace.html" id="landingpage_sql_trace-d9529e25257-link"><span class="keyword label">SQL Trace</span></a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="hint-d9529e25442" class="topicref" data-id="hint" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action hint-d9529e25442-link" class="wh-expand-btn"></span><div class="title"><a href="../../progr/sql/hint.html" id="hint-d9529e25442-link"><span class="keyword label">HINT 关键字</span></a></div></div></li></ul></li><li role="treeitem" aria-expanded="false"><div data-tocid="python-parser-简介-d9529e25535" class="topicref" data-id="python-parser-简介" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action python-parser-简介-d9529e25535-link" class="wh-expand-btn"></span><div class="title"><a href="../../progr/py_parser/py_par_intro.html" id="python-parser-简介-d9529e25535-link"><span class="keyword label">Python Parser</span></a></div></div></li></ul></li><li role="treeitem" aria-expanded="false"><div data-tocid="functions_references-d9529e26503" class="topicref" data-id="functions_references" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action functions_references-d9529e26503-link" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/funcs_intro.html" id="functions_references-d9529e26503-link"><span class="keyword label">函数参考</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 函数分类、语法、详解及示例</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="api_protocol-d9529e86456" class="topicref" data-id="api_protocol" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action api_protocol-d9529e86456-link" class="wh-expand-btn"></span><div class="title"><a href="../../api/connapi_intro.html" id="api_protocol-d9529e86456-link"><span class="keyword label">连接器 &amp; API</span></a><div class="wh-tooltip"><p class="shortdesc">面向不同编程语言的 DolphinDB API 及连接器，相关协议和用法</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="chap6_plugin-d9529e91976" class="topicref" data-id="chap6_plugin" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action chap6_plugin-d9529e91976-link" class="wh-expand-btn"></span><div class="title"><a href="../../plugins/plg_intro.html" id="chap6_plugin-d9529e91976-link"><span class="keyword label">插件</span></a><div class="wh-tooltip"><p class="shortdesc">多个应用场景的插件使用说明和插件开发指导</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="third_party-d9529e94749" class="topicref" data-id="third_party" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action third_party-d9529e94749-link" class="wh-expand-btn"></span><div class="title"><a href="../../third_party.html" id="third_party-d9529e94749-link">第三方工具</a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="about_tutorials-d9529e94980" class="topicref" data-id="about_tutorials" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action about_tutorials-d9529e94980-link" class="wh-expand-btn"></span><div class="title"><a href="../../tutorials/about_tutorials.html" id="about_tutorials-d9529e94980-link"><span class="keyword label">教程</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 产品使用教程</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="tocId-d9529e101769" class="topicref" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action tocId-d9529e101769-link" class="wh-expand-btn"></span><div class="title"><a href="../../rn/server/3_00_1.html" id="tocId-d9529e101769-link">版本说明</a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 版本发布历史</p></div></div></div></li></ul></div>
+		                        
+                            </div>
+                        </nav>
+                    
+                    
+                    <div class="col-lg-7 col-md-9 col-sm-12" id="wh_topic_body">
+                        <button id="wh_close_publication_toc_button" class="close-toc-button d-none" aria-label="Toggle publishing table of content" aria-controls="wh_publication_toc" aria-expanded="true">
+                            <span class="close-toc-icon-container">
+                                <span class="close-toc-icon"></span>     
+                            </span>
+                        </button>
+                        <button id="wh_close_topic_toc_button" class="close-toc-button d-none" aria-label="Toggle topic table of content" aria-controls="wh_topic_toc" aria-expanded="true">
+                            <span class="close-toc-icon-container">
+                                <span class="close-toc-icon"></span>     
+                            </span>
+                        </button>
+                        
+                        <div class=" wh_topic_content body "><main role="main"><article class="- topic/topic topic" role="article" aria-labelledby="chap4_sect_sql_statements__title_brw_s4v_nyb">
+    <h1 class="- topic/title title topictitle1" id="chap4_sect_sql_statements__title_brw_s4v_nyb"><span class="- topic/keyword keyword label">SQL 语句</span></h1>
+    
+    <div class="- topic/body body"><p class="- topic/shortdesc shortdesc">DolphinDB 中 SQL 语句的基本语法和用法</p>
+        <section class="- topic/section section" id="chap4_sect_sql_statements__section_s4x_yf2_myb" data-ofbid="chap4_sect_sql_statements__section_s4x_yf2_myb"><h2 class="- topic/title title sectiontitle">DolphinDB 中的 SQL 语句</h2>
+             在以下内容中，您将了解到 SQL 语句在 DolphinDB
+            中访问、获取以及操作数据的使用方法。DolphinDB 的 SQL 格式与主流关系型数据库管理系统中的 SQL 语言十分相似，例如 MySQL, Oracle, SQL
+            Server 等。 </section>
+        <section class="- topic/section section" id="chap4_sect_sql_statements__section_t4x_yf2_myb" data-ofbid="chap4_sect_sql_statements__section_t4x_yf2_myb"><h2 class="- topic/title title sectiontitle">语法</h2>
+            
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock language-sql" id="chap4_sect_sql_statements__codeblock_u4x_yf2_myb" data-ofbid="chap4_sect_sql_statements__codeblock_u4x_yf2_myb"><strong class="hl-keyword">SELECT</strong> [top_clause] column_expressions
+<strong class="hl-keyword">FROM</strong> <strong class="hl-keyword">table_name</strong> | table_expression
+[<strong class="hl-keyword">WHERE</strong> filtering_conditions]
+[grouping_clause [having_clause] | order_clause]</pre>
+        </section>
+        <section class="- topic/section section" id="chap4_sect_sql_statements__section_e1s_ltk_jxb" data-ofbid="chap4_sect_sql_statements__section_e1s_ltk_jxb"><h2 class="- topic/title title sectiontitle">对 ANSI SQL 92 标准的支持</h2>
+            
+            <p class="- topic/p p">DolphinDB SQL 对 ANSI SQL 92 （下文简称 SQL-92）标准的支持历史如下：</p>
+            <ul class="- topic/ul ul" id="chap4_sect_sql_statements__ul_ac3_mtk_jxb" data-ofbid="chap4_sect_sql_statements__ul_ac3_mtk_jxb">
+                <li class="- topic/li li" id="chap4_sect_sql_statements__li_b1g_4g2_myb" data-ofbid="chap4_sect_sql_statements__li_b1g_4g2_myb">
+                    <p class="- topic/p p" id="chap4_sect_sql_statements__p_v4x_yf2_myb" data-ofbid="chap4_sect_sql_statements__p_v4x_yf2_myb">支持 select, insert, update, delete
+                        语句分别用于查询、插入、更新、删除数据表中的记录。从 <span class="- topic/ph ph">2.00.5  </span>版本开始，DolphinDB 支持 create
+                        语句创建数据库（表），alter 语句为表增加列。从 <span class="- topic/ph ph">2.00.10 </span>版本开始，DolphinDB 的 SQL 关键字也可以采用全部大写的形式，例如
+                        SELECT, FROM, WHERE 等。</p>
+                </li>
+                <li class="- topic/li li" id="chap4_sect_sql_statements__li_c1g_4g2_myb" data-ofbid="chap4_sect_sql_statements__li_c1g_4g2_myb">
+                    <p class="- topic/p p" id="chap4_sect_sql_statements__p_w4x_yf2_myb" data-ofbid="chap4_sect_sql_statements__p_w4x_yf2_myb">支持 where 条件。</p>
+                </li>
+                <li class="- topic/li li" id="chap4_sect_sql_statements__li_d1g_4g2_myb" data-ofbid="chap4_sect_sql_statements__li_d1g_4g2_myb">
+                    <p class="- topic/p p" id="chap4_sect_sql_statements__p_x4x_yf2_myb" data-ofbid="chap4_sect_sql_statements__p_x4x_yf2_myb">支持分组 (group by) 和排序 (order by) 子句。</p>
+                </li>
+                <li class="- topic/li li" id="chap4_sect_sql_statements__li_e1g_4g2_myb" data-ofbid="chap4_sect_sql_statements__li_e1g_4g2_myb">
+                    <p class="- topic/p p" id="chap4_sect_sql_statements__p_y4x_yf2_myb" data-ofbid="chap4_sect_sql_statements__p_y4x_yf2_myb">支持表连接：inner join, left join, left semijoin, full join。</p>
+                </li>
+                <li class="- topic/li li" id="chap4_sect_sql_statements__li_f1g_4g2_myb" data-ofbid="chap4_sect_sql_statements__li_f1g_4g2_myb">从版本 <span class="- topic/ph ph">2.00.10 </span>开始，支持将 SQL 语句分成多行编写。但请注意以下2点： <ul class="- topic/ul ul" id="chap4_sect_sql_statements__ul_oxr_24q_gyb" data-ofbid="chap4_sect_sql_statements__ul_oxr_24q_gyb">
+                        <li class="- topic/li li" id="chap4_sect_sql_statements__li_g1g_4g2_myb" data-ofbid="chap4_sect_sql_statements__li_g1g_4g2_myb">由 2 个单词组成的关键字（例如：order by, group by, context by,
+                            pivot by, union all, inner join, nulls first 等）不能在中间拆分换行。 </li>
+                        <li class="- topic/li li" id="chap4_sect_sql_statements__li_h1g_4g2_myb" data-ofbid="chap4_sect_sql_statements__li_h1g_4g2_myb">为字段或表指定别名时，若不使用关键字 as，则别名必须紧跟在原名称后面，不能换行。</li>
+                    </ul></li>
+            </ul>
+        </section>
+        <section class="- topic/section section" id="chap4_sect_sql_statements__section_i3f_4tk_jxb" data-ofbid="chap4_sect_sql_statements__section_i3f_4tk_jxb"><h2 class="- topic/title title sectiontitle">DolphinDB SQL 与 SQL 92 的区别</h2>
+            
+            <ul class="- topic/ul ul" id="chap4_sect_sql_statements__ul_hnt_ptk_jxb" data-ofbid="chap4_sect_sql_statements__ul_hnt_ptk_jxb">
+                <li class="- topic/li li" id="chap4_sect_sql_statements__li_i1g_4g2_myb" data-ofbid="chap4_sect_sql_statements__li_i1g_4g2_myb">
+                    <p class="- topic/p p" id="chap4_sect_sql_statements__p_z4x_yf2_myb" data-ofbid="chap4_sect_sql_statements__p_z4x_yf2_myb">可在 SQL 查询中直接使用绝大部分函数。</p>
+                </li>
+                <li class="- topic/li li" id="chap4_sect_sql_statements__li_j1g_4g2_myb" data-ofbid="chap4_sect_sql_statements__li_j1g_4g2_myb">
+                    <p class="- topic/p p" id="chap4_sect_sql_statements__p_apx_yf2_myb" data-ofbid="chap4_sect_sql_statements__p_apx_yf2_myb">其它区别如下表所示：</p>
+                </li>
+            </ul>
+            <div class="table-container"><table class="- topic/table table frame-all" id="chap4_sect_sql_statements__table_jxw_ttk_jxb" data-ofbid="chap4_sect_sql_statements__table_jxw_ttk_jxb" data-cols="3"><caption class="- topic/title title tablecap" data-caption-side="top" data-is-repeated="true"><span class="table--title-label">表<span class="table--title-label-number"> 1</span><span class="table--title-label-punctuation">. </span></span><span class="table--title" id="chap4_sect_sql_statements__title_grw_s4v_nyb">DolphinDB SQL与 SQL-92 的语法差异</span></caption><colgroup><col style="width:19.841269841269842%"/><col style="width:20.238095238095237%"/><col style="width:59.92063492063492%"/></colgroup><thead class="- topic/thead thead">
+                        <tr class="- topic/row" id="chap4_sect_sql_statements__row_k1g_4g2_myb">
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="chap4_sect_sql_statements__entry_l1g_4g2_myb">SQL-92 语法</th>
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="chap4_sect_sql_statements__entry_m1g_4g2_myb">DolphinDB 语法</th>
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="chap4_sect_sql_statements__entry_n1g_4g2_myb">说明</th>
+                        </tr>
+                    </thead><tbody class="- topic/tbody tbody">
+                        <tr class="- topic/row" id="chap4_sect_sql_statements__row_vbg_4g2_myb">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" id="chap4_sect_sql_statements__entry_wbg_4g2_myb" headers="chap4_sect_sql_statements__entry_l1g_4g2_myb">N/A</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" id="chap4_sect_sql_statements__entry_xbg_4g2_myb" headers="chap4_sect_sql_statements__entry_m1g_4g2_myb"><code class="+ topic/ph pr-d/codeph ph codeph">context by</code></td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" id="chap4_sect_sql_statements__entry_ybg_4g2_myb" headers="chap4_sect_sql_statements__entry_n1g_4g2_myb"><code class="+ topic/ph pr-d/codeph ph codeph">context by</code> 是 DolphinDB
+                                    的独有的创新，它使得在处理各组内时间序列时非常方便。<code class="+ topic/ph pr-d/codeph ph codeph">context
+                                    by</code>与<code class="+ topic/ph pr-d/codeph ph codeph">group by</code>相似，但是<code class="+ topic/ph pr-d/codeph ph codeph">group
+                                    by</code>的结果为每一组返回一个标量值，而<code class="+ topic/ph pr-d/codeph ph codeph">context by</code>的结果为
+                                每一组返回一个与组内记录数同样长度的向量。</td>
+                        </tr>
+                        <tr class="- topic/row" id="chap4_sect_sql_statements__row_zbg_4g2_myb">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" id="chap4_sect_sql_statements__entry_acg_4g2_myb" headers="chap4_sect_sql_statements__entry_l1g_4g2_myb">N/A</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" id="chap4_sect_sql_statements__entry_bcg_4g2_myb" headers="chap4_sect_sql_statements__entry_m1g_4g2_myb"><code class="+ topic/ph pr-d/codeph ph codeph">pivot by</code></td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" id="chap4_sect_sql_statements__entry_ccg_4g2_myb" headers="chap4_sect_sql_statements__entry_n1g_4g2_myb"><code class="+ topic/ph pr-d/codeph ph codeph">pivot
+                                by</code>将数据转换成二维视图。</td>
+                        </tr>
+                        <tr class="- topic/row" id="chap4_sect_sql_statements__row_dcg_4g2_myb">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" id="chap4_sect_sql_statements__entry_ecg_4g2_myb" headers="chap4_sect_sql_statements__entry_l1g_4g2_myb">N/A</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" id="chap4_sect_sql_statements__entry_fcg_4g2_myb" headers="chap4_sect_sql_statements__entry_m1g_4g2_myb"><code class="+ topic/ph pr-d/codeph ph codeph">cgroup by</code></td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" id="chap4_sect_sql_statements__entry_gcg_4g2_myb" headers="chap4_sect_sql_statements__entry_n1g_4g2_myb"></td>
+                        </tr>
+                        <tr class="- topic/row" id="chap4_sect_sql_statements__row_hcg_4g2_myb">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" id="chap4_sect_sql_statements__entry_icg_4g2_myb" headers="chap4_sect_sql_statements__entry_l1g_4g2_myb">N/A</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" id="chap4_sect_sql_statements__entry_jcg_4g2_myb" headers="chap4_sect_sql_statements__entry_m1g_4g2_myb"><code class="+ topic/ph pr-d/codeph ph codeph">map</code></td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" id="chap4_sect_sql_statements__entry_kcg_4g2_myb" headers="chap4_sect_sql_statements__entry_n1g_4g2_myb">将 SQL 语句在每个分区分别执行，然后将结果合并。</td>
+                        </tr>
+                        <tr class="- topic/row" id="chap4_sect_sql_statements__row_fdg_4g2_myb">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" id="chap4_sect_sql_statements__entry_gdg_4g2_myb" headers="chap4_sect_sql_statements__entry_l1g_4g2_myb">N/A</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" id="chap4_sect_sql_statements__entry_hdg_4g2_myb" headers="chap4_sect_sql_statements__entry_m1g_4g2_myb"><code class="+ topic/ph pr-d/codeph ph codeph">aj</code></td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" id="chap4_sect_sql_statements__entry_idg_4g2_myb" headers="chap4_sect_sql_statements__entry_n1g_4g2_myb"><code class="+ topic/ph pr-d/codeph ph codeph">asof</code>连接。它把左表中的每一条记录作为标准，并且检查右表中是否有匹配行。如果没有完全匹配的行，将会选择最近的行。如果有多个匹配行，将会选择最后一行。</td>
+                        </tr>
+                        <tr class="- topic/row" id="chap4_sect_sql_statements__row_jdg_4g2_myb">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" id="chap4_sect_sql_statements__entry_kdg_4g2_myb" headers="chap4_sect_sql_statements__entry_l1g_4g2_myb">N/A</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" id="chap4_sect_sql_statements__entry_ldg_4g2_myb" headers="chap4_sect_sql_statements__entry_m1g_4g2_myb"><code class="+ topic/ph pr-d/codeph ph codeph">wj</code>,
+                                <code class="+ topic/ph pr-d/codeph ph codeph">pwj</code></td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" id="chap4_sect_sql_statements__entry_mdg_4g2_myb" headers="chap4_sect_sql_statements__entry_n1g_4g2_myb">窗口连接和现行窗口连接。它们是<code class="+ topic/ph pr-d/codeph ph codeph">asof</code>连接的扩展。对于左表中的每一行，窗口连接把聚合函数应用到在滑动窗口中右表的行。如果右表中没有与窗口匹配的值，现行窗口连接会选择滑动窗口的前一个值，并对它使用聚合函数。</td>
+                        </tr>
+                    </tbody></table></div>
+        </section>
+        <section class="- topic/section section" id="chap4_sect_sql_statements__section_zwc_l5q_gyb" data-ofbid="chap4_sect_sql_statements__section_zwc_l5q_gyb"><h2 class="- topic/title title sectiontitle">SQL 方言兼容</h2><p class="- topic/p p" id="chap4_sect_sql_statements__p_bpx_yf2_myb" data-ofbid="chap4_sect_sql_statements__p_bpx_yf2_myb">自 <span class="- topic/ph ph">2.00.10
+                </span>版本开始，DolphinDB 实现了对 Oracle 和 MySQL 方言的兼容性。除了支持 SQL-92
+                语法外，还解决了因不同方言的扩展特性导致同名函数执行行为不一致的问题。通过会话（session）选择方言模式，便可在该会话中执行相应语言编写的脚本。目前有三种模式可选：DolphinDB,
+                Oracle 和 MySQL。</p>
+            <div class="- topic/note note note note_note" id="chap4_sect_sql_statements__note_rg4_nnt_vzb" data-ofbid="chap4_sect_sql_statements__note_rg4_nnt_vzb"><span class="note__title">注：</span> 
+                <ul class="- topic/ul ul" id="chap4_sect_sql_statements__ul_znn_n5q_gyb" data-ofbid="chap4_sect_sql_statements__ul_znn_n5q_gyb">
+                    <li class="- topic/li li" id="chap4_sect_sql_statements__li_ndg_4g2_myb" data-ofbid="chap4_sect_sql_statements__li_ndg_4g2_myb">Oracle 和 MySQL 方言模式也能正确解析使用 DolphinDB 语言编写的脚本。</li>
+                    <li class="- topic/li li" id="chap4_sect_sql_statements__li_odg_4g2_myb" data-ofbid="chap4_sect_sql_statements__li_odg_4g2_myb">仅支持 Oracle 和 MySQL 的部分功能和函数，见下表：</li>
+                </ul>
+            </div>
+            <div class="table-container"><table class="- topic/table table frame-all" id="chap4_sect_sql_statements__table_cyf_q5q_gyb" data-ofbid="chap4_sect_sql_statements__table_cyf_q5q_gyb" data-cols="3"><caption></caption><colgroup><col style="width:20.66115702479339%"/><col style="width:20.66115702479339%"/><col style="width:58.67768595041321%"/></colgroup><thead class="- topic/thead thead">
+                        <tr class="- topic/row" id="chap4_sect_sql_statements__row_pdg_4g2_myb">
+                            <th class="- topic/entry entry align-left colsep-1 rowsep-1" id="chap4_sect_sql_statements__entry_qdg_4g2_myb">SQL 方言</th>
+                            <th class="- topic/entry entry align-left colsep-1 rowsep-1" id="chap4_sect_sql_statements__entry_rdg_4g2_myb">支持功能</th>
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-1" id="chap4_sect_sql_statements__entry_sdg_4g2_myb">支持函数（无分大小写）</th>
+                        </tr>
+                    </thead><tbody class="- topic/tbody tbody">
+                        <tr class="- topic/row" id="chap4_sect_sql_statements__row_tdg_4g2_myb">
+                            <td class="- topic/entry entry align-left colsep-1 rowsep-1" id="chap4_sect_sql_statements__entry_udg_4g2_myb" headers="chap4_sect_sql_statements__entry_qdg_4g2_myb">
+                                <p class="- topic/p p">Oracle</p>
+                            </td>
+                            <td class="- topic/entry entry align-left colsep-1 rowsep-1" id="chap4_sect_sql_statements__entry_vdg_4g2_myb" headers="chap4_sect_sql_statements__entry_rdg_4g2_myb">
+                                <ul class="- topic/ul ul" id="chap4_sect_sql_statements__ul_bbh_t5q_gyb" data-ofbid="chap4_sect_sql_statements__ul_bbh_t5q_gyb">
+                                    <li class="- topic/li li" id="chap4_sect_sql_statements__li_wdg_4g2_myb" data-ofbid="chap4_sect_sql_statements__li_wdg_4g2_myb">注释符：--、/**/</li>
+                                    <li class="- topic/li li" id="chap4_sect_sql_statements__li_xdg_4g2_myb" data-ofbid="chap4_sect_sql_statements__li_xdg_4g2_myb">字符串拼接符：||</li>
+                                </ul>
+                            </td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-1" id="chap4_sect_sql_statements__entry_ydg_4g2_myb" headers="chap4_sect_sql_statements__entry_sdg_4g2_myb">asciistr, concat, decode, instr, nvl,
+                                nvl2, rank, regexp_like, to_char, to_date, to_number 和 trunc <div class="- topic/note note note note_note" id="chap4_sect_sql_statements__note_rng_gtp_wzb" data-ofbid="chap4_sect_sql_statements__note_rng_gtp_wzb"><span class="note__title">注：</span> to_char 只接收数值类型和 DATE, DATEHOUR, DATETIME
+                                    类型的参数。有关 Oracle SQL 函数的语法参考，请访问：<a class="- topic/xref xref" href="https://docs.oracle.com/en/database/oracle/oracle-database/19/sqlrf/Functions.html#GUID-D079EFD3-C683-441F-977E-2C9503089982" target="_blank" rel="external noopener">SQL Language
+                                    Reference</a></div></td>
+                        </tr>
+                        <tr class="- topic/row" id="chap4_sect_sql_statements__row_zdg_4g2_myb">
+                            <td class="- topic/entry entry align-left colsep-1 rowsep-0" id="chap4_sect_sql_statements__entry_a2g_4g2_myb" headers="chap4_sect_sql_statements__entry_qdg_4g2_myb">
+                                <p class="- topic/p p">MySQL</p>
+                            </td>
+                            <td class="- topic/entry entry align-left colsep-1 rowsep-0" id="chap4_sect_sql_statements__entry_b2g_4g2_myb" headers="chap4_sect_sql_statements__entry_rdg_4g2_myb"></td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" id="chap4_sect_sql_statements__entry_c2g_4g2_myb" headers="chap4_sect_sql_statements__entry_sdg_4g2_myb">sysdate<div class="- topic/note note note note_note" id="chap4_sect_sql_statements__note_ep5_k2k_s1c" data-ofbid="chap4_sect_sql_statements__note_ep5_k2k_s1c"><span class="note__title">注：</span> 有关
+                                    MySQL 函数的语法参考，请访问：<a class="- topic/xref xref" href="https://dev.mysql.com/doc/refman/8.0/en/functions.html" target="_blank" rel="external noopener">MySQL :: MySQL 8.0 Reference
+                                        Manual :: 12 Functions and Operators</a></div></td>
+                        </tr>
+                    </tbody></table></div></section>
+    </div>
+</article></main></div>
+                        
+                        
+                        
+                        
+                        
+                        
+                    </div>
+                    
+                        <nav role="navigation" id="wh_topic_toc" aria-label="On this page" class="col-lg-2 d-none d-lg-block navbar d-print-none"> 
+                            <div id="wh_topic_toc_content">
+		                        
+	                            <div class=" wh_topic_toc "><div class="wh_topic_label">在本页上</div><ul><li class="section-item"><div class="section-title"><a href="#chap4_sect_sql_statements__section_s4x_yf2_myb" data-tocid="chap4_sect_sql_statements__section_s4x_yf2_myb">DolphinDB 中的 SQL 语句</a></div></li><li class="section-item"><div class="section-title"><a href="#chap4_sect_sql_statements__section_t4x_yf2_myb" data-tocid="chap4_sect_sql_statements__section_t4x_yf2_myb">语法</a></div></li><li class="section-item"><div class="section-title"><a href="#chap4_sect_sql_statements__section_e1s_ltk_jxb" data-tocid="chap4_sect_sql_statements__section_e1s_ltk_jxb">对 ANSI SQL 92 标准的支持</a></div></li><li class="section-item"><div class="section-title"><a href="#chap4_sect_sql_statements__section_i3f_4tk_jxb" data-tocid="chap4_sect_sql_statements__section_i3f_4tk_jxb">DolphinDB SQL 与 SQL 92 的区别</a></div></li><li class="section-item"><div class="section-title"><a href="#chap4_sect_sql_statements__section_zwc_l5q_gyb" data-tocid="chap4_sect_sql_statements__section_zwc_l5q_gyb">SQL 方言兼容</a></div></li></ul></div>
+	                        	
+                        	</div>
+                        </nav>
+                    
+                </div>
+            </div>
+            
+            
+            
+        </div> 
+        <footer class="navbar navbar-default wh_footer">
+  <div class=" footer-container mx-auto ">
+<title>Copyright</title><p><b> ©2024 浙江智臾科技有限公司 浙ICP备18048711号-3</b></p>
+  </div>
+</footer>
+        
+        <div id="go2top" class="d-print-none">
+            <span class="oxy-icon oxy-icon-up"></span>
+        </div>
+        
+        <div id="modal_img_large" class="modal">
+            <span class="close oxy-icon oxy-icon-remove"></span>
+            <div id="modal_img_container"></div>
+            <div id="caption"></div>
+        </div>
+        
+        
+        
+    </body>
+</html>

@@ -1,0 +1,1059 @@
+<!DOCTYPE html><html xmlns="http://www.w3.org/1999/xhtml" xml:lang="zh" lang="zh" data-whc_version="26.0">
+    <head><link rel="shortcut icon" href="../../favicon.ico"/><link rel="icon" href="../../favicon.ico"/><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><meta http-equiv="X-UA-Compatible" content="IE=edge"/><meta name="description" content="createOrderBookSnapshotEngine(name, exchange, orderbookDepth, intervalInMilli, date, startTime, prevClose, dummyTable, outputTable, inputColMap, [outputColMap], [outputCodeMap], [snapshotDir], ..."/><meta name="DC.rights.owner" content="(C) 版权 2024"/><meta name="copyright" content="(C) 版权 2024"/><meta name="generator" content="DITA-OT"/><meta name="DC.type" content="topic"/><meta name="DC.coverage" content=""/><meta name="DC.relation" content="../../funcs/funcs_intro.html"/><meta name="prodname" content="DolphinDB"/><meta name="brand" content="DolphinDB"/><meta name="DC.creator" content="DolphinDB"/><meta name="DC.publisher" content="DDB N/A DDB 200"/><meta name="DC.format" content="HTML5"/><meta name="DC.identifier" content="createorderbooksnapshotengine"/><title>createOrderBookSnapshotEngine</title><!--  Generated with Oxygen version 26.0, build number 2024012323.  --><meta name="wh-path2root" content="../../"/><meta name="wh-toc-id" content="createorderbooksnapshotengine-d9529e34887"/><meta name="wh-source-relpath" content="funcs/c/createorderbooksnapshotengine.dita"/><meta name="wh-out-relpath" content="funcs/c/createorderbooksnapshotengine.html"/>
+
+    <link rel="stylesheet" type="text/css" href="../../oxygen-webhelp/app/commons.css?buildId=2024012323"/>
+    <link rel="stylesheet" type="text/css" href="../../oxygen-webhelp/app/topic.css?buildId=2024012323"/>
+
+    <script src="../../oxygen-webhelp/app/options/properties.js?buildId=20240704100525"></script>
+    <script src="../../oxygen-webhelp/app/localization/strings.js?buildId=2024012323"></script>
+    <script src="../../oxygen-webhelp/app/search/index/keywords.js?buildId=20240704100525"></script>
+    <script defer="defer" src="../../oxygen-webhelp/app/commons.js?buildId=2024012323"></script>
+    <script defer="defer" src="../../oxygen-webhelp/app/topic.js?buildId=2024012323"></script>
+<link rel="stylesheet" type="text/css" href="../../oxygen-webhelp/template/styles.css?buildId=2024012323"/><script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script><script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script></head>
+
+    <body id="createorderbooksnapshotengine" class="wh_topic_page frmBody">
+        <a href="#wh_topic_body" class="sr-only sr-only-focusable">
+            跳转到主要内容
+        </a>
+        
+        
+        
+        
+        <header class="navbar navbar-default wh_header">
+    <div class="container-fluid">
+        <div xmlns:whc="http://www.oxygenxml.com/webhelp/components" class="wh_header_flex_container navbar-nav navbar-expand-md navbar-dark">
+            <div class="wh_logo_and_publication_title_container">
+                <div class="wh_logo_and_publication_title">
+                    
+                    <a href="https://www.dolphindb.cn" class=" wh_logo d-none d-sm-block "><img src="../../logo.png" alt="  DolphinDB 文档中心  "/></a>
+                    <div class=" wh_publication_title "><a href="../../index.html"><span class="booktitle">  <span class="ph mainbooktitle">DolphinDB 文档中心</span>  </span></a></div>
+                    
+                </div>
+                
+                
+            </div>
+
+            <div class="wh_top_menu_and_indexterms_link collapse navbar-collapse" id="wh_top_menu_and_indexterms_link">
+                
+                
+                
+                
+            </div>
+        <div class=" wh_search_input navbar-form wh_topic_page_search search " role="form">
+            
+            
+            
+            <form id="searchForm" method="get" role="search" action="../../search.html"><div><input type="search" placeholder="搜索 " class="wh_search_textfield" id="textToSearch" name="searchQuery" aria-label="搜索查询" required="required"/><button type="submit" class="wh_search_button" aria-label="搜索"><span class="search_input_text">搜索</span></button></div></form>
+            
+            <script src="/vendors/react/umd/react.production.min.js" defer="defer"></script>
+<script src="/vendors/react-dom/umd/react-dom.production.min.js" defer="defer"></script>
+<script src="/vendors/dayjs/dayjs.min.js" defer="defer"></script>
+<script src="/vendors/antd/dist/antd.min.js" defer="defer"></script>
+<script src="/vendors/@ant-design/icons/dist/index.umd.min.js" defer="defer"></script>
+<script src="/zh/index.js" type="module"></script>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js" defer="defer"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML" defer="defer"><!--
+
+
+--></script>
+
+            
+        </div></div>
+    </div>
+</header>
+        
+        
+         
+        
+        
+        
+        <div class="container-fluid" id="wh_topic_container">
+            <div class="row">
+
+                <nav class="wh_tools d-print-none navbar-expand-md" aria-label="Tools">
+                    
+                    <div data-tooltip-position="bottom" class=" wh_breadcrumb "><ol class="d-print-none"><li><span class="home"><a href="../../index.html"><span>主页</span></a></span></li><li><div class="topicref" data-id="functions_references"><div class="title"><a href="../../funcs/funcs_intro.html"><span class="keyword label">函数参考</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 函数分类、语法、详解及示例</p></div></div></div></li><li><div class="topicref"><div class="title"><a href="../../funcs/a/abs.html">函数一览</a></div></div></li><li><div class="topicref"><div class="title"><a href="../../funcs/c/cacheDS_.html">C</a></div></div></li><li class="active"><div class="topicref" data-id="createorderbooksnapshotengine"><div class="title"><a href="../../funcs/c/createorderbooksnapshotengine.html">createOrderBookSnapshotEngine</a></div></div></li></ol></div>
+                    
+                    
+                    
+                    <div class="wh_right_tools">
+                        <button class="wh_hide_highlight" aria-label="切换搜索突出显示" title="切换搜索突出显示"></button>
+                        <button class="webhelp_expand_collapse_sections" data-next-state="collapsed" aria-label="折叠截面" title="折叠截面"></button>
+                        
+                        
+                        
+                        
+                        <div class=" wh_print_link print d-none d-md-inline-block "><button onClick="window.print()" title="打印此页" aria-label="打印此页"></button></div>
+                        
+                        <button type="button" id="wh_toc_button" class="custom-toggler navbar-toggler collapsed wh_toggle_button navbar-light" aria-expanded="false" aria-label="Toggle publishing table of content" aria-controls="wh_publication_toc">
+                            <span class="navbar-toggler-icon"></span>
+                        </button>
+                    </div>
+                    
+                </nav>
+            </div>
+            
+            
+            
+            
+            <div class="wh_content_area">
+                <div class="row">
+                    
+                        <nav id="wh_publication_toc" class="col-lg-3 col-md-3 col-sm-12 d-md-block d-none d-print-none" aria-label="Table of Contents Container">
+                            <div id="wh_publication_toc_content">
+		                        
+                            	<div class=" wh_publication_toc " data-tooltip-position="right"><span class="expand-button-action-labels"><span id="button-expand-action" role="button" aria-label="Expand"></span><span id="button-collapse-action" role="button" aria-label="Collapse"></span><span id="button-pending-action" role="button" aria-label="Pending"></span></span><ul role="tree" aria-label="Table of Contents"><li role="treeitem"><div data-tocid="new_chap_about_sect_ddb_docs_intro-d9529e87" class="topicref" data-id="new_chap_about_sect_ddb_docs_intro" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../about/ddb_docs_intro.html" id="new_chap_about_sect_ddb_docs_intro-d9529e87-link">文档使用说明</a><div class="wh-tooltip"><p class="shortdesc">如何获取 DolphinDB 帮助信息</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="chap1_getstarted-d9529e140" class="topicref" data-id="chap1_getstarted" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action chap1_getstarted-d9529e140-link" class="wh-expand-btn"></span><div class="title"><a href="../../getstarted/chap1_getstarted.html" id="chap1_getstarted-d9529e140-link"><span class="keyword label">快速上手</span></a><div class="wh-tooltip"><p class="shortdesc">如何快速部署 DolphinDB、建库建表、写入和查询数据</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="sectionddb_deployment-d9529e335" class="topicref" data-id="sectionddb_deployment" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action sectionddb_deployment-d9529e335-link" class="wh-expand-btn"></span><div class="title"><a href="../../deploy/deploy_intro.html" id="sectionddb_deployment-d9529e335-link"><span class="keyword label">部署</span></a><div class="wh-tooltip"><p class="shortdesc">如何在不同的场景中部署 DolphinDB</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="new_chap_database_manage_new_chap_dbmanage_landing_page-d9529e2313" class="topicref" data-id="new_chap_database_manage_new_chap_dbmanage_landing_page" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action new_chap_database_manage_new_chap_dbmanage_landing_page-d9529e2313-link" class="wh-expand-btn"></span><div class="title"><a href="../../db_distr_comp/cfg/db_intro.html" id="new_chap_database_manage_new_chap_dbmanage_landing_page-d9529e2313-link"><span class="keyword label">数据库</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 数据库的基本概念</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="chap7_tutorials_streaming-d9529e3490" class="topicref" data-id="chap7_tutorials_streaming" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action chap7_tutorials_streaming-d9529e3490-link" class="wh-expand-btn"></span><div class="title"><a href="../../stream/str_intro.html" id="chap7_tutorials_streaming-d9529e3490-link"><span class="keyword label">流数据</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 流数据引擎及流数据计算的基本概念</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="tocId-d9529e7385" class="topicref" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action tocId-d9529e7385-link" class="wh-expand-btn"></span><div class="title"><a href="../../db_distr_comp/db_oper/import_data.html" id="tocId-d9529e7385-link">数据迁移</a><div class="wh-tooltip"><p class="shortdesc">如何从不同数据源向 DolphinDB 迁移数据</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="chap7_tutorials_system_management-d9529e7812" class="topicref" data-id="chap7_tutorials_system_management" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action chap7_tutorials_system_management-d9529e7812-link" class="wh-expand-btn"></span><div class="title"><a href="../../sys_man/om_intro.html" id="chap7_tutorials_system_management-d9529e7812-link"><span class="keyword label">系统运维</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 的系统运维功能及方法</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="about_language_resources-d9529e16490" class="topicref" data-id="about_language_resources" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action about_language_resources-d9529e16490-link" class="wh-expand-btn"></span><div class="title"><a href="../../progr/progr_intro.html" id="about_language_resources-d9529e16490-link"><span class="keyword label">编程语言</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 编程基本概念与方法、SQL 在 DolphinDB 的应用</p></div></div></div></li><li role="treeitem" aria-expanded="true"><div data-tocid="functions_references-d9529e26503" class="topicref" data-id="functions_references" data-state="expanded"><span role="button" tabindex="0" aria-labelledby="button-collapse-action functions_references-d9529e26503-link" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/funcs_intro.html" id="functions_references-d9529e26503-link"><span class="keyword label">函数参考</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 函数分类、语法、详解及示例</p></div></div></div><ul role="group" class="navbar-nav nav-list"><li role="treeitem"><div data-tocid="funcs_by_topics-d9529e26556" class="topicref" data-id="funcs_by_topics" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/funcs_by_topics.html" id="funcs_by_topics-d9529e26556-link"><span class="keyword label">函数分类</span></a></div></div></li><li role="treeitem" aria-expanded="true"><div data-tocid="tocId-d9529e26603" class="topicref" data-state="expanded"><span role="button" tabindex="0" aria-labelledby="button-collapse-action tocId-d9529e26603-link" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/a/abs.html" id="tocId-d9529e26603-link">函数一览</a></div></div><ul role="group" class="navbar-nav nav-list"><li role="treeitem" aria-expanded="false"><div data-tocid="tocId-d9529e26604" class="topicref" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action tocId-d9529e26604-link" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/a/abs.html" id="tocId-d9529e26604-link">A</a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="tocId-d9529e28634" class="topicref" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action tocId-d9529e28634-link" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/b/backup.html" id="tocId-d9529e28634-link">B</a></div></div></li><li role="treeitem" aria-expanded="true"><div data-tocid="tocId-d9529e30248" class="topicref" data-state="expanded"><span role="button" tabindex="0" aria-labelledby="button-collapse-action tocId-d9529e30248-link" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/c/cacheDS_.html" id="tocId-d9529e30248-link">C</a></div></div><ul role="group" class="navbar-nav nav-list"><li role="treeitem"><div data-tocid="cacheds-d9529e30249" class="topicref" data-id="cacheds" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/c/cacheDS_.html" id="cacheds-d9529e30249-link">cacheDS!</a></div></div></li><li role="treeitem"><div data-tocid="cachedsnow-d9529e30295" class="topicref" data-id="cachedsnow" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/c/cacheDSNow.html" id="cachedsnow-d9529e30295-link">cacheDSNow</a></div></div></li><li role="treeitem"><div data-tocid="cachedtable-d9529e30341" class="topicref" data-id="cachedtable" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/c/cachedTable.html" id="cachedtable-d9529e30341-link">cachedTable</a></div></div></li><li role="treeitem"><div data-tocid="cancelconsolejob-d9529e30387" class="topicref" data-id="cancelconsolejob" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/c/cancelConsoleJob.html" id="cancelconsolejob-d9529e30387-link">cancelConsoleJob</a></div></div></li><li role="treeitem"><div data-tocid="canceljob-d9529e30433" class="topicref" data-id="canceljob" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/c/cancelJob.html" id="canceljob-d9529e30433-link">cancelJob</a></div></div></li><li role="treeitem"><div data-tocid="cancelpkeycompactiontask-d9529e30479" class="topicref" data-id="cancelpkeycompactiontask" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/c/cancelpkeycompactiontask.html" id="cancelpkeycompactiontask-d9529e30479-link">cancelPKEYCompactionTask</a></div></div></li><li role="treeitem"><div data-tocid="cancelrebalancetask-d9529e30525" class="topicref" data-id="cancelrebalancetask" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/c/cancelRebalanceTask.html" id="cancelrebalancetask-d9529e30525-link">cancelRebalanceTask</a></div></div></li><li role="treeitem"><div data-tocid="cancelrecoverytask-d9529e30571" class="topicref" data-id="cancelrecoverytask" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/c/cancelRecoveryTask.html" id="cancelrecoverytask-d9529e30571-link">cancelRecoveryTask</a></div></div></li><li role="treeitem"><div data-tocid="cast-d9529e30617" class="topicref" data-id="cast" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/c/cast.html" id="cast-d9529e30617-link">cast</a></div></div></li><li role="treeitem"><div data-tocid="cbrt-d9529e30663" class="topicref" data-id="cbrt" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/c/cbrt.html" id="cbrt-d9529e30663-link">cbrt</a></div></div></li><li role="treeitem"><div data-tocid="cdfbeta-d9529e30709" class="topicref" data-id="cdfbeta" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/c/cdfBeta.html" id="cdfbeta-d9529e30709-link">cdfBeta</a></div></div></li><li role="treeitem"><div data-tocid="cdfbinomial-d9529e30756" class="topicref" data-id="cdfbinomial" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/c/cdfBinomial.html" id="cdfbinomial-d9529e30756-link">cdfBinomial</a></div></div></li><li role="treeitem"><div data-tocid="cdfchisquare-d9529e30802" class="topicref" data-id="cdfchisquare" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/c/cdfChiSquare.html" id="cdfchisquare-d9529e30802-link">cdfChiSquare</a></div></div></li><li role="treeitem"><div data-tocid="cdfexp-d9529e30848" class="topicref" data-id="cdfexp" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/c/cdfExp.html" id="cdfexp-d9529e30848-link">cdfExp</a></div></div></li><li role="treeitem"><div data-tocid="cdff-d9529e30894" class="topicref" data-id="cdff" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/c/cdfF.html" id="cdff-d9529e30894-link">cdfF</a></div></div></li><li role="treeitem"><div data-tocid="cdfgamma-d9529e30940" class="topicref" data-id="cdfgamma" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/c/cdfGamma.html" id="cdfgamma-d9529e30940-link">cdfGamma</a></div></div></li><li role="treeitem"><div data-tocid="cdfkolmogorov-d9529e30986" class="topicref" data-id="cdfkolmogorov" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/c/cdfKolmogorov.html" id="cdfkolmogorov-d9529e30986-link">cdfKolmogorov</a></div></div></li><li role="treeitem"><div data-tocid="cdflogistic-d9529e31032" class="topicref" data-id="cdflogistic" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/c/cdfLogistic.html" id="cdflogistic-d9529e31032-link">cdfLogistic</a></div></div></li><li role="treeitem"><div data-tocid="cdfnormal-d9529e31078" class="topicref" data-id="cdfnormal" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/c/cdfNormal.html" id="cdfnormal-d9529e31078-link">cdfNormal</a></div></div></li><li role="treeitem"><div data-tocid="cdfpoisson-d9529e31124" class="topicref" data-id="cdfpoisson" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/c/cdfPoisson.html" id="cdfpoisson-d9529e31124-link">cdfPoisson</a></div></div></li><li role="treeitem"><div data-tocid="cdfstudent-d9529e31170" class="topicref" data-id="cdfstudent" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/c/cdfStudent.html" id="cdfstudent-d9529e31170-link">cdfStudent</a></div></div></li><li role="treeitem"><div data-tocid="cdfuniform-d9529e31216" class="topicref" data-id="cdfuniform" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/c/cdfUniform.html" id="cdfuniform-d9529e31216-link">cdfUniform</a></div></div></li><li role="treeitem"><div data-tocid="cdfweibull-d9529e31263" class="topicref" data-id="cdfweibull" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/c/cdfWeibull.html" id="cdfweibull-d9529e31263-link">cdfWeibull</a></div></div></li><li role="treeitem"><div data-tocid="cdfzipf-d9529e31309" class="topicref" data-id="cdfzipf" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/c/cdfZipf.html" id="cdfzipf-d9529e31309-link">cdfZipf</a></div></div></li><li role="treeitem"><div data-tocid="ceil-d9529e31355" class="topicref" data-id="ceil" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/c/ceil.html" id="ceil-d9529e31355-link">ceil</a></div></div></li><li role="treeitem"><div data-tocid="cell-d9529e31401" class="topicref" data-id="cell" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/c/cell.html" id="cell-d9529e31401-link">cell</a></div></div></li><li role="treeitem"><div data-tocid="cells-d9529e31447" class="topicref" data-id="cells" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/c/cells.html" id="cells-d9529e31447-link">cells</a></div></div></li><li role="treeitem"><div data-tocid="changepwd-d9529e31493" class="topicref" data-id="changepwd" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/c/changePwd.html" id="changepwd-d9529e31493-link">changePwd</a></div></div></li><li role="treeitem"><div data-tocid="char-d9529e31539" class="topicref" data-id="char" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/c/char.html" id="char-d9529e31539-link">char</a></div></div></li><li role="treeitem"><div data-tocid="charat-d9529e31585" class="topicref" data-id="charat" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/c/charAt.html" id="charat-d9529e31585-link">charAt</a></div></div></li><li role="treeitem"><div data-tocid="checkbackup-d9529e31631" class="topicref" data-id="checkbackup" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/c/checkBackup.html" id="checkbackup-d9529e31631-link">checkBackup</a></div></div></li><li role="treeitem"><div data-tocid="chisquaretest-d9529e31677" class="topicref" data-id="chisquaretest" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/c/chiSquareTest.html" id="chisquaretest-d9529e31677-link">chiSquareTest</a></div></div></li><li role="treeitem"><div data-tocid="cholesky-d9529e31723" class="topicref" data-id="cholesky" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/c/cholesky.html" id="cholesky-d9529e31723-link">cholesky</a></div></div></li><li role="treeitem"><div data-tocid="cj-d9529e31770" class="topicref" data-id="cj" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/c/cj.html" id="cj-d9529e31770-link">cj</a></div></div></li><li role="treeitem"><div data-tocid="cleanoutdatelogfiles-d9529e31816" class="topicref" data-id="cleanoutdatelogfiles" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/c/cleanOutdateLogFiles.html" id="cleanoutdatelogfiles-d9529e31816-link">cleanOutdateLogFiles</a></div></div></li><li role="treeitem"><div data-tocid="clear-d9529e31862" class="topicref" data-id="clear" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/c/clear_.html" id="clear-d9529e31862-link">clear!</a></div></div></li><li role="treeitem"><div data-tocid="clearallcache-d9529e31908" class="topicref" data-id="clearallcache" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/c/clearAllCache.html" id="clearallcache-d9529e31908-link">clearAllCache</a></div></div></li><li role="treeitem"><div data-tocid="clearallcache-d9529e31954" class="topicref" data-id="clearallcache" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/c/clearalltsdbsymbolbasecache.html" id="clearallcache-d9529e31954-link">clearAllTSDBSymbolBaseCache</a></div></div></li><li role="treeitem"><div data-tocid="clearcacheddatabase-d9529e32000" class="topicref" data-id="clearcacheddatabase" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/c/clearCachedDatabase.html" id="clearcacheddatabase-d9529e32000-link">clearCachedDatabase</a></div></div></li><li role="treeitem"><div data-tocid="clearcachedmodules-d9529e32046" class="topicref" data-id="clearcachedmodules" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/c/clearCachedModules.html" id="clearcachedmodules-d9529e32046-link">clearCachedModules</a></div></div></li><li role="treeitem"><div data-tocid="cleardscache-d9529e32092" class="topicref" data-id="cleardscache" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/c/clearDSCache_.html" id="cleardscache-d9529e32092-link">clearDSCache!</a></div></div></li><li role="treeitem"><div data-tocid="cleardscachenow-d9529e32138" class="topicref" data-id="cleardscachenow" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/c/clearDSCacheNow.html" id="cleardscachenow-d9529e32138-link">clearDSCacheNow</a></div></div></li><li role="treeitem"><div data-tocid="cleartablepersistence-d9529e32184" class="topicref" data-id="cleartablepersistence" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/c/clearTablePersistence.html" id="cleartablepersistence-d9529e32184-link">clearTablePersistence</a></div></div></li><li role="treeitem"><div data-tocid="clip-d9529e32230" class="topicref" data-id="clip" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/c/clip.html" id="clip-d9529e32230-link">clip</a></div></div></li><li role="treeitem"><div data-tocid="clip_-d9529e32277" class="topicref" data-id="clip_" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/c/clip_.html" id="clip_-d9529e32277-link">clip!</a></div></div></li><li role="treeitem"><div data-tocid="close-d9529e32323" class="topicref" data-id="close" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/c/close.html" id="close-d9529e32323-link">close</a></div></div></li><li role="treeitem"><div data-tocid="closesessions-d9529e32369" class="topicref" data-id="closesessions" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/c/closeSessions.html" id="closesessions-d9529e32369-link">closeSessions</a></div></div></li><li role="treeitem"><div data-tocid="coevent-d9529e32415" class="topicref" data-id="coevent" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/c/coevent.html" id="coevent-d9529e32415-link">coevent</a></div></div></li><li role="treeitem"><div data-tocid="coint-d9529e32461" class="topicref" data-id="coint" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/c/coint.html" id="coint-d9529e32461-link">coint</a></div></div></li><li role="treeitem"><div data-tocid="col-d9529e32507" class="topicref" data-id="col" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/c/col.html" id="col-d9529e32507-link">col</a></div></div></li><li role="treeitem"><div data-tocid="cols-d9529e32553" class="topicref" data-id="cols" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/c/cols.html" id="cols-d9529e32553-link">cols</a></div></div></li><li role="treeitem"><div data-tocid="columnnames-d9529e32599" class="topicref" data-id="columnnames" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/c/columnNames.html" id="columnnames-d9529e32599-link">columnNames</a></div></div></li><li role="treeitem"><div data-tocid="complex-d9529e32645" class="topicref" data-id="complex" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/c/complex.html" id="complex-d9529e32645-link">complex</a></div></div></li><li role="treeitem"><div data-tocid="compress-d9529e32691" class="topicref" data-id="compress" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/c/compress.html" id="compress-d9529e32691-link">compress</a></div></div></li><li role="treeitem"><div data-tocid="concat-d9529e32737" class="topicref" data-id="concat" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/c/concat.html" id="concat-d9529e32737-link">concat</a></div></div></li><li role="treeitem"><div data-tocid="concatdatetime-d9529e32784" class="topicref" data-id="concatdatetime" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/c/concatDateTime.html" id="concatdatetime-d9529e32784-link">concatDateTime</a></div></div></li><li role="treeitem"><div data-tocid="concatmatrix-d9529e32830" class="topicref" data-id="concatmatrix" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/c/concatMatrix.html" id="concatmatrix-d9529e32830-link">concatMatrix</a></div></div></li><li role="treeitem"><div data-tocid="conditionalfilter-d9529e32876" class="topicref" data-id="conditionalfilter" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/c/conditionalFilter.html" id="conditionalfilter-d9529e32876-link">conditionalFilter</a></div></div></li><li role="treeitem"><div data-tocid="conditionaliterate-d9529e32922" class="topicref" data-id="conditionaliterate" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/c/conditionalIterate.html" id="conditionaliterate-d9529e32922-link">conditionalIterate</a></div></div></li><li role="treeitem"><div data-tocid="contextcount-d9529e32968" class="topicref" data-id="contextcount" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/c/contextCount.html" id="contextcount-d9529e32968-link">contextCount</a></div></div></li><li role="treeitem"><div data-tocid="contextsum-d9529e33014" class="topicref" data-id="contextsum" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/c/contextSum.html" id="contextsum-d9529e33014-link">contextSum</a></div></div></li><li role="treeitem"><div data-tocid="contextsum2-d9529e33060" class="topicref" data-id="contextsum2" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/c/contextSum2.html" id="contextsum2-d9529e33060-link">contextSum2</a></div></div></li><li role="treeitem"><div data-tocid="convertencode-d9529e33106" class="topicref" data-id="convertencode" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/c/convertEncode.html" id="convertencode-d9529e33106-link">convertEncode</a></div></div></li><li role="treeitem"><div data-tocid="convertexcelformula-d9529e33152" class="topicref" data-id="convertexcelformula" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/c/convertExcelFormula.html" id="convertexcelformula-d9529e33152-link">convertExcelFormula</a></div></div></li><li role="treeitem"><div data-tocid="converttz-d9529e33198" class="topicref" data-id="converttz" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/c/convertTZ.html" id="converttz-d9529e33198-link">convertTZ</a></div></div></li><li role="treeitem"><div data-tocid="copy-d9529e33244" class="topicref" data-id="copy" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/c/copy.html" id="copy-d9529e33244-link">copy</a></div></div></li><li role="treeitem"><div data-tocid="copyreplicas-d9529e33291" class="topicref" data-id="copyreplicas" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/c/copyReplicas.html" id="copyreplicas-d9529e33291-link">copyReplicas</a></div></div></li><li role="treeitem"><div data-tocid="corr-d9529e33337" class="topicref" data-id="corr" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/c/corr.html" id="corr-d9529e33337-link">corr</a></div></div></li><li role="treeitem"><div data-tocid="corrmatrix-d9529e33383" class="topicref" data-id="corrmatrix" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/c/corrMatrix.html" id="corrmatrix-d9529e33383-link">corrMatrix</a></div></div></li><li role="treeitem"><div data-tocid="cos-d9529e33429" class="topicref" data-id="cos" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/c/cos.html" id="cos-d9529e33429-link">cos</a></div></div></li><li role="treeitem"><div data-tocid="cosh-d9529e33475" class="topicref" data-id="cosh" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/c/cosh.html" id="cosh-d9529e33475-link">cosh</a></div></div></li><li role="treeitem"><div data-tocid="count-d9529e33521" class="topicref" data-id="count" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/c/count.html" id="count-d9529e33521-link">count</a></div></div></li><li role="treeitem"><div data-tocid="countnaninf-d9529e33567" class="topicref" data-id="countnaninf" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/c/countNanInf.html" id="countnaninf-d9529e33567-link">countNanInf</a></div></div></li><li role="treeitem"><div data-tocid="covar-d9529e33613" class="topicref" data-id="covar" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/c/covar.html" id="covar-d9529e33613-link">covar</a></div></div></li><li role="treeitem"><div data-tocid="covarmatrix-d9529e33659" class="topicref" data-id="covarmatrix" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/c/covarMatrix.html" id="covarmatrix-d9529e33659-link">covarMatrix</a></div></div></li><li role="treeitem"><div data-tocid="crc32-d9529e33705" class="topicref" data-id="crc32" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/c/crc32.html" id="crc32-d9529e33705-link">crc32</a></div></div></li><li role="treeitem"><div data-tocid="createanomalydetectionengine-d9529e33751" class="topicref" data-id="createanomalydetectionengine" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/c/createAnomalyDetectionEngine.html" id="createanomalydetectionengine-d9529e33751-link"><span class="keyword">createAnomalyDetectionEngine</span></a></div></div></li><li role="treeitem"><div data-tocid="createasofjoinengine-d9529e33826" class="topicref" data-id="createasofjoinengine" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/c/createAsofJoinEngine.html" id="createasofjoinengine-d9529e33826-link"><span class="keyword">createAsofJoinEngine</span></a></div></div></li><li role="treeitem"><div data-tocid="createCatalog-d9529e33900" class="topicref" data-id="createCatalog" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/c/createCatalog.html" id="createCatalog-d9529e33900-link">createCatalog</a></div></div></li><li role="treeitem"><div data-tocid="createcrosssectionalaggregator-d9529e33946" class="topicref" data-id="createcrosssectionalaggregator" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/c/createCrossSectionalAggregator.html" id="createcrosssectionalaggregator-d9529e33946-link"><span class="keyword">createCrossSectionalAggregator</span></a></div></div></li><li role="treeitem"><div data-tocid="createcrosssectionalengine-d9529e33993" class="topicref" data-id="createcrosssectionalengine" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/c/createCrossSectionalEngine.html" id="createcrosssectionalengine-d9529e33993-link"><span class="keyword">createCrossSectionalEngine</span></a></div></div></li><li role="treeitem"><div data-tocid="createdailytimeseriesengine-d9529e34061" class="topicref" data-id="createdailytimeseriesengine" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/c/createDailyTimeSeriesEngine.html" id="createdailytimeseriesengine-d9529e34061-link"><span class="keyword">createDailyTimeSeriesEngine</span></a></div></div></li><li role="treeitem"><div data-tocid="createdeviceengine-d9529e34129" class="topicref" data-id="createdeviceengine" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/c/createdeviceengine.html" id="createdeviceengine-d9529e34129-link">createDeviceEngine</a></div></div></li><li role="treeitem"><div data-tocid="createdimensiontable-d9529e34175" class="topicref" data-id="createdimensiontable" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/c/createdimensiontable.html" id="createdimensiontable-d9529e34175-link">createDimensionTable</a></div></div></li><li role="treeitem"><div data-tocid="createdistributedinmemorytable-d9529e34221" class="topicref" data-id="createdistributedinmemorytable" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/c/createDistributedInMemoryTable.html" id="createdistributedinmemorytable-d9529e34221-link"><span class="keyword">createDistributedInMemoryTable</span></a></div></div></li><li role="treeitem"><div data-tocid="createdualownershipreactivestateengine-d9529e34268" class="topicref" data-id="createdualownershipreactivestateengine" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/c/createDualOwnershipReactiveStateEngine.html" id="createdualownershipreactivestateengine-d9529e34268-link"><span class="keyword">createDualOwnershipReactiveStateEngine</span></a></div></div></li><li role="treeitem"><div data-tocid="createequaljoinengine-d9529e34336" class="topicref" data-id="createequaljoinengine" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/c/createEqualJoinEngine.html" id="createequaljoinengine-d9529e34336-link"><span class="keyword">createEqualJoinEngine</span></a></div></div></li><li role="treeitem"><div data-tocid="createequijoinengine-d9529e34423" class="topicref" data-id="createequijoinengine" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/c/createEquiJoinEngine.html" id="createequijoinengine-d9529e34423-link"><span class="keyword">createEquiJoinEngine</span></a></div></div></li><li role="treeitem"><div data-tocid="creategplearnengine-d9529e34511" class="topicref" data-id="creategplearnengine" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/c/creategplearnengine.html" id="creategplearnengine-d9529e34511-link">createGPLearnEngine</a></div></div></li><li role="treeitem"><div data-tocid="creategroup-d9529e34557" class="topicref" data-id="creategroup" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/c/createGroup.html" id="creategroup-d9529e34557-link"><span class="keyword">createGroup</span></a></div></div></li><li role="treeitem"><div data-tocid="createipcinmemorytable-d9529e34604" class="topicref" data-id="createipcinmemorytable" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/c/createIPCInMemoryTable.html" id="createipcinmemorytable-d9529e34604-link"><span class="keyword">createIPCInMemoryTable</span></a></div></div></li><li role="treeitem"><div data-tocid="createIMOLTPTable-d9529e34651" class="topicref" data-id="createIMOLTPTable" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/c/createIMOLTPTable.html" id="createIMOLTPTable-d9529e34651-link">createIMOLTPTable</a></div></div></li><li role="treeitem"><div data-tocid="createleftsemijoinengine-d9529e34697" class="topicref" data-id="createleftsemijoinengine" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/c/createLeftSemiJoinEngine.html" id="createleftsemijoinengine-d9529e34697-link"><span class="keyword">createLeftSemiJoinEngine</span></a></div></div></li><li role="treeitem"><div data-tocid="createlookupjoinengine-d9529e34765" class="topicref" data-id="createlookupjoinengine" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/c/createLookupJoinEngine.html" id="createlookupjoinengine-d9529e34765-link"><span class="keyword">createLookupJoinEngine</span></a></div></div></li><li role="treeitem"><div data-tocid="createnarrowreactivestateengine-d9529e34826" class="topicref" data-id="createnarrowreactivestateengine" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/c/createnarrowreactivestateengine.html" id="createnarrowreactivestateengine-d9529e34826-link"><span class="keyword">createNarrowReactiveStateEngine</span></a></div></div></li><li role="treeitem" class="active"><div data-tocid="createorderbooksnapshotengine-d9529e34887" class="topicref" data-id="createorderbooksnapshotengine" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/c/createorderbooksnapshotengine.html" id="createorderbooksnapshotengine-d9529e34887-link">createOrderBookSnapshotEngine</a></div></div></li><li role="treeitem"><div data-tocid="createpartitionedtable-d9529e34933" class="topicref" data-id="createpartitionedtable" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/c/createPartitionedTable.html" id="createpartitionedtable-d9529e34933-link"><span class="keyword">createPartitionedTable</span></a></div></div></li><li role="treeitem"><div data-tocid="createreactivestateengine-d9529e35001" class="topicref" data-id="createreactivestateengine" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/c/createReactiveStateEngine.html" id="createreactivestateengine-d9529e35001-link"><span class="keyword">createReactiveStateEngine</span></a></div></div></li><li role="treeitem"><div data-tocid="createReactiveStatelessEngine-d9529e35069" class="topicref" data-id="createReactiveStatelessEngine" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/c/createReactiveStatelessEngine.html" id="createReactiveStatelessEngine-d9529e35069-link">createReactiveStatelessEngine</a></div></div></li><li role="treeitem"><div data-tocid="createruleengine-d9529e35116" class="topicref" data-id="createruleengine" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/c/createRuleEngine.html" id="createruleengine-d9529e35116-link"><span class="keyword">createRuleEngine</span></a></div></div></li><li role="treeitem"><div data-tocid="createSchema-d9529e35177" class="topicref" data-id="createSchema" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/c/createSchema.html" id="createSchema-d9529e35177-link">createSchema</a></div></div></li><li role="treeitem"><div data-tocid="createsessionwindowengine-d9529e35223" class="topicref" data-id="createsessionwindowengine" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/c/createSessionWindowEngine.html" id="createsessionwindowengine-d9529e35223-link"><span class="keyword">createSessionWindowEngine</span></a></div></div></li><li role="treeitem"><div data-tocid="createstreambroadcastengine-d9529e35284" class="topicref" data-id="createstreambroadcastengine" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/c/createstreambroadcastengine.html" id="createstreambroadcastengine-d9529e35284-link">createStreamBroadcastEngine</a></div></div></li><li role="treeitem"><div data-tocid="createstreamdispatchengine-d9529e35330" class="topicref" data-id="createstreamdispatchengine" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/c/createStreamDispatchEngine.html" id="createstreamdispatchengine-d9529e35330-link"><span class="keyword">createStreamDispatchEngine</span></a></div></div></li><li role="treeitem"><div data-tocid="createtable-d9529e35377" class="topicref" data-id="createtable" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/c/createTable.html" id="createtable-d9529e35377-link"><span class="keyword">createTable</span></a></div></div></li><li role="treeitem"><div data-tocid="createtimeseriesaggregator-d9529e35438" class="topicref" data-id="createtimeseriesaggregator" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/c/createTimeSeriesAggregator.html" id="createtimeseriesaggregator-d9529e35438-link"><span class="keyword">createTimeSeriesAggregator</span></a></div></div></li><li role="treeitem"><div data-tocid="createtimeseriesengine-d9529e35485" class="topicref" data-id="createtimeseriesengine" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/c/createTimeSeriesEngine.html" id="createtimeseriesengine-d9529e35485-link"><span class="keyword">createTimeSeriesEngine</span></a></div></div></li><li role="treeitem"><div data-tocid="createuser-d9529e35546" class="topicref" data-id="createuser" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/c/createUser.html" id="createuser-d9529e35546-link"><span class="keyword">createUser</span></a></div></div></li><li role="treeitem"><div data-tocid="createwindowjoinengine-d9529e35593" class="topicref" data-id="createwindowjoinengine" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/c/createWindowJoinEngine.html" id="createwindowjoinengine-d9529e35593-link"><span class="keyword">createWindowJoinEngine</span></a></div></div></li><li role="treeitem"><div data-tocid="crossstat-d9529e35654" class="topicref" data-id="crossstat" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/c/crossStat.html" id="crossstat-d9529e35654-link">crossStat</a></div></div></li><li role="treeitem"><div data-tocid="cubicspline-d9529e35701" class="topicref" data-id="cubicspline" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/c/cubicspline.html" id="cubicspline-d9529e35701-link">cubicSpline</a></div></div></li><li role="treeitem"><div data-tocid="cubicsplinepredic-d9529e35747" class="topicref" data-id="cubicsplinepredic" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/c/cubicsplinepredic.html" id="cubicsplinepredic-d9529e35747-link">cubicSplinePredic</a></div></div></li><li role="treeitem"><div data-tocid="cumavg-d9529e35793" class="topicref" data-id="cumavg" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/c/cumavg.html" id="cumavg-d9529e35793-link">cumavg</a></div></div></li><li role="treeitem"><div data-tocid="cumavgtopn-d9529e35839" class="topicref" data-id="cumavgtopn" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/c/cumavgTopN.html" id="cumavgtopn-d9529e35839-link">cumavgTopN</a></div></div></li><li role="treeitem"><div data-tocid="cumbeta-d9529e35885" class="topicref" data-id="cumbeta" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/c/cumbeta.html" id="cumbeta-d9529e35885-link">cumbeta</a></div></div></li><li role="treeitem"><div data-tocid="cumbetatopn-d9529e35931" class="topicref" data-id="cumbetatopn" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/c/cumbetaTopN.html" id="cumbetatopn-d9529e35931-link">cumbetaTopN</a></div></div></li><li role="treeitem"><div data-tocid="cumcorr-d9529e35977" class="topicref" data-id="cumcorr" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/c/cumcorr.html" id="cumcorr-d9529e35977-link">cumcorr</a></div></div></li><li role="treeitem"><div data-tocid="cumcorrtopn-d9529e36023" class="topicref" data-id="cumcorrtopn" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/c/cumcorrTopN.html" id="cumcorrtopn-d9529e36023-link">cumcorrTopN</a></div></div></li><li role="treeitem"><div data-tocid="cumcount-d9529e36069" class="topicref" data-id="cumcount" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/c/cumcount.html" id="cumcount-d9529e36069-link">cumcount</a></div></div></li><li role="treeitem"><div data-tocid="cumcovar-d9529e36115" class="topicref" data-id="cumcovar" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/c/cumcovar.html" id="cumcovar-d9529e36115-link">cumcovar</a></div></div></li><li role="treeitem"><div data-tocid="cumcovartopn-d9529e36161" class="topicref" data-id="cumcovartopn" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/c/cumcovarTopN.html" id="cumcovartopn-d9529e36161-link">cumcovarTopN</a></div></div></li><li role="treeitem"><div data-tocid="cumdenserank-d9529e36208" class="topicref" data-id="cumdenserank" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/c/cumdenseRank.html" id="cumdenserank-d9529e36208-link">cumdenseRank</a></div></div></li><li role="treeitem"><div data-tocid="cumfirstnot-d9529e36254" class="topicref" data-id="cumfirstnot" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/c/cumfirstNot.html" id="cumfirstnot-d9529e36254-link">cumfirstNot</a></div></div></li><li role="treeitem"><div data-tocid="cumkurtosistopn-d9529e36300" class="topicref" data-id="cumkurtosistopn" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/c/cumkurtosisTopN.html" id="cumkurtosistopn-d9529e36300-link">cumkurtosisTopN</a></div></div></li><li role="treeitem"><div data-tocid="cumlastnot-d9529e36346" class="topicref" data-id="cumlastnot" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/c/cumlastNot.html" id="cumlastnot-d9529e36346-link">cumlastNot</a></div></div></li><li role="treeitem"><div data-tocid="cummax-d9529e36392" class="topicref" data-id="cummax" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/c/cummax.html" id="cummax-d9529e36392-link">cummax</a></div></div></li><li role="treeitem"><div data-tocid="cummed-d9529e36438" class="topicref" data-id="cummed" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/c/cummed.html" id="cummed-d9529e36438-link">cummed</a></div></div></li><li role="treeitem"><div data-tocid="cummin-d9529e36484" class="topicref" data-id="cummin" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/c/cummin.html" id="cummin-d9529e36484-link">cummin</a></div></div></li><li role="treeitem"><div data-tocid="cumnunique-d9529e36530" class="topicref" data-id="cumnunique" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/c/cumnunique.html" id="cumnunique-d9529e36530-link">cumnunique</a></div></div></li><li role="treeitem"><div data-tocid="cumpercentile-d9529e36576" class="topicref" data-id="cumpercentile" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/c/cumpercentile.html" id="cumpercentile-d9529e36576-link">cumpercentile</a></div></div></li><li role="treeitem"><div data-tocid="cumpositivestreak-d9529e36622" class="topicref" data-id="cumpositivestreak" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/c/cumPositiveStreak.html" id="cumpositivestreak-d9529e36622-link">cumPositiveStreak</a></div></div></li><li role="treeitem"><div data-tocid="cumprod-d9529e36668" class="topicref" data-id="cumprod" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/c/cumprod.html" id="cumprod-d9529e36668-link">cumprod</a></div></div></li><li role="treeitem"><div data-tocid="cumrank-d9529e36715" class="topicref" data-id="cumrank" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/c/cumrank.html" id="cumrank-d9529e36715-link">cumrank</a></div></div></li><li role="treeitem"><div data-tocid="cumskewtopn-d9529e36761" class="topicref" data-id="cumskewtopn" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/c/cumskewTopN.html" id="cumskewtopn-d9529e36761-link">cumskewTopN</a></div></div></li><li role="treeitem"><div data-tocid="cumstd-d9529e36807" class="topicref" data-id="cumstd" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/c/cumstd.html" id="cumstd-d9529e36807-link">cumstd</a></div></div></li><li role="treeitem"><div data-tocid="cumstdp-d9529e36853" class="topicref" data-id="cumstdp" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/c/cumstdp.html" id="cumstdp-d9529e36853-link">cumstdp</a></div></div></li><li role="treeitem"><div data-tocid="cumstdptopn-d9529e36899" class="topicref" data-id="cumstdptopn" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/c/cumstdpTopN.html" id="cumstdptopn-d9529e36899-link">cumstdpTopN</a></div></div></li><li role="treeitem"><div data-tocid="cumstdtopn-d9529e36945" class="topicref" data-id="cumstdtopn" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/c/cumstdTopN.html" id="cumstdtopn-d9529e36945-link">cumstdTopN</a></div></div></li><li role="treeitem"><div data-tocid="cumsum-d9529e36991" class="topicref" data-id="cumsum" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/c/cumsum.html" id="cumsum-d9529e36991-link">cumsum</a></div></div></li><li role="treeitem"><div data-tocid="cumsum2-d9529e37037" class="topicref" data-id="cumsum2" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/c/cumsum2.html" id="cumsum2-d9529e37037-link">cumsum2</a></div></div></li><li role="treeitem"><div data-tocid="cumsum3-d9529e37083" class="topicref" data-id="cumsum3" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/c/cumsum3.html" id="cumsum3-d9529e37083-link">cumsum3</a></div></div></li><li role="treeitem"><div data-tocid="cumsum4-d9529e37129" class="topicref" data-id="cumsum4" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/c/cumsum4.html" id="cumsum4-d9529e37129-link">cumsum4</a></div></div></li><li role="treeitem"><div data-tocid="cumsumtopn-d9529e37175" class="topicref" data-id="cumsumtopn" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/c/cumsumTopN.html" id="cumsumtopn-d9529e37175-link">cumsumTopN</a></div></div></li><li role="treeitem"><div data-tocid="cumvar-d9529e37222" class="topicref" data-id="cumvar" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/c/cumvar.html" id="cumvar-d9529e37222-link">cumvar</a></div></div></li><li role="treeitem"><div data-tocid="cumvarp-d9529e37268" class="topicref" data-id="cumvarp" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/c/cumvarp.html" id="cumvarp-d9529e37268-link">cumvarp</a></div></div></li><li role="treeitem"><div data-tocid="cumvarptopn-d9529e37314" class="topicref" data-id="cumvarptopn" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/c/cumvarpTopN.html" id="cumvarptopn-d9529e37314-link">cumvarpTopN</a></div></div></li><li role="treeitem"><div data-tocid="cumvartopn-d9529e37360" class="topicref" data-id="cumvartopn" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/c/cumvarTopN.html" id="cumvartopn-d9529e37360-link">cumvarTopN</a></div></div></li><li role="treeitem"><div data-tocid="cumwavg-d9529e37406" class="topicref" data-id="cumwavg" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/c/cumwavg.html" id="cumwavg-d9529e37406-link">cumwavg</a></div></div></li><li role="treeitem"><div data-tocid="cumwsum-d9529e37452" class="topicref" data-id="cumwsum" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/c/cumwsum.html" id="cumwsum-d9529e37452-link">cumwsum</a></div></div></li><li role="treeitem"><div data-tocid="cumwcovartopn-d9529e37498" class="topicref" data-id="cumwcovartopn" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/c/cumwsumTopN.html" id="cumwcovartopn-d9529e37498-link">cumwsumTopN</a></div></div></li><li role="treeitem"><div data-tocid="cut-d9529e37544" class="topicref" data-id="cut" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/c/cut.html" id="cut-d9529e37544-link">cut</a></div></div></li><li role="treeitem"><div data-tocid="cutpoints-d9529e37590" class="topicref" data-id="cutpoints" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/c/cutPoints.html" id="cutpoints-d9529e37590-link">cutPoints</a></div></div></li><li role="treeitem"><div data-tocid="cvar-d9529e37636" class="topicref" data-id="cvar" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/c/cvar.html" id="cvar-d9529e37636-link">CVaR</a></div></div></li></ul></li><li role="treeitem" aria-expanded="false"><div data-tocid="tocId-d9529e37682" class="topicref" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action tocId-d9529e37682-link" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/d/dailyAlignedBar.html" id="tocId-d9529e37682-link">D</a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="tocId-d9529e40877" class="topicref" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action tocId-d9529e40877-link" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/e/eig.html" id="tocId-d9529e40877-link">E</a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="tocId-d9529e42767" class="topicref" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action tocId-d9529e42767-link" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/f/ffill_.html" id="tocId-d9529e42767-link">F</a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="tocId-d9529e44196" class="topicref" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action tocId-d9529e44196-link" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/g/gaussiankde.html" id="tocId-d9529e44196-link">G</a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="tocId-d9529e50472" class="topicref" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action tocId-d9529e50472-link" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/h/hashBucket.html" id="tocId-d9529e50472-link">H</a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="tocId-d9529e50887" class="topicref" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action tocId-d9529e50887-link" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/i/ifirstHit.html" id="tocId-d9529e50887-link">I</a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="tocId-d9529e54479" class="topicref" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action tocId-d9529e54479-link" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/j/join.html" id="tocId-d9529e54479-link">J</a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="tocId-d9529e54572" class="topicref" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action tocId-d9529e54572-link" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/k/kama.html" id="tocId-d9529e54572-link">K</a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="tocId-d9529e55034" class="topicref" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action tocId-d9529e55034-link" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/l/lasso.html" id="tocId-d9529e55034-link">L</a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="tocId-d9529e57528" class="topicref" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action tocId-d9529e57528-link" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/m/ma.html" id="tocId-d9529e57528-link">M</a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="tocId-d9529e62047" class="topicref" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action tocId-d9529e62047-link" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/n/nanInfFill.html" id="tocId-d9529e62047-link">N</a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="tocId-d9529e62878" class="topicref" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action tocId-d9529e62878-link" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/o/objByName.html" id="tocId-d9529e62878-link">O</a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="tocId-d9529e63247" class="topicref" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action tocId-d9529e63247-link" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/p/pack.html" id="tocId-d9529e63247-link">P</a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="tocId-d9529e64948" class="topicref" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action tocId-d9529e64948-link" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/q/qclp.html" id="tocId-d9529e64948-link">Q</a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="tocId-d9529e65317" class="topicref" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action tocId-d9529e65317-link" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/r/rad2deg.html" id="tocId-d9529e65317-link">R</a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="tocId-d9529e71497" class="topicref" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action tocId-d9529e71497-link" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/s/saveAsNpy.html" id="tocId-d9529e71497-link">S</a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="tocId-d9529e77874" class="topicref" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action tocId-d9529e77874-link" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/t/t3.html" id="tocId-d9529e77874-link">T</a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="tocId-d9529e81706" class="topicref" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action tocId-d9529e81706-link" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/u/undef.html" id="tocId-d9529e81706-link">U</a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="tocId-d9529e82492" class="topicref" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action tocId-d9529e82492-link" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/v/valueChanged.html" id="tocId-d9529e82492-link">V</a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="tocId-d9529e82862" class="topicref" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action tocId-d9529e82862-link" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/w/warmupStreamEngine.html" id="tocId-d9529e82862-link">W</a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="tocId-d9529e84015" class="topicref" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action tocId-d9529e84015-link" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/x/xdb.html" id="tocId-d9529e84015-link">X</a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="tocId-d9529e84108" class="topicref" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action tocId-d9529e84108-link" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/y/year.html" id="tocId-d9529e84108-link">Y</a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="tocId-d9529e84248" class="topicref" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action tocId-d9529e84248-link" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/z/zigzag.html" id="tocId-d9529e84248-link">Z</a></div></div></li><li role="treeitem"><div data-tocid="types_formats-d9529e84387" class="topicref" data-id="types_formats" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/appendix.html" id="types_formats-d9529e84387-link">附录</a></div></div></li></ul></li><li role="treeitem" aria-expanded="false"><div data-tocid="chap8_sect_series_o_funcs-d9529e84433" class="topicref" data-id="chap8_sect_series_o_funcs" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action chap8_sect_series_o_funcs-d9529e84433-link" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/themes/themes.html" id="chap8_sect_series_o_funcs-d9529e84433-link">系列函数</a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="高阶函数-d9529e84855" class="topicref" data-id="高阶函数" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action 高阶函数-d9529e84855-link" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/ho_funcs/ho_funcs.html" id="高阶函数-d9529e84855-link">高阶函数</a></div></div></li></ul></li><li role="treeitem" aria-expanded="false"><div data-tocid="api_protocol-d9529e86456" class="topicref" data-id="api_protocol" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action api_protocol-d9529e86456-link" class="wh-expand-btn"></span><div class="title"><a href="../../api/connapi_intro.html" id="api_protocol-d9529e86456-link"><span class="keyword label">连接器 &amp; API</span></a><div class="wh-tooltip"><p class="shortdesc">面向不同编程语言的 DolphinDB API 及连接器，相关协议和用法</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="chap6_plugin-d9529e91976" class="topicref" data-id="chap6_plugin" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action chap6_plugin-d9529e91976-link" class="wh-expand-btn"></span><div class="title"><a href="../../plugins/plg_intro.html" id="chap6_plugin-d9529e91976-link"><span class="keyword label">插件</span></a><div class="wh-tooltip"><p class="shortdesc">多个应用场景的插件使用说明和插件开发指导</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="third_party-d9529e94749" class="topicref" data-id="third_party" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action third_party-d9529e94749-link" class="wh-expand-btn"></span><div class="title"><a href="../../third_party.html" id="third_party-d9529e94749-link">第三方工具</a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="about_tutorials-d9529e94980" class="topicref" data-id="about_tutorials" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action about_tutorials-d9529e94980-link" class="wh-expand-btn"></span><div class="title"><a href="../../tutorials/about_tutorials.html" id="about_tutorials-d9529e94980-link"><span class="keyword label">教程</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 产品使用教程</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="tocId-d9529e101769" class="topicref" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action tocId-d9529e101769-link" class="wh-expand-btn"></span><div class="title"><a href="../../rn/server/3_00_1.html" id="tocId-d9529e101769-link">版本说明</a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 版本发布历史</p></div></div></div></li></ul></div>
+		                        
+                            </div>
+                        </nav>
+                    
+                    
+                    <div class="col-lg-7 col-md-9 col-sm-12" id="wh_topic_body">
+                        <button id="wh_close_publication_toc_button" class="close-toc-button d-none" aria-label="Toggle publishing table of content" aria-controls="wh_publication_toc" aria-expanded="true">
+                            <span class="close-toc-icon-container">
+                                <span class="close-toc-icon"></span>     
+                            </span>
+                        </button>
+                        <button id="wh_close_topic_toc_button" class="close-toc-button d-none" aria-label="Toggle topic table of content" aria-controls="wh_topic_toc" aria-expanded="true">
+                            <span class="close-toc-icon-container">
+                                <span class="close-toc-icon"></span>     
+                            </span>
+                        </button>
+                        
+                        <div class=" wh_topic_content body "><main role="main"><article class="- topic/topic topic" role="article" aria-labelledby="ariaid-title1">
+    <h1 class="- topic/title title topictitle1" id="ariaid-title1">createOrderBookSnapshotEngine</h1>
+    <article class="- topic/topic topic nested1" aria-labelledby="ariaid-title2" id="语法">
+        <h2 class="- topic/title title topictitle2" id="ariaid-title2">语法</h2>
+        <div class="- topic/body body">
+            <p class="- topic/p p" id="语法__p_ymh_5hn_ryb" data-ofbid="语法__p_ymh_5hn_ryb"><code class="+ topic/ph pr-d/codeph ph codeph">createOrderBookSnapshotEngine(name, exchange,
+                    orderbookDepth, intervalInMilli, date, startTime, prevClose, dummyTable,
+                    outputTable, inputColMap, [outputColMap], [outputCodeMap], [snapshotDir],
+                    [snapshotIntervalInMsgCount], [raftGroup], [outputIntervalOffsetMap],
+                    [checkRestrict], [maxPrice], [minPrice], [userDefinedMetrics], [priceNullFill],
+                    [triggerType], [forceTriggerTime], [precision], [orderBySeq],
+                    [skipCrossedMarket=true], [orderBookDetailDepth=0], [orderBookAsArray=false],
+                    [useSystemTime=false])</code></p>
+            <div class="- topic/note note note note_note" id="语法__note_vzv_4tr_2bc" data-ofbid="语法__note_vzv_4tr_2bc"><span class="note__title">注：</span> 
+                <p class="- topic/p p">社区版 License 暂不支持该引擎，如需使用此功能，请联系技术支持。</p>
+            </div>
+        </div>
+    </article>
+    <article class="- topic/topic topic nested1" aria-labelledby="ariaid-title3" id="详情">
+        <h2 class="- topic/title title topictitle2" id="ariaid-title3">详情</h2>
+        <div class="- topic/body body">
+            <p class="- topic/p p">该函数基于一个包含了逐笔委托和逐笔交易数据表，实时合成指定频率（1秒，100ms，30ms
+                等）的全档位盘口信息、窗口内统计信息、全天累计统计信息等订单薄（或者叫快照）数据。也可通过历史逐笔数据来合成需要的订单薄数据。</p>
+            <p class="- topic/p p">目前支持合成深交所股票、深交所可转债、深交所基金、上交所股票、上交所可转债、上交所基金的订单薄数据。请注意，可转债的规则遵循自2022年8月之后发布的新规定。</p>
+            <section class="- topic/section section" id="详情__section_t11_g2n_y1c" data-ofbid="详情__section_t11_g2n_y1c"><h3 class="- topic/title title sectiontitle">窗口规则</h3>
+                
+                <p class="- topic/p p">由参数 <em class="+ topic/ph hi-d/i ph i">intervalInMilli </em> 指定窗口的长度（以时间衡量），输出表中显示的时间为窗口的右边界。最后一个窗口的右边界最大值是
+                    14:57:00.000，此时，窗口区间为左开右开，且输出窗口显示为右边界的时间戳（14:57:00.000），其余情况的窗口区间全部左开右闭。</p>
+            </section>
+            <section class="- topic/section section" id="详情__section_avm_h2n_y1c" data-ofbid="详情__section_avm_h2n_y1c"><h3 class="- topic/title title sectiontitle">触发规则</h3>
+                
+                <p class="- topic/p p">第一条输出记录由输入表中第一条时间戳大于 startTime + intervalInMilli 的记录触发，此时输出表的时间戳为 startTime +
+                    intervalInMili。之后根据参数 <em class="+ topic/ph hi-d/i ph i">triggerType
+                    </em>的配置值，决定新收到任意一条逐笔数据，当其时间戳大于窗口右边界时，触发输出单个或所有证券代码的快照。</p>
+            </section>
+            <div class="- topic/note note note note_note" id="详情__note_sws_ygv_x1c" data-ofbid="详情__note_sws_ygv_x1c"><span class="note__title">注：</span> 
+                <ul class="- topic/ul ul" id="详情__ul_rqy_2hv_x1c" data-ofbid="详情__ul_rqy_2hv_x1c">
+                    <li class="- topic/li li">一个引擎至多只能输入某一天一个通道的全部股票数据。</li>
+                    <li class="- topic/li li">必须保证注入引擎的数据表内的数据按照交易所的逐笔序号排序。</li>
+                </ul>
+            </div>
+        </div>
+    </article>
+    <article class="- topic/topic topic nested1" aria-labelledby="ariaid-title4" id="参数">
+        <h2 class="- topic/title title topictitle2" id="ariaid-title4">参数</h2>
+        <div class="- topic/body body">
+            <div class="- topic/note note note note_note" id="参数__note_xyk_khv_x1c" data-ofbid="参数__note_xyk_khv_x1c"><span class="note__title">注：</span> 传参时必须指定参数名。</div>
+            <p class="- topic/p p"><strong class="+ topic/ph hi-d/b ph b">name</strong> 字符串标量，表示 orderbook 快照引擎的名称，可包含字母，数字和下划线，但必须以字母开头。</p>
+            <p class="- topic/p p"><strong class="+ topic/ph hi-d/b ph b">exchange</strong> 字符串标量，表示证券的类型。可选参数：</p>
+            <ul class="- topic/ul ul" id="参数__ul_q52_ghv_x1c" data-ofbid="参数__ul_q52_ghv_x1c">
+                <li class="- topic/li li">“XSHE” 或 “XSHESTOCK”：深交所股票</li>
+                <li class="- topic/li li">“XSHEBOND”：深交所可转债</li>
+                <li class="- topic/li li">“XSHEFUND”：深交所基金</li>
+                <li class="- topic/li li">“XSHG” 或 “XSHGSTOCK”：上交所股票</li>
+                <li class="- topic/li li">“XSHGBOND”：上交所可转债</li>
+                <li class="- topic/li li">“XSHGFUND”：上交所基金</li>
+            </ul>
+            <p class="- topic/p p"><strong class="+ topic/ph hi-d/b ph b">orderbookDepth</strong> 正整数，表示 orderbook 中最多能够显示的买卖报价的档位。</p>
+            <p class="- topic/p p"><strong class="+ topic/ph hi-d/b ph b">intervalInMilli</strong> 正整数，表示触发输出数据的时间间隔，即合成快照的时间频率，单位为毫秒。</p>
+            <p class="- topic/p p"><strong class="+ topic/ph hi-d/b ph b">date</strong> DATE 类型标量，表示交易日期。该参数和窗口右边界组合成输出表的 TIMESTAMP 列。</p>
+            <p class="- topic/p p"><strong class="+ topic/ph hi-d/b ph b">startTime</strong> TIME 类型标量，表示触发输出数据的起始时刻。引擎只会输出该参数指定时刻（规整后）之后的数据。</p>
+            <p class="- topic/p p"><strong class="+ topic/ph hi-d/b ph b">prevClose</strong> 字典，其 key 为字符串标量或向量，表示股票代码；其 value 为数值类型，表示对应于股票代码的上一个交易日的收盘价格。</p>
+            <p class="- topic/p p"><strong class="+ topic/ph hi-d/b ph b">dummyTable</strong> 一个表对象，和订阅的流数据表的 schema 一致，可以含有数据，亦可为空表。。</p>
+            <p class="- topic/p p"><strong class="+ topic/ph hi-d/b ph b">outputTable</strong> 一个表对象。若指定 <em class="+ topic/ph hi-d/i ph i">userDefinedMetrics</em>，<em class="+ topic/ph hi-d/i ph i">outputTable</em> 根据
+                    <code class="+ topic/ph pr-d/codeph ph codeph">genOutputColumnsForOBSnapshotEngine</code> 函数指定的
+                    <em class="+ topic/ph hi-d/i ph i">basic</em>、<em class="+ topic/ph hi-d/i ph i">depth</em> 以及用户自定义的指标来确定表结构。否则，<em class="+ topic/ph hi-d/i ph i">outputTable</em> 根据
+                    <em class="+ topic/ph hi-d/i ph i">outputColMap</em>的设置来确定表结构。</p>
+            <p class="- topic/p p"><strong class="+ topic/ph hi-d/b ph b">inputColMap</strong> 字典，将输入表中列字段的名称映射为引擎计算所需要的列。其中：</p>
+            <ul class="- topic/ul ul" id="参数__ul_r52_ghv_x1c" data-ofbid="参数__ul_r52_ghv_x1c">
+                <li class="- topic/li li">key 为字符串类型，表示引擎所需要的固定的输入字段。具体字段名和含义见下表。注意，这些 key 区分大小写，必须全部指定，但顺序可以不固定。</li>
+                <li class="- topic/li li">value 为字符串类型，表示输入表中对应的列名称。</li>
+            </ul>
+            <div class="table-container"><table class="- topic/table table frame-all" id="参数__table_s52_ghv_x1c" data-ofbid="参数__table_s52_ghv_x1c" data-cols="3"><caption></caption><colgroup><col style="width:17.391304347826086%"/><col style="width:17.565217391304348%"/><col style="width:65.04347826086956%"/></colgroup><thead class="- topic/thead thead">
+                        <tr class="- topic/row">
+                            <th class="- topic/entry entry colsep-1 rowsep-1" id="参数__table_s52_ghv_x1c__entry__1">key</th>
+                            <th class="- topic/entry entry colsep-1 rowsep-1" id="参数__table_s52_ghv_x1c__entry__2">value 对应的字段类型</th>
+                            <th class="- topic/entry entry colsep-0 rowsep-1" id="参数__table_s52_ghv_x1c__entry__3">含义</th>
+                        </tr>
+                    </thead><tbody class="- topic/tbody tbody">
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry colsep-1 rowsep-1" headers="参数__table_s52_ghv_x1c__entry__1">“timeColumn”</td>
+                            <td class="- topic/entry entry colsep-1 rowsep-1" headers="参数__table_s52_ghv_x1c__entry__2">TIME</td>
+                            <td class="- topic/entry entry colsep-0 rowsep-1" headers="参数__table_s52_ghv_x1c__entry__3">交易时间</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry colsep-1 rowsep-1" headers="参数__table_s52_ghv_x1c__entry__1">“typeColumn”</td>
+                            <td class="- topic/entry entry colsep-1 rowsep-1" headers="参数__table_s52_ghv_x1c__entry__2">INT</td>
+                            <td class="- topic/entry entry colsep-0 rowsep-1" headers="参数__table_s52_ghv_x1c__entry__3">交易类型：<ul class="- topic/ul ul" id="参数__ul_w52_ghv_x1c" data-ofbid="参数__ul_w52_ghv_x1c">
+                                    <li class="- topic/li li">如果是逐笔委托单，则：1表示市价；2表示限价；3表示本方最优；10表示撤单（仅上交所）；11市场状态（仅上交所）</li>
+                                    <li class="- topic/li li">如果是逐笔成交单，则：0表示成交；1表示撤单（仅深交所）</li>
+                                </ul></td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry colsep-1 rowsep-1" headers="参数__table_s52_ghv_x1c__entry__1">“priceColumn”</td>
+                            <td class="- topic/entry entry colsep-1 rowsep-1" headers="参数__table_s52_ghv_x1c__entry__2">LONG</td>
+                            <td class="- topic/entry entry colsep-0 rowsep-1" headers="参数__table_s52_ghv_x1c__entry__3">价格，真实价格*10000</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry colsep-1 rowsep-1" headers="参数__table_s52_ghv_x1c__entry__1">“qtyColumn”</td>
+                            <td class="- topic/entry entry colsep-1 rowsep-1" headers="参数__table_s52_ghv_x1c__entry__2">LONG</td>
+                            <td class="- topic/entry entry colsep-0 rowsep-1" headers="参数__table_s52_ghv_x1c__entry__3">数量（股数）</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry colsep-1 rowsep-1" headers="参数__table_s52_ghv_x1c__entry__1">“buyOrderColumn”</td>
+                            <td class="- topic/entry entry colsep-1 rowsep-1" headers="参数__table_s52_ghv_x1c__entry__2">LONG</td>
+                            <td class="- topic/entry entry colsep-0 rowsep-1" headers="参数__table_s52_ghv_x1c__entry__3">
+                                <ul class="- topic/ul ul" id="参数__ul_vcp_txz_x1c" data-ofbid="参数__ul_vcp_txz_x1c">
+                                    <li class="- topic/li li">逐笔成交：对应其原始成交中的买方委托序号。</li>
+                                    <li class="- topic/li li">逐笔委托：<ul class="- topic/ul ul" id="参数__ul_x52_ghv_x1c" data-ofbid="参数__ul_x52_ghv_x1c">
+                                            <li class="- topic/li li">上交所：填充原始委托中的原始订单号，即上交所在新增、删除订单时用以标识订单的唯一编号（OrderNo
+                                                字段）</li>
+                                            <li class="- topic/li li">深交所：填充0。此字段为深交所为了补全上交所数据格式而增加的冗余列</li>
+                                        </ul></li>
+                                </ul>
+                            </td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry colsep-1 rowsep-1" headers="参数__table_s52_ghv_x1c__entry__1">“sellOrderColumn”</td>
+                            <td class="- topic/entry entry colsep-1 rowsep-1" headers="参数__table_s52_ghv_x1c__entry__2">LONG</td>
+                            <td class="- topic/entry entry colsep-0 rowsep-1" headers="参数__table_s52_ghv_x1c__entry__3">
+                                <ul class="- topic/ul ul" id="参数__ul_ggr_vxz_x1c" data-ofbid="参数__ul_ggr_vxz_x1c">
+                                    <li class="- topic/li li">逐笔成交：对应其原始成交中的卖方委托序号。</li>
+                                    <li class="- topic/li li">逐笔委托：<ul class="- topic/ul ul" id="参数__ul_y52_ghv_x1c" data-ofbid="参数__ul_y52_ghv_x1c">
+                                            <li class="- topic/li li">上交所：填充原始委托中的原始订单号，即上交所在新增、删除订单时用以标识订单的唯一编号（OrderNo
+                                                字段）</li>
+                                            <li class="- topic/li li">深交所：填充0。此字段深交所为了补全上交所数据格式而增加的冗余列</li>
+                                        </ul></li>
+                                </ul>
+                            </td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry colsep-1 rowsep-1" headers="参数__table_s52_ghv_x1c__entry__1">“sideColumn”</td>
+                            <td class="- topic/entry entry colsep-1 rowsep-1" headers="参数__table_s52_ghv_x1c__entry__2">INT</td>
+                            <td class="- topic/entry entry colsep-0 rowsep-1" headers="参数__table_s52_ghv_x1c__entry__3">买卖方向：1表示买单；2表示卖单<p class="- topic/p p">说明：</p><ul class="- topic/ul ul" id="参数__ul_z52_ghv_x1c" data-ofbid="参数__ul_z52_ghv_x1c">
+                                    <li class="- topic/li li">委托单的 BSFlag，必填</li>
+                                    <li class="- topic/li li">撤单的 BSFlag 由原始委托单决定买卖方向，必填</li>
+                                    <li class="- topic/li li">成交单的 BSFlag，不影响结果，非必填</li>
+                                </ul></td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry colsep-1 rowsep-1" headers="参数__table_s52_ghv_x1c__entry__1">“msgTypeColumn”</td>
+                            <td class="- topic/entry entry colsep-1 rowsep-1" headers="参数__table_s52_ghv_x1c__entry__2">INT</td>
+                            <td class="- topic/entry entry colsep-0 rowsep-1" headers="参数__table_s52_ghv_x1c__entry__3">数据类型：<ul class="- topic/ul ul" id="参数__ul_r4p_w2t_2bc" data-ofbid="参数__ul_r4p_w2t_2bc">
+                                    <li class="- topic/li li">0表示逐笔委托；</li>
+                                    <li class="- topic/li li">1表示逐笔成交；</li>
+                                    <li class="- topic/li li">-1表示产品状态。</li>
+                                </ul></td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry colsep-1 rowsep-1" headers="参数__table_s52_ghv_x1c__entry__1">“seqColumn”</td>
+                            <td class="- topic/entry entry colsep-1 rowsep-1" headers="参数__table_s52_ghv_x1c__entry__2">LONG</td>
+                            <td class="- topic/entry entry colsep-0 rowsep-1" headers="参数__table_s52_ghv_x1c__entry__3">一个通道内从 1 开始递增的逐笔数据序号。深交所为 appseqlnum 字段，若深交所数据中包含 index 字段，也可以使用
+                                index；上交所为 bizIndex 字段。</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry colsep-1 rowsep-0" headers="参数__table_s52_ghv_x1c__entry__1">“codeColumn”</td>
+                            <td class="- topic/entry entry colsep-1 rowsep-0" headers="参数__table_s52_ghv_x1c__entry__2">SYMBOL</td>
+                            <td class="- topic/entry entry colsep-0 rowsep-0" headers="参数__table_s52_ghv_x1c__entry__3">证券代码（如300010.SZ）</td>
+                        </tr>
+                    </tbody></table></div>
+            <div class="- topic/note note note note_note" id="参数__note_kkb_mhv_x1c" data-ofbid="参数__note_kkb_mhv_x1c"><span class="note__title">注：</span> 引擎规范了枚举类型中各枚举值的具体含义。输入表对应的枚举值必须遵守这个规范。比如枚举类型字段 sideColumn
+                所对应的输入表中的字段必须使用 1 代表买方向，2 代表卖方向。</div>
+            <p class="- topic/p p"><strong class="+ topic/ph hi-d/b ph b">outputColMap</strong> 可选参数，字符串向量，用于指定需要输出的字段名称，不区分大小写。为方便指定 <em class="+ topic/ph hi-d/i ph i">outputColMap</em>，用户可通过
+                    <code class="+ topic/ph pr-d/codeph ph codeph">genOutputColumnsForOBSnapshotEngine</code> 函数生成需要输出的字段名称，将返回值的第一个元素赋值给
+                    <em class="+ topic/ph hi-d/i ph i">outputColMap</em> 即可。</p>
+            <p class="- topic/p p"><strong class="+ topic/ph hi-d/b ph b">outputCodeMap</strong> 可选参数，字符串向量，表示股票代码，例如：“000803.SZ”。指定该参数后，将只输出指定股票对应的数据。</p>
+            <p class="- topic/p p"><strong class="+ topic/ph hi-d/b ph b">outputIntervalOffsetMap</strong> 可选参数，字典，用于指定输出表中股票被触发计算的时间偏移量。其 key 为字符串类型，表示股票代码；其
+                value 为整型，表示时间偏移量，单位为毫秒。例如：outputIntervalOffsetMap =dict(“<a class="- topic/xref xref" href="http://127053.sz/" target="_blank" rel="external noopener">127053.SZ</a>" “<a class="- topic/xref xref" href="http://123082.sz/" target="_blank" rel="external noopener">123082.SZ</a>“,[400,
+                500])，表示经过 intervalInMilli + 400(ms) 后触发 <a class="- topic/xref xref" href="http://127053.sz/" target="_blank" rel="external noopener">127053.SZ</a> 股票的数据输出；经过 intervalInMilli +
+                500(ms) 后触发 <a class="- topic/xref xref" href="http://123082.sz/" target="_blank" rel="external noopener">123082.SZ</a> 股票的数据输出。</p>
+            <p class="- topic/p p"><strong class="+ topic/ph hi-d/b ph b">checkRestrict</strong> 可选参数，布尔值，默认值为 true，表示开启价格笼子机制；若设置为
+                false，则关闭笼子机制，此时会取消对股票交易的限制，创业板合成出的快照可能不正确。</p>
+            <div class="- topic/note note note note_note" id="参数__note_zjv_nhv_x1c" data-ofbid="参数__note_zjv_nhv_x1c"><span class="note__title">注：</span> 深交所对创业板证券（证券代码以 3 开头）设定了价格笼子。在 <em class="+ topic/ph hi-d/i ph i">checkRestrict</em>=true
+                时，引擎只会将证券代码的首字符是否为 3 作为是否执行价格笼子的判断标准。因此，在向引擎输入创业板数据时，证券代码必须以 3 开头。</div>
+            <p class="- topic/p p"><strong class="+ topic/ph hi-d/b ph b">maxPrice</strong> 可选参数，字典。其 key 为字符串类型，表示证券代码；其 value 为 DOUBLE 类型，表示涨停价格。</p>
+            <p class="- topic/p p"><strong class="+ topic/ph hi-d/b ph b">minPrice</strong> 可选参数，字典。其 key 为字符串类型，表示证券代码；其 value 为 DOUBLE 类型，表示跌停价格。</p>
+            <p class="- topic/p p"><strong class="+ topic/ph hi-d/b ph b">userDefinedMetrics</strong> 可选参数，一元函数。</p>
+            <ul class="- topic/ul ul" id="参数__ul_q4l_ddb_bbc" data-ofbid="参数__ul_q4l_ddb_bbc">
+                <li class="- topic/li li">
+                    <p class="- topic/p p">函数的入参是一个表，表的每一行是一个标的，每一列是标的对应的快照。若指定 <em class="+ topic/ph hi-d/i ph i">outputColMap</em>，则表中数据为
+                            <em class="+ topic/ph hi-d/i ph i">outputColMap</em>设置的字段；否则表中数据为基础字段和报价/询价的价格和数量。</p>
+                </li>
+                <li class="- topic/li li">
+                    <p class="- topic/p p">函数的返回值是一个元组，元组的每一个元素是一个常规向量，代表每个标的经对应指标计算后的结果。</p>
+                </li>
+            </ul>
+            <p class="- topic/p p"><strong class="+ topic/ph hi-d/b ph b">priceNullFill</strong> 一个数字。该参数值用于填充输出表中多档买/卖价格中缺失档位的价格。例如涨停后卖单的价格都为 NULL，此时如有指定卖单价格为 0
+                的需求，可以设置 priceNullFill=0。</p>
+            <p class="- topic/p p"><strong class="+ topic/ph hi-d/b ph b">triggerType</strong> 可选参数，字符串标量，表示触发方式。可选值为：</p>
+            <ul class="- topic/ul ul" id="参数__ul_lv2_ghv_x1c" data-ofbid="参数__ul_lv2_ghv_x1c">
+                <li class="- topic/li li">”mutual”：新收到任意一条逐笔数据，当其时间戳大于窗口右边界时，就会触发所有股票未计算的快照合成输出。触发计算的数据并不会参与该次计算。</li>
+                <li class="- topic/li li">”independent”：新收到任意一条逐笔数据，当其时间戳大于窗口右边界时，只触发该条数据对应股票未计算的快照合成输出。触发计算的数据并不会参与该次计算。</li>
+                <li class="- topic/li li">“perRow“：每收到一行逐笔数据都会触发该条数据对应股票计算并输出，触发计算的数据并参与该次计算。</li>
+            </ul>
+            <p class="- topic/p p"><strong class="+ topic/ph hi-d/b ph b">forceTriggerTime</strong>
+                可选参数，是非负整数，单位为毫秒。除了正常触发合成快照外，有时会出现一些数据因乱序不能触发合成快照，而是被缓存在引擎中。在这种情况下，可通过该参数设置强制触发引擎中长时间未处理的逐笔数据合成快照。触发规则为：</p>
+            <ol class="- topic/ol ol" id="参数__ol_mv2_ghv_x1c" data-ofbid="参数__ol_mv2_ghv_x1c">
+                <li class="- topic/li li">最新收到的逐笔数据的时间戳（t ）减去最后一条已经处理的交易数据的时间戳（t0 ）大于或等于
+                    <em class="+ topic/ph hi-d/i ph i">forceTriggerTime</em>，则触发未处理的数据中序号最小的那条数据合成快照，并更新已经处理的交易数据的时间戳（t1）。</li>
+                <li class="- topic/li li">重复上述操作，若判断 t-t1 &gt;=
+                    <em class="+ topic/ph hi-d/i ph i">forceTriggerTime</em>，则触发未处理的数据中序号最小的那条数据合成快照，并更新已经处理的交易数据的时间戳（t2）；直到两个时间戳的差值小于
+                        <em class="+ topic/ph hi-d/i ph i">forceTriggerTime </em>时，停止触发快照合成。</li>
+            </ol>
+            <p class="- topic/p p"><strong class="+ topic/ph hi-d/b ph b">precision</strong>
+                可选参数，非负整数，表示小数位数，取值范围为[0,4]。若指定该参数，则输出表中所有的价格将按照指定的位数进行四舍五入。否则，按照原始结果输出。</p>
+            <p class="- topic/p p"><strong class="+ topic/ph hi-d/b ph b">orderBySeq</strong> 可选参数，布尔值或元组</p>
+            <ul class="- topic/ul ul" id="参数__ul_nv2_ghv_x1c" data-ofbid="参数__ul_nv2_ghv_x1c">
+                <li class="- topic/li li">指定该参数值为布尔值时，表示是否按照逐笔数据中的 seqColumn 列中值的大小顺序处理数据。<ul class="- topic/ul ul" id="参数__ul_lk3_wbn_y1c" data-ofbid="参数__ul_lk3_wbn_y1c">
+                        <li class="- topic/li li">当 <em class="+ topic/ph hi-d/i ph i">orderBySeq</em>=true（默认值）
+                            时，会根据逐笔数据的序号有序处理数据，并计算输出。例如引擎先后收到序号为1，3的数据，因为缺少序号为2的数据，引擎先将1和3的数据缓存，待收到序号2的数据时，再进行计算输出。此时也可以指定
+                                <em class="+ topic/ph hi-d/i ph i">forceTriggerTime </em>强制触发计算输出。</li>
+                        <li class="- topic/li li">当 <em class="+ topic/ph hi-d/i ph i">orderBySeq</em>=false 时，每接收到一条数据都会立即进行计算并输出，此时不可设置
+                                <em class="+ topic/ph hi-d/i ph i">forceTriggerTime</em>。</li>
+                    </ul></li>
+                <li class="- topic/li li">指定该参数值为元组时，以（BOOL, INTEGER, [STRING]）的形式表示，其中：<ul class="- topic/ul ul" id="参数__ul_hjl_ccn_y1c" data-ofbid="参数__ul_hjl_ccn_y1c">
+                        <li class="- topic/li li">第一个元素为布尔值，表示是否按照逐笔数据的序号有序输出结果的布尔值，作用同上。</li>
+                        <li class="- topic/li li">第二个元素为正整数，表示记录缓存输入数据量的时间间隔，单位为毫秒（ms）。</li>
+                        <li class="- topic/li li">第三个元素为指定输出日志级别的字符串标量，可选参数，其可用值为 DEBUG （默认值）和 INFO，分别对应 Debug 和 Info
+                            级别的日志输出。</li>
+                    </ul></li>
+            </ul>
+            <p class="- topic/p p"><strong class="+ topic/ph hi-d/b ph b">skipCrossedMarket</strong>可选参数， 布尔值，表示是否输出买一卖一价交叉的计算结果。</p>
+            <ul class="- topic/ul ul" id="参数__ul_ov2_ghv_x1c" data-ofbid="参数__ul_ov2_ghv_x1c">
+                <li class="- topic/li li">当 <em class="+ topic/ph hi-d/i ph i">skipCrossedMarket</em>=true（默认值）时，若设置 <em class="+ topic/ph hi-d/i ph i">useSystemTime</em> =
+                    false，若出现买一卖一价交叉，即卖一价&lt;=买一价，则不输出该条结果；若设置 <em class="+ topic/ph hi-d/i ph i">useSystemTime</em> =
+                    true，则出现买一卖一交叉时，暂时不输出该条快照，若接下来收到的数据不再有交叉，则立即触发该条快照输出。</li>
+                <li class="- topic/li li">当 <em class="+ topic/ph hi-d/i ph i">skipCrossedMarket</em>=false 时，若出现买一卖一价交叉，仍然输出该条结果。</li>
+            </ul>
+            <p class="- topic/p p"><strong class="+ topic/ph hi-d/b ph b">orderBookDetailDepth</strong> 可选参数，整型标量，表示 orderbook 明细的深度。默认值为0，表示不输出。该参数必须和
+                    <em class="+ topic/ph hi-d/i ph i">outputColMap</em> 中 orderBookDetailDepth 字段的值保持一致。</p>
+            <p class="- topic/p p"><strong class="+ topic/ph hi-d/b ph b">orderBookAsArray</strong> 可选参数，布尔值，表示是否以数组向量形式输出报价/询价的价格和数量。默认值为
+                false，价格和数量将以多列形式输出。</p>
+            <p class="- topic/p p">注意，若指定 <em class="+ topic/ph hi-d/i ph i">userDefinedMetrics</em>，价格和数量的输出形式由 <em class="+ topic/ph hi-d/i ph i">orderBookAsArray</em>
+                确定。否则，价格和数量的输出形式由 <em class="+ topic/ph hi-d/i ph i">outputColMap</em> 确定，该参数失效。</p>
+            <p class="- topic/p p"><strong class="+ topic/ph hi-d/b ph b">useSystemTime</strong> 可选参数，布尔值，表示是否使用系统时间来触发快照输出。</p>
+            <ul class="- topic/ul ul" id="参数__ul_dqz_cr2_xbc" data-ofbid="参数__ul_dqz_cr2_xbc">
+                <li class="- topic/li li">
+                    <p class="- topic/p p">当 <em class="+ topic/ph hi-d/i ph i">useSystemTime</em> = true 时，引擎将基于当前的系统时间，按照 <em class="+ topic/ph hi-d/i ph i">intervalInMilli</em>
+                            设置的时间间隔触发快照输出。此时，不能指定<em class="+ topic/ph hi-d/i ph i"> skipCrossedMarket</em> 和
+                        <em class="+ topic/ph hi-d/i ph i">forceTriggerTime</em>；可以不指定 <em class="+ topic/ph hi-d/i ph i">triggerType</em>，或者指定为
+                        <em class="+ topic/ph hi-d/i ph i">triggerType</em>=”mutual”。</p>
+                </li>
+                <li class="- topic/li li">
+                    <p class="- topic/p p">当 <em class="+ topic/ph hi-d/i ph i">useSystemTime</em> = false（缺省值）时，引擎根据事件时间来触发快照输出。</p>
+                </li>
+            </ul>
+        </div>
+    </article>
+    <article class="- topic/topic topic nested1" aria-labelledby="ariaid-title5" id="例子">
+        <h2 class="- topic/title title topictitle2" id="ariaid-title5">例子</h2>
+        <div class="- topic/body body">
+            <p class="- topic/p p">运行代码前，先下载 <a class="- topic/xref xref" href="../data/orderbookDemoInput.zip">../data/orderbookDemoInput.zip</a> 文件。</p>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="例子__codeblock_kyx_rhv_x1c" data-ofbid="例子__codeblock_kyx_rhv_x1c"><code>// 登录
+login("admin", "123456")
+
+// 释放已有的引擎
+try { dropStreamEngine("demo") } catch(ex) { print(ex) }
+
+// 创建引擎参数 outputTable，即指定输出表
+suffix = string(1..10)
+colNames = `SecurityID`timestamp`lastAppSeqNum`tradingPhaseCode`modified`turnover`volume`tradeNum`totalTurnover`totalVolume`totalTradeNum`lastPx`highPx`lowPx`ask`bid`askVol`bidVol`preClosePx`invalid  join ("bids" + suffix) join ("bidVolumes" + suffix) join ("bidOrderNums" + suffix) join ("asks" + suffix)  join ("askVolumes" + suffix) join ("askOrderNums" + suffix) 
+colTypes = [SYMBOL,TIMESTAMP,LONG,INT,BOOL,DOUBLE,LONG,INT,DOUBLE,LONG,INT,DOUBLE,DOUBLE,DOUBLE,DOUBLE,DOUBLE,LONG,LONG,DOUBLE,BOOL] join take(DOUBLE, 10) join take(LONG, 10) join take(INT, 10) join take(DOUBLE, 10) join take(LONG, 10) join take(INT, 10) 
+share table(10000000:0, colNames, colTypes) as outTable
+
+// 创建引擎参数 dummyTable，即指定输入表的表结构
+colNames = `SecurityID`Date`Time`SecurityIDSource`SecurityType`Index`SourceType`Type`Price`Qty`BSFlag`BuyNo`SellNo`ApplSeqNum`ChannelNo
+colTypes = [SYMBOL, DATE, TIME, SYMBOL, SYMBOL, LONG, INT, INT, LONG, LONG, INT, LONG, LONG, LONG, INT]
+dummyOrderStream = table(1:0, colNames, colTypes)
+
+// 创建引擎参数 inputColMap，即指定输入表各字段的含义
+inputColMap = dict(`codeColumn`timeColumn`typeColumn`priceColumn`qtyColumn`buyOrderColumn`sellOrderColumn`sideColumn`msgTypeColumn`seqColumn, `SecurityID`Time`Type`Price`Qty`BuyNo`SellNo`BSFlag`SourceType`ApplSeqNum)
+
+// 创建引擎参数 prevClose，即昨日收盘价，prevClose 不影响最终的输出结果中除昨日收盘价以外的其他字段
+prevClose = dict(`000587.SZ`002694.SZ`002822.SZ`000683.SZ`301063.SZ`300459.SZ`300057.SZ`300593.SZ`301035.SZ`300765.SZ, [1.66, 6.56, 6.10, 8.47, 38.10, 5.34, 9.14, 48.81, 60.04, 16.52])
+
+// 定义引擎，每1s计算输出深交所股票10档买卖盘口
+engine = createOrderBookSnapshotEngine(name="demo", exchange="XSHE", orderbookDepth=10, intervalInMilli = 1000, date=2022.01.10, startTime=09:15:00.000, prevClose=prevClose, dummyTable=dummyOrderStream, outputTable=outTable, inputColMap=inputColMap)
+
+filePath = "./orderbookDemoInput.csv"
+colNames = `SecurityID`Date`Time`SecurityIDSource`SecurityType`Index`SourceType`Type`Price`Qty`BSFlag`BuyNo`SellNo`ApplSeqNum`ChannelNo
+colTypes = [SYMBOL, DATE, TIME, SYMBOL, SYMBOL, LONG, INT, INT, LONG, LONG, INT, LONG, LONG, LONG, INT]
+orderTrade = table(1:0, colNames, colTypes)
+orderTrade.append!(select * from loadText(filePath) order by Time)
+
+// 10支股票的逐笔数据批量注入快照合成引擎
+engine.append!(orderTrade)
+select count(*) from outTable where SecurityID="300593.SZ", timestamp between 2022.01.10T13:15:01.000 and 2022.01.10T13:15:10.000
+
+//output: 10</code></pre>
+            <div class="- topic/p p">通过 <em class="+ topic/ph hi-d/i ph i">outputColMap </em>指定需要输出的字段。<code class="+ topic/ph pr-d/codeph ph codeph">genOutputColumnsForOBSnapshotEngine</code>
+                函数返回值的第一个元素即为 <em class="+ topic/ph hi-d/i ph i">outputColMap</em>，返回值的第二个元素可以确定 <em class="+ topic/ph hi-d/i ph i">outputTable</em> 的
+                schema。<pre class="+ topic/pre pr-d/codeblock pre codeblock" id="例子__codeblock_pfz_ndb_bbc" data-ofbid="例子__codeblock_pfz_ndb_bbc"><code>try { dropStreamEngine("demo") } catch(ex) { print(ex) }
+
+filePath = "./orderbookDemoInput.csv"
+
+// 创建引擎参数 dummyTable，即指定输入表的表结构
+colNames = `SecurityID`Date`Time`SecurityIDSource`SecurityType`Index`SourceType`Type`Price`Qty`BSFlag`BuyNo`SellNo`ApplSeqNum`ChannelNo
+colTypes = [SYMBOL, DATE, TIME, SYMBOL, SYMBOL, LONG, INT, INT, LONG, LONG, INT, LONG, LONG, LONG, INT]
+share table(1:0, colNames, colTypes) as dummyOrderStream
+
+// 创建引擎参数 inputColMap，即指定输入表各字段的含义
+inputColMap = dict(`codeColumn`timeColumn`typeColumn`priceColumn`qtyColumn`buyOrderColumn`sellOrderColumn`sideColumn`msgTypeColumn`seqColumn, `SecurityID`Time`Type`Price`Qty`BuyNo`SellNo`BSFlag`SourceType`ApplSeqNum)
+
+// 创建引擎参数 prevClose，即昨日收盘价，prevClose 不影响最终的输出结果中除昨日收盘价以外的其他字段
+prevClose = dict(`000587.SZ`002694.SZ`002822.SZ`000683.SZ`301063.SZ`300459.SZ`300057.SZ`300593.SZ`301035.SZ`300765.SZ, [1.66, 6.56, 6.10, 8.47, 38.10, 5.34, 9.14, 48.81, 60.04, 16.52])
+
+//创建使用 outputColMap 和 outputTableSch 接收 genOutputColumnsForOBSnapshotEngine 的返回值。它们分别用于确定 outputColMap 和 outputTable
+outputColMap, outputTableSch = genOutputColumnsForOBSnapshotEngine(basic=true, time=false, depth=(10, true), tradeDetail=true, orderDetail=false, withdrawDetail=false, orderBookDetailDepth=0, prevDetail=false)
+
+engine = createOrderBookSnapshotEngine(name="demo", exchange="XSHE", orderbookDepth=10, intervalInMilli = 1000, date=2022.01.10, startTime=09:15:00.000, prevClose=prevClose, dummyTable=dummyOrderStream, outputTable=outputTableSch, inputColMap=inputColMap, outputColMap=outputColMap, orderBookAsArray=true)
+
+// 10支股票的逐笔数据批量注入快照合成引擎
+engine.append!(select * from loadText(filePath) order by Time)
+select top 10 * from outputTableSch where code="300593.SZ", timestamp between 2022.01.10T13:15:01.000 and 2022.01.10T13:15:10.000</code></pre></div>
+            <p class="- topic/p p">部分结果展示如下：</p>
+            <figure class="- topic/fig fig fignone" id="例子__fig_jyt_sdb_bbc" data-ofbid="例子__fig_jyt_sdb_bbc">
+                <img class="- topic/image image" id="例子__image_n35_tdb_bbc" src="../../images/orderBook1.png"/>
+            </figure>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="例子__codeblock_ugt_qdb_bbc" data-ofbid="例子__codeblock_ugt_qdb_bbc"><code>try { dropStreamEngine("demo") } catch(ex) { print(ex) }
+
+filePath = "./orderbookDemoInput.csv"
+
+// 创建引擎参数 dummyTable，即指定输入表的表结构
+colNames = `SecurityID`Date`Time`SecurityIDSource`SecurityType`Index`SourceType`Type`Price`Qty`BSFlag`BuyNo`SellNo`ApplSeqNum`ChannelNo
+colTypes = [SYMBOL, DATE, TIME, SYMBOL, SYMBOL, LONG, INT, INT, LONG, LONG, INT, LONG, LONG, LONG, INT]
+share table(1:0, colNames, colTypes) as dummyOrderStream
+
+// 创建引擎参数 inputColMap，即指定输入表各字段的含义
+inputColMap = dict(`codeColumn`timeColumn`typeColumn`priceColumn`qtyColumn`buyOrderColumn`sellOrderColumn`sideColumn`msgTypeColumn`seqColumn, `SecurityID`Time`Type`Price`Qty`BuyNo`SellNo`BSFlag`SourceType`ApplSeqNum)
+
+// 创建引擎参数 prevClose，即昨日收盘价，prevClose 不影响最终的输出结果中除昨日收盘价以外的其他字段
+prevClose = dict(`000587.SZ`002694.SZ`002822.SZ`000683.SZ`301063.SZ`300459.SZ`300057.SZ`300593.SZ`301035.SZ`300765.SZ, [1.66, 6.56, 6.10, 8.47, 38.10, 5.34, 9.14, 48.81, 60.04, 16.52])
+
+//此处只定义 outputColMap 接收 genOutputColumnsForOBSnapshotEngine 的第一个返回值。因 userDefinedMetrics 定义的指标中需要使用委托明细和回撤明细，因此 genOutputColumnsForOBSnapshotEngine  需要指定 orderDetail=false, withdrawDetail=true
+outputColMap = genOutputColumnsForOBSnapshotEngine(basic=true, time=false, depth=(10, true), tradeDetail=true, orderDetail=false, withdrawDetail=true, orderBookDetailDepth=0, prevDetail=false)[0]
+
+
+//// 定义用户自定义因子
+def userDefinedFunc(t){
+        AvgBuyDuration = rowAvg(t.TradeMDTimeList-t.TradeOrderBuyNoTimeList).int()
+        AvgSellDuration = rowAvg(t.TradeMDTimeList-t.TradeOrderSellNoTimeList).int()        
+        BuyWithdrawQty = rowSum(t.WithdrawBuyQtyList)
+        SellWithdrawQty = rowSum(t.WithdrawSellQtyList)
+        return (AvgBuyDuration, AvgSellDuration, BuyWithdrawQty, SellWithdrawQty)
+}
+
+// 定义 orderbook 引擎的输出表，需要包含基础字段（basic），报价/询价的多档价格和数量（depth），userDefinedMetrics 自定义指标的输出结果
+outputTableSch = genOutputColumnsForOBSnapshotEngine(basic=true, time=false, depth=(10, true), tradeDetail=false, orderDetail=false, withdrawDetail=false, orderBookDetailDepth=0, prevDetail=false)[1]
+colNames = outputTableSch.schema().colDefs.name join (`AvgBuyDuration`AvgSellDuration`BuyWithdrawQty`SellWithdrawQty)
+colTypes = outputTableSch.schema().colDefs.typeString join (`INT`INT`INT`INT) 
+outputTable = table(1:0, colNames, colTypes)
+
+// 创建引擎，每1s计算输出深交所股票10档 orderbook 
+
+engine = createOrderBookSnapshotEngine(name="demo", exchange="XSHE", orderbookDepth=10, intervalInMilli = 1000, date=2022.01.10, startTime=09:30:00.000, prevClose=prevClose, dummyTable=dummyOrderStream, outputTable=outputTable, inputColMap=inputColMap, outputColMap=outputColMap, orderBookAsArray=true, userDefinedMetrics=userDefinedFunc)
+
+
+engine.append!(select * from loadText(filePath) order by Time)
+select top 10 * from outputTable where code="300593.SZ", timestamp between 2022.01.10T13:15:01.000 and 2022.01.10T13:15:10.000</code></pre>
+            <p class="- topic/p p">部分结果展示如下：</p>
+            <figure class="- topic/fig fig fignone" id="例子__fig_yr2_5db_bbc" data-ofbid="例子__fig_yr2_5db_bbc">
+                <img class="- topic/image image" id="例子__image_aw5_5db_bbc" src="../../images/orderBook2.png"/>
+            </figure>
+            <p class="- topic/p p">相关函数：<a class="- topic/xref xref" href="../g/genoutputcolumnsforobsnapshotengine.html">genOutputColumnsForOBSnapshotEngine</a></p>
+            <p class="- topic/p p">相关教程：<a class="- topic/xref xref" href="../../tutorials/orderBookSnapshotEngine.html">基于逐笔数据合成高频订单簿：DolphinDB 订单簿引擎</a></p>
+        </div>
+        <article class="- topic/topic topic nested2" aria-labelledby="ariaid-title6" id="topic_orx_zdb_bbc">
+            <h3 class="- topic/title title topictitle3" id="ariaid-title6">附录</h3>
+            <div class="- topic/body body">
+                <p class="- topic/p p"><strong class="+ topic/ph hi-d/b ph b">basic（基础字段）</strong></p>
+                <p class="- topic/p p">不指定 <em class="+ topic/ph hi-d/i ph i">outputColMap</em> 和 <em class="+ topic/ph hi-d/i ph i">userDefinedMetrics</em> 时，输出除
+                    openPrice，maxPrice，minPrice 外的字段。</p>
+                <div class="table-container"><table class="- topic/table table frame-all" id="topic_orx_zdb_bbc__table_e13_h2b_bbc" data-ofbid="topic_orx_zdb_bbc__table_e13_h2b_bbc" data-cols="3"><caption></caption><colgroup><col style="width:20.040080160320638%"/><col style="width:21.442885771543086%"/><col style="width:58.51703406813626%"/></colgroup><thead class="- topic/thead thead">
+                            <tr class="- topic/row">
+                                <th class="- topic/entry entry colsep-1 rowsep-1" id="topic_orx_zdb_bbc__table_e13_h2b_bbc__entry__1">字段名</th>
+                                <th class="- topic/entry entry colsep-1 rowsep-1" id="topic_orx_zdb_bbc__table_e13_h2b_bbc__entry__2">类型</th>
+                                <th class="- topic/entry entry colsep-0 rowsep-1" id="topic_orx_zdb_bbc__table_e13_h2b_bbc__entry__3">说明</th>
+                            </tr>
+                        </thead><tbody class="- topic/tbody tbody">
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry colsep-1 rowsep-1" headers="topic_orx_zdb_bbc__table_e13_h2b_bbc__entry__1">code</td>
+                                <td class="- topic/entry entry colsep-1 rowsep-1" headers="topic_orx_zdb_bbc__table_e13_h2b_bbc__entry__2">SYMBOL</td>
+                                <td class="- topic/entry entry colsep-0 rowsep-1" headers="topic_orx_zdb_bbc__table_e13_h2b_bbc__entry__3">证券代码</td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry colsep-1 rowsep-1" headers="topic_orx_zdb_bbc__table_e13_h2b_bbc__entry__1">timestamp</td>
+                                <td class="- topic/entry entry colsep-1 rowsep-1" headers="topic_orx_zdb_bbc__table_e13_h2b_bbc__entry__2">TIMESTAMP</td>
+                                <td class="- topic/entry entry colsep-0 rowsep-1" headers="topic_orx_zdb_bbc__table_e13_h2b_bbc__entry__3">快照时间戳，如以1s间隔合成快照：2022.08.01T09:20:00.000，2022.08.01T09:20:01.000</td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry colsep-1 rowsep-1" headers="topic_orx_zdb_bbc__table_e13_h2b_bbc__entry__1">lastSeq</td>
+                                <td class="- topic/entry entry colsep-1 rowsep-1" headers="topic_orx_zdb_bbc__table_e13_h2b_bbc__entry__2">LONG</td>
+                                <td class="- topic/entry entry colsep-0 rowsep-1" headers="topic_orx_zdb_bbc__table_e13_h2b_bbc__entry__3">最后一条逐笔数据的序号（lastAppSeqNum）</td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry colsep-1 rowsep-1" headers="topic_orx_zdb_bbc__table_e13_h2b_bbc__entry__1">tradingPhaseCode</td>
+                                <td class="- topic/entry entry colsep-1 rowsep-1" headers="topic_orx_zdb_bbc__table_e13_h2b_bbc__entry__2">INT</td>
+                                <td class="- topic/entry entry colsep-0 rowsep-1" headers="topic_orx_zdb_bbc__table_e13_h2b_bbc__entry__3">交易阶段代码（tradingPhaseCode）。枚举值：0（开盘前，启动）、1（开盘集合竞价）、2（开盘集合竞价阶段结束至连续竞价阶段开始之前）、3（连续竞价）、4（中午午休）、5（收盘集合竞价）</td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry colsep-1 rowsep-1" headers="topic_orx_zdb_bbc__table_e13_h2b_bbc__entry__1">modified</td>
+                                <td class="- topic/entry entry colsep-1 rowsep-1" headers="topic_orx_zdb_bbc__table_e13_h2b_bbc__entry__2">BOOL</td>
+                                <td class="- topic/entry entry colsep-0 rowsep-1" headers="topic_orx_zdb_bbc__table_e13_h2b_bbc__entry__3">各证券代码当前周期无输入数据，则对应输出表中的该字段显示为 false，否则显示为 true。</td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry colsep-1 rowsep-1" headers="topic_orx_zdb_bbc__table_e13_h2b_bbc__entry__1">turnover</td>
+                                <td class="- topic/entry entry colsep-1 rowsep-1" headers="topic_orx_zdb_bbc__table_e13_h2b_bbc__entry__2">DOUBLE</td>
+                                <td class="- topic/entry entry colsep-0 rowsep-1" headers="topic_orx_zdb_bbc__table_e13_h2b_bbc__entry__3">当前周期内的成交金额</td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry colsep-1 rowsep-1" headers="topic_orx_zdb_bbc__table_e13_h2b_bbc__entry__1">volume</td>
+                                <td class="- topic/entry entry colsep-1 rowsep-1" headers="topic_orx_zdb_bbc__table_e13_h2b_bbc__entry__2">LONG</td>
+                                <td class="- topic/entry entry colsep-0 rowsep-1" headers="topic_orx_zdb_bbc__table_e13_h2b_bbc__entry__3">当前周期内的成交量</td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry colsep-1 rowsep-1" headers="topic_orx_zdb_bbc__table_e13_h2b_bbc__entry__1">tradeNum</td>
+                                <td class="- topic/entry entry colsep-1 rowsep-1" headers="topic_orx_zdb_bbc__table_e13_h2b_bbc__entry__2">INT</td>
+                                <td class="- topic/entry entry colsep-0 rowsep-1" headers="topic_orx_zdb_bbc__table_e13_h2b_bbc__entry__3">当前周期内的成交笔数</td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry colsep-1 rowsep-1" headers="topic_orx_zdb_bbc__table_e13_h2b_bbc__entry__1">ttlTurnover</td>
+                                <td class="- topic/entry entry colsep-1 rowsep-1" headers="topic_orx_zdb_bbc__table_e13_h2b_bbc__entry__2">DOUBLE</td>
+                                <td class="- topic/entry entry colsep-0 rowsep-1" headers="topic_orx_zdb_bbc__table_e13_h2b_bbc__entry__3">（totalTurnover）开盘到现在的成交金额</td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry colsep-1 rowsep-1" headers="topic_orx_zdb_bbc__table_e13_h2b_bbc__entry__1">ttlVolume</td>
+                                <td class="- topic/entry entry colsep-1 rowsep-1" headers="topic_orx_zdb_bbc__table_e13_h2b_bbc__entry__2">LONG</td>
+                                <td class="- topic/entry entry colsep-0 rowsep-1" headers="topic_orx_zdb_bbc__table_e13_h2b_bbc__entry__3">（totalVolume）开盘到现在的成交量</td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry colsep-1 rowsep-1" headers="topic_orx_zdb_bbc__table_e13_h2b_bbc__entry__1">ttlTradeNum</td>
+                                <td class="- topic/entry entry colsep-1 rowsep-1" headers="topic_orx_zdb_bbc__table_e13_h2b_bbc__entry__2">INT</td>
+                                <td class="- topic/entry entry colsep-0 rowsep-1" headers="topic_orx_zdb_bbc__table_e13_h2b_bbc__entry__3">（totalTradeNum）开盘到现在的成交笔数</td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry colsep-1 rowsep-1" headers="topic_orx_zdb_bbc__table_e13_h2b_bbc__entry__1">lastPrice</td>
+                                <td class="- topic/entry entry colsep-1 rowsep-1" headers="topic_orx_zdb_bbc__table_e13_h2b_bbc__entry__2">DOUBLE</td>
+                                <td class="- topic/entry entry colsep-0 rowsep-1" headers="topic_orx_zdb_bbc__table_e13_h2b_bbc__entry__3">（lastPx）最近成交价</td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry colsep-1 rowsep-1" headers="topic_orx_zdb_bbc__table_e13_h2b_bbc__entry__1">highPrice</td>
+                                <td class="- topic/entry entry colsep-1 rowsep-1" headers="topic_orx_zdb_bbc__table_e13_h2b_bbc__entry__2">DOUBLE</td>
+                                <td class="- topic/entry entry colsep-0 rowsep-1" headers="topic_orx_zdb_bbc__table_e13_h2b_bbc__entry__3">（highPx）开盘到现在的最高价</td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry colsep-1 rowsep-1" headers="topic_orx_zdb_bbc__table_e13_h2b_bbc__entry__1">lowPrice</td>
+                                <td class="- topic/entry entry colsep-1 rowsep-1" headers="topic_orx_zdb_bbc__table_e13_h2b_bbc__entry__2">DOUBLE</td>
+                                <td class="- topic/entry entry colsep-0 rowsep-1" headers="topic_orx_zdb_bbc__table_e13_h2b_bbc__entry__3">（lowPx）开盘到现在的最低价</td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry colsep-1 rowsep-1" headers="topic_orx_zdb_bbc__table_e13_h2b_bbc__entry__1">openPrice</td>
+                                <td class="- topic/entry entry colsep-1 rowsep-1" headers="topic_orx_zdb_bbc__table_e13_h2b_bbc__entry__2">DOUBLE</td>
+                                <td class="- topic/entry entry colsep-0 rowsep-1" headers="topic_orx_zdb_bbc__table_e13_h2b_bbc__entry__3">（openPx）开盘价</td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry colsep-1 rowsep-1" headers="topic_orx_zdb_bbc__table_e13_h2b_bbc__entry__1">avgAskPrice</td>
+                                <td class="- topic/entry entry colsep-1 rowsep-1" headers="topic_orx_zdb_bbc__table_e13_h2b_bbc__entry__2">DOUBLE</td>
+                                <td class="- topic/entry entry colsep-0 rowsep-1" headers="topic_orx_zdb_bbc__table_e13_h2b_bbc__entry__3">（ask）卖出加权平均价 = 卖单的每一档价格*量 / 卖单的总量</td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry colsep-1 rowsep-1" headers="topic_orx_zdb_bbc__table_e13_h2b_bbc__entry__1">avgBidPrice</td>
+                                <td class="- topic/entry entry colsep-1 rowsep-1" headers="topic_orx_zdb_bbc__table_e13_h2b_bbc__entry__2">DOUBLE</td>
+                                <td class="- topic/entry entry colsep-0 rowsep-1" headers="topic_orx_zdb_bbc__table_e13_h2b_bbc__entry__3">（bid）买入加权平均价 = 买单的每一档价格*量 / 买单的总量</td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry colsep-1 rowsep-1" headers="topic_orx_zdb_bbc__table_e13_h2b_bbc__entry__1">askQty</td>
+                                <td class="- topic/entry entry colsep-1 rowsep-1" headers="topic_orx_zdb_bbc__table_e13_h2b_bbc__entry__2">LONG</td>
+                                <td class="- topic/entry entry colsep-0 rowsep-1" headers="topic_orx_zdb_bbc__table_e13_h2b_bbc__entry__3">（askVol）当前卖盘加权挂单量</td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry colsep-1 rowsep-1" headers="topic_orx_zdb_bbc__table_e13_h2b_bbc__entry__1">bidQty</td>
+                                <td class="- topic/entry entry colsep-1 rowsep-1" headers="topic_orx_zdb_bbc__table_e13_h2b_bbc__entry__2">LONG</td>
+                                <td class="- topic/entry entry colsep-0 rowsep-1" headers="topic_orx_zdb_bbc__table_e13_h2b_bbc__entry__3">（bidVol）当前买盘加权挂单量</td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry colsep-1 rowsep-1" headers="topic_orx_zdb_bbc__table_e13_h2b_bbc__entry__1">preClosePrice</td>
+                                <td class="- topic/entry entry colsep-1 rowsep-1" headers="topic_orx_zdb_bbc__table_e13_h2b_bbc__entry__2">DOUBLE</td>
+                                <td class="- topic/entry entry colsep-0 rowsep-1" headers="topic_orx_zdb_bbc__table_e13_h2b_bbc__entry__3">
+                                    <p class="- topic/p p">（preClosePx）昨收价。</p>
+                                    <p class="- topic/p p">引擎外部定义昨收价，并以字典的方式传入引擎。</p>
+                                </td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry colsep-1 rowsep-1" headers="topic_orx_zdb_bbc__table_e13_h2b_bbc__entry__1">abnormal</td>
+                                <td class="- topic/entry entry colsep-1 rowsep-1" headers="topic_orx_zdb_bbc__table_e13_h2b_bbc__entry__2">BOOL</td>
+                                <td class="- topic/entry entry colsep-0 rowsep-1" headers="topic_orx_zdb_bbc__table_e13_h2b_bbc__entry__3">
+                                    <p class="- topic/p p">（invalid）输入数据是否异常：true 表示输入数据异常；false 表示输入数据正常。</p>
+                                    <p class="- topic/p p">数据异常是指收到了逐笔成交或者撤单，却找不到对应的委托单。</p>
+                                </td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry colsep-1 rowsep-1" headers="topic_orx_zdb_bbc__table_e13_h2b_bbc__entry__1">maxPrice</td>
+                                <td class="- topic/entry entry colsep-1 rowsep-1" headers="topic_orx_zdb_bbc__table_e13_h2b_bbc__entry__2">DOUBLE</td>
+                                <td class="- topic/entry entry colsep-0 rowsep-1" headers="topic_orx_zdb_bbc__table_e13_h2b_bbc__entry__3">
+                                    <p class="- topic/p p">涨停价。</p>
+                                    <p class="- topic/p p">引擎外部定义涨停价，并以字典的方式传入引擎。</p>
+                                </td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry colsep-1 rowsep-0" headers="topic_orx_zdb_bbc__table_e13_h2b_bbc__entry__1">minPrice</td>
+                                <td class="- topic/entry entry colsep-1 rowsep-0" headers="topic_orx_zdb_bbc__table_e13_h2b_bbc__entry__2">DOUBLE</td>
+                                <td class="- topic/entry entry colsep-0 rowsep-0" headers="topic_orx_zdb_bbc__table_e13_h2b_bbc__entry__3">
+                                    <p class="- topic/p p">跌停价。</p>
+                                    <p class="- topic/p p">引擎外部定义跌停价，并以字典的方式传入引擎。</p>
+                                </td>
+                            </tr>
+                        </tbody></table></div>
+                <p class="- topic/p p"><strong class="+ topic/ph hi-d/b ph b">time（时间字段）</strong></p>
+                <div class="table-container"><table class="- topic/table table frame-all" id="topic_orx_zdb_bbc__table_f13_h2b_bbc" data-ofbid="topic_orx_zdb_bbc__table_f13_h2b_bbc" data-cols="3"><caption></caption><colgroup><col style="width:21.598272138228943%"/><col style="width:25.48596112311015%"/><col style="width:52.915766738660906%"/></colgroup><thead class="- topic/thead thead">
+                            <tr class="- topic/row">
+                                <th class="- topic/entry entry colsep-1 rowsep-1" id="topic_orx_zdb_bbc__table_f13_h2b_bbc__entry__1">字段名</th>
+                                <th class="- topic/entry entry colsep-1 rowsep-1" id="topic_orx_zdb_bbc__table_f13_h2b_bbc__entry__2">类型</th>
+                                <th class="- topic/entry entry colsep-0 rowsep-1" id="topic_orx_zdb_bbc__table_f13_h2b_bbc__entry__3">说明</th>
+                            </tr>
+                        </thead><tbody class="- topic/tbody tbody">
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry colsep-1 rowsep-1" headers="topic_orx_zdb_bbc__table_f13_h2b_bbc__entry__1">mdTime</td>
+                                <td class="- topic/entry entry colsep-1 rowsep-1" headers="topic_orx_zdb_bbc__table_f13_h2b_bbc__entry__2">TIME</td>
+                                <td class="- topic/entry entry colsep-0 rowsep-1" headers="topic_orx_zdb_bbc__table_f13_h2b_bbc__entry__3">快照时间戳，如以1s间隔合成快照：09:20:00.000，09:20:01.000</td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry colsep-1 rowsep-1" headers="topic_orx_zdb_bbc__table_f13_h2b_bbc__entry__1">mdDate</td>
+                                <td class="- topic/entry entry colsep-1 rowsep-1" headers="topic_orx_zdb_bbc__table_f13_h2b_bbc__entry__2">DATE</td>
+                                <td class="- topic/entry entry colsep-0 rowsep-1" headers="topic_orx_zdb_bbc__table_f13_h2b_bbc__entry__3">
+                                    <p class="- topic/p p">快照日期。</p>
+                                    <p class="- topic/p p">引擎外部定义快照日期，通过 date 参数传入引擎。</p>
+                                </td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry colsep-1 rowsep-1" headers="topic_orx_zdb_bbc__table_f13_h2b_bbc__entry__1">UpdateTime1</td>
+                                <td class="- topic/entry entry colsep-1 rowsep-1" headers="topic_orx_zdb_bbc__table_f13_h2b_bbc__entry__2">NANOTIMESTAMP</td>
+                                <td class="- topic/entry entry colsep-0 rowsep-1" headers="topic_orx_zdb_bbc__table_f13_h2b_bbc__entry__3">触发窗口关闭的那条输入数据的 receiveTime</td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry colsep-1 rowsep-0" headers="topic_orx_zdb_bbc__table_f13_h2b_bbc__entry__1">UpdateTime2</td>
+                                <td class="- topic/entry entry colsep-1 rowsep-0" headers="topic_orx_zdb_bbc__table_f13_h2b_bbc__entry__2">NANOTIMESTAMP</td>
+                                <td class="- topic/entry entry colsep-0 rowsep-0" headers="topic_orx_zdb_bbc__table_f13_h2b_bbc__entry__3">触发窗口关闭后计算完成的系统时刻，即输出计算结果时的系统时间。</td>
+                            </tr>
+                        </tbody></table></div>
+                <p class="- topic/p p"><strong class="+ topic/ph hi-d/b ph b">depth（报价/询价档位）</strong></p>
+                <p class="- topic/p p">不指定 <em class="+ topic/ph hi-d/i ph i">outputColMap</em> 和 <em class="+ topic/ph hi-d/i ph i">userDefinedMetrics</em> 时，会输出 depth 中的所有字段。提供两种方式存储
+                    depth 数据。两种方式只能选其一：</p>
+                <ul class="- topic/ul ul" id="topic_orx_zdb_bbc__ul_g13_h2b_bbc" data-ofbid="topic_orx_zdb_bbc__ul_g13_h2b_bbc">
+                    <li class="- topic/li li">
+                        <p class="- topic/p p">每个档位输出一列。比如 bidsPrice 有10个档位，则会输出10个 bidsPrice
+                            字段：bidsPrice1、bidsPrice2、…、bidsPrice10。</p>
+                    </li>
+                </ul>
+                <div class="table-container"><table class="- topic/table table frame-all" id="topic_orx_zdb_bbc__table_h13_h2b_bbc" data-ofbid="topic_orx_zdb_bbc__table_h13_h2b_bbc" data-cols="3"><caption></caption><colgroup><col style="width:21.914893617021278%"/><col style="width:21.27659574468085%"/><col style="width:56.80851063829787%"/></colgroup><thead class="- topic/thead thead">
+                            <tr class="- topic/row">
+                                <th class="- topic/entry entry colsep-1 rowsep-1" id="topic_orx_zdb_bbc__table_h13_h2b_bbc__entry__1">字段名</th>
+                                <th class="- topic/entry entry colsep-1 rowsep-1" id="topic_orx_zdb_bbc__table_h13_h2b_bbc__entry__2">类型</th>
+                                <th class="- topic/entry entry colsep-0 rowsep-1" id="topic_orx_zdb_bbc__table_h13_h2b_bbc__entry__3">说明</th>
+                            </tr>
+                        </thead><tbody class="- topic/tbody tbody">
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry colsep-1 rowsep-1" headers="topic_orx_zdb_bbc__table_h13_h2b_bbc__entry__1">bidsPrice</td>
+                                <td class="- topic/entry entry colsep-1 rowsep-1" headers="topic_orx_zdb_bbc__table_h13_h2b_bbc__entry__2">DOUBLE (多个)</td>
+                                <td class="- topic/entry entry colsep-0 rowsep-1" headers="topic_orx_zdb_bbc__table_h13_h2b_bbc__entry__3">（bids）多个字段，分别存放多档买入价格，档位由 <em class="+ topic/ph hi-d/i ph i">depth</em>确定</td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry colsep-1 rowsep-1" headers="topic_orx_zdb_bbc__table_h13_h2b_bbc__entry__1">bidsQty</td>
+                                <td class="- topic/entry entry colsep-1 rowsep-1" headers="topic_orx_zdb_bbc__table_h13_h2b_bbc__entry__2">LONG (多个)</td>
+                                <td class="- topic/entry entry colsep-0 rowsep-1" headers="topic_orx_zdb_bbc__table_h13_h2b_bbc__entry__3">（bidVolumes）多个字段，分别存放多档买入数量，档位由 <em class="+ topic/ph hi-d/i ph i">depth</em> 确定</td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry colsep-1 rowsep-1" headers="topic_orx_zdb_bbc__table_h13_h2b_bbc__entry__1">bidsCount</td>
+                                <td class="- topic/entry entry colsep-1 rowsep-1" headers="topic_orx_zdb_bbc__table_h13_h2b_bbc__entry__2">INT (多个)</td>
+                                <td class="- topic/entry entry colsep-0 rowsep-1" headers="topic_orx_zdb_bbc__table_h13_h2b_bbc__entry__3">（bidOrderNums）多个字段，分别存放多档买入委托笔数，档位由 <em class="+ topic/ph hi-d/i ph i">depth</em> 确定</td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry colsep-1 rowsep-1" headers="topic_orx_zdb_bbc__table_h13_h2b_bbc__entry__1">asksPrice</td>
+                                <td class="- topic/entry entry colsep-1 rowsep-1" headers="topic_orx_zdb_bbc__table_h13_h2b_bbc__entry__2">DOUBLE (多个)</td>
+                                <td class="- topic/entry entry colsep-0 rowsep-1" headers="topic_orx_zdb_bbc__table_h13_h2b_bbc__entry__3">（asks）多个字段，分别存放多档卖出价格，档位由 <em class="+ topic/ph hi-d/i ph i">depth</em> 确定</td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry colsep-1 rowsep-1" headers="topic_orx_zdb_bbc__table_h13_h2b_bbc__entry__1">asksQty</td>
+                                <td class="- topic/entry entry colsep-1 rowsep-1" headers="topic_orx_zdb_bbc__table_h13_h2b_bbc__entry__2">LONG (多个)</td>
+                                <td class="- topic/entry entry colsep-0 rowsep-1" headers="topic_orx_zdb_bbc__table_h13_h2b_bbc__entry__3">（askVolumes）多个字段，分别存放多档卖出数量，档位由 <em class="+ topic/ph hi-d/i ph i">depth</em> 确定</td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry colsep-1 rowsep-0" headers="topic_orx_zdb_bbc__table_h13_h2b_bbc__entry__1">asksCount</td>
+                                <td class="- topic/entry entry colsep-1 rowsep-0" headers="topic_orx_zdb_bbc__table_h13_h2b_bbc__entry__2">INT (多个)</td>
+                                <td class="- topic/entry entry colsep-0 rowsep-0" headers="topic_orx_zdb_bbc__table_h13_h2b_bbc__entry__3">（askOrderNums）多个字段，分别存放多档卖出委托笔数，档位由 <em class="+ topic/ph hi-d/i ph i">depth</em> 确定</td>
+                            </tr>
+                        </tbody></table></div>
+                <ul class="- topic/ul ul" id="topic_orx_zdb_bbc__ul_i13_h2b_bbc" data-ofbid="topic_orx_zdb_bbc__ul_i13_h2b_bbc">
+                    <li class="- topic/li li">
+                        <p class="- topic/p p">多个档位输出到一个列字段，该列的类型为数组向量。比如 bidsPrice
+                            有10个档位，则会将这10个档位以数组向量的形式输出到一个字段：bidsPriceList。</p>
+                    </li>
+                </ul>
+                <div class="table-container"><table class="- topic/table table frame-all" id="topic_orx_zdb_bbc__table_j13_h2b_bbc" data-ofbid="topic_orx_zdb_bbc__table_j13_h2b_bbc" data-cols="3"><caption></caption><colgroup><col style="width:22.32142857142857%"/><col style="width:24.776785714285715%"/><col style="width:52.90178571428571%"/></colgroup><thead class="- topic/thead thead">
+                            <tr class="- topic/row">
+                                <th class="- topic/entry entry colsep-1 rowsep-1" id="topic_orx_zdb_bbc__table_j13_h2b_bbc__entry__1">字段名</th>
+                                <th class="- topic/entry entry colsep-1 rowsep-1" id="topic_orx_zdb_bbc__table_j13_h2b_bbc__entry__2">类型</th>
+                                <th class="- topic/entry entry colsep-0 rowsep-1" id="topic_orx_zdb_bbc__table_j13_h2b_bbc__entry__3">说明</th>
+                            </tr>
+                        </thead><tbody class="- topic/tbody tbody">
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry colsep-1 rowsep-1" headers="topic_orx_zdb_bbc__table_j13_h2b_bbc__entry__1">bidsPriceList</td>
+                                <td class="- topic/entry entry colsep-1 rowsep-1" headers="topic_orx_zdb_bbc__table_j13_h2b_bbc__entry__2">DOUBLE[]</td>
+                                <td class="- topic/entry entry colsep-0 rowsep-1" headers="topic_orx_zdb_bbc__table_j13_h2b_bbc__entry__3">数组向量，存放多档买入价格，档位由 <em class="+ topic/ph hi-d/i ph i">depth</em> 确定</td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry colsep-1 rowsep-1" headers="topic_orx_zdb_bbc__table_j13_h2b_bbc__entry__1">bidsQtyList</td>
+                                <td class="- topic/entry entry colsep-1 rowsep-1" headers="topic_orx_zdb_bbc__table_j13_h2b_bbc__entry__2">LONG[]</td>
+                                <td class="- topic/entry entry colsep-0 rowsep-1" headers="topic_orx_zdb_bbc__table_j13_h2b_bbc__entry__3">数组向量，存放多档买入数量，档位由 <em class="+ topic/ph hi-d/i ph i">depth</em> 确定</td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry colsep-1 rowsep-1" headers="topic_orx_zdb_bbc__table_j13_h2b_bbc__entry__1">bidsCountList</td>
+                                <td class="- topic/entry entry colsep-1 rowsep-1" headers="topic_orx_zdb_bbc__table_j13_h2b_bbc__entry__2">INT[]</td>
+                                <td class="- topic/entry entry colsep-0 rowsep-1" headers="topic_orx_zdb_bbc__table_j13_h2b_bbc__entry__3">数组向量，存放多档买入委托笔数，档位由 <em class="+ topic/ph hi-d/i ph i">depth</em> 确定</td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry colsep-1 rowsep-1" headers="topic_orx_zdb_bbc__table_j13_h2b_bbc__entry__1">asksPriceList</td>
+                                <td class="- topic/entry entry colsep-1 rowsep-1" headers="topic_orx_zdb_bbc__table_j13_h2b_bbc__entry__2">DOUBLE[]</td>
+                                <td class="- topic/entry entry colsep-0 rowsep-1" headers="topic_orx_zdb_bbc__table_j13_h2b_bbc__entry__3">数组向量，存放多档卖出价格，档位由 <em class="+ topic/ph hi-d/i ph i">depth</em> 确定</td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry colsep-1 rowsep-1" headers="topic_orx_zdb_bbc__table_j13_h2b_bbc__entry__1">asksQtyList</td>
+                                <td class="- topic/entry entry colsep-1 rowsep-1" headers="topic_orx_zdb_bbc__table_j13_h2b_bbc__entry__2">LONG[]</td>
+                                <td class="- topic/entry entry colsep-0 rowsep-1" headers="topic_orx_zdb_bbc__table_j13_h2b_bbc__entry__3">数组向量，存放多档卖出数量，档位由 <em class="+ topic/ph hi-d/i ph i">depth</em> 确定</td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry colsep-1 rowsep-0" headers="topic_orx_zdb_bbc__table_j13_h2b_bbc__entry__1">asksCountList</td>
+                                <td class="- topic/entry entry colsep-1 rowsep-0" headers="topic_orx_zdb_bbc__table_j13_h2b_bbc__entry__2">INT[]</td>
+                                <td class="- topic/entry entry colsep-0 rowsep-0" headers="topic_orx_zdb_bbc__table_j13_h2b_bbc__entry__3">数组向量，存放多档卖出委托笔数，档位由 <em class="+ topic/ph hi-d/i ph i">depth</em> 确定</td>
+                            </tr>
+                        </tbody></table></div>
+                <p class="- topic/p p"><strong class="+ topic/ph hi-d/b ph b">tradeDetail（成交明细）</strong></p>
+                <div class="table-container"><table class="- topic/table table frame-all" id="topic_orx_zdb_bbc__table_k13_h2b_bbc" data-ofbid="topic_orx_zdb_bbc__table_k13_h2b_bbc" data-cols="3"><caption></caption><colgroup><col style="width:27.40899357601713%"/><col style="width:21.413276231263385%"/><col style="width:51.177730192719494%"/></colgroup><thead class="- topic/thead thead">
+                            <tr class="- topic/row">
+                                <th class="- topic/entry entry colsep-1 rowsep-1" id="topic_orx_zdb_bbc__table_k13_h2b_bbc__entry__1">基础衍生字段</th>
+                                <th class="- topic/entry entry colsep-1 rowsep-1" id="topic_orx_zdb_bbc__table_k13_h2b_bbc__entry__2">类型</th>
+                                <th class="- topic/entry entry colsep-0 rowsep-1" id="topic_orx_zdb_bbc__table_k13_h2b_bbc__entry__3">含义</th>
+                            </tr>
+                        </thead><tbody class="- topic/tbody tbody">
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry colsep-1 rowsep-1" headers="topic_orx_zdb_bbc__table_k13_h2b_bbc__entry__1">buyQty</td>
+                                <td class="- topic/entry entry colsep-1 rowsep-1" headers="topic_orx_zdb_bbc__table_k13_h2b_bbc__entry__2">LONG</td>
+                                <td class="- topic/entry entry colsep-0 rowsep-1" headers="topic_orx_zdb_bbc__table_k13_h2b_bbc__entry__3">当前周期内的买入总量 = sum( BSFlag=1 的成交的量）</td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry colsep-1 rowsep-1" headers="topic_orx_zdb_bbc__table_k13_h2b_bbc__entry__1">sellQty</td>
+                                <td class="- topic/entry entry colsep-1 rowsep-1" headers="topic_orx_zdb_bbc__table_k13_h2b_bbc__entry__2">LONG</td>
+                                <td class="- topic/entry entry colsep-0 rowsep-1" headers="topic_orx_zdb_bbc__table_k13_h2b_bbc__entry__3">当前周期内的卖出总量 = sum( BSFlag=2的成交的量）</td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry colsep-1 rowsep-1" headers="topic_orx_zdb_bbc__table_k13_h2b_bbc__entry__1">buyMoney</td>
+                                <td class="- topic/entry entry colsep-1 rowsep-1" headers="topic_orx_zdb_bbc__table_k13_h2b_bbc__entry__2">DOUBLE</td>
+                                <td class="- topic/entry entry colsep-0 rowsep-1" headers="topic_orx_zdb_bbc__table_k13_h2b_bbc__entry__3">当前周期内的买入总金额 = sum( BSFlag=1的成交的量*价格）</td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry colsep-1 rowsep-1" headers="topic_orx_zdb_bbc__table_k13_h2b_bbc__entry__1">sellMoney</td>
+                                <td class="- topic/entry entry colsep-1 rowsep-1" headers="topic_orx_zdb_bbc__table_k13_h2b_bbc__entry__2">DOUBLE</td>
+                                <td class="- topic/entry entry colsep-0 rowsep-1" headers="topic_orx_zdb_bbc__table_k13_h2b_bbc__entry__3">当前周期内的卖出总金额 = sum( BSFlag=2的成交的量*价格）</td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry colsep-1 rowsep-1" headers="topic_orx_zdb_bbc__table_k13_h2b_bbc__entry__1">tradePriceList</td>
+                                <td class="- topic/entry entry colsep-1 rowsep-1" headers="topic_orx_zdb_bbc__table_k13_h2b_bbc__entry__2">DOUBLE[]</td>
+                                <td class="- topic/entry entry colsep-0 rowsep-1" headers="topic_orx_zdb_bbc__table_k13_h2b_bbc__entry__3">当前周期内成交价格列表 </td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry colsep-1 rowsep-1" headers="topic_orx_zdb_bbc__table_k13_h2b_bbc__entry__1">tradeQtyList</td>
+                                <td class="- topic/entry entry colsep-1 rowsep-1" headers="topic_orx_zdb_bbc__table_k13_h2b_bbc__entry__2">LONG[]</td>
+                                <td class="- topic/entry entry colsep-0 rowsep-1" headers="topic_orx_zdb_bbc__table_k13_h2b_bbc__entry__3">当前周期内成交量列表</td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry colsep-1 rowsep-1" headers="topic_orx_zdb_bbc__table_k13_h2b_bbc__entry__1">tradeTypeList</td>
+                                <td class="- topic/entry entry colsep-1 rowsep-1" headers="topic_orx_zdb_bbc__table_k13_h2b_bbc__entry__2">INT[]</td>
+                                <td class="- topic/entry entry colsep-0 rowsep-1" headers="topic_orx_zdb_bbc__table_k13_h2b_bbc__entry__3">当前周期内成交类型列表 </td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry colsep-1 rowsep-1" headers="topic_orx_zdb_bbc__table_k13_h2b_bbc__entry__1">tradeBSFlagList</td>
+                                <td class="- topic/entry entry colsep-1 rowsep-1" headers="topic_orx_zdb_bbc__table_k13_h2b_bbc__entry__2">INT[]</td>
+                                <td class="- topic/entry entry colsep-0 rowsep-1" headers="topic_orx_zdb_bbc__table_k13_h2b_bbc__entry__3">当前周期内成交方向列表</td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry colsep-1 rowsep-1" headers="topic_orx_zdb_bbc__table_k13_h2b_bbc__entry__1">tradeMDTimeList</td>
+                                <td class="- topic/entry entry colsep-1 rowsep-1" headers="topic_orx_zdb_bbc__table_k13_h2b_bbc__entry__2">TIME[]</td>
+                                <td class="- topic/entry entry colsep-0 rowsep-1" headers="topic_orx_zdb_bbc__table_k13_h2b_bbc__entry__3">当前周期内成交时间列表</td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry colsep-1 rowsep-1" headers="topic_orx_zdb_bbc__table_k13_h2b_bbc__entry__1">tradeBuyNoList</td>
+                                <td class="- topic/entry entry colsep-1 rowsep-1" headers="topic_orx_zdb_bbc__table_k13_h2b_bbc__entry__2">LONG[]</td>
+                                <td class="- topic/entry entry colsep-0 rowsep-1" headers="topic_orx_zdb_bbc__table_k13_h2b_bbc__entry__3">当前周期内买方委托序号列表</td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry colsep-1 rowsep-1" headers="topic_orx_zdb_bbc__table_k13_h2b_bbc__entry__1">tradeSellNoList</td>
+                                <td class="- topic/entry entry colsep-1 rowsep-1" headers="topic_orx_zdb_bbc__table_k13_h2b_bbc__entry__2">LONG[]</td>
+                                <td class="- topic/entry entry colsep-0 rowsep-1" headers="topic_orx_zdb_bbc__table_k13_h2b_bbc__entry__3">当前周期内卖方委托序号列表</td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry colsep-1 rowsep-1" headers="topic_orx_zdb_bbc__table_k13_h2b_bbc__entry__1">tradeOrderBuyNoTimeList</td>
+                                <td class="- topic/entry entry colsep-1 rowsep-1" headers="topic_orx_zdb_bbc__table_k13_h2b_bbc__entry__2">TIME[]</td>
+                                <td class="- topic/entry entry colsep-0 rowsep-1" headers="topic_orx_zdb_bbc__table_k13_h2b_bbc__entry__3">当前周期内的有效成交对应的委托的买单下单时间</td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry colsep-1 rowsep-0" headers="topic_orx_zdb_bbc__table_k13_h2b_bbc__entry__1">tradeOrderSellNoTimeList</td>
+                                <td class="- topic/entry entry colsep-1 rowsep-0" headers="topic_orx_zdb_bbc__table_k13_h2b_bbc__entry__2">TIME[]</td>
+                                <td class="- topic/entry entry colsep-0 rowsep-0" headers="topic_orx_zdb_bbc__table_k13_h2b_bbc__entry__3">当前周期内的有效成交对应的委托的卖单下单时间</td>
+                            </tr>
+                        </tbody></table></div>
+                <p class="- topic/p p"><strong class="+ topic/ph hi-d/b ph b">orderDetail （委托明细）</strong></p>
+                <div class="table-container"><table class="- topic/table table frame-all" id="topic_orx_zdb_bbc__table_l13_h2b_bbc" data-ofbid="topic_orx_zdb_bbc__table_l13_h2b_bbc" data-cols="3"><caption></caption><colgroup><col style="width:25.252525252525253%"/><col style="width:26.767676767676768%"/><col style="width:47.97979797979798%"/></colgroup><thead class="- topic/thead thead">
+                            <tr class="- topic/row">
+                                <th class="- topic/entry entry colsep-1 rowsep-1" id="topic_orx_zdb_bbc__table_l13_h2b_bbc__entry__1">基础衍生字段</th>
+                                <th class="- topic/entry entry colsep-1 rowsep-1" id="topic_orx_zdb_bbc__table_l13_h2b_bbc__entry__2">类型</th>
+                                <th class="- topic/entry entry colsep-0 rowsep-1" id="topic_orx_zdb_bbc__table_l13_h2b_bbc__entry__3">含义</th>
+                            </tr>
+                        </thead><tbody class="- topic/tbody tbody">
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry colsep-1 rowsep-1" headers="topic_orx_zdb_bbc__table_l13_h2b_bbc__entry__1">orderPriceList</td>
+                                <td class="- topic/entry entry colsep-1 rowsep-1" headers="topic_orx_zdb_bbc__table_l13_h2b_bbc__entry__2">DOUBLE[]</td>
+                                <td class="- topic/entry entry colsep-0 rowsep-1" headers="topic_orx_zdb_bbc__table_l13_h2b_bbc__entry__3">当前周期内委托价格列表 </td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry colsep-1 rowsep-1" headers="topic_orx_zdb_bbc__table_l13_h2b_bbc__entry__1">orderQtyList</td>
+                                <td class="- topic/entry entry colsep-1 rowsep-1" headers="topic_orx_zdb_bbc__table_l13_h2b_bbc__entry__2">LONG[]</td>
+                                <td class="- topic/entry entry colsep-0 rowsep-1" headers="topic_orx_zdb_bbc__table_l13_h2b_bbc__entry__3">当前周期内成交量列表</td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry colsep-1 rowsep-1" headers="topic_orx_zdb_bbc__table_l13_h2b_bbc__entry__1">orderTypeList</td>
+                                <td class="- topic/entry entry colsep-1 rowsep-1" headers="topic_orx_zdb_bbc__table_l13_h2b_bbc__entry__2">INT[]</td>
+                                <td class="- topic/entry entry colsep-0 rowsep-1" headers="topic_orx_zdb_bbc__table_l13_h2b_bbc__entry__3">当前周期内委托类型列表</td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry colsep-1 rowsep-1" headers="topic_orx_zdb_bbc__table_l13_h2b_bbc__entry__1">orderBSFlagList</td>
+                                <td class="- topic/entry entry colsep-1 rowsep-1" headers="topic_orx_zdb_bbc__table_l13_h2b_bbc__entry__2">INT[]</td>
+                                <td class="- topic/entry entry colsep-0 rowsep-1" headers="topic_orx_zdb_bbc__table_l13_h2b_bbc__entry__3">当前周期内委托方向列表</td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry colsep-1 rowsep-1" headers="topic_orx_zdb_bbc__table_l13_h2b_bbc__entry__1">orderMDTimeList</td>
+                                <td class="- topic/entry entry colsep-1 rowsep-1" headers="topic_orx_zdb_bbc__table_l13_h2b_bbc__entry__2">TIME[]</td>
+                                <td class="- topic/entry entry colsep-0 rowsep-1" headers="topic_orx_zdb_bbc__table_l13_h2b_bbc__entry__3">当前周期内委托时间列表</td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry colsep-1 rowsep-0" headers="topic_orx_zdb_bbc__table_l13_h2b_bbc__entry__1">orderNoList</td>
+                                <td class="- topic/entry entry colsep-1 rowsep-0" headers="topic_orx_zdb_bbc__table_l13_h2b_bbc__entry__2">LONG[]</td>
+                                <td class="- topic/entry entry colsep-0 rowsep-0" headers="topic_orx_zdb_bbc__table_l13_h2b_bbc__entry__3">当前周期内委托序号列表</td>
+                            </tr>
+                        </tbody></table></div>
+                <p class="- topic/p p"><strong class="+ topic/ph hi-d/b ph b">withdrawDetail（撤单明细）</strong></p>
+                <div class="table-container"><table class="- topic/table table frame-all" id="topic_orx_zdb_bbc__table_m13_h2b_bbc" data-ofbid="topic_orx_zdb_bbc__table_m13_h2b_bbc" data-cols="3"><caption></caption><colgroup><col style="width:29.97987927565392%"/><col style="width:20.120724346076457%"/><col style="width:49.899396378269614%"/></colgroup><thead class="- topic/thead thead">
+                            <tr class="- topic/row">
+                                <th class="- topic/entry entry colsep-1 rowsep-1" id="topic_orx_zdb_bbc__table_m13_h2b_bbc__entry__1">基础衍生字段</th>
+                                <th class="- topic/entry entry colsep-1 rowsep-1" id="topic_orx_zdb_bbc__table_m13_h2b_bbc__entry__2">类型</th>
+                                <th class="- topic/entry entry colsep-0 rowsep-1" id="topic_orx_zdb_bbc__table_m13_h2b_bbc__entry__3">含义</th>
+                            </tr>
+                        </thead><tbody class="- topic/tbody tbody">
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry colsep-1 rowsep-1" headers="topic_orx_zdb_bbc__table_m13_h2b_bbc__entry__1">withdrawBuyPriceList</td>
+                                <td class="- topic/entry entry colsep-1 rowsep-1" headers="topic_orx_zdb_bbc__table_m13_h2b_bbc__entry__2">DOUBLE[]</td>
+                                <td class="- topic/entry entry colsep-0 rowsep-1" headers="topic_orx_zdb_bbc__table_m13_h2b_bbc__entry__3">当前周期内买方撤单的委托价格</td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry colsep-1 rowsep-1" headers="topic_orx_zdb_bbc__table_m13_h2b_bbc__entry__1">withdrawBuyQtyList</td>
+                                <td class="- topic/entry entry colsep-1 rowsep-1" headers="topic_orx_zdb_bbc__table_m13_h2b_bbc__entry__2">LONG[]</td>
+                                <td class="- topic/entry entry colsep-0 rowsep-1" headers="topic_orx_zdb_bbc__table_m13_h2b_bbc__entry__3">当前周期内买方撤单的委托量</td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry colsep-1 rowsep-1" headers="topic_orx_zdb_bbc__table_m13_h2b_bbc__entry__1">withdrawBuyOrderTypeList</td>
+                                <td class="- topic/entry entry colsep-1 rowsep-1" headers="topic_orx_zdb_bbc__table_m13_h2b_bbc__entry__2">INT[]</td>
+                                <td class="- topic/entry entry colsep-0 rowsep-1" headers="topic_orx_zdb_bbc__table_m13_h2b_bbc__entry__3">当前周期内买方撤单的委托的订单类型</td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry colsep-1 rowsep-1" headers="topic_orx_zdb_bbc__table_m13_h2b_bbc__entry__1">withdrawBuyMDTimeList</td>
+                                <td class="- topic/entry entry colsep-1 rowsep-1" headers="topic_orx_zdb_bbc__table_m13_h2b_bbc__entry__2">TIME[]</td>
+                                <td class="- topic/entry entry colsep-0 rowsep-1" headers="topic_orx_zdb_bbc__table_m13_h2b_bbc__entry__3">当前周期内买方撤单的订单时间</td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry colsep-1 rowsep-1" headers="topic_orx_zdb_bbc__table_m13_h2b_bbc__entry__1">withdrawBuyOrderMDTimeList</td>
+                                <td class="- topic/entry entry colsep-1 rowsep-1" headers="topic_orx_zdb_bbc__table_m13_h2b_bbc__entry__2">TIME[]</td>
+                                <td class="- topic/entry entry colsep-0 rowsep-1" headers="topic_orx_zdb_bbc__table_m13_h2b_bbc__entry__3">当前周期内买方撤单对应的委托下单时间</td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry colsep-1 rowsep-1" headers="topic_orx_zdb_bbc__table_m13_h2b_bbc__entry__1">WithdrawBuyOrderQtyList</td>
+                                <td class="- topic/entry entry colsep-1 rowsep-1" headers="topic_orx_zdb_bbc__table_m13_h2b_bbc__entry__2">LONG[]</td>
+                                <td class="- topic/entry entry colsep-0 rowsep-1" headers="topic_orx_zdb_bbc__table_m13_h2b_bbc__entry__3">当前周期内买方撤单对应的原始委托数据中的委托量</td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry colsep-1 rowsep-1" headers="topic_orx_zdb_bbc__table_m13_h2b_bbc__entry__1">withdrawSellPriceList</td>
+                                <td class="- topic/entry entry colsep-1 rowsep-1" headers="topic_orx_zdb_bbc__table_m13_h2b_bbc__entry__2">DOUBLE[]</td>
+                                <td class="- topic/entry entry colsep-0 rowsep-1" headers="topic_orx_zdb_bbc__table_m13_h2b_bbc__entry__3">当前周期内卖方撤单的委托价格</td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry colsep-1 rowsep-1" headers="topic_orx_zdb_bbc__table_m13_h2b_bbc__entry__1">withdrawSellQtyList</td>
+                                <td class="- topic/entry entry colsep-1 rowsep-1" headers="topic_orx_zdb_bbc__table_m13_h2b_bbc__entry__2">LONG[]</td>
+                                <td class="- topic/entry entry colsep-0 rowsep-1" headers="topic_orx_zdb_bbc__table_m13_h2b_bbc__entry__3">当前周期内卖方撤单的委托量</td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry colsep-1 rowsep-1" headers="topic_orx_zdb_bbc__table_m13_h2b_bbc__entry__1">withdrawSellOrderTypeList</td>
+                                <td class="- topic/entry entry colsep-1 rowsep-1" headers="topic_orx_zdb_bbc__table_m13_h2b_bbc__entry__2">INT[]</td>
+                                <td class="- topic/entry entry colsep-0 rowsep-1" headers="topic_orx_zdb_bbc__table_m13_h2b_bbc__entry__3">当前周期内卖方撤单的委托的订单类型</td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry colsep-1 rowsep-1" headers="topic_orx_zdb_bbc__table_m13_h2b_bbc__entry__1">withdrawSellMDTimeList</td>
+                                <td class="- topic/entry entry colsep-1 rowsep-1" headers="topic_orx_zdb_bbc__table_m13_h2b_bbc__entry__2">TIME[]</td>
+                                <td class="- topic/entry entry colsep-0 rowsep-1" headers="topic_orx_zdb_bbc__table_m13_h2b_bbc__entry__3">当前周期内卖方撤单的订单时间</td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry colsep-1 rowsep-1" headers="topic_orx_zdb_bbc__table_m13_h2b_bbc__entry__1">withdrawSellOrderMDTimeList</td>
+                                <td class="- topic/entry entry colsep-1 rowsep-1" headers="topic_orx_zdb_bbc__table_m13_h2b_bbc__entry__2">TIME[]</td>
+                                <td class="- topic/entry entry colsep-0 rowsep-1" headers="topic_orx_zdb_bbc__table_m13_h2b_bbc__entry__3">当前周期内卖方撤单对应的委托下单时间</td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry colsep-1 rowsep-0" headers="topic_orx_zdb_bbc__table_m13_h2b_bbc__entry__1">WithdrawSellOrderQtyList</td>
+                                <td class="- topic/entry entry colsep-1 rowsep-0" headers="topic_orx_zdb_bbc__table_m13_h2b_bbc__entry__2">LONG[]</td>
+                                <td class="- topic/entry entry colsep-0 rowsep-0" headers="topic_orx_zdb_bbc__table_m13_h2b_bbc__entry__3">当前周期内卖方撤单对应的原始委托数据中的委托量</td>
+                            </tr>
+                        </tbody></table></div>
+                <p class="- topic/p p"><strong class="+ topic/ph hi-d/b ph b">prevDetail（上一笔交易明细）</strong></p>
+                <div class="table-container"><table class="- topic/table table frame-all" id="topic_orx_zdb_bbc__table_gj4_42b_bbc" data-ofbid="topic_orx_zdb_bbc__table_gj4_42b_bbc" data-cols="3"><caption></caption><colgroup><col style="width:27.856025039123626%"/><col style="width:15.649452269170578%"/><col style="width:56.49452269170578%"/></colgroup><thead class="- topic/thead thead">
+                            <tr class="- topic/row">
+                                <th class="- topic/entry entry colsep-1 rowsep-1" id="topic_orx_zdb_bbc__table_gj4_42b_bbc__entry__1">基础衍生字段</th>
+                                <th class="- topic/entry entry colsep-1 rowsep-1" id="topic_orx_zdb_bbc__table_gj4_42b_bbc__entry__2">类型</th>
+                                <th class="- topic/entry entry colsep-0 rowsep-1" id="topic_orx_zdb_bbc__table_gj4_42b_bbc__entry__3">含义</th>
+                            </tr>
+                        </thead><tbody class="- topic/tbody tbody">
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry colsep-1 rowsep-1" headers="topic_orx_zdb_bbc__table_gj4_42b_bbc__entry__1">prevBuyPrice1</td>
+                                <td class="- topic/entry entry colsep-1 rowsep-1" headers="topic_orx_zdb_bbc__table_gj4_42b_bbc__entry__2">DOUBLE</td>
+                                <td class="- topic/entry entry colsep-0 rowsep-1" headers="topic_orx_zdb_bbc__table_gj4_42b_bbc__entry__3">上一笔快照的 BuyPrice1 价格</td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry colsep-1 rowsep-1" headers="topic_orx_zdb_bbc__table_gj4_42b_bbc__entry__1">prevSellPrice1</td>
+                                <td class="- topic/entry entry colsep-1 rowsep-1" headers="topic_orx_zdb_bbc__table_gj4_42b_bbc__entry__2">DOUBLE</td>
+                                <td class="- topic/entry entry colsep-0 rowsep-1" headers="topic_orx_zdb_bbc__table_gj4_42b_bbc__entry__3">上一笔快照的 SellPrice1 价格</td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry colsep-1 rowsep-1" headers="topic_orx_zdb_bbc__table_gj4_42b_bbc__entry__1">prevBuyAddQtyList1</td>
+                                <td class="- topic/entry entry colsep-1 rowsep-1" headers="topic_orx_zdb_bbc__table_gj4_42b_bbc__entry__2">LONG[]</td>
+                                <td class="- topic/entry entry colsep-0 rowsep-1" headers="topic_orx_zdb_bbc__table_gj4_42b_bbc__entry__3">价格为上一笔快照的 BuyPrice1，在当前周期内的申购明细</td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry colsep-1 rowsep-1" headers="topic_orx_zdb_bbc__table_gj4_42b_bbc__entry__1">prevSellAddQtyList1</td>
+                                <td class="- topic/entry entry colsep-1 rowsep-1" headers="topic_orx_zdb_bbc__table_gj4_42b_bbc__entry__2">LONG[]</td>
+                                <td class="- topic/entry entry colsep-0 rowsep-1" headers="topic_orx_zdb_bbc__table_gj4_42b_bbc__entry__3">价格为上一笔快照的 SellPrice1，在当前周期内的申购明细</td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry colsep-1 rowsep-1" headers="topic_orx_zdb_bbc__table_gj4_42b_bbc__entry__1">prevBuyWithdrawQtyList1</td>
+                                <td class="- topic/entry entry colsep-1 rowsep-1" headers="topic_orx_zdb_bbc__table_gj4_42b_bbc__entry__2">LONG[]</td>
+                                <td class="- topic/entry entry colsep-0 rowsep-1" headers="topic_orx_zdb_bbc__table_gj4_42b_bbc__entry__3">价格为上一笔快照的 BuyPrice1，在当前周期内的撤单明细</td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry colsep-1 rowsep-0" headers="topic_orx_zdb_bbc__table_gj4_42b_bbc__entry__1">prevSellWithdrawQtyList1</td>
+                                <td class="- topic/entry entry colsep-1 rowsep-0" headers="topic_orx_zdb_bbc__table_gj4_42b_bbc__entry__2">LONG[]</td>
+                                <td class="- topic/entry entry colsep-0 rowsep-0" headers="topic_orx_zdb_bbc__table_gj4_42b_bbc__entry__3">价格为上一笔快照的 SellPrice1，在当前周期内的撤单明细</td>
+                            </tr>
+                        </tbody></table></div>
+                <p class="- topic/p p"><strong class="+ topic/ph hi-d/b ph b">orderBookDetailDepth（ orderbook 明细档位）</strong></p>
+                <p class="- topic/p p">每个档位输出一列，该列的类型是数组向量。比如 buyQtyList 有20个档位，则会输出20个 buyQtyList
+                    字段：buyQtyList1、buyQtyList2、…、buyQtyList20。buyValueList，sellQtyList 和
+                    sellValueList 同理。</p>
+                <div class="table-container"><table class="- topic/table table frame-all" id="topic_orx_zdb_bbc__table_a2y_q2t_2bc" data-ofbid="topic_orx_zdb_bbc__table_a2y_q2t_2bc" data-cols="3"><caption></caption><colgroup><col/><col/><col/></colgroup><thead class="- topic/thead thead">
+                            <tr class="- topic/row">
+                                <th class="- topic/entry entry colsep-1 rowsep-1" id="topic_orx_zdb_bbc__table_a2y_q2t_2bc__entry__1">
+                                    <p class="- topic/p p">基础衍生字段</p>
+                                </th>
+                                <th class="- topic/entry entry colsep-1 rowsep-1" id="topic_orx_zdb_bbc__table_a2y_q2t_2bc__entry__2">
+                                    <p class="- topic/p p">类型</p>
+                                </th>
+                                <th class="- topic/entry entry colsep-0 rowsep-1" id="topic_orx_zdb_bbc__table_a2y_q2t_2bc__entry__3">
+                                    <p class="- topic/p p">含义</p>
+                                </th>
+                            </tr>
+                        </thead><tbody class="- topic/tbody tbody">
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry colsep-1 rowsep-1" headers="topic_orx_zdb_bbc__table_a2y_q2t_2bc__entry__1">buyQtyList</td>
+                                <td class="- topic/entry entry colsep-1 rowsep-1" headers="topic_orx_zdb_bbc__table_a2y_q2t_2bc__entry__2">LONG[]（多个）</td>
+                                <td class="- topic/entry entry colsep-0 rowsep-1" headers="topic_orx_zdb_bbc__table_a2y_q2t_2bc__entry__3">当前最新盘口各档位买入的每一笔委托的数量</td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry colsep-1 rowsep-1" headers="topic_orx_zdb_bbc__table_a2y_q2t_2bc__entry__1">buyValueList</td>
+                                <td class="- topic/entry entry colsep-1 rowsep-1" headers="topic_orx_zdb_bbc__table_a2y_q2t_2bc__entry__2">DOUBLE[]（多个）</td>
+                                <td class="- topic/entry entry colsep-0 rowsep-1" headers="topic_orx_zdb_bbc__table_a2y_q2t_2bc__entry__3">当前最新盘口各档位买入的每一笔委托的金额</td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry colsep-1 rowsep-1" headers="topic_orx_zdb_bbc__table_a2y_q2t_2bc__entry__1">sellQtyList</td>
+                                <td class="- topic/entry entry colsep-1 rowsep-1" headers="topic_orx_zdb_bbc__table_a2y_q2t_2bc__entry__2">LONG[]（多个）</td>
+                                <td class="- topic/entry entry colsep-0 rowsep-1" headers="topic_orx_zdb_bbc__table_a2y_q2t_2bc__entry__3">前最新盘口各档位卖出的每一笔委托的数量</td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry colsep-1 rowsep-0" headers="topic_orx_zdb_bbc__table_a2y_q2t_2bc__entry__1">sellValueList</td>
+                                <td class="- topic/entry entry colsep-1 rowsep-0" headers="topic_orx_zdb_bbc__table_a2y_q2t_2bc__entry__2">DOUBLE[]（多个）</td>
+                                <td class="- topic/entry entry colsep-0 rowsep-0" headers="topic_orx_zdb_bbc__table_a2y_q2t_2bc__entry__3">前最新盘口各档位卖出的每一笔委托的金额</td>
+                            </tr>
+                        </tbody></table></div>
+            </div>
+        </article>
+    </article>
+</article></main></div>
+                        
+                        
+                        
+                        
+                        
+                        
+                    </div>
+                    
+                        <nav role="navigation" id="wh_topic_toc" aria-label="On this page" class="col-lg-2 d-none d-lg-block navbar d-print-none"> 
+                            <div id="wh_topic_toc_content">
+		                        
+	                            <div class=" wh_topic_toc "><div class="wh_topic_label">在本页上</div><ul><li class="topic-item"><a href="#%E8%AF%AD%E6%B3%95" data-tocid="语法">语法</a></li><li class="topic-item"><a href="#%E8%AF%A6%E6%83%85" data-tocid="详情">详情</a><ul><li class="section-item"><div class="section-title"><a href="#%E8%AF%A6%E6%83%85__section_t11_g2n_y1c" data-tocid="详情__section_t11_g2n_y1c">窗口规则</a></div></li><li class="section-item"><div class="section-title"><a href="#%E8%AF%A6%E6%83%85__section_avm_h2n_y1c" data-tocid="详情__section_avm_h2n_y1c">触发规则</a></div></li></ul></li><li class="topic-item"><a href="#%E5%8F%82%E6%95%B0" data-tocid="参数">参数</a></li><li class="topic-item"><a href="#%E4%BE%8B%E5%AD%90" data-tocid="例子">例子</a><ul><li class="topic-item"><a href="#topic_orx_zdb_bbc" data-tocid="topic_orx_zdb_bbc">附录</a></li></ul></li></ul></div>
+	                        	
+                        	</div>
+                        </nav>
+                    
+                </div>
+            </div>
+            
+            
+            
+        </div> 
+        <footer class="navbar navbar-default wh_footer">
+  <div class=" footer-container mx-auto ">
+<title>Copyright</title><p><b> ©2024 浙江智臾科技有限公司 浙ICP备18048711号-3</b></p>
+  </div>
+</footer>
+        
+        <div id="go2top" class="d-print-none">
+            <span class="oxy-icon oxy-icon-up"></span>
+        </div>
+        
+        <div id="modal_img_large" class="modal">
+            <span class="close oxy-icon oxy-icon-remove"></span>
+            <div id="modal_img_container"></div>
+            <div id="caption"></div>
+        </div>
+        
+        
+        
+    </body>
+</html>

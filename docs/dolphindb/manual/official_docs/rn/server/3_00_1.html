@@ -1,0 +1,498 @@
+<!DOCTYPE html><html xmlns="http://www.w3.org/1999/xhtml" xml:lang="zh" lang="zh" data-whc_version="26.0">
+    <head><link rel="shortcut icon" href="../../favicon.ico"/><link rel="icon" href="../../favicon.ico"/><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><meta http-equiv="X-UA-Compatible" content="IE=edge"/><meta name="description" content="版本下载 版本号：3.00.1 二级兼容 2.00.12 和 3.00.0 发行日期： 2024-06-30 下载地址： 最新版： https://dolphindb.cn/product#downloads 历史版本： https://dolphindb.cn/history-versions 新增 remoteRunCompatible 函数，功能与 remoteRun ..."/><meta name="DC.rights.owner" content="(C) 版权 2024"/><meta name="copyright" content="(C) 版权 2024"/><meta name="generator" content="DITA-OT"/><meta name="DC.type" content="topic"/><meta name="DC.coverage" content=""/><meta name="prodname" content="DolphinDB"/><meta name="brand" content="DolphinDB"/><meta name="DC.creator" content="DolphinDB"/><meta name="DC.publisher" content="DDB N/A DDB 200"/><meta name="DC.format" content="HTML5"/><meta name="DC.identifier" content="_3_00_1"/><title>3.00.1</title><!--  Generated with Oxygen version 26.0, build number 2024012323.  --><meta name="wh-path2root" content="../../"/><meta name="wh-toc-id" content="_3_00_1-d9529e101835"/><meta name="wh-source-relpath" content="rn/server/3_00_1.dita"/><meta name="wh-out-relpath" content="rn/server/3_00_1.html"/>
+
+    <link rel="stylesheet" type="text/css" href="../../oxygen-webhelp/app/commons.css?buildId=2024012323"/>
+    <link rel="stylesheet" type="text/css" href="../../oxygen-webhelp/app/topic.css?buildId=2024012323"/>
+
+    <script src="../../oxygen-webhelp/app/options/properties.js?buildId=20240704100525"></script>
+    <script src="../../oxygen-webhelp/app/localization/strings.js?buildId=2024012323"></script>
+    <script src="../../oxygen-webhelp/app/search/index/keywords.js?buildId=20240704100525"></script>
+    <script defer="defer" src="../../oxygen-webhelp/app/commons.js?buildId=2024012323"></script>
+    <script defer="defer" src="../../oxygen-webhelp/app/topic.js?buildId=2024012323"></script>
+<link rel="stylesheet" type="text/css" href="../../oxygen-webhelp/template/styles.css?buildId=2024012323"/><script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script><script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script></head>
+
+    <body id="_3_00_1" class="wh_topic_page frmBody">
+        <a href="#wh_topic_body" class="sr-only sr-only-focusable">
+            跳转到主要内容
+        </a>
+        
+        
+        
+        
+        <header class="navbar navbar-default wh_header">
+    <div class="container-fluid">
+        <div xmlns:whc="http://www.oxygenxml.com/webhelp/components" class="wh_header_flex_container navbar-nav navbar-expand-md navbar-dark">
+            <div class="wh_logo_and_publication_title_container">
+                <div class="wh_logo_and_publication_title">
+                    
+                    <a href="https://www.dolphindb.cn" class=" wh_logo d-none d-sm-block "><img src="../../logo.png" alt="  DolphinDB 文档中心  "/></a>
+                    <div class=" wh_publication_title "><a href="../../index.html"><span class="booktitle">  <span class="ph mainbooktitle">DolphinDB 文档中心</span>  </span></a></div>
+                    
+                </div>
+                
+                
+            </div>
+
+            <div class="wh_top_menu_and_indexterms_link collapse navbar-collapse" id="wh_top_menu_and_indexterms_link">
+                
+                
+                
+                
+            </div>
+        <div class=" wh_search_input navbar-form wh_topic_page_search search " role="form">
+            
+            
+            
+            <form id="searchForm" method="get" role="search" action="../../search.html"><div><input type="search" placeholder="搜索 " class="wh_search_textfield" id="textToSearch" name="searchQuery" aria-label="搜索查询" required="required"/><button type="submit" class="wh_search_button" aria-label="搜索"><span class="search_input_text">搜索</span></button></div></form>
+            
+            <script src="/vendors/react/umd/react.production.min.js" defer="defer"></script>
+<script src="/vendors/react-dom/umd/react-dom.production.min.js" defer="defer"></script>
+<script src="/vendors/dayjs/dayjs.min.js" defer="defer"></script>
+<script src="/vendors/antd/dist/antd.min.js" defer="defer"></script>
+<script src="/vendors/@ant-design/icons/dist/index.umd.min.js" defer="defer"></script>
+<script src="/zh/index.js" type="module"></script>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js" defer="defer"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML" defer="defer"><!--
+
+
+--></script>
+
+            
+        </div></div>
+    </div>
+</header>
+        
+        
+         
+        
+        
+        
+        <div class="container-fluid" id="wh_topic_container">
+            <div class="row">
+
+                <nav class="wh_tools d-print-none navbar-expand-md" aria-label="Tools">
+                    
+                    <div data-tooltip-position="bottom" class=" wh_breadcrumb "><ol class="d-print-none"><li><span class="home"><a href="../../index.html"><span>主页</span></a></span></li><li><div class="topicref"><div class="title"><a href="../../rn/server/3_00_1.html">版本说明</a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 版本发布历史</p></div></div></div></li><li><div class="topicref"><div class="title"><a href="../../rn/server/3_00_1.html">Server</a></div></div></li><li class="active"><div class="topicref" data-id="_3_00_1"><div class="title"><a href="../../rn/server/3_00_1.html">3.00.1</a></div></div></li></ol></div>
+                    
+                    
+                    
+                    <div class="wh_right_tools">
+                        <button class="wh_hide_highlight" aria-label="切换搜索突出显示" title="切换搜索突出显示"></button>
+                        <button class="webhelp_expand_collapse_sections" data-next-state="collapsed" aria-label="折叠截面" title="折叠截面"></button>
+                        
+                        
+                        
+                        
+                        <div class=" wh_print_link print d-none d-md-inline-block "><button onClick="window.print()" title="打印此页" aria-label="打印此页"></button></div>
+                        
+                        <button type="button" id="wh_toc_button" class="custom-toggler navbar-toggler collapsed wh_toggle_button navbar-light" aria-expanded="false" aria-label="Toggle publishing table of content" aria-controls="wh_publication_toc">
+                            <span class="navbar-toggler-icon"></span>
+                        </button>
+                    </div>
+                    
+                </nav>
+            </div>
+            
+            
+            
+            
+            <div class="wh_content_area">
+                <div class="row">
+                    
+                        <nav id="wh_publication_toc" class="col-lg-3 col-md-3 col-sm-12 d-md-block d-none d-print-none" aria-label="Table of Contents Container">
+                            <div id="wh_publication_toc_content">
+		                        
+                            	<div class=" wh_publication_toc " data-tooltip-position="right"><span class="expand-button-action-labels"><span id="button-expand-action" role="button" aria-label="Expand"></span><span id="button-collapse-action" role="button" aria-label="Collapse"></span><span id="button-pending-action" role="button" aria-label="Pending"></span></span><ul role="tree" aria-label="Table of Contents"><li role="treeitem"><div data-tocid="new_chap_about_sect_ddb_docs_intro-d9529e87" class="topicref" data-id="new_chap_about_sect_ddb_docs_intro" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../about/ddb_docs_intro.html" id="new_chap_about_sect_ddb_docs_intro-d9529e87-link">文档使用说明</a><div class="wh-tooltip"><p class="shortdesc">如何获取 DolphinDB 帮助信息</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="chap1_getstarted-d9529e140" class="topicref" data-id="chap1_getstarted" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action chap1_getstarted-d9529e140-link" class="wh-expand-btn"></span><div class="title"><a href="../../getstarted/chap1_getstarted.html" id="chap1_getstarted-d9529e140-link"><span class="keyword label">快速上手</span></a><div class="wh-tooltip"><p class="shortdesc">如何快速部署 DolphinDB、建库建表、写入和查询数据</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="sectionddb_deployment-d9529e335" class="topicref" data-id="sectionddb_deployment" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action sectionddb_deployment-d9529e335-link" class="wh-expand-btn"></span><div class="title"><a href="../../deploy/deploy_intro.html" id="sectionddb_deployment-d9529e335-link"><span class="keyword label">部署</span></a><div class="wh-tooltip"><p class="shortdesc">如何在不同的场景中部署 DolphinDB</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="new_chap_database_manage_new_chap_dbmanage_landing_page-d9529e2313" class="topicref" data-id="new_chap_database_manage_new_chap_dbmanage_landing_page" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action new_chap_database_manage_new_chap_dbmanage_landing_page-d9529e2313-link" class="wh-expand-btn"></span><div class="title"><a href="../../db_distr_comp/cfg/db_intro.html" id="new_chap_database_manage_new_chap_dbmanage_landing_page-d9529e2313-link"><span class="keyword label">数据库</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 数据库的基本概念</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="chap7_tutorials_streaming-d9529e3490" class="topicref" data-id="chap7_tutorials_streaming" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action chap7_tutorials_streaming-d9529e3490-link" class="wh-expand-btn"></span><div class="title"><a href="../../stream/str_intro.html" id="chap7_tutorials_streaming-d9529e3490-link"><span class="keyword label">流数据</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 流数据引擎及流数据计算的基本概念</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="tocId-d9529e7385" class="topicref" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action tocId-d9529e7385-link" class="wh-expand-btn"></span><div class="title"><a href="../../db_distr_comp/db_oper/import_data.html" id="tocId-d9529e7385-link">数据迁移</a><div class="wh-tooltip"><p class="shortdesc">如何从不同数据源向 DolphinDB 迁移数据</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="chap7_tutorials_system_management-d9529e7812" class="topicref" data-id="chap7_tutorials_system_management" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action chap7_tutorials_system_management-d9529e7812-link" class="wh-expand-btn"></span><div class="title"><a href="../../sys_man/om_intro.html" id="chap7_tutorials_system_management-d9529e7812-link"><span class="keyword label">系统运维</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 的系统运维功能及方法</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="about_language_resources-d9529e16490" class="topicref" data-id="about_language_resources" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action about_language_resources-d9529e16490-link" class="wh-expand-btn"></span><div class="title"><a href="../../progr/progr_intro.html" id="about_language_resources-d9529e16490-link"><span class="keyword label">编程语言</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 编程基本概念与方法、SQL 在 DolphinDB 的应用</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="functions_references-d9529e26503" class="topicref" data-id="functions_references" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action functions_references-d9529e26503-link" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/funcs_intro.html" id="functions_references-d9529e26503-link"><span class="keyword label">函数参考</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 函数分类、语法、详解及示例</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="api_protocol-d9529e86456" class="topicref" data-id="api_protocol" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action api_protocol-d9529e86456-link" class="wh-expand-btn"></span><div class="title"><a href="../../api/connapi_intro.html" id="api_protocol-d9529e86456-link"><span class="keyword label">连接器 &amp; API</span></a><div class="wh-tooltip"><p class="shortdesc">面向不同编程语言的 DolphinDB API 及连接器，相关协议和用法</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="chap6_plugin-d9529e91976" class="topicref" data-id="chap6_plugin" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action chap6_plugin-d9529e91976-link" class="wh-expand-btn"></span><div class="title"><a href="../../plugins/plg_intro.html" id="chap6_plugin-d9529e91976-link"><span class="keyword label">插件</span></a><div class="wh-tooltip"><p class="shortdesc">多个应用场景的插件使用说明和插件开发指导</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="third_party-d9529e94749" class="topicref" data-id="third_party" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action third_party-d9529e94749-link" class="wh-expand-btn"></span><div class="title"><a href="../../third_party.html" id="third_party-d9529e94749-link">第三方工具</a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="about_tutorials-d9529e94980" class="topicref" data-id="about_tutorials" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action about_tutorials-d9529e94980-link" class="wh-expand-btn"></span><div class="title"><a href="../../tutorials/about_tutorials.html" id="about_tutorials-d9529e94980-link"><span class="keyword label">教程</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 产品使用教程</p></div></div></div></li><li role="treeitem" aria-expanded="true"><div data-tocid="tocId-d9529e101769" class="topicref" data-state="expanded"><span role="button" tabindex="0" aria-labelledby="button-collapse-action tocId-d9529e101769-link" class="wh-expand-btn"></span><div class="title"><a href="../../rn/server/3_00_1.html" id="tocId-d9529e101769-link">版本说明</a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 版本发布历史</p></div></div></div><ul role="group" class="navbar-nav nav-list"><li role="treeitem" aria-expanded="true"><div data-tocid="tocId-d9529e101834" class="topicref" data-state="expanded"><span role="button" tabindex="0" aria-labelledby="button-collapse-action tocId-d9529e101834-link" class="wh-expand-btn"></span><div class="title"><a href="../../rn/server/3_00_1.html" id="tocId-d9529e101834-link">Server</a></div></div><ul role="group" class="navbar-nav nav-list"><li role="treeitem" class="active"><div data-tocid="_3_00_1-d9529e101835" class="topicref" data-id="_3_00_1" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../rn/server/3_00_1.html" id="_3_00_1-d9529e101835-link">3.00.1</a></div></div></li><li role="treeitem"><div data-tocid="_3000-d9529e101881" class="topicref" data-id="_3000" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../rn/server/3000.html" id="_3000-d9529e101881-link">3.00.0</a></div></div></li></ul></li><li role="treeitem" aria-expanded="false"><div data-tocid="tocId-d9529e101927" class="topicref" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action tocId-d9529e101927-link" class="wh-expand-btn"></span><div class="title"><a href="../../rn/api/rn_cpp.html" id="tocId-d9529e101927-link">连接器和 API</a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="tocId-d9529e104551" class="topicref" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action tocId-d9529e104551-link" class="wh-expand-btn"></span><div class="title"><a href="../../rn/plugin/3_00_1.html" id="tocId-d9529e104551-link">插件</a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="tocId-d9529e104644" class="topicref" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action tocId-d9529e104644-link" class="wh-expand-btn"></span><div class="title"><a href="../../rn/rn_web.html" id="tocId-d9529e104644-link">客户端</a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="third_party_rn-d9529e104783" class="topicref" data-id="third_party_rn" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action third_party_rn-d9529e104783-link" class="wh-expand-btn"></span><div class="title"><a href="../../rn/server/third_party_rn.html" id="third_party_rn-d9529e104783-link">第三方工具</a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="compatibility_def-d9529e104921" class="topicref" data-id="compatibility_def" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action compatibility_def-d9529e104921-link" class="wh-expand-btn"></span><div class="title"><a href="../../rn/compat_def.html" id="compatibility_def-d9529e104921-link">版本兼容性说明</a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="tocId-d9529e105243" class="topicref" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action tocId-d9529e105243-link" class="wh-expand-btn"></span><div class="title"><a href="../../rn/compat_report_3001.html" id="tocId-d9529e105243-link">版本兼容性列表</a></div></div></li></ul></li></ul></div>
+		                        
+                            </div>
+                        </nav>
+                    
+                    
+                    <div class="col-lg-7 col-md-9 col-sm-12" id="wh_topic_body">
+                        <button id="wh_close_publication_toc_button" class="close-toc-button d-none" aria-label="Toggle publishing table of content" aria-controls="wh_publication_toc" aria-expanded="true">
+                            <span class="close-toc-icon-container">
+                                <span class="close-toc-icon"></span>     
+                            </span>
+                        </button>
+                        <button id="wh_close_topic_toc_button" class="close-toc-button d-none" aria-label="Toggle topic table of content" aria-controls="wh_topic_toc" aria-expanded="true">
+                            <span class="close-toc-icon-container">
+                                <span class="close-toc-icon"></span>     
+                            </span>
+                        </button>
+                        
+                        <div class=" wh_topic_content body "><main role="main"><article class="- topic/topic topic" role="article" aria-labelledby="ariaid-title1">
+    <h1 class="- topic/title title topictitle1" id="ariaid-title1">3.00.1</h1>
+    <div class="- topic/body body">
+        <section class="- topic/section section" id="_3_00_1__section_pys_rsd_xbc" data-ofbid="_3_00_1__section_pys_rsd_xbc"><h2 class="- topic/title title sectiontitle">版本下载</h2>
+            
+            <p class="- topic/p p">版本号：3.00.1 二级兼容 2.00.12 和 3.00.0</p>
+            <p class="- topic/p p">发行日期： 2024-06-30</p>
+            <p class="- topic/p p">下载地址：</p>
+            <ul class="- topic/ul ul" id="_3_00_1__ul_hvy_1td_xbc" data-ofbid="_3_00_1__ul_hvy_1td_xbc">
+                <li class="- topic/li li">最新版：<a class="- topic/xref xref" href="https://dolphindb.cn/product#downloads" target="_blank" rel="external noopener">https://dolphindb.cn/product#downloads</a></li>
+                <li class="- topic/li li">历史版本：<a class="- topic/xref xref" href="https://dolphindb.cn/history-versions" target="_blank" rel="external noopener">https://dolphindb.cn/history-versions</a></li>
+            </ul>
+        </section>
+    </div>
+    <article class="- topic/topic topic nested1" aria-labelledby="ariaid-title2" id="topic_kv2_jtd_xbc">
+        <h2 class="- topic/title title topictitle2" id="ariaid-title2">新功能</h2>
+        <div class="- topic/body body">
+            <ul class="- topic/ul ul" id="topic_kv2_jtd_xbc__ul_tgk_ltd_xbc" data-ofbid="topic_kv2_jtd_xbc__ul_tgk_ltd_xbc">
+                <li class="- topic/li li">
+                    <p class="- topic/p p">新增 <code class="+ topic/ph pr-d/codeph ph codeph">remoteRunCompatible</code> 函数，功能与 <code class="+ topic/ph pr-d/codeph ph codeph">remoteRun</code>
+                        相同。差别是此新增函数不对本地和远程数据库的版本进行验证。</p>
+                </li>
+                <li class="- topic/li li">
+                    <p class="- topic/p p"><code class="+ topic/ph pr-d/codeph ph codeph">scheduleJob</code> 新增参数 <em class="+ topic/ph hi-d/i ph i">priority</em> 和
+                        <em class="+ topic/ph hi-d/i ph i">parallelism</em>，用于设置定时任务的优先级和并行度。</p>
+                </li>
+                <li class="- topic/li li">
+                    <p class="- topic/p p"><code class="+ topic/ph pr-d/codeph ph codeph">saveText</code> 新增参数 <em class="+ topic/ph hi-d/i ph i">bom</em>，可以在导出文件时指定是否输出 bom 头。</p>
+                </li>
+                <li class="- topic/li li">
+                    <p class="- topic/p p">新增 <code class="+ topic/ph pr-d/codeph ph codeph">fminLBFGSB</code> 函数，支持使用 L-BFGS-B 算法找到目标函数的最小值。</p>
+                </li>
+                <li class="- topic/li li">
+                    <p class="- topic/p p">新增 <code class="+ topic/ph pr-d/codeph ph codeph">fminNCG</code> 函数，支持使用牛顿共轭梯度法对目标函数进行无约束最小化。</p>
+                </li>
+                <li class="- topic/li li">
+                    <p class="- topic/p p">新增 <code class="+ topic/ph pr-d/codeph ph codeph">fminBFGS</code> 函数，支持使用 BFGS 算法找到目标函数的最小值。</p>
+                </li>
+                <li class="- topic/li li">
+                    <p class="- topic/p p">新增 <code class="+ topic/ph pr-d/codeph ph codeph">fminSLSQP</code> 函数，支持使用顺序最小二乘编程方法找到目标函数的最小值。</p>
+                </li>
+                <li class="- topic/li li">
+                    <p class="- topic/p p">新增 <code class="+ topic/ph pr-d/codeph ph codeph">piecewiseLinFit</code> 和 <code class="+ topic/ph pr-d/codeph ph codeph">pwlfPredict</code>
+                        函数，用于拟合分段线性回归函数和根据回归模型对数据进行预测。</p>
+                </li>
+                <li class="- topic/li li">
+                    <p class="- topic/p p">新增 <code class="+ topic/ph pr-d/codeph ph codeph">brute</code> 函数，用于通过穷举法在给定范围内最小化一个函数。</p>
+                </li>
+                <li class="- topic/li li">
+                    <p class="- topic/p p">新增 <code class="+ topic/ph pr-d/codeph ph codeph">gaussianKde</code> 和 <code class="+ topic/ph pr-d/codeph ph codeph">gaussianKdePredict</code>
+                        函数，用于使用核密度估计方法中的高斯核来估计随机变量的概率密度，和根据回归模型对数据进行预测。</p>
+                </li>
+                <li class="- topic/li li">
+                    <p class="- topic/p p">新增 <code class="+ topic/ph pr-d/codeph ph codeph">vectorAR</code> 函数，用于使用向量自回归模型来分析多变量时间序列。</p>
+                </li>
+                <li class="- topic/li li">
+                    <p class="- topic/p p">新增 <code class="+ topic/ph pr-d/codeph ph codeph">eqPercent</code> 函数，用于根据自定义约束条件，判断两个输入参数的每个对应位置上的元素是否都相等。</p>
+                </li>
+                <li class="- topic/li li">
+                    <p class="- topic/p p">新增配置项 <em class="+ topic/ph hi-d/i ph i">batchJobFileRetentionTime</em>，用于设置批处理作业和定时任务执行后输出信息的最长保留时间。</p>
+                </li>
+                <li class="- topic/li li">
+                    <p class="- topic/p p">新增配置项 resourceSamplingLogDir，用于设置资源跟踪日志的存储路径。</p>
+                </li>
+                <li class="- topic/li li">
+                    <p class="- topic/p p">支持三元运算符(? :)。</p>
+                </li>
+                <li class="- topic/li li">
+                    <p class="- topic/p p">新增 tensor 数据类型，可与 DolphinDB 插件配合使用，实现与深度学习框架之间的数据交换和处理。</p>
+                </li>
+                <li class="- topic/li li">
+                    <p class="- topic/p p">新增配置项 <em class="+ topic/ph hi-d/i ph i">enableRDMA</em>，用于开启 RDMA 全新通讯架构。</p>
+                </li>
+                <li class="- topic/li li">
+                    <p class="- topic/p p">新增配置项 <em class="+ topic/ph hi-d/i ph i">allowTSDBLevel3Compaction</em>，用于设置是否启用 level 3 层级的 Level File
+                            的合并。同时，<code class="+ topic/ph pr-d/codeph ph codeph">triggerTSDBCompaction</code> 函数新增参数 <em class="+ topic/ph hi-d/i ph i">level</em>，
+                        用于指定触发哪一层级的 Level File 合并。</p>
+                </li>
+                <li class="- topic/li li">
+                    <p class="- topic/p p">新增配置项 <em class="+ topic/ph hi-d/i ph i">jobLogRetentionTime</em>， 用于设置数据节点上查询信息日志的最长保留时间。</p>
+                </li>
+                <li class="- topic/li li">
+                    <p class="- topic/p p"><code class="+ topic/ph pr-d/codeph ph codeph">createPartitionedTable</code>新增参数
+                        <em class="+ topic/ph hi-d/i ph i">indexes</em>，支持位列指定索引，以实现向量检索功能。</p>
+                </li>
+                <li class="- topic/li li">
+                    <p class="- topic/p p">新增 <code class="+ topic/ph pr-d/codeph ph codeph">removeNode</code> 函数，以支持动态删除计算节点。同时支持通过 <code class="+ topic/ph pr-d/codeph ph codeph">addNode</code>
+                        一次添加多个节点。</p>
+                </li>
+                <li class="- topic/li li">
+                    <p class="- topic/p p">支持 chimp 压缩算法。</p>
+                </li>
+                <li class="- topic/li li">
+                    <p class="- topic/p p"><code class="+ topic/ph pr-d/codeph ph codeph">database</code>的 <em class="+ topic/ph hi-d/i ph i">engine</em> 参数新增选项 “PKEY”，支持创建主键存储引擎，同时
+                            <code class="+ topic/ph pr-d/codeph ph codeph">createPartitionedTable</code>新增参数
+                        <em class="+ topic/ph hi-d/i ph i">primaryKey</em>，用于指定表的主键列。</p>
+                </li>
+                <li class="- topic/li li">
+                    <p class="- topic/p p">新增函数 <code class="+ topic/ph pr-d/codeph ph codeph">setTableComment</code>，用于为分布式表添加表注释。同时 create 语句新增参数
+                        comment，可在创建分布式表时添加表注释。</p>
+                </li>
+                <li class="- topic/li li">
+                    <p class="- topic/p p">新增配置项 <em class="+ topic/ph hi-d/i ph i">TSDBSymbolBaseEvictTime</em> 和
+                        <em class="+ topic/ph hi-d/i ph i">TSDBCachedSymbolBaseCapacity</em>，可以根据缓存时间或缓存容量来决定何时逐出未被使用的 symbolBase
+                        数据。同时新增函数 <code class="+ topic/ph pr-d/codeph ph codeph">clearAllTSDBSymbolBaseCache</code>，用于清除缓存中所有未被使用的
+                        symbolBase。</p>
+                </li>
+
+                <li class="- topic/li li">
+                    <p class="- topic/p p">SQL DELETE 语句和 sqlDelete 函数支持通过 join 来指定删除行。</p>
+                </li>
+                <li class="- topic/li li">
+                    <p class="- topic/p p">新增函数 setTableComment，用于为分布式表添加注释。同时 create 语句中新增参数 <em class="+ topic/ph hi-d/i ph i">comment</em>。</p>
+                </li>
+                <li class="- topic/li li">
+                    <p class="- topic/p p">新增配置项
+                        <em class="+ topic/ph hi-d/i ph i">memLimitOfAllTempResults</em>，用于设置分布式查询操作中产生的所有临时表可以占用的内存上限。同时新增了与其对应的函数
+                            <code class="+ topic/ph pr-d/codeph ph codeph">setMemLimitOfAllTempResults</code> 和
+                            <code class="+ topic/ph pr-d/codeph ph codeph">getMemLimitOfAllTempResults</code> 分别用于动态设置和获取配置项。</p>
+                </li>
+                <li class="- topic/li li">
+                    <p class="- topic/p p">新增配置项 <em class="+ topic/ph hi-d/i ph i">enableInsertStatementForDFSTable</em>，用于设置是否允许 insert into 语句插入 DFS
+                        表。</p>
+                </li>
+                <li class="- topic/li li">
+                    <p class="- topic/p p">insert into 支持插入多行数据。</p>
+                </li>
+            </ul>
+        </div>
+    </article>
+    <article class="- topic/topic topic nested1" aria-labelledby="ariaid-title3" id="topic_bbg_5td_xbc">
+        <h2 class="- topic/title title topictitle2" id="ariaid-title3">功能优化</h2>
+        <div class="- topic/body body">
+            <ul class="- topic/ul ul" id="topic_bbg_5td_xbc__ul_tst_xtd_xbc" data-ofbid="topic_bbg_5td_xbc__ul_tst_xtd_xbc">
+                <li class="- topic/li li">
+                    <p class="- topic/p p">优化 <code class="+ topic/ph pr-d/codeph ph codeph">interval</code> 函数的以下功能：</p>
+                    <ul class="- topic/ul ul" id="topic_bbg_5td_xbc__ul_ust_xtd_xbc" data-ofbid="topic_bbg_5td_xbc__ul_ust_xtd_xbc">
+                        <li class="- topic/li li">
+                            <p class="- topic/p p"><em class="+ topic/ph hi-d/i ph i">duration</em> 参数支持交易日历。</p>
+                        </li>
+                        <li class="- topic/li li">
+                            <p class="- topic/p p">当参数 <em class="+ topic/ph hi-d/i ph i">duration</em> 和 <em class="+ topic/ph hi-d/i ph i">step</em> 长度不同时，
+                                在对非分区表的查询中可以对查询列应用自定义聚合函数。</p>
+                        </li>
+                    </ul>
+                </li>
+                <li class="- topic/li li">
+                    <p class="- topic/p p"><code class="+ topic/ph pr-d/codeph ph codeph">flatten</code> 函数支持元组嵌套。</p>
+                </li>
+                <li class="- topic/li li">
+                    <p class="- topic/p p"><code class="+ topic/ph pr-d/codeph ph codeph">logisticRegression</code> 函数精度与 SKLearn 中相应函数对齐。</p>
+                </li>
+                <li class="- topic/li li">
+                    <p class="- topic/p p">提高函数 <code class="+ topic/ph pr-d/codeph ph codeph">std</code>, <code class="+ topic/ph pr-d/codeph ph codeph">stdp</code>, <code class="+ topic/ph pr-d/codeph ph codeph">var</code>,
+                            <code class="+ topic/ph pr-d/codeph ph codeph">varp</code>, <code class="+ topic/ph pr-d/codeph ph codeph">skew</code>, <code class="+ topic/ph pr-d/codeph ph codeph">kurtosis</code>
+                        的精度。</p>
+                </li>
+                <li class="- topic/li li">
+                    <p class="- topic/p p">高阶函数 <code class="+ topic/ph pr-d/codeph ph codeph">moving</code> 的参数 <em class="+ topic/ph hi-d/i ph i">func</em> 支持返回 tuple 的函数。</p>
+                </li>
+                <li class="- topic/li li">
+                    <p class="- topic/p p"><code class="+ topic/ph pr-d/codeph ph codeph">addMetrics</code> 新增支持 <em class="+ topic/ph hi-d/i ph i">fill</em> 参数，可以指定对空值处理方法。</p>
+                </li>
+                <li class="- topic/li li">
+                    <p class="- topic/p p"><code class="+ topic/ph pr-d/codeph ph codeph">parseJsonTable</code> 函数支持传入的表中包含 BLOB 类型的列。</p>
+                </li>
+                <li class="- topic/li li">
+                    <p class="- topic/p p"><code class="+ topic/ph pr-d/codeph ph codeph">isDuplicated</code> 函数支持 BLOB 类型。</p>
+                </li>
+                <li class="- topic/li li">
+                    <p class="- topic/p p"><code class="+ topic/ph pr-d/codeph ph codeph">fmin</code> 函数优化输入参数。</p>
+                </li>
+                <li class="- topic/li li">
+                    <p class="- topic/p p"><code class="+ topic/ph pr-d/codeph ph codeph">rowAlign</code> 函数支持列式元组。</p>
+                </li>
+                <li class="- topic/li li">
+                    <p class="- topic/p p"><code class="+ topic/ph pr-d/codeph ph codeph">rolling</code> 函数支持显示行标签。</p>
+                </li>
+                <li class="- topic/li li">
+                    <p class="- topic/p p">元编程中的列别名支持使用宏变量。</p>
+                </li>
+                <li class="- topic/li li">
+                    <p class="- topic/p p"><code class="+ topic/ph pr-d/codeph ph codeph">registerSnapshotEngine</code> 函数新增参数
+                        <em class="+ topic/ph hi-d/i ph i">dedupColumnName</em>，以支持在集群中所有数据节点上为分布式表注册快照引擎。</p>
+                </li>
+                <li class="- topic/li li">
+                    <p class="- topic/p p">模式符号可以搭配系统内置，作为一个运算符。</p>
+                </li>
+                <li class="- topic/li li">
+                    <p class="- topic/p p"><code class="+ topic/ph pr-d/codeph ph codeph">restore</code> 函数的 <em class="+ topic/ph hi-d/i ph i">snapshot</em> 参数的默认值由 true 修改为 false。</p>
+                </li>
+                <li class="- topic/li li">
+                    <p class="- topic/p p">异步复制中从集群中不再需要通过<em class="+ topic/ph hi-d/i ph i">clusterReplicationExecutionPassword</em> 配置密码，以提高安全性。</p>
+                </li>
+                <li class="- topic/li li">
+                    <p class="- topic/p p">提升 TSDB redolog 回放性能。</p>
+                </li>
+                <li class="- topic/li li">
+                    <p class="- topic/p p"><code class="+ topic/ph pr-d/codeph ph codeph">version</code> 函数支持返回更多版本信息。</p>
+                </li>
+                <li class="- topic/li li">
+                    <p class="- topic/p p"><code class="+ topic/ph pr-d/codeph ph codeph">clearAllCache</code> 新增支持清理 TSDB 引擎相关的缓存。</p>
+                </li>
+                <li class="- topic/li li">
+                    <p class="- topic/p p">TSDB 数据写入时可以压缩空值列。</p>
+                </li>
+                <li class="- topic/li li">
+                    <p class="- topic/p p"><code class="+ topic/ph pr-d/codeph ph codeph">createSchema</code> 不支持将数据库同时加到两个 catalog 中。</p>
+                </li>
+                <li class="- topic/li li">优化订单簿引擎的以下功能：<ul class="- topic/ul ul" id="topic_bbg_5td_xbc__ul_efw_ztd_xbc" data-ofbid="topic_bbg_5td_xbc__ul_efw_ztd_xbc">
+                        <li class="- topic/li li">
+                            <p class="- topic/p p">报错日志等级修改为 WARNING。</p>
+                        </li>
+                        <li class="- topic/li li">
+                            <p class="- topic/p p"><code class="+ topic/ph pr-d/codeph ph codeph">createOrderBookSnapshotEngine</code> 新增参数
+                                    <em class="+ topic/ph hi-d/i ph i">useSystemTime</em>，支持使用系统时间来触发快照输出。</p>
+                        </li>
+                    </ul></li>
+                <li class="- topic/li li">优化响应式状态引擎的以下功能：<ul class="- topic/ul ul" id="topic_bbg_5td_xbc__ul_pyb_dvd_xbc" data-ofbid="topic_bbg_5td_xbc__ul_pyb_dvd_xbc">
+                        <li class="- topic/li li">
+                            <p class="- topic/p p">支持对 array vector 列使用 <code class="+ topic/ph pr-d/codeph ph codeph">prev</code> 函数。</p>
+                        </li>
+                        <li class="- topic/li li">
+                            <p class="- topic/p p">优化报错信息。</p>
+                        </li>
+                        <li class="- topic/li li">
+                            <p class="- topic/p p">新增支持 35 个 topN 状态函数。</p>
+                        </li>
+                        <li class="- topic/li li">
+                            <p class="- topic/p p"><em class="+ topic/ph hi-d/i ph i">keyColumn </em>由必填参数修改为可选参数。</p>
+                        </li>
+                        <li class="- topic/li li">
+                            <p class="- topic/p p">自定义状态函数中赋值语句的右值支持返回多个值的自定义函数。</p>
+                        </li>
+                    </ul></li>
+                <li class="- topic/li li"><code class="+ topic/ph pr-d/codeph ph codeph">createLookupJoinEngine</code> 的参数 <em class="+ topic/ph hi-d/i ph i">rightTable</em> 支持指定为元代码。</li>
+                <li class="- topic/li li">如下流计算引擎的 <em class="+ topic/ph hi-d/i ph i">metrics</em> 支持指定为常数标量或向量：<code class="+ topic/ph pr-d/codeph ph codeph">createReactiveStateEngine</code>,
+                        <code class="+ topic/ph pr-d/codeph ph codeph">createAsofJoinEngine</code>，<code class="+ topic/ph pr-d/codeph ph codeph">createLookupJoinEngine</code>，<code class="+ topic/ph pr-d/codeph ph codeph">createEquiJoinEngine</code>，<code class="+ topic/ph pr-d/codeph ph codeph">createLeftSemiJoinEngine</code>
+                    。</li>
+                <li class="- topic/li li"><code class="+ topic/ph pr-d/codeph ph codeph">enableTablePersistence</code> 和
+                        <code class="+ topic/ph pr-d/codeph ph codeph">enableTableShareAndPersistence</code> 函数新增参数
+                        <em class="+ topic/ph hi-d/i ph i">cachepurgeTimeColumn</em>, <em class="+ topic/ph hi-d/i ph i">cachePurgeInterval</em>,
+                        <em class="+ topic/ph hi-d/i ph i">cacheRetentionTime</em>，用于设置持久化流表在内存中的数据清理策略。</li>
+                <li class="- topic/li li"><code class="+ topic/ph pr-d/codeph ph codeph">createTimeSeriesEngine</code> 和
+                        <code class="+ topic/ph pr-d/codeph ph codeph">createDailyTimeSeriesEngine</code> 的 <em class="+ topic/ph hi-d/i ph i">acceptedDelay
+                    </em>参数支持根据数据时间来设置关闭窗口的延时。</li>
+                <li class="- topic/li li">如下流计算引擎新增支持 <em class="+ topic/ph hi-d/i ph i">outputHandler</em>, <em class="+ topic/ph hi-d/i ph i">msgAsTable</em>
+                        参数，支持输出结果到一个一元函数：<code class="+ topic/ph pr-d/codeph ph codeph">createTimeSeriesEngine</code>,
+                        <code class="+ topic/ph pr-d/codeph ph codeph">createDailyTimeSeriesEngine</code>,
+                        <code class="+ topic/ph pr-d/codeph ph codeph">createReactiveStateEngine</code>,
+                        <code class="+ topic/ph pr-d/codeph ph codeph">createDualOwnershipReactiveStateEngine</code>,
+                        <code class="+ topic/ph pr-d/codeph ph codeph">createNarrowReactiveStateEngine</code>。</li>
+                <li class="- topic/li li">优化 SQL JOIN 的以下功能：<ul class="- topic/ul ul" id="topic_bbg_5td_xbc__ul_vcd_c5d_xbc" data-ofbid="topic_bbg_5td_xbc__ul_vcd_c5d_xbc">
+                        <li class="- topic/li li">
+                            <p class="- topic/p p">INNER JOIN 和 LEFT JOIN 支持生成 IN 谓词的 动态过滤条件（Runtime
+                                Filter），以提升查询性能。</p>
+                        </li>
+                        <li class="- topic/li li">
+                            <p class="- topic/p p">提升对分区字段进行过滤，同时搭配 LIMIT 字段时的查询性能。</p>
+                        </li>
+                        <li class="- topic/li li">
+                            <p class="- topic/p p">CASE WHEN 语句支持分析函数 OVER(PARTITION BY xxx)。</p>
+                        </li>
+                    </ul></li>
+                <li class="- topic/li li">
+                    <p class="- topic/p p">优化 JIT 高阶函数 <code class="+ topic/ph pr-d/codeph ph codeph">accumulate</code> 和 <code class="+ topic/ph pr-d/codeph ph codeph">reduce</code>。</p>
+                </li>
+                <li class="- topic/li li">
+                    <p class="- topic/p p">JIT 支持处理索引矩阵。</p>
+                </li>
+            </ul>
+        </div>
+    </article>
+    <article class="- topic/topic topic nested1" aria-labelledby="ariaid-title4" id="topic_rvk_d5d_xbc">
+        <h2 class="- topic/title title topictitle2" id="ariaid-title4">故障修复</h2>
+        <div class="- topic/body body">
+            <ul class="- topic/ul ul" id="topic_rvk_d5d_xbc__ul_ydj_25d_xbc" data-ofbid="topic_rvk_d5d_xbc__ul_ydj_25d_xbc">
+                <li class="- topic/li li">
+                    <p class="- topic/p p"><code class="+ topic/ph pr-d/codeph ph codeph">qclp</code> 函数计算目标函数时，返回非预期结果。</p>
+                </li>
+                <li class="- topic/li li">
+                    <p class="- topic/p p"><code class="+ topic/ph pr-d/codeph ph codeph">saveText</code> 函数传入字符串对象引起宕机。</p>
+                </li>
+                <li class="- topic/li li">
+                    <p class="- topic/p p">同时使用 <code class="+ topic/ph pr-d/codeph ph codeph">at</code> 和 <code class="+ topic/ph pr-d/codeph ph codeph">eachRight</code> 或
+                            <code class="+ topic/ph pr-d/codeph ph codeph">eachLeft</code> 时宕机。</p>
+                </li>
+                <li class="- topic/li li">
+                    <p class="- topic/p p">使用 <code class="+ topic/ph pr-d/codeph ph codeph">loadText</code> 加载文件太大（一行数据超过 2 GB）引起宕机。</p>
+                </li>
+                <li class="- topic/li li">
+                    <p class="- topic/p p">继承 class 时使用 <code class="+ topic/ph pr-d/codeph ph codeph">dict</code> 函数无法被识别。</p>
+                </li>
+                <li class="- topic/li li">
+                    <p class="- topic/p p">函数 <code class="+ topic/ph pr-d/codeph ph codeph">getUserHardwareUsage</code> 因内部计算错误导致参数设为日期时不生效。</p>
+                </li>
+                <li class="- topic/li li">
+                    <p class="- topic/p p">函数 <code class="+ topic/ph pr-d/codeph ph codeph">getSlaveReplicationQueueStatus</code> 返回值中的 executionSet
+                        字段偶现随机值。</p>
+                </li>
+                <li class="- topic/li li">
+                    <p class="- topic/p p"><code class="+ topic/ph pr-d/codeph ph codeph">getQueryStatus</code> 函数返回值中的 startTime 未进行时区转换。</p>
+                </li>
+                <li class="- topic/li li">
+                    <p class="- topic/p p"><code class="+ topic/ph pr-d/codeph ph codeph">loadText</code> 函数将符合某些条件的字符串误识别为 DATE 类型，导致无法加载数据。</p>
+                </li>
+                <li class="- topic/li li">
+                    <p class="- topic/p p">将模块或插件中没有返回值的函数添加为functionView 失败。</p>
+                </li>
+                <li class="- topic/li li">
+                    <p class="- topic/p p">ARM 环境中使用 OpenBLAS 进行多线程计算引发宕机。</p>
+                </li>
+                <li class="- topic/li li">
+                    <p class="- topic/p p">键值内存表更新 array vector 数据时，出现报错。</p>
+                </li>
+                <li class="- topic/li li">windows join 中指定聚合函数为 <code class="+ topic/ph pr-d/codeph ph codeph">count(head())</code> 导致 server 崩溃。</li>
+                <li class="- topic/li li">
+                    <p class="- topic/p p">SQL 语句同时满足以下条件：包含 group by 子句，from 子句为一个空表，select 子句中包含自定义变量时，会出现解析错误。</p>
+                </li>
+                <li class="- topic/li li">
+                    <p class="- topic/p p">pj 连接时，若左右表按连接列排序，对于左表某行，只选取右表中的第一个连续匹配的行数据，导致结果中缺少数据。</p>
+                </li>
+                <li class="- topic/li li">
+                    <p class="- topic/p p">在 join 查询中，如果指定的连接列的列名与表中实际的列名大小写不一致，会导致执行计划未被优化。</p>
+                </li>
+                <li class="- topic/li li">
+                    <p class="- topic/p p">WHERE 子句中 IN 的右值为内存表时，没有分区剪枝。</p>
+                </li>
+            </ul>
+        </div>
+    </article>
+</article></main></div>
+                        
+                        
+                        
+                        
+                        
+                        
+                    </div>
+                    
+                        <nav role="navigation" id="wh_topic_toc" aria-label="On this page" class="col-lg-2 d-none d-lg-block navbar d-print-none"> 
+                            <div id="wh_topic_toc_content">
+		                        
+	                            <div class=" wh_topic_toc "><div class="wh_topic_label">在本页上</div><ul><li class="section-item"><div class="section-title"><a href="#_3_00_1__section_pys_rsd_xbc" data-tocid="_3_00_1__section_pys_rsd_xbc">版本下载</a></div></li><li class="topic-item"><a href="#topic_kv2_jtd_xbc" data-tocid="topic_kv2_jtd_xbc">新功能</a></li><li class="topic-item"><a href="#topic_bbg_5td_xbc" data-tocid="topic_bbg_5td_xbc">功能优化</a></li><li class="topic-item"><a href="#topic_rvk_d5d_xbc" data-tocid="topic_rvk_d5d_xbc">故障修复</a></li></ul></div>
+	                        	
+                        	</div>
+                        </nav>
+                    
+                </div>
+            </div>
+            
+            
+            
+        </div> 
+        <footer class="navbar navbar-default wh_footer">
+  <div class=" footer-container mx-auto ">
+<title>Copyright</title><p><b> ©2024 浙江智臾科技有限公司 浙ICP备18048711号-3</b></p>
+  </div>
+</footer>
+        
+        <div id="go2top" class="d-print-none">
+            <span class="oxy-icon oxy-icon-up"></span>
+        </div>
+        
+        <div id="modal_img_large" class="modal">
+            <span class="close oxy-icon oxy-icon-remove"></span>
+            <div id="modal_img_container"></div>
+            <div id="caption"></div>
+        </div>
+        
+        
+        
+    </body>
+</html>

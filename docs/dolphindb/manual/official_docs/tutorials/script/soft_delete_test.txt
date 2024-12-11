@@ -1,0 +1,113 @@
+if(existsDatabase("dfs://softDelete.level2_tl")){
+    dropDatabase("dfs://softDelete.level2_tl")
+}
+db1 = database(,VALUE,[2023.01.01])
+db2 = database(,HASH,[SYMBOL, 25])
+db = database("dfs://softDelete.level2_tl",COMPO,[db1,db2],,"TSDB")
+colName = `ChannelNo`ApplSeqNum`MDStreamID`SecurityID`SecurityIDSource`Price`OrderQty`Side`TradeTIme`OrderType`OrderIndex`LocalTime`SeqNo`Market`DataStatus`BizIndex
+colType = [INT,LONG,INT,SYMBOL,INT,DOUBLE,INT,SYMBOL,TIMESTAMP,SYMBOL,INT,TIME,LONG,SYMBOL,INT,LONG]
+tbSchema = table(1:0, colName, colType)
+db.createPartitionedTable(table=tbSchema,tableName=`entrust,partitionColumns=`TradeTIme`SecurityID,sortColumns=`Market`SecurityID`TradeTIme,keepDuplicates=LAST,softDelete=true)
+
+if(existsDatabase("dfs://softDelete.level2_tl1")){
+    dropDatabase("dfs://softDelete.level2_tl1")
+}
+db1 = database(,VALUE,[2023.01.01])
+db2 = database(,HASH,[SYMBOL, 25])
+db = database("dfs://softDelete.level2_tl1",COMPO,[db1,db2],,"TSDB")
+db.createPartitionedTable(table=tbSchema,tableName=`entrust1,partitionColumns=`TradeTIme`SecurityID,sortColumns=`Market`SecurityID`TradeTIme,keepDuplicates=LAST,softDelete=false)
+
+def test1(s){
+    delete from loadTable("dfs://softDelete.level2_tl","entrust") where Price < s
+    flushTSDBCache()
+}
+def test2(s){
+    delete from loadTable("dfs://softDelete.level2_tl1","entrust1") where Price < s
+    flushTSDBCache()
+}
+def test3(){
+    select * from loadTable("dfs://softDelete.level2_tl","entrust")
+}    
+def test4(){
+    select * from loadTable("dfs://softDelete.level2_tl1","entrust1")
+}
+
+t1 = table(1:0,`一个分区数据量`数据删除百分比`软删除删除的数据量`硬删除删除的数据量`软删除delete时间`硬删除delete时间`软删除不合并查询数据`硬删除不合并查询数据`软删除查询数据`硬删除查询数据`软删除删除后数据量`硬删除删除后数据量,[INT,INT,INT,INT,DOUBLE,DOUBLE,DOUBLE,DOUBLE,DOUBLE,DOUBLE,INT,INT])
+
+num11111 = [1000000,5000000,10000000,30000000]
+
+for(n in num11111){
+    for(s in 1..9*10){
+        for(i in 1:20){
+            jobId = array(string)
+            for(j in 1:51){
+                
+                Symbol = `000021`000155`000418`000673`000757`000759`000851`000856`000909`000961
+                TradeTime = array(timestamp)
+                for(i in 0:Symbol.size()){
+                    TradeTime.append!(2015.07.01 09:15:00.160..((2015.07.01 09:15:00.160+n/10)-1))
+                }
+                TradeTime = TradeTime+j*86400000
+                t = table(
+                    take(int(),n) as ChannelNo,
+                    take(long(),n) as ApplSeqNum,
+                    take(int(),n) as MDStreamID,
+                    take(Symbol,n) as SecurityID,
+                    take(int(),n) as SecurityIDSource,
+                    take(0..99,n) as Price,
+                    rand(20,n)*100 as OrderQty,
+                    rand(`S`B,n) as Side,
+                    TradeTime as TradeTIme,
+                    take(["0","1","2"],n) as OrderType,
+                    take(int(),n) as OrderIndex,
+                    take(time(),n) as LocalTime,
+                    take(long(),n) as SeqNo,
+                    take(`sz,n) as Market,
+                    take(int(),n) as DataStatus,
+                    take(long(),n) as BizIndex
+                )
+                jobId.append!(submitJob("tt"+rand(100,1)[0],"t",append!,loadTable("dfs://softDelete.level2_tl","entrust"),t))
+                jobId.append!(submitJob("tt"+rand(100,1)[0],"t",append!,loadTable("dfs://softDelete.level2_tl1","entrust1"),t))
+            }
+            for(i in jobId){
+                getJobReturn(i,true)
+            }
+            // peach(append!,loadTable("dfs://softDelete.level2_tl","entrust"), t)
+            // peach(append!,loadTable("dfs://softDelete.level2_tl1","entrust1"), t).
+            flushTSDBCache()
+
+            num1 = exec count(*) from loadTable("dfs://softDelete.level2_tl","entrust") where Price < s
+            num2 = exec count(*) from loadTable("dfs://softDelete.level2_tl1","entrust1") where Price < s
+            
+            for(dbName in getClusterDFSDatabases()) {clearCachedDatabase(dbName)};
+        
+            useSoftDelete = evalTimer(test1{s})
+            noUseSoftDelete = evalTimer(test2{s})
+            chunkIds = exec chunkId from getChunksMeta() where type=1  
+    
+            for(dbName in getClusterDFSDatabases()) {clearCachedDatabase(dbName)};
+        
+            useSoftDeleteQueryNoCompaction = evalTimer(test3)
+            noUseSoftDeleteQueryNoCompaction = evalTimer(test4)
+        
+            for (x in chunkIds) {
+                triggerTSDBCompaction(x)
+            }
+    
+            for(dbName in getClusterDFSDatabases()) {clearCachedDatabase(dbName)};
+    
+            useSoftDeleteQuery = evalTimer(test3)
+            noUseSoftDeleteQuery = evalTimer(test4)
+    
+            num11 = exec count(*) from loadTable("dfs://softDelete.level2_tl","entrust")
+            num12 = exec count(*) from loadTable("dfs://softDelete.level2_tl1","entrust1")
+            
+            insert into t2 values(n,s,num1[0],num2[0],useSoftDelete,noUseSoftDelete,useSoftDeleteQueryNoCompaction,noUseSoftDeleteQueryNoCompaction,useSoftDeleteQuery,noUseSoftDeleteQuery,num11[0],num12[0])
+            
+            truncate("dfs://softDelete.level2_tl","entrust")
+            truncate("dfs://softDelete.level2_tl1","entrust1")
+        }
+    }
+}
+
+select round(avg(软删除delete时间)/avg(硬删除delete时间),3) as a,round(avg(软删除不合并查询数据)/avg(硬删除不合并查询数据),3) as b,round(avg(软删除查询数据)/avg(硬删除查询数据),3) as c from t1 group by 数据删除百分比

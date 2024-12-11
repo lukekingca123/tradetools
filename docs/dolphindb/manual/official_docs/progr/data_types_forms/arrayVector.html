@@ -1,0 +1,683 @@
+<!DOCTYPE html><html xmlns="http://www.w3.org/1999/xhtml" xml:lang="zh" lang="zh" data-whc_version="26.0">
+    <head><link rel="shortcut icon" href="../../favicon.ico"/><link rel="icon" href="../../favicon.ico"/><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><meta http-equiv="X-UA-Compatible" content="IE=edge"/><meta name="description" content="DolphinDB 中的数组向量 (array vector) 是一种特殊的向量，用于存储可变长度的二维数组，如一段时间内股票的多档报价。数据表通常将数据类型相同且含义相近的多列存为一列，例如股票的多档报价数据。这种存储方式可显著简化某些常用的查询与计算。若不同列中含有大量重复数据，使用数组向量存储亦可提高数据压缩比，提升查询速度。 ..."/><meta name="DC.rights.owner" content="(C) 版权 2024"/><meta name="copyright" content="(C) 版权 2024"/><meta name="generator" content="DITA-OT"/><meta name="DC.type" content="topic"/><meta name="DC.coverage" content=""/><meta name="DC.subject" content="数组向量,array vector,arrayvector"/><meta name="keywords" content="数组向量, array vector, arrayvector"/><meta name="indexterms" content="数组向量, array vector, arrayvector"/><meta name="DC.relation" content="../../progr/data_types_forms/vector.html"/><meta name="prodname" content="DolphinDB"/><meta name="brand" content="DolphinDB"/><meta name="DC.creator" content="DolphinDB"/><meta name="DC.publisher" content="DDB N/A DDB 200"/><meta name="DC.format" content="HTML5"/><meta name="DC.identifier" content="数组向量array-vector"/><title>数组向量（array vector）</title><!--  Generated with Oxygen version 26.0, build number 2024012323.  --><meta name="wh-path2root" content="../../"/><meta name="wh-toc-id" content="数组向量array-vector-d9529e17131"/><meta name="wh-source-relpath" content="progr/data_types_forms/arrayVector.dita"/><meta name="wh-out-relpath" content="progr/data_types_forms/arrayVector.html"/>
+
+    <link rel="stylesheet" type="text/css" href="../../oxygen-webhelp/app/commons.css?buildId=2024012323"/>
+    <link rel="stylesheet" type="text/css" href="../../oxygen-webhelp/app/topic.css?buildId=2024012323"/>
+
+    <script src="../../oxygen-webhelp/app/options/properties.js?buildId=20240704100525"></script>
+    <script src="../../oxygen-webhelp/app/localization/strings.js?buildId=2024012323"></script>
+    <script src="../../oxygen-webhelp/app/search/index/keywords.js?buildId=20240704100525"></script>
+    <script defer="defer" src="../../oxygen-webhelp/app/commons.js?buildId=2024012323"></script>
+    <script defer="defer" src="../../oxygen-webhelp/app/topic.js?buildId=2024012323"></script>
+<link rel="stylesheet" type="text/css" href="../../oxygen-webhelp/template/styles.css?buildId=2024012323"/><script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script><script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script></head>
+
+    <body id="数组向量array-vector" class="wh_topic_page frmBody">
+        <a href="#wh_topic_body" class="sr-only sr-only-focusable">
+            跳转到主要内容
+        </a>
+        
+        
+        
+        
+        <header class="navbar navbar-default wh_header">
+    <div class="container-fluid">
+        <div xmlns:whc="http://www.oxygenxml.com/webhelp/components" class="wh_header_flex_container navbar-nav navbar-expand-md navbar-dark">
+            <div class="wh_logo_and_publication_title_container">
+                <div class="wh_logo_and_publication_title">
+                    
+                    <a href="https://www.dolphindb.cn" class=" wh_logo d-none d-sm-block "><img src="../../logo.png" alt="  DolphinDB 文档中心  "/></a>
+                    <div class=" wh_publication_title "><a href="../../index.html"><span class="booktitle">  <span class="ph mainbooktitle">DolphinDB 文档中心</span>  </span></a></div>
+                    
+                </div>
+                
+                
+            </div>
+
+            <div class="wh_top_menu_and_indexterms_link collapse navbar-collapse" id="wh_top_menu_and_indexterms_link">
+                
+                
+                
+                
+            </div>
+        <div class=" wh_search_input navbar-form wh_topic_page_search search " role="form">
+            
+            
+            
+            <form id="searchForm" method="get" role="search" action="../../search.html"><div><input type="search" placeholder="搜索 " class="wh_search_textfield" id="textToSearch" name="searchQuery" aria-label="搜索查询" required="required"/><button type="submit" class="wh_search_button" aria-label="搜索"><span class="search_input_text">搜索</span></button></div></form>
+            
+            <script src="/vendors/react/umd/react.production.min.js" defer="defer"></script>
+<script src="/vendors/react-dom/umd/react-dom.production.min.js" defer="defer"></script>
+<script src="/vendors/dayjs/dayjs.min.js" defer="defer"></script>
+<script src="/vendors/antd/dist/antd.min.js" defer="defer"></script>
+<script src="/vendors/@ant-design/icons/dist/index.umd.min.js" defer="defer"></script>
+<script src="/zh/index.js" type="module"></script>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js" defer="defer"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML" defer="defer"><!--
+
+
+--></script>
+
+            
+        </div></div>
+    </div>
+</header>
+        
+        
+         
+        
+        
+        
+        <div class="container-fluid" id="wh_topic_container">
+            <div class="row">
+
+                <nav class="wh_tools d-print-none navbar-expand-md" aria-label="Tools">
+                    
+                    <div data-tooltip-position="bottom" class=" wh_breadcrumb "><ol class="d-print-none"><li><span class="home"><a href="../../index.html"><span>主页</span></a></span></li><li><div class="topicref" data-id="about_language_resources"><div class="title"><a href="../../progr/progr_intro.html"><span class="keyword label">编程语言</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 编程基本概念与方法、SQL 在 DolphinDB 的应用</p></div></div></div></li><li><div class="topicref" data-id="chap4_db_programming"><div class="title"><a href="../../progr/lang_intro.html"><span class="keyword label">DolphinDB 脚本语言</span></a><div class="wh-tooltip"><p class="shortdesc"> 脚本编程相关概念参考，包括：数据类型与形式、对象、运算符、编程语句、数据操作、函数化编程、文件操作和 SQL 语句。 </p></div></div></div></li><li><div class="topicref" data-id="chap4_sect_datatypes_forms"><div class="title"><a href="../../progr/data_types_forms_intro.html"><span class="keyword">数据类型与形式</span></a></div></div></li><li><div class="topicref" data-id="chap4_sect_dataforms"><div class="title"><a href="../../progr/data_forms.html"><span class="keyword label">数据形式</span></a></div></div></li><li><div class="topicref" data-id="向量"><div class="title"><a href="../../progr/data_types_forms/vector.html"><span class="keyword label">向量</span></a></div></div></li><li class="active"><div class="topicref" data-id="数组向量array-vector"><div class="title"><a href="../../progr/data_types_forms/arrayVector.html"><span class="keyword label">数组向量（array vector）</span></a></div></div></li></ol></div>
+                    
+                    
+                    
+                    <div class="wh_right_tools">
+                        <button class="wh_hide_highlight" aria-label="切换搜索突出显示" title="切换搜索突出显示"></button>
+                        <button class="webhelp_expand_collapse_sections" data-next-state="collapsed" aria-label="折叠截面" title="折叠截面"></button>
+                        
+                        
+                        
+                        
+                        <div class=" wh_print_link print d-none d-md-inline-block "><button onClick="window.print()" title="打印此页" aria-label="打印此页"></button></div>
+                        
+                        <button type="button" id="wh_toc_button" class="custom-toggler navbar-toggler collapsed wh_toggle_button navbar-light" aria-expanded="false" aria-label="Toggle publishing table of content" aria-controls="wh_publication_toc">
+                            <span class="navbar-toggler-icon"></span>
+                        </button>
+                    </div>
+                    
+                </nav>
+            </div>
+            
+            
+            
+            
+            <div class="wh_content_area">
+                <div class="row">
+                    
+                        <nav id="wh_publication_toc" class="col-lg-3 col-md-3 col-sm-12 d-md-block d-none d-print-none" aria-label="Table of Contents Container">
+                            <div id="wh_publication_toc_content">
+		                        
+                            	<div class=" wh_publication_toc " data-tooltip-position="right"><span class="expand-button-action-labels"><span id="button-expand-action" role="button" aria-label="Expand"></span><span id="button-collapse-action" role="button" aria-label="Collapse"></span><span id="button-pending-action" role="button" aria-label="Pending"></span></span><ul role="tree" aria-label="Table of Contents"><li role="treeitem"><div data-tocid="new_chap_about_sect_ddb_docs_intro-d9529e87" class="topicref" data-id="new_chap_about_sect_ddb_docs_intro" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../about/ddb_docs_intro.html" id="new_chap_about_sect_ddb_docs_intro-d9529e87-link">文档使用说明</a><div class="wh-tooltip"><p class="shortdesc">如何获取 DolphinDB 帮助信息</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="chap1_getstarted-d9529e140" class="topicref" data-id="chap1_getstarted" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action chap1_getstarted-d9529e140-link" class="wh-expand-btn"></span><div class="title"><a href="../../getstarted/chap1_getstarted.html" id="chap1_getstarted-d9529e140-link"><span class="keyword label">快速上手</span></a><div class="wh-tooltip"><p class="shortdesc">如何快速部署 DolphinDB、建库建表、写入和查询数据</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="sectionddb_deployment-d9529e335" class="topicref" data-id="sectionddb_deployment" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action sectionddb_deployment-d9529e335-link" class="wh-expand-btn"></span><div class="title"><a href="../../deploy/deploy_intro.html" id="sectionddb_deployment-d9529e335-link"><span class="keyword label">部署</span></a><div class="wh-tooltip"><p class="shortdesc">如何在不同的场景中部署 DolphinDB</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="new_chap_database_manage_new_chap_dbmanage_landing_page-d9529e2313" class="topicref" data-id="new_chap_database_manage_new_chap_dbmanage_landing_page" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action new_chap_database_manage_new_chap_dbmanage_landing_page-d9529e2313-link" class="wh-expand-btn"></span><div class="title"><a href="../../db_distr_comp/cfg/db_intro.html" id="new_chap_database_manage_new_chap_dbmanage_landing_page-d9529e2313-link"><span class="keyword label">数据库</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 数据库的基本概念</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="chap7_tutorials_streaming-d9529e3490" class="topicref" data-id="chap7_tutorials_streaming" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action chap7_tutorials_streaming-d9529e3490-link" class="wh-expand-btn"></span><div class="title"><a href="../../stream/str_intro.html" id="chap7_tutorials_streaming-d9529e3490-link"><span class="keyword label">流数据</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 流数据引擎及流数据计算的基本概念</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="tocId-d9529e7385" class="topicref" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action tocId-d9529e7385-link" class="wh-expand-btn"></span><div class="title"><a href="../../db_distr_comp/db_oper/import_data.html" id="tocId-d9529e7385-link">数据迁移</a><div class="wh-tooltip"><p class="shortdesc">如何从不同数据源向 DolphinDB 迁移数据</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="chap7_tutorials_system_management-d9529e7812" class="topicref" data-id="chap7_tutorials_system_management" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action chap7_tutorials_system_management-d9529e7812-link" class="wh-expand-btn"></span><div class="title"><a href="../../sys_man/om_intro.html" id="chap7_tutorials_system_management-d9529e7812-link"><span class="keyword label">系统运维</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 的系统运维功能及方法</p></div></div></div></li><li role="treeitem" aria-expanded="true"><div data-tocid="about_language_resources-d9529e16490" class="topicref" data-id="about_language_resources" data-state="expanded"><span role="button" tabindex="0" aria-labelledby="button-collapse-action about_language_resources-d9529e16490-link" class="wh-expand-btn"></span><div class="title"><a href="../../progr/progr_intro.html" id="about_language_resources-d9529e16490-link"><span class="keyword label">编程语言</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 编程基本概念与方法、SQL 在 DolphinDB 的应用</p></div></div></div><ul role="group" class="navbar-nav nav-list"><li role="treeitem" aria-expanded="true"><div data-tocid="chap4_db_programming-d9529e16543" class="topicref" data-id="chap4_db_programming" data-state="expanded"><span role="button" tabindex="0" aria-labelledby="button-collapse-action chap4_db_programming-d9529e16543-link" class="wh-expand-btn"></span><div class="title"><a href="../../progr/lang_intro.html" id="chap4_db_programming-d9529e16543-link"><span class="keyword label">DolphinDB 脚本语言</span></a><div class="wh-tooltip"><p class="shortdesc"> 脚本编程相关概念参考，包括：数据类型与形式、对象、运算符、编程语句、数据操作、函数化编程、文件操作和 SQL 语句。 </p></div></div></div><ul role="group" class="navbar-nav nav-list"><li role="treeitem" aria-expanded="true"><div data-tocid="chap4_sect_datatypes_forms-d9529e16594" class="topicref" data-id="chap4_sect_datatypes_forms" data-state="expanded"><span role="button" tabindex="0" aria-labelledby="button-collapse-action chap4_sect_datatypes_forms-d9529e16594-link" class="wh-expand-btn"></span><div class="title"><a href="../../progr/data_types_forms_intro.html" id="chap4_sect_datatypes_forms-d9529e16594-link"><span class="keyword">数据类型与形式</span></a></div></div><ul role="group" class="navbar-nav nav-list"><li role="treeitem" aria-expanded="false"><div data-tocid="chap4_sect_data_type_description-d9529e16655" class="topicref" data-id="chap4_sect_data_type_description" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action chap4_sect_data_type_description-d9529e16655-link" class="wh-expand-btn"></span><div class="title"><a href="../../progr/data_types.html" id="chap4_sect_data_type_description-d9529e16655-link"><span class="keyword label">数据类型</span></a></div></div></li><li role="treeitem" aria-expanded="true"><div data-tocid="chap4_sect_dataforms-d9529e16771" class="topicref" data-id="chap4_sect_dataforms" data-state="expanded"><span role="button" tabindex="0" aria-labelledby="button-collapse-action chap4_sect_dataforms-d9529e16771-link" class="wh-expand-btn"></span><div class="title"><a href="../../progr/data_forms.html" id="chap4_sect_dataforms-d9529e16771-link"><span class="keyword label">数据形式</span></a></div></div><ul role="group" class="navbar-nav nav-list"><li role="treeitem"><div data-tocid="标量-d9529e16826" class="topicref" data-id="标量" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../progr/data_types_forms/Scalar.html" id="标量-d9529e16826-link"><span class="keyword label">标量</span></a></div></div></li><li role="treeitem"><div data-tocid="数据对-d9529e16887" class="topicref" data-id="数据对" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../progr/data_types_forms/Pair.html" id="数据对-d9529e16887-link"><span class="keyword label">数据对</span></a></div></div></li><li role="treeitem" aria-expanded="true"><div data-tocid="向量-d9529e16948" class="topicref" data-id="向量" data-state="expanded"><span role="button" tabindex="0" aria-labelledby="button-collapse-action 向量-d9529e16948-link" class="wh-expand-btn"></span><div class="title"><a href="../../progr/data_types_forms/vector.html" id="向量-d9529e16948-link"><span class="keyword label">向量</span></a></div></div><ul role="group" class="navbar-nav nav-list"><li role="treeitem"><div data-tocid="元组tuple-d9529e17009" class="topicref" data-id="元组tuple" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../progr/data_types_forms/TupleANYVector.html" id="元组tuple-d9529e17009-link"><span class="keyword label">元组 (tuple)</span></a></div></div></li><li role="treeitem"><div data-tocid="subarray-d9529e17070" class="topicref" data-id="subarray" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../progr/data_types_forms/subarray.html" id="subarray-d9529e17070-link"><span class="keyword label">子数组（subarray）</span></a></div></div></li><li role="treeitem" class="active"><div data-tocid="数组向量array-vector-d9529e17131" class="topicref" data-id="数组向量array-vector" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../progr/data_types_forms/arrayVector.html" id="数组向量array-vector-d9529e17131-link"><span class="keyword label">数组向量（array vector）</span></a></div></div></li><li role="treeitem"><div data-tocid="大数组bigarray-d9529e17199" class="topicref" data-id="大数组bigarray" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../progr/data_types_forms/BigArray.html" id="大数组bigarray-d9529e17199-link"><span class="keyword label">大数组 (bigarray)</span></a></div></div></li><li role="treeitem"><div data-tocid="列式元组columnar-tuple-d9529e17267" class="topicref" data-id="列式元组columnar-tuple" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../progr/data_types_forms/columnarTuple.html" id="列式元组columnar-tuple-d9529e17267-link"><span class="keyword label">列式元组（columnar tuple）</span></a></div></div></li></ul></li><li role="treeitem"><div data-tocid="矩阵-d9529e17335" class="topicref" data-id="矩阵" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../progr/data_types_forms/Matrix.html" id="矩阵-d9529e17335-link"><span class="keyword label">矩阵</span></a></div></div></li><li role="treeitem"><div data-tocid="集合-d9529e17396" class="topicref" data-id="集合" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../progr/data_types_forms/Set.html" id="集合-d9529e17396-link"><span class="keyword label">集合</span></a></div></div></li><li role="treeitem"><div data-tocid="字典-d9529e17457" class="topicref" data-id="字典" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../progr/data_types_forms/Dictionary.html" id="字典-d9529e17457-link"><span class="keyword label">字典</span></a></div></div></li><li role="treeitem"><div data-tocid="表-d9529e17518" class="topicref" data-id="表" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../progr/data_types_forms/Table.html" id="表-d9529e17518-link"><span class="keyword label">表</span></a></div></div></li><li role="treeitem"><div data-tocid="tensor-d9529e17586" class="topicref" data-id="tensor" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../progr/tensor.html" id="tensor-d9529e17586-link">tensor</a></div></div></li></ul></li></ul></li><li role="treeitem" aria-expanded="false"><div data-tocid="chap4_sect_objects-d9529e17632" class="topicref" data-id="chap4_sect_objects" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action chap4_sect_objects-d9529e17632-link" class="wh-expand-btn"></span><div class="title"><a href="../../progr/objs/objects.html" id="chap4_sect_objects-d9529e17632-link"><span class="keyword label">对象</span></a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="chap4_sect_operators-d9529e18069" class="topicref" data-id="chap4_sect_operators" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action chap4_sect_operators-d9529e18069-link" class="wh-expand-btn"></span><div class="title"><a href="../../progr/operators/operators.html" id="chap4_sect_operators-d9529e18069-link"><span class="keyword label">运算符</span></a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="chap4_sect_programming_statements-d9529e19654" class="topicref" data-id="chap4_sect_programming_statements" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action chap4_sect_programming_statements-d9529e19654-link" class="wh-expand-btn"></span><div class="title"><a href="../../progr/statements/statements_intro.html" id="chap4_sect_programming_statements-d9529e19654-link"><span class="keyword label">编程语句</span></a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="chap4_sect_data_manipulation-d9529e20900" class="topicref" data-id="chap4_sect_data_manipulation" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action chap4_sect_data_manipulation-d9529e20900-link" class="wh-expand-btn"></span><div class="title"><a href="../../progr/data_mani/dm_intro.html" id="chap4_sect_data_manipulation-d9529e20900-link"><span class="keyword label">数据操作</span></a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="chap4_sect_func_programming-d9529e21873" class="topicref" data-id="chap4_sect_func_programming" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action chap4_sect_func_programming-d9529e21873-link" class="wh-expand-btn"></span><div class="title"><a href="../../progr/func_progr.html" id="chap4_sect_func_programming-d9529e21873-link"><span class="keyword label">函数化编程</span></a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="元编程-d9529e22197" class="topicref" data-id="元编程" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action 元编程-d9529e22197-link" class="wh-expand-btn"></span><div class="title"><a href="../../progr/objs/meta_progr.html" id="元编程-d9529e22197-link"><span class="keyword label">元编程</span></a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="oop-d9529e22337" class="topicref" data-id="oop" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action oop-d9529e22337-link" class="wh-expand-btn"></span><div class="title"><a href="../../progr/oop.html" id="oop-d9529e22337-link">面向对象编程</a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="文件操作-d9529e22705" class="topicref" data-id="文件操作" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action 文件操作-d9529e22705-link" class="wh-expand-btn"></span><div class="title"><a href="../../progr/file_io/file_oper.html" id="文件操作-d9529e22705-link"><span class="keyword label">文件操作</span></a></div></div></li></ul></li><li role="treeitem" aria-expanded="false"><div data-tocid="chap4_sect_sql_statements-d9529e22890" class="topicref" data-id="chap4_sect_sql_statements" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action chap4_sect_sql_statements-d9529e22890-link" class="wh-expand-btn"></span><div class="title"><a href="../../progr/sql/sql_intro.html" id="chap4_sect_sql_statements-d9529e22890-link"><span class="keyword label">SQL 语句</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 中 SQL 语句的基本语法和用法</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="python-parser-简介-d9529e25535" class="topicref" data-id="python-parser-简介" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action python-parser-简介-d9529e25535-link" class="wh-expand-btn"></span><div class="title"><a href="../../progr/py_parser/py_par_intro.html" id="python-parser-简介-d9529e25535-link"><span class="keyword label">Python Parser</span></a></div></div></li></ul></li><li role="treeitem" aria-expanded="false"><div data-tocid="functions_references-d9529e26503" class="topicref" data-id="functions_references" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action functions_references-d9529e26503-link" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/funcs_intro.html" id="functions_references-d9529e26503-link"><span class="keyword label">函数参考</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 函数分类、语法、详解及示例</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="api_protocol-d9529e86456" class="topicref" data-id="api_protocol" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action api_protocol-d9529e86456-link" class="wh-expand-btn"></span><div class="title"><a href="../../api/connapi_intro.html" id="api_protocol-d9529e86456-link"><span class="keyword label">连接器 &amp; API</span></a><div class="wh-tooltip"><p class="shortdesc">面向不同编程语言的 DolphinDB API 及连接器，相关协议和用法</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="chap6_plugin-d9529e91976" class="topicref" data-id="chap6_plugin" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action chap6_plugin-d9529e91976-link" class="wh-expand-btn"></span><div class="title"><a href="../../plugins/plg_intro.html" id="chap6_plugin-d9529e91976-link"><span class="keyword label">插件</span></a><div class="wh-tooltip"><p class="shortdesc">多个应用场景的插件使用说明和插件开发指导</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="third_party-d9529e94749" class="topicref" data-id="third_party" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action third_party-d9529e94749-link" class="wh-expand-btn"></span><div class="title"><a href="../../third_party.html" id="third_party-d9529e94749-link">第三方工具</a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="about_tutorials-d9529e94980" class="topicref" data-id="about_tutorials" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action about_tutorials-d9529e94980-link" class="wh-expand-btn"></span><div class="title"><a href="../../tutorials/about_tutorials.html" id="about_tutorials-d9529e94980-link"><span class="keyword label">教程</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 产品使用教程</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="tocId-d9529e101769" class="topicref" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action tocId-d9529e101769-link" class="wh-expand-btn"></span><div class="title"><a href="../../rn/server/3_00_1.html" id="tocId-d9529e101769-link">版本说明</a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 版本发布历史</p></div></div></div></li></ul></div>
+		                        
+                            </div>
+                        </nav>
+                    
+                    
+                    <div class="col-lg-7 col-md-9 col-sm-12" id="wh_topic_body">
+                        <button id="wh_close_publication_toc_button" class="close-toc-button d-none" aria-label="Toggle publishing table of content" aria-controls="wh_publication_toc" aria-expanded="true">
+                            <span class="close-toc-icon-container">
+                                <span class="close-toc-icon"></span>     
+                            </span>
+                        </button>
+                        <button id="wh_close_topic_toc_button" class="close-toc-button d-none" aria-label="Toggle topic table of content" aria-controls="wh_topic_toc" aria-expanded="true">
+                            <span class="close-toc-icon-container">
+                                <span class="close-toc-icon"></span>     
+                            </span>
+                        </button>
+                        
+                        <div class=" wh_topic_content body "><main role="main"><article class="- topic/topic topic" role="article" aria-labelledby="ariaid-title1">
+    <h1 class="- topic/title title topictitle1" id="ariaid-title1"><span class="- topic/keyword keyword label">数组向量（array vector）</span></h1>
+    <div class="- topic/body body">
+        <p class="- topic/p p" id="数组向量array-vector__p_l2v_5hn_ryb" data-ofbid="数组向量array-vector__p_l2v_5hn_ryb">DolphinDB 中的数组向量 (array vector)
+            是一种特殊的向量，用于存储可变长度的二维数组，如一段时间内股票的多档报价。数据表通常将数据类型相同且含义相近的多列存为一列，例如股票的多档报价数据。这种存储方式可显著简化某些常用的查询与计算。若不同列中含有大量重复数据，使用数组向量存储亦可提高数据压缩比，提升查询速度。</p>
+        <p class="- topic/p p">数组向量的每一个元素仍是一个向量（类型完全相同的一维数组）。我们将数组向量的每个元素视为一行，每个元素中相同位置的标量所组成的向量视为一列，如下所示：</p>
+        <figure class="- topic/fig fig fignone" id="数组向量array-vector__fig_gj4_fjw_wzb" data-ofbid="数组向量array-vector__fig_gj4_fjw_wzb">
+            <br/><div class="imageleft"><img class="- topic/image image imageleft" id="数组向量array-vector__image_bxq_gjw_wzb" src="../../images/arrayvector_.png" height="314" width="292"/></div><br/>
+        </figure>
+        <p class="- topic/p p" id="数组向量array-vector__p_m2v_5hn_ryb" data-ofbid="数组向量array-vector__p_m2v_5hn_ryb">数组向量可以与标量、向量或另一个数组向量进行二元运算。</p>
+        <p class="- topic/p p" id="数组向量array-vector__p_n2v_5hn_ryb" data-ofbid="数组向量array-vector__p_n2v_5hn_ryb">目前，仅内存表与使用 TSDB 存储引擎的分布式表支持数组向量，OLAP 存储引擎暂不支持数组向量。数组向量类型的列不可用作分布式表的分区字段或排序字段。</p>
+    </div>
+    <article class="- topic/topic topic nested1" aria-labelledby="ariaid-title2" id="创建数组向量">
+        <h2 class="- topic/title title topictitle2" id="ariaid-title2">创建数组向量</h2>
+        <div class="- topic/body body">
+            <p class="- topic/p p" id="创建数组向量__p_o2v_5hn_ryb" data-ofbid="创建数组向量__p_o2v_5hn_ryb">使用 <a class="- topic/xref xref" href="../../funcs/a/array.html">array</a> 函数或 <a class="- topic/xref xref" href="../../funcs/b/bigarray.html">bigarray</a> 函数初始化生成空的数组向量。
+                请注意，指定数据类型时，需在数据类型后添加“[]”，以表示创建数组向量，且 initialSize 必须为 0。</p>
+            <p class="- topic/p p" id="创建数组向量__p_p2v_5hn_ryb" data-ofbid="创建数组向量__p_p2v_5hn_ryb">目前支持以下数据类别：Logical, Integral（不包括 INT128, COMPRESS 类型）, Floating, DECIMAL,
+                Temporal。</p>
+        </div>
+    </article>
+    <article class="- topic/topic topic nested1" aria-labelledby="ariaid-title3" id="向量和数组向量的相互转化">
+        <h2 class="- topic/title title topictitle2" id="ariaid-title3">向量和数组向量的相互转化</h2>
+        <div class="- topic/body body">
+            <p class="- topic/p p" id="向量和数组向量的相互转化__p_r2v_5hn_ryb" data-ofbid="向量和数组向量的相互转化__p_r2v_5hn_ryb">向量转数组向量：</p>
+            <ul class="- topic/ul ul" id="向量和数组向量的相互转化__ul_q2v_5hn_ryb" data-ofbid="向量和数组向量的相互转化__ul_q2v_5hn_ryb">
+                <li class="- topic/li li">
+                    <p class="- topic/p p" id="向量和数组向量的相互转化__p_t2v_5hn_ryb" data-ofbid="向量和数组向量的相互转化__p_t2v_5hn_ryb">通过 <a class="- topic/xref xref" href="../../funcs/a/arrayVector.html">arrayVector</a> 将单个向量转换成数组向量。</p>
+                </li>
+                <li class="- topic/li li">
+                    <p class="- topic/p p" id="向量和数组向量的相互转化__p_u2v_5hn_ryb" data-ofbid="向量和数组向量的相互转化__p_u2v_5hn_ryb">通过 <a class="- topic/xref xref" href="../../funcs/f/fixedLengthArrayVector.html">fixedLengthArrayVector</a> 将多个向量拼接成数组向量。</p>
+                </li>
+            </ul>
+            <p class="- topic/p p" id="向量和数组向量的相互转化__p_v2v_5hn_ryb" data-ofbid="向量和数组向量的相互转化__p_v2v_5hn_ryb">数组向量转向量：</p>
+            <p class="- topic/p p" id="向量和数组向量的相互转化__p_w2v_5hn_ryb" data-ofbid="向量和数组向量的相互转化__p_w2v_5hn_ryb">通过 <a class="- topic/xref xref" href="../../funcs/f/flatten.html">flatten</a> 将数组向量转换成向量。</p>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock language-python" id="向量和数组向量的相互转化__codeblock_x2v_5hn_ryb" data-ofbid="向量和数组向量的相互转化__codeblock_x2v_5hn_ryb">a=array(INT[], <span class="hl-number">0</span>, <span class="hl-number">10</span>).append!([<span class="hl-number">1</span> <span class="hl-number">2</span> <span class="hl-number">3</span>, <span class="hl-number">4</span> <span class="hl-number">5</span>, <span class="hl-number">6</span> <span class="hl-number">7</span> <span class="hl-number">8</span>, <span class="hl-number">9</span> <span class="hl-number">10</span>]);
+a
+// output
+[[<span class="hl-number">1</span>,<span class="hl-number">2</span>,<span class="hl-number">3</span>],[<span class="hl-number">4</span>,<span class="hl-number">5</span>],[<span class="hl-number">6</span>,<span class="hl-number">7</span>,<span class="hl-number">8</span>],[<span class="hl-number">9</span>,<span class="hl-number">10</span>]]
+
+flatten(a)
+// output
+[<span class="hl-number">1</span>,<span class="hl-number">2</span>,<span class="hl-number">3</span>,<span class="hl-number">4</span>,<span class="hl-number">5</span>,<span class="hl-number">6</span>,<span class="hl-number">7</span>,<span class="hl-number">8</span>,<span class="hl-number">9</span>,<span class="hl-number">10</span>]</pre>
+        </div>
+    </article>
+    <article class="- topic/topic topic nested1" aria-labelledby="ariaid-title4" id="数组向量转化为矩阵">
+        <h2 class="- topic/title title topictitle2" id="ariaid-title4">数组向量转化为矩阵</h2>
+        <div class="- topic/body body">
+            <p class="- topic/p p" id="数组向量转化为矩阵__p_y2v_5hn_ryb" data-ofbid="数组向量转化为矩阵__p_y2v_5hn_ryb">通过函数 <a class="- topic/xref xref" href="../../funcs/m/matrix.html">matrix</a> 可以将每个元素等长的数组向量转换成矩阵，以进一步进行矩阵计算。</p>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock language-sql" id="数组向量转化为矩阵__codeblock_z2v_5hn_ryb" data-ofbid="数组向量转化为矩阵__codeblock_z2v_5hn_ryb">bid = <strong class="hl-keyword">array</strong>(<strong class="hl-keyword">DOUBLE</strong>[], <span class="hl-number">0</span>, <span class="hl-number">20</span>).append!([<span class="hl-number">1.4799</span> <span class="hl-number">1.479</span> <span class="hl-number">1.4787</span> <span class="hl-number">1.4784</span> <span class="hl-number">1.4667</span>, <span class="hl-number">1.4796</span> <span class="hl-number">1.479</span> <span class="hl-number">1.4782</span> <span class="hl-number">1.4781</span> <span class="hl-number">1.4783</span>, <span class="hl-number">1.4791</span> <span class="hl-number">1.479</span> <span class="hl-number">1.4785</span> <span class="hl-number">1.4698</span> <span class="hl-number">1.4720</span>, <span class="hl-number">1.4699</span> <span class="hl-number">1.469</span> <span class="hl-number">1.4707</span> <span class="hl-number">1.4704</span> <span class="hl-number">1.4697</span>, <span class="hl-number">1.4789</span> <span class="hl-number">1.477</span> <span class="hl-number">1.4780</span> <span class="hl-number">1.4724</span> <span class="hl-number">1.4669</span>])
+ask = <strong class="hl-keyword">array</strong>(<strong class="hl-keyword">DOUBLE</strong>[], <span class="hl-number">0</span>, <span class="hl-number">20</span>).append!([<span class="hl-number">1.4821</span> <span class="hl-number">1.4825</span> <span class="hl-number">1.4828</span> <span class="hl-number">1.4900</span> <span class="hl-number">1.4792</span>, <span class="hl-number">1.4818</span> <span class="hl-number">1.482</span> <span class="hl-number">1.4821</span> <span class="hl-number">1.4818</span> <span class="hl-number">1.4829</span>, <span class="hl-number">1.4814</span> <span class="hl-number">1.4818</span> <span class="hl-number">1.482</span> <span class="hl-number">1.4825</span> <span class="hl-number">1.4823</span>, <span class="hl-number">1.4891</span> <span class="hl-number">1.4885</span> <span class="hl-number">1.4898</span> <span class="hl-number">1.4901</span> <span class="hl-number">1.4799</span>, <span class="hl-number">1.4811</span> <span class="hl-number">1.4815</span> <span class="hl-number">1.4818</span> <span class="hl-number">1.4800</span> <span class="hl-number">1.4799</span>])
+
+TradeDate = <span class="hl-number">2022.01</span>.<span class="hl-number">01</span> + <span class="hl-number">1.</span><span class="hl-number">.5</span>
+SecurityID = rand(`APPL`AMZN`IBM, <span class="hl-number">5</span>)
+t = <strong class="hl-keyword">table</strong>(SecurityID <strong class="hl-keyword">as</strong> `sid, TradeDate <strong class="hl-keyword">as</strong> `<strong class="hl-keyword">date</strong>, bid <strong class="hl-keyword">as</strong> `bid, ask <strong class="hl-keyword">as</strong> `ask)
+<strong class="hl-keyword">result</strong> = <strong class="hl-keyword">select</strong> toArray(matrix(bid).corrMatrix()) <strong class="hl-keyword">as</strong> corr_bid,  toArray(matrix(ask).corrMatrix()) <strong class="hl-keyword">as</strong> corr_ask <strong class="hl-keyword">from</strong> t <strong class="hl-keyword">group</strong> <strong class="hl-keyword">by</strong> sid
+corrMatrix_bid = <strong class="hl-keyword">result</strong>.corr_bid.matrix().<strong class="hl-keyword">avg</strong>().reshape(<span class="hl-number">5</span>:<span class="hl-number">5</span>)
+corrMatrix_ask = <strong class="hl-keyword">result</strong>.corr_ask.matrix().<strong class="hl-keyword">avg</strong>().reshape(<span class="hl-number">5</span>:<span class="hl-number">5</span>)
+corrMatrix_bid;</pre>
+            <div class="table-container"><table class="- topic/table table" id="数组向量转化为矩阵__table_afv_5hn_ryb" data-ofbid="数组向量转化为矩阵__table_afv_5hn_ryb" data-cols="5"><caption></caption><colgroup><col/><col/><col/><col/><col/></colgroup><thead class="- topic/thead thead">
+                        <tr class="- topic/row">
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="数组向量转化为矩阵__table_afv_5hn_ryb__entry__1">col1</th>
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="数组向量转化为矩阵__table_afv_5hn_ryb__entry__2">col2</th>
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="数组向量转化为矩阵__table_afv_5hn_ryb__entry__3">col3</th>
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="数组向量转化为矩阵__table_afv_5hn_ryb__entry__4">col4</th>
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="数组向量转化为矩阵__table_afv_5hn_ryb__entry__5">col5</th>
+                        </tr>
+                    </thead><tbody class="- topic/tbody tbody">
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="数组向量转化为矩阵__table_afv_5hn_ryb__entry__1">1</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="数组向量转化为矩阵__table_afv_5hn_ryb__entry__2">0.9995</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="数组向量转化为矩阵__table_afv_5hn_ryb__entry__3">0.9984</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="数组向量转化为矩阵__table_afv_5hn_ryb__entry__4">0.7417</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="数组向量转化为矩阵__table_afv_5hn_ryb__entry__5">(0.1308)</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="数组向量转化为矩阵__table_afv_5hn_ryb__entry__1">0.9995</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="数组向量转化为矩阵__table_afv_5hn_ryb__entry__2">1</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="数组向量转化为矩阵__table_afv_5hn_ryb__entry__3">0.9997</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="数组向量转化为矩阵__table_afv_5hn_ryb__entry__4">0.7214</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="数组向量转化为矩阵__table_afv_5hn_ryb__entry__5">(0.1466)</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="数组向量转化为矩阵__table_afv_5hn_ryb__entry__1">0.9984</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="数组向量转化为矩阵__table_afv_5hn_ryb__entry__2">0.9997</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="数组向量转化为矩阵__table_afv_5hn_ryb__entry__3">1</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="数组向量转化为矩阵__table_afv_5hn_ryb__entry__4">0.7061</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="数组向量转化为矩阵__table_afv_5hn_ryb__entry__5">(0.1589)</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="数组向量转化为矩阵__table_afv_5hn_ryb__entry__1">0.7417</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="数组向量转化为矩阵__table_afv_5hn_ryb__entry__2">0.7214</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="数组向量转化为矩阵__table_afv_5hn_ryb__entry__3">0.7061</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="数组向量转化为矩阵__table_afv_5hn_ryb__entry__4">1</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="数组向量转化为矩阵__table_afv_5hn_ryb__entry__5">(0.0264)</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="数组向量转化为矩阵__table_afv_5hn_ryb__entry__1">(0.1308)</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="数组向量转化为矩阵__table_afv_5hn_ryb__entry__2">(0.1466)</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="数组向量转化为矩阵__table_afv_5hn_ryb__entry__3">(0.1589)</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="数组向量转化为矩阵__table_afv_5hn_ryb__entry__4">(0.0264)</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="数组向量转化为矩阵__table_afv_5hn_ryb__entry__5">1</td>
+                        </tr>
+                    </tbody></table></div>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="数组向量转化为矩阵__codeblock_bfv_5hn_ryb" data-ofbid="数组向量转化为矩阵__codeblock_bfv_5hn_ryb"><code>corrMatrix_ask;</code></pre>
+            <div class="table-container"><table class="- topic/table table" id="数组向量转化为矩阵__table_cfv_5hn_ryb" data-ofbid="数组向量转化为矩阵__table_cfv_5hn_ryb" data-cols="5"><caption></caption><colgroup><col/><col/><col/><col/><col/></colgroup><thead class="- topic/thead thead">
+                        <tr class="- topic/row">
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="数组向量转化为矩阵__table_cfv_5hn_ryb__entry__1">col1</th>
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="数组向量转化为矩阵__table_cfv_5hn_ryb__entry__2">col2</th>
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="数组向量转化为矩阵__table_cfv_5hn_ryb__entry__3">col3</th>
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="数组向量转化为矩阵__table_cfv_5hn_ryb__entry__4">col4</th>
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="数组向量转化为矩阵__table_cfv_5hn_ryb__entry__5">col5</th>
+                        </tr>
+                    </thead><tbody class="- topic/tbody tbody">
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="数组向量转化为矩阵__table_cfv_5hn_ryb__entry__1">1</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="数组向量转化为矩阵__table_cfv_5hn_ryb__entry__2">0.9999</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="数组向量转化为矩阵__table_cfv_5hn_ryb__entry__3">0.9997</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="数组向量转化为矩阵__table_cfv_5hn_ryb__entry__4">0.9963</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="数组向量转化为矩阵__table_cfv_5hn_ryb__entry__5">(0.9861)</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="数组向量转化为矩阵__table_cfv_5hn_ryb__entry__1">0.9999</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="数组向量转化为矩阵__table_cfv_5hn_ryb__entry__2">1</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="数组向量转化为矩阵__table_cfv_5hn_ryb__entry__3">0.9999</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="数组向量转化为矩阵__table_cfv_5hn_ryb__entry__4">0.9974</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="数组向量转化为矩阵__table_cfv_5hn_ryb__entry__5">(0.9883)</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="数组向量转化为矩阵__table_cfv_5hn_ryb__entry__1">0.9997</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="数组向量转化为矩阵__table_cfv_5hn_ryb__entry__2">0.9999</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="数组向量转化为矩阵__table_cfv_5hn_ryb__entry__3">1</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="数组向量转化为矩阵__table_cfv_5hn_ryb__entry__4">0.9981</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="数组向量转化为矩阵__table_cfv_5hn_ryb__entry__5">(0.9899)</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="数组向量转化为矩阵__table_cfv_5hn_ryb__entry__1">0.9963</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="数组向量转化为矩阵__table_cfv_5hn_ryb__entry__2">0.9974</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="数组向量转化为矩阵__table_cfv_5hn_ryb__entry__3">0.9981</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="数组向量转化为矩阵__table_cfv_5hn_ryb__entry__4">1</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="数组向量转化为矩阵__table_cfv_5hn_ryb__entry__5">(0.9968)</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="数组向量转化为矩阵__table_cfv_5hn_ryb__entry__1">(0.9861)</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="数组向量转化为矩阵__table_cfv_5hn_ryb__entry__2">(0.9883)</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="数组向量转化为矩阵__table_cfv_5hn_ryb__entry__3">(0.9899)</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="数组向量转化为矩阵__table_cfv_5hn_ryb__entry__4">(0.9968)</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="数组向量转化为矩阵__table_cfv_5hn_ryb__entry__5">1</td>
+                        </tr>
+                    </tbody></table></div>
+        </div>
+    </article>
+    <article class="- topic/topic topic nested1" aria-labelledby="ariaid-title5" id="向数组向量中插入数据">
+        <h2 class="- topic/title title topictitle2" id="ariaid-title5">向数组向量中插入数据</h2>
+        <div class="- topic/body body">
+            <p class="- topic/p p" id="向数组向量中插入数据__p_dfv_5hn_ryb" data-ofbid="向数组向量中插入数据__p_dfv_5hn_ryb">只支持使用<code class="+ topic/ph pr-d/codeph ph codeph">append!</code>向数组向量中插入标量、元组或数组向量。暂不支持对数组向量的更新和删除操作。</p>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="向数组向量中插入数据__codeblock_efv_5hn_ryb" data-ofbid="向数组向量中插入数据__codeblock_efv_5hn_ryb"><code>// 插入scalar
+a=array(DOUBLE[], 0, 10).append!(2.5);
+print a;
+// output
+[[2.5]]]
+
+// 插入tuple
+a=array(DATE[], 0, 10).append!((2021.10.15, 2021.10.16, 2021.10.17));
+print a;
+// output
+[[2021.10.15],[2021.10.16],[2021.10.17]]
+
+// 插入数组向量
+a=array(INT[], 0, 10).append!([1 2 3, 4 5, 6 7 8, 9 10]);
+print a;
+// output
+[[1,2,3],[4,5],[6,7,8],[9,10]]</code></pre>
+        </div>
+    </article>
+    <article class="- topic/topic topic nested1" aria-labelledby="ariaid-title6" id="读取数组向量中的数据">
+        <h2 class="- topic/title title topictitle2" id="ariaid-title6">读取数组向量中的数据</h2>
+        <div class="- topic/body body">
+            <ul class="- topic/ul ul" id="读取数组向量中的数据__ul_ffv_5hn_ryb" data-ofbid="读取数组向量中的数据__ul_ffv_5hn_ryb">
+                <li class="- topic/li li">
+                    <p class="- topic/p p" id="读取数组向量中的数据__p_gfv_5hn_ryb" data-ofbid="读取数组向量中的数据__p_gfv_5hn_ryb">数组向量</p>
+                    <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="读取数组向量中的数据__codeblock_hfv_5hn_ryb" data-ofbid="读取数组向量中的数据__codeblock_hfv_5hn_ryb"><code>a =array(DOUBLE[], 0, 10).append!([1.0, 2.1 4.1 6.8, 0.5 2.2 2]);
+print a
+// output
+[[1],[2.1,4.1,6.8],[0.5,2.2,2]]
+typestr(a)
+// output
+FAST DOUBLE[] VECTOR</code></pre>
+                </li>
+                <li class="- topic/li li">
+                    <p class="- topic/p p" id="读取数组向量中的数据__p_jfv_5hn_ryb" data-ofbid="读取数组向量中的数据__p_jfv_5hn_ryb">元组</p>
+                    <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="读取数组向量中的数据__codeblock_kfv_5hn_ryb" data-ofbid="读取数组向量中的数据__codeblock_kfv_5hn_ryb"><code>tp = [[1],[2.1,4.1,6.8],[0.5,2.2,2]]
+typestr(tp)
+// output
+ANY VECTOR</code></pre>
+                </li>
+            </ul>
+            <p class="- topic/p p" id="读取数组向量中的数据__p_lfv_5hn_ryb" data-ofbid="读取数组向量中的数据__p_lfv_5hn_ryb">由上述例子可以看出，数组向量和元组的打印（print）形式一致。但两者读取数据的方式不完全相同。</p>
+            <p class="- topic/p p" id="读取数组向量中的数据__p_mfv_5hn_ryb" data-ofbid="读取数组向量中的数据__p_mfv_5hn_ryb">相同点：</p>
+            <p class="- topic/p p" id="读取数组向量中的数据__p_nfv_5hn_ryb" data-ofbid="读取数组向量中的数据__p_nfv_5hn_ryb">都可以通过 <a class="- topic/xref xref" href="../../funcs/r/row.html">row</a> 读取行数据。</p>
+            <p class="- topic/p p" id="读取数组向量中的数据__p_ofv_5hn_ryb" data-ofbid="读取数组向量中的数据__p_ofv_5hn_ryb">不同点：</p>
+            <p class="- topic/p p" id="读取数组向量中的数据__p_pfv_5hn_ryb" data-ofbid="读取数组向量中的数据__p_pfv_5hn_ryb">数组向量的下标只能表示列索引，可以通过列索引（从0开始）读取一列数据，如 “a[index]”。若要读取某行数据，需通过 row
+                函数读取，如 “a.row(index)“。如需定位到某个具体的数据，可以先定位到列，再定位行，如
+                “a[index1][index2]”；或先定位行，如：a.row(index1)[index2]。</p>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="读取数组向量中的数据__codeblock_qfv_5hn_ryb" data-ofbid="读取数组向量中的数据__codeblock_qfv_5hn_ryb"><code>a[1]
+// output
+[,4.1,2.2]
+
+tp[,1]
+// output
+(,4.1,2.2)
+
+a.row(1)
+// output
+[2.1,4.1,6.8]
+
+tp[1]
+// output
+[2.1,4.1,6.8]</code></pre>
+        </div>
+    </article>
+    <article class="- topic/topic topic nested1" aria-labelledby="ariaid-title7" id="topic_n1g_yx5_h1c">
+        <h2 class="- topic/title title topictitle2" id="ariaid-title7">修改数组向量中的数据</h2>
+        <div class="- topic/body body">
+            <p class="- topic/p p">数组向量中的数据可以通过指定行和列的方式进行修改：<code class="+ topic/ph pr-d/codeph ph codeph">obj[rowIndex, colIndex] = newValue</code></p>
+            <p class="- topic/p p">rowIndex 是标量或数据对，若是数据对，当不指定开始的索引时，表示从第 0 行开始；当不指定结束的索引时，表示到最后一行结束。rowIndex
+                可以省略，省略时代表所有行中对应的 colIndex 位置的数据都要修改。</p>
+            <p class="- topic/p p">colIndex 是标量或数据对，不可省略。当是数据对时，数据对的开始和结束索引不可省略。</p>
+            <p class="- topic/p p">newValue 是标量、向量或元组：</p>
+            <ul class="- topic/ul ul" id="topic_n1g_yx5_h1c__ul_cbq_brz_h1c" data-ofbid="topic_n1g_yx5_h1c__ul_cbq_brz_h1c">
+                <li class="- topic/li li">
+                    <p class="- topic/p p">newValue 是一个标量时，所有通过 rowIndex 和 colIndex 指定的数据都会修改为 newValue；</p>
+                </li>
+                <li class="- topic/li li">
+                    <p class="- topic/p p">newValue 是一个与 colIndex 长度相同的向量或元组时，每一行中由 colIndex 指定的数据都会对应替换为该向量或元组的值；</p>
+                </li>
+                <li class="- topic/li li">
+                    <p class="- topic/p p">newValue 是长度与 rowIndex 相同的向量或元组时，其中 newValue 的元素为标量或者长度与 colIndex
+                        相同的向量，每一行中的数据会替换为 newValue 中对应位置的元素。</p>
+                </li>
+            </ul>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="topic_n1g_yx5_h1c__codeblock_t21_2y5_h1c" data-ofbid="topic_n1g_yx5_h1c__codeblock_t21_2y5_h1c"><code>// 创建数组向量 a
+a = array(DOUBLE[], 0, 10).append!([1 2 3 4, 5 6 7 8 , 9 10 11 12]);
+print a 
+// output
+[[1,2,3,4],[5,6,7,8],[9,10,11,12]]
+
+// 修改第0行、第1列的数据为 50
+a[0,1] = 50
+print a 
+// output
+[[1,50,3,4],[5,6,7,8],[9,10,11,12]]
+
+// 修改第0到1行中第1到2列的数据为 100 200
+a[0:2, 1:3] = 100 200
+print a
+// output
+[[1,100,200,4],[5,100,200,8],[9,10,11,12]]
+
+// 修改第0到1行中第1到2列的数据为 300 400，省略行索引的起始索引值
+a[:2, 1:3] = 300 400
+print a
+// output
+[[1,300,400,4],[5,300,400,8],[9,10,11,12]]
+
+// 修改第0行中第1到2列的数据为 500 600，修改第1行中第1到2列的数据为 700 800
+a[0:2, 1:3] = (500 600, 700 800)
+print a
+// output
+[[1,500,600,4],[5,700,800,8],[9,10,11,12]]
+
+// 修改所有行中第1到2列的数据为 900 1000
+a[, 1:3] = 900 1000
+print a
+// output
+[[1,900,1000,4],[5,900,1000,8],[9,900,1000,12]]</code></pre>
+        </div>
+    </article>
+    <article class="- topic/topic topic nested1" aria-labelledby="ariaid-title8" id="导入表时存储为数组向量2004-及以上版本">
+        <h2 class="- topic/title title topictitle2" id="ariaid-title8">导入表时存储为数组向量（2.00.4 及以上版本）</h2>
+        <div class="- topic/body body">
+            <p class="- topic/p p" id="导入表时存储为数组向量2004-及以上版本__p_rfv_5hn_ryb" data-ofbid="导入表时存储为数组向量2004-及以上版本__p_rfv_5hn_ryb">目前暂不支持导入时将文本文件的多列数据存成 DolphinDB
+                数据表的一列。如需导入数组向量，可以在导入前，将文本文件的多列数据合并存储到一列中，并通过特定的标识符分隔多列数据，如对于五档报价的一行数据可以在一列中存储为
+                “1.4799|1.479|1.4787|1.4796|1.479” 。</p>
+            <p class="- topic/p p" id="导入表时存储为数组向量2004-及以上版本__p_sfv_5hn_ryb" data-ofbid="导入表时存储为数组向量2004-及以上版本__p_sfv_5hn_ryb">使用 loadText (ploadText) 与 loadTextEx 导入数据时，通过参数 arrayDelimiter 指定分隔符(上述报价数据分隔符是
+                “|”)，即可在导入数据表时将该列的识别为数组向量。</p>
+            <div class="- topic/note note note note_note" id="导入表时存储为数组向量2004-及以上版本__note_zny_xg3_5yb" data-ofbid="导入表时存储为数组向量2004-及以上版本__note_zny_xg3_5yb"><span class="note__title">注：</span> 导入数据前需在 schema 中修改数组向量对应列的类型。</div>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="导入表时存储为数组向量2004-及以上版本__codeblock_ufv_5hn_ryb" data-ofbid="导入表时存储为数组向量2004-及以上版本__codeblock_ufv_5hn_ryb"><code>bid = array(DOUBLE[], 0, 20).append!([1.4799 1.479 1.4787, 1.4796 1.479 1.4784, 1.4791 1.479 1.4784])
+ask = array(DOUBLE[], 0, 20).append!([1.4821 1.4825 1.4828, 1.4818 1.482 1.4821, 1.4814 1.4818 1.482])
+TradeDate = 2022.01.01 + 1..3
+SecurityID = rand(`APPL`AMZN`IBM, 3)
+t = table(SecurityID as `sid, TradeDate as `date, bid as `bid, ask as `ask)
+t;
+saveText(t,filename="/home/t.csv",delimiter=',',append=true)
+path = "/home/t.csv"
+schema=extractTextSchema(path);
+update schema set type = "DOUBLE[]" where name="bid" or name ="ask"
+t = loadText(path, schema=schema, arrayDelimiter=",")
+t;</code></pre>
+            <div class="table-container"><table class="- topic/table table" id="导入表时存储为数组向量2004-及以上版本__table_vfv_5hn_ryb" data-ofbid="导入表时存储为数组向量2004-及以上版本__table_vfv_5hn_ryb" data-cols="4"><caption></caption><colgroup><col/><col/><col/><col/></colgroup><thead class="- topic/thead thead">
+                        <tr class="- topic/row">
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="导入表时存储为数组向量2004-及以上版本__table_vfv_5hn_ryb__entry__1">sid</th>
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="导入表时存储为数组向量2004-及以上版本__table_vfv_5hn_ryb__entry__2">date</th>
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="导入表时存储为数组向量2004-及以上版本__table_vfv_5hn_ryb__entry__3">bid</th>
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="导入表时存储为数组向量2004-及以上版本__table_vfv_5hn_ryb__entry__4">ask</th>
+                        </tr>
+                    </thead><tbody class="- topic/tbody tbody">
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="导入表时存储为数组向量2004-及以上版本__table_vfv_5hn_ryb__entry__1">AMZN</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="导入表时存储为数组向量2004-及以上版本__table_vfv_5hn_ryb__entry__2">2022.01.02</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="导入表时存储为数组向量2004-及以上版本__table_vfv_5hn_ryb__entry__3">[1.4799,1.479,1.4787]</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="导入表时存储为数组向量2004-及以上版本__table_vfv_5hn_ryb__entry__4">[1.4821,1.4825,1.4828]</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="导入表时存储为数组向量2004-及以上版本__table_vfv_5hn_ryb__entry__1">AMZN</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="导入表时存储为数组向量2004-及以上版本__table_vfv_5hn_ryb__entry__2">2022.01.03</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="导入表时存储为数组向量2004-及以上版本__table_vfv_5hn_ryb__entry__3">[1.4796,1.479,1.4784]</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="导入表时存储为数组向量2004-及以上版本__table_vfv_5hn_ryb__entry__4">[1.4818,1.482,1.4821]</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="导入表时存储为数组向量2004-及以上版本__table_vfv_5hn_ryb__entry__1">IBM</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="导入表时存储为数组向量2004-及以上版本__table_vfv_5hn_ryb__entry__2">2022.01.04</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="导入表时存储为数组向量2004-及以上版本__table_vfv_5hn_ryb__entry__3">[1.4791,1.479,1.4784]</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="导入表时存储为数组向量2004-及以上版本__table_vfv_5hn_ryb__entry__4">[1.4814,1.4818,1.482]</td>
+                        </tr>
+                    </tbody></table></div>
+        </div>
+    </article>
+    <article class="- topic/topic topic nested1" aria-labelledby="ariaid-title9" id="将表的多列合并成一个数组向量">
+        <h2 class="- topic/title title topictitle2" id="ariaid-title9">将表的多列合并成一个数组向量</h2>
+        <div class="- topic/body body">
+            <p class="- topic/p p" id="将表的多列合并成一个数组向量__p_wfv_5hn_ryb" data-ofbid="将表的多列合并成一个数组向量__p_wfv_5hn_ryb">通过函数 <a class="- topic/xref xref" href="../../funcs/f/fixedLengthArrayVector.html">fixedLengthArrayVector</a> 将表的多列数据存成一列。</p>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="将表的多列合并成一个数组向量__codeblock_xfv_5hn_ryb" data-ofbid="将表的多列合并成一个数组向量__codeblock_xfv_5hn_ryb"><code>syms="A"+string(1..30)
+datetimes=2019.01.01T00:00:00..2019.01.31T23:59:59
+n=200
+if(existsDatabase("dfs://stock")) {
+dropDatabase("dfs://stock")
+}
+db=database("dfs://stock",RANGE,cutPoints(syms,3));
+t=table(take(datetimes,n) as trade_time, take(syms,n) as sym,take(500+rand(10.0,n), n) as bid1, take(500+rand(20.0,n),n) as bid2)
+quotes=db.createPartitionedTable(t,`quotes,`sym).append!(t)
+t1=select sym, fixedLengthArrayVector(bid1,bid2) as bid from quotes</code></pre>
+        </div>
+    </article>
+    <article class="- topic/topic topic nested1" aria-labelledby="ariaid-title10" id="将表分组数据聚合成一个数组向量">
+        <h2 class="- topic/title title topictitle2" id="ariaid-title10">将表分组数据聚合成一个数组向量</h2>
+        <div class="- topic/body body">
+            <p class="- topic/p p" id="将表分组数据聚合成一个数组向量__p_yfv_5hn_ryb" data-ofbid="将表分组数据聚合成一个数组向量__p_yfv_5hn_ryb">DolphinDB 提供了函数 toArray 搭配 group by 语句使用。toArray 可以将 group by
+                分组的数据存储成数组向量的一行，便于用户直接查看该分组下的所有数据。</p>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="将表分组数据聚合成一个数组向量__codeblock_zfv_5hn_ryb" data-ofbid="将表分组数据聚合成一个数组向量__codeblock_zfv_5hn_ryb"><code>ticker = `AAPL`IBM`IBM`AAPL`AMZN`AAPL`AMZN`IBM`AMZN
+volume = 106 115 121 90 130 150 145 123 155;
+t = table(ticker, volume);
+
+t1 = select toArray(volume) as volume_all from t group by ticker;
+t1;</code></pre>
+            <div class="table-container"><table class="- topic/table table" id="将表分组数据聚合成一个数组向量__table_agv_5hn_ryb" data-ofbid="将表分组数据聚合成一个数组向量__table_agv_5hn_ryb" data-cols="2"><caption></caption><colgroup><col/><col/></colgroup><thead class="- topic/thead thead">
+                        <tr class="- topic/row">
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="将表分组数据聚合成一个数组向量__table_agv_5hn_ryb__entry__1">ticker</th>
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="将表分组数据聚合成一个数组向量__table_agv_5hn_ryb__entry__2">volume_all</th>
+                        </tr>
+                    </thead><tbody class="- topic/tbody tbody">
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="将表分组数据聚合成一个数组向量__table_agv_5hn_ryb__entry__1">AAPL</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="将表分组数据聚合成一个数组向量__table_agv_5hn_ryb__entry__2">[106,90,150]</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="将表分组数据聚合成一个数组向量__table_agv_5hn_ryb__entry__1">AMZN</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="将表分组数据聚合成一个数组向量__table_agv_5hn_ryb__entry__2">[130,145,155]</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="将表分组数据聚合成一个数组向量__table_agv_5hn_ryb__entry__1">IBM</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="将表分组数据聚合成一个数组向量__table_agv_5hn_ryb__entry__2">[115,121,123]</td>
+                        </tr>
+                    </tbody></table></div>
+        </div>
+    </article>
+    <article class="- topic/topic topic nested1" aria-labelledby="ariaid-title11" id="数组向量按行计算">
+        <h2 class="- topic/title title topictitle2" id="ariaid-title11">数组向量按行计算</h2>
+        <div class="- topic/body body">
+            <p class="- topic/p p" id="数组向量按行计算__p_bgv_5hn_ryb" data-ofbid="数组向量按行计算__p_bgv_5hn_ryb"><strong class="+ topic/ph hi-d/b ph b"><dfn class="- topic/term term">聚合计算</dfn></strong></p>
+            <ul class="- topic/ul ul" id="数组向量按行计算__ul_cgv_5hn_ryb" data-ofbid="数组向量按行计算__ul_cgv_5hn_ryb">
+                <li class="- topic/li li">
+                    <p class="- topic/p p" id="数组向量按行计算__p_dgv_5hn_ryb" data-ofbid="数组向量按行计算__p_dgv_5hn_ryb">支持 row 系列函数，如:</p>
+                    <ul class="- topic/ul ul" id="数组向量按行计算__ul_egv_5hn_ryb" data-ofbid="数组向量按行计算__ul_egv_5hn_ryb">
+                        <li class="- topic/li li">
+                            <p class="- topic/p p" id="数组向量按行计算__p_fgv_5hn_ryb" data-ofbid="数组向量按行计算__p_fgv_5hn_ryb">
+                                <a class="- topic/xref xref" href="../../funcs/r/rowMax.html">rowMax</a>
+                            </p>
+                        </li>
+                        <li class="- topic/li li">
+                            <p class="- topic/p p" id="数组向量按行计算__p_ggv_5hn_ryb" data-ofbid="数组向量按行计算__p_ggv_5hn_ryb">
+                                <a class="- topic/xref xref" href="../../funcs/r/rowStd.html">rowStd</a>
+                            </p>
+                        </li>
+                    </ul>
+                </li>
+                <li class="- topic/li li">
+                    <p class="- topic/p p" id="数组向量按行计算__p_hgv_5hn_ryb" data-ofbid="数组向量按行计算__p_hgv_5hn_ryb">支持调用高阶函数 <a class="- topic/xref xref" href="../../funcs/ho_funcs/byRow.html">byRow</a>，对数组向量的每行元素进行聚合计算。</p>
+                    <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="数组向量按行计算__codeblock_igv_5hn_ryb" data-ofbid="数组向量按行计算__codeblock_igv_5hn_ryb"><code>a=array(DOUBLE[], 0, 10).append!([8.3 1.2 5.6, 1.8 3.3, 0.1 2.4 6.8]);
+rowMax(a);
+// output
+[8.3, 3.3, 6.7]
+
+
+bid = array(DOUBLE[], 0, 20).append!([1.4799 1.479 1.4787, 1.4796 1.479 1.4784, 1.4791 1.479 1.4784])
+ask = array(DOUBLE[], 0, 20).append!([1.4821 1.4825 1.4828, 1.4818 1.482 1.4821, 1.4814 1.4818 1.482])
+TradeDate = 2022.01.01 + 1..3
+SecurityID = rand(`APPL`AMZN`IBM, 3)
+t = table(SecurityID as `sid, TradeDate as `date, bid as `bid, ask as `ask)
+t;</code></pre>
+                    <div class="table-container"><table class="- topic/table table" id="数组向量按行计算__table_jgv_5hn_ryb" data-ofbid="数组向量按行计算__table_jgv_5hn_ryb" data-cols="4"><caption></caption><colgroup><col/><col/><col/><col/></colgroup><thead class="- topic/thead thead">
+                                <tr class="- topic/row">
+                                    <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="数组向量按行计算__table_jgv_5hn_ryb__entry__1">sid</th>
+                                    <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="数组向量按行计算__table_jgv_5hn_ryb__entry__2">date</th>
+                                    <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="数组向量按行计算__table_jgv_5hn_ryb__entry__3">bid</th>
+                                    <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="数组向量按行计算__table_jgv_5hn_ryb__entry__4">ask</th>
+                                </tr>
+                            </thead><tbody class="- topic/tbody tbody">
+                                <tr class="- topic/row">
+                                    <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="数组向量按行计算__table_jgv_5hn_ryb__entry__1">IBM</td>
+                                    <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="数组向量按行计算__table_jgv_5hn_ryb__entry__2">2022.01.02</td>
+                                    <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="数组向量按行计算__table_jgv_5hn_ryb__entry__3">[1.4799,1.479,1.4787]</td>
+                                    <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="数组向量按行计算__table_jgv_5hn_ryb__entry__4">[1.4821,1.4825,1.4828]</td>
+                                </tr>
+                                <tr class="- topic/row">
+                                    <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="数组向量按行计算__table_jgv_5hn_ryb__entry__1">APPL</td>
+                                    <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="数组向量按行计算__table_jgv_5hn_ryb__entry__2">2022.01.03</td>
+                                    <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="数组向量按行计算__table_jgv_5hn_ryb__entry__3">[1.4796,1.479,1.4784]</td>
+                                    <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="数组向量按行计算__table_jgv_5hn_ryb__entry__4">[1.4818,1.482,1.4821]</td>
+                                </tr>
+                                <tr class="- topic/row">
+                                    <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="数组向量按行计算__table_jgv_5hn_ryb__entry__1">APPL</td>
+                                    <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="数组向量按行计算__table_jgv_5hn_ryb__entry__2">2022.01.04</td>
+                                    <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="数组向量按行计算__table_jgv_5hn_ryb__entry__3">[1.4791,1.479,1.4784]</td>
+                                    <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="数组向量按行计算__table_jgv_5hn_ryb__entry__4">[1.4814,1.4818,1.482]</td>
+                                </tr>
+                            </tbody></table></div>
+                    <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="数组向量按行计算__codeblock_kgv_5hn_ryb" data-ofbid="数组向量按行计算__codeblock_kgv_5hn_ryb"><code>select SecurityID, TradeDate, bid, ask,  rowAvg(bid) as bid_avg, rowAvg(ask) as ask_avg from t</code></pre>
+                    <div class="table-container"><table class="- topic/table table" id="数组向量按行计算__table_lgv_5hn_ryb" data-ofbid="数组向量按行计算__table_lgv_5hn_ryb" data-cols="6"><caption></caption><colgroup><col/><col/><col/><col/><col/><col/></colgroup><thead class="- topic/thead thead">
+                                <tr class="- topic/row">
+                                    <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="数组向量按行计算__table_lgv_5hn_ryb__entry__1">SecurityID</th>
+                                    <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="数组向量按行计算__table_lgv_5hn_ryb__entry__2">TradeDate</th>
+                                    <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="数组向量按行计算__table_lgv_5hn_ryb__entry__3">bid</th>
+                                    <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="数组向量按行计算__table_lgv_5hn_ryb__entry__4">ask</th>
+                                    <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="数组向量按行计算__table_lgv_5hn_ryb__entry__5">bid_avg</th>
+                                    <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="数组向量按行计算__table_lgv_5hn_ryb__entry__6">ask_avg</th>
+                                </tr>
+                            </thead><tbody class="- topic/tbody tbody">
+                                <tr class="- topic/row">
+                                    <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="数组向量按行计算__table_lgv_5hn_ryb__entry__1">IBM</td>
+                                    <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="数组向量按行计算__table_lgv_5hn_ryb__entry__2">2022.01.02</td>
+                                    <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="数组向量按行计算__table_lgv_5hn_ryb__entry__3">[1.4799,1.479,1.4787]</td>
+                                    <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="数组向量按行计算__table_lgv_5hn_ryb__entry__4">[1.4821,1.4825,1.4828]</td>
+                                    <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="数组向量按行计算__table_lgv_5hn_ryb__entry__5">1.4792</td>
+                                    <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="数组向量按行计算__table_lgv_5hn_ryb__entry__6">1.4825</td>
+                                </tr>
+                                <tr class="- topic/row">
+                                    <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="数组向量按行计算__table_lgv_5hn_ryb__entry__1">APPL</td>
+                                    <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="数组向量按行计算__table_lgv_5hn_ryb__entry__2">2022.01.03</td>
+                                    <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="数组向量按行计算__table_lgv_5hn_ryb__entry__3">[1.4796,1.479,1.4784]</td>
+                                    <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="数组向量按行计算__table_lgv_5hn_ryb__entry__4">[1.4818,1.482,1.4821]</td>
+                                    <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="数组向量按行计算__table_lgv_5hn_ryb__entry__5">1.479</td>
+                                    <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="数组向量按行计算__table_lgv_5hn_ryb__entry__6">1.482</td>
+                                </tr>
+                                <tr class="- topic/row">
+                                    <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="数组向量按行计算__table_lgv_5hn_ryb__entry__1">APPL</td>
+                                    <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="数组向量按行计算__table_lgv_5hn_ryb__entry__2">2022.01.04</td>
+                                    <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="数组向量按行计算__table_lgv_5hn_ryb__entry__3">[1.4791,1.479,1.4784]</td>
+                                    <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="数组向量按行计算__table_lgv_5hn_ryb__entry__4">[1.4814,1.4818,1.482]</td>
+                                    <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="数组向量按行计算__table_lgv_5hn_ryb__entry__5">1.4788</td>
+                                    <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="数组向量按行计算__table_lgv_5hn_ryb__entry__6">1.4817</td>
+                                </tr>
+                            </tbody></table></div>
+                </li>
+            </ul>
+            <p class="- topic/p p" id="数组向量按行计算__p_mgv_5hn_ryb" data-ofbid="数组向量按行计算__p_mgv_5hn_ryb"><strong class="+ topic/ph hi-d/b ph b"><dfn class="- topic/term term">窗口计算（滑动窗口、累计窗口等）</dfn></strong></p>
+            <p class="- topic/p p" id="数组向量按行计算__p_ngv_5hn_ryb" data-ofbid="数组向量按行计算__p_ngv_5hn_ryb">通过高阶函数 <a class="- topic/xref xref" href="../../funcs/ho_funcs/byRow.html">byRow</a>
+                将窗口计算应用在数组向量的每行元素上。</p>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="数组向量按行计算__codeblock_ogv_5hn_ryb" data-ofbid="数组向量按行计算__codeblock_ogv_5hn_ryb"><code>select SecurityID, TradeDate, bid, ask, byRow(cumavg, bid) as bid_cum, byRow(cumavg, ask) as ask_cum from t</code></pre>
+            <div class="table-container"><table class="- topic/table table" id="数组向量按行计算__table_pgv_5hn_ryb" data-ofbid="数组向量按行计算__table_pgv_5hn_ryb" data-cols="6"><caption></caption><colgroup><col/><col/><col/><col/><col/><col/></colgroup><thead class="- topic/thead thead">
+                        <tr class="- topic/row">
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="数组向量按行计算__table_pgv_5hn_ryb__entry__1">SecurityID</th>
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="数组向量按行计算__table_pgv_5hn_ryb__entry__2">TradeDate</th>
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="数组向量按行计算__table_pgv_5hn_ryb__entry__3">bid</th>
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="数组向量按行计算__table_pgv_5hn_ryb__entry__4">ask</th>
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="数组向量按行计算__table_pgv_5hn_ryb__entry__5">bid_cum</th>
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="数组向量按行计算__table_pgv_5hn_ryb__entry__6">ask_cum</th>
+                        </tr>
+                    </thead><tbody class="- topic/tbody tbody">
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="数组向量按行计算__table_pgv_5hn_ryb__entry__1">IBM</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="数组向量按行计算__table_pgv_5hn_ryb__entry__2">2022.01.02</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="数组向量按行计算__table_pgv_5hn_ryb__entry__3">[1.4799,1.479,1.4787]</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="数组向量按行计算__table_pgv_5hn_ryb__entry__4">[1.4821,1.4825,1.4828]</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="数组向量按行计算__table_pgv_5hn_ryb__entry__5">[1.4799,1.47945,1.4792]</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="数组向量按行计算__table_pgv_5hn_ryb__entry__6">[1.4821,1.4823,1.482467]</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="数组向量按行计算__table_pgv_5hn_ryb__entry__1">APPL</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="数组向量按行计算__table_pgv_5hn_ryb__entry__2">2022.01.03</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="数组向量按行计算__table_pgv_5hn_ryb__entry__3">[1.4796,1.479,1.4784]</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="数组向量按行计算__table_pgv_5hn_ryb__entry__4">[1.4818,1.482,1.4821]</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="数组向量按行计算__table_pgv_5hn_ryb__entry__5">[1.4796,1.4793,1.479]</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="数组向量按行计算__table_pgv_5hn_ryb__entry__6">[1.4818,1.4819,1.481967]</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="数组向量按行计算__table_pgv_5hn_ryb__entry__1">APPL</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="数组向量按行计算__table_pgv_5hn_ryb__entry__2">2022.01.04</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="数组向量按行计算__table_pgv_5hn_ryb__entry__3">[1.4791,1.479,1.4784]</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="数组向量按行计算__table_pgv_5hn_ryb__entry__4">[1.4814,1.4818,1.482]</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="数组向量按行计算__table_pgv_5hn_ryb__entry__5">[1.4791,1.47905,1.478833]</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="数组向量按行计算__table_pgv_5hn_ryb__entry__6">[1.4814,1.4816,1.481733]</td>
+                        </tr>
+                    </tbody></table></div>
+        </div>
+    </article>
+</article></main></div>
+                        
+                        
+                        
+                        
+                        
+                        
+                    </div>
+                    
+                        <nav role="navigation" id="wh_topic_toc" aria-label="On this page" class="col-lg-2 d-none d-lg-block navbar d-print-none"> 
+                            <div id="wh_topic_toc_content">
+		                        
+	                            <div class=" wh_topic_toc "><div class="wh_topic_label">在本页上</div><ul><li class="topic-item"><a href="#%E5%88%9B%E5%BB%BA%E6%95%B0%E7%BB%84%E5%90%91%E9%87%8F" data-tocid="创建数组向量">创建数组向量</a></li><li class="topic-item"><a href="#%E5%90%91%E9%87%8F%E5%92%8C%E6%95%B0%E7%BB%84%E5%90%91%E9%87%8F%E7%9A%84%E7%9B%B8%E4%BA%92%E8%BD%AC%E5%8C%96" data-tocid="向量和数组向量的相互转化">向量和数组向量的相互转化</a></li><li class="topic-item"><a href="#%E6%95%B0%E7%BB%84%E5%90%91%E9%87%8F%E8%BD%AC%E5%8C%96%E4%B8%BA%E7%9F%A9%E9%98%B5" data-tocid="数组向量转化为矩阵">数组向量转化为矩阵</a></li><li class="topic-item"><a href="#%E5%90%91%E6%95%B0%E7%BB%84%E5%90%91%E9%87%8F%E4%B8%AD%E6%8F%92%E5%85%A5%E6%95%B0%E6%8D%AE" data-tocid="向数组向量中插入数据">向数组向量中插入数据</a></li><li class="topic-item"><a href="#%E8%AF%BB%E5%8F%96%E6%95%B0%E7%BB%84%E5%90%91%E9%87%8F%E4%B8%AD%E7%9A%84%E6%95%B0%E6%8D%AE" data-tocid="读取数组向量中的数据">读取数组向量中的数据</a></li><li class="topic-item"><a href="#topic_n1g_yx5_h1c" data-tocid="topic_n1g_yx5_h1c">修改数组向量中的数据</a></li><li class="topic-item"><a href="#%E5%AF%BC%E5%85%A5%E8%A1%A8%E6%97%B6%E5%AD%98%E5%82%A8%E4%B8%BA%E6%95%B0%E7%BB%84%E5%90%91%E9%87%8F2004-%E5%8F%8A%E4%BB%A5%E4%B8%8A%E7%89%88%E6%9C%AC" data-tocid="导入表时存储为数组向量2004-及以上版本">导入表时存储为数组向量（2.00.4 及以上版本）</a></li><li class="topic-item"><a href="#%E5%B0%86%E8%A1%A8%E7%9A%84%E5%A4%9A%E5%88%97%E5%90%88%E5%B9%B6%E6%88%90%E4%B8%80%E4%B8%AA%E6%95%B0%E7%BB%84%E5%90%91%E9%87%8F" data-tocid="将表的多列合并成一个数组向量">将表的多列合并成一个数组向量</a></li><li class="topic-item"><a href="#%E5%B0%86%E8%A1%A8%E5%88%86%E7%BB%84%E6%95%B0%E6%8D%AE%E8%81%9A%E5%90%88%E6%88%90%E4%B8%80%E4%B8%AA%E6%95%B0%E7%BB%84%E5%90%91%E9%87%8F" data-tocid="将表分组数据聚合成一个数组向量">将表分组数据聚合成一个数组向量</a></li><li class="topic-item"><a href="#%E6%95%B0%E7%BB%84%E5%90%91%E9%87%8F%E6%8C%89%E8%A1%8C%E8%AE%A1%E7%AE%97" data-tocid="数组向量按行计算">数组向量按行计算</a></li></ul></div>
+	                        	
+                        	</div>
+                        </nav>
+                    
+                </div>
+            </div>
+            
+            
+            
+        </div> 
+        <footer class="navbar navbar-default wh_footer">
+  <div class=" footer-container mx-auto ">
+<title>Copyright</title><p><b> ©2024 浙江智臾科技有限公司 浙ICP备18048711号-3</b></p>
+  </div>
+</footer>
+        
+        <div id="go2top" class="d-print-none">
+            <span class="oxy-icon oxy-icon-up"></span>
+        </div>
+        
+        <div id="modal_img_large" class="modal">
+            <span class="close oxy-icon oxy-icon-remove"></span>
+            <div id="modal_img_container"></div>
+            <div id="caption"></div>
+        </div>
+        
+        
+        
+    </body>
+</html>

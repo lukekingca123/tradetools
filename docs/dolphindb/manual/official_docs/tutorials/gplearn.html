@@ -1,0 +1,444 @@
+<!DOCTYPE html><html xmlns="http://www.w3.org/1999/xhtml" xml:lang="zh" lang="zh" data-whc_version="26.0">
+    <head><link rel="shortcut icon" href="../favicon.ico"/><link rel="icon" href="../favicon.ico"/><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><meta http-equiv="X-UA-Compatible" content="IE=edge"/><meta name="description" content="1.1 背景 在金融领域，gplearn 经常被用于利用历史数据挖掘出合适的因子来指导股票/期货的买卖决策。然而，当前的 gplearn 面临着一些挑战： 计算效率低： 为了挖掘出高质量的因子，需要增加单个算子的复杂度、初始化公式数量、迭代次数等，这导致了更多的计算负担。以使用4年A股数据进行单因子挖掘为例，单轮挖掘（15代）需要耗时约5 - 24小时。 算子不足： 目前的 gplearn ..."/><meta name="DC.rights.owner" content="(C) 版权 2024"/><meta name="copyright" content="(C) 版权 2024"/><meta name="generator" content="DITA-OT"/><meta name="DC.type" content="topic"/><meta name="DC.coverage" content=""/><meta name="DC.relation" content="../tutorials/about_tutorials.html"/><meta name="DC.relation" content="../funcs/c/creategplearnengine.html"/><meta name="DC.relation" content="../funcs/g/gpfit.html"/><meta name="DC.relation" content="../funcs/g/gppredict.html"/><meta name="DC.relation" content="../funcs/s/setgpfitnessfunc.html"/><meta name="DC.relation" content="../funcs/a/addgpfunction.html"/><meta name="prodname" content="DolphinDB"/><meta name="brand" content="DolphinDB"/><meta name="DC.creator" content="DolphinDB"/><meta name="DC.publisher" content="DDB N/A DDB 200"/><meta name="DC.format" content="HTML5"/><meta name="DC.identifier" content="gplearn"/><title>Shark GPLearn 快速上手</title><!--  Generated with Oxygen version 26.0, build number 2024012323.  --><meta name="wh-path2root" content="../"/><meta name="wh-toc-id" content="gplearn-d9529e98678"/><meta name="wh-source-relpath" content="tutorials/gplearn.dita"/><meta name="wh-out-relpath" content="tutorials/gplearn.html"/>
+
+    <link rel="stylesheet" type="text/css" href="../oxygen-webhelp/app/commons.css?buildId=2024012323"/>
+    <link rel="stylesheet" type="text/css" href="../oxygen-webhelp/app/topic.css?buildId=2024012323"/>
+
+    <script src="../oxygen-webhelp/app/options/properties.js?buildId=20240704100525"></script>
+    <script src="../oxygen-webhelp/app/localization/strings.js?buildId=2024012323"></script>
+    <script src="../oxygen-webhelp/app/search/index/keywords.js?buildId=20240704100525"></script>
+    <script defer="defer" src="../oxygen-webhelp/app/commons.js?buildId=2024012323"></script>
+    <script defer="defer" src="../oxygen-webhelp/app/topic.js?buildId=2024012323"></script>
+<link rel="stylesheet" type="text/css" href="../oxygen-webhelp/template/styles.css?buildId=2024012323"/><script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script><script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script></head>
+
+    <body id="gplearn" class="wh_topic_page frmBody">
+        <a href="#wh_topic_body" class="sr-only sr-only-focusable">
+            跳转到主要内容
+        </a>
+        
+        
+        
+        
+        <header class="navbar navbar-default wh_header">
+    <div class="container-fluid">
+        <div xmlns:whc="http://www.oxygenxml.com/webhelp/components" class="wh_header_flex_container navbar-nav navbar-expand-md navbar-dark">
+            <div class="wh_logo_and_publication_title_container">
+                <div class="wh_logo_and_publication_title">
+                    
+                    <a href="https://www.dolphindb.cn" class=" wh_logo d-none d-sm-block "><img src="../logo.png" alt="  DolphinDB 文档中心  "/></a>
+                    <div class=" wh_publication_title "><a href="../index.html"><span class="booktitle">  <span class="ph mainbooktitle">DolphinDB 文档中心</span>  </span></a></div>
+                    
+                </div>
+                
+                
+            </div>
+
+            <div class="wh_top_menu_and_indexterms_link collapse navbar-collapse" id="wh_top_menu_and_indexterms_link">
+                
+                
+                
+                
+            </div>
+        <div class=" wh_search_input navbar-form wh_topic_page_search search " role="form">
+            
+            
+            
+            <form id="searchForm" method="get" role="search" action="../search.html"><div><input type="search" placeholder="搜索 " class="wh_search_textfield" id="textToSearch" name="searchQuery" aria-label="搜索查询" required="required"/><button type="submit" class="wh_search_button" aria-label="搜索"><span class="search_input_text">搜索</span></button></div></form>
+            
+            <script src="/vendors/react/umd/react.production.min.js" defer="defer"></script>
+<script src="/vendors/react-dom/umd/react-dom.production.min.js" defer="defer"></script>
+<script src="/vendors/dayjs/dayjs.min.js" defer="defer"></script>
+<script src="/vendors/antd/dist/antd.min.js" defer="defer"></script>
+<script src="/vendors/@ant-design/icons/dist/index.umd.min.js" defer="defer"></script>
+<script src="/zh/index.js" type="module"></script>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js" defer="defer"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML" defer="defer"><!--
+
+
+--></script>
+
+            
+        </div></div>
+    </div>
+</header>
+        
+        
+         
+        
+        
+        
+        <div class="container-fluid" id="wh_topic_container">
+            <div class="row">
+
+                <nav class="wh_tools d-print-none navbar-expand-md" aria-label="Tools">
+                    
+                    <div data-tooltip-position="bottom" class=" wh_breadcrumb "><ol class="d-print-none"><li><span class="home"><a href="../index.html"><span>主页</span></a></span></li><li><div class="topicref" data-id="about_tutorials"><div class="title"><a href="../tutorials/about_tutorials.html"><span class="keyword label">教程</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 产品使用教程</p></div></div></div></li><li><div class="topicref"><div class="title"><a href="../tutorials/dolphinscheduler_integration.html">金融场景案例</a></div></div></li><li class="active"><div class="topicref" data-id="gplearn"><div class="title"><a href="../tutorials/gplearn.html">Shark GPLearn 快速上手</a></div></div></li></ol></div>
+                    
+                    
+                    
+                    <div class="wh_right_tools">
+                        <button class="wh_hide_highlight" aria-label="切换搜索突出显示" title="切换搜索突出显示"></button>
+                        <button class="webhelp_expand_collapse_sections" data-next-state="collapsed" aria-label="折叠截面" title="折叠截面"></button>
+                        
+                        
+                        
+                        
+                        <div class=" wh_print_link print d-none d-md-inline-block "><button onClick="window.print()" title="打印此页" aria-label="打印此页"></button></div>
+                        
+                        <button type="button" id="wh_toc_button" class="custom-toggler navbar-toggler collapsed wh_toggle_button navbar-light" aria-expanded="false" aria-label="Toggle publishing table of content" aria-controls="wh_publication_toc">
+                            <span class="navbar-toggler-icon"></span>
+                        </button>
+                    </div>
+                    
+                </nav>
+            </div>
+            
+            
+            
+            
+            <div class="wh_content_area">
+                <div class="row">
+                    
+                        <nav id="wh_publication_toc" class="col-lg-3 col-md-3 col-sm-12 d-md-block d-none d-print-none" aria-label="Table of Contents Container">
+                            <div id="wh_publication_toc_content">
+		                        
+                            	<div class=" wh_publication_toc " data-tooltip-position="right"><span class="expand-button-action-labels"><span id="button-expand-action" role="button" aria-label="Expand"></span><span id="button-collapse-action" role="button" aria-label="Collapse"></span><span id="button-pending-action" role="button" aria-label="Pending"></span></span><ul role="tree" aria-label="Table of Contents"><li role="treeitem"><div data-tocid="new_chap_about_sect_ddb_docs_intro-d9529e87" class="topicref" data-id="new_chap_about_sect_ddb_docs_intro" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../about/ddb_docs_intro.html" id="new_chap_about_sect_ddb_docs_intro-d9529e87-link">文档使用说明</a><div class="wh-tooltip"><p class="shortdesc">如何获取 DolphinDB 帮助信息</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="chap1_getstarted-d9529e140" class="topicref" data-id="chap1_getstarted" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action chap1_getstarted-d9529e140-link" class="wh-expand-btn"></span><div class="title"><a href="../getstarted/chap1_getstarted.html" id="chap1_getstarted-d9529e140-link"><span class="keyword label">快速上手</span></a><div class="wh-tooltip"><p class="shortdesc">如何快速部署 DolphinDB、建库建表、写入和查询数据</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="sectionddb_deployment-d9529e335" class="topicref" data-id="sectionddb_deployment" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action sectionddb_deployment-d9529e335-link" class="wh-expand-btn"></span><div class="title"><a href="../deploy/deploy_intro.html" id="sectionddb_deployment-d9529e335-link"><span class="keyword label">部署</span></a><div class="wh-tooltip"><p class="shortdesc">如何在不同的场景中部署 DolphinDB</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="new_chap_database_manage_new_chap_dbmanage_landing_page-d9529e2313" class="topicref" data-id="new_chap_database_manage_new_chap_dbmanage_landing_page" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action new_chap_database_manage_new_chap_dbmanage_landing_page-d9529e2313-link" class="wh-expand-btn"></span><div class="title"><a href="../db_distr_comp/cfg/db_intro.html" id="new_chap_database_manage_new_chap_dbmanage_landing_page-d9529e2313-link"><span class="keyword label">数据库</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 数据库的基本概念</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="chap7_tutorials_streaming-d9529e3490" class="topicref" data-id="chap7_tutorials_streaming" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action chap7_tutorials_streaming-d9529e3490-link" class="wh-expand-btn"></span><div class="title"><a href="../stream/str_intro.html" id="chap7_tutorials_streaming-d9529e3490-link"><span class="keyword label">流数据</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 流数据引擎及流数据计算的基本概念</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="tocId-d9529e7385" class="topicref" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action tocId-d9529e7385-link" class="wh-expand-btn"></span><div class="title"><a href="../db_distr_comp/db_oper/import_data.html" id="tocId-d9529e7385-link">数据迁移</a><div class="wh-tooltip"><p class="shortdesc">如何从不同数据源向 DolphinDB 迁移数据</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="chap7_tutorials_system_management-d9529e7812" class="topicref" data-id="chap7_tutorials_system_management" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action chap7_tutorials_system_management-d9529e7812-link" class="wh-expand-btn"></span><div class="title"><a href="../sys_man/om_intro.html" id="chap7_tutorials_system_management-d9529e7812-link"><span class="keyword label">系统运维</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 的系统运维功能及方法</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="about_language_resources-d9529e16490" class="topicref" data-id="about_language_resources" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action about_language_resources-d9529e16490-link" class="wh-expand-btn"></span><div class="title"><a href="../progr/progr_intro.html" id="about_language_resources-d9529e16490-link"><span class="keyword label">编程语言</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 编程基本概念与方法、SQL 在 DolphinDB 的应用</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="functions_references-d9529e26503" class="topicref" data-id="functions_references" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action functions_references-d9529e26503-link" class="wh-expand-btn"></span><div class="title"><a href="../funcs/funcs_intro.html" id="functions_references-d9529e26503-link"><span class="keyword label">函数参考</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 函数分类、语法、详解及示例</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="api_protocol-d9529e86456" class="topicref" data-id="api_protocol" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action api_protocol-d9529e86456-link" class="wh-expand-btn"></span><div class="title"><a href="../api/connapi_intro.html" id="api_protocol-d9529e86456-link"><span class="keyword label">连接器 &amp; API</span></a><div class="wh-tooltip"><p class="shortdesc">面向不同编程语言的 DolphinDB API 及连接器，相关协议和用法</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="chap6_plugin-d9529e91976" class="topicref" data-id="chap6_plugin" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action chap6_plugin-d9529e91976-link" class="wh-expand-btn"></span><div class="title"><a href="../plugins/plg_intro.html" id="chap6_plugin-d9529e91976-link"><span class="keyword label">插件</span></a><div class="wh-tooltip"><p class="shortdesc">多个应用场景的插件使用说明和插件开发指导</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="third_party-d9529e94749" class="topicref" data-id="third_party" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action third_party-d9529e94749-link" class="wh-expand-btn"></span><div class="title"><a href="../third_party.html" id="third_party-d9529e94749-link">第三方工具</a></div></div></li><li role="treeitem" aria-expanded="true"><div data-tocid="about_tutorials-d9529e94980" class="topicref" data-id="about_tutorials" data-state="expanded"><span role="button" tabindex="0" aria-labelledby="button-collapse-action about_tutorials-d9529e94980-link" class="wh-expand-btn"></span><div class="title"><a href="../tutorials/about_tutorials.html" id="about_tutorials-d9529e94980-link"><span class="keyword label">教程</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 产品使用教程</p></div></div></div><ul role="group" class="navbar-nav nav-list"><li role="treeitem" aria-expanded="false"><div data-tocid="tocId-d9529e95033" class="topicref" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action tocId-d9529e95033-link" class="wh-expand-btn"></span><div class="title"><a href="../tutorials/import_data.html" id="tocId-d9529e95033-link">数据导入</a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="tocId-d9529e95264" class="topicref" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action tocId-d9529e95264-link" class="wh-expand-btn"></span><div class="title"><a href="../tutorials/DolphinDB_TopN.html" id="tocId-d9529e95264-link">数据库</a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="tocId-d9529e95910" class="topicref" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action tocId-d9529e95910-link" class="wh-expand-btn"></span><div class="title"><a href="../tutorials/memory_management.html" id="tocId-d9529e95910-link">系统运维</a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="tocId-d9529e96325" class="topicref" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action tocId-d9529e96325-link" class="wh-expand-btn"></span><div class="title"><a href="../tutorials/hybrid_programming_paradigms.html" id="tocId-d9529e96325-link">编程语言</a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="tocId-d9529e97155" class="topicref" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action tocId-d9529e97155-link" class="wh-expand-btn"></span><div class="title"><a href="../tutorials/data_sync_among_clusters.html" id="tocId-d9529e97155-link">安全与容灾</a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="tocId-d9529e97386" class="topicref" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action tocId-d9529e97386-link" class="wh-expand-btn"></span><div class="title"><a href="../tutorials/streaming_tutorial.html" id="tocId-d9529e97386-link">流数据</a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="tocId-d9529e97893" class="topicref" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action tocId-d9529e97893-link" class="wh-expand-btn"></span><div class="title"><a href="../tutorials/DECIMAL.html" id="tocId-d9529e97893-link">数值处理</a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="chap7_tutorials_modules-d9529e97986" class="topicref" data-id="chap7_tutorials_modules" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action chap7_tutorials_modules-d9529e97986-link" class="wh-expand-btn"></span><div class="title"><a href="../tutorials/tu_modules.html" id="chap7_tutorials_modules-d9529e97986-link"><span class="keyword label">模块</span></a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="plugins_apply-d9529e98493" class="topicref" data-id="plugins_apply" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action plugins_apply-d9529e98493-link" class="wh-expand-btn"></span><div class="title"><a href="../tutorials/plugins_apply.html" id="plugins_apply-d9529e98493-link">插件应用</a></div></div></li><li role="treeitem" aria-expanded="true"><div data-tocid="tocId-d9529e98631" class="topicref" data-state="expanded"><span role="button" tabindex="0" aria-labelledby="button-collapse-action tocId-d9529e98631-link" class="wh-expand-btn"></span><div class="title"><a href="../tutorials/dolphinscheduler_integration.html" id="tocId-d9529e98631-link">金融场景案例</a></div></div><ul role="group" class="navbar-nav nav-list"><li role="treeitem"><div data-tocid="dolphindb-与-dolphinscheduler-的集成-d9529e98632" class="topicref" data-id="dolphindb-与-dolphinscheduler-的集成" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../tutorials/dolphinscheduler_integration.html" id="dolphindb-与-dolphinscheduler-的集成-d9529e98632-link">DolphinDB 与 DolphinScheduler 的集成</a></div></div></li><li role="treeitem" class="active"><div data-tocid="gplearn-d9529e98678" class="topicref" data-id="gplearn" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../tutorials/gplearn.html" id="gplearn-d9529e98678-link">Shark GPLearn 快速上手</a></div></div></li><li role="treeitem"><div data-tocid="量化金融范例-d9529e98724" class="topicref" data-id="量化金融范例" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../tutorials/quant_finance_examples.html" id="量化金融范例-d9529e98724-link">量化金融范例</a></div></div></li><li role="treeitem"><div data-tocid="利用缓存表快速实现-mysql-库间信息同步-d9529e98770" class="topicref" data-id="利用缓存表快速实现-mysql-库间信息同步" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../tutorials/cachedtable.html" id="利用缓存表快速实现-mysql-库间信息同步-d9529e98770-link">利用缓存表快速实现 MySQL 库间信息同步</a></div></div></li><li role="treeitem"><div data-tocid="机器学习-d9529e98816" class="topicref" data-id="机器学习" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../tutorials/machine_learning.html" id="机器学习-d9529e98816-link">机器学习</a></div></div></li><li role="treeitem"><div data-tocid="时区处理-d9529e98862" class="topicref" data-id="时区处理" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../tutorials/timezone.html" id="时区处理-d9529e98862-link">时区处理</a></div></div></li><li role="treeitem"><div data-tocid="实时计算高频因子-d9529e98908" class="topicref" data-id="实时计算高频因子" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../tutorials/hf_factor_streaming_2.html" id="实时计算高频因子-d9529e98908-link">实时计算高频因子</a></div></div></li><li role="treeitem"><div data-tocid="计算基金日频因子-d9529e98954" class="topicref" data-id="计算基金日频因子" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../tutorials/fund_factor_contrasted_by_py.html" id="计算基金日频因子-d9529e98954-link">计算基金日频因子</a></div></div></li><li role="treeitem"><div data-tocid="因子计算最佳实践-d9529e99000" class="topicref" data-id="因子计算最佳实践" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../tutorials/best_practice_for_factor_calculation.html" id="因子计算最佳实践-d9529e99000-link">因子计算最佳实践</a></div></div></li><li role="treeitem"><div data-tocid="因子计算平台构建-d9529e99046" class="topicref" data-id="因子计算平台构建" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../tutorials/Python_Celery.html" id="因子计算平台构建-d9529e99046-link">因子计算平台构建</a></div></div></li><li role="treeitem"><div data-tocid="金融因子流式实现-d9529e99092" class="topicref" data-id="金融因子流式实现" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../tutorials/str_comp_fin_quant_2.html" id="金融因子流式实现-d9529e99092-link">金融因子流式实现</a></div></div></li><li role="treeitem"><div data-tocid="中高频多因子库存储最佳实践-d9529e99139" class="topicref" data-id="中高频多因子库存储最佳实践" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../tutorials/best_practices_for_multi_factor.html" id="中高频多因子库存储最佳实践-d9529e99139-link">中高频多因子库存储最佳实践</a></div></div></li><li role="treeitem"><div data-tocid="python--hdf5-因子计算与-dolphindb-一体化因子计算方案对比-d9529e99185" class="topicref" data-id="python--hdf5-因子计算与-dolphindb-一体化因子计算方案对比" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../tutorials/Python_HDF5_vs_DolphinDB.html" id="python--hdf5-因子计算与-dolphindb-一体化因子计算方案对比-d9529e99185-link">Python + HDF5 因子计算与 DolphinDB 一体化因子计算方案对比</a></div></div></li><li role="treeitem"><div data-tocid="python--文件存储与-dolphindb-因子计算性能比较-d9529e99231" class="topicref" data-id="python--文件存储与-dolphindb-因子计算性能比较" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../tutorials/DolphinDB_VS_PythonFile_Storage.html" id="python--文件存储与-dolphindb-因子计算性能比较-d9529e99231-link">Python + 文件存储与 DolphinDB 因子计算性能比较</a></div></div></li><li role="treeitem"><div data-tocid="快速搭建-level-2-快照数据流批一体因子计算平台最佳实践-d9529e99277" class="topicref" data-id="快速搭建-level-2-快照数据流批一体因子计算平台最佳实践" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../tutorials/l2_snapshot_factor_calc_2.html" id="快速搭建-level-2-快照数据流批一体因子计算平台最佳实践-d9529e99277-link">快速搭建 Level-2 快照数据流批一体因子计算平台最佳实践</a></div></div></li><li role="treeitem"><div data-tocid="k-线计算-d9529e99323" class="topicref" data-id="k-线计算" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../tutorials/OHLC_2.html" id="k-线计算-d9529e99323-link">K 线计算</a></div></div></li><li role="treeitem"><div data-tocid="mvo_tutorial-d9529e99369" class="topicref" data-id="mvo_tutorial" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../tutorials/MVO.html" id="mvo_tutorial-d9529e99369-link">优化投资组合：DolphinDB 最优化求解系列函数应用指南</a></div></div></li><li role="treeitem"><div data-tocid="面板数据处理-d9529e99415" class="topicref" data-id="面板数据处理" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../tutorials/panel_data.html" id="面板数据处理-d9529e99415-link">面板数据处理</a></div></div></li><li role="treeitem"><div data-tocid="快照引擎-d9529e99461" class="topicref" data-id="快照引擎" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../tutorials/snapshot_engine.html" id="快照引擎-d9529e99461-link">快照引擎</a></div></div></li><li role="treeitem"><div data-tocid="国内股票行情数据导入实例-d9529e99507" class="topicref" data-id="国内股票行情数据导入实例" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../tutorials/stockdata_csv_import_demo.html" id="国内股票行情数据导入实例-d9529e99507-link">国内股票行情数据导入实例</a></div></div></li><li role="treeitem"><div data-tocid="搭建行情回放服务的最佳实践-d9529e99553" class="topicref" data-id="搭建行情回放服务的最佳实践" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../tutorials/appendices_market_replay_bp.html" id="搭建行情回放服务的最佳实践-d9529e99553-link">搭建行情回放服务的最佳实践</a></div></div></li><li role="treeitem"><div data-tocid="外汇掉期估值计算-d9529e99599" class="topicref" data-id="外汇掉期估值计算" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../tutorials/FxSwapValuation.html" id="外汇掉期估值计算-d9529e99599-link">外汇掉期估值计算</a></div></div></li><li role="treeitem"><div data-tocid="深度不平衡买卖压力指标波动率计算-d9529e99646" class="topicref" data-id="深度不平衡买卖压力指标波动率计算" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../tutorials/sql_performance_optimization_wap_di_rv.html" id="深度不平衡买卖压力指标波动率计算-d9529e99646-link">深度不平衡、买卖压力指标、波动率计算</a></div></div></li><li role="treeitem"><div data-tocid="金融实时实际波动率预测-d9529e99692" class="topicref" data-id="金融实时实际波动率预测" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../tutorials/ml_volatility_2.html" id="金融实时实际波动率预测-d9529e99692-link">金融实时实际波动率预测</a></div></div></li><li role="treeitem"><div data-tocid="股票行情回放-d9529e99738" class="topicref" data-id="股票行情回放" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../tutorials/stock_market_replay_2.html" id="股票行情回放-d9529e99738-link">股票行情回放</a></div></div></li><li role="treeitem"><div data-tocid="实时计算日累计逐单资金流-d9529e99784" class="topicref" data-id="实时计算日累计逐单资金流" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../tutorials/streaming_capital_flow_daily_2.html" id="实时计算日累计逐单资金流-d9529e99784-link">实时计算日累计逐单资金流</a></div></div></li><li role="treeitem"><div data-tocid="实时计算分钟资金流-d9529e99830" class="topicref" data-id="实时计算分钟资金流" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../tutorials/streaming_capital_flow_order_by_order_2.html" id="实时计算分钟资金流-d9529e99830-link">实时计算分钟资金流</a></div></div></li><li role="treeitem"><div data-tocid="基金份额参考价值-iopv-计算-d9529e99876" class="topicref" data-id="基金份额参考价值-iopv-计算" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../tutorials/streaming_IOPV_2.html" id="基金份额参考价值-iopv-计算-d9529e99876-link">基金份额参考价值 IOPV 计算</a></div></div></li><li role="treeitem"><div data-tocid="开发股票波动率预测模型的-676-个输入特征-d9529e99922" class="topicref" data-id="开发股票波动率预测模型的-676-个输入特征" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../tutorials/metacode_derived_features_2.html" id="开发股票波动率预测模型的-676-个输入特征-d9529e99922-link">开发股票波动率预测模型的 676 个输入特征</a></div></div></li><li role="treeitem"><div data-tocid="流式计算中证-1000-指数主买主卖交易量-d9529e99968" class="topicref" data-id="流式计算中证-1000-指数主买主卖交易量" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../tutorials/CSI_1000_2.html" id="流式计算中证-1000-指数主买主卖交易量-d9529e99968-link">流式计算中证 1000 指数主买/主卖交易量</a></div></div></li><li role="treeitem"><div data-tocid="利用-dolphindb-高效清洗数据-d9529e100014" class="topicref" data-id="利用-dolphindb-高效清洗数据" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../tutorials/data_ETL.html" id="利用-dolphindb-高效清洗数据-d9529e100014-link">利用 DolphinDB 高效清洗数据</a></div></div></li><li role="treeitem"><div data-tocid="公募基金历史数据基础分析教程-d9529e100060" class="topicref" data-id="公募基金历史数据基础分析教程" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../tutorials/public_fund_basic_analysis.html" id="公募基金历史数据基础分析教程-d9529e100060-link">公募基金历史数据基础分析教程</a></div></div></li><li role="treeitem"><div data-tocid="dolphindb-与-python-airflow-最佳实践-d9529e100106" class="topicref" data-id="dolphindb-与-python-airflow-最佳实践" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../tutorials/ddb_airflow.html" id="dolphindb-与-python-airflow-最佳实践-d9529e100106-link">DolphinDB 与 Python AirFlow 最佳实践</a></div></div></li><li role="treeitem"><div data-tocid="处理-level-2-行情数据实例-d9529e100153" class="topicref" data-id="处理-level-2-行情数据实例" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../tutorials/l2_stk_data_proc_2.html" id="处理-level-2-行情数据实例-d9529e100153-link">处理 Level-2 行情数据实例</a></div></div></li><li role="treeitem"><div data-tocid="金融-poc-用户历史数据导入指导手册之股票-level-2-逐笔篇-d9529e100199" class="topicref" data-id="金融-poc-用户历史数据导入指导手册之股票-level-2-逐笔篇" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../tutorials/LoadDataForPoc.html" id="金融-poc-用户历史数据导入指导手册之股票-level-2-逐笔篇-d9529e100199-link">金融 PoC 用户历史数据导入指导手册之股票 Level-2 逐笔篇</a></div></div></li><li role="treeitem"><div data-tocid="多数据源流式实时关联处理-d9529e100245" class="topicref" data-id="多数据源流式实时关联处理" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../tutorials/streaming-real-time-correlation-processing_2.html" id="多数据源流式实时关联处理-d9529e100245-link">多数据源流式实时关联处理</a></div></div></li><li role="treeitem"><div data-tocid="实时计算涨幅榜-d9529e100291" class="topicref" data-id="实时计算涨幅榜" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../tutorials/rt_stk_price_inc_calc_2.html" id="实时计算涨幅榜-d9529e100291-link">实时计算涨幅榜</a></div></div></li><li role="treeitem"><div data-tocid="python-parser-在金融量化分析场景的应用入门-d9529e100337" class="topicref" data-id="python-parser-在金融量化分析场景的应用入门" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../tutorials/py_parser__quant_fin.html" id="python-parser-在金融量化分析场景的应用入门-d9529e100337-link">Python Parser 在金融量化分析场景的应用入门</a></div></div></li><li role="treeitem"><div data-tocid="存储金融数据的分区方案最佳实践-d9529e100383" class="topicref" data-id="存储金融数据的分区方案最佳实践" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../tutorials/best_practices_for_partitioned_storage.html" id="存储金融数据的分区方案最佳实践-d9529e100383-link">存储金融数据的分区方案最佳实践</a></div></div></li><li role="treeitem"><div data-tocid="实时选取外汇行情多价源最优价-d9529e100429" class="topicref" data-id="实时选取外汇行情多价源最优价" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../tutorials/best_price_selection.html" id="实时选取外汇行情多价源最优价-d9529e100429-link">实时选取外汇行情多价源最优价</a></div></div></li><li role="treeitem"><div data-tocid="dolphindb-insight-行情插件最佳实践指南-d9529e100475" class="topicref" data-id="dolphindb-insight-行情插件最佳实践指南" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../tutorials/insight_plugin.html" id="dolphindb-insight-行情插件最佳实践指南-d9529e100475-link">DolphinDB INSIGHT 行情插件最佳实践指南</a></div></div></li><li role="treeitem"><div data-tocid="dolphindb-xtp-插件最佳实践-d9529e100521" class="topicref" data-id="dolphindb-xtp-插件最佳实践" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../tutorials/xtp.html" id="dolphindb-xtp-插件最佳实践-d9529e100521-link">DolphinDB XTP 插件最佳实践</a></div></div></li><li role="treeitem"><div data-tocid="dolphindb-教程概率统计分析-d9529e100567" class="topicref" data-id="dolphindb-教程概率统计分析" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../tutorials/probabilistic_and_statistical_analysis.html" id="dolphindb-教程概率统计分析-d9529e100567-link">DolphinDB 教程：概率统计分析</a></div></div></li><li role="treeitem"><div data-tocid="基于快照行情的股票和基金-k-线合成-d9529e100613" class="topicref" data-id="基于快照行情的股票和基金-k-线合成" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../tutorials/k.html" id="基于快照行情的股票和基金-k-线合成-d9529e100613-link">基于快照行情的股票和基金 K 线合成</a></div></div></li><li role="treeitem"><div data-tocid="alphalens-在-dolphindb-中的应用因子分析建模实践-d9529e100660" class="topicref" data-id="alphalens-在-dolphindb-中的应用因子分析建模实践" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../tutorials/Practical_Factor_Analysis_Modeling.html" id="alphalens-在-dolphindb-中的应用因子分析建模实践-d9529e100660-link">Alphalens 在 DolphinDB 中的应用：因子分析建模实践</a></div></div></li></ul></li><li role="treeitem" aria-expanded="false"><div data-tocid="tocId-d9529e100707" class="topicref" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action tocId-d9529e100707-link" class="wh-expand-btn"></span><div class="title"><a href="../tutorials/iot_examples.html" id="tocId-d9529e100707-link">物联网场景案例</a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="tocId-d9529e101629" class="topicref" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action tocId-d9529e101629-link" class="wh-expand-btn"></span><div class="title"><a href="../tutorials/cluster_scaleout_perf_test.html" id="tocId-d9529e101629-link">测试报告</a></div></div></li></ul></li><li role="treeitem" aria-expanded="false"><div data-tocid="tocId-d9529e101769" class="topicref" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action tocId-d9529e101769-link" class="wh-expand-btn"></span><div class="title"><a href="../rn/server/3_00_1.html" id="tocId-d9529e101769-link">版本说明</a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 版本发布历史</p></div></div></div></li></ul></div>
+		                        
+                            </div>
+                        </nav>
+                    
+                    
+                    <div class="col-lg-7 col-md-9 col-sm-12" id="wh_topic_body">
+                        <button id="wh_close_publication_toc_button" class="close-toc-button d-none" aria-label="Toggle publishing table of content" aria-controls="wh_publication_toc" aria-expanded="true">
+                            <span class="close-toc-icon-container">
+                                <span class="close-toc-icon"></span>     
+                            </span>
+                        </button>
+                        <button id="wh_close_topic_toc_button" class="close-toc-button d-none" aria-label="Toggle topic table of content" aria-controls="wh_topic_toc" aria-expanded="true">
+                            <span class="close-toc-icon-container">
+                                <span class="close-toc-icon"></span>     
+                            </span>
+                        </button>
+                        
+                        <div class=" wh_topic_content body "><main role="main"><article class="- topic/topic topic" role="article" aria-labelledby="ariaid-title1">
+    <h1 class="- topic/title title topictitle1" id="ariaid-title1">Shark GPLearn 快速上手</h1>
+    <div class="- topic/body body">
+        <section class="- topic/section section" id="gplearn__background" data-ofbid="gplearn__background"><h2 class="- topic/title title sectiontitle">1.1 背景</h2>
+            
+            <p class="- topic/p p">在金融领域，gplearn 经常被用于利用历史数据挖掘出合适的因子来指导股票/期货的买卖决策。然而，当前的 gplearn 面临着一些挑战：</p>
+            <ul class="- topic/ul ul" id="gplearn__ul_ctr_4p5_x1c" data-ofbid="gplearn__ul_ctr_4p5_x1c">
+                <li class="- topic/li li"><strong class="+ topic/ph hi-d/b ph b">计算效率低：</strong>
+                    为了挖掘出高质量的因子，需要增加单个算子的复杂度、初始化公式数量、迭代次数等，这导致了更多的计算负担。以使用4年A股数据进行单因子挖掘为例，单轮挖掘（15代）需要耗时约5
+                    - 24小时。</li>
+                <li class="- topic/li li"><strong class="+ topic/ph hi-d/b ph b">算子不足：</strong> 目前的 gplearn 提供的基础数学算子难以拟合金融领域数据的复杂特征。</li>
+                <li class="- topic/li li"><strong class="+ topic/ph hi-d/b ph b">难以处理三维数据：</strong> 基础的 gplearn
+                    只能处理二维的输入数据，如同一时间所有股票的数据（横截面数据）或同一股票不同时间的数据（时序数据）。对于三维数据（不同时间+不同股票+特征），需要额外的分组操作（group
+                    by），这增加了数据处理的复杂度。</li>
+            </ul>
+        </section>
+        <section class="- topic/section section" id="gplearn__overview" data-ofbid="gplearn__overview"><h2 class="- topic/title title sectiontitle">1.2 概述</h2>
+            
+            <p class="- topic/p p">Shark GPLearn 是一个利用遗传算法解决符号回归问题的框架，旨在自动生成与数据分布相拟合的因子。相比传统 gplearn，Shark GPLearn
+                带来了以下改进：</p>
+            <ul class="- topic/ul ul" id="gplearn__ul_dtr_4p5_x1c" data-ofbid="gplearn__ul_dtr_4p5_x1c">
+                <li class="- topic/li li"><strong class="+ topic/ph hi-d/b ph b">GPU 加速：</strong> Shark GPLearn 利用 GPU 大幅提高了因子挖掘的效率，加快了计算速度。</li>
+                <li class="- topic/li li"><strong class="+ topic/ph hi-d/b ph b">丰富的算子库：</strong> Shark GPLearn 整合了 DolphinDB
+                    数据库内置的函数，大大丰富了算子库，使其能够更准确地拟合数据的复杂特征。</li>
+                <li class="- topic/li li"><strong class="+ topic/ph hi-d/b ph b">处理三维数据：</strong>Shark GPLearn 支持对三维数据的处理，用户只需设置分组列名，无需进行额外的手动分组。</li>
+            </ul>
+            <div class="- topic/note note note note_note" id="gplearn__note_qbp_cvr_2bc" data-ofbid="gplearn__note_qbp_cvr_2bc"><span class="note__title">注：</span> 社区版 License 暂不支持该功能。如需使用，请前往<a class="- topic/xref xref" href="https://dolphindb.cn/product#downloads-top" target="_blank" rel="external noopener">官网下载页面</a>，点击 Shark 产品的“试用 License”，申请对应 License。</div>
+        </section>
+        <section class="- topic/section section" id="gplearn__method" data-ofbid="gplearn__method"><h2 class="- topic/title title sectiontitle">1.3 原理</h2>
+            
+            <p class="- topic/p p">遗传算法是一种搜索优化方法，灵感来自自然选择和达尔文的进化论，尤其是“适者生存”的思想。遗传算法中有一些关键概念，如“种群”，“交叉（杂交）”，“突变”和“选择”，均来源于进化论。种群是所有可能解的集合。交叉是一种方式，通过组合两个解的部分，产生新的解。突变是对解的随机更改，以增加种群的多样性。选择是保留适应度较好的解的过程。</p>
+            <p class="- topic/p p">Shark GPLearn 的原理可以概括为以下步骤：</p>
+            <ol class="- topic/ol ol" id="gplearn__ol_etr_4p5_x1c" data-ofbid="gplearn__ol_etr_4p5_x1c">
+                <li class="- topic/li li">初始化：生成一个随机公式的种群。 </li>
+                <li class="- topic/li li">评估：评估每个公式的适应度（即对数据拟合的准确性），给出适应度评分。</li>
+                <li class="- topic/li li">选择：根据其适应度评分选择公式，以用于下一代。适应度更好的公式有更高的被选中的概率。</li>
+                <li class="- topic/li li">进化与变异：随机选取两个公式，然后从一个公式中选取一部分，与另一个公式的一部分交换，生成两个新的公式。或随机更改一部分公式，产生一个新的公式。</li>
+                <li class="- topic/li li">迭代：重复第 2-4 步，直到满足停止准则，如达到最大的迭代次数，或者找到一个足够好的公式。</li>
+            </ol>
+            <figure class="- topic/fig fig fignone" id="gplearn__fig_ff2_bq5_x1c" data-ofbid="gplearn__fig_ff2_bq5_x1c"><figcaption data-caption-side="top" class="- topic/title title figcap"><span class="figtitleprefix fig--title-label">图<span class="fig--title-label-number"> 1</span><span class="fig--title-label-punctuation">. </span></span><span class="fig--title">Shark GPLearn </span></figcaption>
+                
+                <br/><img class="- topic/image image" id="gplearn__image_mtp_dq5_x1c" src="images/gplearn/a.png" height="273" width="608"/><br/>
+            </figure>
+        </section>
+        <section class="- topic/section section" id="gplearn__section_tcn_lsv_x1c" data-ofbid="gplearn__section_tcn_lsv_x1c"><h2 class="- topic/title title sectiontitle">1.4 显卡要求</h2>
+            
+            <p class="- topic/p p">DolphinDB 的 Shark GPLearn 功能要求显卡的计算能力达到 6.0 或以上。有关不同型号显卡算力的计算方法，请查阅 <a class="- topic/xref xref" href="https://developer.nvidia.com/cuda-gpus" target="_blank" rel="external noopener">Nvidia 官方文档</a>。</p>
+        </section>
+        <section class="- topic/section section" id="gplearn__section_arx_zp5_x1c" data-ofbid="gplearn__section_arx_zp5_x1c"><h2 class="- topic/title title sectiontitle">2. 快速上手</h2>
+            
+            <p class="- topic/p p">支持 Shark GPLearn 的 DolphinDB 部署在一台支持 GPU 的服务器上。部署流程请参考<a class="- topic/xref xref" href="https://docs.dolphindb.cn/zh/tutorials/standalone_server.html" target="_blank" rel="external noopener">单节点部署</a> 与 <a class="- topic/xref xref" href="https://docs.dolphindb.cn/zh/tutorials/single_machine_cluster_deploy.html" target="_blank" rel="external noopener">集群部署</a>。</p>
+            <ol class="- topic/ol ol" id="gplearn__ol_ktn_hq5_x1c" data-ofbid="gplearn__ol_ktn_hq5_x1c">
+                <li class="- topic/li li">准备训练数据：<pre class="+ topic/pre pr-d/codeblock pre codeblock" id="gplearn__codeblock_ush_3q5_x1c" data-ofbid="gplearn__codeblock_ush_3q5_x1c"><code>def prepareData(num){
+    total =num
+    data=table(total:total, `a`b`c`d,[FLOAT,FLOAT,FLOAT,FLOAT])// 1024*1024*5 行
+    data[`a]=rand(10.0, total)  - rand(5.0, total)
+    data[`b]=rand(10.0, total)   - rand(5.0, total)
+    data[`c]=rand(10.0, total)   - rand(5.0, total)
+    data[`d]=rand(10.0, total)   - rand(5.0, total)
+    return data
+}
+num = 1024 * 1024 * 5
+source = prepareData(num)</code></pre></li>
+                <li class="- topic/li li">准备预测数据：<pre class="+ topic/pre pr-d/codeblock pre codeblock" id="gplearn__codeblock_j23_jq5_x1c" data-ofbid="gplearn__codeblock_j23_jq5_x1c"><code>a =  source[`a] 
+b = source[`b] 
+c = source[`c] 
+d = source[`d] 
+predVec = a*a*a*a/(a*a*a*a+1) + b*b*b*b/(b*b*b*b+1) +  c*c*c*c/( c*c*c*c+1) +  d*d*d*d/(d*d*d*d+1) </code></pre></li>
+                <li class="- topic/li li">执行训练：<pre class="+ topic/pre pr-d/codeblock pre codeblock" id="gplearn__codeblock_orq_kq5_x1c" data-ofbid="gplearn__codeblock_orq_kq5_x1c"><code>engine = createGPLearnEngine(source, predVec, 
+    functionSet=['add','sub','mul','div','sqrt','sin','cos','tan'],constRange=0,initDepth = [2,5],restrictDepth=true)
+engine.gpFit(10)</code></pre></li>
+                <li class="- topic/li li">进行预测：<pre class="+ topic/pre pr-d/codeblock pre codeblock" id="gplearn__codeblock_m5n_lq5_x1c" data-ofbid="gplearn__codeblock_m5n_lq5_x1c"><code>predict = engine.gpPredict(source, 3)</code></pre></li>
+                <li class="- topic/li li">训练过程输出：<figure class="- topic/fig fig fignone" id="gplearn__fig_zxb_nq5_x1c" data-ofbid="gplearn__fig_zxb_nq5_x1c">
+                        <br/><img class="- topic/image image" id="gplearn__image_tbx_nq5_x1c" src="images/gplearn/b.png" height="359" width="907"/><br/>
+                    </figure></li>
+            </ol>
+            <figure class="- topic/fig fig fignone" id="gplearn__fig_lqd_pq5_x1c" data-ofbid="gplearn__fig_lqd_pq5_x1c"><figcaption data-caption-side="top" class="- topic/title title figcap"><span class="figtitleprefix fig--title-label">图<span class="fig--title-label-number"> 2</span><span class="fig--title-label-punctuation">. </span></span><span class="fig--title">训练结果</span></figcaption>
+                
+                <br/><img class="- topic/image image" id="gplearn__image_hrd_qq5_x1c" src="images/gplearn/c.png" height="285" width="518"/><br/>
+            </figure>
+            <figure class="- topic/fig fig fignone" id="gplearn__fig_tc4_qq5_x1c" data-ofbid="gplearn__fig_tc4_qq5_x1c"><figcaption data-caption-side="top" class="- topic/title title figcap"><span class="figtitleprefix fig--title-label">图<span class="fig--title-label-number"> 3</span><span class="fig--title-label-punctuation">. </span></span><span class="fig--title">预测结果</span></figcaption>
+                
+                <br/><img class="- topic/image image" id="gplearn__image_n3q_rq5_x1c" src="images/gplearn/d.png" height="211" width="779"/><br/>
+            </figure>
+        </section>
+        <section class="- topic/section section" id="gplearn__section_yml_sq5_x1c" data-ofbid="gplearn__section_yml_sq5_x1c"><h2 class="- topic/title title sectiontitle">3. 相关函数</h2>
+            
+            <p class="- topic/p p">在以上的操作步骤中使用了以下函数：</p>
+            <ul class="- topic/ul ul" id="gplearn__ul_wkz_jr5_x1c" data-ofbid="gplearn__ul_wkz_jr5_x1c">
+                <li class="- topic/li li"><a class="- topic/xref xref" href="../funcs/c/creategplearnengine.html">createGPLearnEngine</a>：创建一个 GPLearn 引擎用于训练和预测。</li>
+                <li class="- topic/li li"><a class="- topic/xref xref" href="../funcs/g/gpfit.html">gpFit</a>：查看训练生成的公式。函数返回一个表：<ul class="- topic/ul ul" id="gplearn__ul_vbl_5r5_x1c" data-ofbid="gplearn__ul_vbl_5r5_x1c">
+                        <li class="- topic/li li">第一列为 program 列，STRING 类型，用于存储得到的公式；</li>
+                        <li class="- topic/li li">第二列为 fitness 列，DOUBLE 类型，存储公式的适应度；</li>
+                        <li class="- topic/li li">当 programCorr 为 true 时，第三列为 programCorr 列，是DOUBLE
+                            类型的数组向量，存储公式之间的相关性。</li>
+                    </ul></li>
+                <li class="- topic/li li"><a class="- topic/xref xref" href="../funcs/g/gppredict.html">gpPredict</a>：采用上次训练得到的适应度函数较小的前 programNum 个公式用于预测。如果指定
+                    groupCol，计算时还会依据 groupCol 分组。函数返回一个表，共 programNum 列，列名为 gpFit 训练得到的公式。</li>
+                <li class="- topic/li li"><a class="- topic/xref xref" href="../funcs/s/setgpfitnessfunc.html">setGpFitnessFunc</a>：重置 GPLearn 引擎的适应度函数。</li>
+                <li class="- topic/li li"><a class="- topic/xref xref" href="../funcs/a/addgpfunction.html">addGpFunction</a>：在现有训练函数的基础上增加用户自定义函数，用于初始化公式树和进化时使用。支持的算子详见附录。</li>
+            </ul>
+        </section>
+        <section class="- topic/section section" id="gplearn__section_btv_r55_x1c" data-ofbid="gplearn__section_btv_r55_x1c"><h2 class="- topic/title title sectiontitle">附录</h2>
+            
+            <p class="- topic/p p">目前已支持的训练函数：</p>
+            <div class="- topic/note note note note_note" id="gplearn__note_xqt_n55_x1c" data-ofbid="gplearn__note_xqt_n55_x1c"><span class="note__title">注：</span> 对于所有的 m 系列函数，如果当前窗口小于 n，则会直接返回 0。而 DolphinDB 默认返回空值。</div>
+            <div class="table-container"><table class="- topic/table table frame-all" id="gplearn__table_ohy_k55_x1c" data-ofbid="gplearn__table_ohy_k55_x1c" data-cols="3"><caption></caption><colgroup><col style="width:23.736263736263734%"/><col style="width:21.978021978021975%"/><col style="width:54.285714285714285%"/></colgroup><thead class="- topic/thead thead">
+                        <tr class="- topic/row">
+                            <th class="- topic/entry entry colsep-1 rowsep-1" id="gplearn__table_ohy_k55_x1c__entry__1">函数名</th>
+                            <th class="- topic/entry entry colsep-1 rowsep-1" id="gplearn__table_ohy_k55_x1c__entry__2">入参数量</th>
+                            <th class="- topic/entry entry colsep-0 rowsep-1" id="gplearn__table_ohy_k55_x1c__entry__3">描述</th>
+                        </tr>
+                    </thead><tbody class="- topic/tbody tbody">
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry colsep-1 rowsep-1" headers="gplearn__table_ohy_k55_x1c__entry__1">add(x,y)</td>
+                            <td class="- topic/entry entry colsep-1 rowsep-1" headers="gplearn__table_ohy_k55_x1c__entry__2">2</td>
+                            <td class="- topic/entry entry colsep-0 rowsep-1" headers="gplearn__table_ohy_k55_x1c__entry__3">加法</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry colsep-1 rowsep-1" headers="gplearn__table_ohy_k55_x1c__entry__1">sub(x,y)</td>
+                            <td class="- topic/entry entry colsep-1 rowsep-1" headers="gplearn__table_ohy_k55_x1c__entry__2">2</td>
+                            <td class="- topic/entry entry colsep-0 rowsep-1" headers="gplearn__table_ohy_k55_x1c__entry__3">减法</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry colsep-1 rowsep-1" headers="gplearn__table_ohy_k55_x1c__entry__1">mul(x,y)</td>
+                            <td class="- topic/entry entry colsep-1 rowsep-1" headers="gplearn__table_ohy_k55_x1c__entry__2">2</td>
+                            <td class="- topic/entry entry colsep-0 rowsep-1" headers="gplearn__table_ohy_k55_x1c__entry__3">乘法</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry colsep-1 rowsep-1" headers="gplearn__table_ohy_k55_x1c__entry__1">div(x,y)</td>
+                            <td class="- topic/entry entry colsep-1 rowsep-1" headers="gplearn__table_ohy_k55_x1c__entry__2">2</td>
+                            <td class="- topic/entry entry colsep-0 rowsep-1" headers="gplearn__table_ohy_k55_x1c__entry__3">除法， 如果除数的绝对值小于0.001，返回1</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry colsep-1 rowsep-1" headers="gplearn__table_ohy_k55_x1c__entry__1">max(x,y)</td>
+                            <td class="- topic/entry entry colsep-1 rowsep-1" headers="gplearn__table_ohy_k55_x1c__entry__2">2</td>
+                            <td class="- topic/entry entry colsep-0 rowsep-1" headers="gplearn__table_ohy_k55_x1c__entry__3">最大值</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry colsep-1 rowsep-1" headers="gplearn__table_ohy_k55_x1c__entry__1">min(x,y)</td>
+                            <td class="- topic/entry entry colsep-1 rowsep-1" headers="gplearn__table_ohy_k55_x1c__entry__2">2</td>
+                            <td class="- topic/entry entry colsep-0 rowsep-1" headers="gplearn__table_ohy_k55_x1c__entry__3">最小值</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry colsep-1 rowsep-1" headers="gplearn__table_ohy_k55_x1c__entry__1">sqrt(x)</td>
+                            <td class="- topic/entry entry colsep-1 rowsep-1" headers="gplearn__table_ohy_k55_x1c__entry__2">1</td>
+                            <td class="- topic/entry entry colsep-0 rowsep-1" headers="gplearn__table_ohy_k55_x1c__entry__3">按照绝对值开方</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry colsep-1 rowsep-1" headers="gplearn__table_ohy_k55_x1c__entry__1">log(x)</td>
+                            <td class="- topic/entry entry colsep-1 rowsep-1" headers="gplearn__table_ohy_k55_x1c__entry__2">1</td>
+                            <td class="- topic/entry entry colsep-0 rowsep-1" headers="gplearn__table_ohy_k55_x1c__entry__3"><code class="+ topic/ph pr-d/codeph ph codeph">iif(x &lt; 0.001, 0, log(abs(x)))</code></td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry colsep-1 rowsep-1" headers="gplearn__table_ohy_k55_x1c__entry__1">neg(x)</td>
+                            <td class="- topic/entry entry colsep-1 rowsep-1" headers="gplearn__table_ohy_k55_x1c__entry__2">1</td>
+                            <td class="- topic/entry entry colsep-0 rowsep-1" headers="gplearn__table_ohy_k55_x1c__entry__3">相反数</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry colsep-1 rowsep-1" headers="gplearn__table_ohy_k55_x1c__entry__1">reciprocal(x)</td>
+                            <td class="- topic/entry entry colsep-1 rowsep-1" headers="gplearn__table_ohy_k55_x1c__entry__2">1</td>
+                            <td class="- topic/entry entry colsep-0 rowsep-1" headers="gplearn__table_ohy_k55_x1c__entry__3">倒数，如果x的绝对值小于0.001，将返回0</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry colsep-1 rowsep-1" headers="gplearn__table_ohy_k55_x1c__entry__1">abs(x)</td>
+                            <td class="- topic/entry entry colsep-1 rowsep-1" headers="gplearn__table_ohy_k55_x1c__entry__2">1</td>
+                            <td class="- topic/entry entry colsep-0 rowsep-1" headers="gplearn__table_ohy_k55_x1c__entry__3">绝对值</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry colsep-1 rowsep-1" headers="gplearn__table_ohy_k55_x1c__entry__1">sin(x)</td>
+                            <td class="- topic/entry entry colsep-1 rowsep-1" headers="gplearn__table_ohy_k55_x1c__entry__2">1</td>
+                            <td class="- topic/entry entry colsep-0 rowsep-1" headers="gplearn__table_ohy_k55_x1c__entry__3">正弦函数</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry colsep-1 rowsep-1" headers="gplearn__table_ohy_k55_x1c__entry__1">cos(x)</td>
+                            <td class="- topic/entry entry colsep-1 rowsep-1" headers="gplearn__table_ohy_k55_x1c__entry__2">1</td>
+                            <td class="- topic/entry entry colsep-0 rowsep-1" headers="gplearn__table_ohy_k55_x1c__entry__3">余弦函数</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry colsep-1 rowsep-1" headers="gplearn__table_ohy_k55_x1c__entry__1">tan(x)</td>
+                            <td class="- topic/entry entry colsep-1 rowsep-1" headers="gplearn__table_ohy_k55_x1c__entry__2">1</td>
+                            <td class="- topic/entry entry colsep-0 rowsep-1" headers="gplearn__table_ohy_k55_x1c__entry__3">正切函数</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry colsep-1 rowsep-1" headers="gplearn__table_ohy_k55_x1c__entry__1">sig(x)</td>
+                            <td class="- topic/entry entry colsep-1 rowsep-1" headers="gplearn__table_ohy_k55_x1c__entry__2">1</td>
+                            <td class="- topic/entry entry colsep-0 rowsep-1" headers="gplearn__table_ohy_k55_x1c__entry__3">sigmoid函数</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry colsep-1 rowsep-1" headers="gplearn__table_ohy_k55_x1c__entry__1">mdiff(x, n)</td>
+                            <td class="- topic/entry entry colsep-1 rowsep-1" headers="gplearn__table_ohy_k55_x1c__entry__2">1</td>
+                            <td class="- topic/entry entry colsep-0 rowsep-1" headers="gplearn__table_ohy_k55_x1c__entry__3">x的n阶差分</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry colsep-1 rowsep-1" headers="gplearn__table_ohy_k55_x1c__entry__1">mcovar(x, y, n)</td>
+                            <td class="- topic/entry entry colsep-1 rowsep-1" headers="gplearn__table_ohy_k55_x1c__entry__2">2</td>
+                            <td class="- topic/entry entry colsep-0 rowsep-1" headers="gplearn__table_ohy_k55_x1c__entry__3">滑动窗口为n时，x和y的协方差</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry colsep-1 rowsep-1" headers="gplearn__table_ohy_k55_x1c__entry__1">mcorr(x, y, n)</td>
+                            <td class="- topic/entry entry colsep-1 rowsep-1" headers="gplearn__table_ohy_k55_x1c__entry__2">2</td>
+                            <td class="- topic/entry entry colsep-0 rowsep-1" headers="gplearn__table_ohy_k55_x1c__entry__3">滑动窗口为n时，x和y的相关性</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry colsep-1 rowsep-1" headers="gplearn__table_ohy_k55_x1c__entry__1">mstd(x, n)</td>
+                            <td class="- topic/entry entry colsep-1 rowsep-1" headers="gplearn__table_ohy_k55_x1c__entry__2">1</td>
+                            <td class="- topic/entry entry colsep-0 rowsep-1" headers="gplearn__table_ohy_k55_x1c__entry__3">滑动窗口为n时，x的样本标准差</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry colsep-1 rowsep-1" headers="gplearn__table_ohy_k55_x1c__entry__1">mmax(x, n)</td>
+                            <td class="- topic/entry entry colsep-1 rowsep-1" headers="gplearn__table_ohy_k55_x1c__entry__2">1</td>
+                            <td class="- topic/entry entry colsep-0 rowsep-1" headers="gplearn__table_ohy_k55_x1c__entry__3">滑动窗口为n时，x的最大值</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry colsep-1 rowsep-1" headers="gplearn__table_ohy_k55_x1c__entry__1">mmin(x, n)</td>
+                            <td class="- topic/entry entry colsep-1 rowsep-1" headers="gplearn__table_ohy_k55_x1c__entry__2">1</td>
+                            <td class="- topic/entry entry colsep-0 rowsep-1" headers="gplearn__table_ohy_k55_x1c__entry__3">滑动窗口为n时，x的最小值</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry colsep-1 rowsep-1" headers="gplearn__table_ohy_k55_x1c__entry__1">msum(x, n)</td>
+                            <td class="- topic/entry entry colsep-1 rowsep-1" headers="gplearn__table_ohy_k55_x1c__entry__2">1</td>
+                            <td class="- topic/entry entry colsep-0 rowsep-1" headers="gplearn__table_ohy_k55_x1c__entry__3">滑动窗口为n时，x的和</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry colsep-1 rowsep-1" headers="gplearn__table_ohy_k55_x1c__entry__1">mavg(x, n)</td>
+                            <td class="- topic/entry entry colsep-1 rowsep-1" headers="gplearn__table_ohy_k55_x1c__entry__2">1</td>
+                            <td class="- topic/entry entry colsep-0 rowsep-1" headers="gplearn__table_ohy_k55_x1c__entry__3">滑动窗口为n时，x的平均数</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry colsep-1 rowsep-1" headers="gplearn__table_ohy_k55_x1c__entry__1">mprod(x, n)</td>
+                            <td class="- topic/entry entry colsep-1 rowsep-1" headers="gplearn__table_ohy_k55_x1c__entry__2">1</td>
+                            <td class="- topic/entry entry colsep-0 rowsep-1" headers="gplearn__table_ohy_k55_x1c__entry__3">滑动窗口为n时，x的积</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry colsep-1 rowsep-1" headers="gplearn__table_ohy_k55_x1c__entry__1">mvar(x, n)</td>
+                            <td class="- topic/entry entry colsep-1 rowsep-1" headers="gplearn__table_ohy_k55_x1c__entry__2">1</td>
+                            <td class="- topic/entry entry colsep-0 rowsep-1" headers="gplearn__table_ohy_k55_x1c__entry__3">滑动窗口为n时，x的样本方差</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry colsep-1 rowsep-1" headers="gplearn__table_ohy_k55_x1c__entry__1">mvarp(x, n)</td>
+                            <td class="- topic/entry entry colsep-1 rowsep-1" headers="gplearn__table_ohy_k55_x1c__entry__2">1</td>
+                            <td class="- topic/entry entry colsep-0 rowsep-1" headers="gplearn__table_ohy_k55_x1c__entry__3">滑动窗口为n时，x的总体方差</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry colsep-1 rowsep-1" headers="gplearn__table_ohy_k55_x1c__entry__1">mstdp(x, n)</td>
+                            <td class="- topic/entry entry colsep-1 rowsep-1" headers="gplearn__table_ohy_k55_x1c__entry__2">1</td>
+                            <td class="- topic/entry entry colsep-0 rowsep-1" headers="gplearn__table_ohy_k55_x1c__entry__3">滑动窗口为n时，x的总体标准差</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry colsep-1 rowsep-1" headers="gplearn__table_ohy_k55_x1c__entry__1">mimin(x, n)</td>
+                            <td class="- topic/entry entry colsep-1 rowsep-1" headers="gplearn__table_ohy_k55_x1c__entry__2">1</td>
+                            <td class="- topic/entry entry colsep-0 rowsep-1" headers="gplearn__table_ohy_k55_x1c__entry__3">滑动窗口为n时，x的最小值下标</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry colsep-1 rowsep-1" headers="gplearn__table_ohy_k55_x1c__entry__1">mimax(x, n)</td>
+                            <td class="- topic/entry entry colsep-1 rowsep-1" headers="gplearn__table_ohy_k55_x1c__entry__2">1</td>
+                            <td class="- topic/entry entry colsep-0 rowsep-1" headers="gplearn__table_ohy_k55_x1c__entry__3">滑动窗口为n时，x的最大值下标</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry colsep-1 rowsep-1" headers="gplearn__table_ohy_k55_x1c__entry__1">mbeta(x, y, n)</td>
+                            <td class="- topic/entry entry colsep-1 rowsep-1" headers="gplearn__table_ohy_k55_x1c__entry__2">2</td>
+                            <td class="- topic/entry entry colsep-0 rowsep-1" headers="gplearn__table_ohy_k55_x1c__entry__3">滑动窗口为n时，x在y上的回归系数的最小二乘估计</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry colsep-1 rowsep-1" headers="gplearn__table_ohy_k55_x1c__entry__1">mwsum(x, y, n)</td>
+                            <td class="- topic/entry entry colsep-1 rowsep-1" headers="gplearn__table_ohy_k55_x1c__entry__2">2</td>
+                            <td class="- topic/entry entry colsep-0 rowsep-1" headers="gplearn__table_ohy_k55_x1c__entry__3">滑动窗口为n时，x和y的内积</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry colsep-1 rowsep-0" headers="gplearn__table_ohy_k55_x1c__entry__1">mwavg(x, y, n)</td>
+                            <td class="- topic/entry entry colsep-1 rowsep-0" headers="gplearn__table_ohy_k55_x1c__entry__2">2</td>
+                            <td class="- topic/entry entry colsep-0 rowsep-0" headers="gplearn__table_ohy_k55_x1c__entry__3">滑动窗口为n时，x以y为权重的加权平均值</td>
+                        </tr>
+                    </tbody></table></div>
+        </section>
+    </div>
+    
+</article></main></div>
+                        
+                        
+                        <div class=" wh_related_links d-print-none "><nav aria-label="Related Links" role="navigation" class="- topic/related-links related-links"><div class="- topic/linklist linklist relinfo"><strong>相关信息</strong><ul class="linklist related_link"><li class="linklist"><a class="- topic/link link navheader_parent_path" href="../funcs/c/creategplearnengine.html" title="createGPLearnEngine">createGPLearnEngine</a></li><li class="linklist"><a class="- topic/link link navheader_parent_path" href="../funcs/g/gpfit.html" title="gpFit">gpFit</a></li><li class="linklist"><a class="- topic/link link navheader_parent_path" href="../funcs/g/gppredict.html" title="gpPredict">gpPredict</a></li><li class="linklist"><a class="- topic/link link navheader_parent_path" href="../funcs/s/setgpfitnessfunc.html" title="setGpFitnessFunc">setGpFitnessFunc</a></li><li class="linklist"><a class="- topic/link link navheader_parent_path" href="../funcs/a/addgpfunction.html" title="addGpFunction">addGpFunction</a></li></ul></div></nav></div>
+                        
+                        
+                        
+                    </div>
+                    
+                        <nav role="navigation" id="wh_topic_toc" aria-label="On this page" class="col-lg-2 d-none d-lg-block navbar d-print-none"> 
+                            <div id="wh_topic_toc_content">
+		                        
+	                            <div class=" wh_topic_toc "><div class="wh_topic_label">在本页上</div><ul><li class="section-item"><div class="section-title"><a href="#gplearn__background" data-tocid="gplearn__background">1.1 背景</a></div></li><li class="section-item"><div class="section-title"><a href="#gplearn__overview" data-tocid="gplearn__overview">1.2 概述</a></div></li><li class="section-item"><div class="section-title"><a href="#gplearn__method" data-tocid="gplearn__method">1.3 原理</a></div></li><li class="section-item"><div class="section-title"><a href="#gplearn__section_tcn_lsv_x1c" data-tocid="gplearn__section_tcn_lsv_x1c">1.4 显卡要求</a></div></li><li class="section-item"><div class="section-title"><a href="#gplearn__section_arx_zp5_x1c" data-tocid="gplearn__section_arx_zp5_x1c">2. 快速上手</a></div></li><li class="section-item"><div class="section-title"><a href="#gplearn__section_yml_sq5_x1c" data-tocid="gplearn__section_yml_sq5_x1c">3. 相关函数</a></div></li><li class="section-item"><div class="section-title"><a href="#gplearn__section_btv_r55_x1c" data-tocid="gplearn__section_btv_r55_x1c">附录</a></div></li></ul></div>
+	                        	
+                        	</div>
+                        </nav>
+                    
+                </div>
+            </div>
+            
+            
+            
+        </div> 
+        <footer class="navbar navbar-default wh_footer">
+  <div class=" footer-container mx-auto ">
+<title>Copyright</title><p><b> ©2024 浙江智臾科技有限公司 浙ICP备18048711号-3</b></p>
+  </div>
+</footer>
+        
+        <div id="go2top" class="d-print-none">
+            <span class="oxy-icon oxy-icon-up"></span>
+        </div>
+        
+        <div id="modal_img_large" class="modal">
+            <span class="close oxy-icon oxy-icon-remove"></span>
+            <div id="modal_img_container"></div>
+            <div id="caption"></div>
+        </div>
+        
+        
+        
+    </body>
+</html>

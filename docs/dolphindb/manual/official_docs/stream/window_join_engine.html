@@ -1,0 +1,610 @@
+<!DOCTYPE html><html xmlns="http://www.w3.org/1999/xhtml" xml:lang="zh" lang="zh" data-whc_version="26.0">
+    <head><link rel="shortcut icon" href="../favicon.ico"/><link rel="icon" href="../favicon.ico"/><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><meta http-equiv="X-UA-Compatible" content="IE=edge"/><meta name="description" content="window join 引擎由 createWindowJoinEngine 函数创建。 window join 引擎的连接机制类似于 SQL 中的 window join，上一小节的 asof join 引擎可以看做是 window join 引擎的一个特例。按连接列分组，在每个分组内按时间邻近关联右表一个时间窗口内的数据，这个窗口由左表的每一条记录的时刻和创建引擎时指定的窗口（参数 ..."/><meta name="DC.rights.owner" content="(C) 版权 2024"/><meta name="copyright" content="(C) 版权 2024"/><meta name="generator" content="DITA-OT"/><meta name="DC.type" content="topic"/><meta name="DC.coverage" content=""/><meta name="DC.relation" content="../stream/str_join_engine.html"/><meta name="prodname" content="DolphinDB"/><meta name="brand" content="DolphinDB"/><meta name="DC.creator" content="DolphinDB"/><meta name="DC.publisher" content="DDB N/A DDB 200"/><meta name="DC.format" content="HTML5"/><meta name="DC.identifier" content="window_join_engine"/><title>window join 引擎</title><!--  Generated with Oxygen version 26.0, build number 2024012323.  --><meta name="wh-path2root" content="../"/><meta name="wh-toc-id" content="window_join_engine-d9529e4469"/><meta name="wh-source-relpath" content="stream/window_join_engine.dita"/><meta name="wh-out-relpath" content="stream/window_join_engine.html"/>
+
+    <link rel="stylesheet" type="text/css" href="../oxygen-webhelp/app/commons.css?buildId=2024012323"/>
+    <link rel="stylesheet" type="text/css" href="../oxygen-webhelp/app/topic.css?buildId=2024012323"/>
+
+    <script src="../oxygen-webhelp/app/options/properties.js?buildId=20240704100525"></script>
+    <script src="../oxygen-webhelp/app/localization/strings.js?buildId=2024012323"></script>
+    <script src="../oxygen-webhelp/app/search/index/keywords.js?buildId=20240704100525"></script>
+    <script defer="defer" src="../oxygen-webhelp/app/commons.js?buildId=2024012323"></script>
+    <script defer="defer" src="../oxygen-webhelp/app/topic.js?buildId=2024012323"></script>
+<link rel="stylesheet" type="text/css" href="../oxygen-webhelp/template/styles.css?buildId=2024012323"/><script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script><script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script></head>
+
+    <body id="window_join_engine" class="wh_topic_page frmBody">
+        <a href="#wh_topic_body" class="sr-only sr-only-focusable">
+            跳转到主要内容
+        </a>
+        
+        
+        
+        
+        <header class="navbar navbar-default wh_header">
+    <div class="container-fluid">
+        <div xmlns:whc="http://www.oxygenxml.com/webhelp/components" class="wh_header_flex_container navbar-nav navbar-expand-md navbar-dark">
+            <div class="wh_logo_and_publication_title_container">
+                <div class="wh_logo_and_publication_title">
+                    
+                    <a href="https://www.dolphindb.cn" class=" wh_logo d-none d-sm-block "><img src="../logo.png" alt="  DolphinDB 文档中心  "/></a>
+                    <div class=" wh_publication_title "><a href="../index.html"><span class="booktitle">  <span class="ph mainbooktitle">DolphinDB 文档中心</span>  </span></a></div>
+                    
+                </div>
+                
+                
+            </div>
+
+            <div class="wh_top_menu_and_indexterms_link collapse navbar-collapse" id="wh_top_menu_and_indexterms_link">
+                
+                
+                
+                
+            </div>
+        <div class=" wh_search_input navbar-form wh_topic_page_search search " role="form">
+            
+            
+            
+            <form id="searchForm" method="get" role="search" action="../search.html"><div><input type="search" placeholder="搜索 " class="wh_search_textfield" id="textToSearch" name="searchQuery" aria-label="搜索查询" required="required"/><button type="submit" class="wh_search_button" aria-label="搜索"><span class="search_input_text">搜索</span></button></div></form>
+            
+            <script src="/vendors/react/umd/react.production.min.js" defer="defer"></script>
+<script src="/vendors/react-dom/umd/react-dom.production.min.js" defer="defer"></script>
+<script src="/vendors/dayjs/dayjs.min.js" defer="defer"></script>
+<script src="/vendors/antd/dist/antd.min.js" defer="defer"></script>
+<script src="/vendors/@ant-design/icons/dist/index.umd.min.js" defer="defer"></script>
+<script src="/zh/index.js" type="module"></script>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js" defer="defer"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML" defer="defer"><!--
+
+
+--></script>
+
+            
+        </div></div>
+    </div>
+</header>
+        
+        
+         
+        
+        
+        
+        <div class="container-fluid" id="wh_topic_container">
+            <div class="row">
+
+                <nav class="wh_tools d-print-none navbar-expand-md" aria-label="Tools">
+                    
+                    <div data-tooltip-position="bottom" class=" wh_breadcrumb "><ol class="d-print-none"><li><span class="home"><a href="../index.html"><span>主页</span></a></span></li><li><div class="topicref" data-id="chap7_tutorials_streaming"><div class="title"><a href="../stream/str_intro.html"><span class="keyword label">流数据</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 流数据引擎及流数据计算的基本概念</p></div></div></div></li><li><div class="topicref" data-id="chap7_tutorials_streaming"><div class="title"><a href="../stream/str_join_engine.html"><span class="keyword label">内置多数据源流式关联引擎</span></a></div></div></li><li class="active"><div class="topicref" data-id="window_join_engine"><div class="title"><a href="../stream/window_join_engine.html">window join 引擎</a></div></div></li></ol></div>
+                    
+                    
+                    
+                    <div class="wh_right_tools">
+                        <button class="wh_hide_highlight" aria-label="切换搜索突出显示" title="切换搜索突出显示"></button>
+                        <button class="webhelp_expand_collapse_sections" data-next-state="collapsed" aria-label="折叠截面" title="折叠截面"></button>
+                        
+                        
+                        
+                        
+                        <div class=" wh_print_link print d-none d-md-inline-block "><button onClick="window.print()" title="打印此页" aria-label="打印此页"></button></div>
+                        
+                        <button type="button" id="wh_toc_button" class="custom-toggler navbar-toggler collapsed wh_toggle_button navbar-light" aria-expanded="false" aria-label="Toggle publishing table of content" aria-controls="wh_publication_toc">
+                            <span class="navbar-toggler-icon"></span>
+                        </button>
+                    </div>
+                    
+                </nav>
+            </div>
+            
+            
+            
+            
+            <div class="wh_content_area">
+                <div class="row">
+                    
+                        <nav id="wh_publication_toc" class="col-lg-3 col-md-3 col-sm-12 d-md-block d-none d-print-none" aria-label="Table of Contents Container">
+                            <div id="wh_publication_toc_content">
+		                        
+                            	<div class=" wh_publication_toc " data-tooltip-position="right"><span class="expand-button-action-labels"><span id="button-expand-action" role="button" aria-label="Expand"></span><span id="button-collapse-action" role="button" aria-label="Collapse"></span><span id="button-pending-action" role="button" aria-label="Pending"></span></span><ul role="tree" aria-label="Table of Contents"><li role="treeitem"><div data-tocid="new_chap_about_sect_ddb_docs_intro-d9529e87" class="topicref" data-id="new_chap_about_sect_ddb_docs_intro" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../about/ddb_docs_intro.html" id="new_chap_about_sect_ddb_docs_intro-d9529e87-link">文档使用说明</a><div class="wh-tooltip"><p class="shortdesc">如何获取 DolphinDB 帮助信息</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="chap1_getstarted-d9529e140" class="topicref" data-id="chap1_getstarted" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action chap1_getstarted-d9529e140-link" class="wh-expand-btn"></span><div class="title"><a href="../getstarted/chap1_getstarted.html" id="chap1_getstarted-d9529e140-link"><span class="keyword label">快速上手</span></a><div class="wh-tooltip"><p class="shortdesc">如何快速部署 DolphinDB、建库建表、写入和查询数据</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="sectionddb_deployment-d9529e335" class="topicref" data-id="sectionddb_deployment" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action sectionddb_deployment-d9529e335-link" class="wh-expand-btn"></span><div class="title"><a href="../deploy/deploy_intro.html" id="sectionddb_deployment-d9529e335-link"><span class="keyword label">部署</span></a><div class="wh-tooltip"><p class="shortdesc">如何在不同的场景中部署 DolphinDB</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="new_chap_database_manage_new_chap_dbmanage_landing_page-d9529e2313" class="topicref" data-id="new_chap_database_manage_new_chap_dbmanage_landing_page" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action new_chap_database_manage_new_chap_dbmanage_landing_page-d9529e2313-link" class="wh-expand-btn"></span><div class="title"><a href="../db_distr_comp/cfg/db_intro.html" id="new_chap_database_manage_new_chap_dbmanage_landing_page-d9529e2313-link"><span class="keyword label">数据库</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 数据库的基本概念</p></div></div></div></li><li role="treeitem" aria-expanded="true"><div data-tocid="chap7_tutorials_streaming-d9529e3490" class="topicref" data-id="chap7_tutorials_streaming" data-state="expanded"><span role="button" tabindex="0" aria-labelledby="button-collapse-action chap7_tutorials_streaming-d9529e3490-link" class="wh-expand-btn"></span><div class="title"><a href="../stream/str_intro.html" id="chap7_tutorials_streaming-d9529e3490-link"><span class="keyword label">流数据</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 流数据引擎及流数据计算的基本概念</p></div></div></div><ul role="group" class="navbar-nav nav-list"><li role="treeitem" aria-expanded="false"><div data-tocid="streamfunctions-d9529e3543" class="topicref" data-id="streamfunctions" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action streamfunctions-d9529e3543-link" class="wh-expand-btn"></span><div class="title"><a href="../stream/str_funcs.html" id="streamfunctions-d9529e3543-link">功能简介</a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="tocId-d9529e3821" class="topicref" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action tocId-d9529e3821-link" class="wh-expand-btn"></span><div class="title"><a href="../stream/try_example1.html" id="tocId-d9529e3821-link">入门示例</a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="内置流式计算算子-d9529e3914" class="topicref" data-id="内置流式计算算子" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action 内置流式计算算子-d9529e3914-link" class="wh-expand-btn"></span><div class="title"><a href="../stream/str_operator.html" id="内置流式计算算子-d9529e3914-link"><span class="keyword label">内置流式计算算子</span></a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="streamingEngineTopic-d9529e4099" class="topicref" data-id="streamingEngineTopic" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action streamingEngineTopic-d9529e4099-link" class="wh-expand-btn"></span><div class="title"><a href="../funcs/themes/streamingEngine.html" id="streamingEngineTopic-d9529e4099-link"><span class="keyword label">内置流式计算引擎</span></a></div></div></li><li role="treeitem" aria-expanded="true"><div data-tocid="chap7_tutorials_streaming-d9529e4376" class="topicref" data-id="chap7_tutorials_streaming" data-state="expanded"><span role="button" tabindex="0" aria-labelledby="button-collapse-action chap7_tutorials_streaming-d9529e4376-link" class="wh-expand-btn"></span><div class="title"><a href="../stream/str_join_engine.html" id="chap7_tutorials_streaming-d9529e4376-link"><span class="keyword label">内置多数据源流式关联引擎</span></a></div></div><ul role="group" class="navbar-nav nav-list"><li role="treeitem"><div data-tocid="asof_join_engine-d9529e4423" class="topicref" data-id="asof_join_engine" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../stream/asof_join_engine.html" id="asof_join_engine-d9529e4423-link">asof join 引擎</a></div></div></li><li role="treeitem" class="active"><div data-tocid="window_join_engine-d9529e4469" class="topicref" data-id="window_join_engine" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../stream/window_join_engine.html" id="window_join_engine-d9529e4469-link">window join 引擎</a></div></div></li><li role="treeitem"><div data-tocid="equi_join_engine-d9529e4515" class="topicref" data-id="equi_join_engine" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../stream/equi_join_engine.html" id="equi_join_engine-d9529e4515-link">equi join 引擎</a></div></div></li><li role="treeitem"><div data-tocid="lookup_join_engine-d9529e4561" class="topicref" data-id="lookup_join_engine" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../stream/lookup_join_engine.html" id="lookup_join_engine-d9529e4561-link">lookup join 引擎</a></div></div></li><li role="treeitem"><div data-tocid="leftsemi_join_engine-d9529e4607" class="topicref" data-id="leftsemi_join_engine" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../stream/leftsemi_join_engine.html" id="leftsemi_join_engine-d9529e4607-link">leftSemi join 引擎</a></div></div></li></ul></li><li role="treeitem"><div data-tocid="streamha-d9529e4653" class="topicref" data-id="streamha" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../stream/str_ha.html" id="streamha-d9529e4653-link"><span class="keyword label">流数据高可用</span></a></div></div></li><li role="treeitem"><div data-tocid="流计算状态监控-d9529e4700" class="topicref" data-id="流计算状态监控" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../stream/str_monitor.html" id="流计算状态监控-d9529e4700-link">流计算状态监控</a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="replay-d9529e4746" class="topicref" data-id="replay" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action replay-d9529e4746-link" class="wh-expand-btn"></span><div class="title"><a href="../stream/str_replay.html" id="replay-d9529e4746-link"><span class="keyword label">历史数据回放</span></a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="流批一体功能-d9529e4931" class="topicref" data-id="流批一体功能" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action 流批一体功能-d9529e4931-link" class="wh-expand-btn"></span><div class="title"><a href="../stream/str_batch.html" id="流批一体功能-d9529e4931-link"><span class="keyword label">流批一体</span></a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="tocId-d9529e5024" class="topicref" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action tocId-d9529e5024-link" class="wh-expand-btn"></span><div class="title"><a href="../stream/str_api_python.html" id="tocId-d9529e5024-link">实时流数据接入</a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="cep-d9529e5442" class="topicref" data-id="cep" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action cep-d9529e5442-link" class="wh-expand-btn"></span><div class="title"><a href="../stream/cep.html" id="cep-d9529e5442-link">复杂事件处理（CEP）引擎</a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="tocId-d9529e5995" class="topicref" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action tocId-d9529e5995-link" class="wh-expand-btn"></span><div class="title"><a href="../stream/local_sub.html" id="tocId-d9529e5995-link">流处理结果交互方式</a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="tocId-d9529e6184" class="topicref" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action tocId-d9529e6184-link" class="wh-expand-btn"></span><div class="title"><a href="../stream/str_altair.html" id="tocId-d9529e6184-link">数据可视化工具</a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="tocId-d9529e6277" class="topicref" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action tocId-d9529e6277-link" class="wh-expand-btn"></span><div class="title"><a href="../tutorials/streaming_auto_sub.html" id="tocId-d9529e6277-link">金融场景应用案例</a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="tocId-d9529e6969" class="topicref" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action tocId-d9529e6969-link" class="wh-expand-btn"></span><div class="title"><a href="../tutorials/ddb_str_app_iot.html" id="tocId-d9529e6969-link">物联网场景应用案例</a></div></div></li></ul></li><li role="treeitem" aria-expanded="false"><div data-tocid="tocId-d9529e7385" class="topicref" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action tocId-d9529e7385-link" class="wh-expand-btn"></span><div class="title"><a href="../db_distr_comp/db_oper/import_data.html" id="tocId-d9529e7385-link">数据迁移</a><div class="wh-tooltip"><p class="shortdesc">如何从不同数据源向 DolphinDB 迁移数据</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="chap7_tutorials_system_management-d9529e7812" class="topicref" data-id="chap7_tutorials_system_management" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action chap7_tutorials_system_management-d9529e7812-link" class="wh-expand-btn"></span><div class="title"><a href="../sys_man/om_intro.html" id="chap7_tutorials_system_management-d9529e7812-link"><span class="keyword label">系统运维</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 的系统运维功能及方法</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="about_language_resources-d9529e16490" class="topicref" data-id="about_language_resources" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action about_language_resources-d9529e16490-link" class="wh-expand-btn"></span><div class="title"><a href="../progr/progr_intro.html" id="about_language_resources-d9529e16490-link"><span class="keyword label">编程语言</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 编程基本概念与方法、SQL 在 DolphinDB 的应用</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="functions_references-d9529e26503" class="topicref" data-id="functions_references" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action functions_references-d9529e26503-link" class="wh-expand-btn"></span><div class="title"><a href="../funcs/funcs_intro.html" id="functions_references-d9529e26503-link"><span class="keyword label">函数参考</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 函数分类、语法、详解及示例</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="api_protocol-d9529e86456" class="topicref" data-id="api_protocol" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action api_protocol-d9529e86456-link" class="wh-expand-btn"></span><div class="title"><a href="../api/connapi_intro.html" id="api_protocol-d9529e86456-link"><span class="keyword label">连接器 &amp; API</span></a><div class="wh-tooltip"><p class="shortdesc">面向不同编程语言的 DolphinDB API 及连接器，相关协议和用法</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="chap6_plugin-d9529e91976" class="topicref" data-id="chap6_plugin" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action chap6_plugin-d9529e91976-link" class="wh-expand-btn"></span><div class="title"><a href="../plugins/plg_intro.html" id="chap6_plugin-d9529e91976-link"><span class="keyword label">插件</span></a><div class="wh-tooltip"><p class="shortdesc">多个应用场景的插件使用说明和插件开发指导</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="third_party-d9529e94749" class="topicref" data-id="third_party" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action third_party-d9529e94749-link" class="wh-expand-btn"></span><div class="title"><a href="../third_party.html" id="third_party-d9529e94749-link">第三方工具</a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="about_tutorials-d9529e94980" class="topicref" data-id="about_tutorials" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action about_tutorials-d9529e94980-link" class="wh-expand-btn"></span><div class="title"><a href="../tutorials/about_tutorials.html" id="about_tutorials-d9529e94980-link"><span class="keyword label">教程</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 产品使用教程</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="tocId-d9529e101769" class="topicref" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action tocId-d9529e101769-link" class="wh-expand-btn"></span><div class="title"><a href="../rn/server/3_00_1.html" id="tocId-d9529e101769-link">版本说明</a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 版本发布历史</p></div></div></div></li></ul></div>
+		                        
+                            </div>
+                        </nav>
+                    
+                    
+                    <div class="col-lg-7 col-md-9 col-sm-12" id="wh_topic_body">
+                        <button id="wh_close_publication_toc_button" class="close-toc-button d-none" aria-label="Toggle publishing table of content" aria-controls="wh_publication_toc" aria-expanded="true">
+                            <span class="close-toc-icon-container">
+                                <span class="close-toc-icon"></span>     
+                            </span>
+                        </button>
+                        <button id="wh_close_topic_toc_button" class="close-toc-button d-none" aria-label="Toggle topic table of content" aria-controls="wh_topic_toc" aria-expanded="true">
+                            <span class="close-toc-icon-container">
+                                <span class="close-toc-icon"></span>     
+                            </span>
+                        </button>
+                        
+                        <div class=" wh_topic_content body "><main role="main"><article class="- topic/topic topic" role="article" aria-labelledby="ariaid-title1">
+    <h1 class="- topic/title title topictitle1" id="ariaid-title1">window join 引擎</h1>
+    <div class="- topic/body body">
+        <p class="- topic/p p">window join 引擎由 <code class="+ topic/ph pr-d/codeph ph codeph">createWindowJoinEngine</code> 函数创建。</p>
+        <p class="- topic/p p">window join 引擎的连接机制类似于 SQL 中的 window join，上一小节的 asof join 引擎可以看做是 window join
+            引擎的一个特例。按连接列分组，在每个分组内按时间邻近关联右表一个时间窗口内的数据，这个窗口由左表的每一条记录的时刻和创建引擎时指定的窗口（参数
+            <em class="+ topic/ph hi-d/i ph i">window</em>）决定。引擎默认左右表是有序的，在连接列分组内，对于左表中的每一条记录，会在右表缓存中选取由左表的时刻确定的窗口范围内的记录，可能会找到 0
+            至多条记录，引擎将输出一条结果，这条结果由多条右表记录聚合为一条后与左表拼接而成。</p>
+        <p class="- topic/p p">window join 引擎在创建时通过参数<em class="+ topic/ph hi-d/i ph i"> useSystemTime </em>指定以下两种规则中的一种，用于判断临近时刻是否到来：</p>
+        <ul class="- topic/ul ul" id="window_join_engine__ul_czh_nfl_xzb" data-ofbid="window_join_engine__ul_czh_nfl_xzb">
+            <li class="- topic/li li">
+                <p class="- topic/p p">规则一：以数据注入引擎时的系统时间为时序标准，则系统时间达到窗口下边界时立刻关联并输出；</p>
+            </li>
+            <li class="- topic/li li">
+                <p class="- topic/p p">规则二：以数据中的时间列为时序标准，当右表数据的最新时刻大于窗口下边界时触发关联并输出。</p>
+            </li>
+        </ul>
+        <p class="- topic/p p">在规则二的基础上，还可以通过参数 <em class="+ topic/ph hi-d/i ph i">maxDelayedTime</em> 设置超时强制触发规则。</p>
+        <p class="- topic/p p">下图展示在一个分组中，以非系统时间触发输出的普通窗口（参数 <em class="+ topic/ph hi-d/i ph i">window</em>=-1:2 ）连接的效果，由每一条左表记录基于其时间戳往前 1 个时间刻度、往后 2
+            个时间刻度划定窗口的上下边界，输出由大于窗口下边界的第一条右表记录触发，窗口计算不包含这条触发记录。</p>
+        <img class="- topic/image image" id="window_join_engine__image_dzh_nfl_xzb" src="images/window_join_engine_1.png"/>
+        <p class="- topic/p p">下图展示在一个分组中，以非系统时间触发输出的特殊窗口（参数 <em class="+ topic/ph hi-d/i ph i">window</em>=0:0
+            ）连接的效果，窗口范围由相邻两条左表记录划定，输出由等于或大于左表时间戳的第一条右表记录触发，窗口计算不包含这条触发记录。后文将介绍一个基于特殊窗口的窗口关联引擎的实际应用场景：对行情快照融合逐笔成交数据。</p>
+        <figure class="- topic/fig fig fignone" id="window_join_engine__fig_fxq_fhm_xzb" data-ofbid="window_join_engine__fig_fxq_fhm_xzb">
+            <img class="- topic/image image" id="window_join_engine__image_ezh_nfl_xzb" src="images/window_join_engine_2.png"/>
+        </figure>
+        <p class="- topic/p p"><code class="+ topic/ph pr-d/codeph ph codeph">createWindowJoinEngine</code> 函数的语法如下：</p>
+        <pre class="+ topic/pre pr-d/codeblock pre codeblock language-python" id="window_join_engine__codeblock_q2l_rfl_xzb" data-ofbid="window_join_engine__codeblock_q2l_rfl_xzb">createWindowJoinEngine(name, leftTable, rightTable, outputTable, window, metrics, matchingColumn, [timeColumn], [useSystemTime=false], [garbageSize = <span class="hl-number">5000</span>], [maxDelayedTime], [nullFill], [outputElapsedMicroseconds=false], [sortByTime])</pre>
+        <p class="- topic/p p">其参数的详细含义可以参考：<a class="- topic/xref xref" href="https://docs.dolphindb.cn/zh/funcs/c/createWindowJoinEngine.html" target="_blank" rel="external noopener">createWindowJoinEngine 函数</a>。</p>
+    </div>
+    <article class="- topic/topic topic nested1" aria-labelledby="ariaid-title2" id="topic_z23_tfl_xzb">
+        <h2 class="- topic/title title topictitle2" id="ariaid-title2">应用例子 1-行情快照与逐笔成交数据融合</h2>
+        <div class="- topic/body body">
+            <div class="- topic/bodydiv bodydiv"><p class="- topic/p p">行情快照和逐笔成交数据包含着不同的信息，很多高频因子的计算同时依赖行情快照和成交数据，本例在行情快照数据的基础上融合前后两个快照之间的逐笔成交数据，融合后的数据可以更方便地作为后续复杂因子的计算的输入。</p><p class="- topic/p p">这个场景的特征是，每条行情快照记录匹配一个时间窗口内的全部逐笔成交记录的聚合值，这个时间窗口的上下界由两条行情快照数据的时刻决定，输出与原始的每一条行情快照记录一一对应。对于一个窗口中的逐笔成交记录，既需要计算交易量总和这样的聚合值，也希望以一个字段保留窗口内的全部逐笔成交明细。以下脚本用
+                    window join 引擎的特殊窗口来实现此场景。</p><div class="- topic/note note note note_note" id="topic_z23_tfl_xzb__note_agr_3hm_xzb" data-ofbid="topic_z23_tfl_xzb__note_agr_3hm_xzb"><span class="note__title">注：</span> 1.30 版本的 DolphinDB 不支持
+                    array vector 数据形式，以下脚本包含 array vector 功能，因此仅支持 2.00
+                    版本。</div><pre class="+ topic/pre pr-d/codeblock pre codeblock language-python" id="topic_z23_tfl_xzb__codeblock_ddc_vfl_xzb" data-ofbid="topic_z23_tfl_xzb__codeblock_ddc_vfl_xzb">// create table
+share streamTable(<span class="hl-number">1</span>:<span class="hl-number">0</span>, `Sym`TradeTime`Side`TradeQty, [SYMBOL, TIME, INT, LONG]) <strong class="hl-keyword">as</strong> trades
+share streamTable(<span class="hl-number">1</span>:<span class="hl-number">0</span>, `Sym`Time`Open`High`Low`Close, [SYMBOL, TIME, DOUBLE, DOUBLE, DOUBLE, DOUBLE]) <strong class="hl-keyword">as</strong> snapshot
+share streamTable(<span class="hl-number">1</span>:<span class="hl-number">0</span>, `Time`Sym`Open`High`Low`Close`BuyQty`SellQty`TradeQtyList`TradeTimeList, [TIME, SYMBOL, DOUBLE, DOUBLE, DOUBLE, DOUBLE, LONG, LONG, LONG[], TIME[]]) <strong class="hl-keyword">as</strong> output
+
+// create engine
+wjMetrics = &lt;[Open, High, Low, Close, sum(iif(Side==<span class="hl-number">1</span>, TradeQty, <span class="hl-number">0</span>)), sum(iif(Side==<span class="hl-number">2</span>, TradeQty, <span class="hl-number">0</span>)), TradeQty, TradeTime]&gt;
+fillArray = [<span class="hl-number">00</span>:<span class="hl-number">00</span>:<span class="hl-number">00.000</span>, <span class="hl-string">""</span>, <span class="hl-number">0</span>, <span class="hl-number">0</span>, <span class="hl-number">0</span>, <span class="hl-number">0</span>, <span class="hl-number">0</span>, <span class="hl-number">0</span>, [], []]
+wjEngine = createWindowJoinEngine(name=<span class="hl-string">"windowJoin"</span>, leftTable=snapshot, rightTable=trades, outputTable=output, window=<span class="hl-number">0</span>:<span class="hl-number">0</span>, metrics=wjMetrics, matchingColumn=`Sym, timeColumn=`Time`TradeTime, useSystemTime=false, nullFill=fillArray)
+
+// subscribe topic
+subscribeTable(tableName=<span class="hl-string">"snapshot"</span>, actionName=<span class="hl-string">"appendLeftStream"</span>, handler=getLeftStream(wjEngine), msgAsTable=true, offset=-<span class="hl-number">1</span>, hash=<span class="hl-number">0</span>)
+subscribeTable(tableName=<span class="hl-string">"trades"</span>, actionName=<span class="hl-string">"appendRightStream"</span>, handler=getRightStream(wjEngine), msgAsTable=true, offset=-<span class="hl-number">1</span>, hash=<span class="hl-number">1</span>)</pre><ul class="- topic/ul ul" id="topic_z23_tfl_xzb__ul_lhf_5fl_xzb" data-ofbid="topic_z23_tfl_xzb__ul_lhf_5fl_xzb">
+                    <li class="- topic/li li">
+                        <p class="- topic/p p">行情快照数据 snapshot 注入引擎的左表，逐笔成交数据 trades 注入引擎的右表。</p>
+                    </li>
+                    <li class="- topic/li li">
+                        <p class="- topic/p p">引擎参数 <em class="+ topic/ph hi-d/i ph i">useSystemTime</em>=false 表示通过数据中的时间列（左表为 Time 字段，右表为 TradeTime
+                            字段）来判断左右表中记录的时序关系。</p>
+                    </li>
+                    <li class="- topic/li li">
+                        <p class="- topic/p p">引擎参数 <em class="+ topic/ph hi-d/i ph i">window</em>=0:0 表示右表 <em class="+ topic/ph hi-d/i ph i">trades</em> 的计算窗口将由左表 <em class="+ topic/ph hi-d/i ph i">snapshot</em>
+                            当前和其上一条数据的时间戳划定。</p>
+                    </li>
+                    <li class="- topic/li li">
+                        <p class="- topic/p p">引擎参数 <em class="+ topic/ph hi-d/i ph i">metrics</em> 表示计算指标，如 Open 表示取左表 <em class="+ topic/ph hi-d/i ph i">snapshot</em> 中 Open
+                                字段，<code class="+ topic/ph pr-d/codeph ph codeph">sum(iif(Side==1, TradeQty, 0))</code> 表示对右表
+                                <em class="+ topic/ph hi-d/i ph i">trades</em> 在窗口内的数据做聚合计算。注意，TradeQty 是右表 <em class="+ topic/ph hi-d/i ph i">trades</em> 中的字段，且此处对
+                            TradeQty 没有使用聚合函数，则表示对右表 <em class="+ topic/ph hi-d/i ph i">trades</em> 在窗口内的全部 TradeQty
+                            值保留明细，对应的输出为一个数据类型为 array vector 的字段。</p>
+                    </li>
+                    <li class="- topic/li li">
+                        <p class="- topic/p p">引擎参数 <em class="+ topic/ph hi-d/i ph i">nullFill</em> 为可选参数，表示如何填充输出表中的空值，本例中结合实际场景，对于表示价格的字段如 Open
+                                等都指定将空值填充为0。注意，<em class="+ topic/ph hi-d/i ph i">nullFill</em> 为元组，必须和输出表列字段等长且类型一一对应。</p>
+                    </li>
+                </ul><p class="- topic/p p">构造数据写入作为原始输入的 2
+                    个流数据表，先写入右表，再写入左表：</p><pre class="+ topic/pre pr-d/codeblock pre codeblock language-python" id="topic_z23_tfl_xzb__codeblock_mhf_5fl_xzb" data-ofbid="topic_z23_tfl_xzb__codeblock_mhf_5fl_xzb">// generate data: snapshot
+t1 = table(`A`B`A`B`A`B <strong class="hl-keyword">as</strong> Sym, <span class="hl-number">10</span>:<span class="hl-number">00</span>:<span class="hl-number">00.000</span>+(<span class="hl-number">3</span> <span class="hl-number">3</span> <span class="hl-number">6</span> <span class="hl-number">6</span> <span class="hl-number">9</span> <span class="hl-number">9</span>)*<span class="hl-number">1000</span> <strong class="hl-keyword">as</strong> Time, (NULL NULL <span class="hl-number">3.5</span> <span class="hl-number">7.6</span> <span class="hl-number">3.5</span> <span class="hl-number">7.6</span>) <strong class="hl-keyword">as</strong> Open, (<span class="hl-number">3.5</span> <span class="hl-number">7.6</span> <span class="hl-number">3.6</span> <span class="hl-number">7.6</span> <span class="hl-number">3.6</span> <span class="hl-number">7.6</span>) <strong class="hl-keyword">as</strong> High, (<span class="hl-number">3.5</span> <span class="hl-number">7.6</span> <span class="hl-number">3.5</span> <span class="hl-number">7.6</span> <span class="hl-number">3.4</span> <span class="hl-number">7.5</span>) <strong class="hl-keyword">as</strong> Low, (<span class="hl-number">3.5</span> <span class="hl-number">7.6</span> <span class="hl-number">3.5</span> <span class="hl-number">7.6</span> <span class="hl-number">3.6</span> <span class="hl-number">7.5</span>) <strong class="hl-keyword">as</strong> Close)
+// generate data: trade
+t2 = table(`A`A`B`A`B`B`A`B`A`A <strong class="hl-keyword">as</strong> Sym, <span class="hl-number">10</span>:<span class="hl-number">00</span>:<span class="hl-number">02.000</span>+(<span class="hl-number">1.</span><span class="hl-number">.10</span>)*<span class="hl-number">700</span> <strong class="hl-keyword">as</strong> TradeTime,  (<span class="hl-number">1</span> <span class="hl-number">2</span> <span class="hl-number">1</span> <span class="hl-number">1</span> <span class="hl-number">1</span> <span class="hl-number">1</span> <span class="hl-number">2</span> <span class="hl-number">1</span> <span class="hl-number">2</span> <span class="hl-number">2</span>) <strong class="hl-keyword">as</strong> Side, (<span class="hl-number">1.</span><span class="hl-number">.10</span>) * <span class="hl-number">10</span> <strong class="hl-keyword">as</strong> TradeQty)
+// input data
+trades.append!(t2)
+snapshot.append!(t1)</pre><p class="- topic/p p">输入数据与关联关系如下：</p><img class="- topic/image image" id="topic_z23_tfl_xzb__image_nhf_5fl_xzb" src="images/window_join_engine_3.png"/><p class="- topic/p p">关联得到的结果表
+                        <em class="+ topic/ph hi-d/i ph i">output</em> 如下，其中最后两列为 array vector 类型数据，记录了窗口中全部成交记录的 TradeQty
+                    字段明细、TradeTime 字段明细。</p><p class="- topic/p p">注意，输出表比左表 <em class="+ topic/ph hi-d/i ph i">snapshot</em> 少一条数据，即左表 <em class="+ topic/ph hi-d/i ph i">snapshot</em>
+                    中分组 B 内时间戳为 10:00:09.000 的数据没有输出，这是因为右表 <em class="+ topic/ph hi-d/i ph i">trades</em> 中分组 B 内没有等于或大于
+                    10:00:09.000 的数据来关闭窗口。在实际生产中，当接入实时数据时，若需要左表 <em class="+ topic/ph hi-d/i ph i">snapshot</em> 一旦达到引擎便立即输出，则建议选择
+                        <em class="+ topic/ph hi-d/i ph i">useSystemTime</em>=true，即用系统时间作为时间戳，这时，对于任意一条左表记录，右表窗口是从前一条左表记录到达到本条记录到达之间进入引擎的全部右表数据。</p><img class="- topic/image image" id="topic_z23_tfl_xzb__image_w4p_4gl_xzb" src="images/window_join_engine_4.png"/></div>
+        </div>
+    </article>
+    <article class="- topic/topic topic nested1" aria-labelledby="ariaid-title3" id="topic_a2s_bgl_xzb">
+        <h2 class="- topic/title title topictitle2" id="ariaid-title3">应用例子 2</h2>
+        <div class="- topic/body body">
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock language-python" id="topic_a2s_bgl_xzb__codeblock_aq4_cgl_xzb" data-ofbid="topic_a2s_bgl_xzb__codeblock_aq4_cgl_xzb">share streamTable(<span class="hl-number">1</span>:<span class="hl-number">0</span>, `time`sym`price, [TIMESTAMP, SYMBOL, DOUBLE]) <strong class="hl-keyword">as</strong> leftTable
+share streamTable(<span class="hl-number">1</span>:<span class="hl-number">0</span>, `time`sym`val, [TIMESTAMP, SYMBOL, DOUBLE]) <strong class="hl-keyword">as</strong> rightTable
+output=table(<span class="hl-number">100</span>:<span class="hl-number">0</span>, `time`sym`factor1`factor2`factor3, [TIMESTAMP, SYMBOL, DOUBLE, DOUBLE, DOUBLE])
+
+nullFill= [<span class="hl-number">2012.01</span>.<span class="hl-number">01</span>T00:<span class="hl-number">00</span>:<span class="hl-number">00.000</span>, `NONE, <span class="hl-number">0.0</span>, <span class="hl-number">0.0</span>, <span class="hl-number">0.0</span>]
+wjEngine=createWindowJoinEngine(name=<span class="hl-string">"test1"</span>, leftTable=leftTable, rightTable=rightTable, outputTable=output,  window=-<span class="hl-number">2</span>:<span class="hl-number">2</span>, metrics=&lt;[price,val,sum(val)]&gt;, matchingColumn=`sym, timeColumn=`time, useSystemTime=false,nullFill=nullFill)
+
+subscribeTable(tableName=<span class="hl-string">"leftTable"</span>, actionName=<span class="hl-string">"joinLeft"</span>, offset=<span class="hl-number">0</span>, handler=appendForJoin{wjEngine, true}, msgAsTable=true)
+subscribeTable(tableName=<span class="hl-string">"rightTable"</span>, actionName=<span class="hl-string">"joinRight"</span>, offset=<span class="hl-number">0</span>, handler=appendForJoin{wjEngine, false}, msgAsTable=true)
+
+n=<span class="hl-number">10</span>
+tp1=table(take(<span class="hl-number">2012.01</span>.<span class="hl-number">01</span>T00:<span class="hl-number">00</span>:<span class="hl-number">00.000</span>+<span class="hl-number">0.</span><span class="hl-number">.10</span>, <span class="hl-number">2</span>*n) <strong class="hl-keyword">as</strong> time, take(`A, n) join take(`B, n) <strong class="hl-keyword">as</strong> sym, take(NULL join rand(<span class="hl-number">10.0</span>, n-<span class="hl-number">1</span>),<span class="hl-number">2</span>*n) <strong class="hl-keyword">as</strong> price)
+tp1.sortBy!(`time)
+leftTable.append!(tp1)
+
+tp2=table(take(<span class="hl-number">2012.01</span>.<span class="hl-number">01</span>T00:<span class="hl-number">00</span>:<span class="hl-number">00.000</span>+<span class="hl-number">0.</span><span class="hl-number">.10</span>, <span class="hl-number">2</span>*n) <strong class="hl-keyword">as</strong> time, take(`A, n) join take(`B, n) <strong class="hl-keyword">as</strong> sym, take(double(<span class="hl-number">1.</span>.n),<span class="hl-number">2</span>*n) <strong class="hl-keyword">as</strong> val)
+tp2.sortBy!(`time)
+rightTable.append!(tp2)
+
+select * <strong class="hl-keyword">from</strong> output where time between <span class="hl-number">2012.01</span>.<span class="hl-number">01</span>T00:<span class="hl-number">00</span>:<span class="hl-number">00.000</span>:<span class="hl-number">2012.01</span>.<span class="hl-number">01</span>T00:<span class="hl-number">00</span>:<span class="hl-number">00.001</span></pre>
+            <div class="table-container"><table class="- topic/table table" id="topic_a2s_bgl_xzb__table_owg_dgl_xzb" data-ofbid="topic_a2s_bgl_xzb__table_owg_dgl_xzb" data-cols="5"><caption></caption><colgroup><col/><col/><col/><col/><col/></colgroup><thead class="- topic/thead thead">
+                        <tr class="- topic/row">
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="topic_a2s_bgl_xzb__table_owg_dgl_xzb__entry__1">
+                                <p class="- topic/p p">time</p>
+                            </th>
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="topic_a2s_bgl_xzb__table_owg_dgl_xzb__entry__2">
+                                <p class="- topic/p p">sym</p>
+                            </th>
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="topic_a2s_bgl_xzb__table_owg_dgl_xzb__entry__3">
+                                <p class="- topic/p p">factor1</p>
+                            </th>
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="topic_a2s_bgl_xzb__table_owg_dgl_xzb__entry__4">
+                                <p class="- topic/p p">factor2</p>
+                            </th>
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="topic_a2s_bgl_xzb__table_owg_dgl_xzb__entry__5">
+                                <p class="- topic/p p">factor3</p>
+                            </th>
+                        </tr>
+                    </thead><tbody class="- topic/tbody tbody">
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="topic_a2s_bgl_xzb__table_owg_dgl_xzb__entry__1">2012.01.01T00:00:00.000</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="topic_a2s_bgl_xzb__table_owg_dgl_xzb__entry__2">A</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="topic_a2s_bgl_xzb__table_owg_dgl_xzb__entry__3">0</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="topic_a2s_bgl_xzb__table_owg_dgl_xzb__entry__4">1</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="topic_a2s_bgl_xzb__table_owg_dgl_xzb__entry__5">6</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="topic_a2s_bgl_xzb__table_owg_dgl_xzb__entry__1">2012.01.01T00:00:00.000</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="topic_a2s_bgl_xzb__table_owg_dgl_xzb__entry__2">A</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="topic_a2s_bgl_xzb__table_owg_dgl_xzb__entry__3">0</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="topic_a2s_bgl_xzb__table_owg_dgl_xzb__entry__4">2</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="topic_a2s_bgl_xzb__table_owg_dgl_xzb__entry__5">6</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="topic_a2s_bgl_xzb__table_owg_dgl_xzb__entry__1">2012.01.01T00:00:00.000</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="topic_a2s_bgl_xzb__table_owg_dgl_xzb__entry__2">A</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="topic_a2s_bgl_xzb__table_owg_dgl_xzb__entry__3">0</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="topic_a2s_bgl_xzb__table_owg_dgl_xzb__entry__4">3</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="topic_a2s_bgl_xzb__table_owg_dgl_xzb__entry__5">6</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="topic_a2s_bgl_xzb__table_owg_dgl_xzb__entry__1">2012.01.01T00:00:00.001</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="topic_a2s_bgl_xzb__table_owg_dgl_xzb__entry__2">A</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="topic_a2s_bgl_xzb__table_owg_dgl_xzb__entry__3">5.2705</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="topic_a2s_bgl_xzb__table_owg_dgl_xzb__entry__4">1</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="topic_a2s_bgl_xzb__table_owg_dgl_xzb__entry__5">10</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="topic_a2s_bgl_xzb__table_owg_dgl_xzb__entry__1">2012.01.01T00:00:00.001</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="topic_a2s_bgl_xzb__table_owg_dgl_xzb__entry__2">A</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="topic_a2s_bgl_xzb__table_owg_dgl_xzb__entry__3">5.2705</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="topic_a2s_bgl_xzb__table_owg_dgl_xzb__entry__4">2</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="topic_a2s_bgl_xzb__table_owg_dgl_xzb__entry__5">10</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="topic_a2s_bgl_xzb__table_owg_dgl_xzb__entry__1">2012.01.01T00:00:00.001</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="topic_a2s_bgl_xzb__table_owg_dgl_xzb__entry__2">A</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="topic_a2s_bgl_xzb__table_owg_dgl_xzb__entry__3">5.2705</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="topic_a2s_bgl_xzb__table_owg_dgl_xzb__entry__4">3</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="topic_a2s_bgl_xzb__table_owg_dgl_xzb__entry__5">10</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="topic_a2s_bgl_xzb__table_owg_dgl_xzb__entry__1">2012.01.01T00:00:00.001</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="topic_a2s_bgl_xzb__table_owg_dgl_xzb__entry__2">A</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="topic_a2s_bgl_xzb__table_owg_dgl_xzb__entry__3">5.2705</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="topic_a2s_bgl_xzb__table_owg_dgl_xzb__entry__4">4</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="topic_a2s_bgl_xzb__table_owg_dgl_xzb__entry__5">10</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="topic_a2s_bgl_xzb__table_owg_dgl_xzb__entry__1">2012.01.01T00:00:00.000</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="topic_a2s_bgl_xzb__table_owg_dgl_xzb__entry__2">B</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="topic_a2s_bgl_xzb__table_owg_dgl_xzb__entry__3">5.2705</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="topic_a2s_bgl_xzb__table_owg_dgl_xzb__entry__4">2</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="topic_a2s_bgl_xzb__table_owg_dgl_xzb__entry__5">9</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="topic_a2s_bgl_xzb__table_owg_dgl_xzb__entry__1">2012.01.01T00:00:00.000</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="topic_a2s_bgl_xzb__table_owg_dgl_xzb__entry__2">B</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="topic_a2s_bgl_xzb__table_owg_dgl_xzb__entry__3">5.2705</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="topic_a2s_bgl_xzb__table_owg_dgl_xzb__entry__4">3</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="topic_a2s_bgl_xzb__table_owg_dgl_xzb__entry__5">9</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="topic_a2s_bgl_xzb__table_owg_dgl_xzb__entry__1">2012.01.01T00:00:00.000</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="topic_a2s_bgl_xzb__table_owg_dgl_xzb__entry__2">B</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="topic_a2s_bgl_xzb__table_owg_dgl_xzb__entry__3">5.2705</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="topic_a2s_bgl_xzb__table_owg_dgl_xzb__entry__4">4</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="topic_a2s_bgl_xzb__table_owg_dgl_xzb__entry__5">9</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="topic_a2s_bgl_xzb__table_owg_dgl_xzb__entry__1">2012.01.01T00:00:00.001</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="topic_a2s_bgl_xzb__table_owg_dgl_xzb__entry__2">B</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="topic_a2s_bgl_xzb__table_owg_dgl_xzb__entry__3">1.0179</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="topic_a2s_bgl_xzb__table_owg_dgl_xzb__entry__4">2</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="topic_a2s_bgl_xzb__table_owg_dgl_xzb__entry__5">14</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="topic_a2s_bgl_xzb__table_owg_dgl_xzb__entry__1">2012.01.01T00:00:00.001</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="topic_a2s_bgl_xzb__table_owg_dgl_xzb__entry__2">B</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="topic_a2s_bgl_xzb__table_owg_dgl_xzb__entry__3">1.0179</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="topic_a2s_bgl_xzb__table_owg_dgl_xzb__entry__4">3</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="topic_a2s_bgl_xzb__table_owg_dgl_xzb__entry__5">14</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="topic_a2s_bgl_xzb__table_owg_dgl_xzb__entry__1">2012.01.01T00:00:00.001</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="topic_a2s_bgl_xzb__table_owg_dgl_xzb__entry__2">B</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="topic_a2s_bgl_xzb__table_owg_dgl_xzb__entry__3">1.0179</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="topic_a2s_bgl_xzb__table_owg_dgl_xzb__entry__4">4</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="topic_a2s_bgl_xzb__table_owg_dgl_xzb__entry__5">14</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="topic_a2s_bgl_xzb__table_owg_dgl_xzb__entry__1">2012.01.01T00:00:00.001</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="topic_a2s_bgl_xzb__table_owg_dgl_xzb__entry__2">B</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="topic_a2s_bgl_xzb__table_owg_dgl_xzb__entry__3">1.0179</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="topic_a2s_bgl_xzb__table_owg_dgl_xzb__entry__4">5</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="topic_a2s_bgl_xzb__table_owg_dgl_xzb__entry__5">14</td>
+                        </tr>
+                    </tbody></table></div>
+            <p class="- topic/p p">下例展示特殊窗口的计算：</p>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock language-python" id="topic_a2s_bgl_xzb__codeblock_oxd_ggl_xzb" data-ofbid="topic_a2s_bgl_xzb__codeblock_oxd_ggl_xzb">share streamTable(<span class="hl-number">1</span>:<span class="hl-number">0</span>, `time`sym`price, [TIMESTAMP, SYMBOL, DOUBLE]) <strong class="hl-keyword">as</strong> leftTable
+share streamTable(<span class="hl-number">1</span>:<span class="hl-number">0</span>, `time`sym`val, [TIMESTAMP, SYMBOL, DOUBLE]) <strong class="hl-keyword">as</strong> rightTable
+
+v = [<span class="hl-number">1</span>, <span class="hl-number">5</span>, <span class="hl-number">10</span>, <span class="hl-number">15</span>]
+tp1=table(<span class="hl-number">2012.01</span>.<span class="hl-number">01</span>T00:<span class="hl-number">00</span>:<span class="hl-number">00.000</span>+v <strong class="hl-keyword">as</strong> time, take(`A   , <span class="hl-number">4</span>) <strong class="hl-keyword">as</strong> sym, rand(<span class="hl-number">10.0</span>,<span class="hl-number">4</span>) <strong class="hl-keyword">as</strong> price)
+
+v = [<span class="hl-number">1</span>, <span class="hl-number">2</span>, <span class="hl-number">3</span>, <span class="hl-number">4</span>, <span class="hl-number">5</span>, <span class="hl-number">6</span>, <span class="hl-number">9</span>, <span class="hl-number">15</span>]
+tp2=table(<span class="hl-number">2012.01</span>.<span class="hl-number">01</span>T00:<span class="hl-number">00</span>:<span class="hl-number">00.000</span>+v <strong class="hl-keyword">as</strong> time, take(`A   , <span class="hl-number">8</span>) <strong class="hl-keyword">as</strong> sym, rand(<span class="hl-number">10.0</span>,<span class="hl-number">8</span>) <strong class="hl-keyword">as</strong> val)
+
+output=table(<span class="hl-number">100</span>:<span class="hl-number">0</span>, `time`sym`price`val`sum_val, [TIMESTAMP, SYMBOL, DOUBLE, DOUBLE[], DOUBLE])
+wjEngine=createWindowJoinEngine(name=<span class="hl-string">"test1"</span>, leftTable=leftTable, rightTable=rightTable, outputTable=output,  window=<span class="hl-number">0</span>:<span class="hl-number">0</span>, metrics=&lt;[price, val, sum(val)]&gt;, matchingColumn=`sym, timeColumn=`time, useSystemTime=false)
+
+subscribeTable(tableName=<span class="hl-string">"leftTable"</span>, actionName=<span class="hl-string">"joinLeft"</span>, offset=<span class="hl-number">0</span>, handler=appendForJoin{wjEngine, true}, msgAsTable=true)
+subscribeTable(tableName=<span class="hl-string">"rightTable"</span>, actionName=<span class="hl-string">"joinRight"</span>, offset=<span class="hl-number">0</span>, handler=appendForJoin{wjEngine, false}, msgAsTable=true)
+
+leftTable.append!(tp1)
+rightTable.append!(tp2)</pre>
+            <div class="table-container"><table class="- topic/table table" id="topic_a2s_bgl_xzb__table_vwg_dgl_xzb" data-ofbid="topic_a2s_bgl_xzb__table_vwg_dgl_xzb" data-cols="5"><caption></caption><colgroup><col/><col/><col/><col/><col/></colgroup><thead class="- topic/thead thead">
+                        <tr class="- topic/row">
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="topic_a2s_bgl_xzb__table_vwg_dgl_xzb__entry__1">
+                                <p class="- topic/p p">time</p>
+                            </th>
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="topic_a2s_bgl_xzb__table_vwg_dgl_xzb__entry__2">
+                                <p class="- topic/p p">sym</p>
+                            </th>
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="topic_a2s_bgl_xzb__table_vwg_dgl_xzb__entry__3">
+                                <p class="- topic/p p">price</p>
+                            </th>
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="topic_a2s_bgl_xzb__table_vwg_dgl_xzb__entry__4">
+                                <p class="- topic/p p">val</p>
+                            </th>
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="topic_a2s_bgl_xzb__table_vwg_dgl_xzb__entry__5">
+                                <p class="- topic/p p">sum_val</p>
+                            </th>
+                        </tr>
+                    </thead><tbody class="- topic/tbody tbody">
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="topic_a2s_bgl_xzb__table_vwg_dgl_xzb__entry__1">2012.01.01T00:00:00.001</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="topic_a2s_bgl_xzb__table_vwg_dgl_xzb__entry__2">A</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="topic_a2s_bgl_xzb__table_vwg_dgl_xzb__entry__3">8.8252</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="topic_a2s_bgl_xzb__table_vwg_dgl_xzb__entry__4">[]</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="topic_a2s_bgl_xzb__table_vwg_dgl_xzb__entry__5"> </td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="topic_a2s_bgl_xzb__table_vwg_dgl_xzb__entry__1">2012.01.01T00:00:00.005</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="topic_a2s_bgl_xzb__table_vwg_dgl_xzb__entry__2">A</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="topic_a2s_bgl_xzb__table_vwg_dgl_xzb__entry__3">7.1195</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="topic_a2s_bgl_xzb__table_vwg_dgl_xzb__entry__4">[7.495792,9.417891,1.419681,...]</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="topic_a2s_bgl_xzb__table_vwg_dgl_xzb__entry__5">21.3741</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="topic_a2s_bgl_xzb__table_vwg_dgl_xzb__entry__1">2012.01.01T00:00:00.010</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="topic_a2s_bgl_xzb__table_vwg_dgl_xzb__entry__2">A</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="topic_a2s_bgl_xzb__table_vwg_dgl_xzb__entry__3">5.2217</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="topic_a2s_bgl_xzb__table_vwg_dgl_xzb__entry__4">[4.840462,8.086567,3.495306]</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="topic_a2s_bgl_xzb__table_vwg_dgl_xzb__entry__5">16.4223</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="topic_a2s_bgl_xzb__table_vwg_dgl_xzb__entry__1">2012.01.01T00:00:00.015</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="topic_a2s_bgl_xzb__table_vwg_dgl_xzb__entry__2">A</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="topic_a2s_bgl_xzb__table_vwg_dgl_xzb__entry__3">9.2517</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="topic_a2s_bgl_xzb__table_vwg_dgl_xzb__entry__4">[]</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="topic_a2s_bgl_xzb__table_vwg_dgl_xzb__entry__5"> </td>
+                        </tr>
+                    </tbody></table></div>
+            <p class="- topic/p p">下例展示指定 sortByTime = true 时，引擎将按时间顺序输出数据。</p>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock language-python" id="topic_a2s_bgl_xzb__codeblock_pps_hgl_xzb" data-ofbid="topic_a2s_bgl_xzb__codeblock_pps_hgl_xzb">//清理引擎及变量
+unsubscribeTable(tableName=<span class="hl-string">"leftTable"</span>, actionName=<span class="hl-string">"joinLeft"</span>)
+unsubscribeTable(tableName=<span class="hl-string">"rightTable"</span>, actionName=<span class="hl-string">"joinRight"</span>)
+undef(`leftTable,SHARED)
+undef(`rightTable,SHARED)
+dropAggregator(name=<span class="hl-string">"test1"</span>)
+
+//定义引擎
+share streamTable(<span class="hl-number">1</span>:<span class="hl-number">0</span>, `time`sym`price, [TIMESTAMP, SYMBOL, DOUBLE]) <strong class="hl-keyword">as</strong> leftTable
+share streamTable(<span class="hl-number">1</span>:<span class="hl-number">0</span>, `time`sym`val, [TIMESTAMP, SYMBOL, DOUBLE]) <strong class="hl-keyword">as</strong> rightTable
+output=table(<span class="hl-number">100</span>:<span class="hl-number">0</span>, `time`sym`factor1`factor2`factor3, [TIMESTAMP, SYMBOL, DOUBLE, DOUBLE, DOUBLE])
+nullFill= [<span class="hl-number">2012.01</span>.<span class="hl-number">01</span>T00:<span class="hl-number">00</span>:<span class="hl-number">00.000</span>, `NONE, <span class="hl-number">0.0</span>, <span class="hl-number">0.0</span>, <span class="hl-number">0.0</span>]
+wjEngine=createWindowJoinEngine(name=<span class="hl-string">"test1"</span>, leftTable=leftTable, rightTable=rightTable, outputTable=output,  window=-<span class="hl-number">2</span>:<span class="hl-number">2</span>, metrics=&lt;[price,val,sum(val)]&gt;, matchingColumn=`sym, timeColumn=`time, useSystemTime=false,nullFill=nullFill, sortByTime=true)
+
+//定义数据
+subscribeTable(tableName=<span class="hl-string">"leftTable"</span>, actionName=<span class="hl-string">"joinLeft"</span>, offset=<span class="hl-number">0</span>, handler=appendForJoin{wjEngine, true}, msgAsTable=true)
+subscribeTable(tableName=<span class="hl-string">"rightTable"</span>, actionName=<span class="hl-string">"joinRight"</span>, offset=<span class="hl-number">0</span>, handler=appendForJoin{wjEngine, false}, msgAsTable=true)
+
+n=<span class="hl-number">10</span>
+tp1=table(take(<span class="hl-number">2012.01</span>.<span class="hl-number">01</span>T00:<span class="hl-number">00</span>:<span class="hl-number">00.000</span>+<span class="hl-number">0.</span><span class="hl-number">.10</span>, <span class="hl-number">2</span>*n) <strong class="hl-keyword">as</strong> time, take(`A, n) join take(`B, n) <strong class="hl-keyword">as</strong> sym, take(NULL join rand(<span class="hl-number">10.0</span>, n-<span class="hl-number">1</span>),<span class="hl-number">2</span>*n) <strong class="hl-keyword">as</strong> price)
+tp1.sortBy!(`time)
+leftTable.append!(tp1)
+
+tp2=table(take(<span class="hl-number">2012.01</span>.<span class="hl-number">01</span>T00:<span class="hl-number">00</span>:<span class="hl-number">00.000</span>+<span class="hl-number">0.</span><span class="hl-number">.10</span>, <span class="hl-number">2</span>*n) <strong class="hl-keyword">as</strong> time, take(`A, n) join take(`B, n) <strong class="hl-keyword">as</strong> sym, take(double(<span class="hl-number">1.</span>.n),<span class="hl-number">2</span>*n) <strong class="hl-keyword">as</strong> val)
+tp2.sortBy!(`time)
+rightTable.append!(tp2)
+
+sleep(<span class="hl-number">100</span>)
+select * <strong class="hl-keyword">from</strong> output where time between <span class="hl-number">2012.01</span>.<span class="hl-number">01</span>T00:<span class="hl-number">00</span>:<span class="hl-number">00.000</span>:<span class="hl-number">2012.01</span>.<span class="hl-number">01</span>T00:<span class="hl-number">00</span>:<span class="hl-number">00.001</span></pre>
+            <div class="table-container"><table class="- topic/table table" id="topic_a2s_bgl_xzb__table_ixg_dgl_xzb" data-ofbid="topic_a2s_bgl_xzb__table_ixg_dgl_xzb" data-cols="5"><caption></caption><colgroup><col/><col/><col/><col/><col/></colgroup><thead class="- topic/thead thead">
+                        <tr class="- topic/row">
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="topic_a2s_bgl_xzb__table_ixg_dgl_xzb__entry__1">
+                                <p class="- topic/p p">time</p>
+                            </th>
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="topic_a2s_bgl_xzb__table_ixg_dgl_xzb__entry__2">
+                                <p class="- topic/p p">sym</p>
+                            </th>
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="topic_a2s_bgl_xzb__table_ixg_dgl_xzb__entry__3">
+                                <p class="- topic/p p">factor1</p>
+                            </th>
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="topic_a2s_bgl_xzb__table_ixg_dgl_xzb__entry__4">
+                                <p class="- topic/p p">factor2</p>
+                            </th>
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="topic_a2s_bgl_xzb__table_ixg_dgl_xzb__entry__5">
+                                <p class="- topic/p p">factor3</p>
+                            </th>
+                        </tr>
+                    </thead><tbody class="- topic/tbody tbody">
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="topic_a2s_bgl_xzb__table_ixg_dgl_xzb__entry__1">2012.01.01T00:00:00.000</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="topic_a2s_bgl_xzb__table_ixg_dgl_xzb__entry__2">A</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="topic_a2s_bgl_xzb__table_ixg_dgl_xzb__entry__3">0</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="topic_a2s_bgl_xzb__table_ixg_dgl_xzb__entry__4">1</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="topic_a2s_bgl_xzb__table_ixg_dgl_xzb__entry__5">6</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="topic_a2s_bgl_xzb__table_ixg_dgl_xzb__entry__1">2012.01.01T00:00:00.000</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="topic_a2s_bgl_xzb__table_ixg_dgl_xzb__entry__2">A</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="topic_a2s_bgl_xzb__table_ixg_dgl_xzb__entry__3">0</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="topic_a2s_bgl_xzb__table_ixg_dgl_xzb__entry__4">2</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="topic_a2s_bgl_xzb__table_ixg_dgl_xzb__entry__5">6</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="topic_a2s_bgl_xzb__table_ixg_dgl_xzb__entry__1">2012.01.01T00:00:00.000</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="topic_a2s_bgl_xzb__table_ixg_dgl_xzb__entry__2">A</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="topic_a2s_bgl_xzb__table_ixg_dgl_xzb__entry__3">0</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="topic_a2s_bgl_xzb__table_ixg_dgl_xzb__entry__4">3</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="topic_a2s_bgl_xzb__table_ixg_dgl_xzb__entry__5">6</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="topic_a2s_bgl_xzb__table_ixg_dgl_xzb__entry__1">2012.01.01T00:00:00.000</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="topic_a2s_bgl_xzb__table_ixg_dgl_xzb__entry__2">B</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="topic_a2s_bgl_xzb__table_ixg_dgl_xzb__entry__3">3.9389</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="topic_a2s_bgl_xzb__table_ixg_dgl_xzb__entry__4">2</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="topic_a2s_bgl_xzb__table_ixg_dgl_xzb__entry__5">9</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="topic_a2s_bgl_xzb__table_ixg_dgl_xzb__entry__1">2012.01.01T00:00:00.000</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="topic_a2s_bgl_xzb__table_ixg_dgl_xzb__entry__2">B</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="topic_a2s_bgl_xzb__table_ixg_dgl_xzb__entry__3">3.9389</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="topic_a2s_bgl_xzb__table_ixg_dgl_xzb__entry__4">3</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="topic_a2s_bgl_xzb__table_ixg_dgl_xzb__entry__5">9</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="topic_a2s_bgl_xzb__table_ixg_dgl_xzb__entry__1">2012.01.01T00:00:00.000</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="topic_a2s_bgl_xzb__table_ixg_dgl_xzb__entry__2">B</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="topic_a2s_bgl_xzb__table_ixg_dgl_xzb__entry__3">3.9389</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="topic_a2s_bgl_xzb__table_ixg_dgl_xzb__entry__4">4</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="topic_a2s_bgl_xzb__table_ixg_dgl_xzb__entry__5">9</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="topic_a2s_bgl_xzb__table_ixg_dgl_xzb__entry__1">2012.01.01T00:00:00.001</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="topic_a2s_bgl_xzb__table_ixg_dgl_xzb__entry__2">A</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="topic_a2s_bgl_xzb__table_ixg_dgl_xzb__entry__3">3.9389</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="topic_a2s_bgl_xzb__table_ixg_dgl_xzb__entry__4">1</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="topic_a2s_bgl_xzb__table_ixg_dgl_xzb__entry__5">10</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="topic_a2s_bgl_xzb__table_ixg_dgl_xzb__entry__1">2012.01.01T00:00:00.001</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="topic_a2s_bgl_xzb__table_ixg_dgl_xzb__entry__2">A</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="topic_a2s_bgl_xzb__table_ixg_dgl_xzb__entry__3">3.9389</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="topic_a2s_bgl_xzb__table_ixg_dgl_xzb__entry__4">2</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="topic_a2s_bgl_xzb__table_ixg_dgl_xzb__entry__5">10</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="topic_a2s_bgl_xzb__table_ixg_dgl_xzb__entry__1">2012.01.01T00:00:00.001</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="topic_a2s_bgl_xzb__table_ixg_dgl_xzb__entry__2">A</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="topic_a2s_bgl_xzb__table_ixg_dgl_xzb__entry__3">3.9389</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="topic_a2s_bgl_xzb__table_ixg_dgl_xzb__entry__4">3</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="topic_a2s_bgl_xzb__table_ixg_dgl_xzb__entry__5">10</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="topic_a2s_bgl_xzb__table_ixg_dgl_xzb__entry__1">2012.01.01T00:00:00.001</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="topic_a2s_bgl_xzb__table_ixg_dgl_xzb__entry__2">A</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="topic_a2s_bgl_xzb__table_ixg_dgl_xzb__entry__3">3.9389</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="topic_a2s_bgl_xzb__table_ixg_dgl_xzb__entry__4">4</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="topic_a2s_bgl_xzb__table_ixg_dgl_xzb__entry__5">10</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="topic_a2s_bgl_xzb__table_ixg_dgl_xzb__entry__1">2012.01.01T00:00:00.001</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="topic_a2s_bgl_xzb__table_ixg_dgl_xzb__entry__2">B</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="topic_a2s_bgl_xzb__table_ixg_dgl_xzb__entry__3">4.9875</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="topic_a2s_bgl_xzb__table_ixg_dgl_xzb__entry__4">2</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="topic_a2s_bgl_xzb__table_ixg_dgl_xzb__entry__5">14</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="topic_a2s_bgl_xzb__table_ixg_dgl_xzb__entry__1">2012.01.01T00:00:00.001</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="topic_a2s_bgl_xzb__table_ixg_dgl_xzb__entry__2">B</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="topic_a2s_bgl_xzb__table_ixg_dgl_xzb__entry__3">4.9875</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="topic_a2s_bgl_xzb__table_ixg_dgl_xzb__entry__4">3</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="topic_a2s_bgl_xzb__table_ixg_dgl_xzb__entry__5">14</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="topic_a2s_bgl_xzb__table_ixg_dgl_xzb__entry__1">2012.01.01T00:00:00.001</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="topic_a2s_bgl_xzb__table_ixg_dgl_xzb__entry__2">B</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="topic_a2s_bgl_xzb__table_ixg_dgl_xzb__entry__3">4.9875</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="topic_a2s_bgl_xzb__table_ixg_dgl_xzb__entry__4">4</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="topic_a2s_bgl_xzb__table_ixg_dgl_xzb__entry__5">14</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="topic_a2s_bgl_xzb__table_ixg_dgl_xzb__entry__1">2012.01.01T00:00:00.001</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="topic_a2s_bgl_xzb__table_ixg_dgl_xzb__entry__2">B</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="topic_a2s_bgl_xzb__table_ixg_dgl_xzb__entry__3">4.9875</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="topic_a2s_bgl_xzb__table_ixg_dgl_xzb__entry__4">5</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="topic_a2s_bgl_xzb__table_ixg_dgl_xzb__entry__5">14</td>
+                        </tr>
+                    </tbody></table></div>
+        </div>
+    </article>
+</article></main></div>
+                        
+                        
+                        
+                        
+                        
+                        
+                    </div>
+                    
+                        <nav role="navigation" id="wh_topic_toc" aria-label="On this page" class="col-lg-2 d-none d-lg-block navbar d-print-none"> 
+                            <div id="wh_topic_toc_content">
+		                        
+	                            <div class=" wh_topic_toc "><div class="wh_topic_label">在本页上</div><ul><li class="topic-item"><a href="#topic_z23_tfl_xzb" data-tocid="topic_z23_tfl_xzb">应用例子 1-行情快照与逐笔成交数据融合</a></li><li class="topic-item"><a href="#topic_a2s_bgl_xzb" data-tocid="topic_a2s_bgl_xzb">应用例子 2</a></li></ul></div>
+	                        	
+                        	</div>
+                        </nav>
+                    
+                </div>
+            </div>
+            
+            
+            
+        </div> 
+        <footer class="navbar navbar-default wh_footer">
+  <div class=" footer-container mx-auto ">
+<title>Copyright</title><p><b> ©2024 浙江智臾科技有限公司 浙ICP备18048711号-3</b></p>
+  </div>
+</footer>
+        
+        <div id="go2top" class="d-print-none">
+            <span class="oxy-icon oxy-icon-up"></span>
+        </div>
+        
+        <div id="modal_img_large" class="modal">
+            <span class="close oxy-icon oxy-icon-remove"></span>
+            <div id="modal_img_container"></div>
+            <div id="caption"></div>
+        </div>
+        
+        
+        
+    </body>
+</html>

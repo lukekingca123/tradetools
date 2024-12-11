@@ -1,0 +1,977 @@
+<!DOCTYPE html><html xmlns="http://www.w3.org/1999/xhtml" xml:lang="zh" lang="zh" data-whc_version="26.0">
+    <head><link rel="shortcut icon" href="../../favicon.ico"/><link rel="icon" href="../../favicon.ico"/><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><meta http-equiv="X-UA-Compatible" content="IE=edge"/><meta name="description" content="loadText(filename, [delimiter], [schema], [skipRows=0] , [arrayDelimiter], [containHeader], [arrayMarker] ) filename 字符串，表示数据文件的路径。仅支持 CSV 格式的文件。若传入其他格式文件，则无法保证数据准确性。 delimiter ..."/><meta name="DC.rights.owner" content="(C) 版权 2024"/><meta name="copyright" content="(C) 版权 2024"/><meta name="generator" content="DITA-OT"/><meta name="DC.type" content="topic"/><meta name="DC.coverage" content=""/><meta name="DC.relation" content="../../funcs/funcs_intro.html"/><meta name="prodname" content="DolphinDB"/><meta name="brand" content="DolphinDB"/><meta name="DC.creator" content="DolphinDB"/><meta name="DC.publisher" content="DDB N/A DDB 200"/><meta name="DC.format" content="HTML5"/><meta name="DC.identifier" content="loadtext"/><title>loadText</title><!--  Generated with Oxygen version 26.0, build number 2024012323.  --><meta name="wh-path2root" content="../../"/><meta name="wh-toc-id" content="loadtext-d9529e56466"/><meta name="wh-source-relpath" content="funcs/l/loadText.dita"/><meta name="wh-out-relpath" content="funcs/l/loadText.html"/>
+
+    <link rel="stylesheet" type="text/css" href="../../oxygen-webhelp/app/commons.css?buildId=2024012323"/>
+    <link rel="stylesheet" type="text/css" href="../../oxygen-webhelp/app/topic.css?buildId=2024012323"/>
+
+    <script src="../../oxygen-webhelp/app/options/properties.js?buildId=20240704100525"></script>
+    <script src="../../oxygen-webhelp/app/localization/strings.js?buildId=2024012323"></script>
+    <script src="../../oxygen-webhelp/app/search/index/keywords.js?buildId=20240704100525"></script>
+    <script defer="defer" src="../../oxygen-webhelp/app/commons.js?buildId=2024012323"></script>
+    <script defer="defer" src="../../oxygen-webhelp/app/topic.js?buildId=2024012323"></script>
+<link rel="stylesheet" type="text/css" href="../../oxygen-webhelp/template/styles.css?buildId=2024012323"/><script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script><script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script></head>
+
+    <body id="loadtext" class="wh_topic_page frmBody">
+        <a href="#wh_topic_body" class="sr-only sr-only-focusable">
+            跳转到主要内容
+        </a>
+        
+        
+        
+        
+        <header class="navbar navbar-default wh_header">
+    <div class="container-fluid">
+        <div xmlns:whc="http://www.oxygenxml.com/webhelp/components" class="wh_header_flex_container navbar-nav navbar-expand-md navbar-dark">
+            <div class="wh_logo_and_publication_title_container">
+                <div class="wh_logo_and_publication_title">
+                    
+                    <a href="https://www.dolphindb.cn" class=" wh_logo d-none d-sm-block "><img src="../../logo.png" alt="  DolphinDB 文档中心  "/></a>
+                    <div class=" wh_publication_title "><a href="../../index.html"><span class="booktitle">  <span class="ph mainbooktitle">DolphinDB 文档中心</span>  </span></a></div>
+                    
+                </div>
+                
+                
+            </div>
+
+            <div class="wh_top_menu_and_indexterms_link collapse navbar-collapse" id="wh_top_menu_and_indexterms_link">
+                
+                
+                
+                
+            </div>
+        <div class=" wh_search_input navbar-form wh_topic_page_search search " role="form">
+            
+            
+            
+            <form id="searchForm" method="get" role="search" action="../../search.html"><div><input type="search" placeholder="搜索 " class="wh_search_textfield" id="textToSearch" name="searchQuery" aria-label="搜索查询" required="required"/><button type="submit" class="wh_search_button" aria-label="搜索"><span class="search_input_text">搜索</span></button></div></form>
+            
+            <script src="/vendors/react/umd/react.production.min.js" defer="defer"></script>
+<script src="/vendors/react-dom/umd/react-dom.production.min.js" defer="defer"></script>
+<script src="/vendors/dayjs/dayjs.min.js" defer="defer"></script>
+<script src="/vendors/antd/dist/antd.min.js" defer="defer"></script>
+<script src="/vendors/@ant-design/icons/dist/index.umd.min.js" defer="defer"></script>
+<script src="/zh/index.js" type="module"></script>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js" defer="defer"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML" defer="defer"><!--
+
+
+--></script>
+
+            
+        </div></div>
+    </div>
+</header>
+        
+        
+         
+        
+        
+        
+        <div class="container-fluid" id="wh_topic_container">
+            <div class="row">
+
+                <nav class="wh_tools d-print-none navbar-expand-md" aria-label="Tools">
+                    
+                    <div data-tooltip-position="bottom" class=" wh_breadcrumb "><ol class="d-print-none"><li><span class="home"><a href="../../index.html"><span>主页</span></a></span></li><li><div class="topicref" data-id="functions_references"><div class="title"><a href="../../funcs/funcs_intro.html"><span class="keyword label">函数参考</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 函数分类、语法、详解及示例</p></div></div></div></li><li><div class="topicref"><div class="title"><a href="../../funcs/a/abs.html">函数一览</a></div></div></li><li><div class="topicref"><div class="title"><a href="../../funcs/l/lasso.html">L</a></div></div></li><li class="active"><div class="topicref" data-id="loadtext"><div class="title"><a href="../../funcs/l/loadText.html">loadText</a></div></div></li></ol></div>
+                    
+                    
+                    
+                    <div class="wh_right_tools">
+                        <button class="wh_hide_highlight" aria-label="切换搜索突出显示" title="切换搜索突出显示"></button>
+                        <button class="webhelp_expand_collapse_sections" data-next-state="collapsed" aria-label="折叠截面" title="折叠截面"></button>
+                        
+                        
+                        
+                        
+                        <div class=" wh_print_link print d-none d-md-inline-block "><button onClick="window.print()" title="打印此页" aria-label="打印此页"></button></div>
+                        
+                        <button type="button" id="wh_toc_button" class="custom-toggler navbar-toggler collapsed wh_toggle_button navbar-light" aria-expanded="false" aria-label="Toggle publishing table of content" aria-controls="wh_publication_toc">
+                            <span class="navbar-toggler-icon"></span>
+                        </button>
+                    </div>
+                    
+                </nav>
+            </div>
+            
+            
+            
+            
+            <div class="wh_content_area">
+                <div class="row">
+                    
+                        <nav id="wh_publication_toc" class="col-lg-3 col-md-3 col-sm-12 d-md-block d-none d-print-none" aria-label="Table of Contents Container">
+                            <div id="wh_publication_toc_content">
+		                        
+                            	<div class=" wh_publication_toc " data-tooltip-position="right"><span class="expand-button-action-labels"><span id="button-expand-action" role="button" aria-label="Expand"></span><span id="button-collapse-action" role="button" aria-label="Collapse"></span><span id="button-pending-action" role="button" aria-label="Pending"></span></span><ul role="tree" aria-label="Table of Contents"><li role="treeitem"><div data-tocid="new_chap_about_sect_ddb_docs_intro-d9529e87" class="topicref" data-id="new_chap_about_sect_ddb_docs_intro" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../about/ddb_docs_intro.html" id="new_chap_about_sect_ddb_docs_intro-d9529e87-link">文档使用说明</a><div class="wh-tooltip"><p class="shortdesc">如何获取 DolphinDB 帮助信息</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="chap1_getstarted-d9529e140" class="topicref" data-id="chap1_getstarted" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action chap1_getstarted-d9529e140-link" class="wh-expand-btn"></span><div class="title"><a href="../../getstarted/chap1_getstarted.html" id="chap1_getstarted-d9529e140-link"><span class="keyword label">快速上手</span></a><div class="wh-tooltip"><p class="shortdesc">如何快速部署 DolphinDB、建库建表、写入和查询数据</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="sectionddb_deployment-d9529e335" class="topicref" data-id="sectionddb_deployment" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action sectionddb_deployment-d9529e335-link" class="wh-expand-btn"></span><div class="title"><a href="../../deploy/deploy_intro.html" id="sectionddb_deployment-d9529e335-link"><span class="keyword label">部署</span></a><div class="wh-tooltip"><p class="shortdesc">如何在不同的场景中部署 DolphinDB</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="new_chap_database_manage_new_chap_dbmanage_landing_page-d9529e2313" class="topicref" data-id="new_chap_database_manage_new_chap_dbmanage_landing_page" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action new_chap_database_manage_new_chap_dbmanage_landing_page-d9529e2313-link" class="wh-expand-btn"></span><div class="title"><a href="../../db_distr_comp/cfg/db_intro.html" id="new_chap_database_manage_new_chap_dbmanage_landing_page-d9529e2313-link"><span class="keyword label">数据库</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 数据库的基本概念</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="chap7_tutorials_streaming-d9529e3490" class="topicref" data-id="chap7_tutorials_streaming" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action chap7_tutorials_streaming-d9529e3490-link" class="wh-expand-btn"></span><div class="title"><a href="../../stream/str_intro.html" id="chap7_tutorials_streaming-d9529e3490-link"><span class="keyword label">流数据</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 流数据引擎及流数据计算的基本概念</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="tocId-d9529e7385" class="topicref" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action tocId-d9529e7385-link" class="wh-expand-btn"></span><div class="title"><a href="../../db_distr_comp/db_oper/import_data.html" id="tocId-d9529e7385-link">数据迁移</a><div class="wh-tooltip"><p class="shortdesc">如何从不同数据源向 DolphinDB 迁移数据</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="chap7_tutorials_system_management-d9529e7812" class="topicref" data-id="chap7_tutorials_system_management" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action chap7_tutorials_system_management-d9529e7812-link" class="wh-expand-btn"></span><div class="title"><a href="../../sys_man/om_intro.html" id="chap7_tutorials_system_management-d9529e7812-link"><span class="keyword label">系统运维</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 的系统运维功能及方法</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="about_language_resources-d9529e16490" class="topicref" data-id="about_language_resources" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action about_language_resources-d9529e16490-link" class="wh-expand-btn"></span><div class="title"><a href="../../progr/progr_intro.html" id="about_language_resources-d9529e16490-link"><span class="keyword label">编程语言</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 编程基本概念与方法、SQL 在 DolphinDB 的应用</p></div></div></div></li><li role="treeitem" aria-expanded="true"><div data-tocid="functions_references-d9529e26503" class="topicref" data-id="functions_references" data-state="expanded"><span role="button" tabindex="0" aria-labelledby="button-collapse-action functions_references-d9529e26503-link" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/funcs_intro.html" id="functions_references-d9529e26503-link"><span class="keyword label">函数参考</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 函数分类、语法、详解及示例</p></div></div></div><ul role="group" class="navbar-nav nav-list"><li role="treeitem"><div data-tocid="funcs_by_topics-d9529e26556" class="topicref" data-id="funcs_by_topics" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/funcs_by_topics.html" id="funcs_by_topics-d9529e26556-link"><span class="keyword label">函数分类</span></a></div></div></li><li role="treeitem" aria-expanded="true"><div data-tocid="tocId-d9529e26603" class="topicref" data-state="expanded"><span role="button" tabindex="0" aria-labelledby="button-collapse-action tocId-d9529e26603-link" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/a/abs.html" id="tocId-d9529e26603-link">函数一览</a></div></div><ul role="group" class="navbar-nav nav-list"><li role="treeitem" aria-expanded="false"><div data-tocid="tocId-d9529e26604" class="topicref" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action tocId-d9529e26604-link" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/a/abs.html" id="tocId-d9529e26604-link">A</a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="tocId-d9529e28634" class="topicref" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action tocId-d9529e28634-link" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/b/backup.html" id="tocId-d9529e28634-link">B</a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="tocId-d9529e30248" class="topicref" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action tocId-d9529e30248-link" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/c/cacheDS_.html" id="tocId-d9529e30248-link">C</a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="tocId-d9529e37682" class="topicref" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action tocId-d9529e37682-link" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/d/dailyAlignedBar.html" id="tocId-d9529e37682-link">D</a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="tocId-d9529e40877" class="topicref" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action tocId-d9529e40877-link" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/e/eig.html" id="tocId-d9529e40877-link">E</a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="tocId-d9529e42767" class="topicref" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action tocId-d9529e42767-link" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/f/ffill_.html" id="tocId-d9529e42767-link">F</a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="tocId-d9529e44196" class="topicref" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action tocId-d9529e44196-link" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/g/gaussiankde.html" id="tocId-d9529e44196-link">G</a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="tocId-d9529e50472" class="topicref" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action tocId-d9529e50472-link" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/h/hashBucket.html" id="tocId-d9529e50472-link">H</a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="tocId-d9529e50887" class="topicref" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action tocId-d9529e50887-link" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/i/ifirstHit.html" id="tocId-d9529e50887-link">I</a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="tocId-d9529e54479" class="topicref" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action tocId-d9529e54479-link" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/j/join.html" id="tocId-d9529e54479-link">J</a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="tocId-d9529e54572" class="topicref" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action tocId-d9529e54572-link" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/k/kama.html" id="tocId-d9529e54572-link">K</a></div></div></li><li role="treeitem" aria-expanded="true"><div data-tocid="tocId-d9529e55034" class="topicref" data-state="expanded"><span role="button" tabindex="0" aria-labelledby="button-collapse-action tocId-d9529e55034-link" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/l/lasso.html" id="tocId-d9529e55034-link">L</a></div></div><ul role="group" class="navbar-nav nav-list"><li role="treeitem"><div data-tocid="lasso-d9529e55035" class="topicref" data-id="lasso" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/l/lasso.html" id="lasso-d9529e55035-link">lasso</a></div></div></li><li role="treeitem"><div data-tocid="lassobasic-d9529e55081" class="topicref" data-id="lassobasic" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/l/lassoBasic.html" id="lassobasic-d9529e55081-link">lassoBasic</a></div></div></li><li role="treeitem"><div data-tocid="lassocv-d9529e55127" class="topicref" data-id="lassocv" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/l/lassoCV.html" id="lassocv-d9529e55127-link">lassoCV</a></div></div></li><li role="treeitem"><div data-tocid="last-d9529e55173" class="topicref" data-id="last" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/l/last.html" id="last-d9529e55173-link">last</a></div></div></li><li role="treeitem"><div data-tocid="lastnot-d9529e55219" class="topicref" data-id="lastnot" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/l/lastNot.html" id="lastnot-d9529e55219-link">lastNot</a></div></div></li><li role="treeitem"><div data-tocid="lastweekofmonth-d9529e55265" class="topicref" data-id="lastweekofmonth" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/l/lastWeekOfMonth.html" id="lastweekofmonth-d9529e55265-link">lastWeekOfMonth</a></div></div></li><li role="treeitem"><div data-tocid="latestindexedtable-d9529e55311" class="topicref" data-id="latestindexedtable" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/l/latestIndexedTable.html" id="latestindexedtable-d9529e55311-link">latestIndexedTable</a></div></div></li><li role="treeitem"><div data-tocid="latestkeyedtable-d9529e55357" class="topicref" data-id="latestkeyedtable" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/l/latestKeyedTable.html" id="latestkeyedtable-d9529e55357-link">latestKeyedTable</a></div></div></li><li role="treeitem"><div data-tocid="le-d9529e55403" class="topicref" data-id="le" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/l/le.html" id="le-d9529e55403-link">le</a></div></div></li><li role="treeitem"><div data-tocid="left-d9529e55449" class="topicref" data-id="left" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/l/left.html" id="left-d9529e55449-link">left</a></div></div></li><li role="treeitem"><div data-tocid="lfill-d9529e55495" class="topicref" data-id="lfill" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/l/lfill_.html" id="lfill-d9529e55495-link">lfill!</a></div></div></li><li role="treeitem"><div data-tocid="lfill-d9529e55542" class="topicref" data-id="lfill" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/l/lfill.html" id="lfill-d9529e55542-link">lfill</a></div></div></li><li role="treeitem"><div data-tocid="license-d9529e55588" class="topicref" data-id="license" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/l/license.html" id="license-d9529e55588-link"><span class="keyword">license</span></a></div></div></li><li role="treeitem"><div data-tocid="like-d9529e55635" class="topicref" data-id="like" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/l/like.html" id="like-d9529e55635-link">like</a></div></div></li><li role="treeitem"><div data-tocid="lineartimetrend-d9529e55681" class="topicref" data-id="lineartimetrend" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/l/linearTimeTrend.html" id="lineartimetrend-d9529e55681-link">linearTimeTrend</a></div></div></li><li role="treeitem"><div data-tocid="linprog-d9529e55727" class="topicref" data-id="linprog" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/l/linprog.html" id="linprog-d9529e55727-link">linprog</a></div></div></li><li role="treeitem"><div data-tocid="listremoteplugins-d9529e55773" class="topicref" data-id="listremoteplugins" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/l/listRemotePlugins.html" id="listremoteplugins-d9529e55773-link">listRemotePlugins</a></div></div></li><li role="treeitem"><div data-tocid="listtables-d9529e55819" class="topicref" data-id="listtables" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/l/listTables.html" id="listtables-d9529e55819-link">listTables</a></div></div></li><li role="treeitem"><div data-tocid="loadbackup-d9529e55865" class="topicref" data-id="loadbackup" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/l/loadBackup.html" id="loadbackup-d9529e55865-link">loadBackup</a></div></div></li><li role="treeitem"><div data-tocid="loaddistributedinmemorytable-d9529e55911" class="topicref" data-id="loaddistributedinmemorytable" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/l/loadDistributedInMemoryTable.html" id="loaddistributedinmemorytable-d9529e55911-link">loadDistributedInMemoryTable</a></div></div></li><li role="treeitem"><div data-tocid="loadipcinmemorytable-d9529e55957" class="topicref" data-id="loadipcinmemorytable" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/l/loadIPCInMemoryTable.html" id="loadipcinmemorytable-d9529e55957-link">loadIPCInMemoryTable</a></div></div></li><li role="treeitem"><div data-tocid="loadmodel-d9529e56003" class="topicref" data-id="loadmodel" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/l/loadModel.html" id="loadmodel-d9529e56003-link">loadModel</a></div></div></li><li role="treeitem"><div data-tocid="loadmodule-d9529e56050" class="topicref" data-id="loadmodule" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/l/loadModule.html" id="loadmodule-d9529e56050-link"><span class="keyword">loadModule</span></a></div></div></li><li role="treeitem"><div data-tocid="loadmodulefromscript-d9529e56097" class="topicref" data-id="loadmodulefromscript" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/l/loadmodulefromscript.html" id="loadmodulefromscript-d9529e56097-link">loadModuleFromScript</a></div></div></li><li role="treeitem"><div data-tocid="loadmvcctable-d9529e56143" class="topicref" data-id="loadmvcctable" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/l/loadMvccTable.html" id="loadmvcctable-d9529e56143-link">loadMvccTable</a></div></div></li><li role="treeitem"><div data-tocid="loadnpy-d9529e56189" class="topicref" data-id="loadnpy" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/l/loadNpy.html" id="loadnpy-d9529e56189-link">loadNpy</a></div></div></li><li role="treeitem"><div data-tocid="loadnpz-d9529e56235" class="topicref" data-id="loadnpz" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/l/loadNpz.html" id="loadnpz-d9529e56235-link">loadNpz</a></div></div></li><li role="treeitem"><div data-tocid="loadplugin-d9529e56281" class="topicref" data-id="loadplugin" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/l/loadPlugin.html" id="loadplugin-d9529e56281-link"><span class="keyword">loadPlugin</span></a></div></div></li><li role="treeitem"><div data-tocid="loadrecord-d9529e56328" class="topicref" data-id="loadrecord" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/l/loadRecord.html" id="loadrecord-d9529e56328-link">loadRecord</a></div></div></li><li role="treeitem"><div data-tocid="loadtable-d9529e56374" class="topicref" data-id="loadtable" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/l/loadTable.html" id="loadtable-d9529e56374-link">loadTable</a></div></div></li><li role="treeitem"><div data-tocid="loadtablebysql-d9529e56420" class="topicref" data-id="loadtablebysql" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/l/loadTableBySQL.html" id="loadtablebysql-d9529e56420-link">loadTableBySQL</a></div></div></li><li role="treeitem" class="active"><div data-tocid="loadtext-d9529e56466" class="topicref" data-id="loadtext" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/l/loadText.html" id="loadtext-d9529e56466-link">loadText</a></div></div></li><li role="treeitem"><div data-tocid="loadtextex-d9529e56512" class="topicref" data-id="loadtextex" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/l/loadTextEx.html" id="loadtextex-d9529e56512-link">loadTextEx</a></div></div></li><li role="treeitem"><div data-tocid="loc-d9529e56559" class="topicref" data-id="loc" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/l/loc.html" id="loc-d9529e56559-link">loc</a></div></div></li><li role="treeitem"><div data-tocid="localtime-d9529e56605" class="topicref" data-id="localtime" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/l/localtime.html" id="localtime-d9529e56605-link"><span class="keyword">localtime</span></a></div></div></li><li role="treeitem"><div data-tocid="loess-d9529e56652" class="topicref" data-id="loess" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/l/loess.html" id="loess-d9529e56652-link"><span class="keyword">loess</span></a></div></div></li><li role="treeitem"><div data-tocid="log-d9529e56699" class="topicref" data-id="log" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/l/log.html" id="log-d9529e56699-link">log</a></div></div></li><li role="treeitem"><div data-tocid="log1p-d9529e56745" class="topicref" data-id="log1p" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/l/log1p.html" id="log1p-d9529e56745-link">log1p</a></div></div></li><li role="treeitem"><div data-tocid="log2-d9529e56791" class="topicref" data-id="log2" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/l/log2.html" id="log2-d9529e56791-link">log2</a></div></div></li><li role="treeitem"><div data-tocid="log10-d9529e56837" class="topicref" data-id="log10" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/l/log10.html" id="log10-d9529e56837-link">log10</a></div></div></li><li role="treeitem"><div data-tocid="login-d9529e56883" class="topicref" data-id="login" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/l/login.html" id="login-d9529e56883-link">login</a></div></div></li><li role="treeitem"><div data-tocid="logisticregression-d9529e56929" class="topicref" data-id="logisticregression" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/l/logisticRegression.html" id="logisticregression-d9529e56929-link">logisticRegression</a></div></div></li><li role="treeitem"><div data-tocid="logout-d9529e56975" class="topicref" data-id="logout" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/l/logout.html" id="logout-d9529e56975-link">logout</a></div></div></li><li role="treeitem"><div data-tocid="long-d9529e57021" class="topicref" data-id="long" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/l/long.html" id="long-d9529e57021-link">long</a></div></div></li><li role="treeitem"><div data-tocid="lowdouble-d9529e57068" class="topicref" data-id="lowdouble" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/l/lowDouble.html" id="lowdouble-d9529e57068-link">lowDouble</a></div></div></li><li role="treeitem"><div data-tocid="lower-d9529e57114" class="topicref" data-id="lower" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/l/lower.html" id="lower-d9529e57114-link">lower</a></div></div></li><li role="treeitem"><div data-tocid="lowerbound-d9529e57160" class="topicref" data-id="lowerbound" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/l/lowerbound.html" id="lowerbound-d9529e57160-link">lowerBound</a></div></div></li><li role="treeitem"><div data-tocid="lowlong-d9529e57206" class="topicref" data-id="lowlong" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/l/lowlong.html" id="lowlong-d9529e57206-link">lowLong</a></div></div></li><li role="treeitem"><div data-tocid="lowrange-d9529e57252" class="topicref" data-id="lowrange" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/l/lowRange.html" id="lowrange-d9529e57252-link">lowRange</a></div></div></li><li role="treeitem"><div data-tocid="lpad-d9529e57298" class="topicref" data-id="lpad" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/l/lpad.html" id="lpad-d9529e57298-link">lpad</a></div></div></li><li role="treeitem"><div data-tocid="lshift-d9529e57344" class="topicref" data-id="lshift" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/l/lshift.html" id="lshift-d9529e57344-link">lshift</a></div></div></li><li role="treeitem"><div data-tocid="lt-d9529e57390" class="topicref" data-id="lt" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/l/lt.html" id="lt-d9529e57390-link">lt</a></div></div></li><li role="treeitem"><div data-tocid="ltrim-d9529e57436" class="topicref" data-id="ltrim" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/l/ltrim.html" id="ltrim-d9529e57436-link">ltrim</a></div></div></li><li role="treeitem"><div data-tocid="lu-d9529e57482" class="topicref" data-id="lu" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/l/lu.html" id="lu-d9529e57482-link">lu</a></div></div></li></ul></li><li role="treeitem" aria-expanded="false"><div data-tocid="tocId-d9529e57528" class="topicref" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action tocId-d9529e57528-link" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/m/ma.html" id="tocId-d9529e57528-link">M</a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="tocId-d9529e62047" class="topicref" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action tocId-d9529e62047-link" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/n/nanInfFill.html" id="tocId-d9529e62047-link">N</a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="tocId-d9529e62878" class="topicref" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action tocId-d9529e62878-link" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/o/objByName.html" id="tocId-d9529e62878-link">O</a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="tocId-d9529e63247" class="topicref" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action tocId-d9529e63247-link" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/p/pack.html" id="tocId-d9529e63247-link">P</a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="tocId-d9529e64948" class="topicref" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action tocId-d9529e64948-link" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/q/qclp.html" id="tocId-d9529e64948-link">Q</a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="tocId-d9529e65317" class="topicref" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action tocId-d9529e65317-link" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/r/rad2deg.html" id="tocId-d9529e65317-link">R</a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="tocId-d9529e71497" class="topicref" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action tocId-d9529e71497-link" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/s/saveAsNpy.html" id="tocId-d9529e71497-link">S</a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="tocId-d9529e77874" class="topicref" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action tocId-d9529e77874-link" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/t/t3.html" id="tocId-d9529e77874-link">T</a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="tocId-d9529e81706" class="topicref" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action tocId-d9529e81706-link" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/u/undef.html" id="tocId-d9529e81706-link">U</a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="tocId-d9529e82492" class="topicref" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action tocId-d9529e82492-link" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/v/valueChanged.html" id="tocId-d9529e82492-link">V</a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="tocId-d9529e82862" class="topicref" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action tocId-d9529e82862-link" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/w/warmupStreamEngine.html" id="tocId-d9529e82862-link">W</a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="tocId-d9529e84015" class="topicref" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action tocId-d9529e84015-link" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/x/xdb.html" id="tocId-d9529e84015-link">X</a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="tocId-d9529e84108" class="topicref" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action tocId-d9529e84108-link" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/y/year.html" id="tocId-d9529e84108-link">Y</a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="tocId-d9529e84248" class="topicref" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action tocId-d9529e84248-link" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/z/zigzag.html" id="tocId-d9529e84248-link">Z</a></div></div></li><li role="treeitem"><div data-tocid="types_formats-d9529e84387" class="topicref" data-id="types_formats" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/appendix.html" id="types_formats-d9529e84387-link">附录</a></div></div></li></ul></li><li role="treeitem" aria-expanded="false"><div data-tocid="chap8_sect_series_o_funcs-d9529e84433" class="topicref" data-id="chap8_sect_series_o_funcs" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action chap8_sect_series_o_funcs-d9529e84433-link" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/themes/themes.html" id="chap8_sect_series_o_funcs-d9529e84433-link">系列函数</a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="高阶函数-d9529e84855" class="topicref" data-id="高阶函数" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action 高阶函数-d9529e84855-link" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/ho_funcs/ho_funcs.html" id="高阶函数-d9529e84855-link">高阶函数</a></div></div></li></ul></li><li role="treeitem" aria-expanded="false"><div data-tocid="api_protocol-d9529e86456" class="topicref" data-id="api_protocol" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action api_protocol-d9529e86456-link" class="wh-expand-btn"></span><div class="title"><a href="../../api/connapi_intro.html" id="api_protocol-d9529e86456-link"><span class="keyword label">连接器 &amp; API</span></a><div class="wh-tooltip"><p class="shortdesc">面向不同编程语言的 DolphinDB API 及连接器，相关协议和用法</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="chap6_plugin-d9529e91976" class="topicref" data-id="chap6_plugin" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action chap6_plugin-d9529e91976-link" class="wh-expand-btn"></span><div class="title"><a href="../../plugins/plg_intro.html" id="chap6_plugin-d9529e91976-link"><span class="keyword label">插件</span></a><div class="wh-tooltip"><p class="shortdesc">多个应用场景的插件使用说明和插件开发指导</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="third_party-d9529e94749" class="topicref" data-id="third_party" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action third_party-d9529e94749-link" class="wh-expand-btn"></span><div class="title"><a href="../../third_party.html" id="third_party-d9529e94749-link">第三方工具</a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="about_tutorials-d9529e94980" class="topicref" data-id="about_tutorials" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action about_tutorials-d9529e94980-link" class="wh-expand-btn"></span><div class="title"><a href="../../tutorials/about_tutorials.html" id="about_tutorials-d9529e94980-link"><span class="keyword label">教程</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 产品使用教程</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="tocId-d9529e101769" class="topicref" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action tocId-d9529e101769-link" class="wh-expand-btn"></span><div class="title"><a href="../../rn/server/3_00_1.html" id="tocId-d9529e101769-link">版本说明</a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 版本发布历史</p></div></div></div></li></ul></div>
+		                        
+                            </div>
+                        </nav>
+                    
+                    
+                    <div class="col-lg-7 col-md-9 col-sm-12" id="wh_topic_body">
+                        <button id="wh_close_publication_toc_button" class="close-toc-button d-none" aria-label="Toggle publishing table of content" aria-controls="wh_publication_toc" aria-expanded="true">
+                            <span class="close-toc-icon-container">
+                                <span class="close-toc-icon"></span>     
+                            </span>
+                        </button>
+                        <button id="wh_close_topic_toc_button" class="close-toc-button d-none" aria-label="Toggle topic table of content" aria-controls="wh_topic_toc" aria-expanded="true">
+                            <span class="close-toc-icon-container">
+                                <span class="close-toc-icon"></span>     
+                            </span>
+                        </button>
+                        
+                        <div class=" wh_topic_content body "><main role="main"><article class="- topic/topic topic" role="article" aria-labelledby="ariaid-title1">
+    <h1 class="- topic/title title topictitle1" id="ariaid-title1">loadText</h1>
+    
+    <article class="- topic/topic topic nested1" aria-labelledby="ariaid-title2" id="语法">
+        <h2 class="- topic/title title topictitle2" id="ariaid-title2">语法</h2>
+        <div class="- topic/body body">
+            <p class="- topic/p p" id="语法__p_p12_5hn_ryb" data-ofbid="语法__p_p12_5hn_ryb">
+                <code class="+ topic/ph pr-d/codeph ph codeph">loadText(filename, [delimiter], [schema], [skipRows=0]<span class="- topic/ph ph">, [arrayDelimiter], [containHeader],
+                    [arrayMarker]</span>)</code>
+            </p>
+        </div>
+    </article>
+    <article class="- topic/topic topic nested1" aria-labelledby="ariaid-title3" id="参数">
+        <h2 class="- topic/title title topictitle2" id="ariaid-title3">参数</h2>
+        <div class="- topic/body body">
+            <p class="- topic/p p"><strong class="+ topic/ph hi-d/b ph b">filename</strong> 字符串，表示数据文件的路径。仅支持 CSV 格式的文件。若传入其他格式文件，则无法保证数据准确性。</p>
+            <p class="- topic/p p"><strong class="+ topic/ph hi-d/b ph b">delimiter</strong> 字符串标量，表示数据文件中各列的分隔符。分隔符可以是一个或多个字符，默认是逗号（","）。</p>
+            <p class="- topic/p p"><strong class="+ topic/ph hi-d/b ph b">schema</strong> 表对象，用于指定各字段的数据类型。它可以包含以下四列（其中，name 和 type 这两列是必需的）</p>
+            <div class="table-container"><table class="- topic/table table" id="参数__table_u12_5hn_ryb" data-ofbid="参数__table_u12_5hn_ryb" data-cols="2"><caption></caption><colgroup><col/><col/></colgroup><thead class="- topic/thead thead">
+                        <tr class="- topic/row">
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="参数__table_u12_5hn_ryb__entry__1">列名</th>
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="参数__table_u12_5hn_ryb__entry__2">含义</th>
+                        </tr>
+                    </thead><tbody class="- topic/tbody tbody">
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="参数__table_u12_5hn_ryb__entry__1">name</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="参数__table_u12_5hn_ryb__entry__2">字符串，表示列名</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="参数__table_u12_5hn_ryb__entry__1">type</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="参数__table_u12_5hn_ryb__entry__2">字符串，表示各列的数据类型。暂不支持 BLOB, COMPLEX, POINT, DURATION
+                                类型。</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="参数__table_u12_5hn_ryb__entry__1">format</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="参数__table_u12_5hn_ryb__entry__2">字符串，表示数据文件中日期或时间列的格式</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="参数__table_u12_5hn_ryb__entry__1">col</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="参数__table_u12_5hn_ryb__entry__2">整型，表示要加载的列的下标。该列的值必须是升序。</td>
+                        </tr>
+                    </tbody></table></div>
+            <div class="- topic/note note note note_note" id="参数__note_nbv_ksj_syb" data-ofbid="参数__note_nbv_ksj_syb"><span class="note__title">注：</span> 若 type 为时间类型，则源数据的时间类型格式需要和 DolphinDB 时间类型数据格式一致。若原始数据的时间戳和
+                DolphinDB 时间类型不兼容，建议导入时先指定为字符串类型，再通过 <a class="- topic/xref xref" href="../t/temporalParse.html">temporalParse</a> 函数进行转换。</div>
+            <p class="- topic/p p"><strong class="+ topic/ph hi-d/b ph b">skipRows</strong> 0 到 1024 之间的整数，表示从文件头开始忽略的行数。它是一个可选参数。默认值为 0。</p>
+            <p class="- topic/p p"><strong class="+ topic/ph hi-d/b ph b">arrayDelimiter</strong> 数据文件中数组向量列的分隔符。默认是逗号。由于不支持自动识别数组向量，必须同步修改
+                    <em class="+ topic/ph hi-d/i ph i">schema</em> 的 type 列修为数组向量类型。</p>
+            <p class="- topic/p p"><strong class="+ topic/ph hi-d/b ph b">containHeader</strong>
+                布尔值，表示数据文件是否包含标题行，默认为空。若不设置，则系统将会分析第一行数据并确定其是否为标题行。不同设置下，列名解析规则见详情描述。</p>
+            <p class="- topic/p p" id="参数__p_pfj_1j4_y1c" data-ofbid="参数__p_pfj_1j4_y1c"><strong class="+ topic/ph hi-d/b ph b">arrayMarker </strong> 包含两个字符的字符串或或 CHAR
+                类型数据对，两个字符分别表示数组向量左右边界的标识符。默认标识符为双引号（"）。</p>
+            <ul class="- topic/ul ul" id="参数__ul_e1r_v15_x1c" data-ofbid="参数__ul_e1r_v15_x1c">
+                <li class="- topic/li li">
+                    <p class="- topic/p p">不能包含空格、Tab(<code class="+ topic/ph pr-d/codeph ph codeph">\t</code>)
+                        和换行符(<code class="+ topic/ph pr-d/codeph ph codeph">\t</code>和<code class="+ topic/ph pr-d/codeph ph codeph">\n</code>)。</p>
+                </li>
+                <li class="- topic/li li">
+                    <p class="- topic/p p">不能包含数字或字母。</p>
+                </li>
+                <li class="- topic/li li">
+                    <p class="- topic/p p">如果其中一个为双引号(")，另一个也必须为双引号。</p>
+                </li>
+                <li class="- topic/li li">
+                    <p class="- topic/p p">如果标识符为 <code class="+ topic/ph pr-d/codeph ph codeph">'</code>，<code class="+ topic/ph pr-d/codeph ph codeph">"</code> 或<code class="+ topic/ph pr-d/codeph ph codeph">\</code>
+                        ，需视情况添加转义符。例如 <code class="+ topic/ph pr-d/codeph ph codeph">arrayMarker="\"\""</code>。</p>
+                </li>
+                <li class="- topic/li li">
+                    <p class="- topic/p p">如果 <em class="+ topic/ph hi-d/i ph i">delimiter </em>是单个字符，则 <em class="+ topic/ph hi-d/i ph i">arrayMarker </em>不能包含与其相同的字符。</p>
+                </li>
+                <li class="- topic/li li">
+                    <p class="- topic/p p">如果 <em class="+ topic/ph hi-d/i ph i">delimiter </em>是多个字符，则 <em class="+ topic/ph hi-d/i ph i">arrayMarker</em> 左边界不能与 <em class="+ topic/ph hi-d/i ph i">delimiter
+                        </em>的首个字符相同。</p>
+                </li>
+            </ul>
+        </div>
+    </article>
+    <article class="- topic/topic topic nested1" aria-labelledby="ariaid-title4" id="详情">
+        <h2 class="- topic/title title topictitle2" id="ariaid-title4">详情</h2>
+        <div class="- topic/body body">
+            <p class="- topic/p p" id="详情__p_ab2_5hn_ryb" data-ofbid="详情__p_ab2_5hn_ryb">将数据文件加载到 DolphinDB 的内存表中。<code class="+ topic/ph pr-d/codeph ph codeph">loadText</code>
+                使用单个线程加载数据，如果需要使用多个线程并行加载数据，请使用 <a class="- topic/xref xref" href="../p/ploadText.html">ploadText</a>
+                函数。</p>
+            <ul class="- topic/ul ul" id="详情__ul_bb2_5hn_ryb" data-ofbid="详情__ul_bb2_5hn_ryb">
+                <li class="- topic/li li">
+                    <p class="- topic/p p" id="详情__p_cb2_5hn_ryb" data-ofbid="详情__p_cb2_5hn_ryb">解析列名：</p>
+                    <ul class="- topic/ul ul" id="详情__ul_db2_5hn_ryb" data-ofbid="详情__ul_db2_5hn_ryb">
+                        <li class="- topic/li li">
+                            <p class="- topic/p p" id="详情__p_eb2_5hn_ryb" data-ofbid="详情__p_eb2_5hn_ryb"><span class="- topic/ph ph">不指定 <em class="+ topic/ph hi-d/i ph i">containHeader</em>
+                                    时，</span>导入文本文件时将以字符串格式读取第一行数据，并根据该数据解析列名。但需要注意，系统内部对第一行数据设置了读取上限，即不能超过
+                                256
+                                KB。解析时，如果文件中第一行的内容不包含以数字开头的数据，那么加载文件时系统会将第一行作为列名。如果文件第一行记录中某列记录以数字开头，那么加载文件时系统可能会使用col0,
+                                col1, ...等作为列名。</p>
+                        </li>
+                        <li class="- topic/li li">
+                            <p class="- topic/p p" id="详情__p_fb2_5hn_ryb" data-ofbid="详情__p_fb2_5hn_ryb">指定 <em class="+ topic/ph hi-d/i ph i">containHeader</em> = true
+                                时，则系统将第一行数据视为标题行，并解析出列名。</p>
+                        </li>
+                        <li class="- topic/li li">
+                            <p class="- topic/p p" id="详情__p_gb2_5hn_ryb" data-ofbid="详情__p_gb2_5hn_ryb">指定 <em class="+ topic/ph hi-d/i ph i">containHeader</em> = false 时，则系统将添加列名 col0,
+                                col1, ... 。</p>
+                        </li>
+                    </ul>
+                </li>
+                <li class="- topic/li li">
+                    <p class="- topic/p p" id="详情__p_hb2_5hn_ryb" data-ofbid="详情__p_hb2_5hn_ryb">解析类型：</p>
+                    <ul class="- topic/ul ul" id="详情__ul_qnz_bv2_jzb" data-ofbid="详情__ul_qnz_bv2_jzb">
+                        <li class="- topic/li li">
+                            <p class="- topic/p p">当 DolphinDB
+                                加载数据文件时，会进行随机抽样，并基于样本决定每列的数据类型。这个方法不一定每次都能准确决定各列的数据类型。因此我们建议，在加载数据前，使用
+                                    <a class="- topic/xref xref" href="../e/extractTextSchema.html">extractTextSchema</a> 函数查看 DolphinDB 识别每列的数据类型。</p>
+                        </li>
+                        <li class="- topic/li li">当加载的数据文件中包含了表达时间、日期的数据时，满足分隔符要求的这部分数据（日期数据分隔符包含"-"、"/"和"."，时间数据分隔符为":"）会解析为相应的类型。例如，"12:34:56"解析为SECOND类型；"23.04.10"解析为DATE类型。对于不包含分隔符的数据，形如"yyMMdd"的数据同时满足0&lt;=yy&lt;=99，0&lt;=MM&lt;=12，1&lt;=dd&lt;=31，会被优先解析成DATE；形如"yyyyMMdd"的数据同时满足1900&lt;=yyyy&lt;=2100，0&lt;=MM&lt;=12，1&lt;=dd&lt;=31会被优先解析成DATE。</li>
+                        <li class="- topic/li li">
+                            <p class="- topic/p p">如果 DolphinDB 识别的数据类型不符合预期，可以在 schema 的 type 列中指定数据类型。对于日期列或时间列，如果
+                                DolphinDB 识别的数据类型不符合预期，不仅需要在 schema 的 type 列指定时间类型，还需要在 format
+                                列中指定数据文件中日期或时间的格式（用字符串表示），如 "MM/dd/yyyy"。如何表示日期和时间格式请参考 <a class="- topic/xref xref" href="../../progr/data_mani/format_temp_obj.html">ParsingandFormatofTemporalVariables</a>。</p>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+            <p class="- topic/p p" id="详情__p_ib2_5hn_ryb" data-ofbid="详情__p_ib2_5hn_ryb">如果只需加载数据文件中的部分列，需要在 schema 的 col 列中指定要加载的列的下标。</p>
+            <p class="- topic/p p" id="详情__p_jb2_5hn_ryb" data-ofbid="详情__p_jb2_5hn_ryb">由于 DolphinDB 的字符串采用 UTF-8 编码，加载的文件必须是 UTF-8 编码。</p>
+            <p class="- topic/p p" id="详情__p_kb2_5hn_ryb" data-ofbid="详情__p_kb2_5hn_ryb">由于 DolphinDB 中列名仅可使用中文或英文字母、数字或下划线
+                (_)，且必须以中文或英文字母开头，若数据文件中的列名不符合要求，系统会依据以下规则自动调整列名：</p>
+            <ul class="- topic/ul ul" id="详情__ul_lb2_5hn_ryb" data-ofbid="详情__ul_lb2_5hn_ryb">
+                <li class="- topic/li li">
+                    <p class="- topic/p p" id="详情__p_mb2_5hn_ryb" data-ofbid="详情__p_mb2_5hn_ryb">若数据中列名存在中文或英文字母、数字或下划线之外的字符，将其转换为下划线。</p>
+                </li>
+                <li class="- topic/li li">
+                    <p class="- topic/p p" id="详情__p_nb2_5hn_ryb" data-ofbid="详情__p_nb2_5hn_ryb">若数据中列名第一个字符不是中文或英文字母，添加 "c" 作为该列名首字符。</p>
+                </li>
+            </ul>
+            <p class="- topic/p p" id="详情__p_ob2_5hn_ryb" data-ofbid="详情__p_ob2_5hn_ryb">以下是数据文件中不合规列名以及自动转换的列名的例子：</p>
+            <div class="table-container"><table class="- topic/table table" id="详情__table_pb2_5hn_ryb" data-ofbid="详情__table_pb2_5hn_ryb" data-cols="2"><caption></caption><colgroup><col/><col/></colgroup><thead class="- topic/thead thead">
+                        <tr class="- topic/row">
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="详情__table_pb2_5hn_ryb__entry__1">数据文件中列名</th>
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="详情__table_pb2_5hn_ryb__entry__2">自动转换的列名</th>
+                        </tr>
+                    </thead><tbody class="- topic/tbody tbody">
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="详情__table_pb2_5hn_ryb__entry__1">1_test</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="详情__table_pb2_5hn_ryb__entry__2">c1_test</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="详情__table_pb2_5hn_ryb__entry__1">test-a!</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="详情__table_pb2_5hn_ryb__entry__2">test_a_</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="详情__table_pb2_5hn_ryb__entry__1">[test]</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="详情__table_pb2_5hn_ryb__entry__2">c_test_</td>
+                        </tr>
+                    </tbody></table></div>
+            <div class="- topic/p p" id="详情__p_qb2_5hn_ryb" data-ofbid="详情__p_qb2_5hn_ryb">
+                <div class="- topic/note note note note_note" id="详情__note_k2b_512_hzb" data-ofbid="详情__note_k2b_512_hzb"><span class="note__title">注：</span> 从 2.00.10
+                        版本开始，<code class="+ topic/ph pr-d/codeph ph codeph">loadText</code> 支持加载一条记录中包含多个换行符的数据文件。</div>
+                
+            </div>
+        </div>
+    </article>
+    <article class="- topic/topic topic nested1" aria-labelledby="ariaid-title5" id="例子">
+        <h2 class="- topic/title title topictitle2" id="ariaid-title5">例子</h2>
+        <div class="- topic/body body">
+            <p class="- topic/p p" id="例子__p_rb2_5hn_ryb" data-ofbid="例子__p_rb2_5hn_ryb">首先，使用以下脚本生成模拟的数据文件：</p>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="例子__codeblock_sb2_5hn_ryb" data-ofbid="例子__codeblock_sb2_5hn_ryb"><code>n=10
+sym=rand(`AAPL`ORCL`MS`SUN,n)
+permno=take(10001,n)
+date=rand(2019.06.01..2019.06.10,n)
+open=rand(100.0,n)
+high=rand(200.0,n)
+close=rand(200.0,n)
+pre_close=rand(200.0,n)
+change=rand(100.0,n)
+vol=rand(10000,n)
+amount=rand(100000.0,n)
+t=table(sym,permno,date,open,high,close,pre_close,change,vol,amount)
+saveText(t,"/home/DolphinDB/Data/stock.csv");</code></pre>
+        </div>
+    </article>
+    <article class="- topic/topic topic nested1" aria-labelledby="ariaid-title6" id="例-1-直接加载数据文件">
+        <h2 class="- topic/title title topictitle2" id="ariaid-title6">例 1. 直接加载数据文件</h2>
+        <div class="- topic/body body">
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="例-1-直接加载数据文件__codeblock_tb2_5hn_ryb" data-ofbid="例-1-直接加载数据文件__codeblock_tb2_5hn_ryb"><code>tt=loadText("/home/DolphinDB/Data/stock.csv");
+# output
+tt;</code></pre>
+            <div class="table-container"><table class="- topic/table table" id="例-1-直接加载数据文件__table_ub2_5hn_ryb" data-ofbid="例-1-直接加载数据文件__table_ub2_5hn_ryb" data-cols="10"><caption></caption><colgroup><col/><col/><col/><col/><col/><col/><col/><col/><col/><col/></colgroup><thead class="- topic/thead thead">
+                        <tr class="- topic/row">
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="例-1-直接加载数据文件__table_ub2_5hn_ryb__entry__1">sym</th>
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="例-1-直接加载数据文件__table_ub2_5hn_ryb__entry__2">permno</th>
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="例-1-直接加载数据文件__table_ub2_5hn_ryb__entry__3">date</th>
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="例-1-直接加载数据文件__table_ub2_5hn_ryb__entry__4">open</th>
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="例-1-直接加载数据文件__table_ub2_5hn_ryb__entry__5">high</th>
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="例-1-直接加载数据文件__table_ub2_5hn_ryb__entry__6">close</th>
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="例-1-直接加载数据文件__table_ub2_5hn_ryb__entry__7">pre_close</th>
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="例-1-直接加载数据文件__table_ub2_5hn_ryb__entry__8">change</th>
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="例-1-直接加载数据文件__table_ub2_5hn_ryb__entry__9">vol</th>
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="例-1-直接加载数据文件__table_ub2_5hn_ryb__entry__10">amount</th>
+                        </tr>
+                    </thead><tbody class="- topic/tbody tbody">
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例-1-直接加载数据文件__table_ub2_5hn_ryb__entry__1">MS</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例-1-直接加载数据文件__table_ub2_5hn_ryb__entry__2">10001</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例-1-直接加载数据文件__table_ub2_5hn_ryb__entry__3">2019.06.06</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例-1-直接加载数据文件__table_ub2_5hn_ryb__entry__4">90.346594</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例-1-直接加载数据文件__table_ub2_5hn_ryb__entry__5">80.530542</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例-1-直接加载数据文件__table_ub2_5hn_ryb__entry__6">96.474428</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例-1-直接加载数据文件__table_ub2_5hn_ryb__entry__7">146.305659</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例-1-直接加载数据文件__table_ub2_5hn_ryb__entry__8">0.720236</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例-1-直接加载数据文件__table_ub2_5hn_ryb__entry__9">1045</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例-1-直接加载数据文件__table_ub2_5hn_ryb__entry__10">90494.568297</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例-1-直接加载数据文件__table_ub2_5hn_ryb__entry__1">AAPL</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例-1-直接加载数据文件__table_ub2_5hn_ryb__entry__2">10001</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例-1-直接加载数据文件__table_ub2_5hn_ryb__entry__3">2019.06.07</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例-1-直接加载数据文件__table_ub2_5hn_ryb__entry__4">91.165315</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例-1-直接加载数据文件__table_ub2_5hn_ryb__entry__5">8.482074</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例-1-直接加载数据文件__table_ub2_5hn_ryb__entry__6">85.514922</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例-1-直接加载数据文件__table_ub2_5hn_ryb__entry__7">16.259077</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例-1-直接加载数据文件__table_ub2_5hn_ryb__entry__8">76.797829</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例-1-直接加载数据文件__table_ub2_5hn_ryb__entry__9">7646</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例-1-直接加载数据文件__table_ub2_5hn_ryb__entry__10">91623.485996</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例-1-直接加载数据文件__table_ub2_5hn_ryb__entry__1">AAPL</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例-1-直接加载数据文件__table_ub2_5hn_ryb__entry__2">10001</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例-1-直接加载数据文件__table_ub2_5hn_ryb__entry__3">2019.06.03</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例-1-直接加载数据文件__table_ub2_5hn_ryb__entry__4">45.361885</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例-1-直接加载数据文件__table_ub2_5hn_ryb__entry__5">14.077451</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例-1-直接加载数据文件__table_ub2_5hn_ryb__entry__6">149.848419</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例-1-直接加载数据文件__table_ub2_5hn_ryb__entry__7">89.110375</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例-1-直接加载数据文件__table_ub2_5hn_ryb__entry__8">45.499145</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例-1-直接加载数据文件__table_ub2_5hn_ryb__entry__9">9555</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例-1-直接加载数据文件__table_ub2_5hn_ryb__entry__10">98171.601654</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例-1-直接加载数据文件__table_ub2_5hn_ryb__entry__1">MS</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例-1-直接加载数据文件__table_ub2_5hn_ryb__entry__2">10001</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例-1-直接加载数据文件__table_ub2_5hn_ryb__entry__3">2019.06.04</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例-1-直接加载数据文件__table_ub2_5hn_ryb__entry__4">8.98688</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例-1-直接加载数据文件__table_ub2_5hn_ryb__entry__5">0.591778</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例-1-直接加载数据文件__table_ub2_5hn_ryb__entry__6">155.54643</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例-1-直接加载数据文件__table_ub2_5hn_ryb__entry__7">132.423187</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例-1-直接加载数据文件__table_ub2_5hn_ryb__entry__8">69.95799</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例-1-直接加载数据文件__table_ub2_5hn_ryb__entry__9">1202</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例-1-直接加载数据文件__table_ub2_5hn_ryb__entry__10">3512.927634</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例-1-直接加载数据文件__table_ub2_5hn_ryb__entry__1">MS</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例-1-直接加载数据文件__table_ub2_5hn_ryb__entry__2">10001</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例-1-直接加载数据文件__table_ub2_5hn_ryb__entry__3">2019.06.07</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例-1-直接加载数据文件__table_ub2_5hn_ryb__entry__4">62.866173</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例-1-直接加载数据文件__table_ub2_5hn_ryb__entry__5">33.465237</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例-1-直接加载数据文件__table_ub2_5hn_ryb__entry__6">174.20712</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例-1-直接加载数据文件__table_ub2_5hn_ryb__entry__7">102.695818</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例-1-直接加载数据文件__table_ub2_5hn_ryb__entry__8">74.580523</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例-1-直接加载数据文件__table_ub2_5hn_ryb__entry__9">3524</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例-1-直接加载数据文件__table_ub2_5hn_ryb__entry__10">61943.64517</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例-1-直接加载数据文件__table_ub2_5hn_ryb__entry__1">MS</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例-1-直接加载数据文件__table_ub2_5hn_ryb__entry__2">10001</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例-1-直接加载数据文件__table_ub2_5hn_ryb__entry__3">2019.06.09</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例-1-直接加载数据文件__table_ub2_5hn_ryb__entry__4">32.819915</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例-1-直接加载数据文件__table_ub2_5hn_ryb__entry__5">13.319577</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例-1-直接加载数据文件__table_ub2_5hn_ryb__entry__6">136.729618</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例-1-直接加载数据文件__table_ub2_5hn_ryb__entry__7">63.980405</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例-1-直接加载数据文件__table_ub2_5hn_ryb__entry__8">60.66375</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例-1-直接加载数据文件__table_ub2_5hn_ryb__entry__9">7078</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例-1-直接加载数据文件__table_ub2_5hn_ryb__entry__10">85138.216568</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例-1-直接加载数据文件__table_ub2_5hn_ryb__entry__1">MS</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例-1-直接加载数据文件__table_ub2_5hn_ryb__entry__2">10001</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例-1-直接加载数据文件__table_ub2_5hn_ryb__entry__3">2019.06.07</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例-1-直接加载数据文件__table_ub2_5hn_ryb__entry__4">90.210866</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例-1-直接加载数据文件__table_ub2_5hn_ryb__entry__5">22.728777</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例-1-直接加载数据文件__table_ub2_5hn_ryb__entry__6">150.212291</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例-1-直接加载数据文件__table_ub2_5hn_ryb__entry__7">59.454705</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例-1-直接加载数据文件__table_ub2_5hn_ryb__entry__8">73.916303</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例-1-直接加载数据文件__table_ub2_5hn_ryb__entry__9">5306</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例-1-直接加载数据文件__table_ub2_5hn_ryb__entry__10">19883.845607</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例-1-直接加载数据文件__table_ub2_5hn_ryb__entry__1">AAPL</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例-1-直接加载数据文件__table_ub2_5hn_ryb__entry__2">10001</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例-1-直接加载数据文件__table_ub2_5hn_ryb__entry__3">2019.06.06</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例-1-直接加载数据文件__table_ub2_5hn_ryb__entry__4">83.752686</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例-1-直接加载数据文件__table_ub2_5hn_ryb__entry__5">71.3501</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例-1-直接加载数据文件__table_ub2_5hn_ryb__entry__6">98.211979</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例-1-直接加载数据文件__table_ub2_5hn_ryb__entry__7">145.60098</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例-1-直接加载数据文件__table_ub2_5hn_ryb__entry__8">94.428343</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例-1-直接加载数据文件__table_ub2_5hn_ryb__entry__9">8852</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例-1-直接加载数据文件__table_ub2_5hn_ryb__entry__10">9236.020781</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例-1-直接加载数据文件__table_ub2_5hn_ryb__entry__1">ORCL</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例-1-直接加载数据文件__table_ub2_5hn_ryb__entry__2">10001</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例-1-直接加载数据文件__table_ub2_5hn_ryb__entry__3">2019.06.01</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例-1-直接加载数据文件__table_ub2_5hn_ryb__entry__4">81.64719</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例-1-直接加载数据文件__table_ub2_5hn_ryb__entry__5">129.702202</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例-1-直接加载数据文件__table_ub2_5hn_ryb__entry__6">182.784373</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例-1-直接加载数据文件__table_ub2_5hn_ryb__entry__7">117.575967</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例-1-直接加载数据文件__table_ub2_5hn_ryb__entry__8">74.84595</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例-1-直接加载数据文件__table_ub2_5hn_ryb__entry__9">2942</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例-1-直接加载数据文件__table_ub2_5hn_ryb__entry__10">43394.871242</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例-1-直接加载数据文件__table_ub2_5hn_ryb__entry__1">AAPL</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例-1-直接加载数据文件__table_ub2_5hn_ryb__entry__2">10001</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例-1-直接加载数据文件__table_ub2_5hn_ryb__entry__3">2019.06.02</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例-1-直接加载数据文件__table_ub2_5hn_ryb__entry__4">10.068382</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例-1-直接加载数据文件__table_ub2_5hn_ryb__entry__5">80.875383</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例-1-直接加载数据文件__table_ub2_5hn_ryb__entry__6">181.674585</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例-1-直接加载数据文件__table_ub2_5hn_ryb__entry__7">138.783821</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例-1-直接加载数据文件__table_ub2_5hn_ryb__entry__8">25.298267</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例-1-直接加载数据文件__table_ub2_5hn_ryb__entry__9">1088</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例-1-直接加载数据文件__table_ub2_5hn_ryb__entry__10">82981.043775</td>
+                        </tr>
+                    </tbody></table></div>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="例-1-直接加载数据文件__codeblock_vb2_5hn_ryb" data-ofbid="例-1-直接加载数据文件__codeblock_vb2_5hn_ryb"><code>schema(tt).colDefs;</code></pre>
+            <div class="table-container"><table class="- topic/table table" id="例-1-直接加载数据文件__table_wb2_5hn_ryb" data-ofbid="例-1-直接加载数据文件__table_wb2_5hn_ryb" data-cols="4"><caption></caption><colgroup><col/><col/><col/><col/></colgroup><thead class="- topic/thead thead">
+                        <tr class="- topic/row">
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="例-1-直接加载数据文件__table_wb2_5hn_ryb__entry__1">name</th>
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="例-1-直接加载数据文件__table_wb2_5hn_ryb__entry__2">typeString</th>
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="例-1-直接加载数据文件__table_wb2_5hn_ryb__entry__3">typeInt</th>
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="例-1-直接加载数据文件__table_wb2_5hn_ryb__entry__4">comment</th>
+                        </tr>
+                    </thead><tbody class="- topic/tbody tbody">
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例-1-直接加载数据文件__table_wb2_5hn_ryb__entry__1">sym</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例-1-直接加载数据文件__table_wb2_5hn_ryb__entry__2">SYMBOL</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例-1-直接加载数据文件__table_wb2_5hn_ryb__entry__3">17</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例-1-直接加载数据文件__table_wb2_5hn_ryb__entry__4"> </td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例-1-直接加载数据文件__table_wb2_5hn_ryb__entry__1">permno</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例-1-直接加载数据文件__table_wb2_5hn_ryb__entry__2">INT</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例-1-直接加载数据文件__table_wb2_5hn_ryb__entry__3">4</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例-1-直接加载数据文件__table_wb2_5hn_ryb__entry__4"> </td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例-1-直接加载数据文件__table_wb2_5hn_ryb__entry__1">date</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例-1-直接加载数据文件__table_wb2_5hn_ryb__entry__2">DATE</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例-1-直接加载数据文件__table_wb2_5hn_ryb__entry__3">6</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例-1-直接加载数据文件__table_wb2_5hn_ryb__entry__4"> </td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例-1-直接加载数据文件__table_wb2_5hn_ryb__entry__1">open</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例-1-直接加载数据文件__table_wb2_5hn_ryb__entry__2">DOUBLE</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例-1-直接加载数据文件__table_wb2_5hn_ryb__entry__3">16</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例-1-直接加载数据文件__table_wb2_5hn_ryb__entry__4"> </td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例-1-直接加载数据文件__table_wb2_5hn_ryb__entry__1">high</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例-1-直接加载数据文件__table_wb2_5hn_ryb__entry__2">DOUBLE</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例-1-直接加载数据文件__table_wb2_5hn_ryb__entry__3">16</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例-1-直接加载数据文件__table_wb2_5hn_ryb__entry__4"> </td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例-1-直接加载数据文件__table_wb2_5hn_ryb__entry__1">close</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例-1-直接加载数据文件__table_wb2_5hn_ryb__entry__2">DOUBLE</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例-1-直接加载数据文件__table_wb2_5hn_ryb__entry__3">16</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例-1-直接加载数据文件__table_wb2_5hn_ryb__entry__4"> </td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例-1-直接加载数据文件__table_wb2_5hn_ryb__entry__1">pre_close</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例-1-直接加载数据文件__table_wb2_5hn_ryb__entry__2">DOUBLE</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例-1-直接加载数据文件__table_wb2_5hn_ryb__entry__3">16</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例-1-直接加载数据文件__table_wb2_5hn_ryb__entry__4"> </td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例-1-直接加载数据文件__table_wb2_5hn_ryb__entry__1">change</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例-1-直接加载数据文件__table_wb2_5hn_ryb__entry__2">DOUBLE</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例-1-直接加载数据文件__table_wb2_5hn_ryb__entry__3">16</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例-1-直接加载数据文件__table_wb2_5hn_ryb__entry__4"> </td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例-1-直接加载数据文件__table_wb2_5hn_ryb__entry__1">vol</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例-1-直接加载数据文件__table_wb2_5hn_ryb__entry__2">INT</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例-1-直接加载数据文件__table_wb2_5hn_ryb__entry__3">4</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例-1-直接加载数据文件__table_wb2_5hn_ryb__entry__4"> </td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例-1-直接加载数据文件__table_wb2_5hn_ryb__entry__1">amount</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例-1-直接加载数据文件__table_wb2_5hn_ryb__entry__2">DOUBLE</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例-1-直接加载数据文件__table_wb2_5hn_ryb__entry__3">16</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例-1-直接加载数据文件__table_wb2_5hn_ryb__entry__4"> </td>
+                        </tr>
+                    </tbody></table></div>
+        </div>
+    </article>
+    <article class="- topic/topic topic nested1" aria-labelledby="ariaid-title7" id="例-2-指定某列的数据类型来加载数据文件">
+        <h2 class="- topic/title title topictitle2" id="ariaid-title7">例 2. 指定某列的数据类型来加载数据文件</h2>
+        <div class="- topic/body body">
+            <p class="- topic/p p" id="例-2-指定某列的数据类型来加载数据文件__p_xb2_5hn_ryb" data-ofbid="例-2-指定某列的数据类型来加载数据文件__p_xb2_5hn_ryb">例如，我们想要把 permno 列的数据类型转换成 SYMBOL，可以用 <a class="- topic/xref xref" href="../e/extractTextSchema.html">extractTextSchema</a>
+                函数获取输入文件的结构，在导入数据前修改该列的数据类型，并指定 <code class="+ topic/ph pr-d/codeph ph codeph">loadText</code> 函数的 <em class="+ topic/ph hi-d/i ph i">schema</em> 参数。</p>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="例-2-指定某列的数据类型来加载数据文件__codeblock_yb2_5hn_ryb" data-ofbid="例-2-指定某列的数据类型来加载数据文件__codeblock_yb2_5hn_ryb"><code>schema=extractTextSchema("/home/DolphinDB/Data/stock.csv");
+update schema set type=`SYMBOL where name=`permno;
+tt=loadText("/home/DolphinDB/Data/stock.csv",,schema);
+schema(tt).colDefs;</code></pre>
+            <div class="table-container"><table class="- topic/table table" id="例-2-指定某列的数据类型来加载数据文件__table_zb2_5hn_ryb" data-ofbid="例-2-指定某列的数据类型来加载数据文件__table_zb2_5hn_ryb" data-cols="4"><caption></caption><colgroup><col/><col/><col/><col/></colgroup><thead class="- topic/thead thead">
+                        <tr class="- topic/row">
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="例-2-指定某列的数据类型来加载数据文件__table_zb2_5hn_ryb__entry__1">name</th>
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="例-2-指定某列的数据类型来加载数据文件__table_zb2_5hn_ryb__entry__2">typeString</th>
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="例-2-指定某列的数据类型来加载数据文件__table_zb2_5hn_ryb__entry__3">typeInt</th>
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="例-2-指定某列的数据类型来加载数据文件__table_zb2_5hn_ryb__entry__4">comment</th>
+                        </tr>
+                    </thead><tbody class="- topic/tbody tbody">
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例-2-指定某列的数据类型来加载数据文件__table_zb2_5hn_ryb__entry__1">sym</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例-2-指定某列的数据类型来加载数据文件__table_zb2_5hn_ryb__entry__2">SYMBOL</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例-2-指定某列的数据类型来加载数据文件__table_zb2_5hn_ryb__entry__3">17</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例-2-指定某列的数据类型来加载数据文件__table_zb2_5hn_ryb__entry__4"> </td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例-2-指定某列的数据类型来加载数据文件__table_zb2_5hn_ryb__entry__1">permno</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例-2-指定某列的数据类型来加载数据文件__table_zb2_5hn_ryb__entry__2">SYMBOL</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例-2-指定某列的数据类型来加载数据文件__table_zb2_5hn_ryb__entry__3">17</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例-2-指定某列的数据类型来加载数据文件__table_zb2_5hn_ryb__entry__4"> </td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例-2-指定某列的数据类型来加载数据文件__table_zb2_5hn_ryb__entry__1">date</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例-2-指定某列的数据类型来加载数据文件__table_zb2_5hn_ryb__entry__2">DATE</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例-2-指定某列的数据类型来加载数据文件__table_zb2_5hn_ryb__entry__3">6</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例-2-指定某列的数据类型来加载数据文件__table_zb2_5hn_ryb__entry__4"> </td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例-2-指定某列的数据类型来加载数据文件__table_zb2_5hn_ryb__entry__1">open</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例-2-指定某列的数据类型来加载数据文件__table_zb2_5hn_ryb__entry__2">DOUBLE</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例-2-指定某列的数据类型来加载数据文件__table_zb2_5hn_ryb__entry__3">16</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例-2-指定某列的数据类型来加载数据文件__table_zb2_5hn_ryb__entry__4"> </td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例-2-指定某列的数据类型来加载数据文件__table_zb2_5hn_ryb__entry__1">high</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例-2-指定某列的数据类型来加载数据文件__table_zb2_5hn_ryb__entry__2">DOUBLE</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例-2-指定某列的数据类型来加载数据文件__table_zb2_5hn_ryb__entry__3">16</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例-2-指定某列的数据类型来加载数据文件__table_zb2_5hn_ryb__entry__4"> </td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例-2-指定某列的数据类型来加载数据文件__table_zb2_5hn_ryb__entry__1">close</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例-2-指定某列的数据类型来加载数据文件__table_zb2_5hn_ryb__entry__2">DOUBLE</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例-2-指定某列的数据类型来加载数据文件__table_zb2_5hn_ryb__entry__3">16</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例-2-指定某列的数据类型来加载数据文件__table_zb2_5hn_ryb__entry__4"> </td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例-2-指定某列的数据类型来加载数据文件__table_zb2_5hn_ryb__entry__1">pre_close</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例-2-指定某列的数据类型来加载数据文件__table_zb2_5hn_ryb__entry__2">DOUBLE</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例-2-指定某列的数据类型来加载数据文件__table_zb2_5hn_ryb__entry__3">16</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例-2-指定某列的数据类型来加载数据文件__table_zb2_5hn_ryb__entry__4"> </td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例-2-指定某列的数据类型来加载数据文件__table_zb2_5hn_ryb__entry__1">change</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例-2-指定某列的数据类型来加载数据文件__table_zb2_5hn_ryb__entry__2">DOUBLE</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例-2-指定某列的数据类型来加载数据文件__table_zb2_5hn_ryb__entry__3">16</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例-2-指定某列的数据类型来加载数据文件__table_zb2_5hn_ryb__entry__4"> </td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例-2-指定某列的数据类型来加载数据文件__table_zb2_5hn_ryb__entry__1">vol</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例-2-指定某列的数据类型来加载数据文件__table_zb2_5hn_ryb__entry__2">INT</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例-2-指定某列的数据类型来加载数据文件__table_zb2_5hn_ryb__entry__3">4</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例-2-指定某列的数据类型来加载数据文件__table_zb2_5hn_ryb__entry__4"> </td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例-2-指定某列的数据类型来加载数据文件__table_zb2_5hn_ryb__entry__1">amount</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例-2-指定某列的数据类型来加载数据文件__table_zb2_5hn_ryb__entry__2">DOUBLE</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例-2-指定某列的数据类型来加载数据文件__table_zb2_5hn_ryb__entry__3">16</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例-2-指定某列的数据类型来加载数据文件__table_zb2_5hn_ryb__entry__4"> </td>
+                        </tr>
+                    </tbody></table></div>
+            <p class="- topic/p p" id="例-2-指定某列的数据类型来加载数据文件__p_ac2_5hn_ryb" data-ofbid="例-2-指定某列的数据类型来加载数据文件__p_ac2_5hn_ryb">用户也可以指定所有数据类型：</p>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="例-2-指定某列的数据类型来加载数据文件__codeblock_bc2_5hn_ryb" data-ofbid="例-2-指定某列的数据类型来加载数据文件__codeblock_bc2_5hn_ryb"><code>schematable=table(`sym`permno`date`open`high`close`pre_close`change`vol`amount as name,`SYMBOL`SYMBOL`DATE`DOUBLE`DOUBLE`DOUBLE`DOUBLE`DOUBLE`INT`DOUBLE as type)
+tt=loadText("/home/DolphinDB/Data/stock.csv",,schematable)
+schema(tt).colDefs;</code></pre>
+            <div class="table-container"><table class="- topic/table table" id="例-2-指定某列的数据类型来加载数据文件__table_cc2_5hn_ryb" data-ofbid="例-2-指定某列的数据类型来加载数据文件__table_cc2_5hn_ryb" data-cols="4"><caption></caption><colgroup><col/><col/><col/><col/></colgroup><thead class="- topic/thead thead">
+                        <tr class="- topic/row">
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="例-2-指定某列的数据类型来加载数据文件__table_cc2_5hn_ryb__entry__1">name</th>
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="例-2-指定某列的数据类型来加载数据文件__table_cc2_5hn_ryb__entry__2">typeString</th>
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="例-2-指定某列的数据类型来加载数据文件__table_cc2_5hn_ryb__entry__3">typeInt</th>
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="例-2-指定某列的数据类型来加载数据文件__table_cc2_5hn_ryb__entry__4">comment</th>
+                        </tr>
+                    </thead><tbody class="- topic/tbody tbody">
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例-2-指定某列的数据类型来加载数据文件__table_cc2_5hn_ryb__entry__1">sym</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例-2-指定某列的数据类型来加载数据文件__table_cc2_5hn_ryb__entry__2">SYMBOL</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例-2-指定某列的数据类型来加载数据文件__table_cc2_5hn_ryb__entry__3">17</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例-2-指定某列的数据类型来加载数据文件__table_cc2_5hn_ryb__entry__4"> </td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例-2-指定某列的数据类型来加载数据文件__table_cc2_5hn_ryb__entry__1">permno</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例-2-指定某列的数据类型来加载数据文件__table_cc2_5hn_ryb__entry__2">SYMBOL</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例-2-指定某列的数据类型来加载数据文件__table_cc2_5hn_ryb__entry__3">17</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例-2-指定某列的数据类型来加载数据文件__table_cc2_5hn_ryb__entry__4"> </td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例-2-指定某列的数据类型来加载数据文件__table_cc2_5hn_ryb__entry__1">date</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例-2-指定某列的数据类型来加载数据文件__table_cc2_5hn_ryb__entry__2">DATE</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例-2-指定某列的数据类型来加载数据文件__table_cc2_5hn_ryb__entry__3">6</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例-2-指定某列的数据类型来加载数据文件__table_cc2_5hn_ryb__entry__4"> </td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例-2-指定某列的数据类型来加载数据文件__table_cc2_5hn_ryb__entry__1">open</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例-2-指定某列的数据类型来加载数据文件__table_cc2_5hn_ryb__entry__2">DOUBLE</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例-2-指定某列的数据类型来加载数据文件__table_cc2_5hn_ryb__entry__3">16</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例-2-指定某列的数据类型来加载数据文件__table_cc2_5hn_ryb__entry__4"> </td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例-2-指定某列的数据类型来加载数据文件__table_cc2_5hn_ryb__entry__1">high</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例-2-指定某列的数据类型来加载数据文件__table_cc2_5hn_ryb__entry__2">DOUBLE</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例-2-指定某列的数据类型来加载数据文件__table_cc2_5hn_ryb__entry__3">16</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例-2-指定某列的数据类型来加载数据文件__table_cc2_5hn_ryb__entry__4"> </td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例-2-指定某列的数据类型来加载数据文件__table_cc2_5hn_ryb__entry__1">close</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例-2-指定某列的数据类型来加载数据文件__table_cc2_5hn_ryb__entry__2">DOUBLE</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例-2-指定某列的数据类型来加载数据文件__table_cc2_5hn_ryb__entry__3">16</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例-2-指定某列的数据类型来加载数据文件__table_cc2_5hn_ryb__entry__4"> </td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例-2-指定某列的数据类型来加载数据文件__table_cc2_5hn_ryb__entry__1">pre_close</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例-2-指定某列的数据类型来加载数据文件__table_cc2_5hn_ryb__entry__2">DOUBLE</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例-2-指定某列的数据类型来加载数据文件__table_cc2_5hn_ryb__entry__3">16</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例-2-指定某列的数据类型来加载数据文件__table_cc2_5hn_ryb__entry__4"> </td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例-2-指定某列的数据类型来加载数据文件__table_cc2_5hn_ryb__entry__1">change</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例-2-指定某列的数据类型来加载数据文件__table_cc2_5hn_ryb__entry__2">DOUBLE</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例-2-指定某列的数据类型来加载数据文件__table_cc2_5hn_ryb__entry__3">16</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例-2-指定某列的数据类型来加载数据文件__table_cc2_5hn_ryb__entry__4"> </td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例-2-指定某列的数据类型来加载数据文件__table_cc2_5hn_ryb__entry__1">vol</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例-2-指定某列的数据类型来加载数据文件__table_cc2_5hn_ryb__entry__2">INT</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例-2-指定某列的数据类型来加载数据文件__table_cc2_5hn_ryb__entry__3">4</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例-2-指定某列的数据类型来加载数据文件__table_cc2_5hn_ryb__entry__4"> </td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例-2-指定某列的数据类型来加载数据文件__table_cc2_5hn_ryb__entry__1">amount</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例-2-指定某列的数据类型来加载数据文件__table_cc2_5hn_ryb__entry__2">DOUBLE</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例-2-指定某列的数据类型来加载数据文件__table_cc2_5hn_ryb__entry__3">16</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例-2-指定某列的数据类型来加载数据文件__table_cc2_5hn_ryb__entry__4"> </td>
+                        </tr>
+                    </tbody></table></div>
+        </div>
+    </article>
+    <article class="- topic/topic topic nested1" aria-labelledby="ariaid-title8" id="例-3-只加载部分列">
+        <h2 class="- topic/title title topictitle2" id="ariaid-title8">例 3. 只加载部分列</h2>
+        <div class="- topic/body body">
+            <p class="- topic/p p" id="例-3-只加载部分列__p_dc2_5hn_ryb" data-ofbid="例-3-只加载部分列__p_dc2_5hn_ryb">例如，只需加载 sym, date, open, high, close, vol, amount 这 7
+                    列。注意，加载数据时，不能改变各列的先后顺序。如果需要调整列的顺序，可以将数据文件加载后，再使用<code class="+ topic/ph pr-d/codeph ph codeph">reorderColumns!</code>函数。</p>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="例-3-只加载部分列__codeblock_ec2_5hn_ryb" data-ofbid="例-3-只加载部分列__codeblock_ec2_5hn_ryb"><code>schema=extractTextSchema("/home/DolphinDB/Data/stock.csv");
+schema=select * from schema where name in `sym`date`open`high`close`vol`amount
+schema[`col]=[0,2,3,4,5,8,9]
+
+tt=loadText("/home/DolphinDB/Data/stock.csv",,schema);
+tt;</code></pre>
+            <div class="table-container"><table class="- topic/table table" id="例-3-只加载部分列__table_fc2_5hn_ryb" data-ofbid="例-3-只加载部分列__table_fc2_5hn_ryb" data-cols="7"><caption></caption><colgroup><col/><col/><col/><col/><col/><col/><col/></colgroup><thead class="- topic/thead thead">
+                        <tr class="- topic/row">
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="例-3-只加载部分列__table_fc2_5hn_ryb__entry__1">sym</th>
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="例-3-只加载部分列__table_fc2_5hn_ryb__entry__2">date</th>
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="例-3-只加载部分列__table_fc2_5hn_ryb__entry__3">open</th>
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="例-3-只加载部分列__table_fc2_5hn_ryb__entry__4">high</th>
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="例-3-只加载部分列__table_fc2_5hn_ryb__entry__5">close</th>
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="例-3-只加载部分列__table_fc2_5hn_ryb__entry__6">vol</th>
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="例-3-只加载部分列__table_fc2_5hn_ryb__entry__7">amount</th>
+                        </tr>
+                    </thead><tbody class="- topic/tbody tbody">
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例-3-只加载部分列__table_fc2_5hn_ryb__entry__1">SUN</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例-3-只加载部分列__table_fc2_5hn_ryb__entry__2">2019.06.10</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例-3-只加载部分列__table_fc2_5hn_ryb__entry__3">18.675316</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例-3-只加载部分列__table_fc2_5hn_ryb__entry__4">72.754005</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例-3-只加载部分列__table_fc2_5hn_ryb__entry__5">136.463909</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例-3-只加载部分列__table_fc2_5hn_ryb__entry__6">1376</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例-3-只加载部分列__table_fc2_5hn_ryb__entry__7">31371.319038</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例-3-只加载部分列__table_fc2_5hn_ryb__entry__1">AAPL</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例-3-只加载部分列__table_fc2_5hn_ryb__entry__2">2019.06.05</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例-3-只加载部分列__table_fc2_5hn_ryb__entry__3">42.098717</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例-3-只加载部分列__table_fc2_5hn_ryb__entry__4">196.873587</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例-3-只加载部分列__table_fc2_5hn_ryb__entry__5">41.513899</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例-3-只加载部分列__table_fc2_5hn_ryb__entry__6">3632</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例-3-只加载部分列__table_fc2_5hn_ryb__entry__7">9950.864129</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例-3-只加载部分列__table_fc2_5hn_ryb__entry__1">ORCL</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例-3-只加载部分列__table_fc2_5hn_ryb__entry__2">2019.06.05</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例-3-只加载部分列__table_fc2_5hn_ryb__entry__3">62.223474</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例-3-只加载部分列__table_fc2_5hn_ryb__entry__4">197.099027</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例-3-只加载部分列__table_fc2_5hn_ryb__entry__5">123.785675</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例-3-只加载部分列__table_fc2_5hn_ryb__entry__6">3069</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例-3-只加载部分列__table_fc2_5hn_ryb__entry__7">38035.800937</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例-3-只加载部分列__table_fc2_5hn_ryb__entry__1">SUN</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例-3-只加载部分列__table_fc2_5hn_ryb__entry__2">2019.06.03</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例-3-只加载部分列__table_fc2_5hn_ryb__entry__3">0.18163</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例-3-只加载部分列__table_fc2_5hn_ryb__entry__4">50.669866</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例-3-只加载部分列__table_fc2_5hn_ryb__entry__5">4.652098</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例-3-只加载部分列__table_fc2_5hn_ryb__entry__6">6213</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例-3-只加载部分列__table_fc2_5hn_ryb__entry__7">1842.198893</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例-3-只加载部分列__table_fc2_5hn_ryb__entry__1">SUN</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例-3-只加载部分列__table_fc2_5hn_ryb__entry__2">2019.06.06</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例-3-只加载部分列__table_fc2_5hn_ryb__entry__3">32.54134</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例-3-只加载部分列__table_fc2_5hn_ryb__entry__4">67.012502</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例-3-只加载部分列__table_fc2_5hn_ryb__entry__5">130.312294</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例-3-只加载部分列__table_fc2_5hn_ryb__entry__6">4891</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例-3-只加载部分列__table_fc2_5hn_ryb__entry__7">55744.156823</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例-3-只加载部分列__table_fc2_5hn_ryb__entry__1">SUN</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例-3-只加载部分列__table_fc2_5hn_ryb__entry__2">2019.06.07</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例-3-只加载部分列__table_fc2_5hn_ryb__entry__3">56.899091</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例-3-只加载部分列__table_fc2_5hn_ryb__entry__4">81.709825</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例-3-只加载部分列__table_fc2_5hn_ryb__entry__5">61.786176</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例-3-只加载部分列__table_fc2_5hn_ryb__entry__6">1133</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例-3-只加载部分列__table_fc2_5hn_ryb__entry__7">69057.849515</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例-3-只加载部分列__table_fc2_5hn_ryb__entry__1">AAPL</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例-3-只加载部分列__table_fc2_5hn_ryb__entry__2">2019.06.08</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例-3-只加载部分列__table_fc2_5hn_ryb__entry__3">77.026838</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例-3-只加载部分列__table_fc2_5hn_ryb__entry__4">38.504431</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例-3-只加载部分列__table_fc2_5hn_ryb__entry__5">22.68496</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例-3-只加载部分列__table_fc2_5hn_ryb__entry__6">3672</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例-3-只加载部分列__table_fc2_5hn_ryb__entry__7">34420.187073</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例-3-只加载部分列__table_fc2_5hn_ryb__entry__1">ORCL</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例-3-只加载部分列__table_fc2_5hn_ryb__entry__2">2019.06.07</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例-3-只加载部分列__table_fc2_5hn_ryb__entry__3">62.752656</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例-3-只加载部分列__table_fc2_5hn_ryb__entry__4">39.33621</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例-3-只加载部分列__table_fc2_5hn_ryb__entry__5">48.483091</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例-3-只加载部分列__table_fc2_5hn_ryb__entry__6">4382</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例-3-只加载部分列__table_fc2_5hn_ryb__entry__7">41601.601639</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例-3-只加载部分列__table_fc2_5hn_ryb__entry__1">AAPL</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例-3-只加载部分列__table_fc2_5hn_ryb__entry__2">2019.06.02</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例-3-只加载部分列__table_fc2_5hn_ryb__entry__3">8.5487</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例-3-只加载部分列__table_fc2_5hn_ryb__entry__4">17.623418</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例-3-只加载部分列__table_fc2_5hn_ryb__entry__5">141.88325</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例-3-只加载部分列__table_fc2_5hn_ryb__entry__6">8092</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例-3-只加载部分列__table_fc2_5hn_ryb__entry__7">15449.159988</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例-3-只加载部分列__table_fc2_5hn_ryb__entry__1">AAPL</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例-3-只加载部分列__table_fc2_5hn_ryb__entry__2">2019.06.02</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例-3-只加载部分列__table_fc2_5hn_ryb__entry__3">26.178685</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例-3-只加载部分列__table_fc2_5hn_ryb__entry__4">197.320455</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例-3-只加载部分列__table_fc2_5hn_ryb__entry__5">110.52407</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例-3-只加载部分列__table_fc2_5hn_ryb__entry__6">5541</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例-3-只加载部分列__table_fc2_5hn_ryb__entry__7">14616.820449</td>
+                        </tr>
+                    </tbody></table></div>
+        </div>
+    </article>
+    <article class="- topic/topic topic nested1" aria-labelledby="ariaid-title9" id="例-4-加载文件时忽略数据文件的前-2-行">
+        <h2 class="- topic/title title topictitle2" id="ariaid-title9">例 4. 加载文件时，忽略数据文件的前 2 行。</h2>
+        <div class="- topic/body body">
+            <p class="- topic/p p" id="例-4-加载文件时忽略数据文件的前-2-行__p_gc2_5hn_ryb" data-ofbid="例-4-加载文件时忽略数据文件的前-2-行__p_gc2_5hn_ryb">示例文件的第一行为列名，因此忽略前 2 行后，总的数据条数为 9。</p>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="例-4-加载文件时忽略数据文件的前-2-行__codeblock_hc2_5hn_ryb" data-ofbid="例-4-加载文件时忽略数据文件的前-2-行__codeblock_hc2_5hn_ryb"><code>re=loadText(filename="/home/DolphinDB/Data/stock.csv",skipRows=2)
+select count(*) from re;</code></pre>
+            <div class="table-container"><table class="- topic/table table" id="例-4-加载文件时忽略数据文件的前-2-行__table_ic2_5hn_ryb" data-ofbid="例-4-加载文件时忽略数据文件的前-2-行__table_ic2_5hn_ryb" data-cols="1"><caption></caption><colgroup><col/></colgroup><thead class="- topic/thead thead">
+                        <tr class="- topic/row">
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="例-4-加载文件时忽略数据文件的前-2-行__table_ic2_5hn_ryb__entry__1">count</th>
+                        </tr>
+                    </thead><tbody class="- topic/tbody tbody">
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例-4-加载文件时忽略数据文件的前-2-行__table_ic2_5hn_ryb__entry__1">9</td>
+                        </tr>
+                    </tbody></table></div>
+        </div>
+    </article>
+    <article class="- topic/topic topic nested1" aria-labelledby="ariaid-title10" id="例-5-指定时间类型的格式来加载数据文件">
+        <h2 class="- topic/title title topictitle2" id="ariaid-title10">例 5. 指定时间类型的格式来加载数据文件</h2>
+        <div class="- topic/body body">
+            <p class="- topic/p p" id="例-5-指定时间类型的格式来加载数据文件__p_jc2_5hn_ryb" data-ofbid="例-5-指定时间类型的格式来加载数据文件__p_jc2_5hn_ryb">生成本例所需的数据文件：</p>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="例-5-指定时间类型的格式来加载数据文件__codeblock_kc2_5hn_ryb" data-ofbid="例-5-指定时间类型的格式来加载数据文件__codeblock_kc2_5hn_ryb"><code>time=["20190623145457","20190623155423","20190623163025"]
+sym=`AAPL`MS`IBM
+qty=2200 5400 8670
+price=54.78 59.64 65.23
+t=table(time,sym,qty,price)
+saveText(t,"/home/DolphinDB/Data/t2.csv");</code></pre>
+            <p class="- topic/p p" id="例-5-指定时间类型的格式来加载数据文件__p_lc2_5hn_ryb" data-ofbid="例-5-指定时间类型的格式来加载数据文件__p_lc2_5hn_ryb">加载数据前，使用 <a class="- topic/xref xref" href="../e/extractTextSchema.html">extractTextSchema</a> 函数获取该数据文件的结构：</p>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="例-5-指定时间类型的格式来加载数据文件__codeblock_mc2_5hn_ryb" data-ofbid="例-5-指定时间类型的格式来加载数据文件__codeblock_mc2_5hn_ryb"><code>extractTextSchema("/home/DolphinDB/Data/t2.csv");</code></pre>
+            <div class="table-container"><table class="- topic/table table" id="例-5-指定时间类型的格式来加载数据文件__table_nc2_5hn_ryb" data-ofbid="例-5-指定时间类型的格式来加载数据文件__table_nc2_5hn_ryb" data-cols="2"><caption></caption><colgroup><col/><col/></colgroup><thead class="- topic/thead thead">
+                        <tr class="- topic/row">
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="例-5-指定时间类型的格式来加载数据文件__table_nc2_5hn_ryb__entry__1">name</th>
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="例-5-指定时间类型的格式来加载数据文件__table_nc2_5hn_ryb__entry__2">type</th>
+                        </tr>
+                    </thead><tbody class="- topic/tbody tbody">
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例-5-指定时间类型的格式来加载数据文件__table_nc2_5hn_ryb__entry__1">time</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例-5-指定时间类型的格式来加载数据文件__table_nc2_5hn_ryb__entry__2">LONG</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例-5-指定时间类型的格式来加载数据文件__table_nc2_5hn_ryb__entry__1">sym</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例-5-指定时间类型的格式来加载数据文件__table_nc2_5hn_ryb__entry__2">SYMBOL</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例-5-指定时间类型的格式来加载数据文件__table_nc2_5hn_ryb__entry__1">qty</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例-5-指定时间类型的格式来加载数据文件__table_nc2_5hn_ryb__entry__2">INT</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例-5-指定时间类型的格式来加载数据文件__table_nc2_5hn_ryb__entry__1">price</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例-5-指定时间类型的格式来加载数据文件__table_nc2_5hn_ryb__entry__2">DOUBLE</td>
+                        </tr>
+                    </tbody></table></div>
+            <p class="- topic/p p" id="例-5-指定时间类型的格式来加载数据文件__p_oc2_5hn_ryb" data-ofbid="例-5-指定时间类型的格式来加载数据文件__p_oc2_5hn_ryb">由于 time 列的时间格式与 DolphinDB 中的时间格式不同，如果直接加载该文件，time 列的数据将会被识别为长整型。为了能够正确加载该文件 time
+                列的数据，需要指定 time 列的数据类型为 DATETIME，并且指定该列的格式为 "yyyyMMddHHmmss"。</p>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="例-5-指定时间类型的格式来加载数据文件__codeblock_pc2_5hn_ryb" data-ofbid="例-5-指定时间类型的格式来加载数据文件__codeblock_pc2_5hn_ryb"><code>schema=extractTextSchema("/home/DolphinDB/Data/t2.csv")
+update schema set type = "DATETIME" where name = "time"
+schema[`format]=["yyyyMMddHHmmss",,,];
+
+loadText("/home/DolphinDB/Data/t2.csv",,schema);</code></pre>
+            <div class="table-container"><table class="- topic/table table" id="例-5-指定时间类型的格式来加载数据文件__table_qc2_5hn_ryb" data-ofbid="例-5-指定时间类型的格式来加载数据文件__table_qc2_5hn_ryb" data-cols="4"><caption></caption><colgroup><col/><col/><col/><col/></colgroup><thead class="- topic/thead thead">
+                        <tr class="- topic/row">
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="例-5-指定时间类型的格式来加载数据文件__table_qc2_5hn_ryb__entry__1">time</th>
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="例-5-指定时间类型的格式来加载数据文件__table_qc2_5hn_ryb__entry__2">sym</th>
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="例-5-指定时间类型的格式来加载数据文件__table_qc2_5hn_ryb__entry__3">qty</th>
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="例-5-指定时间类型的格式来加载数据文件__table_qc2_5hn_ryb__entry__4">price</th>
+                        </tr>
+                    </thead><tbody class="- topic/tbody tbody">
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例-5-指定时间类型的格式来加载数据文件__table_qc2_5hn_ryb__entry__1">2019.06.23T14:54:57</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例-5-指定时间类型的格式来加载数据文件__table_qc2_5hn_ryb__entry__2">AAPL</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例-5-指定时间类型的格式来加载数据文件__table_qc2_5hn_ryb__entry__3">2200</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例-5-指定时间类型的格式来加载数据文件__table_qc2_5hn_ryb__entry__4">54.78</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例-5-指定时间类型的格式来加载数据文件__table_qc2_5hn_ryb__entry__1">2019.06.23T15:54:23</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例-5-指定时间类型的格式来加载数据文件__table_qc2_5hn_ryb__entry__2">MS</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例-5-指定时间类型的格式来加载数据文件__table_qc2_5hn_ryb__entry__3">5400</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例-5-指定时间类型的格式来加载数据文件__table_qc2_5hn_ryb__entry__4">59.64</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例-5-指定时间类型的格式来加载数据文件__table_qc2_5hn_ryb__entry__1">2019.06.23T16:30:25</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例-5-指定时间类型的格式来加载数据文件__table_qc2_5hn_ryb__entry__2">IBM</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例-5-指定时间类型的格式来加载数据文件__table_qc2_5hn_ryb__entry__3">8670</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例-5-指定时间类型的格式来加载数据文件__table_qc2_5hn_ryb__entry__4">65.23</td>
+                        </tr>
+                    </tbody></table></div>
+        </div>
+    </article>
+    <article class="- topic/topic topic nested1" aria-labelledby="ariaid-title11" id="例-6-加载包含数组向量列的数据">
+        <h2 class="- topic/title title topictitle2" id="ariaid-title11">例 6. 加载包含数组向量列的数据</h2>
+        <div class="- topic/body body">
+            <p class="- topic/p p" id="例-6-加载包含数组向量列的数据__p_rc2_5hn_ryb" data-ofbid="例-6-加载包含数组向量列的数据__p_rc2_5hn_ryb">使用以下脚本模拟生成一个 csv 文本文件：</p>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="例-6-加载包含数组向量列的数据__codeblock_sc2_5hn_ryb" data-ofbid="例-6-加载包含数组向量列的数据__codeblock_sc2_5hn_ryb"><code>bid = array(DOUBLE[], 0, 20).append!([1.4799 1.479 1.4787, 1.4796 1.479 1.4784, 1.4791 1.479 1.4784])
+ask = array(DOUBLE[], 0, 20).append!([1.4821 1.4825 1.4828, 1.4818 1.482 1.4821, 1.4814 1.4818 1.482])
+TradeDate = 2022.01.01 + 1..3
+SecurityID = rand(`APPL`AMZN`IBM, 3)
+t = table(SecurityID as `sid, TradeDate as `date, bid as `bid, ask as `ask)
+t;
+saveText(t,filename="/home/DolphinDB/Data/t.csv",delimiter=',',append=true)</code></pre>
+            <div class="- topic/p p">saveText在保存数组向量到 csv 文件时，把原数据中的<code class="+ topic/ph pr-d/codeph ph codeph">[ ]</code> 替换为了 <code class="+ topic/ph pr-d/codeph ph codeph">"
+                "</code>，文件内容如下：<pre class="+ topic/pre pr-d/codeblock pre codeblock" id="例-6-加载包含数组向量列的数据__codeblock_sfq_bs4_y1c" data-ofbid="例-6-加载包含数组向量列的数据__codeblock_sfq_bs4_y1c"><code>sid,date,bid,ask
+APPL,2022.01.02,"1.4799,1.479,1.4787","1.4821,1.4825,1.4828"
+IBM,2022.01.03,"1.4796,1.479,1.4784","1.4818,1.482,1.4821"
+APPL,2022.01.04,"1.4791,1.479,1.4784","1.4814,1.4818,1.482"</code></pre></div>
+            <p class="- topic/p p" id="例-6-加载包含数组向量列的数据__p_tc2_5hn_ryb" data-ofbid="例-6-加载包含数组向量列的数据__p_tc2_5hn_ryb">然后调用 loadText 导入该文件：</p>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="例-6-加载包含数组向量列的数据__codeblock_uc2_5hn_ryb" data-ofbid="例-6-加载包含数组向量列的数据__codeblock_uc2_5hn_ryb"><code>path = "/home/DolphinDB/Data/t.csv"
+schema=extractTextSchema(path);
+update schema set type = "DOUBLE[]" where name="bid" or name ="ask"
+t = loadText(path, schema=schema, arrayDelimiter=",")
+t;</code></pre>
+            <div class="table-container"><table class="- topic/table table" id="例-6-加载包含数组向量列的数据__table_vc2_5hn_ryb" data-ofbid="例-6-加载包含数组向量列的数据__table_vc2_5hn_ryb" data-cols="4"><caption></caption><colgroup><col/><col/><col/><col/></colgroup><thead class="- topic/thead thead">
+                        <tr class="- topic/row">
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="例-6-加载包含数组向量列的数据__table_vc2_5hn_ryb__entry__1">sid</th>
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="例-6-加载包含数组向量列的数据__table_vc2_5hn_ryb__entry__2">date</th>
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="例-6-加载包含数组向量列的数据__table_vc2_5hn_ryb__entry__3">bid</th>
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="例-6-加载包含数组向量列的数据__table_vc2_5hn_ryb__entry__4">ask</th>
+                        </tr>
+                    </thead><tbody class="- topic/tbody tbody">
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例-6-加载包含数组向量列的数据__table_vc2_5hn_ryb__entry__1">AMZN</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例-6-加载包含数组向量列的数据__table_vc2_5hn_ryb__entry__2">2022.01.02</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例-6-加载包含数组向量列的数据__table_vc2_5hn_ryb__entry__3">[1.4799,1.479,1.4787]</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例-6-加载包含数组向量列的数据__table_vc2_5hn_ryb__entry__4">[1.4821,1.4825,1.4828]</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例-6-加载包含数组向量列的数据__table_vc2_5hn_ryb__entry__1">AMZN</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例-6-加载包含数组向量列的数据__table_vc2_5hn_ryb__entry__2">2022.01.03</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例-6-加载包含数组向量列的数据__table_vc2_5hn_ryb__entry__3">[1.4796,1.479,1.4784]</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例-6-加载包含数组向量列的数据__table_vc2_5hn_ryb__entry__4">[1.4818,1.482,1.4821]</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例-6-加载包含数组向量列的数据__table_vc2_5hn_ryb__entry__1">IBM</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例-6-加载包含数组向量列的数据__table_vc2_5hn_ryb__entry__2">2022.01.04</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例-6-加载包含数组向量列的数据__table_vc2_5hn_ryb__entry__3">[1.4791,1.479,1.4784]</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例-6-加载包含数组向量列的数据__table_vc2_5hn_ryb__entry__4">[1.4814,1.4818,1.482]</td>
+                        </tr>
+                    </tbody></table></div>
+            <p class="- topic/p p">通过 saveText 导出 csv 文件时，数组向量的边界标识默认为双引号（”），本例中 t.csv 的内容如下</p>
+            <p class="- topic/p p">当数组向量的边界标识不为双引号时，可以通过设置参数 arrayMarker 导入，例如当 t.csv 的内容如下时</p>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="例-6-加载包含数组向量列的数据__codeblock_jwf_x34_y1c" data-ofbid="例-6-加载包含数组向量列的数据__codeblock_jwf_x34_y1c"><code>sid,date,bid,ask
+APPL,2022.01.02,[1.4799,1.479,1.4787],[1.4821,1.4825,1.4828]
+IBM,2022.01.03,[1.4796,1.479,1.4784],[1.4818,1.482,1.4821]
+APPL,2022.01.04,[1.4791,1.479,1.4784],[1.4814,1.4818,1.482]</code></pre>
+            <p class="- topic/p p">通过以下脚本导入</p>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="例-6-加载包含数组向量列的数据__codeblock_qfy_x34_y1c" data-ofbid="例-6-加载包含数组向量列的数据__codeblock_qfy_x34_y1c"><code>path = "/home/DolphinDB/Data/t.csv"
+schema=extractTextSchema(path);
+update schema set type = "DOUBLE[]" where name="bid" or name ="ask"
+t = loadText(path, schema=schema, arrayDelimiter=",",arrayMarker="[]")
+t;</code></pre>
+        </div>
+    </article>
+</article></main></div>
+                        
+                        
+                        
+                        
+                        
+                        
+                    </div>
+                    
+                        <nav role="navigation" id="wh_topic_toc" aria-label="On this page" class="col-lg-2 d-none d-lg-block navbar d-print-none"> 
+                            <div id="wh_topic_toc_content">
+		                        
+	                            <div class=" wh_topic_toc "><div class="wh_topic_label">在本页上</div><ul><li class="topic-item"><a href="#%E8%AF%AD%E6%B3%95" data-tocid="语法">语法</a></li><li class="topic-item"><a href="#%E5%8F%82%E6%95%B0" data-tocid="参数">参数</a></li><li class="topic-item"><a href="#%E8%AF%A6%E6%83%85" data-tocid="详情">详情</a></li><li class="topic-item"><a href="#%E4%BE%8B%E5%AD%90" data-tocid="例子">例子</a></li><li class="topic-item"><a href="#%E4%BE%8B-1-%E7%9B%B4%E6%8E%A5%E5%8A%A0%E8%BD%BD%E6%95%B0%E6%8D%AE%E6%96%87%E4%BB%B6" data-tocid="例-1-直接加载数据文件">例 1. 直接加载数据文件</a></li><li class="topic-item"><a href="#%E4%BE%8B-2-%E6%8C%87%E5%AE%9A%E6%9F%90%E5%88%97%E7%9A%84%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B%E6%9D%A5%E5%8A%A0%E8%BD%BD%E6%95%B0%E6%8D%AE%E6%96%87%E4%BB%B6" data-tocid="例-2-指定某列的数据类型来加载数据文件">例 2. 指定某列的数据类型来加载数据文件</a></li><li class="topic-item"><a href="#%E4%BE%8B-3-%E5%8F%AA%E5%8A%A0%E8%BD%BD%E9%83%A8%E5%88%86%E5%88%97" data-tocid="例-3-只加载部分列">例 3. 只加载部分列</a></li><li class="topic-item"><a href="#%E4%BE%8B-4-%E5%8A%A0%E8%BD%BD%E6%96%87%E4%BB%B6%E6%97%B6%E5%BF%BD%E7%95%A5%E6%95%B0%E6%8D%AE%E6%96%87%E4%BB%B6%E7%9A%84%E5%89%8D-2-%E8%A1%8C" data-tocid="例-4-加载文件时忽略数据文件的前-2-行">例 4. 加载文件时，忽略数据文件的前 2 行。</a></li><li class="topic-item"><a href="#%E4%BE%8B-5-%E6%8C%87%E5%AE%9A%E6%97%B6%E9%97%B4%E7%B1%BB%E5%9E%8B%E7%9A%84%E6%A0%BC%E5%BC%8F%E6%9D%A5%E5%8A%A0%E8%BD%BD%E6%95%B0%E6%8D%AE%E6%96%87%E4%BB%B6" data-tocid="例-5-指定时间类型的格式来加载数据文件">例 5. 指定时间类型的格式来加载数据文件</a></li><li class="topic-item"><a href="#%E4%BE%8B-6-%E5%8A%A0%E8%BD%BD%E5%8C%85%E5%90%AB%E6%95%B0%E7%BB%84%E5%90%91%E9%87%8F%E5%88%97%E7%9A%84%E6%95%B0%E6%8D%AE" data-tocid="例-6-加载包含数组向量列的数据">例 6. 加载包含数组向量列的数据</a></li></ul></div>
+	                        	
+                        	</div>
+                        </nav>
+                    
+                </div>
+            </div>
+            
+            
+            
+        </div> 
+        <footer class="navbar navbar-default wh_footer">
+  <div class=" footer-container mx-auto ">
+<title>Copyright</title><p><b> ©2024 浙江智臾科技有限公司 浙ICP备18048711号-3</b></p>
+  </div>
+</footer>
+        
+        <div id="go2top" class="d-print-none">
+            <span class="oxy-icon oxy-icon-up"></span>
+        </div>
+        
+        <div id="modal_img_large" class="modal">
+            <span class="close oxy-icon oxy-icon-remove"></span>
+            <div id="modal_img_container"></div>
+            <div id="caption"></div>
+        </div>
+        
+        
+        
+    </body>
+</html>

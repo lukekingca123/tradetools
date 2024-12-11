@@ -1,0 +1,1041 @@
+<!DOCTYPE html><html xmlns="http://www.w3.org/1999/xhtml" xml:lang="zh" lang="zh" data-whc_version="26.0">
+    <head><link rel="shortcut icon" href="../../favicon.ico"/><link rel="icon" href="../../favicon.ico"/><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><meta http-equiv="X-UA-Compatible" content="IE=edge"/><meta name="description" content="pivot by 是 DolphinDB 的独有功能，是对标准 SQL 语句的拓展。它将表中一列或多列的内容按照两个维度重新排列，亦可配合数据转换函数使用。与 select 子句一起使用时返回一个表，而和 exec 语句一起使用时返回一个矩阵。若重新排列后存在行维度存在多个相同值，则会进行去重，只保留最后一个值。 参考 pivot 和 unpivot 。 从 2.00.10.4 版本开始， ..."/><meta name="DC.rights.owner" content="(C) 版权 2024"/><meta name="copyright" content="(C) 版权 2024"/><meta name="generator" content="DITA-OT"/><meta name="DC.type" content="topic"/><meta name="DC.coverage" content=""/><meta name="DC.relation" content="../../progr/sql/sql_dql.html"/><meta name="prodname" content="DolphinDB"/><meta name="brand" content="DolphinDB"/><meta name="DC.creator" content="DolphinDB"/><meta name="DC.publisher" content="DDB N/A DDB 200"/><meta name="DC.format" content="HTML5"/><meta name="DC.identifier" content="pivot-by"/><title>pivot by</title><!--  Generated with Oxygen version 26.0, build number 2024012323.  --><meta name="wh-path2root" content="../../"/><meta name="wh-toc-id" content="pivot-by-d9529e23597"/><meta name="wh-source-relpath" content="progr/sql/pivotBy.dita"/><meta name="wh-out-relpath" content="progr/sql/pivotBy.html"/>
+
+    <link rel="stylesheet" type="text/css" href="../../oxygen-webhelp/app/commons.css?buildId=2024012323"/>
+    <link rel="stylesheet" type="text/css" href="../../oxygen-webhelp/app/topic.css?buildId=2024012323"/>
+
+    <script src="../../oxygen-webhelp/app/options/properties.js?buildId=20240704100525"></script>
+    <script src="../../oxygen-webhelp/app/localization/strings.js?buildId=2024012323"></script>
+    <script src="../../oxygen-webhelp/app/search/index/keywords.js?buildId=20240704100525"></script>
+    <script defer="defer" src="../../oxygen-webhelp/app/commons.js?buildId=2024012323"></script>
+    <script defer="defer" src="../../oxygen-webhelp/app/topic.js?buildId=2024012323"></script>
+<link rel="stylesheet" type="text/css" href="../../oxygen-webhelp/template/styles.css?buildId=2024012323"/><script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script><script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script></head>
+
+    <body id="pivot-by" class="wh_topic_page frmBody">
+        <a href="#wh_topic_body" class="sr-only sr-only-focusable">
+            跳转到主要内容
+        </a>
+        
+        
+        
+        
+        <header class="navbar navbar-default wh_header">
+    <div class="container-fluid">
+        <div xmlns:whc="http://www.oxygenxml.com/webhelp/components" class="wh_header_flex_container navbar-nav navbar-expand-md navbar-dark">
+            <div class="wh_logo_and_publication_title_container">
+                <div class="wh_logo_and_publication_title">
+                    
+                    <a href="https://www.dolphindb.cn" class=" wh_logo d-none d-sm-block "><img src="../../logo.png" alt="  DolphinDB 文档中心  "/></a>
+                    <div class=" wh_publication_title "><a href="../../index.html"><span class="booktitle">  <span class="ph mainbooktitle">DolphinDB 文档中心</span>  </span></a></div>
+                    
+                </div>
+                
+                
+            </div>
+
+            <div class="wh_top_menu_and_indexterms_link collapse navbar-collapse" id="wh_top_menu_and_indexterms_link">
+                
+                
+                
+                
+            </div>
+        <div class=" wh_search_input navbar-form wh_topic_page_search search " role="form">
+            
+            
+            
+            <form id="searchForm" method="get" role="search" action="../../search.html"><div><input type="search" placeholder="搜索 " class="wh_search_textfield" id="textToSearch" name="searchQuery" aria-label="搜索查询" required="required"/><button type="submit" class="wh_search_button" aria-label="搜索"><span class="search_input_text">搜索</span></button></div></form>
+            
+            <script src="/vendors/react/umd/react.production.min.js" defer="defer"></script>
+<script src="/vendors/react-dom/umd/react-dom.production.min.js" defer="defer"></script>
+<script src="/vendors/dayjs/dayjs.min.js" defer="defer"></script>
+<script src="/vendors/antd/dist/antd.min.js" defer="defer"></script>
+<script src="/vendors/@ant-design/icons/dist/index.umd.min.js" defer="defer"></script>
+<script src="/zh/index.js" type="module"></script>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js" defer="defer"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML" defer="defer"><!--
+
+
+--></script>
+
+            
+        </div></div>
+    </div>
+</header>
+        
+        
+         
+        
+        
+        
+        <div class="container-fluid" id="wh_topic_container">
+            <div class="row">
+
+                <nav class="wh_tools d-print-none navbar-expand-md" aria-label="Tools">
+                    
+                    <div data-tooltip-position="bottom" class=" wh_breadcrumb "><ol class="d-print-none"><li><span class="home"><a href="../../index.html"><span>主页</span></a></span></li><li><div class="topicref" data-id="about_language_resources"><div class="title"><a href="../../progr/progr_intro.html"><span class="keyword label">编程语言</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 编程基本概念与方法、SQL 在 DolphinDB 的应用</p></div></div></div></li><li><div class="topicref" data-id="chap4_sect_sql_statements"><div class="title"><a href="../../progr/sql/sql_intro.html"><span class="keyword label">SQL 语句</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 中 SQL 语句的基本语法和用法</p></div></div></div></li><li><div class="topicref" data-id="dql"><div class="title"><a href="../../progr/sql/sql_dql.html">DQL</a><div class="wh-tooltip"><p class="shortdesc">介绍 DolphinDB 中的数据查询（DQL）语言</p></div></div></div></li><li class="active"><div class="topicref" data-id="pivot-by"><div class="title"><a href="../../progr/sql/pivotBy.html">pivot by</a></div></div></li></ol></div>
+                    
+                    
+                    
+                    <div class="wh_right_tools">
+                        <button class="wh_hide_highlight" aria-label="切换搜索突出显示" title="切换搜索突出显示"></button>
+                        <button class="webhelp_expand_collapse_sections" data-next-state="collapsed" aria-label="折叠截面" title="折叠截面"></button>
+                        
+                        
+                        
+                        
+                        <div class=" wh_print_link print d-none d-md-inline-block "><button onClick="window.print()" title="打印此页" aria-label="打印此页"></button></div>
+                        
+                        <button type="button" id="wh_toc_button" class="custom-toggler navbar-toggler collapsed wh_toggle_button navbar-light" aria-expanded="false" aria-label="Toggle publishing table of content" aria-controls="wh_publication_toc">
+                            <span class="navbar-toggler-icon"></span>
+                        </button>
+                    </div>
+                    
+                </nav>
+            </div>
+            
+            
+            
+            
+            <div class="wh_content_area">
+                <div class="row">
+                    
+                        <nav id="wh_publication_toc" class="col-lg-3 col-md-3 col-sm-12 d-md-block d-none d-print-none" aria-label="Table of Contents Container">
+                            <div id="wh_publication_toc_content">
+		                        
+                            	<div class=" wh_publication_toc " data-tooltip-position="right"><span class="expand-button-action-labels"><span id="button-expand-action" role="button" aria-label="Expand"></span><span id="button-collapse-action" role="button" aria-label="Collapse"></span><span id="button-pending-action" role="button" aria-label="Pending"></span></span><ul role="tree" aria-label="Table of Contents"><li role="treeitem"><div data-tocid="new_chap_about_sect_ddb_docs_intro-d9529e87" class="topicref" data-id="new_chap_about_sect_ddb_docs_intro" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../about/ddb_docs_intro.html" id="new_chap_about_sect_ddb_docs_intro-d9529e87-link">文档使用说明</a><div class="wh-tooltip"><p class="shortdesc">如何获取 DolphinDB 帮助信息</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="chap1_getstarted-d9529e140" class="topicref" data-id="chap1_getstarted" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action chap1_getstarted-d9529e140-link" class="wh-expand-btn"></span><div class="title"><a href="../../getstarted/chap1_getstarted.html" id="chap1_getstarted-d9529e140-link"><span class="keyword label">快速上手</span></a><div class="wh-tooltip"><p class="shortdesc">如何快速部署 DolphinDB、建库建表、写入和查询数据</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="sectionddb_deployment-d9529e335" class="topicref" data-id="sectionddb_deployment" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action sectionddb_deployment-d9529e335-link" class="wh-expand-btn"></span><div class="title"><a href="../../deploy/deploy_intro.html" id="sectionddb_deployment-d9529e335-link"><span class="keyword label">部署</span></a><div class="wh-tooltip"><p class="shortdesc">如何在不同的场景中部署 DolphinDB</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="new_chap_database_manage_new_chap_dbmanage_landing_page-d9529e2313" class="topicref" data-id="new_chap_database_manage_new_chap_dbmanage_landing_page" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action new_chap_database_manage_new_chap_dbmanage_landing_page-d9529e2313-link" class="wh-expand-btn"></span><div class="title"><a href="../../db_distr_comp/cfg/db_intro.html" id="new_chap_database_manage_new_chap_dbmanage_landing_page-d9529e2313-link"><span class="keyword label">数据库</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 数据库的基本概念</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="chap7_tutorials_streaming-d9529e3490" class="topicref" data-id="chap7_tutorials_streaming" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action chap7_tutorials_streaming-d9529e3490-link" class="wh-expand-btn"></span><div class="title"><a href="../../stream/str_intro.html" id="chap7_tutorials_streaming-d9529e3490-link"><span class="keyword label">流数据</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 流数据引擎及流数据计算的基本概念</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="tocId-d9529e7385" class="topicref" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action tocId-d9529e7385-link" class="wh-expand-btn"></span><div class="title"><a href="../../db_distr_comp/db_oper/import_data.html" id="tocId-d9529e7385-link">数据迁移</a><div class="wh-tooltip"><p class="shortdesc">如何从不同数据源向 DolphinDB 迁移数据</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="chap7_tutorials_system_management-d9529e7812" class="topicref" data-id="chap7_tutorials_system_management" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action chap7_tutorials_system_management-d9529e7812-link" class="wh-expand-btn"></span><div class="title"><a href="../../sys_man/om_intro.html" id="chap7_tutorials_system_management-d9529e7812-link"><span class="keyword label">系统运维</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 的系统运维功能及方法</p></div></div></div></li><li role="treeitem" aria-expanded="true"><div data-tocid="about_language_resources-d9529e16490" class="topicref" data-id="about_language_resources" data-state="expanded"><span role="button" tabindex="0" aria-labelledby="button-collapse-action about_language_resources-d9529e16490-link" class="wh-expand-btn"></span><div class="title"><a href="../../progr/progr_intro.html" id="about_language_resources-d9529e16490-link"><span class="keyword label">编程语言</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 编程基本概念与方法、SQL 在 DolphinDB 的应用</p></div></div></div><ul role="group" class="navbar-nav nav-list"><li role="treeitem" aria-expanded="false"><div data-tocid="chap4_db_programming-d9529e16543" class="topicref" data-id="chap4_db_programming" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action chap4_db_programming-d9529e16543-link" class="wh-expand-btn"></span><div class="title"><a href="../../progr/lang_intro.html" id="chap4_db_programming-d9529e16543-link"><span class="keyword label">DolphinDB 脚本语言</span></a><div class="wh-tooltip"><p class="shortdesc"> 脚本编程相关概念参考，包括：数据类型与形式、对象、运算符、编程语句、数据操作、函数化编程、文件操作和 SQL 语句。 </p></div></div></div></li><li role="treeitem" aria-expanded="true"><div data-tocid="chap4_sect_sql_statements-d9529e22890" class="topicref" data-id="chap4_sect_sql_statements" data-state="expanded"><span role="button" tabindex="0" aria-labelledby="button-collapse-action chap4_sect_sql_statements-d9529e22890-link" class="wh-expand-btn"></span><div class="title"><a href="../../progr/sql/sql_intro.html" id="chap4_sect_sql_statements-d9529e22890-link"><span class="keyword label">SQL 语句</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 中 SQL 语句的基本语法和用法</p></div></div></div><ul role="group" class="navbar-nav nav-list"><li role="treeitem" aria-expanded="false"><div data-tocid="ddl-d9529e22941" class="topicref" data-id="ddl" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action ddl-d9529e22941-link" class="wh-expand-btn"></span><div class="title"><a href="../../progr/sql/sql_ddl.html" id="ddl-d9529e22941-link">DDL</a><div class="wh-tooltip"><p class="shortdesc">介绍 DolphinDB 中的数据定义（DDL）语言</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="dml-d9529e23129" class="topicref" data-id="dml" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action dml-d9529e23129-link" class="wh-expand-btn"></span><div class="title"><a href="../../progr/sql/sql_dml.html" id="dml-d9529e23129-link">DML</a><div class="wh-tooltip"><p class="shortdesc">介绍 DolphinDB 中的数据描述（DML）语言</p></div></div></div></li><li role="treeitem" aria-expanded="true"><div data-tocid="dql-d9529e23317" class="topicref" data-id="dql" data-state="expanded"><span role="button" tabindex="0" aria-labelledby="button-collapse-action dql-d9529e23317-link" class="wh-expand-btn"></span><div class="title"><a href="../../progr/sql/sql_dql.html" id="dql-d9529e23317-link">DQL</a><div class="wh-tooltip"><p class="shortdesc">介绍 DolphinDB 中的数据查询（DQL）语言</p></div></div></div><ul role="group" class="navbar-nav nav-list"><li role="treeitem"><div data-tocid="select-d9529e23367" class="topicref" data-id="select" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../progr/sql/Select.html" id="select-d9529e23367-link">select</a></div></div></li><li role="treeitem"><div data-tocid="exec-d9529e23413" class="topicref" data-id="exec" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../progr/sql/exec.html" id="exec-d9529e23413-link">exec</a></div></div></li><li role="treeitem"><div data-tocid="where-d9529e23459" class="topicref" data-id="where" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../progr/sql/where.html" id="where-d9529e23459-link">where</a></div></div></li><li role="treeitem"><div data-tocid="group-by-d9529e23505" class="topicref" data-id="group-by" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../progr/sql/groupby.html" id="group-by-d9529e23505-link">group by</a></div></div></li><li role="treeitem"><div data-tocid="context-by-d9529e23551" class="topicref" data-id="context-by" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../progr/sql/contextBy.html" id="context-by-d9529e23551-link">context by</a></div></div></li><li role="treeitem" class="active"><div data-tocid="pivot-by-d9529e23597" class="topicref" data-id="pivot-by" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../progr/sql/pivotBy.html" id="pivot-by-d9529e23597-link">pivot by</a></div></div></li><li role="treeitem"><div data-tocid="order-by-d9529e23643" class="topicref" data-id="order-by" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../progr/sql/orderby.html" id="order-by-d9529e23643-link">order by</a></div></div></li><li role="treeitem"><div data-tocid="top-d9529e23689" class="topicref" data-id="top" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../progr/sql/top.html" id="top-d9529e23689-link">top</a></div></div></li><li role="treeitem"><div data-tocid="limit-d9529e23735" class="topicref" data-id="limit" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../progr/sql/limit.html" id="limit-d9529e23735-link">limit</a></div></div></li><li role="treeitem"><div data-tocid="case-d9529e23781" class="topicref" data-id="case" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../progr/sql/case.html" id="case-d9529e23781-link">case</a></div></div></li><li role="treeitem"><div data-tocid="cgroup-by-d9529e23828" class="topicref" data-id="cgroup-by" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../progr/sql/cgroupby.html" id="cgroup-by-d9529e23828-link">cgroup by</a></div></div></li><li role="treeitem"><div data-tocid="distinct-d9529e23874" class="topicref" data-id="distinct" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../progr/sql/distinct.html" id="distinct-d9529e23874-link">distinct</a></div></div></li><li role="treeitem"><div data-tocid="having-d9529e23920" class="topicref" data-id="having" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../progr/sql/having.html" id="having-d9529e23920-link">having</a></div></div></li><li role="treeitem"><div data-tocid="interval-d9529e23966" class="topicref" data-id="interval" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../progr/sql/interval.html" id="interval-d9529e23966-link">interval</a></div></div></li><li role="treeitem"><div data-tocid="map-d9529e24012" class="topicref" data-id="map" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../progr/sql/map.html" id="map-d9529e24012-link">map</a></div></div></li><li role="treeitem"><div data-tocid="partition-d9529e24058" class="topicref" data-id="partition" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../progr/sql/partition.html" id="partition-d9529e24058-link">partition</a></div></div></li><li role="treeitem"><div data-tocid="sample-d9529e24104" class="topicref" data-id="sample" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../progr/sql/sample.html" id="sample-d9529e24104-link">sample</a></div></div></li><li role="treeitem"><div data-tocid="analyticFunction-d9529e24150" class="topicref" data-id="analyticFunction" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../progr/sql/analyticFunction.html" id="analyticFunction-d9529e24150-link">分析函数</a></div></div></li></ul></li><li role="treeitem" aria-expanded="false"><div data-tocid="predicates-d9529e24196" class="topicref" data-id="predicates" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action predicates-d9529e24196-link" class="wh-expand-btn"></span><div class="title"><a href="../../progr/sql/predicates.html" id="predicates-d9529e24196-link"><span class="keyword label">谓词</span></a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="table_joiners-d9529e24703" class="topicref" data-id="table_joiners" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action table_joiners-d9529e24703-link" class="wh-expand-btn"></span><div class="title"><a href="../../progr/sql/tb_joiner_intro.html" id="table_joiners-d9529e24703-link"><span class="keyword label">表连接</span></a></div></div></li><li role="treeitem"><div data-tocid="执行顺序-d9529e25210" class="topicref" data-id="执行顺序" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../progr/sql/exe_order.html" id="执行顺序-d9529e25210-link"><span class="keyword label">执行顺序</span></a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="landingpage_sql_trace-d9529e25257" class="topicref" data-id="landingpage_sql_trace" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action landingpage_sql_trace-d9529e25257-link" class="wh-expand-btn"></span><div class="title"><a href="../../progr/sql/sql_trace.html" id="landingpage_sql_trace-d9529e25257-link"><span class="keyword label">SQL Trace</span></a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="hint-d9529e25442" class="topicref" data-id="hint" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action hint-d9529e25442-link" class="wh-expand-btn"></span><div class="title"><a href="../../progr/sql/hint.html" id="hint-d9529e25442-link"><span class="keyword label">HINT 关键字</span></a></div></div></li></ul></li><li role="treeitem" aria-expanded="false"><div data-tocid="python-parser-简介-d9529e25535" class="topicref" data-id="python-parser-简介" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action python-parser-简介-d9529e25535-link" class="wh-expand-btn"></span><div class="title"><a href="../../progr/py_parser/py_par_intro.html" id="python-parser-简介-d9529e25535-link"><span class="keyword label">Python Parser</span></a></div></div></li></ul></li><li role="treeitem" aria-expanded="false"><div data-tocid="functions_references-d9529e26503" class="topicref" data-id="functions_references" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action functions_references-d9529e26503-link" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/funcs_intro.html" id="functions_references-d9529e26503-link"><span class="keyword label">函数参考</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 函数分类、语法、详解及示例</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="api_protocol-d9529e86456" class="topicref" data-id="api_protocol" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action api_protocol-d9529e86456-link" class="wh-expand-btn"></span><div class="title"><a href="../../api/connapi_intro.html" id="api_protocol-d9529e86456-link"><span class="keyword label">连接器 &amp; API</span></a><div class="wh-tooltip"><p class="shortdesc">面向不同编程语言的 DolphinDB API 及连接器，相关协议和用法</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="chap6_plugin-d9529e91976" class="topicref" data-id="chap6_plugin" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action chap6_plugin-d9529e91976-link" class="wh-expand-btn"></span><div class="title"><a href="../../plugins/plg_intro.html" id="chap6_plugin-d9529e91976-link"><span class="keyword label">插件</span></a><div class="wh-tooltip"><p class="shortdesc">多个应用场景的插件使用说明和插件开发指导</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="third_party-d9529e94749" class="topicref" data-id="third_party" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action third_party-d9529e94749-link" class="wh-expand-btn"></span><div class="title"><a href="../../third_party.html" id="third_party-d9529e94749-link">第三方工具</a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="about_tutorials-d9529e94980" class="topicref" data-id="about_tutorials" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action about_tutorials-d9529e94980-link" class="wh-expand-btn"></span><div class="title"><a href="../../tutorials/about_tutorials.html" id="about_tutorials-d9529e94980-link"><span class="keyword label">教程</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 产品使用教程</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="tocId-d9529e101769" class="topicref" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action tocId-d9529e101769-link" class="wh-expand-btn"></span><div class="title"><a href="../../rn/server/3_00_1.html" id="tocId-d9529e101769-link">版本说明</a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 版本发布历史</p></div></div></div></li></ul></div>
+		                        
+                            </div>
+                        </nav>
+                    
+                    
+                    <div class="col-lg-7 col-md-9 col-sm-12" id="wh_topic_body">
+                        <button id="wh_close_publication_toc_button" class="close-toc-button d-none" aria-label="Toggle publishing table of content" aria-controls="wh_publication_toc" aria-expanded="true">
+                            <span class="close-toc-icon-container">
+                                <span class="close-toc-icon"></span>     
+                            </span>
+                        </button>
+                        <button id="wh_close_topic_toc_button" class="close-toc-button d-none" aria-label="Toggle topic table of content" aria-controls="wh_topic_toc" aria-expanded="true">
+                            <span class="close-toc-icon-container">
+                                <span class="close-toc-icon"></span>     
+                            </span>
+                        </button>
+                        
+                        <div class=" wh_topic_content body "><main role="main"><article class="- topic/topic topic" role="article" aria-labelledby="ariaid-title1">
+    <h1 class="- topic/title title topictitle1" id="ariaid-title1">pivot by</h1>
+    <div class="- topic/body body">
+        <p class="- topic/p p" id="pivot-by__p_xpz_5hn_ryb" data-ofbid="pivot-by__p_xpz_5hn_ryb"><code class="+ topic/ph pr-d/codeph ph codeph">pivot by</code> 是 DolphinDB 的独有功能，是对标准 SQL
+            语句的拓展。它将表中一列或多列的内容按照两个维度重新排列，亦可配合数据转换函数使用。与 select 子句一起使用时返回一个表，而和 exec
+            语句一起使用时返回一个矩阵。若重新排列后存在行维度存在多个相同值，则会进行去重，只保留最后一个值。 参考 <a class="- topic/xref xref" href="../../funcs/ho_funcs/pivot.html">pivot</a> 和 <a class="- topic/xref xref" href="../../funcs/u/unpivot.html">unpivot</a>。</p>
+        <p class="- topic/p p">从 2.00.10.4 版本开始，<code class="+ topic/ph pr-d/codeph ph codeph">pivot by</code> 支持搭配 select
+            子句查询表中的数组向量列，返回一个表，且支持对数组向量列应用聚合函数（row 系列函数除外）； <code class="+ topic/ph pr-d/codeph ph codeph">pivot by</code> 支持搭配 exec
+            子句对数组向量列应用返回标量的聚合函数（例如 max, sum 等），此时返回一个矩阵，详见例6。</p>
+        <p class="- topic/p p" id="pivot-by__p_ypz_5hn_ryb" data-ofbid="pivot-by__p_ypz_5hn_ryb"><code class="+ topic/ph pr-d/codeph ph codeph">pivot by</code> 在以下版本中进行了优化：</p>
+        <div class="table-container"><table class="- topic/table table" id="pivot-by__table_zpz_5hn_ryb" data-ofbid="pivot-by__table_zpz_5hn_ryb" data-cols="2"><caption></caption><colgroup><col/><col/></colgroup><thead class="- topic/thead thead">
+                    <tr class="- topic/row">
+                        <th class="- topic/entry entry colsep-0 rowsep-0" id="pivot-by__table_zpz_5hn_ryb__entry__1">优化版本</th>
+                        <th class="- topic/entry entry colsep-0 rowsep-0" id="pivot-by__table_zpz_5hn_ryb__entry__2">优化内容</th>
+                    </tr>
+                </thead><tbody class="- topic/tbody tbody">
+                    <tr class="- topic/row">
+                        <td class="- topic/entry entry colsep-0 rowsep-0" headers="pivot-by__table_zpz_5hn_ryb__entry__1">1.20.4</td>
+                        <td class="- topic/entry entry colsep-0 rowsep-0" headers="pivot-by__table_zpz_5hn_ryb__entry__2"><code class="+ topic/ph pr-d/codeph ph codeph">pivot by</code> 后面的列数可为两个以上，其中最后一列为列维度，其它各列均为行维度。 使用
+                                <code class="+ topic/ph pr-d/codeph ph codeph">pivot by</code> 时，select 子句可使用多个指标。</td>
+                    </tr>
+                    
+                    <tr class="- topic/row">
+                        <td class="- topic/entry entry colsep-0 rowsep-0" headers="pivot-by__table_zpz_5hn_ryb__entry__1">2.00.9</td>
+                        <td class="- topic/entry entry colsep-0 rowsep-0" headers="pivot-by__table_zpz_5hn_ryb__entry__2">对满足以下2个条件的 <code class="+ topic/ph pr-d/codeph ph codeph">pivot by</code> 语句进行了优化：<ol class="- topic/ol ol" id="pivot-by__ol_ef3_bdy_jzb" data-ofbid="pivot-by__ol_ef3_bdy_jzb">
+                                <li class="- topic/li li">对查询的列不使用以下函数时：聚合函数（例如
+                                        <code class="+ topic/ph pr-d/codeph ph codeph">sum</code>）、序列相关函数（例如：<code class="+ topic/ph pr-d/codeph ph codeph">last</code>）、行函数（例如：<code class="+ topic/ph pr-d/codeph ph codeph">rowMin</code>）、填充（例如：<code class="+ topic/ph pr-d/codeph ph codeph">ffill</code>）函数。</li>
+                                <li class="- topic/li li"><code class="+ topic/ph pr-d/codeph ph codeph">pivot by</code> 最后一列为分区列。</li>
+                            </ol></td>
+                    </tr>
+                    <tr class="- topic/row">
+                        <td class="- topic/entry entry colsep-0 rowsep-0" headers="pivot-by__table_zpz_5hn_ryb__entry__1">2.00.10.4</td>
+                        <td class="- topic/entry entry colsep-0 rowsep-0" headers="pivot-by__table_zpz_5hn_ryb__entry__2">若 <code class="+ topic/ph pr-d/codeph ph codeph">pivot by</code> 后面的列在原表中存在多个相同的组合值，当同时满足以下条件时，对至少一个查询列应用
+                                <code class="+ topic/ph pr-d/codeph ph codeph">asis</code> 函数，则不会对数据去重而是保留所有数据：<ol class="- topic/ol ol" id="pivot-by__ol_gyn_fcy_jzb" data-ofbid="pivot-by__ol_gyn_fcy_jzb">
+                                <li class="- topic/li li">查询的表是 DFS 表。</li>
+                                <li class="- topic/li li"><code class="+ topic/ph pr-d/codeph ph codeph">from</code>  子句不包含各种类型的表连接（<code class="+ topic/ph pr-d/codeph ph codeph">join</code>
+                                    语句）</li>
+                                <li class="- topic/li li"><code class="+ topic/ph pr-d/codeph ph codeph">pivot by</code> 子句的前 n-1 列不能是 DECIMAL128 类型。</li>
+                                <li class="- topic/li li"><code class="+ topic/ph pr-d/codeph ph codeph">pivot by</code> 子句的最后一列是分区列。</li>
+                                <li class="- topic/li li">查询的列不含聚合函数、序列函数、行处理函数和填充函数，且查询列不包含空值。</li>
+                                <li class="- topic/li li"> 原始数据可以填满 <code class="+ topic/ph pr-d/codeph ph codeph">pivot by</code> 的宽表结果，即 <code class="+ topic/ph pr-d/codeph ph codeph">pivot
+                                        by</code> 前 n-1 列的每个取值组合对应的行数虽不要求严格相等，但对于 <code class="+ topic/ph pr-d/codeph ph codeph">pivot
+                                        by</code> 前 n-1 列的每个取值组合内，<code class="+ topic/ph pr-d/codeph ph codeph">pivot by</code>
+                                    最后一列的取值的个数必须相等。</li>
+                            </ol></td>
+                    </tr>
+                </tbody></table></div>
+    </div>
+    <article class="- topic/topic topic nested1" aria-labelledby="ariaid-title2" id="例子">
+        <h2 class="- topic/title title topictitle2" id="ariaid-title2">例子</h2>
+        <article class="- topic/topic topic nested2" aria-labelledby="ariaid-title3" id="行维度为一列即-pivot-by-之后仅有两列">
+            <h3 class="- topic/title title topictitle3" id="ariaid-title3">例1：行维度为一列（即 pivot by 之后仅有两列）</h3>
+            <div class="- topic/body body">
+                <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="行维度为一列即-pivot-by-之后仅有两列__codeblock_aqz_5hn_ryb" data-ofbid="行维度为一列即-pivot-by-之后仅有两列__codeblock_aqz_5hn_ryb"><code>sym = `C`MS`MS`MS`IBM`IBM`C`C`C
+price= 49.6 29.46 29.52 30.02 174.97 175.23 50.76 50.32 51.29
+qty = 2200 1900 2100 3200 6800 5400 1300 2500 8800
+timestamp = [09:34:07,09:35:42,09:36:51,09:36:59,09:35:47,09:36:26,09:34:16,09:35:26,09:36:12]
+t2 = table(timestamp, sym, qty, price);
+
+t2;</code></pre>
+                <div class="table-container"><table class="- topic/table table" id="行维度为一列即-pivot-by-之后仅有两列__table_bqz_5hn_ryb" data-ofbid="行维度为一列即-pivot-by-之后仅有两列__table_bqz_5hn_ryb" data-cols="4"><caption></caption><colgroup><col/><col/><col/><col/></colgroup><thead class="- topic/thead thead">
+                            <tr class="- topic/row">
+                                <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="行维度为一列即-pivot-by-之后仅有两列__table_bqz_5hn_ryb__entry__1">timestamp</th>
+                                <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="行维度为一列即-pivot-by-之后仅有两列__table_bqz_5hn_ryb__entry__2">sym</th>
+                                <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="行维度为一列即-pivot-by-之后仅有两列__table_bqz_5hn_ryb__entry__3">qty</th>
+                                <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="行维度为一列即-pivot-by-之后仅有两列__table_bqz_5hn_ryb__entry__4">price</th>
+                            </tr>
+                        </thead><tbody class="- topic/tbody tbody">
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="行维度为一列即-pivot-by-之后仅有两列__table_bqz_5hn_ryb__entry__1">09:34:07</td>
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="行维度为一列即-pivot-by-之后仅有两列__table_bqz_5hn_ryb__entry__2">C</td>
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="行维度为一列即-pivot-by-之后仅有两列__table_bqz_5hn_ryb__entry__3">2200</td>
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="行维度为一列即-pivot-by-之后仅有两列__table_bqz_5hn_ryb__entry__4">49.6</td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="行维度为一列即-pivot-by-之后仅有两列__table_bqz_5hn_ryb__entry__1">09:35:42</td>
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="行维度为一列即-pivot-by-之后仅有两列__table_bqz_5hn_ryb__entry__2">MS</td>
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="行维度为一列即-pivot-by-之后仅有两列__table_bqz_5hn_ryb__entry__3">1900</td>
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="行维度为一列即-pivot-by-之后仅有两列__table_bqz_5hn_ryb__entry__4">29.46</td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="行维度为一列即-pivot-by-之后仅有两列__table_bqz_5hn_ryb__entry__1">09:36:51</td>
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="行维度为一列即-pivot-by-之后仅有两列__table_bqz_5hn_ryb__entry__2">MS</td>
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="行维度为一列即-pivot-by-之后仅有两列__table_bqz_5hn_ryb__entry__3">2100</td>
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="行维度为一列即-pivot-by-之后仅有两列__table_bqz_5hn_ryb__entry__4">29.52</td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="行维度为一列即-pivot-by-之后仅有两列__table_bqz_5hn_ryb__entry__1">09:36:59</td>
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="行维度为一列即-pivot-by-之后仅有两列__table_bqz_5hn_ryb__entry__2">MS</td>
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="行维度为一列即-pivot-by-之后仅有两列__table_bqz_5hn_ryb__entry__3">3200</td>
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="行维度为一列即-pivot-by-之后仅有两列__table_bqz_5hn_ryb__entry__4">30.02</td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="行维度为一列即-pivot-by-之后仅有两列__table_bqz_5hn_ryb__entry__1">09:35:47</td>
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="行维度为一列即-pivot-by-之后仅有两列__table_bqz_5hn_ryb__entry__2">IBM</td>
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="行维度为一列即-pivot-by-之后仅有两列__table_bqz_5hn_ryb__entry__3">6800</td>
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="行维度为一列即-pivot-by-之后仅有两列__table_bqz_5hn_ryb__entry__4">174.97</td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="行维度为一列即-pivot-by-之后仅有两列__table_bqz_5hn_ryb__entry__1">09:36:26</td>
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="行维度为一列即-pivot-by-之后仅有两列__table_bqz_5hn_ryb__entry__2">IBM</td>
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="行维度为一列即-pivot-by-之后仅有两列__table_bqz_5hn_ryb__entry__3">5400</td>
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="行维度为一列即-pivot-by-之后仅有两列__table_bqz_5hn_ryb__entry__4">175.23</td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="行维度为一列即-pivot-by-之后仅有两列__table_bqz_5hn_ryb__entry__1">09:34:16</td>
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="行维度为一列即-pivot-by-之后仅有两列__table_bqz_5hn_ryb__entry__2">C</td>
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="行维度为一列即-pivot-by-之后仅有两列__table_bqz_5hn_ryb__entry__3">1300</td>
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="行维度为一列即-pivot-by-之后仅有两列__table_bqz_5hn_ryb__entry__4">50.76</td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="行维度为一列即-pivot-by-之后仅有两列__table_bqz_5hn_ryb__entry__1">09:35:26</td>
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="行维度为一列即-pivot-by-之后仅有两列__table_bqz_5hn_ryb__entry__2">C</td>
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="行维度为一列即-pivot-by-之后仅有两列__table_bqz_5hn_ryb__entry__3">2500</td>
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="行维度为一列即-pivot-by-之后仅有两列__table_bqz_5hn_ryb__entry__4">50.32</td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="行维度为一列即-pivot-by-之后仅有两列__table_bqz_5hn_ryb__entry__1">09:36:12</td>
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="行维度为一列即-pivot-by-之后仅有两列__table_bqz_5hn_ryb__entry__2">C</td>
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="行维度为一列即-pivot-by-之后仅有两列__table_bqz_5hn_ryb__entry__3">8800</td>
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="行维度为一列即-pivot-by-之后仅有两列__table_bqz_5hn_ryb__entry__4">51.29</td>
+                            </tr>
+                        </tbody></table></div>
+                <p class="- topic/p p">将表 t2 的 timestamp 列作为行索引，sym 列作为列索引，查看 price 列的值。</p>
+                <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="行维度为一列即-pivot-by-之后仅有两列__codeblock_cqz_5hn_ryb" data-ofbid="行维度为一列即-pivot-by-之后仅有两列__codeblock_cqz_5hn_ryb"><code>select price from t2 pivot by timestamp, sym;</code></pre>
+                <div class="table-container"><table class="- topic/table table" id="行维度为一列即-pivot-by-之后仅有两列__table_dqz_5hn_ryb" data-ofbid="行维度为一列即-pivot-by-之后仅有两列__table_dqz_5hn_ryb" data-cols="4"><caption></caption><colgroup><col/><col/><col/><col/></colgroup><thead class="- topic/thead thead">
+                            <tr class="- topic/row">
+                                <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="行维度为一列即-pivot-by-之后仅有两列__table_dqz_5hn_ryb__entry__1">timestamp</th>
+                                <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="行维度为一列即-pivot-by-之后仅有两列__table_dqz_5hn_ryb__entry__2">C</th>
+                                <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="行维度为一列即-pivot-by-之后仅有两列__table_dqz_5hn_ryb__entry__3">IBM</th>
+                                <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="行维度为一列即-pivot-by-之后仅有两列__table_dqz_5hn_ryb__entry__4">MS</th>
+                            </tr>
+                        </thead><tbody class="- topic/tbody tbody">
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="行维度为一列即-pivot-by-之后仅有两列__table_dqz_5hn_ryb__entry__1">09:34:07</td>
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="行维度为一列即-pivot-by-之后仅有两列__table_dqz_5hn_ryb__entry__2">49.6</td>
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="行维度为一列即-pivot-by-之后仅有两列__table_dqz_5hn_ryb__entry__3"> </td>
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="行维度为一列即-pivot-by-之后仅有两列__table_dqz_5hn_ryb__entry__4"> </td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="行维度为一列即-pivot-by-之后仅有两列__table_dqz_5hn_ryb__entry__1">09:34:16</td>
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="行维度为一列即-pivot-by-之后仅有两列__table_dqz_5hn_ryb__entry__2">50.76</td>
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="行维度为一列即-pivot-by-之后仅有两列__table_dqz_5hn_ryb__entry__3"> </td>
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="行维度为一列即-pivot-by-之后仅有两列__table_dqz_5hn_ryb__entry__4"> </td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="行维度为一列即-pivot-by-之后仅有两列__table_dqz_5hn_ryb__entry__1">09:35:26</td>
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="行维度为一列即-pivot-by-之后仅有两列__table_dqz_5hn_ryb__entry__2">50.32</td>
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="行维度为一列即-pivot-by-之后仅有两列__table_dqz_5hn_ryb__entry__3"> </td>
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="行维度为一列即-pivot-by-之后仅有两列__table_dqz_5hn_ryb__entry__4"> </td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="行维度为一列即-pivot-by-之后仅有两列__table_dqz_5hn_ryb__entry__1">09:35:42</td>
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="行维度为一列即-pivot-by-之后仅有两列__table_dqz_5hn_ryb__entry__2"> </td>
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="行维度为一列即-pivot-by-之后仅有两列__table_dqz_5hn_ryb__entry__3"> </td>
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="行维度为一列即-pivot-by-之后仅有两列__table_dqz_5hn_ryb__entry__4">29.46</td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="行维度为一列即-pivot-by-之后仅有两列__table_dqz_5hn_ryb__entry__1">09:35:47</td>
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="行维度为一列即-pivot-by-之后仅有两列__table_dqz_5hn_ryb__entry__2"> </td>
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="行维度为一列即-pivot-by-之后仅有两列__table_dqz_5hn_ryb__entry__3">174.97</td>
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="行维度为一列即-pivot-by-之后仅有两列__table_dqz_5hn_ryb__entry__4"> </td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="行维度为一列即-pivot-by-之后仅有两列__table_dqz_5hn_ryb__entry__1">09:36:12</td>
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="行维度为一列即-pivot-by-之后仅有两列__table_dqz_5hn_ryb__entry__2">51.29</td>
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="行维度为一列即-pivot-by-之后仅有两列__table_dqz_5hn_ryb__entry__3"> </td>
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="行维度为一列即-pivot-by-之后仅有两列__table_dqz_5hn_ryb__entry__4"> </td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="行维度为一列即-pivot-by-之后仅有两列__table_dqz_5hn_ryb__entry__1">09:36:26</td>
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="行维度为一列即-pivot-by-之后仅有两列__table_dqz_5hn_ryb__entry__2"> </td>
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="行维度为一列即-pivot-by-之后仅有两列__table_dqz_5hn_ryb__entry__3">175.23</td>
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="行维度为一列即-pivot-by-之后仅有两列__table_dqz_5hn_ryb__entry__4"> </td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="行维度为一列即-pivot-by-之后仅有两列__table_dqz_5hn_ryb__entry__1">09:36:51</td>
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="行维度为一列即-pivot-by-之后仅有两列__table_dqz_5hn_ryb__entry__2"> </td>
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="行维度为一列即-pivot-by-之后仅有两列__table_dqz_5hn_ryb__entry__3"> </td>
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="行维度为一列即-pivot-by-之后仅有两列__table_dqz_5hn_ryb__entry__4">29.52</td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="行维度为一列即-pivot-by-之后仅有两列__table_dqz_5hn_ryb__entry__1">09:36:59</td>
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="行维度为一列即-pivot-by-之后仅有两列__table_dqz_5hn_ryb__entry__2"> </td>
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="行维度为一列即-pivot-by-之后仅有两列__table_dqz_5hn_ryb__entry__3"> </td>
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="行维度为一列即-pivot-by-之后仅有两列__table_dqz_5hn_ryb__entry__4">30.02</td>
+                            </tr>
+                        </tbody></table></div>
+                <p class="- topic/p p">查看表 t2 每一分钟，不同 sym 对应的 price。</p>
+                <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="行维度为一列即-pivot-by-之后仅有两列__codeblock_eqz_5hn_ryb" data-ofbid="行维度为一列即-pivot-by-之后仅有两列__codeblock_eqz_5hn_ryb"><code>a=select price from t2 pivot by timestamp.minute(), sym;
+a;</code></pre>
+                <div class="table-container"><table class="- topic/table table" id="行维度为一列即-pivot-by-之后仅有两列__table_fqz_5hn_ryb" data-ofbid="行维度为一列即-pivot-by-之后仅有两列__table_fqz_5hn_ryb" data-cols="4"><caption></caption><colgroup><col/><col/><col/><col/></colgroup><thead class="- topic/thead thead">
+                            <tr class="- topic/row">
+                                <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="行维度为一列即-pivot-by-之后仅有两列__table_fqz_5hn_ryb__entry__1">minute_timestamp</th>
+                                <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="行维度为一列即-pivot-by-之后仅有两列__table_fqz_5hn_ryb__entry__2">C</th>
+                                <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="行维度为一列即-pivot-by-之后仅有两列__table_fqz_5hn_ryb__entry__3">IBM</th>
+                                <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="行维度为一列即-pivot-by-之后仅有两列__table_fqz_5hn_ryb__entry__4">MS</th>
+                            </tr>
+                        </thead><tbody class="- topic/tbody tbody">
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="行维度为一列即-pivot-by-之后仅有两列__table_fqz_5hn_ryb__entry__1">09:34m</td>
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="行维度为一列即-pivot-by-之后仅有两列__table_fqz_5hn_ryb__entry__2">50.76</td>
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="行维度为一列即-pivot-by-之后仅有两列__table_fqz_5hn_ryb__entry__3"> </td>
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="行维度为一列即-pivot-by-之后仅有两列__table_fqz_5hn_ryb__entry__4"> </td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="行维度为一列即-pivot-by-之后仅有两列__table_fqz_5hn_ryb__entry__1">09:35m</td>
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="行维度为一列即-pivot-by-之后仅有两列__table_fqz_5hn_ryb__entry__2">50.32</td>
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="行维度为一列即-pivot-by-之后仅有两列__table_fqz_5hn_ryb__entry__3">174.97</td>
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="行维度为一列即-pivot-by-之后仅有两列__table_fqz_5hn_ryb__entry__4">29.46</td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="行维度为一列即-pivot-by-之后仅有两列__table_fqz_5hn_ryb__entry__1">09:36m</td>
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="行维度为一列即-pivot-by-之后仅有两列__table_fqz_5hn_ryb__entry__2">51.29</td>
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="行维度为一列即-pivot-by-之后仅有两列__table_fqz_5hn_ryb__entry__3">175.23</td>
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="行维度为一列即-pivot-by-之后仅有两列__table_fqz_5hn_ryb__entry__4">30.02</td>
+                            </tr>
+                        </tbody></table></div>
+                <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="行维度为一列即-pivot-by-之后仅有两列__codeblock_gqz_5hn_ryb" data-ofbid="行维度为一列即-pivot-by-之后仅有两列__codeblock_gqz_5hn_ryb"><code>typestr a;
+// output
+TABLE
+
+//pivot by 与 exec 搭配使用，查看一分钟内各个 sym 对应的 price 的数量，结果为一个矩阵
+b=exec count(price) from t2 pivot by timestamp.minute(), sym;
+b;</code></pre>
+                <div class="table-container"><table class="- topic/table table" id="行维度为一列即-pivot-by-之后仅有两列__table_hqz_5hn_ryb" data-ofbid="行维度为一列即-pivot-by-之后仅有两列__table_hqz_5hn_ryb" data-cols="4"><caption></caption><colgroup><col/><col/><col/><col/></colgroup><thead class="- topic/thead thead">
+                            <tr class="- topic/row">
+                                <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="行维度为一列即-pivot-by-之后仅有两列__table_hqz_5hn_ryb__entry__1">label</th>
+                                <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="行维度为一列即-pivot-by-之后仅有两列__table_hqz_5hn_ryb__entry__2">C</th>
+                                <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="行维度为一列即-pivot-by-之后仅有两列__table_hqz_5hn_ryb__entry__3">IBM</th>
+                                <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="行维度为一列即-pivot-by-之后仅有两列__table_hqz_5hn_ryb__entry__4">MS</th>
+                            </tr>
+                        </thead><tbody class="- topic/tbody tbody">
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="行维度为一列即-pivot-by-之后仅有两列__table_hqz_5hn_ryb__entry__1">09:34m</td>
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="行维度为一列即-pivot-by-之后仅有两列__table_hqz_5hn_ryb__entry__2">2</td>
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="行维度为一列即-pivot-by-之后仅有两列__table_hqz_5hn_ryb__entry__3"> </td>
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="行维度为一列即-pivot-by-之后仅有两列__table_hqz_5hn_ryb__entry__4"> </td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="行维度为一列即-pivot-by-之后仅有两列__table_hqz_5hn_ryb__entry__1">09:35m</td>
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="行维度为一列即-pivot-by-之后仅有两列__table_hqz_5hn_ryb__entry__2">1</td>
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="行维度为一列即-pivot-by-之后仅有两列__table_hqz_5hn_ryb__entry__3">1</td>
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="行维度为一列即-pivot-by-之后仅有两列__table_hqz_5hn_ryb__entry__4">1</td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="行维度为一列即-pivot-by-之后仅有两列__table_hqz_5hn_ryb__entry__1">09:36m</td>
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="行维度为一列即-pivot-by-之后仅有两列__table_hqz_5hn_ryb__entry__2">1</td>
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="行维度为一列即-pivot-by-之后仅有两列__table_hqz_5hn_ryb__entry__3">1</td>
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="行维度为一列即-pivot-by-之后仅有两列__table_hqz_5hn_ryb__entry__4">2</td>
+                            </tr>
+                        </tbody></table></div>
+                <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="行维度为一列即-pivot-by-之后仅有两列__codeblock_iqz_5hn_ryb" data-ofbid="行维度为一列即-pivot-by-之后仅有两列__codeblock_iqz_5hn_ryb"><code>typestr b;
+// output
+FAST DOUBLE MATRIX</code></pre>
+            </div>
+        </article>
+        <article class="- topic/topic topic nested2" aria-labelledby="ariaid-title4" id="计算-etf-的内在价值">
+            <h3 class="- topic/title title topictitle3" id="ariaid-title4">例2：计算 ETF 的内在价值</h3>
+            <div class="- topic/body body">
+                <p class="- topic/p p" id="计算-etf-的内在价值__p_jqz_5hn_ryb" data-ofbid="计算-etf-的内在价值__p_jqz_5hn_ryb">为简便起见，假设 ETF 有两个成分股：AAPL 和 FB，其成分权重为 [0.6, 0.4]。</p>
+                <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="计算-etf-的内在价值__codeblock_kqz_5hn_ryb" data-ofbid="计算-etf-的内在价值__codeblock_kqz_5hn_ryb"><code>symbol=take(`AAPL, 6) join take(`FB, 5)
+time=2019.02.27T09:45:01.000000000+[146, 278, 412, 445, 496, 789, 212, 556, 598, 712, 989]
+price=173.27 173.26 173.24 173.25 173.26 173.27 161.51 161.50 161.49 161.50 161.51
+quotes=table(symbol, time, price)
+weights=dict(`AAPL`FB, 0.6 0.4)
+ETF = select symbol, time, price*weights[symbol] as price from quotes;
+
+select price from ETF pivot by time, symbol;</code></pre>
+                <div class="table-container"><table class="- topic/table table" id="计算-etf-的内在价值__table_lqz_5hn_ryb" data-ofbid="计算-etf-的内在价值__table_lqz_5hn_ryb" data-cols="3"><caption></caption><colgroup><col/><col/><col/></colgroup><thead class="- topic/thead thead">
+                            <tr class="- topic/row">
+                                <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="计算-etf-的内在价值__table_lqz_5hn_ryb__entry__1">Time</th>
+                                <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="计算-etf-的内在价值__table_lqz_5hn_ryb__entry__2">AAPL</th>
+                                <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="计算-etf-的内在价值__table_lqz_5hn_ryb__entry__3">FB</th>
+                            </tr>
+                        </thead><tbody class="- topic/tbody tbody">
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="计算-etf-的内在价值__table_lqz_5hn_ryb__entry__1">2019.02.27T09:45:01.000000146</td>
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="计算-etf-的内在价值__table_lqz_5hn_ryb__entry__2">103.962</td>
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="计算-etf-的内在价值__table_lqz_5hn_ryb__entry__3"> </td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="计算-etf-的内在价值__table_lqz_5hn_ryb__entry__1">2019.02.27T09:45:01.000000212</td>
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="计算-etf-的内在价值__table_lqz_5hn_ryb__entry__2"> </td>
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="计算-etf-的内在价值__table_lqz_5hn_ryb__entry__3">64.604</td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="计算-etf-的内在价值__table_lqz_5hn_ryb__entry__1">2019.02.27T09:45:01.000000278</td>
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="计算-etf-的内在价值__table_lqz_5hn_ryb__entry__2">103.956</td>
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="计算-etf-的内在价值__table_lqz_5hn_ryb__entry__3"> </td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="计算-etf-的内在价值__table_lqz_5hn_ryb__entry__1">2019.02.27T09:45:01.000000412</td>
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="计算-etf-的内在价值__table_lqz_5hn_ryb__entry__2">103.944</td>
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="计算-etf-的内在价值__table_lqz_5hn_ryb__entry__3"> </td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="计算-etf-的内在价值__table_lqz_5hn_ryb__entry__1">2019.02.27T09:45:01.000000445</td>
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="计算-etf-的内在价值__table_lqz_5hn_ryb__entry__2">103.95</td>
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="计算-etf-的内在价值__table_lqz_5hn_ryb__entry__3"> </td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="计算-etf-的内在价值__table_lqz_5hn_ryb__entry__1">2019.02.27T09:45:01.000000496</td>
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="计算-etf-的内在价值__table_lqz_5hn_ryb__entry__2">103.956</td>
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="计算-etf-的内在价值__table_lqz_5hn_ryb__entry__3"> </td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="计算-etf-的内在价值__table_lqz_5hn_ryb__entry__1">2019.02.27T09:45:01.000000556</td>
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="计算-etf-的内在价值__table_lqz_5hn_ryb__entry__2"> </td>
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="计算-etf-的内在价值__table_lqz_5hn_ryb__entry__3">64.6</td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="计算-etf-的内在价值__table_lqz_5hn_ryb__entry__1">2019.02.27T09:45:01.000000598</td>
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="计算-etf-的内在价值__table_lqz_5hn_ryb__entry__2"> </td>
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="计算-etf-的内在价值__table_lqz_5hn_ryb__entry__3">64.596</td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="计算-etf-的内在价值__table_lqz_5hn_ryb__entry__1">2019.02.27T09:45:01.000000712</td>
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="计算-etf-的内在价值__table_lqz_5hn_ryb__entry__2"> </td>
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="计算-etf-的内在价值__table_lqz_5hn_ryb__entry__3">64.6</td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="计算-etf-的内在价值__table_lqz_5hn_ryb__entry__1">2019.02.27T09:45:01.000000789</td>
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="计算-etf-的内在价值__table_lqz_5hn_ryb__entry__2">103.962</td>
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="计算-etf-的内在价值__table_lqz_5hn_ryb__entry__3"> </td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="计算-etf-的内在价值__table_lqz_5hn_ryb__entry__1">2019.02.27T09:45:01.000000989</td>
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="计算-etf-的内在价值__table_lqz_5hn_ryb__entry__2"> </td>
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="计算-etf-的内在价值__table_lqz_5hn_ryb__entry__3">64.604</td>
+                            </tr>
+                        </tbody></table></div>
+                <p class="- topic/p p" id="计算-etf-的内在价值__p_mqz_5hn_ryb" data-ofbid="计算-etf-的内在价值__p_mqz_5hn_ryb">以上结果为在每个时间戳经过 ETF 权重调整的股票价格。 为了计算 ETF 在每个时间戳的内在价值，需要使用 <a class="- topic/xref xref" href="../../funcs/f/ffill.html">ffill</a> 函数来填充每个股票的 NULL
+                    值，然后将所有股票价格相加。可在一个 SQL 语句中完成。</p>
+                <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="计算-etf-的内在价值__codeblock_nqz_5hn_ryb" data-ofbid="计算-etf-的内在价值__codeblock_nqz_5hn_ryb"><code>select rowSum(ffill(price)) from ETF pivot by time, symbol;</code></pre>
+                <div class="table-container"><table class="- topic/table table" id="计算-etf-的内在价值__table_oqz_5hn_ryb" data-ofbid="计算-etf-的内在价值__table_oqz_5hn_ryb" data-cols="2"><caption></caption><colgroup><col/><col/></colgroup><thead class="- topic/thead thead">
+                            <tr class="- topic/row">
+                                <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="计算-etf-的内在价值__table_oqz_5hn_ryb__entry__1">Time</th>
+                                <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="计算-etf-的内在价值__table_oqz_5hn_ryb__entry__2">rowSum</th>
+                            </tr>
+                        </thead><tbody class="- topic/tbody tbody">
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="计算-etf-的内在价值__table_oqz_5hn_ryb__entry__1">2019.02.27T09:45:01.000000146</td>
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="计算-etf-的内在价值__table_oqz_5hn_ryb__entry__2">103.962</td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="计算-etf-的内在价值__table_oqz_5hn_ryb__entry__1">2019.02.27T09:45:01.000000212</td>
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="计算-etf-的内在价值__table_oqz_5hn_ryb__entry__2">168.566</td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="计算-etf-的内在价值__table_oqz_5hn_ryb__entry__1">2019.02.27T09:45:01.000000278</td>
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="计算-etf-的内在价值__table_oqz_5hn_ryb__entry__2">168.56</td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="计算-etf-的内在价值__table_oqz_5hn_ryb__entry__1">2019.02.27T09:45:01.000000412</td>
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="计算-etf-的内在价值__table_oqz_5hn_ryb__entry__2">168.548</td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="计算-etf-的内在价值__table_oqz_5hn_ryb__entry__1">2019.02.27T09:45:01.000000445</td>
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="计算-etf-的内在价值__table_oqz_5hn_ryb__entry__2">168.554</td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="计算-etf-的内在价值__table_oqz_5hn_ryb__entry__1">2019.02.27T09:45:01.000000496</td>
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="计算-etf-的内在价值__table_oqz_5hn_ryb__entry__2">168.56</td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="计算-etf-的内在价值__table_oqz_5hn_ryb__entry__1">2019.02.27T09:45:01.000000556</td>
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="计算-etf-的内在价值__table_oqz_5hn_ryb__entry__2">168.556</td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="计算-etf-的内在价值__table_oqz_5hn_ryb__entry__1">2019.02.27T09:45:01.000000598</td>
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="计算-etf-的内在价值__table_oqz_5hn_ryb__entry__2">168.552</td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="计算-etf-的内在价值__table_oqz_5hn_ryb__entry__1">2019.02.27T09:45:01.000000712</td>
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="计算-etf-的内在价值__table_oqz_5hn_ryb__entry__2">168.556</td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="计算-etf-的内在价值__table_oqz_5hn_ryb__entry__1">2019.02.27T09:45:01.000000789</td>
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="计算-etf-的内在价值__table_oqz_5hn_ryb__entry__2">168.562</td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="计算-etf-的内在价值__table_oqz_5hn_ryb__entry__1">2019.02.27T09:45:01.000000989</td>
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="计算-etf-的内在价值__table_oqz_5hn_ryb__entry__2">168.566</td>
+                            </tr>
+                        </tbody></table></div>
+            </div>
+        </article>
+        <article class="- topic/topic topic nested2" aria-labelledby="ariaid-title5" id="使用-pivot-by-时某些新建列名的自动转换">
+            <h3 class="- topic/title title topictitle3" id="ariaid-title5">例3：使用 pivot by 时某些新建列名的自动转换</h3>
+            <div class="- topic/body body">
+                <p class="- topic/p p" id="使用-pivot-by-时某些新建列名的自动转换__p_pqz_5hn_ryb" data-ofbid="使用-pivot-by-时某些新建列名的自动转换__p_pqz_5hn_ryb"><strong class="+ topic/ph hi-d/b ph b">版本说明</strong>：</p>
+                <ul class="- topic/ul ul" id="使用-pivot-by-时某些新建列名的自动转换__ul_qqz_5hn_ryb" data-ofbid="使用-pivot-by-时某些新建列名的自动转换__ul_qqz_5hn_ryb">
+                    <li class="- topic/li li">
+                        <p class="- topic/p p" id="使用-pivot-by-时某些新建列名的自动转换__p_rqz_5hn_ryb" data-ofbid="使用-pivot-by-时某些新建列名的自动转换__p_rqz_5hn_ryb"><span class="- topic/ph ph">2.00.2 </span>版本以前，DolphinDB 中列名仅可使用中文或英文字母、数字或下划线
+                            (_)，且必须以中文或英文字母开头。</p>
+                    </li>
+                    <li class="- topic/li li">
+                        <p class="- topic/p p" id="使用-pivot-by-时某些新建列名的自动转换__p_sqz_5hn_ryb" data-ofbid="使用-pivot-by-时某些新建列名的自动转换__p_sqz_5hn_ryb"><span class="- topic/ph ph">2.00.2 </span>版本开始，由 <code class="+ topic/ph pr-d/codeph ph codeph">pivot by</code>,
+                                <code class="+ topic/ph pr-d/codeph ph codeph">addColumn</code>操作产生的列名，支持包含特殊字符，或以数字开头。</p>
+                    </li>
+                </ul>
+                <p class="- topic/p p" id="使用-pivot-by-时某些新建列名的自动转换__p_tqz_5hn_ryb" data-ofbid="使用-pivot-by-时某些新建列名的自动转换__p_tqz_5hn_ryb">详情可以参考：<a class="- topic/xref xref" href="../data_types_forms/Table.html">创建表章节</a>。</p>
+                <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="使用-pivot-by-时某些新建列名的自动转换__codeblock_uqz_5hn_ryb" data-ofbid="使用-pivot-by-时某些新建列名的自动转换__codeblock_uqz_5hn_ryb"><code>date = take(2021.08.01  2021.08.02 2021.08.03, 12)
+sym = take(["IBM N", "_MSFTN", "3_GOOGS", ""], 12).sort()
+value = 1..12
+t=table(date, sym, value)
+re = select value from t pivot by date, sym</code></pre>
+                <div class="table-container"><table class="- topic/table table" id="使用-pivot-by-时某些新建列名的自动转换__table_vqz_5hn_ryb" data-ofbid="使用-pivot-by-时某些新建列名的自动转换__table_vqz_5hn_ryb" data-cols="5"><caption></caption><colgroup><col/><col/><col/><col/><col/></colgroup><thead class="- topic/thead thead">
+                            <tr class="- topic/row">
+                                <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="使用-pivot-by-时某些新建列名的自动转换__table_vqz_5hn_ryb__entry__1">date</th>
+                                <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="使用-pivot-by-时某些新建列名的自动转换__table_vqz_5hn_ryb__entry__2">NULL</th>
+                                <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="使用-pivot-by-时某些新建列名的自动转换__table_vqz_5hn_ryb__entry__3">3_GOOGS</th>
+                                <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="使用-pivot-by-时某些新建列名的自动转换__table_vqz_5hn_ryb__entry__4">IBM N</th>
+                                <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="使用-pivot-by-时某些新建列名的自动转换__table_vqz_5hn_ryb__entry__5">_MSFTN</th>
+                            </tr>
+                        </thead><tbody class="- topic/tbody tbody">
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="使用-pivot-by-时某些新建列名的自动转换__table_vqz_5hn_ryb__entry__1">2021.08.01</td>
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="使用-pivot-by-时某些新建列名的自动转换__table_vqz_5hn_ryb__entry__2">1</td>
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="使用-pivot-by-时某些新建列名的自动转换__table_vqz_5hn_ryb__entry__3">4</td>
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="使用-pivot-by-时某些新建列名的自动转换__table_vqz_5hn_ryb__entry__4">7</td>
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="使用-pivot-by-时某些新建列名的自动转换__table_vqz_5hn_ryb__entry__5">10</td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="使用-pivot-by-时某些新建列名的自动转换__table_vqz_5hn_ryb__entry__1">2021.08.02</td>
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="使用-pivot-by-时某些新建列名的自动转换__table_vqz_5hn_ryb__entry__2">2</td>
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="使用-pivot-by-时某些新建列名的自动转换__table_vqz_5hn_ryb__entry__3">5</td>
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="使用-pivot-by-时某些新建列名的自动转换__table_vqz_5hn_ryb__entry__4">8</td>
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="使用-pivot-by-时某些新建列名的自动转换__table_vqz_5hn_ryb__entry__5">11</td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="使用-pivot-by-时某些新建列名的自动转换__table_vqz_5hn_ryb__entry__1">2021.08.03</td>
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="使用-pivot-by-时某些新建列名的自动转换__table_vqz_5hn_ryb__entry__2">3</td>
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="使用-pivot-by-时某些新建列名的自动转换__table_vqz_5hn_ryb__entry__3">6</td>
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="使用-pivot-by-时某些新建列名的自动转换__table_vqz_5hn_ryb__entry__4">9</td>
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="使用-pivot-by-时某些新建列名的自动转换__table_vqz_5hn_ryb__entry__5">12</td>
+                            </tr>
+                        </tbody></table></div>
+                <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="使用-pivot-by-时某些新建列名的自动转换__codeblock_wqz_5hn_ryb" data-ofbid="使用-pivot-by-时某些新建列名的自动转换__codeblock_wqz_5hn_ryb"><code>select  _"NULL" from re</code></pre>
+                <div class="table-container"><table class="- topic/table table" id="使用-pivot-by-时某些新建列名的自动转换__table_xqz_5hn_ryb" data-ofbid="使用-pivot-by-时某些新建列名的自动转换__table_xqz_5hn_ryb" data-cols="1"><caption></caption><colgroup><col/></colgroup><thead class="- topic/thead thead">
+                            <tr class="- topic/row">
+                                <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="使用-pivot-by-时某些新建列名的自动转换__table_xqz_5hn_ryb__entry__1">NULL</th>
+                            </tr>
+                        </thead><tbody class="- topic/tbody tbody">
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="使用-pivot-by-时某些新建列名的自动转换__table_xqz_5hn_ryb__entry__1">1</td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="使用-pivot-by-时某些新建列名的自动转换__table_xqz_5hn_ryb__entry__1">2</td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="使用-pivot-by-时某些新建列名的自动转换__table_xqz_5hn_ryb__entry__1">3</td>
+                            </tr>
+                        </tbody></table></div>
+                <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="使用-pivot-by-时某些新建列名的自动转换__codeblock_yqz_5hn_ryb" data-ofbid="使用-pivot-by-时某些新建列名的自动转换__codeblock_yqz_5hn_ryb"><code>select  _"3_GOOGS" from re</code></pre>
+                <div class="table-container"><table class="- topic/table table" id="使用-pivot-by-时某些新建列名的自动转换__table_zqz_5hn_ryb" data-ofbid="使用-pivot-by-时某些新建列名的自动转换__table_zqz_5hn_ryb" data-cols="1"><caption></caption><colgroup><col/></colgroup><thead class="- topic/thead thead">
+                            <tr class="- topic/row">
+                                <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="使用-pivot-by-时某些新建列名的自动转换__table_zqz_5hn_ryb__entry__1">3_GOOGS</th>
+                            </tr>
+                        </thead><tbody class="- topic/tbody tbody">
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="使用-pivot-by-时某些新建列名的自动转换__table_zqz_5hn_ryb__entry__1">4</td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="使用-pivot-by-时某些新建列名的自动转换__table_zqz_5hn_ryb__entry__1">5</td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="使用-pivot-by-时某些新建列名的自动转换__table_zqz_5hn_ryb__entry__1">6</td>
+                            </tr>
+                        </tbody></table></div>
+                <p class="- topic/p p" id="使用-pivot-by-时某些新建列名的自动转换__p_arz_5hn_ryb" data-ofbid="使用-pivot-by-时某些新建列名的自动转换__p_arz_5hn_ryb">下例中，设置 <em class="+ topic/ph hi-d/i ph i">removeSpecialCharInColumnName</em> = true，股票代码
+                    "600300" 与 "600600" 在成为列名后，系统自动将其处理为 "C600300" 与 "C600600"。</p>
+                <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="使用-pivot-by-时某些新建列名的自动转换__codeblock_brz_5hn_ryb" data-ofbid="使用-pivot-by-时某些新建列名的自动转换__codeblock_brz_5hn_ryb"><code>symbol=take(`600300, 6) join take(`600600, 5)
+time=2019.02.27T09:45:01.000000000+[146, 278, 412, 445, 496, 789, 212, 556, 598, 712, 989]
+price=173.27 173.26 173.24 173.25 173.26 173.27 161.51 161.50 161.49 161.50 161.51
+quotes=table(symbol, time, price)
+weights=dict(`600300`600600, 0.6 0.4)
+ETF = select symbol, time, price*weights[symbol] as price from quotes;
+
+select last(price) from ETF pivot by time, symbol;</code></pre>
+                <div class="table-container"><table class="- topic/table table" id="使用-pivot-by-时某些新建列名的自动转换__table_crz_5hn_ryb" data-ofbid="使用-pivot-by-时某些新建列名的自动转换__table_crz_5hn_ryb" data-cols="3"><caption></caption><colgroup><col/><col/><col/></colgroup><thead class="- topic/thead thead">
+                            <tr class="- topic/row">
+                                <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="使用-pivot-by-时某些新建列名的自动转换__table_crz_5hn_ryb__entry__1">time</th>
+                                <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="使用-pivot-by-时某些新建列名的自动转换__table_crz_5hn_ryb__entry__2">C600300</th>
+                                <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="使用-pivot-by-时某些新建列名的自动转换__table_crz_5hn_ryb__entry__3">C600600</th>
+                            </tr>
+                        </thead><tbody class="- topic/tbody tbody">
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="使用-pivot-by-时某些新建列名的自动转换__table_crz_5hn_ryb__entry__1">2019.02.27T09:45:01.000000146</td>
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="使用-pivot-by-时某些新建列名的自动转换__table_crz_5hn_ryb__entry__2">103.962</td>
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="使用-pivot-by-时某些新建列名的自动转换__table_crz_5hn_ryb__entry__3"> </td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="使用-pivot-by-时某些新建列名的自动转换__table_crz_5hn_ryb__entry__1">2019.02.27T09:45:01.000000212</td>
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="使用-pivot-by-时某些新建列名的自动转换__table_crz_5hn_ryb__entry__2"> </td>
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="使用-pivot-by-时某些新建列名的自动转换__table_crz_5hn_ryb__entry__3">64.604</td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="使用-pivot-by-时某些新建列名的自动转换__table_crz_5hn_ryb__entry__1">2019.02.27T09:45:01.000000278</td>
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="使用-pivot-by-时某些新建列名的自动转换__table_crz_5hn_ryb__entry__2">103.956</td>
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="使用-pivot-by-时某些新建列名的自动转换__table_crz_5hn_ryb__entry__3"> </td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="使用-pivot-by-时某些新建列名的自动转换__table_crz_5hn_ryb__entry__1">2019.02.27T09:45:01.000000412</td>
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="使用-pivot-by-时某些新建列名的自动转换__table_crz_5hn_ryb__entry__2">103.944</td>
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="使用-pivot-by-时某些新建列名的自动转换__table_crz_5hn_ryb__entry__3"> </td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="使用-pivot-by-时某些新建列名的自动转换__table_crz_5hn_ryb__entry__1">2019.02.27T09:45:01.000000445</td>
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="使用-pivot-by-时某些新建列名的自动转换__table_crz_5hn_ryb__entry__2">103.95</td>
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="使用-pivot-by-时某些新建列名的自动转换__table_crz_5hn_ryb__entry__3"> </td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="使用-pivot-by-时某些新建列名的自动转换__table_crz_5hn_ryb__entry__1">2019.02.27T09:45:01.000000496</td>
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="使用-pivot-by-时某些新建列名的自动转换__table_crz_5hn_ryb__entry__2">103.956</td>
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="使用-pivot-by-时某些新建列名的自动转换__table_crz_5hn_ryb__entry__3"> </td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="使用-pivot-by-时某些新建列名的自动转换__table_crz_5hn_ryb__entry__1">2019.02.27T09:45:01.000000556</td>
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="使用-pivot-by-时某些新建列名的自动转换__table_crz_5hn_ryb__entry__2"> </td>
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="使用-pivot-by-时某些新建列名的自动转换__table_crz_5hn_ryb__entry__3">64.6</td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="使用-pivot-by-时某些新建列名的自动转换__table_crz_5hn_ryb__entry__1">2019.02.27T09:45:01.000000598</td>
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="使用-pivot-by-时某些新建列名的自动转换__table_crz_5hn_ryb__entry__2"> </td>
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="使用-pivot-by-时某些新建列名的自动转换__table_crz_5hn_ryb__entry__3">64.596</td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="使用-pivot-by-时某些新建列名的自动转换__table_crz_5hn_ryb__entry__1">2019.02.27T09:45:01.000000712</td>
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="使用-pivot-by-时某些新建列名的自动转换__table_crz_5hn_ryb__entry__2"> </td>
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="使用-pivot-by-时某些新建列名的自动转换__table_crz_5hn_ryb__entry__3">64.6</td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="使用-pivot-by-时某些新建列名的自动转换__table_crz_5hn_ryb__entry__1">2019.02.27T09:45:01.000000789</td>
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="使用-pivot-by-时某些新建列名的自动转换__table_crz_5hn_ryb__entry__2">103.962</td>
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="使用-pivot-by-时某些新建列名的自动转换__table_crz_5hn_ryb__entry__3"> </td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="使用-pivot-by-时某些新建列名的自动转换__table_crz_5hn_ryb__entry__1">2019.02.27T09:45:01.000000989</td>
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="使用-pivot-by-时某些新建列名的自动转换__table_crz_5hn_ryb__entry__2"> </td>
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="使用-pivot-by-时某些新建列名的自动转换__table_crz_5hn_ryb__entry__3">64.604</td>
+                            </tr>
+                        </tbody></table></div>
+            </div>
+        </article>
+        <article class="- topic/topic topic nested2" aria-labelledby="ariaid-title6" id="行维度为多列即-pivot-by-之后多于两列">
+            <h3 class="- topic/title title topictitle3" id="ariaid-title6">例4：行维度为多列（即 pivot by 之后多于两列）</h3>
+            <div class="- topic/body body">
+                <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="行维度为多列即-pivot-by-之后多于两列__codeblock_drz_5hn_ryb" data-ofbid="行维度为多列即-pivot-by-之后多于两列__codeblock_drz_5hn_ryb"><code>date = 2020.09.21 + 0 0 0 0 1 1 1 1
+sym = `MS`MS`GS`GS`MS`MS`GS`GS$SYMBOL
+factorNum = 1 2 1 2 1 2 1 2
+factorValue = 1.2 -3.4 -2.5 6.3 1.1 -3.2 -2.1 5.6
+t = table(date, sym, factorNum, factorValue);
+
+t;</code></pre>
+                <div class="table-container"><table class="- topic/table table" id="行维度为多列即-pivot-by-之后多于两列__table_erz_5hn_ryb" data-ofbid="行维度为多列即-pivot-by-之后多于两列__table_erz_5hn_ryb" data-cols="4"><caption></caption><colgroup><col/><col/><col/><col/></colgroup><thead class="- topic/thead thead">
+                            <tr class="- topic/row">
+                                <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="行维度为多列即-pivot-by-之后多于两列__table_erz_5hn_ryb__entry__1">date</th>
+                                <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="行维度为多列即-pivot-by-之后多于两列__table_erz_5hn_ryb__entry__2">sym</th>
+                                <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="行维度为多列即-pivot-by-之后多于两列__table_erz_5hn_ryb__entry__3">factorNum</th>
+                                <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="行维度为多列即-pivot-by-之后多于两列__table_erz_5hn_ryb__entry__4">factorValue</th>
+                            </tr>
+                        </thead><tbody class="- topic/tbody tbody">
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="行维度为多列即-pivot-by-之后多于两列__table_erz_5hn_ryb__entry__1">2020.09.21</td>
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="行维度为多列即-pivot-by-之后多于两列__table_erz_5hn_ryb__entry__2">MS</td>
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="行维度为多列即-pivot-by-之后多于两列__table_erz_5hn_ryb__entry__3">1</td>
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="行维度为多列即-pivot-by-之后多于两列__table_erz_5hn_ryb__entry__4">1.2</td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="行维度为多列即-pivot-by-之后多于两列__table_erz_5hn_ryb__entry__1">2020.09.21</td>
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="行维度为多列即-pivot-by-之后多于两列__table_erz_5hn_ryb__entry__2">MS</td>
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="行维度为多列即-pivot-by-之后多于两列__table_erz_5hn_ryb__entry__3">2</td>
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="行维度为多列即-pivot-by-之后多于两列__table_erz_5hn_ryb__entry__4">-3.4</td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="行维度为多列即-pivot-by-之后多于两列__table_erz_5hn_ryb__entry__1">2020.09.21</td>
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="行维度为多列即-pivot-by-之后多于两列__table_erz_5hn_ryb__entry__2">GS</td>
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="行维度为多列即-pivot-by-之后多于两列__table_erz_5hn_ryb__entry__3">1</td>
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="行维度为多列即-pivot-by-之后多于两列__table_erz_5hn_ryb__entry__4">-2.5</td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="行维度为多列即-pivot-by-之后多于两列__table_erz_5hn_ryb__entry__1">2020.09.21</td>
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="行维度为多列即-pivot-by-之后多于两列__table_erz_5hn_ryb__entry__2">GS</td>
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="行维度为多列即-pivot-by-之后多于两列__table_erz_5hn_ryb__entry__3">2</td>
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="行维度为多列即-pivot-by-之后多于两列__table_erz_5hn_ryb__entry__4">6.3</td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="行维度为多列即-pivot-by-之后多于两列__table_erz_5hn_ryb__entry__1">2020.09.22</td>
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="行维度为多列即-pivot-by-之后多于两列__table_erz_5hn_ryb__entry__2">MS</td>
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="行维度为多列即-pivot-by-之后多于两列__table_erz_5hn_ryb__entry__3">1</td>
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="行维度为多列即-pivot-by-之后多于两列__table_erz_5hn_ryb__entry__4">1.1</td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="行维度为多列即-pivot-by-之后多于两列__table_erz_5hn_ryb__entry__1">2020.09.22</td>
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="行维度为多列即-pivot-by-之后多于两列__table_erz_5hn_ryb__entry__2">MS</td>
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="行维度为多列即-pivot-by-之后多于两列__table_erz_5hn_ryb__entry__3">2</td>
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="行维度为多列即-pivot-by-之后多于两列__table_erz_5hn_ryb__entry__4">-3.2</td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="行维度为多列即-pivot-by-之后多于两列__table_erz_5hn_ryb__entry__1">2020.09.22</td>
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="行维度为多列即-pivot-by-之后多于两列__table_erz_5hn_ryb__entry__2">GS</td>
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="行维度为多列即-pivot-by-之后多于两列__table_erz_5hn_ryb__entry__3">1</td>
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="行维度为多列即-pivot-by-之后多于两列__table_erz_5hn_ryb__entry__4">-2.1</td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="行维度为多列即-pivot-by-之后多于两列__table_erz_5hn_ryb__entry__1">2020.09.22</td>
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="行维度为多列即-pivot-by-之后多于两列__table_erz_5hn_ryb__entry__2">GS</td>
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="行维度为多列即-pivot-by-之后多于两列__table_erz_5hn_ryb__entry__3">2</td>
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="行维度为多列即-pivot-by-之后多于两列__table_erz_5hn_ryb__entry__4">5.6</td>
+                            </tr>
+                        </tbody></table></div>
+                <p class="- topic/p p">将表 t 的 date 列和 sym 列作为行索引，factorNum 列作为列索引，查看 factorValue 列的值。</p>
+                <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="行维度为多列即-pivot-by-之后多于两列__codeblock_frz_5hn_ryb" data-ofbid="行维度为多列即-pivot-by-之后多于两列__codeblock_frz_5hn_ryb"><code>select factorValue from t pivot by date, sym, factorNum;</code></pre>
+                <div class="table-container"><table class="- topic/table table" id="行维度为多列即-pivot-by-之后多于两列__table_grz_5hn_ryb" data-ofbid="行维度为多列即-pivot-by-之后多于两列__table_grz_5hn_ryb" data-cols="4"><caption></caption><colgroup><col/><col/><col/><col/></colgroup><thead class="- topic/thead thead">
+                            <tr class="- topic/row">
+                                <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="行维度为多列即-pivot-by-之后多于两列__table_grz_5hn_ryb__entry__1">date</th>
+                                <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="行维度为多列即-pivot-by-之后多于两列__table_grz_5hn_ryb__entry__2">sym</th>
+                                <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="行维度为多列即-pivot-by-之后多于两列__table_grz_5hn_ryb__entry__3">1</th>
+                                <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="行维度为多列即-pivot-by-之后多于两列__table_grz_5hn_ryb__entry__4">2</th>
+                            </tr>
+                        </thead><tbody class="- topic/tbody tbody">
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="行维度为多列即-pivot-by-之后多于两列__table_grz_5hn_ryb__entry__1">2020.09.21</td>
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="行维度为多列即-pivot-by-之后多于两列__table_grz_5hn_ryb__entry__2">GS</td>
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="行维度为多列即-pivot-by-之后多于两列__table_grz_5hn_ryb__entry__3">-2.5</td>
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="行维度为多列即-pivot-by-之后多于两列__table_grz_5hn_ryb__entry__4">6.3</td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="行维度为多列即-pivot-by-之后多于两列__table_grz_5hn_ryb__entry__1">2020.09.21</td>
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="行维度为多列即-pivot-by-之后多于两列__table_grz_5hn_ryb__entry__2">MS</td>
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="行维度为多列即-pivot-by-之后多于两列__table_grz_5hn_ryb__entry__3">1.2</td>
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="行维度为多列即-pivot-by-之后多于两列__table_grz_5hn_ryb__entry__4">-3.4</td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="行维度为多列即-pivot-by-之后多于两列__table_grz_5hn_ryb__entry__1">2020.09.22</td>
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="行维度为多列即-pivot-by-之后多于两列__table_grz_5hn_ryb__entry__2">GS</td>
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="行维度为多列即-pivot-by-之后多于两列__table_grz_5hn_ryb__entry__3">-2.1</td>
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="行维度为多列即-pivot-by-之后多于两列__table_grz_5hn_ryb__entry__4">5.6</td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="行维度为多列即-pivot-by-之后多于两列__table_grz_5hn_ryb__entry__1">2020.09.22</td>
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="行维度为多列即-pivot-by-之后多于两列__table_grz_5hn_ryb__entry__2">MS</td>
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="行维度为多列即-pivot-by-之后多于两列__table_grz_5hn_ryb__entry__3">1.1</td>
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="行维度为多列即-pivot-by-之后多于两列__table_grz_5hn_ryb__entry__4">-3.2</td>
+                            </tr>
+                        </tbody></table></div>
+                <div class="- topic/p p">返回每个 factorNum
+                    对应的多个指标<pre class="+ topic/pre pr-d/codeblock pre codeblock" id="行维度为多列即-pivot-by-之后多于两列__codeblock_cny_mtb_lzb" data-ofbid="行维度为多列即-pivot-by-之后多于两列__codeblock_cny_mtb_lzb"><code>select factorValue, factorValue&gt;0 as factorSign from t pivot by date, sym, factorNum;</code></pre></div>
+                <div class="table-container"><table class="- topic/table table" id="行维度为多列即-pivot-by-之后多于两列__table_irz_5hn_ryb" data-ofbid="行维度为多列即-pivot-by-之后多于两列__table_irz_5hn_ryb" data-cols="6"><caption></caption><colgroup><col/><col/><col/><col/><col/><col/></colgroup><thead class="- topic/thead thead">
+                            <tr class="- topic/row">
+                                <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="行维度为多列即-pivot-by-之后多于两列__table_irz_5hn_ryb__entry__1">date</th>
+                                <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="行维度为多列即-pivot-by-之后多于两列__table_irz_5hn_ryb__entry__2">sym</th>
+                                <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="行维度为多列即-pivot-by-之后多于两列__table_irz_5hn_ryb__entry__3">factorValue_1</th>
+                                <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="行维度为多列即-pivot-by-之后多于两列__table_irz_5hn_ryb__entry__4">factorValue_2</th>
+                                <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="行维度为多列即-pivot-by-之后多于两列__table_irz_5hn_ryb__entry__5">factorSign_1</th>
+                                <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="行维度为多列即-pivot-by-之后多于两列__table_irz_5hn_ryb__entry__6">factorSign_2</th>
+                            </tr>
+                        </thead><tbody class="- topic/tbody tbody">
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="行维度为多列即-pivot-by-之后多于两列__table_irz_5hn_ryb__entry__1">2020.09.21</td>
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="行维度为多列即-pivot-by-之后多于两列__table_irz_5hn_ryb__entry__2">GS</td>
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="行维度为多列即-pivot-by-之后多于两列__table_irz_5hn_ryb__entry__3">-2.5</td>
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="行维度为多列即-pivot-by-之后多于两列__table_irz_5hn_ryb__entry__4">6.3</td>
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="行维度为多列即-pivot-by-之后多于两列__table_irz_5hn_ryb__entry__5">0</td>
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="行维度为多列即-pivot-by-之后多于两列__table_irz_5hn_ryb__entry__6">1</td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="行维度为多列即-pivot-by-之后多于两列__table_irz_5hn_ryb__entry__1">2020.09.21</td>
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="行维度为多列即-pivot-by-之后多于两列__table_irz_5hn_ryb__entry__2">MS</td>
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="行维度为多列即-pivot-by-之后多于两列__table_irz_5hn_ryb__entry__3">1.2</td>
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="行维度为多列即-pivot-by-之后多于两列__table_irz_5hn_ryb__entry__4">-3.4</td>
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="行维度为多列即-pivot-by-之后多于两列__table_irz_5hn_ryb__entry__5">1</td>
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="行维度为多列即-pivot-by-之后多于两列__table_irz_5hn_ryb__entry__6">0</td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="行维度为多列即-pivot-by-之后多于两列__table_irz_5hn_ryb__entry__1">2020.09.22</td>
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="行维度为多列即-pivot-by-之后多于两列__table_irz_5hn_ryb__entry__2">GS</td>
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="行维度为多列即-pivot-by-之后多于两列__table_irz_5hn_ryb__entry__3">-2.1</td>
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="行维度为多列即-pivot-by-之后多于两列__table_irz_5hn_ryb__entry__4">5.6</td>
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="行维度为多列即-pivot-by-之后多于两列__table_irz_5hn_ryb__entry__5">0</td>
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="行维度为多列即-pivot-by-之后多于两列__table_irz_5hn_ryb__entry__6">1</td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="行维度为多列即-pivot-by-之后多于两列__table_irz_5hn_ryb__entry__1">2020.09.22</td>
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="行维度为多列即-pivot-by-之后多于两列__table_irz_5hn_ryb__entry__2">MS</td>
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="行维度为多列即-pivot-by-之后多于两列__table_irz_5hn_ryb__entry__3">1.1</td>
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="行维度为多列即-pivot-by-之后多于两列__table_irz_5hn_ryb__entry__4">-3.2</td>
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="行维度为多列即-pivot-by-之后多于两列__table_irz_5hn_ryb__entry__5">1</td>
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="行维度为多列即-pivot-by-之后多于两列__table_irz_5hn_ryb__entry__6">0</td>
+                            </tr>
+                        </tbody></table></div>
+            </div>
+        </article>
+        <article class="- topic/topic topic nested2" aria-labelledby="ariaid-title7" id="topic_p5k_dhy_jzb">
+            <h3 class="- topic/title title topictitle3" id="ariaid-title7">例5：应用 <code class="+ topic/ph pr-d/codeph ph codeph">asis</code> 函数保留全量数据。</h3>
+            <div class="- topic/body body">
+                <p class="- topic/p p">本例中满足以下条件：</p>
+                <ul class="- topic/ul ul" id="topic_p5k_dhy_jzb__ul_jgm_jfy_jzb" data-ofbid="topic_p5k_dhy_jzb__ul_jgm_jfy_jzb">
+                    <li class="- topic/li li">
+                        <p class="- topic/p p">pt 是 DFS 表</p>
+                    </li>
+                    <li class="- topic/li li">
+                        <p class="- topic/p p">from 子句不包含表连接</p>
+                    </li>
+                    <li class="- topic/li li">
+                        <p class="- topic/p p"><code class="+ topic/ph pr-d/codeph ph codeph">pivot by</code> 子句的前 n-1 列，即 time 列不含 DECIMAL128 类型</p>
+                    </li>
+                    <li class="- topic/li li">
+                        <p class="- topic/p p"><code class="+ topic/ph pr-d/codeph ph codeph">pivot by</code> 子句最后一列 sym 是分区列</p>
+                    </li>
+                    <li class="- topic/li li">
+                        <p class="- topic/p p">查询语句 select value 不含聚合函数、行处理函数和填充函数，且 value 列不含空值</p>
+                    </li>
+                    <li class="- topic/li li">
+                        <p class="- topic/p p">数据可以填满 <code class="+ topic/ph pr-d/codeph ph codeph">pivot by</code> 的宽表结果，即对于 time 列的每个不同的取值，<code class="+ topic/ph pr-d/codeph ph codeph">pivot
+                            by</code> 最后一列的取值的个数必须相等， time=10:20:44 时，sym 的取值 A、B、C
+                            对应的行数均为1；time=10:20:45 时，sym 的取值 A、B、C 对应的行数均为1；time=10:20:46 时，sym 的取值
+                            A、B、C 对应的行数均为2。</p>
+                    </li>
+                </ul>
+                <div class="- topic/p p">此时对查询列 value 应用 <code class="+ topic/ph pr-d/codeph ph codeph">asis</code>
+                    函数，可以保留全量数据。<pre class="+ topic/pre pr-d/codeblock pre codeblock" id="topic_p5k_dhy_jzb__codeblock_l1g_nfy_jzb" data-ofbid="topic_p5k_dhy_jzb__codeblock_l1g_nfy_jzb"><code>time = [10:20:44,10:20:44,10:20:44,10:20:45,10:20:45,10:20:45,10:20:46,10:20:46,10:20:46,10:20:46,10:20:46,10:20:46]
+                        sym = ["A","B","C","A","B","C","A","B","C","A","B","C"]
+                        value = [510,434,999,837,402,615,495,885,745,968,975,165]
+                        t = table(time,sym,value)
+                        
+                        db = database("dfs://test_pivot",VALUE,`A`B`C)
+                        pt = db.createPartitionedTable(t,`pt,`sym)
+                        pt.append!(t)
+                        
+                        select value from pt pivot by time,sym</code></pre><div class="table-container"><table class="- topic/table table frame-all" id="topic_p5k_dhy_jzb__table_mzj_pfy_jzb" data-ofbid="topic_p5k_dhy_jzb__table_mzj_pfy_jzb" data-cols="4"><caption class="- topic/title title tablecap" data-caption-side="top" data-is-repeated="true"><span class="table--title-label">表<span class="table--title-label-number"> 1</span><span class="table--title-label-punctuation">. </span></span><span class="table--title"></span></caption><colgroup><col/><col/><col/><col/></colgroup><thead class="- topic/thead thead">
+                                    <tr class="- topic/row">
+                                        <th class="- topic/entry entry align-left colsep-1 rowsep-1" id="topic_p5k_dhy_jzb__table_mzj_pfy_jzb__entry__1">time</th>
+                                        <th class="- topic/entry entry align-left colsep-1 rowsep-1" id="topic_p5k_dhy_jzb__table_mzj_pfy_jzb__entry__2">A</th>
+                                        <th class="- topic/entry entry align-left colsep-1 rowsep-1" id="topic_p5k_dhy_jzb__table_mzj_pfy_jzb__entry__3">B</th>
+                                        <th class="- topic/entry entry align-left colsep-0 rowsep-1" id="topic_p5k_dhy_jzb__table_mzj_pfy_jzb__entry__4">C</th>
+                                    </tr>
+                                </thead><tbody class="- topic/tbody tbody">
+                                    <tr class="- topic/row">
+                                        <td class="- topic/entry entry align-left colsep-1 rowsep-1" headers="topic_p5k_dhy_jzb__table_mzj_pfy_jzb__entry__1">10:20:44</td>
+                                        <td class="- topic/entry entry align-left colsep-1 rowsep-1" headers="topic_p5k_dhy_jzb__table_mzj_pfy_jzb__entry__2">510</td>
+                                        <td class="- topic/entry entry align-left colsep-1 rowsep-1" headers="topic_p5k_dhy_jzb__table_mzj_pfy_jzb__entry__3">434</td>
+                                        <td class="- topic/entry entry align-left colsep-0 rowsep-1" headers="topic_p5k_dhy_jzb__table_mzj_pfy_jzb__entry__4">999</td>
+                                    </tr>
+                                    <tr class="- topic/row">
+                                        <td class="- topic/entry entry align-left colsep-1 rowsep-1" headers="topic_p5k_dhy_jzb__table_mzj_pfy_jzb__entry__1">10:20:45</td>
+                                        <td class="- topic/entry entry align-left colsep-1 rowsep-1" headers="topic_p5k_dhy_jzb__table_mzj_pfy_jzb__entry__2">837</td>
+                                        <td class="- topic/entry entry align-left colsep-1 rowsep-1" headers="topic_p5k_dhy_jzb__table_mzj_pfy_jzb__entry__3">402</td>
+                                        <td class="- topic/entry entry align-left colsep-0 rowsep-1" headers="topic_p5k_dhy_jzb__table_mzj_pfy_jzb__entry__4">615</td>
+                                    </tr>
+                                    <tr class="- topic/row">
+                                        <td class="- topic/entry entry align-left colsep-1 rowsep-0" headers="topic_p5k_dhy_jzb__table_mzj_pfy_jzb__entry__1">10:20:46</td>
+                                        <td class="- topic/entry entry align-left colsep-1 rowsep-0" headers="topic_p5k_dhy_jzb__table_mzj_pfy_jzb__entry__2">968</td>
+                                        <td class="- topic/entry entry align-left colsep-1 rowsep-0" headers="topic_p5k_dhy_jzb__table_mzj_pfy_jzb__entry__3">975</td>
+                                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="topic_p5k_dhy_jzb__table_mzj_pfy_jzb__entry__4">165</td>
+                                    </tr>
+                                </tbody></table></div><pre class="+ topic/pre pr-d/codeblock pre codeblock" id="topic_p5k_dhy_jzb__codeblock_a2r_sfy_jzb" data-ofbid="topic_p5k_dhy_jzb__codeblock_a2r_sfy_jzb"><code>select asis(value) from pt pivot by time,sym</code></pre></div>
+                <div class="table-container"><table class="- topic/table table frame-all" id="topic_p5k_dhy_jzb__table_efw_tfy_jzb" data-ofbid="topic_p5k_dhy_jzb__table_efw_tfy_jzb" data-cols="4"><caption class="- topic/title title tablecap" data-caption-side="top" data-is-repeated="true"><span class="table--title-label">表<span class="table--title-label-number"> 2</span><span class="table--title-label-punctuation">. </span></span><span class="table--title"></span></caption><colgroup><col/><col/><col/><col/></colgroup><thead class="- topic/thead thead">
+                            <tr class="- topic/row">
+                                <th class="- topic/entry entry align-left colsep-1 rowsep-1" id="topic_p5k_dhy_jzb__table_efw_tfy_jzb__entry__1">time</th>
+                                <th class="- topic/entry entry align-left colsep-1 rowsep-1" id="topic_p5k_dhy_jzb__table_efw_tfy_jzb__entry__2">A</th>
+                                <th class="- topic/entry entry align-left colsep-1 rowsep-1" id="topic_p5k_dhy_jzb__table_efw_tfy_jzb__entry__3">B</th>
+                                <th class="- topic/entry entry align-left colsep-0 rowsep-1" id="topic_p5k_dhy_jzb__table_efw_tfy_jzb__entry__4">C</th>
+                            </tr>
+                        </thead><tbody class="- topic/tbody tbody">
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry align-left colsep-1 rowsep-1" headers="topic_p5k_dhy_jzb__table_efw_tfy_jzb__entry__1">10:20:44</td>
+                                <td class="- topic/entry entry align-left colsep-1 rowsep-1" headers="topic_p5k_dhy_jzb__table_efw_tfy_jzb__entry__2">510</td>
+                                <td class="- topic/entry entry align-left colsep-1 rowsep-1" headers="topic_p5k_dhy_jzb__table_efw_tfy_jzb__entry__3">434</td>
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-1" headers="topic_p5k_dhy_jzb__table_efw_tfy_jzb__entry__4">999</td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry align-left colsep-1 rowsep-1" headers="topic_p5k_dhy_jzb__table_efw_tfy_jzb__entry__1">10:20:45</td>
+                                <td class="- topic/entry entry align-left colsep-1 rowsep-1" headers="topic_p5k_dhy_jzb__table_efw_tfy_jzb__entry__2">837</td>
+                                <td class="- topic/entry entry align-left colsep-1 rowsep-1" headers="topic_p5k_dhy_jzb__table_efw_tfy_jzb__entry__3">402</td>
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-1" headers="topic_p5k_dhy_jzb__table_efw_tfy_jzb__entry__4">615</td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry align-left colsep-1 rowsep-1" headers="topic_p5k_dhy_jzb__table_efw_tfy_jzb__entry__1">10:20:46</td>
+                                <td class="- topic/entry entry align-left colsep-1 rowsep-1" headers="topic_p5k_dhy_jzb__table_efw_tfy_jzb__entry__2">495</td>
+                                <td class="- topic/entry entry align-left colsep-1 rowsep-1" headers="topic_p5k_dhy_jzb__table_efw_tfy_jzb__entry__3">885</td>
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-1" headers="topic_p5k_dhy_jzb__table_efw_tfy_jzb__entry__4">745</td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry align-left colsep-1 rowsep-0" headers="topic_p5k_dhy_jzb__table_efw_tfy_jzb__entry__1">10:20:46</td>
+                                <td class="- topic/entry entry align-left colsep-1 rowsep-0" headers="topic_p5k_dhy_jzb__table_efw_tfy_jzb__entry__2">968</td>
+                                <td class="- topic/entry entry align-left colsep-1 rowsep-0" headers="topic_p5k_dhy_jzb__table_efw_tfy_jzb__entry__3">975</td>
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="topic_p5k_dhy_jzb__table_efw_tfy_jzb__entry__4">165</td>
+                            </tr>
+                        </tbody></table></div>
+            </div>
+        </article>
+        <article class="- topic/topic topic nested2" aria-labelledby="ariaid-title8" id="topic_x3b_hhy_jzb">
+            <h3 class="- topic/title title topictitle3" id="ariaid-title8">例6：<code class="+ topic/ph pr-d/codeph ph codeph">pivot by</code> 搭配 select/exec 子句查询数组向量列并进行聚合计算。</h3>
+            <div class="- topic/body body">
+                <div class="- topic/p p">首先创建一个内存表，其中 val1
+                    为数组向量列<pre class="+ topic/pre pr-d/codeblock pre codeblock" id="topic_x3b_hhy_jzb__codeblock_yfp_yfy_jzb" data-ofbid="topic_x3b_hhy_jzb__codeblock_yfp_yfy_jzb"><code>id = `A`B`B`B`C`C`D`D`D
+                        val1 = array(DOUBLE[], 0, 10).append!([1.0, 2.1 2.2 2.4, 2.1 2.2 2.4, 3, 5, 1.6 7, 8.9 100, 2.3, 1.1 4 5.1 4]);
+                        val2 = 2200 1900 2100 3200 6800 5400 1300 2500 8800
+                        timestamp = [09:34:07,09:35:42,09:36:51,09:36:59,09:35:47,09:36:26,09:34:16,09:35:26,09:36:12]
+                        t = table(timestamp, id, val1, val2);
+                        
+                        //对查询每分钟各个 id 对应的 val1 值
+                        select val1 from t pivot by timestamp.minute(), id;</code></pre></div>
+                <div class="table-container"><table class="- topic/table table frame-all" id="topic_x3b_hhy_jzb__table_cc2_1gy_jzb" data-ofbid="topic_x3b_hhy_jzb__table_cc2_1gy_jzb" data-cols="5"><caption class="- topic/title title tablecap" data-caption-side="top" data-is-repeated="true"><span class="table--title-label">表<span class="table--title-label-number"> 3</span><span class="table--title-label-punctuation">. </span></span><span class="table--title"></span></caption><colgroup><col/><col/><col/><col/><col/></colgroup><thead class="- topic/thead thead">
+                            <tr class="- topic/row">
+                                <th class="- topic/entry entry align-left colsep-1 rowsep-1" id="topic_x3b_hhy_jzb__table_cc2_1gy_jzb__entry__1">minute_timestamp</th>
+                                <th class="- topic/entry entry align-left colsep-1 rowsep-1" id="topic_x3b_hhy_jzb__table_cc2_1gy_jzb__entry__2">A</th>
+                                <th class="- topic/entry entry align-left colsep-1 rowsep-1" id="topic_x3b_hhy_jzb__table_cc2_1gy_jzb__entry__3">B</th>
+                                <th class="- topic/entry entry align-left colsep-1 rowsep-1" id="topic_x3b_hhy_jzb__table_cc2_1gy_jzb__entry__4">C</th>
+                                <th class="- topic/entry entry align-left colsep-0 rowsep-1" id="topic_x3b_hhy_jzb__table_cc2_1gy_jzb__entry__5">D</th>
+                            </tr>
+                        </thead><tbody class="- topic/tbody tbody">
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry align-left colsep-1 rowsep-1" headers="topic_x3b_hhy_jzb__table_cc2_1gy_jzb__entry__1">09:34m</td>
+                                <td class="- topic/entry entry align-left colsep-1 rowsep-1" headers="topic_x3b_hhy_jzb__table_cc2_1gy_jzb__entry__2">[1.0000]</td>
+                                <td class="- topic/entry entry align-left colsep-1 rowsep-1" headers="topic_x3b_hhy_jzb__table_cc2_1gy_jzb__entry__3">[]</td>
+                                <td class="- topic/entry entry align-left colsep-1 rowsep-1" headers="topic_x3b_hhy_jzb__table_cc2_1gy_jzb__entry__4">[]</td>
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-1" headers="topic_x3b_hhy_jzb__table_cc2_1gy_jzb__entry__5">[8.9000,100.0000]</td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry align-left colsep-1 rowsep-1" headers="topic_x3b_hhy_jzb__table_cc2_1gy_jzb__entry__1">09:35m</td>
+                                <td class="- topic/entry entry align-left colsep-1 rowsep-1" headers="topic_x3b_hhy_jzb__table_cc2_1gy_jzb__entry__2">[]</td>
+                                <td class="- topic/entry entry align-left colsep-1 rowsep-1" headers="topic_x3b_hhy_jzb__table_cc2_1gy_jzb__entry__3">[2.1000,2.2000,2.4000]</td>
+                                <td class="- topic/entry entry align-left colsep-1 rowsep-1" headers="topic_x3b_hhy_jzb__table_cc2_1gy_jzb__entry__4">[5.0000]</td>
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-1" headers="topic_x3b_hhy_jzb__table_cc2_1gy_jzb__entry__5">[2.3000]</td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry align-left colsep-1 rowsep-0" headers="topic_x3b_hhy_jzb__table_cc2_1gy_jzb__entry__1">09:36m</td>
+                                <td class="- topic/entry entry align-left colsep-1 rowsep-0" headers="topic_x3b_hhy_jzb__table_cc2_1gy_jzb__entry__2">[]</td>
+                                <td class="- topic/entry entry align-left colsep-1 rowsep-0" headers="topic_x3b_hhy_jzb__table_cc2_1gy_jzb__entry__3">[3.0000]</td>
+                                <td class="- topic/entry entry align-left colsep-1 rowsep-0" headers="topic_x3b_hhy_jzb__table_cc2_1gy_jzb__entry__4">[1.6000,7.0000]</td>
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="topic_x3b_hhy_jzb__table_cc2_1gy_jzb__entry__5">[1.1000,4.0000,5.1000,4.0000]</td>
+                            </tr>
+                        </tbody></table></div>
+                <div class="- topic/p p">搭配 select，对 val1
+                    应用聚合函数，返回一个表<pre class="+ topic/pre pr-d/codeblock pre codeblock" id="topic_x3b_hhy_jzb__codeblock_qg2_dgy_jzb" data-ofbid="topic_x3b_hhy_jzb__codeblock_qg2_dgy_jzb"><code>exec max(val1) from t pivot by timestamp.minute(), id;</code></pre></div>
+                <div class="table-container"><table class="- topic/table table frame-all" id="topic_x3b_hhy_jzb__table_b12_2gy_jzb" data-ofbid="topic_x3b_hhy_jzb__table_b12_2gy_jzb" data-cols="5"><caption class="- topic/title title tablecap" data-caption-side="top" data-is-repeated="true"><span class="table--title-label">表<span class="table--title-label-number"> 4</span><span class="table--title-label-punctuation">. </span></span><span class="table--title"></span></caption><colgroup><col/><col/><col/><col/><col/></colgroup><thead class="- topic/thead thead">
+                            <tr class="- topic/row">
+                                <th class="- topic/entry entry align-left colsep-1 rowsep-1" id="topic_x3b_hhy_jzb__table_b12_2gy_jzb__entry__1">label</th>
+                                <th class="- topic/entry entry align-left colsep-1 rowsep-1" id="topic_x3b_hhy_jzb__table_b12_2gy_jzb__entry__2">A</th>
+                                <th class="- topic/entry entry align-left colsep-1 rowsep-1" id="topic_x3b_hhy_jzb__table_b12_2gy_jzb__entry__3">B</th>
+                                <th class="- topic/entry entry align-left colsep-1 rowsep-1" id="topic_x3b_hhy_jzb__table_b12_2gy_jzb__entry__4">C</th>
+                                <th class="- topic/entry entry align-left colsep-0 rowsep-1" id="topic_x3b_hhy_jzb__table_b12_2gy_jzb__entry__5">D</th>
+                            </tr>
+                        </thead><tbody class="- topic/tbody tbody">
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry align-left colsep-1 rowsep-1" headers="topic_x3b_hhy_jzb__table_b12_2gy_jzb__entry__1">09:34m</td>
+                                <td class="- topic/entry entry align-left colsep-1 rowsep-1" headers="topic_x3b_hhy_jzb__table_b12_2gy_jzb__entry__2">1.0000</td>
+                                <td class="- topic/entry entry align-left colsep-1 rowsep-1" headers="topic_x3b_hhy_jzb__table_b12_2gy_jzb__entry__3"></td>
+                                <td class="- topic/entry entry align-left colsep-1 rowsep-1" headers="topic_x3b_hhy_jzb__table_b12_2gy_jzb__entry__4"></td>
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-1" headers="topic_x3b_hhy_jzb__table_b12_2gy_jzb__entry__5">100.0000</td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry align-left colsep-1 rowsep-1" headers="topic_x3b_hhy_jzb__table_b12_2gy_jzb__entry__1">09:35m</td>
+                                <td class="- topic/entry entry align-left colsep-1 rowsep-1" headers="topic_x3b_hhy_jzb__table_b12_2gy_jzb__entry__2"></td>
+                                <td class="- topic/entry entry align-left colsep-1 rowsep-1" headers="topic_x3b_hhy_jzb__table_b12_2gy_jzb__entry__3">2.4000</td>
+                                <td class="- topic/entry entry align-left colsep-1 rowsep-1" headers="topic_x3b_hhy_jzb__table_b12_2gy_jzb__entry__4">5.0000</td>
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-1" headers="topic_x3b_hhy_jzb__table_b12_2gy_jzb__entry__5">2.3000</td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry align-left colsep-1 rowsep-0" headers="topic_x3b_hhy_jzb__table_b12_2gy_jzb__entry__1">09:36m</td>
+                                <td class="- topic/entry entry align-left colsep-1 rowsep-0" headers="topic_x3b_hhy_jzb__table_b12_2gy_jzb__entry__2"></td>
+                                <td class="- topic/entry entry align-left colsep-1 rowsep-0" headers="topic_x3b_hhy_jzb__table_b12_2gy_jzb__entry__3">3.0000</td>
+                                <td class="- topic/entry entry align-left colsep-1 rowsep-0" headers="topic_x3b_hhy_jzb__table_b12_2gy_jzb__entry__4">7.0000</td>
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="topic_x3b_hhy_jzb__table_b12_2gy_jzb__entry__5">5.1000</td>
+                            </tr>
+                        </tbody></table></div>
+            </div>
+        </article>
+    </article>    
+    
+</article></main></div>
+                        
+                        
+                        
+                        
+                        
+                        
+                    </div>
+                    
+                        <nav role="navigation" id="wh_topic_toc" aria-label="On this page" class="col-lg-2 d-none d-lg-block navbar d-print-none"> 
+                            <div id="wh_topic_toc_content">
+		                        
+	                            <div class=" wh_topic_toc "><div class="wh_topic_label">在本页上</div><ul><li class="topic-item"><a href="#%E4%BE%8B%E5%AD%90" data-tocid="例子">例子</a><ul><li class="topic-item"><a href="#%E8%A1%8C%E7%BB%B4%E5%BA%A6%E4%B8%BA%E4%B8%80%E5%88%97%E5%8D%B3-pivot-by-%E4%B9%8B%E5%90%8E%E4%BB%85%E6%9C%89%E4%B8%A4%E5%88%97" data-tocid="行维度为一列即-pivot-by-之后仅有两列">例1：行维度为一列（即 pivot by 之后仅有两列）</a></li><li class="topic-item"><a href="#%E8%AE%A1%E7%AE%97-etf-%E7%9A%84%E5%86%85%E5%9C%A8%E4%BB%B7%E5%80%BC" data-tocid="计算-etf-的内在价值">例2：计算 ETF 的内在价值</a></li><li class="topic-item"><a href="#%E4%BD%BF%E7%94%A8-pivot-by-%E6%97%B6%E6%9F%90%E4%BA%9B%E6%96%B0%E5%BB%BA%E5%88%97%E5%90%8D%E7%9A%84%E8%87%AA%E5%8A%A8%E8%BD%AC%E6%8D%A2" data-tocid="使用-pivot-by-时某些新建列名的自动转换">例3：使用 pivot by 时某些新建列名的自动转换</a></li><li class="topic-item"><a href="#%E8%A1%8C%E7%BB%B4%E5%BA%A6%E4%B8%BA%E5%A4%9A%E5%88%97%E5%8D%B3-pivot-by-%E4%B9%8B%E5%90%8E%E5%A4%9A%E4%BA%8E%E4%B8%A4%E5%88%97" data-tocid="行维度为多列即-pivot-by-之后多于两列">例4：行维度为多列（即 pivot by 之后多于两列）</a></li><li class="topic-item"><a href="#topic_p5k_dhy_jzb" data-tocid="topic_p5k_dhy_jzb">例5：应用 <code class="+ topic/ph pr-d/codeph ph codeph">asis</code> 函数保留全量数据。</a></li><li class="topic-item"><a href="#topic_x3b_hhy_jzb" data-tocid="topic_x3b_hhy_jzb">例6：<code class="+ topic/ph pr-d/codeph ph codeph">pivot by</code> 搭配 select/exec 子句查询数组向量列并进行聚合计算。</a></li></ul></li></ul></div>
+	                        	
+                        	</div>
+                        </nav>
+                    
+                </div>
+            </div>
+            
+            
+            
+        </div> 
+        <footer class="navbar navbar-default wh_footer">
+  <div class=" footer-container mx-auto ">
+<title>Copyright</title><p><b> ©2024 浙江智臾科技有限公司 浙ICP备18048711号-3</b></p>
+  </div>
+</footer>
+        
+        <div id="go2top" class="d-print-none">
+            <span class="oxy-icon oxy-icon-up"></span>
+        </div>
+        
+        <div id="modal_img_large" class="modal">
+            <span class="close oxy-icon oxy-icon-remove"></span>
+            <div id="modal_img_container"></div>
+            <div id="caption"></div>
+        </div>
+        
+        
+        
+    </body>
+</html>

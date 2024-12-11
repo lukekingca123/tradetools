@@ -1,0 +1,457 @@
+<!DOCTYPE html><html xmlns="http://www.w3.org/1999/xhtml" xml:lang="zh" lang="zh" data-whc_version="26.0">
+    <head><link rel="shortcut icon" href="../../favicon.ico"/><link rel="icon" href="../../favicon.ico"/><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><meta http-equiv="X-UA-Compatible" content="IE=edge"/><meta name="description" content="运算符是表达式的两个基本构建元素之一（另一个基本元素是上一章讨论的对象）。作用于单个对象的运算符称为一元运算符；作用于两个对象的运算符被称为二元运算符；作用于三个对象的运算符被称为三元运算符。DolphinDB支持许多类型的基本运算符，包括算术运算符、布尔运算符、关系运算符、成员运算符等。此外，所有具有一个\两个、或三个参数的内置函数或用户定义函数，都可以写成一元、两元、或三元运算符的形式。 ..."/><meta name="DC.rights.owner" content="(C) 版权 2024"/><meta name="copyright" content="(C) 版权 2024"/><meta name="generator" content="DITA-OT"/><meta name="DC.type" content="topic"/><meta name="DC.coverage" content=""/><meta name="DC.subject" content="运算符,operator"/><meta name="keywords" content="运算符, operator"/><meta name="indexterms" content="运算符, operator"/><meta name="DC.relation" content="../../progr/lang_intro.html"/><meta name="DC.relation" content="../../progr/operators/precedence.html"/><meta name="DC.relation" content="../../progr/operators/oper_list.html"/><meta name="prodname" content="DolphinDB"/><meta name="brand" content="DolphinDB"/><meta name="DC.creator" content="DolphinDB"/><meta name="DC.publisher" content="DDB N/A DDB 200"/><meta name="DC.format" content="HTML5"/><meta name="DC.identifier" content="chap4_sect_operators"/><title>运算符</title><!--  Generated with Oxygen version 26.0, build number 2024012323.  --><meta name="wh-path2root" content="../../"/><meta name="wh-toc-id" content="chap4_sect_operators-d9529e18069"/><meta name="wh-source-relpath" content="progr/operators/operators.dita"/><meta name="wh-out-relpath" content="progr/operators/operators.html"/>
+
+    <link rel="stylesheet" type="text/css" href="../../oxygen-webhelp/app/commons.css?buildId=2024012323"/>
+    <link rel="stylesheet" type="text/css" href="../../oxygen-webhelp/app/topic.css?buildId=2024012323"/>
+
+    <script src="../../oxygen-webhelp/app/options/properties.js?buildId=20240704100525"></script>
+    <script src="../../oxygen-webhelp/app/localization/strings.js?buildId=2024012323"></script>
+    <script src="../../oxygen-webhelp/app/search/index/keywords.js?buildId=20240704100525"></script>
+    <script defer="defer" src="../../oxygen-webhelp/app/commons.js?buildId=2024012323"></script>
+    <script defer="defer" src="../../oxygen-webhelp/app/topic.js?buildId=2024012323"></script>
+<link rel="stylesheet" type="text/css" href="../../oxygen-webhelp/template/styles.css?buildId=2024012323"/><script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script><script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script></head>
+
+    <body id="chap4_sect_operators" class="wh_topic_page frmBody">
+        <a href="#wh_topic_body" class="sr-only sr-only-focusable">
+            跳转到主要内容
+        </a>
+        
+        
+        
+        
+        <header class="navbar navbar-default wh_header">
+    <div class="container-fluid">
+        <div xmlns:whc="http://www.oxygenxml.com/webhelp/components" class="wh_header_flex_container navbar-nav navbar-expand-md navbar-dark">
+            <div class="wh_logo_and_publication_title_container">
+                <div class="wh_logo_and_publication_title">
+                    
+                    <a href="https://www.dolphindb.cn" class=" wh_logo d-none d-sm-block "><img src="../../logo.png" alt="  DolphinDB 文档中心  "/></a>
+                    <div class=" wh_publication_title "><a href="../../index.html"><span class="booktitle">  <span class="ph mainbooktitle">DolphinDB 文档中心</span>  </span></a></div>
+                    
+                </div>
+                
+                
+            </div>
+
+            <div class="wh_top_menu_and_indexterms_link collapse navbar-collapse" id="wh_top_menu_and_indexterms_link">
+                
+                
+                
+                
+            </div>
+        <div class=" wh_search_input navbar-form wh_topic_page_search search " role="form">
+            
+            
+            
+            <form id="searchForm" method="get" role="search" action="../../search.html"><div><input type="search" placeholder="搜索 " class="wh_search_textfield" id="textToSearch" name="searchQuery" aria-label="搜索查询" required="required"/><button type="submit" class="wh_search_button" aria-label="搜索"><span class="search_input_text">搜索</span></button></div></form>
+            
+            <script src="/vendors/react/umd/react.production.min.js" defer="defer"></script>
+<script src="/vendors/react-dom/umd/react-dom.production.min.js" defer="defer"></script>
+<script src="/vendors/dayjs/dayjs.min.js" defer="defer"></script>
+<script src="/vendors/antd/dist/antd.min.js" defer="defer"></script>
+<script src="/vendors/@ant-design/icons/dist/index.umd.min.js" defer="defer"></script>
+<script src="/zh/index.js" type="module"></script>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js" defer="defer"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML" defer="defer"><!--
+
+
+--></script>
+
+            
+        </div></div>
+    </div>
+</header>
+        
+        
+         
+        
+        
+        
+        <div class="container-fluid" id="wh_topic_container">
+            <div class="row">
+
+                <nav class="wh_tools d-print-none navbar-expand-md" aria-label="Tools">
+                    
+                    <div data-tooltip-position="bottom" class=" wh_breadcrumb "><ol class="d-print-none"><li><span class="home"><a href="../../index.html"><span>主页</span></a></span></li><li><div class="topicref" data-id="about_language_resources"><div class="title"><a href="../../progr/progr_intro.html"><span class="keyword label">编程语言</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 编程基本概念与方法、SQL 在 DolphinDB 的应用</p></div></div></div></li><li><div class="topicref" data-id="chap4_db_programming"><div class="title"><a href="../../progr/lang_intro.html"><span class="keyword label">DolphinDB 脚本语言</span></a><div class="wh-tooltip"><p class="shortdesc"> 脚本编程相关概念参考，包括：数据类型与形式、对象、运算符、编程语句、数据操作、函数化编程、文件操作和 SQL 语句。 </p></div></div></div></li><li class="active"><div class="topicref" data-id="chap4_sect_operators"><div class="title"><a href="../../progr/operators/operators.html"><span class="keyword label">运算符</span></a></div></div></li></ol></div>
+                    
+                    
+                    
+                    <div class="wh_right_tools">
+                        <button class="wh_hide_highlight" aria-label="切换搜索突出显示" title="切换搜索突出显示"></button>
+                        <button class="webhelp_expand_collapse_sections" data-next-state="collapsed" aria-label="折叠截面" title="折叠截面"></button>
+                        
+                        
+                        
+                        
+                        <div class=" wh_print_link print d-none d-md-inline-block "><button onClick="window.print()" title="打印此页" aria-label="打印此页"></button></div>
+                        
+                        <button type="button" id="wh_toc_button" class="custom-toggler navbar-toggler collapsed wh_toggle_button navbar-light" aria-expanded="false" aria-label="Toggle publishing table of content" aria-controls="wh_publication_toc">
+                            <span class="navbar-toggler-icon"></span>
+                        </button>
+                    </div>
+                    
+                </nav>
+            </div>
+            
+            
+            
+            
+            <div class="wh_content_area">
+                <div class="row">
+                    
+                        <nav id="wh_publication_toc" class="col-lg-3 col-md-3 col-sm-12 d-md-block d-none d-print-none" aria-label="Table of Contents Container">
+                            <div id="wh_publication_toc_content">
+		                        
+                            	<div class=" wh_publication_toc " data-tooltip-position="right"><span class="expand-button-action-labels"><span id="button-expand-action" role="button" aria-label="Expand"></span><span id="button-collapse-action" role="button" aria-label="Collapse"></span><span id="button-pending-action" role="button" aria-label="Pending"></span></span><ul role="tree" aria-label="Table of Contents"><li role="treeitem"><div data-tocid="new_chap_about_sect_ddb_docs_intro-d9529e87" class="topicref" data-id="new_chap_about_sect_ddb_docs_intro" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../about/ddb_docs_intro.html" id="new_chap_about_sect_ddb_docs_intro-d9529e87-link">文档使用说明</a><div class="wh-tooltip"><p class="shortdesc">如何获取 DolphinDB 帮助信息</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="chap1_getstarted-d9529e140" class="topicref" data-id="chap1_getstarted" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action chap1_getstarted-d9529e140-link" class="wh-expand-btn"></span><div class="title"><a href="../../getstarted/chap1_getstarted.html" id="chap1_getstarted-d9529e140-link"><span class="keyword label">快速上手</span></a><div class="wh-tooltip"><p class="shortdesc">如何快速部署 DolphinDB、建库建表、写入和查询数据</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="sectionddb_deployment-d9529e335" class="topicref" data-id="sectionddb_deployment" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action sectionddb_deployment-d9529e335-link" class="wh-expand-btn"></span><div class="title"><a href="../../deploy/deploy_intro.html" id="sectionddb_deployment-d9529e335-link"><span class="keyword label">部署</span></a><div class="wh-tooltip"><p class="shortdesc">如何在不同的场景中部署 DolphinDB</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="new_chap_database_manage_new_chap_dbmanage_landing_page-d9529e2313" class="topicref" data-id="new_chap_database_manage_new_chap_dbmanage_landing_page" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action new_chap_database_manage_new_chap_dbmanage_landing_page-d9529e2313-link" class="wh-expand-btn"></span><div class="title"><a href="../../db_distr_comp/cfg/db_intro.html" id="new_chap_database_manage_new_chap_dbmanage_landing_page-d9529e2313-link"><span class="keyword label">数据库</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 数据库的基本概念</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="chap7_tutorials_streaming-d9529e3490" class="topicref" data-id="chap7_tutorials_streaming" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action chap7_tutorials_streaming-d9529e3490-link" class="wh-expand-btn"></span><div class="title"><a href="../../stream/str_intro.html" id="chap7_tutorials_streaming-d9529e3490-link"><span class="keyword label">流数据</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 流数据引擎及流数据计算的基本概念</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="tocId-d9529e7385" class="topicref" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action tocId-d9529e7385-link" class="wh-expand-btn"></span><div class="title"><a href="../../db_distr_comp/db_oper/import_data.html" id="tocId-d9529e7385-link">数据迁移</a><div class="wh-tooltip"><p class="shortdesc">如何从不同数据源向 DolphinDB 迁移数据</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="chap7_tutorials_system_management-d9529e7812" class="topicref" data-id="chap7_tutorials_system_management" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action chap7_tutorials_system_management-d9529e7812-link" class="wh-expand-btn"></span><div class="title"><a href="../../sys_man/om_intro.html" id="chap7_tutorials_system_management-d9529e7812-link"><span class="keyword label">系统运维</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 的系统运维功能及方法</p></div></div></div></li><li role="treeitem" aria-expanded="true"><div data-tocid="about_language_resources-d9529e16490" class="topicref" data-id="about_language_resources" data-state="expanded"><span role="button" tabindex="0" aria-labelledby="button-collapse-action about_language_resources-d9529e16490-link" class="wh-expand-btn"></span><div class="title"><a href="../../progr/progr_intro.html" id="about_language_resources-d9529e16490-link"><span class="keyword label">编程语言</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 编程基本概念与方法、SQL 在 DolphinDB 的应用</p></div></div></div><ul role="group" class="navbar-nav nav-list"><li role="treeitem" aria-expanded="true"><div data-tocid="chap4_db_programming-d9529e16543" class="topicref" data-id="chap4_db_programming" data-state="expanded"><span role="button" tabindex="0" aria-labelledby="button-collapse-action chap4_db_programming-d9529e16543-link" class="wh-expand-btn"></span><div class="title"><a href="../../progr/lang_intro.html" id="chap4_db_programming-d9529e16543-link"><span class="keyword label">DolphinDB 脚本语言</span></a><div class="wh-tooltip"><p class="shortdesc"> 脚本编程相关概念参考，包括：数据类型与形式、对象、运算符、编程语句、数据操作、函数化编程、文件操作和 SQL 语句。 </p></div></div></div><ul role="group" class="navbar-nav nav-list"><li role="treeitem" aria-expanded="false"><div data-tocid="chap4_sect_datatypes_forms-d9529e16594" class="topicref" data-id="chap4_sect_datatypes_forms" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action chap4_sect_datatypes_forms-d9529e16594-link" class="wh-expand-btn"></span><div class="title"><a href="../../progr/data_types_forms_intro.html" id="chap4_sect_datatypes_forms-d9529e16594-link"><span class="keyword">数据类型与形式</span></a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="chap4_sect_objects-d9529e17632" class="topicref" data-id="chap4_sect_objects" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action chap4_sect_objects-d9529e17632-link" class="wh-expand-btn"></span><div class="title"><a href="../../progr/objs/objects.html" id="chap4_sect_objects-d9529e17632-link"><span class="keyword label">对象</span></a></div></div></li><li role="treeitem" aria-expanded="true" class="active"><div data-tocid="chap4_sect_operators-d9529e18069" class="topicref" data-id="chap4_sect_operators" data-state="expanded"><span role="button" tabindex="0" aria-labelledby="button-collapse-action chap4_sect_operators-d9529e18069-link" class="wh-expand-btn"></span><div class="title"><a href="../../progr/operators/operators.html" id="chap4_sect_operators-d9529e18069-link"><span class="keyword label">运算符</span></a></div></div><ul role="group" class="navbar-nav nav-list"><li role="treeitem"><div data-tocid="precedence-d9529e18130" class="topicref" data-id="precedence" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../progr/operators/precedence.html" id="precedence-d9529e18130-link"><span class="keyword label">运算优先级</span></a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="chap4_sect_objects_list-d9529e18177" class="topicref" data-id="chap4_sect_objects_list" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action chap4_sect_objects_list-d9529e18177-link" class="wh-expand-btn"></span><div class="title"><a href="../../progr/operators/oper_list.html" id="chap4_sect_objects_list-d9529e18177-link"><span class="keyword label">定义与用法</span></a></div></div></li></ul></li><li role="treeitem" aria-expanded="false"><div data-tocid="chap4_sect_programming_statements-d9529e19654" class="topicref" data-id="chap4_sect_programming_statements" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action chap4_sect_programming_statements-d9529e19654-link" class="wh-expand-btn"></span><div class="title"><a href="../../progr/statements/statements_intro.html" id="chap4_sect_programming_statements-d9529e19654-link"><span class="keyword label">编程语句</span></a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="chap4_sect_data_manipulation-d9529e20900" class="topicref" data-id="chap4_sect_data_manipulation" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action chap4_sect_data_manipulation-d9529e20900-link" class="wh-expand-btn"></span><div class="title"><a href="../../progr/data_mani/dm_intro.html" id="chap4_sect_data_manipulation-d9529e20900-link"><span class="keyword label">数据操作</span></a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="chap4_sect_func_programming-d9529e21873" class="topicref" data-id="chap4_sect_func_programming" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action chap4_sect_func_programming-d9529e21873-link" class="wh-expand-btn"></span><div class="title"><a href="../../progr/func_progr.html" id="chap4_sect_func_programming-d9529e21873-link"><span class="keyword label">函数化编程</span></a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="元编程-d9529e22197" class="topicref" data-id="元编程" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action 元编程-d9529e22197-link" class="wh-expand-btn"></span><div class="title"><a href="../../progr/objs/meta_progr.html" id="元编程-d9529e22197-link"><span class="keyword label">元编程</span></a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="oop-d9529e22337" class="topicref" data-id="oop" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action oop-d9529e22337-link" class="wh-expand-btn"></span><div class="title"><a href="../../progr/oop.html" id="oop-d9529e22337-link">面向对象编程</a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="文件操作-d9529e22705" class="topicref" data-id="文件操作" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action 文件操作-d9529e22705-link" class="wh-expand-btn"></span><div class="title"><a href="../../progr/file_io/file_oper.html" id="文件操作-d9529e22705-link"><span class="keyword label">文件操作</span></a></div></div></li></ul></li><li role="treeitem" aria-expanded="false"><div data-tocid="chap4_sect_sql_statements-d9529e22890" class="topicref" data-id="chap4_sect_sql_statements" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action chap4_sect_sql_statements-d9529e22890-link" class="wh-expand-btn"></span><div class="title"><a href="../../progr/sql/sql_intro.html" id="chap4_sect_sql_statements-d9529e22890-link"><span class="keyword label">SQL 语句</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 中 SQL 语句的基本语法和用法</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="python-parser-简介-d9529e25535" class="topicref" data-id="python-parser-简介" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action python-parser-简介-d9529e25535-link" class="wh-expand-btn"></span><div class="title"><a href="../../progr/py_parser/py_par_intro.html" id="python-parser-简介-d9529e25535-link"><span class="keyword label">Python Parser</span></a></div></div></li></ul></li><li role="treeitem" aria-expanded="false"><div data-tocid="functions_references-d9529e26503" class="topicref" data-id="functions_references" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action functions_references-d9529e26503-link" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/funcs_intro.html" id="functions_references-d9529e26503-link"><span class="keyword label">函数参考</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 函数分类、语法、详解及示例</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="api_protocol-d9529e86456" class="topicref" data-id="api_protocol" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action api_protocol-d9529e86456-link" class="wh-expand-btn"></span><div class="title"><a href="../../api/connapi_intro.html" id="api_protocol-d9529e86456-link"><span class="keyword label">连接器 &amp; API</span></a><div class="wh-tooltip"><p class="shortdesc">面向不同编程语言的 DolphinDB API 及连接器，相关协议和用法</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="chap6_plugin-d9529e91976" class="topicref" data-id="chap6_plugin" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action chap6_plugin-d9529e91976-link" class="wh-expand-btn"></span><div class="title"><a href="../../plugins/plg_intro.html" id="chap6_plugin-d9529e91976-link"><span class="keyword label">插件</span></a><div class="wh-tooltip"><p class="shortdesc">多个应用场景的插件使用说明和插件开发指导</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="third_party-d9529e94749" class="topicref" data-id="third_party" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action third_party-d9529e94749-link" class="wh-expand-btn"></span><div class="title"><a href="../../third_party.html" id="third_party-d9529e94749-link">第三方工具</a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="about_tutorials-d9529e94980" class="topicref" data-id="about_tutorials" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action about_tutorials-d9529e94980-link" class="wh-expand-btn"></span><div class="title"><a href="../../tutorials/about_tutorials.html" id="about_tutorials-d9529e94980-link"><span class="keyword label">教程</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 产品使用教程</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="tocId-d9529e101769" class="topicref" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action tocId-d9529e101769-link" class="wh-expand-btn"></span><div class="title"><a href="../../rn/server/3_00_1.html" id="tocId-d9529e101769-link">版本说明</a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 版本发布历史</p></div></div></div></li></ul></div>
+		                        
+                            </div>
+                        </nav>
+                    
+                    
+                    <div class="col-lg-7 col-md-9 col-sm-12" id="wh_topic_body">
+                        <button id="wh_close_publication_toc_button" class="close-toc-button d-none" aria-label="Toggle publishing table of content" aria-controls="wh_publication_toc" aria-expanded="true">
+                            <span class="close-toc-icon-container">
+                                <span class="close-toc-icon"></span>     
+                            </span>
+                        </button>
+                        <button id="wh_close_topic_toc_button" class="close-toc-button d-none" aria-label="Toggle topic table of content" aria-controls="wh_topic_toc" aria-expanded="true">
+                            <span class="close-toc-icon-container">
+                                <span class="close-toc-icon"></span>     
+                            </span>
+                        </button>
+                        
+                        <div class=" wh_topic_content body "><main role="main"><article class="- topic/topic topic" role="article" aria-labelledby="chap4_sect_operators__title_l3y_s4v_nyb">
+    <h1 class="- topic/title title topictitle1" id="chap4_sect_operators__title_l3y_s4v_nyb"><span class="- topic/keyword keyword label">运算符</span></h1>
+    <div class="- topic/body body">
+        <p class="- topic/p p" id="chap4_sect_operators__p_ljr_yf2_myb" data-ofbid="chap4_sect_operators__p_ljr_yf2_myb">运算符是表达式的两个基本构建元素之一（另一个基本元素是上一章讨论的对象）。作用于单个对象的运算符称为一元运算符；作用于两个对象的运算符被称为二元运算符；作用于三个对象的运算符被称为三元运算符。DolphinDB支持许多类型的基本运算符，包括算术运算符、布尔运算符、关系运算符、成员运算符等。此外，所有具有一个\两个、或三个参数的内置函数或用户定义函数，都可以写成一元、两元、或三元运算符的形式。</p>
+        <section class="- topic/section section" id="chap4_sect_operators__section_gdc_qx3_s1c" data-ofbid="chap4_sect_operators__section_gdc_qx3_s1c"><h2 class="- topic/title title sectiontitle">运算符一览</h2>
+            
+            <div class="table-container"><table class="- topic/table table" id="chap4_sect_operators__table_kdw_5hn_ryb" data-ofbid="chap4_sect_operators__table_kdw_5hn_ryb" data-cols="6"><caption></caption><colgroup><col style="width:13.038674033149173%"/><col style="width:13.92265193370166%"/><col style="width:31.38121546961326%"/><col style="width:11.049723756906078%"/><col style="width:13.92265193370166%"/><col style="width:16.685082872928177%"/></colgroup><thead class="- topic/thead thead">
+                        <tr class="- topic/row">
+                            <th class="- topic/entry entry colsep-0 rowsep-0" id="chap4_sect_operators__table_kdw_5hn_ryb__entry__1">名字</th>
+                            <th class="- topic/entry entry colsep-0 rowsep-0" id="chap4_sect_operators__table_kdw_5hn_ryb__entry__2">运算符</th>
+                            <th class="- topic/entry entry colsep-0 rowsep-0" id="chap4_sect_operators__table_kdw_5hn_ryb__entry__3">例子</th>
+                            <th class="- topic/entry entry colsep-0 rowsep-0" id="chap4_sect_operators__table_kdw_5hn_ryb__entry__4">优先级</th>
+                            <th class="- topic/entry entry colsep-0 rowsep-0" id="chap4_sect_operators__table_kdw_5hn_ryb__entry__5">元数</th>
+                            <th class="- topic/entry entry colsep-0 rowsep-0" id="chap4_sect_operators__table_kdw_5hn_ryb__entry__6">运算数据类型</th>
+                        </tr>
+                    </thead><tbody class="- topic/tbody tbody">
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry colsep-0 rowsep-0" headers="chap4_sect_operators__table_kdw_5hn_ryb__entry__1">or</td>
+                            <td class="- topic/entry entry colsep-0 rowsep-0" headers="chap4_sect_operators__table_kdw_5hn_ryb__entry__2">||</td>
+                            <td class="- topic/entry entry colsep-0 rowsep-0" headers="chap4_sect_operators__table_kdw_5hn_ryb__entry__3">1||0; [2,3]|| [4,5]; 0||[4,5]</td>
+                            <td class="- topic/entry entry colsep-0 rowsep-0" headers="chap4_sect_operators__table_kdw_5hn_ryb__entry__4">1</td>
+                            <td class="- topic/entry entry colsep-0 rowsep-0" headers="chap4_sect_operators__table_kdw_5hn_ryb__entry__5">binary</td>
+                            <td class="- topic/entry entry colsep-0 rowsep-0" headers="chap4_sect_operators__table_kdw_5hn_ryb__entry__6">A, V, S, M</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry colsep-0 rowsep-0" headers="chap4_sect_operators__table_kdw_5hn_ryb__entry__1">and</td>
+                            <td class="- topic/entry entry colsep-0 rowsep-0" headers="chap4_sect_operators__table_kdw_5hn_ryb__entry__2">&amp;&amp;</td>
+                            <td class="- topic/entry entry colsep-0 rowsep-0" headers="chap4_sect_operators__table_kdw_5hn_ryb__entry__3">1&amp;&amp;0; [2,3]&amp;&amp;[4,5];</td>
+                            <td class="- topic/entry entry colsep-0 rowsep-0" headers="chap4_sect_operators__table_kdw_5hn_ryb__entry__4">2</td>
+                            <td class="- topic/entry entry colsep-0 rowsep-0" headers="chap4_sect_operators__table_kdw_5hn_ryb__entry__5">binary</td>
+                            <td class="- topic/entry entry colsep-0 rowsep-0" headers="chap4_sect_operators__table_kdw_5hn_ryb__entry__6">A, V, S, M</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry colsep-0 rowsep-0" headers="chap4_sect_operators__table_kdw_5hn_ryb__entry__1">lt</td>
+                            <td class="- topic/entry entry colsep-0 rowsep-0" headers="chap4_sect_operators__table_kdw_5hn_ryb__entry__2">&lt;</td>
+                            <td class="- topic/entry entry colsep-0 rowsep-0" headers="chap4_sect_operators__table_kdw_5hn_ryb__entry__3">1&lt;2; [2,3]&lt;[4,5]; 2&lt;[4,5]; 2&lt;4 5</td>
+                            <td class="- topic/entry entry colsep-0 rowsep-0" headers="chap4_sect_operators__table_kdw_5hn_ryb__entry__4">3</td>
+                            <td class="- topic/entry entry colsep-0 rowsep-0" headers="chap4_sect_operators__table_kdw_5hn_ryb__entry__5">binary</td>
+                            <td class="- topic/entry entry colsep-0 rowsep-0" headers="chap4_sect_operators__table_kdw_5hn_ryb__entry__6">A, V, S, M</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry colsep-0 rowsep-0" headers="chap4_sect_operators__table_kdw_5hn_ryb__entry__1">le</td>
+                            <td class="- topic/entry entry colsep-0 rowsep-0" headers="chap4_sect_operators__table_kdw_5hn_ryb__entry__2">&lt;=</td>
+                            <td class="- topic/entry entry colsep-0 rowsep-0" headers="chap4_sect_operators__table_kdw_5hn_ryb__entry__3">1&lt;=2; [2,3]&lt;=[4,5]; 2&lt;=[4,5]; 2&lt;4 5</td>
+                            <td class="- topic/entry entry colsep-0 rowsep-0" headers="chap4_sect_operators__table_kdw_5hn_ryb__entry__4">3</td>
+                            <td class="- topic/entry entry colsep-0 rowsep-0" headers="chap4_sect_operators__table_kdw_5hn_ryb__entry__5">binary</td>
+                            <td class="- topic/entry entry colsep-0 rowsep-0" headers="chap4_sect_operators__table_kdw_5hn_ryb__entry__6">A, V, S, M</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry colsep-0 rowsep-0" headers="chap4_sect_operators__table_kdw_5hn_ryb__entry__1">equal</td>
+                            <td class="- topic/entry entry colsep-0 rowsep-0" headers="chap4_sect_operators__table_kdw_5hn_ryb__entry__2">==</td>
+                            <td class="- topic/entry entry colsep-0 rowsep-0" headers="chap4_sect_operators__table_kdw_5hn_ryb__entry__3">1==2; [2,3]==[4,5];2==4 5</td>
+                            <td class="- topic/entry entry colsep-0 rowsep-0" headers="chap4_sect_operators__table_kdw_5hn_ryb__entry__4">3</td>
+                            <td class="- topic/entry entry colsep-0 rowsep-0" headers="chap4_sect_operators__table_kdw_5hn_ryb__entry__5">binary</td>
+                            <td class="- topic/entry entry colsep-0 rowsep-0" headers="chap4_sect_operators__table_kdw_5hn_ryb__entry__6">A, V, S, M</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry colsep-0 rowsep-0" headers="chap4_sect_operators__table_kdw_5hn_ryb__entry__1">gt</td>
+                            <td class="- topic/entry entry colsep-0 rowsep-0" headers="chap4_sect_operators__table_kdw_5hn_ryb__entry__2">&gt;</td>
+                            <td class="- topic/entry entry colsep-0 rowsep-0" headers="chap4_sect_operators__table_kdw_5hn_ryb__entry__3">1&gt;2; [2,3]&gt;[4,5]; 2&gt;4 5</td>
+                            <td class="- topic/entry entry colsep-0 rowsep-0" headers="chap4_sect_operators__table_kdw_5hn_ryb__entry__4">3</td>
+                            <td class="- topic/entry entry colsep-0 rowsep-0" headers="chap4_sect_operators__table_kdw_5hn_ryb__entry__5">binary</td>
+                            <td class="- topic/entry entry colsep-0 rowsep-0" headers="chap4_sect_operators__table_kdw_5hn_ryb__entry__6">A, V, S, M</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry colsep-0 rowsep-0" headers="chap4_sect_operators__table_kdw_5hn_ryb__entry__1">ge</td>
+                            <td class="- topic/entry entry colsep-0 rowsep-0" headers="chap4_sect_operators__table_kdw_5hn_ryb__entry__2">&gt;=</td>
+                            <td class="- topic/entry entry colsep-0 rowsep-0" headers="chap4_sect_operators__table_kdw_5hn_ryb__entry__3">2&gt;=1; [2,3]&gt;=[4,5]; 2&gt;=4 5</td>
+                            <td class="- topic/entry entry colsep-0 rowsep-0" headers="chap4_sect_operators__table_kdw_5hn_ryb__entry__4">3</td>
+                            <td class="- topic/entry entry colsep-0 rowsep-0" headers="chap4_sect_operators__table_kdw_5hn_ryb__entry__5">binary</td>
+                            <td class="- topic/entry entry colsep-0 rowsep-0" headers="chap4_sect_operators__table_kdw_5hn_ryb__entry__6">A, V, S, M</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry colsep-0 rowsep-0" headers="chap4_sect_operators__table_kdw_5hn_ryb__entry__1">ne</td>
+                            <td class="- topic/entry entry colsep-0 rowsep-0" headers="chap4_sect_operators__table_kdw_5hn_ryb__entry__2">!= 或 &lt;&gt;</td>
+                            <td class="- topic/entry entry colsep-0 rowsep-0" headers="chap4_sect_operators__table_kdw_5hn_ryb__entry__3">1!=2; [2,3]!=[2,5]; 2!=4 5; 2&lt;&gt;5</td>
+                            <td class="- topic/entry entry colsep-0 rowsep-0" headers="chap4_sect_operators__table_kdw_5hn_ryb__entry__4">3</td>
+                            <td class="- topic/entry entry colsep-0 rowsep-0" headers="chap4_sect_operators__table_kdw_5hn_ryb__entry__5">binary</td>
+                            <td class="- topic/entry entry colsep-0 rowsep-0" headers="chap4_sect_operators__table_kdw_5hn_ryb__entry__6">A, V, S, M</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry colsep-0 rowsep-0" headers="chap4_sect_operators__table_kdw_5hn_ryb__entry__1">bitOr (union)</td>
+                            <td class="- topic/entry entry colsep-0 rowsep-0" headers="chap4_sect_operators__table_kdw_5hn_ryb__entry__2">|</td>
+                            <td class="- topic/entry entry colsep-0 rowsep-0" headers="chap4_sect_operators__table_kdw_5hn_ryb__entry__3">0 | 1</td>
+                            <td class="- topic/entry entry colsep-0 rowsep-0" headers="chap4_sect_operators__table_kdw_5hn_ryb__entry__4">4</td>
+                            <td class="- topic/entry entry colsep-0 rowsep-0" headers="chap4_sect_operators__table_kdw_5hn_ryb__entry__5">binary</td>
+                            <td class="- topic/entry entry colsep-0 rowsep-0" headers="chap4_sect_operators__table_kdw_5hn_ryb__entry__6">A, V, S, M</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry colsep-0 rowsep-0" headers="chap4_sect_operators__table_kdw_5hn_ryb__entry__1">bitXor</td>
+                            <td class="- topic/entry entry colsep-0 rowsep-0" headers="chap4_sect_operators__table_kdw_5hn_ryb__entry__2"> ^</td>
+                            <td class="- topic/entry entry colsep-0 rowsep-0" headers="chap4_sect_operators__table_kdw_5hn_ryb__entry__3">0 | 1</td>
+                            <td class="- topic/entry entry colsep-0 rowsep-0" headers="chap4_sect_operators__table_kdw_5hn_ryb__entry__4">5</td>
+                            <td class="- topic/entry entry colsep-0 rowsep-0" headers="chap4_sect_operators__table_kdw_5hn_ryb__entry__5">binary</td>
+                            <td class="- topic/entry entry colsep-0 rowsep-0" headers="chap4_sect_operators__table_kdw_5hn_ryb__entry__6">A, V, S, M</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry colsep-0 rowsep-0" headers="chap4_sect_operators__table_kdw_5hn_ryb__entry__1">bitAnd (intersection)</td>
+                            <td class="- topic/entry entry colsep-0 rowsep-0" headers="chap4_sect_operators__table_kdw_5hn_ryb__entry__2">&amp;</td>
+                            <td class="- topic/entry entry colsep-0 rowsep-0" headers="chap4_sect_operators__table_kdw_5hn_ryb__entry__3">0 &amp; 1</td>
+                            <td class="- topic/entry entry colsep-0 rowsep-0" headers="chap4_sect_operators__table_kdw_5hn_ryb__entry__4">6</td>
+                            <td class="- topic/entry entry colsep-0 rowsep-0" headers="chap4_sect_operators__table_kdw_5hn_ryb__entry__5">binary</td>
+                            <td class="- topic/entry entry colsep-0 rowsep-0" headers="chap4_sect_operators__table_kdw_5hn_ryb__entry__6">A, V, S, M</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry colsep-0 rowsep-0" headers="chap4_sect_operators__table_kdw_5hn_ryb__entry__1">lshift</td>
+                            <td class="- topic/entry entry colsep-0 rowsep-0" headers="chap4_sect_operators__table_kdw_5hn_ryb__entry__2">&lt;&lt;</td>
+                            <td class="- topic/entry entry colsep-0 rowsep-0" headers="chap4_sect_operators__table_kdw_5hn_ryb__entry__3">1&lt;&lt;2</td>
+                            <td class="- topic/entry entry colsep-0 rowsep-0" headers="chap4_sect_operators__table_kdw_5hn_ryb__entry__4">7</td>
+                            <td class="- topic/entry entry colsep-0 rowsep-0" headers="chap4_sect_operators__table_kdw_5hn_ryb__entry__5">binary</td>
+                            <td class="- topic/entry entry colsep-0 rowsep-0" headers="chap4_sect_operators__table_kdw_5hn_ryb__entry__6">A, V, M</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry colsep-0 rowsep-0" headers="chap4_sect_operators__table_kdw_5hn_ryb__entry__1">rshift</td>
+                            <td class="- topic/entry entry colsep-0 rowsep-0" headers="chap4_sect_operators__table_kdw_5hn_ryb__entry__2">&gt;&gt;</td>
+                            <td class="- topic/entry entry colsep-0 rowsep-0" headers="chap4_sect_operators__table_kdw_5hn_ryb__entry__3">10&gt;&gt;2</td>
+                            <td class="- topic/entry entry colsep-0 rowsep-0" headers="chap4_sect_operators__table_kdw_5hn_ryb__entry__4">7</td>
+                            <td class="- topic/entry entry colsep-0 rowsep-0" headers="chap4_sect_operators__table_kdw_5hn_ryb__entry__5">binary</td>
+                            <td class="- topic/entry entry colsep-0 rowsep-0" headers="chap4_sect_operators__table_kdw_5hn_ryb__entry__6">A, V, M</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry colsep-0 rowsep-0" headers="chap4_sect_operators__table_kdw_5hn_ryb__entry__1">add</td>
+                            <td class="- topic/entry entry colsep-0 rowsep-0" headers="chap4_sect_operators__table_kdw_5hn_ryb__entry__2">+</td>
+                            <td class="- topic/entry entry colsep-0 rowsep-0" headers="chap4_sect_operators__table_kdw_5hn_ryb__entry__3">1+2; [1,2]+[3,4]</td>
+                            <td class="- topic/entry entry colsep-0 rowsep-0" headers="chap4_sect_operators__table_kdw_5hn_ryb__entry__4">8</td>
+                            <td class="- topic/entry entry colsep-0 rowsep-0" headers="chap4_sect_operators__table_kdw_5hn_ryb__entry__5">binary</td>
+                            <td class="- topic/entry entry colsep-0 rowsep-0" headers="chap4_sect_operators__table_kdw_5hn_ryb__entry__6">A, V, S, M</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry colsep-0 rowsep-0" headers="chap4_sect_operators__table_kdw_5hn_ryb__entry__1">sub</td>
+                            <td class="- topic/entry entry colsep-0 rowsep-0" headers="chap4_sect_operators__table_kdw_5hn_ryb__entry__2">-</td>
+                            <td class="- topic/entry entry colsep-0 rowsep-0" headers="chap4_sect_operators__table_kdw_5hn_ryb__entry__3">1-2; [3,4]-[1,2]; 5-[3,4]</td>
+                            <td class="- topic/entry entry colsep-0 rowsep-0" headers="chap4_sect_operators__table_kdw_5hn_ryb__entry__4">8</td>
+                            <td class="- topic/entry entry colsep-0 rowsep-0" headers="chap4_sect_operators__table_kdw_5hn_ryb__entry__5">binary</td>
+                            <td class="- topic/entry entry colsep-0 rowsep-0" headers="chap4_sect_operators__table_kdw_5hn_ryb__entry__6">A, V, S, M</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry colsep-0 rowsep-0" headers="chap4_sect_operators__table_kdw_5hn_ryb__entry__1">mul</td>
+                            <td class="- topic/entry entry colsep-0 rowsep-0" headers="chap4_sect_operators__table_kdw_5hn_ryb__entry__2">*</td>
+                            <td class="- topic/entry entry colsep-0 rowsep-0" headers="chap4_sect_operators__table_kdw_5hn_ryb__entry__3">2*3; [1,2]*[3,4]; 3*[4,5,6]</td>
+                            <td class="- topic/entry entry colsep-0 rowsep-0" headers="chap4_sect_operators__table_kdw_5hn_ryb__entry__4">10</td>
+                            <td class="- topic/entry entry colsep-0 rowsep-0" headers="chap4_sect_operators__table_kdw_5hn_ryb__entry__5">binary</td>
+                            <td class="- topic/entry entry colsep-0 rowsep-0" headers="chap4_sect_operators__table_kdw_5hn_ryb__entry__6">A, V, S, M</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry colsep-0 rowsep-0" headers="chap4_sect_operators__table_kdw_5hn_ryb__entry__1">dot</td>
+                            <td class="- topic/entry entry colsep-0 rowsep-0" headers="chap4_sect_operators__table_kdw_5hn_ryb__entry__2">**</td>
+                            <td class="- topic/entry entry colsep-0 rowsep-0" headers="chap4_sect_operators__table_kdw_5hn_ryb__entry__3">[1,2]**[3,4]</td>
+                            <td class="- topic/entry entry colsep-0 rowsep-0" headers="chap4_sect_operators__table_kdw_5hn_ryb__entry__4">10</td>
+                            <td class="- topic/entry entry colsep-0 rowsep-0" headers="chap4_sect_operators__table_kdw_5hn_ryb__entry__5">binary</td>
+                            <td class="- topic/entry entry colsep-0 rowsep-0" headers="chap4_sect_operators__table_kdw_5hn_ryb__entry__6">V, M</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry colsep-0 rowsep-0" headers="chap4_sect_operators__table_kdw_5hn_ryb__entry__1">div</td>
+                            <td class="- topic/entry entry colsep-0 rowsep-0" headers="chap4_sect_operators__table_kdw_5hn_ryb__entry__2">/</td>
+                            <td class="- topic/entry entry colsep-0 rowsep-0" headers="chap4_sect_operators__table_kdw_5hn_ryb__entry__3">2/3; 2.0/3; [2,3,4]/2</td>
+                            <td class="- topic/entry entry colsep-0 rowsep-0" headers="chap4_sect_operators__table_kdw_5hn_ryb__entry__4">10</td>
+                            <td class="- topic/entry entry colsep-0 rowsep-0" headers="chap4_sect_operators__table_kdw_5hn_ryb__entry__5">binary</td>
+                            <td class="- topic/entry entry colsep-0 rowsep-0" headers="chap4_sect_operators__table_kdw_5hn_ryb__entry__6">A, V, M</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry colsep-0 rowsep-0" headers="chap4_sect_operators__table_kdw_5hn_ryb__entry__1">ratio</td>
+                            <td class="- topic/entry entry colsep-0 rowsep-0" headers="chap4_sect_operators__table_kdw_5hn_ryb__entry__2">\</td>
+                            <td class="- topic/entry entry colsep-0 rowsep-0" headers="chap4_sect_operators__table_kdw_5hn_ryb__entry__3">1\2; [2,3,4]\2</td>
+                            <td class="- topic/entry entry colsep-0 rowsep-0" headers="chap4_sect_operators__table_kdw_5hn_ryb__entry__4">10</td>
+                            <td class="- topic/entry entry colsep-0 rowsep-0" headers="chap4_sect_operators__table_kdw_5hn_ryb__entry__5">binary</td>
+                            <td class="- topic/entry entry colsep-0 rowsep-0" headers="chap4_sect_operators__table_kdw_5hn_ryb__entry__6">A, V, M</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry colsep-0 rowsep-0" headers="chap4_sect_operators__table_kdw_5hn_ryb__entry__1">mod</td>
+                            <td class="- topic/entry entry colsep-0 rowsep-0" headers="chap4_sect_operators__table_kdw_5hn_ryb__entry__2">%</td>
+                            <td class="- topic/entry entry colsep-0 rowsep-0" headers="chap4_sect_operators__table_kdw_5hn_ryb__entry__3">1%2; [2,3,4]%2</td>
+                            <td class="- topic/entry entry colsep-0 rowsep-0" headers="chap4_sect_operators__table_kdw_5hn_ryb__entry__4">10</td>
+                            <td class="- topic/entry entry colsep-0 rowsep-0" headers="chap4_sect_operators__table_kdw_5hn_ryb__entry__5">binary</td>
+                            <td class="- topic/entry entry colsep-0 rowsep-0" headers="chap4_sect_operators__table_kdw_5hn_ryb__entry__6">A, V, M</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry colsep-0 rowsep-0" headers="chap4_sect_operators__table_kdw_5hn_ryb__entry__1">cast</td>
+                            <td class="- topic/entry entry colsep-0 rowsep-0" headers="chap4_sect_operators__table_kdw_5hn_ryb__entry__2">$</td>
+                            <td class="- topic/entry entry colsep-0 rowsep-0" headers="chap4_sect_operators__table_kdw_5hn_ryb__entry__3">1..8$4:2; cast(1..8, 4:2); cast(1.1,`int)</td>
+                            <td class="- topic/entry entry colsep-0 rowsep-0" headers="chap4_sect_operators__table_kdw_5hn_ryb__entry__4">10</td>
+                            <td class="- topic/entry entry colsep-0 rowsep-0" headers="chap4_sect_operators__table_kdw_5hn_ryb__entry__5">binary</td>
+                            <td class="- topic/entry entry colsep-0 rowsep-0" headers="chap4_sect_operators__table_kdw_5hn_ryb__entry__6">A, V, M</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry colsep-0 rowsep-0" headers="chap4_sect_operators__table_kdw_5hn_ryb__entry__1">join</td>
+                            <td class="- topic/entry entry colsep-0 rowsep-0" headers="chap4_sect_operators__table_kdw_5hn_ryb__entry__2">&lt;-</td>
+                            <td class="- topic/entry entry colsep-0 rowsep-0" headers="chap4_sect_operators__table_kdw_5hn_ryb__entry__3">1 2 3 &lt;- 4</td>
+                            <td class="- topic/entry entry colsep-0 rowsep-0" headers="chap4_sect_operators__table_kdw_5hn_ryb__entry__4">10</td>
+                            <td class="- topic/entry entry colsep-0 rowsep-0" headers="chap4_sect_operators__table_kdw_5hn_ryb__entry__5">binary</td>
+                            <td class="- topic/entry entry colsep-0 rowsep-0" headers="chap4_sect_operators__table_kdw_5hn_ryb__entry__6">A, V, M, T</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry colsep-0 rowsep-0" headers="chap4_sect_operators__table_kdw_5hn_ryb__entry__1">pair</td>
+                            <td class="- topic/entry entry colsep-0 rowsep-0" headers="chap4_sect_operators__table_kdw_5hn_ryb__entry__2">:</td>
+                            <td class="- topic/entry entry colsep-0 rowsep-0" headers="chap4_sect_operators__table_kdw_5hn_ryb__entry__3">1:3;</td>
+                            <td class="- topic/entry entry colsep-0 rowsep-0" headers="chap4_sect_operators__table_kdw_5hn_ryb__entry__4">15</td>
+                            <td class="- topic/entry entry colsep-0 rowsep-0" headers="chap4_sect_operators__table_kdw_5hn_ryb__entry__5">binary</td>
+                            <td class="- topic/entry entry colsep-0 rowsep-0" headers="chap4_sect_operators__table_kdw_5hn_ryb__entry__6">A</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry colsep-0 rowsep-0" headers="chap4_sect_operators__table_kdw_5hn_ryb__entry__1">seq</td>
+                            <td class="- topic/entry entry colsep-0 rowsep-0" headers="chap4_sect_operators__table_kdw_5hn_ryb__entry__2">..</td>
+                            <td class="- topic/entry entry colsep-0 rowsep-0" headers="chap4_sect_operators__table_kdw_5hn_ryb__entry__3">5..9, 9..5;</td>
+                            <td class="- topic/entry entry colsep-0 rowsep-0" headers="chap4_sect_operators__table_kdw_5hn_ryb__entry__4">15</td>
+                            <td class="- topic/entry entry colsep-0 rowsep-0" headers="chap4_sect_operators__table_kdw_5hn_ryb__entry__5">binary</td>
+                            <td class="- topic/entry entry colsep-0 rowsep-0" headers="chap4_sect_operators__table_kdw_5hn_ryb__entry__6">A</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry colsep-0 rowsep-0" headers="chap4_sect_operators__table_kdw_5hn_ryb__entry__1">not</td>
+                            <td class="- topic/entry entry colsep-0 rowsep-0" headers="chap4_sect_operators__table_kdw_5hn_ryb__entry__2">!</td>
+                            <td class="- topic/entry entry colsep-0 rowsep-0" headers="chap4_sect_operators__table_kdw_5hn_ryb__entry__3">!0; ! 3 4 0; </td>
+                            <td class="- topic/entry entry colsep-0 rowsep-0" headers="chap4_sect_operators__table_kdw_5hn_ryb__entry__4">18</td>
+                            <td class="- topic/entry entry colsep-0 rowsep-0" headers="chap4_sect_operators__table_kdw_5hn_ryb__entry__5">unary</td>
+                            <td class="- topic/entry entry colsep-0 rowsep-0" headers="chap4_sect_operators__table_kdw_5hn_ryb__entry__6">A, V, M</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry colsep-0 rowsep-0" headers="chap4_sect_operators__table_kdw_5hn_ryb__entry__1">neg</td>
+                            <td class="- topic/entry entry colsep-0 rowsep-0" headers="chap4_sect_operators__table_kdw_5hn_ryb__entry__2">-</td>
+                            <td class="- topic/entry entry colsep-0 rowsep-0" headers="chap4_sect_operators__table_kdw_5hn_ryb__entry__3">-x; - 4 5 6;</td>
+                            <td class="- topic/entry entry colsep-0 rowsep-0" headers="chap4_sect_operators__table_kdw_5hn_ryb__entry__4">18</td>
+                            <td class="- topic/entry entry colsep-0 rowsep-0" headers="chap4_sect_operators__table_kdw_5hn_ryb__entry__5">unary</td>
+                            <td class="- topic/entry entry colsep-0 rowsep-0" headers="chap4_sect_operators__table_kdw_5hn_ryb__entry__6">A, V, M</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry colsep-0 rowsep-0" headers="chap4_sect_operators__table_kdw_5hn_ryb__entry__1">at</td>
+                            <td class="- topic/entry entry colsep-0 rowsep-0" headers="chap4_sect_operators__table_kdw_5hn_ryb__entry__2">[]</td>
+                            <td class="- topic/entry entry colsep-0 rowsep-0" headers="chap4_sect_operators__table_kdw_5hn_ryb__entry__3">x[0], x[3 5 6], x[2,3], x[1:2,4:3]</td>
+                            <td class="- topic/entry entry colsep-0 rowsep-0" headers="chap4_sect_operators__table_kdw_5hn_ryb__entry__4">20</td>
+                            <td class="- topic/entry entry colsep-0 rowsep-0" headers="chap4_sect_operators__table_kdw_5hn_ryb__entry__5">binary</td>
+                            <td class="- topic/entry entry colsep-0 rowsep-0" headers="chap4_sect_operators__table_kdw_5hn_ryb__entry__6">V, M, T, D</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry colsep-0 rowsep-0" headers="chap4_sect_operators__table_kdw_5hn_ryb__entry__1">member</td>
+                            <td class="- topic/entry entry colsep-0 rowsep-0" headers="chap4_sect_operators__table_kdw_5hn_ryb__entry__2">.</td>
+                            <td class="- topic/entry entry colsep-0 rowsep-0" headers="chap4_sect_operators__table_kdw_5hn_ryb__entry__3">x.price, d.2</td>
+                            <td class="- topic/entry entry colsep-0 rowsep-0" headers="chap4_sect_operators__table_kdw_5hn_ryb__entry__4">20</td>
+                            <td class="- topic/entry entry colsep-0 rowsep-0" headers="chap4_sect_operators__table_kdw_5hn_ryb__entry__5">binary</td>
+                            <td class="- topic/entry entry colsep-0 rowsep-0" headers="chap4_sect_operators__table_kdw_5hn_ryb__entry__6">T, D</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry colsep-0 rowsep-0" headers="chap4_sect_operators__table_kdw_5hn_ryb__entry__1">function operator</td>
+                            <td class="- topic/entry entry colsep-0 rowsep-0" headers="chap4_sect_operators__table_kdw_5hn_ryb__entry__2">()</td>
+                            <td class="- topic/entry entry colsep-0 rowsep-0" headers="chap4_sect_operators__table_kdw_5hn_ryb__entry__3">x(1, 2)</td>
+                            <td class="- topic/entry entry colsep-0 rowsep-0" headers="chap4_sect_operators__table_kdw_5hn_ryb__entry__4">20</td>
+                            <td class="- topic/entry entry colsep-0 rowsep-0" headers="chap4_sect_operators__table_kdw_5hn_ryb__entry__5">binary</td>
+                            <td class="- topic/entry entry colsep-0 rowsep-0" headers="chap4_sect_operators__table_kdw_5hn_ryb__entry__6">A, V</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry colsep-0 rowsep-0" headers="chap4_sect_operators__table_kdw_5hn_ryb__entry__1">ternary operator</td>
+                            <td class="- topic/entry entry colsep-0 rowsep-0" headers="chap4_sect_operators__table_kdw_5hn_ryb__entry__2">? :</td>
+                            <td class="- topic/entry entry colsep-0 rowsep-0" headers="chap4_sect_operators__table_kdw_5hn_ryb__entry__3">(1+1&gt;2)?1:0</td>
+                            <td class="- topic/entry entry colsep-0 rowsep-0" headers="chap4_sect_operators__table_kdw_5hn_ryb__entry__4">25</td>
+                            <td class="- topic/entry entry colsep-0 rowsep-0" headers="chap4_sect_operators__table_kdw_5hn_ryb__entry__5">ternary</td>
+                            <td class="- topic/entry entry colsep-0 rowsep-0" headers="chap4_sect_operators__table_kdw_5hn_ryb__entry__6">A, V, S, M, D, T</td>
+                        </tr>
+                    </tbody></table></div>
+            <div class="- topic/note note note note_note" id="chap4_sect_operators__note_yc3_kx3_s1c" data-ofbid="chap4_sect_operators__note_yc3_kx3_s1c"><span class="note__title">注：</span> 在运算数据类型列中，符号A, V, S, M, D, T分别表示标量，向量，集合，矩阵，字典和表。</div>
+        </section>
+        <section class="- topic/section section" id="chap4_sect_operators__section_wxd_vx3_s1c" data-ofbid="chap4_sect_operators__section_wxd_vx3_s1c"><h2 class="- topic/title title sectiontitle">运算符使用示例</h2>
+            
+            <p class="- topic/p p" id="chap4_sect_operators__p_mdw_5hn_ryb" data-ofbid="chap4_sect_operators__p_mdw_5hn_ryb">运算符用于连接表达式中的运算数。我们选择常用的符号来表示各种操作。为了方便记住运算符，我们给每个运算符定义一个名字。运算符的名称可以在任何表达式中使用。下面以"+"为例。</p>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="chap4_sect_operators__codeblock_ndw_5hn_ryb" data-ofbid="chap4_sect_operators__codeblock_ndw_5hn_ryb"><code>x=1;
+y=2;
+
+// 运算符 "+"
+x+y;
+// output
+3
+
+// 函数作为运算符
+x add y;
+// output
+3
+
+add(x,y);
+// output
+3
+
+// 函数写成面向对象的形式
+x.add(y);
+// output
+3</code></pre>
+            <p class="- topic/p p" id="chap4_sect_operators__p_odw_5hn_ryb" data-ofbid="chap4_sect_operators__p_odw_5hn_ryb">在调用用户定义函数时，函数也可以写成运算符的形式。这样的函数的参数值不能被修改。</p>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="chap4_sect_operators__codeblock_pdw_5hn_ryb" data-ofbid="chap4_sect_operators__codeblock_pdw_5hn_ryb"><code>def f(a, b){return a*a + b*b - 2*a*b};
+3 f 4;
+// output
+1</code></pre>
+        </section>
+    </div>
+</article></main></div>
+                        
+                        
+                        
+                        
+                        
+                        
+                    </div>
+                    
+                        <nav role="navigation" id="wh_topic_toc" aria-label="On this page" class="col-lg-2 d-none d-lg-block navbar d-print-none"> 
+                            <div id="wh_topic_toc_content">
+		                        
+	                            <div class=" wh_topic_toc "><div class="wh_topic_label">在本页上</div><ul><li class="section-item"><div class="section-title"><a href="#chap4_sect_operators__section_gdc_qx3_s1c" data-tocid="chap4_sect_operators__section_gdc_qx3_s1c">运算符一览</a></div></li><li class="section-item"><div class="section-title"><a href="#chap4_sect_operators__section_wxd_vx3_s1c" data-tocid="chap4_sect_operators__section_wxd_vx3_s1c">运算符使用示例</a></div></li></ul></div>
+	                        	
+                        	</div>
+                        </nav>
+                    
+                </div>
+            </div>
+            
+            
+            
+        </div> 
+        <footer class="navbar navbar-default wh_footer">
+  <div class=" footer-container mx-auto ">
+<title>Copyright</title><p><b> ©2024 浙江智臾科技有限公司 浙ICP备18048711号-3</b></p>
+  </div>
+</footer>
+        
+        <div id="go2top" class="d-print-none">
+            <span class="oxy-icon oxy-icon-up"></span>
+        </div>
+        
+        <div id="modal_img_large" class="modal">
+            <span class="close oxy-icon oxy-icon-remove"></span>
+            <div id="modal_img_container"></div>
+            <div id="caption"></div>
+        </div>
+        
+        
+        
+    </body>
+</html>

@@ -1,0 +1,478 @@
+/**** 功能及性能概要 ****/
+/*
+功能概要：
+1、写入数据
+2、查询、数据分析、聚合统计
+3、数据导出和备份
+4、数据导入和备份恢复
+5、关系模型
+6、数据回放（重现试验场景，故障排查）
+7、波形录制（故障时段的数据单独录制并保存）
+8、状态保持计算（统计某个设备的使用时长）
+9、实时数据（时间序列聚合引擎）
+10、磁盘占用查询
+
+
+测试环境：
+    DELL OptiPlex 5000 windows 10 专业版
+    CPU：12th Gen Intel(R) Core(TM) i5-12500   3.00 GHz
+    内存：16G
+    磁盘: SSD 1.5T
+    服务端：DolphinDB 2.00.10.9 （Windows）
+    客户端：VSCode 1.78.2 （extension for DolphinDB v2.0.961）
+
+数据集：
+    记录描述：1个小时的数据，每秒50条记录
+    记录行数：180,000 行
+    磁盘占用：3.35G
+    字段数量：5,002
+    字段样式：ts时间戳,deviceid设备号，v1~v5000 值float类型
+
+性能概要：
+ * 1. 写入性能
+ * 1.1 写入行数             217.5 行/秒
+ * 1.2 写入点数             1,087,613.3 采集点/秒
+
+ * 2. 查询性能
+ * 2.1 数据总数                          1.003 ms
+ * 2.2 单点查询                         16.002 ms
+ * 2.4 范围查询                         15.994 ms
+ * 2.5 聚合查询（最大值、平均值等）        5.036 ms
+ * 2.6 单条记录查询（5000列返回）       3102.216 ms
+ * 2.7 30秒降采样查询                    43.997 ms
+ * 2.8 30秒滑动平均查询                  15.003 ms
+
+ * 3. 数据导入导出（1小时数据）
+ * 3.1 数据导出（3.4 GB）       23.6 s s 
+ * 3.2 数据导入（3.4 GB）       18.4 s
+ * 3.3 Excel导出（7.83GB）      1min 17s（集群32.8s）
+ * 3.4 Excel导入（7.83GB）	    38.2s
+ * 3.5 备份保存（2.44GB）       1min 14s
+ * 3.6 备份恢复（2.44GB）	    31.8s
+
+*/
+
+
+/**** 步骤一：部署及清理测试环境 ****/
+//建议server 2.00.7及以上版本，建议在linux环境下运行
+login(`admin,`123456)
+
+//清理缓存
+undef(all)
+clearAllCache()
+
+//清空数据库，环境初始化
+if(existsDatabase("dfs://db_devices")){dropDatabase("dfs://db_devices")}
+if(existsDatabase("dfs://db_test")){dropDatabase("dfs://db_test")}
+if(existsDatabase("dfs://db_temp")){dropDatabase("dfs://db_temp")}
+
+
+/**** 步骤二：建库、建表 ****/
+
+/*
+数据建模：
+1台设备，采集频率50HZ（每秒采集50次），单次采集5000个点，FLOAT类型。
+1）每小时记录数：180,000
+2）每条记录大小：20,012字节
+    TIMESTAMP（8字节），SYMBOL（4字节），FLOAT（4字节）
+3）每小时空间占用（压缩前）：3.35G
+    每天空间占用（压缩前）：80.5G
+4）建议以“小时”+“设备号哈希值5”组合分区
+    每分区≈670M
+5）分区索引为“时间戳”+“设备号”
+*/
+
+
+//构建分区方式，构建小时+哈希5的组合分区
+dbname="dfs://db_test"   
+db_hour=database(partitionType=VALUE,partitionScheme=[datehour(2022.10.01)])
+db_hash=database(partitionType=HASH, partitionScheme=[SYMBOL,5])
+db=database(directory=dbname,partitionType=COMPO,partitionScheme=[db_hour,db_hash],engine=`TSDB)
+
+//新建“采集表”，宽表，单条记录5002个字段
+n=5000   //采集点数量
+tablename="collect"          //表名
+colNames=`ts`deviceid <- ("v"+string(1..5000))      //表字段
+colTypes=`TIMESTAMP`SYMBOL <- take(`FLOAT,5000)  //字段类型
+//创建表t
+t=table(1:0,colNames,colTypes) 
+
+//构建分布式表
+pt=createPartitionedTable(dbHandle=db,table=t,tableName=tablename,partitionColumns=`ts`deviceid,sortColumns=`deviceid`ts)
+
+/**** 步骤三：写入数据 ****/
+
+//新建自定义函数（入参：begindate开始时间，enddate停止时间；n 单设备赫兹数）
+def write_real_data(begindate,enddate,n){
+
+    //指定设备ID：d001
+    deviceids=take("d001",n)
+    //数值呈正态分布
+    values=randNormal(10.0, 2.0, n)
+    btime=timestamp(begindate)
+
+    do{
+        cols_info=`ts`deviceid
+        cols_info.append!(`v+string(1..5000)) 
+        cols_type=`TIMESTAMP`SYMBOL
+        cols_type.append!(take("FLOAT",5000))
+        pt=loadTable(database="dfs://db_test", tableName=`collect)
+
+        t=table(n:n,cols_info,cols_type)
+        val=rand(values,n)
+        for(j in 1..5000)
+        {
+            t[`v+string(j)]=val
+        }
+        t[`deviceid]=deviceids
+        t[`ts]=btime+1..n
+        pt.append!(t)
+        t=NULL
+        
+        btime=btime+1000
+        etime=timestamp(now())
+        timediff=btime-etime
+        // // 控制写入频率模拟真实场景
+        if(timediff>0){sleep(timediff)}
+
+    }while(enddate>btime)
+}
+
+//通过批处理作业提交任务，模拟实时写入
+begindate=datetime(2022.01.01 00:00:00)  //写入开始时间
+enddate = begindate + 1*60*60            //写入结束时间（1小时）
+n = 50                                   //单设备每秒钟写入记录数
+
+//提交任务 
+//write_real_data为要提交的任务；begindate, enddate, n都是函数write_real_data的参数
+submitJob(`write_real_data_624, `write_real_data_624, write_real_data,begindate, enddate, n)
+
+//检查作业状态
+getRecentJobs(1)
+
+//取消作业
+// cancelJob(`write_real_data_624)
+
+
+/**** 步骤四、数据查询 Demo ****/
+
+//加载表，赋值给 pt （表变量赋值仅加载元数据）
+pt=loadTable(database="dfs://db_test",tableName=`collect)  //pt(ts,deviceid,v1,...,v5000)
+
+//查看数据总数
+select count(*) from pt  //180,000     
+
+//数据检查
+select max(ts),min(v1),max(v2),avg(v3),sum(v4),last(v1) from pt   //最大值、最小值、平均值、最后一条数据 的查询
+select top 10 v1 from pt where ts between 2022.01.01 00:00:00.000 : 2022.01.01 00:01:00.000
+select count(*) from pt where ts between 2022.01.01 00:00:00.000 : 2022.01.01 00:00:01.000
+
+
+//单点查询（返回单值）
+deviceid = 'd001'
+t = select v1 from pt where deviceid=deviceid,ts=2022.01.01 00:00:00.001
+t
+
+//单点查询（返回5000列的所有值）
+timer t = select * from pt where deviceid=deviceid,ts=2022.01.01 00:00:00.001
+t
+
+//范围查询
+timer t=select ts,v1 from pt where deviceid=deviceid , ts between 2022.01.01 00:00:00.000 : 2022.01.01 00:00:01.000
+t
+
+//每30秒钟，取一条数据（降采样）
+select ts,v1 from pt context by bar(ts,30s) limit -1        //limit -1 代表取最后一条记录
+select avg(v1) from pt group by bar(ts,30s)                 //avg(v1) 代表取30s内的平均值
+
+//30秒钟滑动平均计算
+timer t=select ts,deviceid,mavg(v1,30) as val from pt where deviceid=deviceid , ts between 2022.01.01 00:00:00.000 : 2022.01.01 00:01:00.000 context by deviceid
+t
+
+
+/**** 步骤五：导出数据 ****/
+
+//数据准备：将1小时数据，赋值给临时表
+t=NULL
+t=select * from pt where ts between 2022.01.01 00:00:00.000 : 2022.01.01 01:00:00.000
+select count(*) from t
+
+//数据准备：路径，文件名
+path=getHomeDir()  //getHomeDir()返回DolphinDB中的server文件夹所在路径
+filename="savetable_output.csv"
+
+//1、导出表，直接将表保存到磁盘中，结构一致，无需序列化。
+db=database(directory=path+"/output_db")
+saveTable(dbHandle=db,table=t,tableName=`collect)
+
+//2、导出csv，保存前需要进行序列化，耗时主要在序列化上面。
+saveText(obj=t, filename=path+"/"+filename)
+
+//3、备份，读取、压缩、转换、保存。
+backupPath = path+"\\backup"
+t=NULL  //释放内存
+backup(backupPath,<select * from loadTable("dfs://db_test","collect")>,true);  //保存到server下的db_test文件夹
+
+
+/**** 步骤六：导入数据 ****/
+
+//1、导入表（大概 18.4s），与导出时间基本一致。
+db=database(directory=path+"/output_db")
+t=loadTable(database=db,tableName=`collect)
+select count(*) from t
+
+//删除数据库
+dropDatabase(path+"/output_db")
+
+
+//2、导入csv
+t=NULL  //释放内存
+ds=textChunkDS(path+"/"+filename,1000)
+//dropDatabase("dfs://db_temp2")
+// 创建一个新的分布式表导入csv文件，便于观察
+n=5000   //采集点数量
+tablename="collect_temp"          //表名
+cols_info=`ts`deviceid       //表字段
+cols_type=`TIMESTAMP`SYMBOL  //字段类型
+//创建表t
+t=table(1:0,cols_info,cols_type) 
+for(i in 1..n){  addColumn(t,`v+string(i),FLOAT)  }
+db=database("dfs://db_temp2",VALUE,[datehour(2022.10.01)],,'TSDB');
+pt=createPartitionedTable(db,t,tablename,`ts,,`deviceid);
+
+mr(ds,append!{pt},,,false);
+select count(*) from pt
+
+//文件操作，删除导出的文件
+rm(path+"/"+filename)
+
+
+//3、恢复备份
+//使用 migrate 函数，完整恢复备份。恢复到新建的表中。
+
+// 创建一个新的分布式表用于验证备份恢复
+n=5000   //采集点数量
+tablename="collect_temp"          //表名
+cols_info=`ts`deviceid       //表字段
+cols_type=`TIMESTAMP`SYMBOL  //字段类型
+//创建表t
+t=table(1:0,cols_info,cols_type) 
+for(i in 1..n){  addColumn(t,`v+string(i),FLOAT)  }
+dbname="dfs://db_temp3"   
+db_hour=database(partitionType=VALUE,partitionScheme=[datehour(2022.10.01)])
+db_hash=database(partitionType=HASH, partitionScheme=[SYMBOL,5])
+db=database(directory=dbname,partitionType=COMPO,partitionScheme=[db_hour,db_hash],engine=`TSDB)
+temp=createPartitionedTable(dbHandle=db,table=t,tableName=tablename,partitionColumns=`ts`deviceid,sortColumns=`deviceid`ts)
+
+// 备份恢复
+migrate(backupDir=path+"/backup",backupDBPath="dfs://db_test",backupTableName="collect",newDBPath="dfs://db_temp3",newTableName=("collect_temp"));
+loadTable(database="dfs://db_temp",tableName="temp")
+
+//删除数据库
+dropDatabase("dfs://db_temp")
+//另一种恢复方法为 restore ，可以更灵活的恢复数据，比如按分区路径恢复数据。
+// restore(backupDir=path,dbPath="dfs://db_test",tableName="collect",partition="%",force=true,outputTable=loadTable("dfs://db_temp3","collect_temp"));
+
+/**** 步骤七：关系模型 ****/
+
+//新建设备表
+dbname="dfs://db_devices"
+tablename="device"
+cols_info=`deviceid`model`ip
+cols_type=`SYMBOL`SYMBOL`SYMBOL
+
+t=table(1:0,cols_info,cols_type)
+db=database(directory=dbname,partitionType=VALUE,`1`2)
+dt=createTable(db,t,tablename)
+
+//插入一条记录
+insert into t (deviceid,model,ip) values(`d001,`AAA,`127.0.0.1)
+dt.append!(t)
+
+select * from dt
+//关联查询
+pt=loadTable("dfs://db_test",`collect)
+
+select pt.ts,pt.v1,pt.v2,dt.* from pt left join dt on pt.deviceid=dt.deviceid where pt.ts=2022.01.01 00:00:01.001
+
+
+/**** 步骤八 ：历史回放功能（可用于试验故障排查） ****/
+//清理环境
+//dropStreamTable 删除流数据表
+try{dropStreamTable("replayStream")}catch(ex){}
+try{dropStreamTable("calc_result")}catch(ex){}
+
+undef(`replayStream)
+undef(`calc_result)
+
+//1. 新建流数据表，容纳回放数据
+//share 节点内的会话共享
+//streamTable 创建流数据表。流数据表可处理并发的读写操作
+share streamTable(1000:0,`ts`deviceid,[TIMESTAMP,SYMBOL]) as replayStream
+
+n=3 //添加3个采集点，用于演示
+for(i in 1..3){
+    addColumn(replayStream,`v+string(i),DOUBLE)
+}
+
+//2. 数据回放（10分钟）
+rate=1                                  //回放倍速
+begintime=2022.01.01 00:00:00.000       //数据开始时间
+endtime  =2022.01.01 00:10:00.000       //数据结束时间
+t=select ts,deviceid,v1,v2,v3 from pt where ts between begintime:endtime order by ts,deviceid
+
+//批处理调用replay函数，后台执行回放
+submitJob("replay_output", "replay_output_stream", replay,  t,replayStream, `ts, `ts, rate,false)
+
+//3. 检查回放数据  
+getRecentJobs(1)
+
+select count(*) from replayStream
+select last(ts) from replayStream
+
+//4.展示回放数据（top 1000）
+t=select * from replayStream limit 1000
+plot(t.v1,t.ts,"top 1000 value 1")
+
+//5、展示回放数据（全部数据，自动降采样，无论查询数量多大，只展示1000条左右的平均值特征）
+def auto_rollup(tb){
+	cnt=(select count(*) cnt from tb).cnt
+	if (cnt>1000 ){
+		interver=string(cnt/1000)+"ms"
+		interver=duration(interver[0])
+	}else{interver=1}
+
+	t = select avg(v1) from tb group by bar(ts,interver)
+	return select bar_ts as ts,avg_v1 as v1 from t
+}
+t=select * from auto_rollup(replayStream)
+title=select min(ts),max(ts) from t
+plot(t.v1,t.ts,title.min_ts[0]+"  ~  "+title.max_ts[0])
+
+//5. 可输出到grafana，脚本：
+select ts,v1 from auto_rollup(replayStream) order by ts desc
+
+
+/**** 步骤九、录制某段波形数据 ****/
+
+//1. 建表，保存录制信息
+n=5000 //采集点数量
+dbname="dfs://db_recodeing"
+tablename="recode"
+cols_info=`ts`deviceid
+cols_type=`TIMESTAMP`SYMBOL
+t=table(1:0,cols_info,cols_type)
+
+for(i in 1..n){
+    addColumn(t,`v+string(i),DOUBLE)
+}
+
+db_hour=database(partitionType=VALUE,partitionScheme=[datehour(2022.10.01)])
+db_hash=database(partitionType=HASH, partitionScheme=[SYMBOL,5])
+db=database(directory=dbname,partitionType=COMPO,partitionScheme=[db_hour,db_hash],engine=`TSDB)
+pt=createPartitionedTable(dbHandle=db,table=t,tableName=tablename,partitionColumns=`ts`deviceid,sortColumns=`deviceid`ts)
+
+
+//2. 自定义录制函数
+def funRecodeData(wtid,mutable begintime,second){
+
+    //合法性判断
+    if(second>180){
+        strMsg='录制时间需小于3分钟'
+        return strMsg
+    }
+
+    if(typestr(begintime)=="STRING"){begintime=timestamp(begintime)}
+    
+    endtime=temporalAdd(begintime,second,`s)
+
+    //录制未来数据
+    diff=endtime-now()
+    if(diff>0){
+        sleep(diff)
+    }
+
+    //录制
+    t=select * from loadTable("dfs://db_test",`collect) where ts between begintime:endtime and deviceid=wtid
+    pt=loadTable(database="dfs://db_recodeing",tableName=`recode)
+    pt.append!(t)
+
+    //返回消息，供应用端展示
+    rownum=t.size()
+    strMsg='录制行数：'+string(rownum)+''
+    return strMsg
+}
+
+//3. 建立函数视图，可通过外部API调用该函数
+addFunctionView(funRecodeData)
+
+//4. 调用函数
+deviceid = 'd001'
+second = 5
+begintime = 2022.01.01 00:10:00.000
+
+msg=funRecodeData(deviceid,begintime,second)
+msg
+
+//5. 检查数据
+pt=loadTable(database="dfs://db_recodeing",tableName=`recode)
+
+select count(*) from pt
+select top 10 ts,deviceid,v1,v2,v3 from pt
+
+dropFunctionView(`funRecodeData)
+
+
+/**** 步骤十：统计设备使用时长 ****/
+//1. 生成数据
+n=100
+times=datetime(2022.01.01)+1..864000
+ts=sort(rand(times,n))
+status=rand(1..3,n)
+deviceid=rand("D"+lpad(string(1..9),2,"00"),n)
+t=table(ts,deviceid, status)
+
+select * from t
+select * from t where deviceid="D01" order by ts
+
+//2. 汇总设备状态时长
+dt = select *, deltas(ts) as duration from t context by deviceid
+
+dt=select sum(duration)/3600 as totalhour from dt where status=1 group by deviceid, status 
+
+//3. 返回使用时长
+select deviceid,string(totalhour)+"小时" as totalUse from dt order by totalhour desc
+
+
+/**** 性能优化 ****/
+//在 TSDB 存储引擎中，强制触发指定 chunk 内 level 0 级别的所有 level file 的合并操作，可以提升读取效率。
+chunkIds = exec chunkId from getChunksMeta() where type=1
+for (x in chunkIds) {
+triggerTSDBCompaction(x)
+}
+
+
+/**** 步骤十一：时间序列聚合引擎 ****/
+
+//定义保存计算结果的流表
+share streamTable(1000:0, `ts`deviceid`v1`v2`v3,[TIMESTAMP,SYMBOL,FLOAT,FLOAT,FLOAT]) as calc_result
+
+//计算引擎，实时计算均值指标（窗口10s，步长1s）
+//创建流数据时间序列引擎，以实现基于时间的滑动窗口或滚动窗口进行实时计算。返回一个表对象，通过向该表对象写入，将数据注入时间序列引擎进行计算。
+tsAggr_iot = createTimeSeriesEngine(name="tsAggr_iot",  windowSize=10*1000, step=1*1000, metrics=<[avg(v1),avg(v2),max(v3)]>, dummyTable=replayStream, outputTable=calc_result, timeColumn=`ts, keyColumn=`deviceid)
+//从客户端节点订阅本地或远程服务器的流数据表。可在 handler 调用函数来处理订阅数据。
+subscribeTable(tableName="replayStream", actionName="act_tsAggr_iot", offset=0, handler=append!{tsAggr_iot}, msgAsTable=true, batchSize=50, throttle=1, hash=0)
+
+select count(*) from calc_result   
+
+t=select top 100 * from calc_result order by ts desc
+title=select min(ts),max(ts) from t
+plot(t.v1,t.ts,title.min_ts[0]+"  ~  "+title.max_ts[0])
+
+
+/**** 步骤十二：存储磁盘占用 ****/
+// flushTSDBCache() 刷盘
+select sum(diskUsage)/1024/1024+`m from pnodeRun(getTabletsMeta{chunkPath="/db_test/%", tableName="collect", diskUsage=true,top=0})
+
+
+

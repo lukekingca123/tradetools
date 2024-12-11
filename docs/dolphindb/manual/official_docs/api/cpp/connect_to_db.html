@@ -1,0 +1,250 @@
+<!DOCTYPE html><html xmlns="http://www.w3.org/1999/xhtml" xml:lang="zh" lang="zh" data-whc_version="26.0">
+    <head><link rel="shortcut icon" href="../../favicon.ico"/><link rel="icon" href="../../favicon.ico"/><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><meta http-equiv="X-UA-Compatible" content="IE=edge"/><meta name="description" content="API 提供 DBConnection::connect 方法以连接数据库，该方法的声明如下： bool connect(const string&amp; hostName, int port, const string&amp; userId = &#34;&#34;, const string&amp; password = &#34;&#34;, const string&amp; initialScript = &#34;&#34;, bool ..."/><meta name="DC.rights.owner" content="(C) 版权 2024"/><meta name="copyright" content="(C) 版权 2024"/><meta name="generator" content="DITA-OT"/><meta name="DC.type" content="topic"/><meta name="DC.coverage" content=""/><meta name="DC.relation" content="../../api/cpp/conn_db.html"/><meta name="prodname" content="DolphinDB"/><meta name="brand" content="DolphinDB"/><meta name="DC.creator" content="DolphinDB"/><meta name="DC.publisher" content="DDB N/A DDB 200"/><meta name="DC.format" content="HTML5"/><meta name="DC.identifier" content="connect_to_db"/><title>连接数据库</title><!--  Generated with Oxygen version 26.0, build number 2024012323.  --><meta name="wh-path2root" content="../../"/><meta name="wh-toc-id" content="connect_to_db-d9529e87245"/><meta name="wh-source-relpath" content="api/cpp/connect_to_db.dita"/><meta name="wh-out-relpath" content="api/cpp/connect_to_db.html"/>
+
+    <link rel="stylesheet" type="text/css" href="../../oxygen-webhelp/app/commons.css?buildId=2024012323"/>
+    <link rel="stylesheet" type="text/css" href="../../oxygen-webhelp/app/topic.css?buildId=2024012323"/>
+
+    <script src="../../oxygen-webhelp/app/options/properties.js?buildId=20240704100525"></script>
+    <script src="../../oxygen-webhelp/app/localization/strings.js?buildId=2024012323"></script>
+    <script src="../../oxygen-webhelp/app/search/index/keywords.js?buildId=20240704100525"></script>
+    <script defer="defer" src="../../oxygen-webhelp/app/commons.js?buildId=2024012323"></script>
+    <script defer="defer" src="../../oxygen-webhelp/app/topic.js?buildId=2024012323"></script>
+<link rel="stylesheet" type="text/css" href="../../oxygen-webhelp/template/styles.css?buildId=2024012323"/><script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script><script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script></head>
+
+    <body id="connect_to_db" class="wh_topic_page frmBody">
+        <a href="#wh_topic_body" class="sr-only sr-only-focusable">
+            跳转到主要内容
+        </a>
+        
+        
+        
+        
+        <header class="navbar navbar-default wh_header">
+    <div class="container-fluid">
+        <div xmlns:whc="http://www.oxygenxml.com/webhelp/components" class="wh_header_flex_container navbar-nav navbar-expand-md navbar-dark">
+            <div class="wh_logo_and_publication_title_container">
+                <div class="wh_logo_and_publication_title">
+                    
+                    <a href="https://www.dolphindb.cn" class=" wh_logo d-none d-sm-block "><img src="../../logo.png" alt="  DolphinDB 文档中心  "/></a>
+                    <div class=" wh_publication_title "><a href="../../index.html"><span class="booktitle">  <span class="ph mainbooktitle">DolphinDB 文档中心</span>  </span></a></div>
+                    
+                </div>
+                
+                
+            </div>
+
+            <div class="wh_top_menu_and_indexterms_link collapse navbar-collapse" id="wh_top_menu_and_indexterms_link">
+                
+                
+                
+                
+            </div>
+        <div class=" wh_search_input navbar-form wh_topic_page_search search " role="form">
+            
+            
+            
+            <form id="searchForm" method="get" role="search" action="../../search.html"><div><input type="search" placeholder="搜索 " class="wh_search_textfield" id="textToSearch" name="searchQuery" aria-label="搜索查询" required="required"/><button type="submit" class="wh_search_button" aria-label="搜索"><span class="search_input_text">搜索</span></button></div></form>
+            
+            <script src="/vendors/react/umd/react.production.min.js" defer="defer"></script>
+<script src="/vendors/react-dom/umd/react-dom.production.min.js" defer="defer"></script>
+<script src="/vendors/dayjs/dayjs.min.js" defer="defer"></script>
+<script src="/vendors/antd/dist/antd.min.js" defer="defer"></script>
+<script src="/vendors/@ant-design/icons/dist/index.umd.min.js" defer="defer"></script>
+<script src="/zh/index.js" type="module"></script>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js" defer="defer"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML" defer="defer"><!--
+
+
+--></script>
+
+            
+        </div></div>
+    </div>
+</header>
+        
+        
+         
+        
+        
+        
+        <div class="container-fluid" id="wh_topic_container">
+            <div class="row">
+
+                <nav class="wh_tools d-print-none navbar-expand-md" aria-label="Tools">
+                    
+                    <div data-tooltip-position="bottom" class=" wh_breadcrumb "><ol class="d-print-none"><li><span class="home"><a href="../../index.html"><span>主页</span></a></span></li><li><div class="topicref" data-id="api_protocol"><div class="title"><a href="../../api/connapi_intro.html"><span class="keyword label">连接器 &amp; API</span></a><div class="wh-tooltip"><p class="shortdesc">面向不同编程语言的 DolphinDB API 及连接器，相关协议和用法</p></div></div></div></li><li><div class="topicref" data-id="cpp_api"><div class="title"><a href="../../api/cpp/cpp_api.html">C++ API</a></div></div></li><li><div class="topicref" data-id="bsc_ops"><div class="title"><a href="../../api/cpp/bsc_ops.html">基本操作</a></div></div></li><li><div class="topicref" data-id="conn_db"><div class="title"><a href="../../api/cpp/conn_db.html">连接数据库</a></div></div></li><li class="active"><div class="topicref" data-id="connect_to_db"><div class="title"><a href="../../api/cpp/connect_to_db.html">连接数据库</a></div></div></li></ol></div>
+                    
+                    
+                    
+                    <div class="wh_right_tools">
+                        <button class="wh_hide_highlight" aria-label="切换搜索突出显示" title="切换搜索突出显示"></button>
+                        <button class="webhelp_expand_collapse_sections" data-next-state="collapsed" aria-label="折叠截面" title="折叠截面"></button>
+                        
+                        
+                        
+                        
+                        <div class=" wh_print_link print d-none d-md-inline-block "><button onClick="window.print()" title="打印此页" aria-label="打印此页"></button></div>
+                        
+                        <button type="button" id="wh_toc_button" class="custom-toggler navbar-toggler collapsed wh_toggle_button navbar-light" aria-expanded="false" aria-label="Toggle publishing table of content" aria-controls="wh_publication_toc">
+                            <span class="navbar-toggler-icon"></span>
+                        </button>
+                    </div>
+                    
+                </nav>
+            </div>
+            
+            
+            
+            
+            <div class="wh_content_area">
+                <div class="row">
+                    
+                        <nav id="wh_publication_toc" class="col-lg-3 col-md-3 col-sm-12 d-md-block d-none d-print-none" aria-label="Table of Contents Container">
+                            <div id="wh_publication_toc_content">
+		                        
+                            	<div class=" wh_publication_toc " data-tooltip-position="right"><span class="expand-button-action-labels"><span id="button-expand-action" role="button" aria-label="Expand"></span><span id="button-collapse-action" role="button" aria-label="Collapse"></span><span id="button-pending-action" role="button" aria-label="Pending"></span></span><ul role="tree" aria-label="Table of Contents"><li role="treeitem"><div data-tocid="new_chap_about_sect_ddb_docs_intro-d9529e87" class="topicref" data-id="new_chap_about_sect_ddb_docs_intro" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../about/ddb_docs_intro.html" id="new_chap_about_sect_ddb_docs_intro-d9529e87-link">文档使用说明</a><div class="wh-tooltip"><p class="shortdesc">如何获取 DolphinDB 帮助信息</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="chap1_getstarted-d9529e140" class="topicref" data-id="chap1_getstarted" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action chap1_getstarted-d9529e140-link" class="wh-expand-btn"></span><div class="title"><a href="../../getstarted/chap1_getstarted.html" id="chap1_getstarted-d9529e140-link"><span class="keyword label">快速上手</span></a><div class="wh-tooltip"><p class="shortdesc">如何快速部署 DolphinDB、建库建表、写入和查询数据</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="sectionddb_deployment-d9529e335" class="topicref" data-id="sectionddb_deployment" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action sectionddb_deployment-d9529e335-link" class="wh-expand-btn"></span><div class="title"><a href="../../deploy/deploy_intro.html" id="sectionddb_deployment-d9529e335-link"><span class="keyword label">部署</span></a><div class="wh-tooltip"><p class="shortdesc">如何在不同的场景中部署 DolphinDB</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="new_chap_database_manage_new_chap_dbmanage_landing_page-d9529e2313" class="topicref" data-id="new_chap_database_manage_new_chap_dbmanage_landing_page" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action new_chap_database_manage_new_chap_dbmanage_landing_page-d9529e2313-link" class="wh-expand-btn"></span><div class="title"><a href="../../db_distr_comp/cfg/db_intro.html" id="new_chap_database_manage_new_chap_dbmanage_landing_page-d9529e2313-link"><span class="keyword label">数据库</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 数据库的基本概念</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="chap7_tutorials_streaming-d9529e3490" class="topicref" data-id="chap7_tutorials_streaming" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action chap7_tutorials_streaming-d9529e3490-link" class="wh-expand-btn"></span><div class="title"><a href="../../stream/str_intro.html" id="chap7_tutorials_streaming-d9529e3490-link"><span class="keyword label">流数据</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 流数据引擎及流数据计算的基本概念</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="tocId-d9529e7385" class="topicref" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action tocId-d9529e7385-link" class="wh-expand-btn"></span><div class="title"><a href="../../db_distr_comp/db_oper/import_data.html" id="tocId-d9529e7385-link">数据迁移</a><div class="wh-tooltip"><p class="shortdesc">如何从不同数据源向 DolphinDB 迁移数据</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="chap7_tutorials_system_management-d9529e7812" class="topicref" data-id="chap7_tutorials_system_management" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action chap7_tutorials_system_management-d9529e7812-link" class="wh-expand-btn"></span><div class="title"><a href="../../sys_man/om_intro.html" id="chap7_tutorials_system_management-d9529e7812-link"><span class="keyword label">系统运维</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 的系统运维功能及方法</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="about_language_resources-d9529e16490" class="topicref" data-id="about_language_resources" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action about_language_resources-d9529e16490-link" class="wh-expand-btn"></span><div class="title"><a href="../../progr/progr_intro.html" id="about_language_resources-d9529e16490-link"><span class="keyword label">编程语言</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 编程基本概念与方法、SQL 在 DolphinDB 的应用</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="functions_references-d9529e26503" class="topicref" data-id="functions_references" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action functions_references-d9529e26503-link" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/funcs_intro.html" id="functions_references-d9529e26503-link"><span class="keyword label">函数参考</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 函数分类、语法、详解及示例</p></div></div></div></li><li role="treeitem" aria-expanded="true"><div data-tocid="api_protocol-d9529e86456" class="topicref" data-id="api_protocol" data-state="expanded"><span role="button" tabindex="0" aria-labelledby="button-collapse-action api_protocol-d9529e86456-link" class="wh-expand-btn"></span><div class="title"><a href="../../api/connapi_intro.html" id="api_protocol-d9529e86456-link"><span class="keyword label">连接器 &amp; API</span></a><div class="wh-tooltip"><p class="shortdesc">面向不同编程语言的 DolphinDB API 及连接器，相关协议和用法</p></div></div></div><ul role="group" class="navbar-nav nav-list"><li role="treeitem" aria-expanded="true"><div data-tocid="cpp_api-d9529e86509" class="topicref" data-id="cpp_api" data-state="expanded"><span role="button" tabindex="0" aria-labelledby="button-collapse-action cpp_api-d9529e86509-link" class="wh-expand-btn"></span><div class="title"><a href="../../api/cpp/cpp_api.html" id="cpp_api-d9529e86509-link">C++ API</a></div></div><ul role="group" class="navbar-nav nav-list"><li role="treeitem" aria-expanded="false"><div data-tocid="quickstart-d9529e86555" class="topicref" data-id="quickstart" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action quickstart-d9529e86555-link" class="wh-expand-btn"></span><div class="title"><a href="../../api/cpp/quickstart.html" id="quickstart-d9529e86555-link">快速上手</a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="data_types_forms-d9529e86785" class="topicref" data-id="data_types_forms" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action data_types_forms-d9529e86785-link" class="wh-expand-btn"></span><div class="title"><a href="../../api/cpp/data_types_forms.html" id="data_types_forms-d9529e86785-link">数据类型与形式</a></div></div></li><li role="treeitem" aria-expanded="true"><div data-tocid="bsc_ops-d9529e87107" class="topicref" data-id="bsc_ops" data-state="expanded"><span role="button" tabindex="0" aria-labelledby="button-collapse-action bsc_ops-d9529e87107-link" class="wh-expand-btn"></span><div class="title"><a href="../../api/cpp/bsc_ops.html" id="bsc_ops-d9529e87107-link">基本操作</a></div></div><ul role="group" class="navbar-nav nav-list"><li role="treeitem" aria-expanded="true"><div data-tocid="conn_db-d9529e87153" class="topicref" data-id="conn_db" data-state="expanded"><span role="button" tabindex="0" aria-labelledby="button-collapse-action conn_db-d9529e87153-link" class="wh-expand-btn"></span><div class="title"><a href="../../api/cpp/conn_db.html" id="conn_db-d9529e87153-link">连接数据库</a></div></div><ul role="group" class="navbar-nav nav-list"><li role="treeitem"><div data-tocid="create_dbconn_obj-d9529e87199" class="topicref" data-id="create_dbconn_obj" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../api/cpp/create_dbconn_obj.html" id="create_dbconn_obj-d9529e87199-link">创建 DBConnection 类对象</a></div></div></li><li role="treeitem" class="active"><div data-tocid="connect_to_db-d9529e87245" class="topicref" data-id="connect_to_db" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../api/cpp/connect_to_db.html" id="connect_to_db-d9529e87245-link">连接数据库</a></div></div></li></ul></li><li role="treeitem" aria-expanded="false"><div data-tocid="run_script_func-d9529e87291" class="topicref" data-id="run_script_func" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action run_script_func-d9529e87291-link" class="wh-expand-btn"></span><div class="title"><a href="../../api/cpp/run_script_func.html" id="run_script_func-d9529e87291-link">运行脚本与函数</a></div></div></li><li role="treeitem"><div data-tocid="upload_obj-d9529e87429" class="topicref" data-id="upload_obj" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../api/cpp/upload_obj.html" id="upload_obj-d9529e87429-link">上传数据对象</a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="conn_pool-d9529e87475" class="topicref" data-id="conn_pool" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action conn_pool-d9529e87475-link" class="wh-expand-btn"></span><div class="title"><a href="../../api/cpp/conn_pool.html" id="conn_pool-d9529e87475-link">使用连接池</a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="subscribe_stream_data-d9529e87659" class="topicref" data-id="subscribe_stream_data" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action subscribe_stream_data-d9529e87659-link" class="wh-expand-btn"></span><div class="title"><a href="../../api/cpp/subscribe_stream_data.html" id="subscribe_stream_data-d9529e87659-link">订阅流数据</a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="write_data-d9529e87981" class="topicref" data-id="write_data" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action write_data-d9529e87981-link" class="wh-expand-btn"></span><div class="title"><a href="../../api/cpp/write_data.html" id="write_data-d9529e87981-link">写入数据</a></div></div></li><li role="treeitem"><div data-tocid="event_handling-d9529e88257" class="topicref" data-id="event_handling" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../api/cpp/event_handling.html" id="event_handling-d9529e88257-link">事件处理</a></div></div></li></ul></li><li role="treeitem"><div data-tocid="troubleshooting-d9529e88303" class="topicref" data-id="troubleshooting" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../api/cpp/troubleshooting.html" id="troubleshooting-d9529e88303-link">故障排查</a></div></div></li></ul></li><li role="treeitem" aria-expanded="false"><div data-tocid="chap5_sectpythonapi-d9529e88349" class="topicref" data-id="chap5_sectpythonapi" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action chap5_sectpythonapi-d9529e88349-link" class="wh-expand-btn"></span><div class="title"><a href="../../api/python/py.html" id="chap5_sectpythonapi-d9529e88349-link"><span class="keyword label">Python API</span></a></div></div></li><li role="treeitem"><div data-tocid="c-api-d9529e90273" class="topicref" data-id="c-api" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../api/csharp.html" id="c-api-d9529e90273-link">C# API</a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="javaapi_landingpage-d9529e90319" class="topicref" data-id="javaapi_landingpage" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action javaapi_landingpage-d9529e90319-link" class="wh-expand-btn"></span><div class="title"><a href="../../api/java_api/newjava.html" id="javaapi_landingpage-d9529e90319-link">Java API</a></div></div></li><li role="treeitem"><div data-tocid="jdbc-连接器-d9529e91745" class="topicref" data-id="jdbc-连接器" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../api/jdbc.html" id="jdbc-连接器-d9529e91745-link">JDBC 连接器</a></div></div></li><li role="treeitem"><div data-tocid="go-api-d9529e91791" class="topicref" data-id="go-api" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../api/go.html" id="go-api-d9529e91791-link">Go API</a></div></div></li><li role="treeitem"><div data-tocid="javascript-api-d9529e91837" class="topicref" data-id="javascript-api" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../api/js.html" id="javascript-api-d9529e91837-link">JavaScript API</a></div></div></li><li role="treeitem"><div data-tocid="json-api-d9529e91883" class="topicref" data-id="json-api" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../api/json.html" id="json-api-d9529e91883-link">JSON API</a></div></div></li><li role="treeitem"><div data-tocid="r-api-d9529e91929" class="topicref" data-id="r-api" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../api/r.html" id="r-api-d9529e91929-link">R API</a></div></div></li></ul></li><li role="treeitem" aria-expanded="false"><div data-tocid="chap6_plugin-d9529e91976" class="topicref" data-id="chap6_plugin" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action chap6_plugin-d9529e91976-link" class="wh-expand-btn"></span><div class="title"><a href="../../plugins/plg_intro.html" id="chap6_plugin-d9529e91976-link"><span class="keyword label">插件</span></a><div class="wh-tooltip"><p class="shortdesc">多个应用场景的插件使用说明和插件开发指导</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="third_party-d9529e94749" class="topicref" data-id="third_party" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action third_party-d9529e94749-link" class="wh-expand-btn"></span><div class="title"><a href="../../third_party.html" id="third_party-d9529e94749-link">第三方工具</a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="about_tutorials-d9529e94980" class="topicref" data-id="about_tutorials" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action about_tutorials-d9529e94980-link" class="wh-expand-btn"></span><div class="title"><a href="../../tutorials/about_tutorials.html" id="about_tutorials-d9529e94980-link"><span class="keyword label">教程</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 产品使用教程</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="tocId-d9529e101769" class="topicref" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action tocId-d9529e101769-link" class="wh-expand-btn"></span><div class="title"><a href="../../rn/server/3_00_1.html" id="tocId-d9529e101769-link">版本说明</a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 版本发布历史</p></div></div></div></li></ul></div>
+		                        
+                            </div>
+                        </nav>
+                    
+                    
+                    <div class="col-lg-7 col-md-9 col-sm-12" id="wh_topic_body">
+                        <button id="wh_close_publication_toc_button" class="close-toc-button d-none" aria-label="Toggle publishing table of content" aria-controls="wh_publication_toc" aria-expanded="true">
+                            <span class="close-toc-icon-container">
+                                <span class="close-toc-icon"></span>     
+                            </span>
+                        </button>
+                        <button id="wh_close_topic_toc_button" class="close-toc-button d-none" aria-label="Toggle topic table of content" aria-controls="wh_topic_toc" aria-expanded="true">
+                            <span class="close-toc-icon-container">
+                                <span class="close-toc-icon"></span>     
+                            </span>
+                        </button>
+                        
+                        <div class=" wh_topic_content body "><main role="main"><article class="- topic/topic topic" role="article" aria-labelledby="ariaid-title1">
+    <h1 class="- topic/title title topictitle1" id="ariaid-title1">连接数据库</h1>
+    <div class="- topic/body body">
+        <p class="- topic/p p">API 提供 <code class="+ topic/ph pr-d/codeph ph codeph">DBConnection::connect</code> 方法以连接数据库，该方法的声明如下：</p>
+        <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="connect_to_db__codeblock_vp1_41m_x1c" data-ofbid="connect_to_db__codeblock_vp1_41m_x1c"><code>bool connect(const string&amp; hostName, int port, const string&amp; userId = "", const string&amp; password = "", const string&amp; initialScript = "",
+		     bool highAvailability = false, const vector&lt;string&gt;&amp; highAvailabilitySites = vector&lt;string&gt;(), int keepAliveTime=7200, bool reconnect = false);</code></pre>
+        <p class="- topic/p p">参数说明如下：</p>
+        <section class="- topic/section section" id="connect_to_db__para_sobre_conn" data-ofbid="connect_to_db__para_sobre_conn"><h2 class="- topic/title title sectiontitle">连接参数</h2>
+            
+            <ul class="- topic/ul ul" id="connect_to_db__ul_yst_v1m_x1c" data-ofbid="connect_to_db__ul_yst_v1m_x1c">
+                <li class="- topic/li li">
+                    <p class="- topic/p p"><code class="+ topic/ph pr-d/codeph ph codeph">hostName</code>：所连接服务器的地址。</p>
+                </li>
+                <li class="- topic/li li">
+                    <p class="- topic/p p"><code class="+ topic/ph pr-d/codeph ph codeph">port</code>：所连接服务器的端口。</p>
+                </li>
+                <li class="- topic/li li">
+                    <p class="- topic/p p"><code class="+ topic/ph pr-d/codeph ph codeph">userId</code>：登录时的用户名，默认值为空。</p>
+                </li>
+                <li class="- topic/li li">
+                    <p class="- topic/p p"><code class="+ topic/ph pr-d/codeph ph codeph">password</code>：登录时用户名对应的密码，默认值为空。</p>
+                </li>
+            </ul>
+            <p class="- topic/p p">通过上述参数，用户可以连接到指定的IP地址和端口号上面的 DolphinDB，如果userId和password不为空，则在建立连接的同时登录账号。</p>
+        </section>
+        <section class="- topic/section section" id="connect_to_db__para_sobre_script" data-ofbid="connect_to_db__para_sobre_script"><h2 class="- topic/title title sectiontitle">脚本参数</h2>
+            
+            <p class="- topic/p p"><code class="+ topic/ph pr-d/codeph ph codeph">initialScript</code>：初始化脚本，在连接成功后会调用一次 。</p>
+            <p class="- topic/p p">该参数可以用于执行一些预加载任务。包含加载插件、加载分布式表、定义并加载流数据表等脚本。</p>
+        </section>
+        <section class="- topic/section section" id="connect_to_db__para_sobre_ha" data-ofbid="connect_to_db__para_sobre_ha"><h2 class="- topic/title title sectiontitle">高可用参数</h2>
+            
+            <ul class="- topic/ul ul" id="connect_to_db__ul_att_v1m_x1c" data-ofbid="connect_to_db__ul_att_v1m_x1c">
+                <li class="- topic/li li">
+                    <p class="- topic/p p"><code class="+ topic/ph pr-d/codeph ph codeph">highAvailability</code>：是否开启 API 高可用，默认值为 false。</p>
+                </li>
+                <li class="- topic/li li">
+                    <p class="- topic/p p"><code class="+ topic/ph pr-d/codeph ph codeph">highAvailabilitySites</code>：由所有可用节点的地址和端口组成的 vector，每个节点的格式为
+                            <code class="+ topic/ph pr-d/codeph ph codeph">ip:port</code>。</p>
+                </li>
+            </ul>
+            <p class="- topic/p p"><em class="+ topic/ph hi-d/i ph i">highAvailability</em> 和 <em class="+ topic/ph hi-d/i ph i">highAvailabilitySites</em> 都是 API 高可用的相关配置参数。在高可用模式下，C++
+                API 在连接集群节点时会查询负载最小的节点，并与其建立连接。当使用单线程方式有一定延迟地（如下注意中的第一点）创建多个连接时，C++ API
+                可以保证所有可用节点上连接的负载均衡；但在使用多线程方式同时创建多个连接时，由于同时建立连接，每个 Session
+                建立时查询的最小负载节点可能为同一个，不能保证节点的负载均衡。</p>
+            <p class="- topic/p p">若要开启 API 高可用，则需要指定 <em class="+ topic/ph hi-d/i ph i">highAvailability</em> 参数为 True，同时通过 <em class="+ topic/ph hi-d/i ph i">highAvailabilitySites</em>
+                指定所有可用节点的地址和端口。</p>
+            <div class="- topic/note note note note_note" id="connect_to_db__note_jyw_2bm_x1c" data-ofbid="connect_to_db__note_jyw_2bm_x1c"><span class="note__title">注：</span> 
+                <ul class="- topic/ul ul" id="connect_to_db__ul_s25_fbm_x1c" data-ofbid="connect_to_db__ul_s25_fbm_x1c">
+                    <li class="- topic/li li">如果连续建立多个 Session，服务端集群间可能尚未同步负载信息，此时查询到的结果可能始终为同一个最小负载节点，无法保证节点的负载均衡。</li>
+                    <li class="- topic/li li">若开启高可用后不指定 <em class="+ topic/ph hi-d/i ph i">highAvailabilitySites</em>，则默认高可用组为集群全部节点。</li>
+                    <li class="- topic/li li">开启高可用相当于启用自动重连，当连接断开时，如果返回的错误信息为 <code class="+ topic/ph pr-d/codeph ph codeph">&lt;NotLeader&gt;</code>
+                        则继续尝试重连错误信息中指定的 Leader 节点；如果返回的错误信息为其他，则尝试重连 <em class="+ topic/ph hi-d/i ph i">highAvailabilitySites</em>
+                        列表中上一次成功连接的节点的下一个节点。</li>
+                </ul>
+            </div>
+        </section>
+        <section class="- topic/section section" id="connect_to_db__para_sobre_keepalivetime" data-ofbid="connect_to_db__para_sobre_keepalivetime"><h2 class="- topic/title title sectiontitle">保活参数</h2>
+            
+            <p class="- topic/p p"><code class="+ topic/ph pr-d/codeph ph codeph">keepAliveTime</code>：表示在 TCP 连接空闲状态下，两次保活包之间的间隔时间，默认参数为 7200，单位秒（s）。</p>
+            <p class="- topic/p p">该参数与 DBConnection 构造函数中的 <em class="+ topic/ph hi-d/i ph i">keepAliveTime</em> 参数作用相同。</p>
+            <div class="- topic/note note note note_note" id="connect_to_db__note_arq_kbm_x1c" data-ofbid="connect_to_db__note_arq_kbm_x1c"><span class="note__title">注：</span> 
+                <ol class="- topic/ol ol" id="connect_to_db__ol_ctt_v1m_x1c" data-ofbid="connect_to_db__ol_ctt_v1m_x1c">
+                    <li class="- topic/li li">该参数在 Linux、Windows、MacOS 平台均可生效。</li>
+                    <li class="- topic/li li">在构造DBConnect对象时也可以设置该参数。</li>
+                </ol>
+            </div>
+        </section>
+        <section class="- topic/section section" id="connect_to_db__para_sobre_reconn" data-ofbid="connect_to_db__para_sobre_reconn"><h2 class="- topic/title title sectiontitle">重连参数</h2>
+            
+            <p class="- topic/p p"><code class="+ topic/ph pr-d/codeph ph codeph">reconnect</code>：表示在不开启高可用的情况下，是否在 API 检测到连接异常时进行重连，默认值为 false。</p>
+            <p class="- topic/p p">若开启高可用模式，则 API 在检测到连接异常时将自动进行重连，不需要设置参数 <em class="+ topic/ph hi-d/i ph i">reconnect</em>；若未开启高可用，通过配置
+                    <code class="+ topic/ph pr-d/codeph ph codeph">reconnect = true</code>，即可实现 API 在检测到连接异常时进行重连。</p>
+        </section>
+        <section class="- topic/section section" id="connect_to_db__examples_conn" data-ofbid="connect_to_db__examples_conn"><h2 class="- topic/title title sectiontitle">用法示例</h2>
+            
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="connect_to_db__codeblock_hxs_mbm_x1c" data-ofbid="connect_to_db__codeblock_hxs_mbm_x1c"><code>conn.connect("127.0.0.1", 8848, "admin", "123456"); //连接IP地址为127.0.0.1，端口为8848的DolphinDB并登录，用户名为"admin"，密码为"123456" 
+conn.connect("127.0.0.1", 8848, "admin", "123456", "clearAllCache();");  //连接数据库，并执行初始化脚本"clearAllCache();"
+std::vector&lt;std::string&gt; sites{"192.168.1.2:24120", "192.168.1.3:24120", "192.168.1.4:24120"};  //开启高可用，连接由三台DolphinDB节点组成的集群
+conn.connect("192.168.1.2", 24120, "admin", "123456", "", true, sites);
+conn.connect("127.0.0.1", 8848, "admin", "123456", "", false, std::vector&lt;std::string&gt;{}, 30, true);  //连接单节点数据库，设置保活包间隔为30秒，并开启自动重连</code></pre>
+        </section>
+    </div>
+</article></main></div>
+                        
+                        
+                        
+                        
+                        
+                        
+                    </div>
+                    
+                        <nav role="navigation" id="wh_topic_toc" aria-label="On this page" class="col-lg-2 d-none d-lg-block navbar d-print-none"> 
+                            <div id="wh_topic_toc_content">
+		                        
+	                            <div class=" wh_topic_toc "><div class="wh_topic_label">在本页上</div><ul><li class="section-item"><div class="section-title"><a href="#connect_to_db__para_sobre_conn" data-tocid="connect_to_db__para_sobre_conn">连接参数</a></div></li><li class="section-item"><div class="section-title"><a href="#connect_to_db__para_sobre_script" data-tocid="connect_to_db__para_sobre_script">脚本参数</a></div></li><li class="section-item"><div class="section-title"><a href="#connect_to_db__para_sobre_ha" data-tocid="connect_to_db__para_sobre_ha">高可用参数</a></div></li><li class="section-item"><div class="section-title"><a href="#connect_to_db__para_sobre_keepalivetime" data-tocid="connect_to_db__para_sobre_keepalivetime">保活参数</a></div></li><li class="section-item"><div class="section-title"><a href="#connect_to_db__para_sobre_reconn" data-tocid="connect_to_db__para_sobre_reconn">重连参数</a></div></li><li class="section-item"><div class="section-title"><a href="#connect_to_db__examples_conn" data-tocid="connect_to_db__examples_conn">用法示例</a></div></li></ul></div>
+	                        	
+                        	</div>
+                        </nav>
+                    
+                </div>
+            </div>
+            
+            
+            
+        </div> 
+        <footer class="navbar navbar-default wh_footer">
+  <div class=" footer-container mx-auto ">
+<title>Copyright</title><p><b> ©2024 浙江智臾科技有限公司 浙ICP备18048711号-3</b></p>
+  </div>
+</footer>
+        
+        <div id="go2top" class="d-print-none">
+            <span class="oxy-icon oxy-icon-up"></span>
+        </div>
+        
+        <div id="modal_img_large" class="modal">
+            <span class="close oxy-icon oxy-icon-remove"></span>
+            <div id="modal_img_container"></div>
+            <div id="caption"></div>
+        </div>
+        
+        
+        
+    </body>
+</html>

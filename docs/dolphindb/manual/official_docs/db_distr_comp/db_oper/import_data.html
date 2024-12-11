@@ -1,0 +1,361 @@
+<!DOCTYPE html><html xmlns="http://www.w3.org/1999/xhtml" xml:lang="zh" lang="zh" data-whc_version="26.0">
+    <head><link rel="shortcut icon" href="../../favicon.ico"/><link rel="icon" href="../../favicon.ico"/><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><meta http-equiv="X-UA-Compatible" content="IE=edge"/><meta name="description" content="从外部数据源向向 DolphinDB 迁移时，可采取如下方法： 通过文本文件导入 通过 HDF5 插件导入 通过 ODBC 插件导入 通过 MySQL 插件导入 其中，HDF5, ODBC 与 MySQL 插件均可从 DolphinDB 官网下载。以下简介这四种导入方法： 文本文件 通过文本文件进行数据中转是较为通用的一种数据迁移方式。DolphinDB 提供了以下三个函数来加载文本文件： ..."/><meta name="DC.rights.owner" content="(C) 版权 2024"/><meta name="copyright" content="(C) 版权 2024"/><meta name="generator" content="DITA-OT"/><meta name="DC.type" content="topic"/><meta name="DC.coverage" content=""/><meta name="prodname" content="DolphinDB"/><meta name="brand" content="DolphinDB"/><meta name="DC.creator" content="DolphinDB"/><meta name="DC.publisher" content="DDB N/A DDB 200"/><meta name="DC.format" content="HTML5"/><meta name="DC.identifier" content="导入数据"/><title>数据迁移方法</title><!--  Generated with Oxygen version 26.0, build number 2024012323.  --><meta name="wh-path2root" content="../../"/><meta name="wh-toc-id" content="导入数据-d9529e7395"/><meta name="wh-source-relpath" content="db_distr_comp/db_oper/import_data.dita"/><meta name="wh-out-relpath" content="db_distr_comp/db_oper/import_data.html"/>
+
+    <link rel="stylesheet" type="text/css" href="../../oxygen-webhelp/app/commons.css?buildId=2024012323"/>
+    <link rel="stylesheet" type="text/css" href="../../oxygen-webhelp/app/topic.css?buildId=2024012323"/>
+
+    <script src="../../oxygen-webhelp/app/options/properties.js?buildId=20240704100525"></script>
+    <script src="../../oxygen-webhelp/app/localization/strings.js?buildId=2024012323"></script>
+    <script src="../../oxygen-webhelp/app/search/index/keywords.js?buildId=20240704100525"></script>
+    <script defer="defer" src="../../oxygen-webhelp/app/commons.js?buildId=2024012323"></script>
+    <script defer="defer" src="../../oxygen-webhelp/app/topic.js?buildId=2024012323"></script>
+<link rel="stylesheet" type="text/css" href="../../oxygen-webhelp/template/styles.css?buildId=2024012323"/><script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script><script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script></head>
+
+    <body id="导入数据" class="wh_topic_page frmBody">
+        <a href="#wh_topic_body" class="sr-only sr-only-focusable">
+            跳转到主要内容
+        </a>
+        
+        
+        
+        
+        <header class="navbar navbar-default wh_header">
+    <div class="container-fluid">
+        <div xmlns:whc="http://www.oxygenxml.com/webhelp/components" class="wh_header_flex_container navbar-nav navbar-expand-md navbar-dark">
+            <div class="wh_logo_and_publication_title_container">
+                <div class="wh_logo_and_publication_title">
+                    
+                    <a href="https://www.dolphindb.cn" class=" wh_logo d-none d-sm-block "><img src="../../logo.png" alt="  DolphinDB 文档中心  "/></a>
+                    <div class=" wh_publication_title "><a href="../../index.html"><span class="booktitle">  <span class="ph mainbooktitle">DolphinDB 文档中心</span>  </span></a></div>
+                    
+                </div>
+                
+                
+            </div>
+
+            <div class="wh_top_menu_and_indexterms_link collapse navbar-collapse" id="wh_top_menu_and_indexterms_link">
+                
+                
+                
+                
+            </div>
+        <div class=" wh_search_input navbar-form wh_topic_page_search search " role="form">
+            
+            
+            
+            <form id="searchForm" method="get" role="search" action="../../search.html"><div><input type="search" placeholder="搜索 " class="wh_search_textfield" id="textToSearch" name="searchQuery" aria-label="搜索查询" required="required"/><button type="submit" class="wh_search_button" aria-label="搜索"><span class="search_input_text">搜索</span></button></div></form>
+            
+            <script src="/vendors/react/umd/react.production.min.js" defer="defer"></script>
+<script src="/vendors/react-dom/umd/react-dom.production.min.js" defer="defer"></script>
+<script src="/vendors/dayjs/dayjs.min.js" defer="defer"></script>
+<script src="/vendors/antd/dist/antd.min.js" defer="defer"></script>
+<script src="/vendors/@ant-design/icons/dist/index.umd.min.js" defer="defer"></script>
+<script src="/zh/index.js" type="module"></script>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js" defer="defer"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML" defer="defer"><!--
+
+
+--></script>
+
+            
+        </div></div>
+    </div>
+</header>
+        
+        
+         
+        
+        
+        
+        <div class="container-fluid" id="wh_topic_container">
+            <div class="row">
+
+                <nav class="wh_tools d-print-none navbar-expand-md" aria-label="Tools">
+                    
+                    <div data-tooltip-position="bottom" class=" wh_breadcrumb "><ol class="d-print-none"><li><span class="home"><a href="../../index.html"><span>主页</span></a></span></li><li><div class="topicref"><div class="title"><a href="../../db_distr_comp/db_oper/import_data.html">数据迁移</a><div class="wh-tooltip"><p class="shortdesc">如何从不同数据源向 DolphinDB 迁移数据</p></div></div></div></li><li class="active"><div class="topicref" data-id="导入数据"><div class="title"><a href="../../db_distr_comp/db_oper/import_data.html"><span class="keyword label">数据迁移方法</span></a></div></div></li></ol></div>
+                    
+                    
+                    
+                    <div class="wh_right_tools">
+                        <button class="wh_hide_highlight" aria-label="切换搜索突出显示" title="切换搜索突出显示"></button>
+                        <button class="webhelp_expand_collapse_sections" data-next-state="collapsed" aria-label="折叠截面" title="折叠截面"></button>
+                        
+                        
+                        
+                        
+                        <div class=" wh_print_link print d-none d-md-inline-block "><button onClick="window.print()" title="打印此页" aria-label="打印此页"></button></div>
+                        
+                        <button type="button" id="wh_toc_button" class="custom-toggler navbar-toggler collapsed wh_toggle_button navbar-light" aria-expanded="false" aria-label="Toggle publishing table of content" aria-controls="wh_publication_toc">
+                            <span class="navbar-toggler-icon"></span>
+                        </button>
+                    </div>
+                    
+                </nav>
+            </div>
+            
+            
+            
+            
+            <div class="wh_content_area">
+                <div class="row">
+                    
+                        <nav id="wh_publication_toc" class="col-lg-3 col-md-3 col-sm-12 d-md-block d-none d-print-none" aria-label="Table of Contents Container">
+                            <div id="wh_publication_toc_content">
+		                        
+                            	<div class=" wh_publication_toc " data-tooltip-position="right"><span class="expand-button-action-labels"><span id="button-expand-action" role="button" aria-label="Expand"></span><span id="button-collapse-action" role="button" aria-label="Collapse"></span><span id="button-pending-action" role="button" aria-label="Pending"></span></span><ul role="tree" aria-label="Table of Contents"><li role="treeitem"><div data-tocid="new_chap_about_sect_ddb_docs_intro-d9529e87" class="topicref" data-id="new_chap_about_sect_ddb_docs_intro" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../about/ddb_docs_intro.html" id="new_chap_about_sect_ddb_docs_intro-d9529e87-link">文档使用说明</a><div class="wh-tooltip"><p class="shortdesc">如何获取 DolphinDB 帮助信息</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="chap1_getstarted-d9529e140" class="topicref" data-id="chap1_getstarted" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action chap1_getstarted-d9529e140-link" class="wh-expand-btn"></span><div class="title"><a href="../../getstarted/chap1_getstarted.html" id="chap1_getstarted-d9529e140-link"><span class="keyword label">快速上手</span></a><div class="wh-tooltip"><p class="shortdesc">如何快速部署 DolphinDB、建库建表、写入和查询数据</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="sectionddb_deployment-d9529e335" class="topicref" data-id="sectionddb_deployment" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action sectionddb_deployment-d9529e335-link" class="wh-expand-btn"></span><div class="title"><a href="../../deploy/deploy_intro.html" id="sectionddb_deployment-d9529e335-link"><span class="keyword label">部署</span></a><div class="wh-tooltip"><p class="shortdesc">如何在不同的场景中部署 DolphinDB</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="new_chap_database_manage_new_chap_dbmanage_landing_page-d9529e2313" class="topicref" data-id="new_chap_database_manage_new_chap_dbmanage_landing_page" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action new_chap_database_manage_new_chap_dbmanage_landing_page-d9529e2313-link" class="wh-expand-btn"></span><div class="title"><a href="../../db_distr_comp/cfg/db_intro.html" id="new_chap_database_manage_new_chap_dbmanage_landing_page-d9529e2313-link"><span class="keyword label">数据库</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 数据库的基本概念</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="chap7_tutorials_streaming-d9529e3490" class="topicref" data-id="chap7_tutorials_streaming" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action chap7_tutorials_streaming-d9529e3490-link" class="wh-expand-btn"></span><div class="title"><a href="../../stream/str_intro.html" id="chap7_tutorials_streaming-d9529e3490-link"><span class="keyword label">流数据</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 流数据引擎及流数据计算的基本概念</p></div></div></div></li><li role="treeitem" aria-expanded="true"><div data-tocid="tocId-d9529e7385" class="topicref" data-state="expanded"><span role="button" tabindex="0" aria-labelledby="button-collapse-action tocId-d9529e7385-link" class="wh-expand-btn"></span><div class="title"><a href="../../db_distr_comp/db_oper/import_data.html" id="tocId-d9529e7385-link">数据迁移</a><div class="wh-tooltip"><p class="shortdesc">如何从不同数据源向 DolphinDB 迁移数据</p></div></div></div><ul role="group" class="navbar-nav nav-list"><li role="treeitem" class="active"><div data-tocid="导入数据-d9529e7395" class="topicref" data-id="导入数据" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../db_distr_comp/db_oper/import_data.html" id="导入数据-d9529e7395-link"><span class="keyword label">数据迁移方法</span></a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="tocId-d9529e7442" class="topicref" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action tocId-d9529e7442-link" class="wh-expand-btn"></span><div class="title"><a href="../../tutorials/ClickHouse_to_DolphinDB.html" id="tocId-d9529e7442-link">应用场景</a></div></div></li></ul></li><li role="treeitem" aria-expanded="false"><div data-tocid="chap7_tutorials_system_management-d9529e7812" class="topicref" data-id="chap7_tutorials_system_management" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action chap7_tutorials_system_management-d9529e7812-link" class="wh-expand-btn"></span><div class="title"><a href="../../sys_man/om_intro.html" id="chap7_tutorials_system_management-d9529e7812-link"><span class="keyword label">系统运维</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 的系统运维功能及方法</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="about_language_resources-d9529e16490" class="topicref" data-id="about_language_resources" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action about_language_resources-d9529e16490-link" class="wh-expand-btn"></span><div class="title"><a href="../../progr/progr_intro.html" id="about_language_resources-d9529e16490-link"><span class="keyword label">编程语言</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 编程基本概念与方法、SQL 在 DolphinDB 的应用</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="functions_references-d9529e26503" class="topicref" data-id="functions_references" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action functions_references-d9529e26503-link" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/funcs_intro.html" id="functions_references-d9529e26503-link"><span class="keyword label">函数参考</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 函数分类、语法、详解及示例</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="api_protocol-d9529e86456" class="topicref" data-id="api_protocol" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action api_protocol-d9529e86456-link" class="wh-expand-btn"></span><div class="title"><a href="../../api/connapi_intro.html" id="api_protocol-d9529e86456-link"><span class="keyword label">连接器 &amp; API</span></a><div class="wh-tooltip"><p class="shortdesc">面向不同编程语言的 DolphinDB API 及连接器，相关协议和用法</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="chap6_plugin-d9529e91976" class="topicref" data-id="chap6_plugin" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action chap6_plugin-d9529e91976-link" class="wh-expand-btn"></span><div class="title"><a href="../../plugins/plg_intro.html" id="chap6_plugin-d9529e91976-link"><span class="keyword label">插件</span></a><div class="wh-tooltip"><p class="shortdesc">多个应用场景的插件使用说明和插件开发指导</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="third_party-d9529e94749" class="topicref" data-id="third_party" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action third_party-d9529e94749-link" class="wh-expand-btn"></span><div class="title"><a href="../../third_party.html" id="third_party-d9529e94749-link">第三方工具</a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="about_tutorials-d9529e94980" class="topicref" data-id="about_tutorials" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action about_tutorials-d9529e94980-link" class="wh-expand-btn"></span><div class="title"><a href="../../tutorials/about_tutorials.html" id="about_tutorials-d9529e94980-link"><span class="keyword label">教程</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 产品使用教程</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="tocId-d9529e101769" class="topicref" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action tocId-d9529e101769-link" class="wh-expand-btn"></span><div class="title"><a href="../../rn/server/3_00_1.html" id="tocId-d9529e101769-link">版本说明</a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 版本发布历史</p></div></div></div></li></ul></div>
+		                        
+                            </div>
+                        </nav>
+                    
+                    
+                    <div class="col-lg-7 col-md-9 col-sm-12" id="wh_topic_body">
+                        <button id="wh_close_publication_toc_button" class="close-toc-button d-none" aria-label="Toggle publishing table of content" aria-controls="wh_publication_toc" aria-expanded="true">
+                            <span class="close-toc-icon-container">
+                                <span class="close-toc-icon"></span>     
+                            </span>
+                        </button>
+                        <button id="wh_close_topic_toc_button" class="close-toc-button d-none" aria-label="Toggle topic table of content" aria-controls="wh_topic_toc" aria-expanded="true">
+                            <span class="close-toc-icon-container">
+                                <span class="close-toc-icon"></span>     
+                            </span>
+                        </button>
+                        
+                        <div class=" wh_topic_content body "><main role="main"><article class="- topic/topic topic" role="article" aria-labelledby="ariaid-title1">
+    <h1 class="- topic/title title topictitle1" id="ariaid-title1"><span class="- topic/keyword keyword label">数据迁移方法</span></h1>
+    <div class="- topic/body body">
+        <p class="- topic/p p" id="导入数据__p_ybj_thn_ryb" data-ofbid="导入数据__p_ybj_thn_ryb">从外部数据源向向 DolphinDB 迁移时，可采取如下方法：</p>
+        <ul class="- topic/ul ul" id="导入数据__ul_zbj_thn_ryb" data-ofbid="导入数据__ul_zbj_thn_ryb">
+            <li class="- topic/li li" id="导入数据__li_itm_54d_syb" data-ofbid="导入数据__li_itm_54d_syb">
+                <p class="- topic/p p" id="导入数据__p_acj_thn_ryb" data-ofbid="导入数据__p_acj_thn_ryb">通过文本文件导入</p>
+            </li>
+            <li class="- topic/li li" id="导入数据__li_jtm_54d_syb" data-ofbid="导入数据__li_jtm_54d_syb">
+                <p class="- topic/p p" id="导入数据__p_bcj_thn_ryb" data-ofbid="导入数据__p_bcj_thn_ryb">通过 HDF5 插件导入</p>
+            </li>
+            <li class="- topic/li li" id="导入数据__li_ktm_54d_syb" data-ofbid="导入数据__li_ktm_54d_syb">
+                <p class="- topic/p p" id="导入数据__p_ccj_thn_ryb" data-ofbid="导入数据__p_ccj_thn_ryb">通过 ODBC 插件导入</p>
+            </li>
+            <li class="- topic/li li" id="导入数据__li_ltm_54d_syb" data-ofbid="导入数据__li_ltm_54d_syb">
+                <p class="- topic/p p" id="导入数据__p_dcj_thn_ryb" data-ofbid="导入数据__p_dcj_thn_ryb">通过 MySQL 插件导入</p>
+            </li>
+        </ul>
+        <p class="- topic/p p" id="导入数据__p_ecj_thn_ryb" data-ofbid="导入数据__p_ecj_thn_ryb">其中，HDF5, ODBC 与 MySQL 插件均可从 DolphinDB 官网下载。以下简介这四种导入方法：</p>
+        <section class="- topic/section section" id="导入数据__section_cnz_ntb_wzb" data-ofbid="导入数据__section_cnz_ntb_wzb"><h2 class="- topic/title title sectiontitle">文本文件</h2><p class="- topic/p p" id="导入数据__p_fcj_thn_ryb" data-ofbid="导入数据__p_fcj_thn_ryb">通过文本文件进行数据中转是较为通用的一种数据迁移方式。DolphinDB 提供了以下三个函数来加载文本文件：</p><ul class="- topic/ul ul" id="导入数据__ul_gcj_thn_ryb" data-ofbid="导入数据__ul_gcj_thn_ryb">
+                <li class="- topic/li li" id="导入数据__li_mtm_54d_syb" data-ofbid="导入数据__li_mtm_54d_syb">
+                    <p class="- topic/p p" id="导入数据__p_hcj_thn_ryb" data-ofbid="导入数据__p_hcj_thn_ryb"><a class="- topic/xref xref" href="../../funcs/l/loadText.html">loadText</a>：把文本文件加载到内存中</p>
+                </li>
+                <li class="- topic/li li" id="导入数据__li_ntm_54d_syb" data-ofbid="导入数据__li_ntm_54d_syb">
+                    <p class="- topic/p p" id="导入数据__p_icj_thn_ryb" data-ofbid="导入数据__p_icj_thn_ryb"><a class="- topic/xref xref" href="../../funcs/p/ploadText.html">ploadText</a>：以并行的方式把文本文件加载到内存中，它的速度比 <code class="+ topic/ph pr-d/codeph ph codeph">loadText</code> 要快</p>
+                </li>
+                <li class="- topic/li li" id="导入数据__li_otm_54d_syb" data-ofbid="导入数据__li_otm_54d_syb">
+                    <p class="- topic/p p" id="导入数据__p_jcj_thn_ryb" data-ofbid="导入数据__p_jcj_thn_ryb"><a class="- topic/xref xref" href="../../funcs/l/loadTextEx.html">loadTextEx</a>：把文本文件导入到 DolphinDB 数据库中</p>
+                </li>
+            </ul><strong class="+ topic/ph hi-d/b ph b"><dfn class="- topic/term term">导入内存</dfn></strong><p class="- topic/p p" id="导入数据__p_mcj_thn_ryb" data-ofbid="导入数据__p_mcj_thn_ryb">使用 <code class="+ topic/ph pr-d/codeph ph codeph">loadText</code> 或
+                    <code class="+ topic/ph pr-d/codeph ph codeph">ploadText</code>
+                函数时，需要先把数据加载到内存，然后再落盘到数据库。如果文本文件过大，可能会出现内存不足。因此这两个函数不能用于导入大于本地机器内存的文本文件。</p><p class="- topic/p p" id="导入数据__p_kcj_thn_ryb" data-ofbid="导入数据__p_kcj_thn_ryb">若要把数据导入到数据库中，<code class="+ topic/ph pr-d/codeph ph codeph">loadText</code> 和
+                    <code class="+ topic/ph pr-d/codeph ph codeph">ploadText</code> 需要与 <code class="+ topic/ph pr-d/codeph ph codeph">append!</code> 和
+                    <code class="+ topic/ph pr-d/codeph ph codeph">tableInsert</code>
+                函数一起使用。</p><pre class="+ topic/pre pr-d/codeblock pre codeblock" id="导入数据__codeblock_lcj_thn_ryb" data-ofbid="导入数据__codeblock_lcj_thn_ryb"><code>t = ploadText("/stockData/trades.csv")
+db=database("dfs://stock",VALUE,2019.08.01..2019.08.10)
+pt=db.createPartitionedTable(t,`pt,`timestamp)
+pt.append!(t)</code></pre><p class="- topic/p p" id="导入数据__p_ocj_thn_ryb" data-ofbid="导入数据__p_ocj_thn_ryb">在下例中，原始数据是 2018 年 5 月至今的股票报价数据，每天一个
+                CSV 文件，保存在文件夹 <em class="+ topic/ph hi-d/i ph i">/stockData</em> 下。按照下面的步骤，创建一个数据库并把数据导入。</p><p class="- topic/p p" id="导入数据__p_qcj_thn_ryb" data-ofbid="导入数据__p_qcj_thn_ryb">创建组合分区类型(COMPO)的分布式数据库 <em class="+ topic/ph hi-d/i ph i">dfs://stockDB</em>
+                ，根据日期进行值分区，根据股票代码进行范围分区。由于后续的数据都会导入到数据库，所以在创建数据库时我们扩大了日期的分区方案。</p><pre class="+ topic/pre pr-d/codeblock pre codeblock" id="导入数据__codeblock_rcj_thn_ryb" data-ofbid="导入数据__codeblock_rcj_thn_ryb"><code>t = ploadText("/stockData/TAQ20180501.csv")
+tmp = select count(*) as count from t group by sym order by sym;
+buckets = cutPoints(tmp.sym, 128, tmp.count)
+
+dateDomain = database("", VALUE, 2018.05.01..2030.07.01)
+symDomain = database("", RANGE, buckets)
+stockDB = database("dfs://stockDB", COMPO, [dateDomain, symDomain])
+stockDB.createPartitionedTable(t, "quotes", `date`sym)</code></pre><strong class="+ topic/ph hi-d/b ph b"><dfn class="- topic/term term">导入数据库</dfn></strong><p class="- topic/p p"><code class="+ topic/ph pr-d/codeph ph codeph">loadTextEx</code>
+                可以避免文本文件过大时可能出现内存不足的问题。该函数将文本文件分为许多批次逐步载入内存并落盘到数据库，因可以导入超出本地机器内存的文本文件。</p><p class="- topic/p p">例如：</p><ul class="- topic/ul ul" id="导入数据__ul_azh_yzb_wzb" data-ofbid="导入数据__ul_azh_yzb_wzb">
+                
+                <li class="- topic/li li">直接使用：<pre class="+ topic/pre pr-d/codeblock pre codeblock" id="导入数据__codeblock_ncj_thn_ryb" data-ofbid="导入数据__codeblock_ncj_thn_ryb"><code>db=database("dfs://stock",VALUE,2019.08.01..2019.08.10)
+loadTextEx(db,`pt,`timestamp,"/stockData/trades.csv")</code></pre></li>
+                <li class="- topic/li li">利用 <code class="+ topic/ph pr-d/codeph ph codeph">loadTextEx</code> 函数，编写用户自定义函数 loadCsv
+                    把文件文件加载到数据库：<pre class="+ topic/pre pr-d/codeblock pre codeblock" id="导入数据__codeblock_t4k_b1c_wzb" data-ofbid="导入数据__codeblock_t4k_b1c_wzb"><code>def loadCsv(){
+   fileDir='/stockData'
+   filenames = exec filename from files(fileDir)
+   db = database("dfs://stockDB")
+   for(fname in filenames){
+       jobId = fname.strReplace(".csv", "")
+       submitJob(jobId, , loadTextEx{db, "quotes", `date`sym, fileDir+'/'+fname})
+   }
+}
+loadCsv()</code></pre></li>
+            </ul></section>
+        <section class="- topic/section section" id="导入数据__section_obd_ptb_wzb" data-ofbid="导入数据__section_obd_ptb_wzb"><h2 class="- topic/title title sectiontitle">HDF5 插件</h2>
+            
+            <p class="- topic/p p" id="导入数据__p_vcj_thn_ryb" data-ofbid="导入数据__p_vcj_thn_ryb">HDF5 是一种在数据分析领域广泛使用的二进制数据文件格式。用户可通过 DolphinDB HDF5 插件提供的以下方法导入
+                HDF5 格式数据文件：</p>
+            <ul class="- topic/ul ul" id="导入数据__ul_xcj_thn_ryb" data-ofbid="导入数据__ul_xcj_thn_ryb">
+                <li class="- topic/li li" id="导入数据__li_rtm_54d_syb" data-ofbid="导入数据__li_rtm_54d_syb">
+                    <p class="- topic/p p" id="导入数据__p_ycj_thn_ryb" data-ofbid="导入数据__p_ycj_thn_ryb">hdf5::ls：列出HDF5文件中所有 group 和 dataset 对象</p>
+                </li>
+                <li class="- topic/li li" id="导入数据__li_stm_54d_syb" data-ofbid="导入数据__li_stm_54d_syb">
+                    <p class="- topic/p p" id="导入数据__p_zcj_thn_ryb" data-ofbid="导入数据__p_zcj_thn_ryb">hdf5::lsTable：列出HDF5文件中所有 dataset 对象</p>
+                </li>
+                <li class="- topic/li li" id="导入数据__li_ttm_54d_syb" data-ofbid="导入数据__li_ttm_54d_syb">
+                    <p class="- topic/p p" id="导入数据__p_adj_thn_ryb" data-ofbid="导入数据__p_adj_thn_ryb">hdf5::hdf5DS：返回HDF5文件中 dataset 的元数据</p>
+                </li>
+                <li class="- topic/li li" id="导入数据__li_utm_54d_syb" data-ofbid="导入数据__li_utm_54d_syb">
+                    <p class="- topic/p p" id="导入数据__p_bdj_thn_ryb" data-ofbid="导入数据__p_bdj_thn_ryb">hdf5::loadHdf5：将HDF5文件导入内存表</p>
+                </li>
+                <li class="- topic/li li" id="导入数据__li_vtm_54d_syb" data-ofbid="导入数据__li_vtm_54d_syb">
+                    <p class="- topic/p p" id="导入数据__p_cdj_thn_ryb" data-ofbid="导入数据__p_cdj_thn_ryb">hdf5::loadHdf5Ex：将HDF5文件导入分区表</p>
+                </li>
+                <li class="- topic/li li" id="导入数据__li_wtm_54d_syb" data-ofbid="导入数据__li_wtm_54d_syb">
+                    <p class="- topic/p p" id="导入数据__p_ddj_thn_ryb" data-ofbid="导入数据__p_ddj_thn_ryb">hdf5::extractHdf5Schema：从HDF5文件中提取表结构</p>
+                </li>
+            </ul>
+            <p class="- topic/p p">用法如下：</p>
+            <p class="- topic/p p" id="导入数据__p_edj_thn_ryb" data-ofbid="导入数据__p_edj_thn_ryb">下载HDF5 插件，再将插件部署到 <em class="+ topic/ph hi-d/i ph i">/server/plugins</em> 目录下。使用以下脚本加载插件：</p>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="导入数据__codeblock_fdj_thn_ryb" data-ofbid="导入数据__codeblock_fdj_thn_ryb"><code>loadPlugin("plugins/hdf5/PluginHdf5.txt")</code></pre>
+            <p class="- topic/p p" id="导入数据__p_gdj_thn_ryb" data-ofbid="导入数据__p_gdj_thn_ryb">调用插件方法时需要在方法前面提供namespace，比如调用loadHdf5可以使用hdf5::loadHdf5。另一种写法是：</p>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="导入数据__codeblock_hdj_thn_ryb" data-ofbid="导入数据__codeblock_hdj_thn_ryb"><code>use hdf5
+loadHdf5(filePath,tableName)</code></pre>
+            <p class="- topic/p p" id="导入数据__p_idj_thn_ryb" data-ofbid="导入数据__p_idj_thn_ryb">若要导入包含一个Dataset candle_201801的文件candle_201801.h5，可使用以下脚本：</p>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="导入数据__codeblock_jdj_thn_ryb" data-ofbid="导入数据__codeblock_jdj_thn_ryb"><code>dataFilePath = "/home/data/candle_201801.h5"
+datasetName = "candle_201801"
+tmpTB = hdf5::loadHdf5(dataFilePath,datasetName)</code></pre>
+            <p class="- topic/p p" id="导入数据__p_kdj_thn_ryb" data-ofbid="导入数据__p_kdj_thn_ryb">如果需要指定数据类型导入可以使用hdf5::extractHdf5Schema，脚本如下：</p>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="导入数据__codeblock_ldj_thn_ryb" data-ofbid="导入数据__codeblock_ldj_thn_ryb"><code>dataFilePath = "/home/data/candle_201801.h5"
+datasetName = "candle_201801"
+schema=hdf5::extractHdf5Schema(dataFilePath,datasetName)
+update schema set type=`LONG where name=`volume
+tt=hdf5::loadHdf5(dataFilePath,datasetName,schema)</code></pre>
+            <p class="- topic/p p" id="导入数据__p_mdj_thn_ryb" data-ofbid="导入数据__p_mdj_thn_ryb">如果HDF5文件超过服务器内存，可以使用hdf5::loadHdf5Ex载入数据。</p>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="导入数据__codeblock_ndj_thn_ryb" data-ofbid="导入数据__codeblock_ndj_thn_ryb"><code>dataFilePath = "/home/data/candle_201801.h5"
+datasetName = "candle_201801"
+dfsPath = "dfs://dataImportHDF5DB"
+db=database(dfsPath,VALUE,2018.01.01..2018.01.31)
+hdf5::loadHdf5Ex(db, "cycle", "tradingDay", dataFilePath,datasetName)</code></pre>
+            <p class="- topic/p p">更多关于 HDF5 插件的内容，参考：<a class="- topic/xref xref" href="../../plugins/hdf5/hdf5.html">HDF5 插件</a>。</p>
+        </section>
+        <section class="- topic/section section" id="导入数据__section_uvg_qtb_wzb" data-ofbid="导入数据__section_uvg_qtb_wzb"><h2 class="- topic/title title sectiontitle">ODBC 插件</h2>
+            
+            <p class="- topic/p p" id="导入数据__p_odj_thn_ryb" data-ofbid="导入数据__p_odj_thn_ryb">用户可通过 ODBC 插件提供的接口连接第三方数据库后迁移数据至 DolphinDB。</p>
+            <p class="- topic/p p" id="导入数据__p_pdj_thn_ryb" data-ofbid="导入数据__p_pdj_thn_ryb">ODBC 插件提供了以下四个方法用于操作第三方数据源数据：</p>
+            <ul class="- topic/ul ul" id="导入数据__ul_qdj_thn_ryb" data-ofbid="导入数据__ul_qdj_thn_ryb">
+                <li class="- topic/li li" id="导入数据__li_xtm_54d_syb" data-ofbid="导入数据__li_xtm_54d_syb">
+                    <p class="- topic/p p" id="导入数据__p_rdj_thn_ryb" data-ofbid="导入数据__p_rdj_thn_ryb">odbc::connect：创建连接。</p>
+                </li>
+                <li class="- topic/li li" id="导入数据__li_ytm_54d_syb" data-ofbid="导入数据__li_ytm_54d_syb">
+                    <p class="- topic/p p" id="导入数据__p_sdj_thn_ryb" data-ofbid="导入数据__p_sdj_thn_ryb">odbc::close： 关闭连接。</p>
+                </li>
+                <li class="- topic/li li" id="导入数据__li_ztm_54d_syb" data-ofbid="导入数据__li_ztm_54d_syb">
+                    <p class="- topic/p p" id="导入数据__p_tdj_thn_ryb" data-ofbid="导入数据__p_tdj_thn_ryb">odbc::query：根据给定的SQL语句查询数据并将结果返回到DolphinDB的内存表。</p>
+                </li>
+                <li class="- topic/li li" id="导入数据__li_a5m_54d_syb" data-ofbid="导入数据__li_a5m_54d_syb">
+                    <p class="- topic/p p" id="导入数据__p_udj_thn_ryb" data-ofbid="导入数据__p_udj_thn_ryb">odbc::execute：在第三方数据库内执行给定的SQL语句，不返回结果。</p>
+                </li>
+            </ul>
+            <p class="- topic/p p" id="导入数据__p_vdj_thn_ryb" data-ofbid="导入数据__p_vdj_thn_ryb">在使用ODBC 插件之前，需要安装ODBC驱动程序。</p>
+            <p class="- topic/p p" id="导入数据__p_wdj_thn_ryb" data-ofbid="导入数据__p_wdj_thn_ryb">下面的例子使用ODBC 插件连接以下SQL Server：</p>
+            <ul class="- topic/ul ul" id="导入数据__ul_xdj_thn_ryb" data-ofbid="导入数据__ul_xdj_thn_ryb">
+                <li class="- topic/li li" id="导入数据__li_b5m_54d_syb" data-ofbid="导入数据__li_b5m_54d_syb">
+                    <p class="- topic/p p" id="导入数据__p_ydj_thn_ryb" data-ofbid="导入数据__p_ydj_thn_ryb">IP地址：172.18.0.15</p>
+                </li>
+                <li class="- topic/li li" id="导入数据__li_c5m_54d_syb" data-ofbid="导入数据__li_c5m_54d_syb">
+                    <p class="- topic/p p" id="导入数据__p_zdj_thn_ryb" data-ofbid="导入数据__p_zdj_thn_ryb">连接用户名：sa</p>
+                </li>
+                <li class="- topic/li li" id="导入数据__li_d5m_54d_syb" data-ofbid="导入数据__li_d5m_54d_syb">
+                    <p class="- topic/p p" id="导入数据__p_a2j_thn_ryb" data-ofbid="导入数据__p_a2j_thn_ryb">密码：123456</p>
+                </li>
+                <li class="- topic/li li" id="导入数据__li_e5m_54d_syb" data-ofbid="导入数据__li_e5m_54d_syb">
+                    <p class="- topic/p p" id="导入数据__p_b2j_thn_ryb" data-ofbid="导入数据__p_b2j_thn_ryb">数据库名称： SZ_TAQ</p>
+                </li>
+            </ul>
+            <p class="- topic/p p" id="导入数据__p_c2j_thn_ryb" data-ofbid="导入数据__p_c2j_thn_ryb">下载插件解压并拷贝 plugins/odbc 目录下所有文件到 DolphinDB server/plugins/odbc
+                目录下，通过下面的脚本完成插件初始化：</p>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="导入数据__codeblock_d2j_thn_ryb" data-ofbid="导入数据__codeblock_d2j_thn_ryb"><code>loadPlugin("plugins/odbc/odbc.cfg")
+conn=odbc::connect("Driver=ODBC Driver 17 for SQL Server;Server=172.18.0.15;Database=SZ_TAQ;Uid=sa;Pwd=123456;")</code></pre>
+            <p class="- topic/p p" id="导入数据__p_e2j_thn_ryb" data-ofbid="导入数据__p_e2j_thn_ryb">创建 DolphinDB 分布式数据库dfs://dataImportODBC。使用SQL
+                Server中的数据表结构作为DolphinDB数据表的模板，在dfs://dataImportODBC中创建数据库cycle。</p>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="导入数据__codeblock_f2j_thn_ryb" data-ofbid="导入数据__codeblock_f2j_thn_ryb"><code>tb = odbc::query(conn,"select top 1 * from candle_201801")
+db=database("dfs://dataImportODBC",VALUE,2018.01.01..2018.01.31)
+db.createPartitionedTable(tb, "cycle", "tradingDay")</code></pre>
+            <p class="- topic/p p" id="导入数据__p_g2j_thn_ryb" data-ofbid="导入数据__p_g2j_thn_ryb">从SQL Server中导入数据并保存入cycle表中：</p>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="导入数据__codeblock_h2j_thn_ryb" data-ofbid="导入数据__codeblock_h2j_thn_ryb"><code>tb = database("dfs://dataImportODBC").loadTable("cycle")
+data = odbc::query(conn,"select * from candle_201801")
+tb.append!(data);</code></pre>
+            <p class="- topic/p p">更多关于 ODBC 插件的内容，参考：<a class="- topic/xref xref" href="../../plugins/odbc/odbc.html">ODBC 插件</a>。</p>
+        </section>
+        <section class="- topic/section section" id="导入数据__section_jhr_rtb_wzb" data-ofbid="导入数据__section_jhr_rtb_wzb"><h2 class="- topic/title title sectiontitle">MySQL 插件</h2>
+            
+            <p class="- topic/p p" id="导入数据__p_i2j_thn_ryb" data-ofbid="导入数据__p_i2j_thn_ryb">MySQL 插件导入数据的速度比ODBC接口要快，并且不需要配置数据源，使用更加便捷。</p>
+            <p class="- topic/p p" id="导入数据__p_j2j_thn_ryb" data-ofbid="导入数据__p_j2j_thn_ryb">MySQL插件提供了以下接口函数：</p>
+            <ul class="- topic/ul ul" id="导入数据__ul_k2j_thn_ryb" data-ofbid="导入数据__ul_k2j_thn_ryb">
+                <li class="- topic/li li" id="导入数据__li_f5m_54d_syb" data-ofbid="导入数据__li_f5m_54d_syb">
+                    <p class="- topic/p p" id="导入数据__p_l2j_thn_ryb" data-ofbid="导入数据__p_l2j_thn_ryb">mysql::connect：创建连接</p>
+                </li>
+                <li class="- topic/li li" id="导入数据__li_g5m_54d_syb" data-ofbid="导入数据__li_g5m_54d_syb">
+                    <p class="- topic/p p" id="导入数据__p_m2j_thn_ryb" data-ofbid="导入数据__p_m2j_thn_ryb">mysql::showTables：列出MySQL数据库中的所有表</p>
+                </li>
+                <li class="- topic/li li" id="导入数据__li_h5m_54d_syb" data-ofbid="导入数据__li_h5m_54d_syb">
+                    <p class="- topic/p p" id="导入数据__p_n2j_thn_ryb" data-ofbid="导入数据__p_n2j_thn_ryb">mysql::extractSchema：获取MySQL数据表的结构</p>
+                </li>
+                <li class="- topic/li li" id="导入数据__li_i5m_54d_syb" data-ofbid="导入数据__li_i5m_54d_syb">
+                    <p class="- topic/p p" id="导入数据__p_o2j_thn_ryb" data-ofbid="导入数据__p_o2j_thn_ryb">mysql::load：把MySQL数据加载到DolphinDB的内存表</p>
+                </li>
+                <li class="- topic/li li" id="导入数据__li_j5m_54d_syb" data-ofbid="导入数据__li_j5m_54d_syb">
+                    <p class="- topic/p p" id="导入数据__p_p2j_thn_ryb" data-ofbid="导入数据__p_p2j_thn_ryb">mysql::loadEx：把MySQL中的数据加载到DolphinDB的分区表</p>
+                </li>
+            </ul>
+            <p class="- topic/p p" id="导入数据__p_q2j_thn_ryb" data-ofbid="导入数据__p_q2j_thn_ryb">下载插件解压并拷贝 plugins\mysql 目录下所有文件到DolphinDB server的 plugins/mysql
+                目录下，通过下面的脚本完成插件初始化：</p>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="导入数据__codeblock_r2j_thn_ryb" data-ofbid="导入数据__codeblock_r2j_thn_ryb"><code>loadPlugin("plugins/PluginMySQL.txt")</code></pre>
+            <p class="- topic/p p" id="导入数据__p_s2j_thn_ryb" data-ofbid="导入数据__p_s2j_thn_ryb">连接本地MySQL服务器中的employees数据库：</p>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="导入数据__codeblock_t2j_thn_ryb" data-ofbid="导入数据__codeblock_t2j_thn_ryb"><code>conn=connect("127.0.0.1",3306,"root","123456","employees")</code></pre>
+            <p class="- topic/p p" id="导入数据__p_u2j_thn_ryb" data-ofbid="导入数据__p_u2j_thn_ryb">确定分区类型和分区方案，创建数据库，用于保存MySQL数据：</p>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="导入数据__codeblock_v2j_thn_ryb" data-ofbid="导入数据__codeblock_v2j_thn_ryb"><code>db=database("dfs://mysql",VALUE,`F`M)</code></pre>
+            <p class="- topic/p p" id="导入数据__p_w2j_thn_ryb" data-ofbid="导入数据__p_w2j_thn_ryb">导入数据：</p>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="导入数据__codeblock_x2j_thn_ryb" data-ofbid="导入数据__codeblock_x2j_thn_ryb"><code>pt=loadEx(conn,db,"pt","gender","employees")</code></pre>
+            <p class="- topic/p p">更多关于 MySQL 插件的内容，参考：<a class="- topic/xref xref" href="../../plugins/mysql/mysql.html">MySQL
+                    插件</a>。</p>
+        </section>
+    </div>
+</article></main></div>
+                        
+                        
+                        
+                        
+                        
+                        
+                    </div>
+                    
+                        <nav role="navigation" id="wh_topic_toc" aria-label="On this page" class="col-lg-2 d-none d-lg-block navbar d-print-none"> 
+                            <div id="wh_topic_toc_content">
+		                        
+	                            <div class=" wh_topic_toc "><div class="wh_topic_label">在本页上</div><ul><li class="section-item"><div class="section-title"><a href="#%E5%AF%BC%E5%85%A5%E6%95%B0%E6%8D%AE__section_cnz_ntb_wzb" data-tocid="导入数据__section_cnz_ntb_wzb">文本文件</a></div></li><li class="section-item"><div class="section-title"><a href="#%E5%AF%BC%E5%85%A5%E6%95%B0%E6%8D%AE__section_obd_ptb_wzb" data-tocid="导入数据__section_obd_ptb_wzb">HDF5 插件</a></div></li><li class="section-item"><div class="section-title"><a href="#%E5%AF%BC%E5%85%A5%E6%95%B0%E6%8D%AE__section_uvg_qtb_wzb" data-tocid="导入数据__section_uvg_qtb_wzb">ODBC 插件</a></div></li><li class="section-item"><div class="section-title"><a href="#%E5%AF%BC%E5%85%A5%E6%95%B0%E6%8D%AE__section_jhr_rtb_wzb" data-tocid="导入数据__section_jhr_rtb_wzb">MySQL 插件</a></div></li></ul></div>
+	                        	
+                        	</div>
+                        </nav>
+                    
+                </div>
+            </div>
+            
+            
+            
+        </div> 
+        <footer class="navbar navbar-default wh_footer">
+  <div class=" footer-container mx-auto ">
+<title>Copyright</title><p><b> ©2024 浙江智臾科技有限公司 浙ICP备18048711号-3</b></p>
+  </div>
+</footer>
+        
+        <div id="go2top" class="d-print-none">
+            <span class="oxy-icon oxy-icon-up"></span>
+        </div>
+        
+        <div id="modal_img_large" class="modal">
+            <span class="close oxy-icon oxy-icon-remove"></span>
+            <div id="modal_img_container"></div>
+            <div id="caption"></div>
+        </div>
+        
+        
+        
+    </body>
+</html>

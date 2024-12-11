@@ -1,0 +1,1374 @@
+<!DOCTYPE html><html xmlns="http://www.w3.org/1999/xhtml" xml:lang="zh" lang="zh" data-whc_version="26.0">
+    <head><link rel="shortcut icon" href="../favicon.ico"/><link rel="icon" href="../favicon.ico"/><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><meta http-equiv="X-UA-Compatible" content="IE=edge"/><meta name="description" content="时序聚合引擎由 createTimeSeriesEngine 函数创建。 createTimeSeriesEngine 函数的语法如下： createTimeSeriesEngine(name, windowSize, step, metrics, dummyTable, outputTable, [timeColumn], [useSystemTime=false], [keyColumn], ..."/><meta name="DC.rights.owner" content="(C) 版权 2024"/><meta name="copyright" content="(C) 版权 2024"/><meta name="generator" content="DITA-OT"/><meta name="DC.type" content="topic"/><meta name="DC.coverage" content=""/><meta name="DC.relation" content="../funcs/themes/streamingEngine.html"/><meta name="prodname" content="DolphinDB"/><meta name="brand" content="DolphinDB"/><meta name="DC.creator" content="DolphinDB"/><meta name="DC.publisher" content="DDB N/A DDB 200"/><meta name="DC.format" content="HTML5"/><meta name="DC.identifier" content="时序聚合引擎"/><title>时序聚合引擎</title><!--  Generated with Oxygen version 26.0, build number 2024012323.  --><meta name="wh-path2root" content="../"/><meta name="wh-toc-id" content="时序聚合引擎-d9529e4146"/><meta name="wh-source-relpath" content="stream/time_series_engine.dita"/><meta name="wh-out-relpath" content="stream/time_series_engine.html"/>
+
+    <link rel="stylesheet" type="text/css" href="../oxygen-webhelp/app/commons.css?buildId=2024012323"/>
+    <link rel="stylesheet" type="text/css" href="../oxygen-webhelp/app/topic.css?buildId=2024012323"/>
+
+    <script src="../oxygen-webhelp/app/options/properties.js?buildId=20240704100525"></script>
+    <script src="../oxygen-webhelp/app/localization/strings.js?buildId=2024012323"></script>
+    <script src="../oxygen-webhelp/app/search/index/keywords.js?buildId=20240704100525"></script>
+    <script defer="defer" src="../oxygen-webhelp/app/commons.js?buildId=2024012323"></script>
+    <script defer="defer" src="../oxygen-webhelp/app/topic.js?buildId=2024012323"></script>
+<link rel="stylesheet" type="text/css" href="../oxygen-webhelp/template/styles.css?buildId=2024012323"/><script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script><script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script></head>
+
+    <body id="时序聚合引擎" class="wh_topic_page frmBody">
+        <a href="#wh_topic_body" class="sr-only sr-only-focusable">
+            跳转到主要内容
+        </a>
+        
+        
+        
+        
+        <header class="navbar navbar-default wh_header">
+    <div class="container-fluid">
+        <div xmlns:whc="http://www.oxygenxml.com/webhelp/components" class="wh_header_flex_container navbar-nav navbar-expand-md navbar-dark">
+            <div class="wh_logo_and_publication_title_container">
+                <div class="wh_logo_and_publication_title">
+                    
+                    <a href="https://www.dolphindb.cn" class=" wh_logo d-none d-sm-block "><img src="../logo.png" alt="  DolphinDB 文档中心  "/></a>
+                    <div class=" wh_publication_title "><a href="../index.html"><span class="booktitle">  <span class="ph mainbooktitle">DolphinDB 文档中心</span>  </span></a></div>
+                    
+                </div>
+                
+                
+            </div>
+
+            <div class="wh_top_menu_and_indexterms_link collapse navbar-collapse" id="wh_top_menu_and_indexterms_link">
+                
+                
+                
+                
+            </div>
+        <div class=" wh_search_input navbar-form wh_topic_page_search search " role="form">
+            
+            
+            
+            <form id="searchForm" method="get" role="search" action="../search.html"><div><input type="search" placeholder="搜索 " class="wh_search_textfield" id="textToSearch" name="searchQuery" aria-label="搜索查询" required="required"/><button type="submit" class="wh_search_button" aria-label="搜索"><span class="search_input_text">搜索</span></button></div></form>
+            
+            <script src="/vendors/react/umd/react.production.min.js" defer="defer"></script>
+<script src="/vendors/react-dom/umd/react-dom.production.min.js" defer="defer"></script>
+<script src="/vendors/dayjs/dayjs.min.js" defer="defer"></script>
+<script src="/vendors/antd/dist/antd.min.js" defer="defer"></script>
+<script src="/vendors/@ant-design/icons/dist/index.umd.min.js" defer="defer"></script>
+<script src="/zh/index.js" type="module"></script>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js" defer="defer"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML" defer="defer"><!--
+
+
+--></script>
+
+            
+        </div></div>
+    </div>
+</header>
+        
+        
+         
+        
+        
+        
+        <div class="container-fluid" id="wh_topic_container">
+            <div class="row">
+
+                <nav class="wh_tools d-print-none navbar-expand-md" aria-label="Tools">
+                    
+                    <div data-tooltip-position="bottom" class=" wh_breadcrumb "><ol class="d-print-none"><li><span class="home"><a href="../index.html"><span>主页</span></a></span></li><li><div class="topicref" data-id="chap7_tutorials_streaming"><div class="title"><a href="../stream/str_intro.html"><span class="keyword label">流数据</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 流数据引擎及流数据计算的基本概念</p></div></div></div></li><li><div class="topicref" data-id="streamingEngineTopic"><div class="title"><a href="../funcs/themes/streamingEngine.html"><span class="keyword label">内置流式计算引擎</span></a></div></div></li><li class="active"><div class="topicref" data-id="时序聚合引擎"><div class="title"><a href="../stream/time_series_engine.html">时序聚合引擎</a></div></div></li></ol></div>
+                    
+                    
+                    
+                    <div class="wh_right_tools">
+                        <button class="wh_hide_highlight" aria-label="切换搜索突出显示" title="切换搜索突出显示"></button>
+                        <button class="webhelp_expand_collapse_sections" data-next-state="collapsed" aria-label="折叠截面" title="折叠截面"></button>
+                        
+                        
+                        
+                        
+                        <div class=" wh_print_link print d-none d-md-inline-block "><button onClick="window.print()" title="打印此页" aria-label="打印此页"></button></div>
+                        
+                        <button type="button" id="wh_toc_button" class="custom-toggler navbar-toggler collapsed wh_toggle_button navbar-light" aria-expanded="false" aria-label="Toggle publishing table of content" aria-controls="wh_publication_toc">
+                            <span class="navbar-toggler-icon"></span>
+                        </button>
+                    </div>
+                    
+                </nav>
+            </div>
+            
+            
+            
+            
+            <div class="wh_content_area">
+                <div class="row">
+                    
+                        <nav id="wh_publication_toc" class="col-lg-3 col-md-3 col-sm-12 d-md-block d-none d-print-none" aria-label="Table of Contents Container">
+                            <div id="wh_publication_toc_content">
+		                        
+                            	<div class=" wh_publication_toc " data-tooltip-position="right"><span class="expand-button-action-labels"><span id="button-expand-action" role="button" aria-label="Expand"></span><span id="button-collapse-action" role="button" aria-label="Collapse"></span><span id="button-pending-action" role="button" aria-label="Pending"></span></span><ul role="tree" aria-label="Table of Contents"><li role="treeitem"><div data-tocid="new_chap_about_sect_ddb_docs_intro-d9529e87" class="topicref" data-id="new_chap_about_sect_ddb_docs_intro" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../about/ddb_docs_intro.html" id="new_chap_about_sect_ddb_docs_intro-d9529e87-link">文档使用说明</a><div class="wh-tooltip"><p class="shortdesc">如何获取 DolphinDB 帮助信息</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="chap1_getstarted-d9529e140" class="topicref" data-id="chap1_getstarted" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action chap1_getstarted-d9529e140-link" class="wh-expand-btn"></span><div class="title"><a href="../getstarted/chap1_getstarted.html" id="chap1_getstarted-d9529e140-link"><span class="keyword label">快速上手</span></a><div class="wh-tooltip"><p class="shortdesc">如何快速部署 DolphinDB、建库建表、写入和查询数据</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="sectionddb_deployment-d9529e335" class="topicref" data-id="sectionddb_deployment" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action sectionddb_deployment-d9529e335-link" class="wh-expand-btn"></span><div class="title"><a href="../deploy/deploy_intro.html" id="sectionddb_deployment-d9529e335-link"><span class="keyword label">部署</span></a><div class="wh-tooltip"><p class="shortdesc">如何在不同的场景中部署 DolphinDB</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="new_chap_database_manage_new_chap_dbmanage_landing_page-d9529e2313" class="topicref" data-id="new_chap_database_manage_new_chap_dbmanage_landing_page" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action new_chap_database_manage_new_chap_dbmanage_landing_page-d9529e2313-link" class="wh-expand-btn"></span><div class="title"><a href="../db_distr_comp/cfg/db_intro.html" id="new_chap_database_manage_new_chap_dbmanage_landing_page-d9529e2313-link"><span class="keyword label">数据库</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 数据库的基本概念</p></div></div></div></li><li role="treeitem" aria-expanded="true"><div data-tocid="chap7_tutorials_streaming-d9529e3490" class="topicref" data-id="chap7_tutorials_streaming" data-state="expanded"><span role="button" tabindex="0" aria-labelledby="button-collapse-action chap7_tutorials_streaming-d9529e3490-link" class="wh-expand-btn"></span><div class="title"><a href="../stream/str_intro.html" id="chap7_tutorials_streaming-d9529e3490-link"><span class="keyword label">流数据</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 流数据引擎及流数据计算的基本概念</p></div></div></div><ul role="group" class="navbar-nav nav-list"><li role="treeitem" aria-expanded="false"><div data-tocid="streamfunctions-d9529e3543" class="topicref" data-id="streamfunctions" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action streamfunctions-d9529e3543-link" class="wh-expand-btn"></span><div class="title"><a href="../stream/str_funcs.html" id="streamfunctions-d9529e3543-link">功能简介</a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="tocId-d9529e3821" class="topicref" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action tocId-d9529e3821-link" class="wh-expand-btn"></span><div class="title"><a href="../stream/try_example1.html" id="tocId-d9529e3821-link">入门示例</a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="内置流式计算算子-d9529e3914" class="topicref" data-id="内置流式计算算子" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action 内置流式计算算子-d9529e3914-link" class="wh-expand-btn"></span><div class="title"><a href="../stream/str_operator.html" id="内置流式计算算子-d9529e3914-link"><span class="keyword label">内置流式计算算子</span></a></div></div></li><li role="treeitem" aria-expanded="true"><div data-tocid="streamingEngineTopic-d9529e4099" class="topicref" data-id="streamingEngineTopic" data-state="expanded"><span role="button" tabindex="0" aria-labelledby="button-collapse-action streamingEngineTopic-d9529e4099-link" class="wh-expand-btn"></span><div class="title"><a href="../funcs/themes/streamingEngine.html" id="streamingEngineTopic-d9529e4099-link"><span class="keyword label">内置流式计算引擎</span></a></div></div><ul role="group" class="navbar-nav nav-list"><li role="treeitem" class="active"><div data-tocid="时序聚合引擎-d9529e4146" class="topicref" data-id="时序聚合引擎" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../stream/time_series_engine.html" id="时序聚合引擎-d9529e4146-link">时序聚合引擎</a></div></div></li><li role="treeitem"><div data-tocid="cross_sectional_engine-d9529e4192" class="topicref" data-id="cross_sectional_engine" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../stream/cross_sectional_engine.html" id="cross_sectional_engine-d9529e4192-link">横截面引擎</a></div></div></li><li role="treeitem"><div data-tocid="reactive_state_engine-d9529e4238" class="topicref" data-id="reactive_state_engine" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../stream/reactive_state_engine.html" id="reactive_state_engine-d9529e4238-link">响应式状态引擎</a></div></div></li><li role="treeitem"><div data-tocid="session_window_engine-d9529e4284" class="topicref" data-id="session_window_engine" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../stream/session_window_engine.html" id="session_window_engine-d9529e4284-link">会话窗口引擎</a></div></div></li><li role="treeitem"><div data-tocid="anomaly_detection_engine-d9529e4330" class="topicref" data-id="anomaly_detection_engine" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../stream/anomaly_detection_engine.html" id="anomaly_detection_engine-d9529e4330-link">异常检测引擎</a></div></div></li></ul></li><li role="treeitem" aria-expanded="false"><div data-tocid="chap7_tutorials_streaming-d9529e4376" class="topicref" data-id="chap7_tutorials_streaming" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action chap7_tutorials_streaming-d9529e4376-link" class="wh-expand-btn"></span><div class="title"><a href="../stream/str_join_engine.html" id="chap7_tutorials_streaming-d9529e4376-link"><span class="keyword label">内置多数据源流式关联引擎</span></a></div></div></li><li role="treeitem"><div data-tocid="streamha-d9529e4653" class="topicref" data-id="streamha" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../stream/str_ha.html" id="streamha-d9529e4653-link"><span class="keyword label">流数据高可用</span></a></div></div></li><li role="treeitem"><div data-tocid="流计算状态监控-d9529e4700" class="topicref" data-id="流计算状态监控" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../stream/str_monitor.html" id="流计算状态监控-d9529e4700-link">流计算状态监控</a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="replay-d9529e4746" class="topicref" data-id="replay" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action replay-d9529e4746-link" class="wh-expand-btn"></span><div class="title"><a href="../stream/str_replay.html" id="replay-d9529e4746-link"><span class="keyword label">历史数据回放</span></a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="流批一体功能-d9529e4931" class="topicref" data-id="流批一体功能" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action 流批一体功能-d9529e4931-link" class="wh-expand-btn"></span><div class="title"><a href="../stream/str_batch.html" id="流批一体功能-d9529e4931-link"><span class="keyword label">流批一体</span></a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="tocId-d9529e5024" class="topicref" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action tocId-d9529e5024-link" class="wh-expand-btn"></span><div class="title"><a href="../stream/str_api_python.html" id="tocId-d9529e5024-link">实时流数据接入</a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="cep-d9529e5442" class="topicref" data-id="cep" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action cep-d9529e5442-link" class="wh-expand-btn"></span><div class="title"><a href="../stream/cep.html" id="cep-d9529e5442-link">复杂事件处理（CEP）引擎</a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="tocId-d9529e5995" class="topicref" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action tocId-d9529e5995-link" class="wh-expand-btn"></span><div class="title"><a href="../stream/local_sub.html" id="tocId-d9529e5995-link">流处理结果交互方式</a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="tocId-d9529e6184" class="topicref" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action tocId-d9529e6184-link" class="wh-expand-btn"></span><div class="title"><a href="../stream/str_altair.html" id="tocId-d9529e6184-link">数据可视化工具</a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="tocId-d9529e6277" class="topicref" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action tocId-d9529e6277-link" class="wh-expand-btn"></span><div class="title"><a href="../tutorials/streaming_auto_sub.html" id="tocId-d9529e6277-link">金融场景应用案例</a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="tocId-d9529e6969" class="topicref" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action tocId-d9529e6969-link" class="wh-expand-btn"></span><div class="title"><a href="../tutorials/ddb_str_app_iot.html" id="tocId-d9529e6969-link">物联网场景应用案例</a></div></div></li></ul></li><li role="treeitem" aria-expanded="false"><div data-tocid="tocId-d9529e7385" class="topicref" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action tocId-d9529e7385-link" class="wh-expand-btn"></span><div class="title"><a href="../db_distr_comp/db_oper/import_data.html" id="tocId-d9529e7385-link">数据迁移</a><div class="wh-tooltip"><p class="shortdesc">如何从不同数据源向 DolphinDB 迁移数据</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="chap7_tutorials_system_management-d9529e7812" class="topicref" data-id="chap7_tutorials_system_management" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action chap7_tutorials_system_management-d9529e7812-link" class="wh-expand-btn"></span><div class="title"><a href="../sys_man/om_intro.html" id="chap7_tutorials_system_management-d9529e7812-link"><span class="keyword label">系统运维</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 的系统运维功能及方法</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="about_language_resources-d9529e16490" class="topicref" data-id="about_language_resources" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action about_language_resources-d9529e16490-link" class="wh-expand-btn"></span><div class="title"><a href="../progr/progr_intro.html" id="about_language_resources-d9529e16490-link"><span class="keyword label">编程语言</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 编程基本概念与方法、SQL 在 DolphinDB 的应用</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="functions_references-d9529e26503" class="topicref" data-id="functions_references" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action functions_references-d9529e26503-link" class="wh-expand-btn"></span><div class="title"><a href="../funcs/funcs_intro.html" id="functions_references-d9529e26503-link"><span class="keyword label">函数参考</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 函数分类、语法、详解及示例</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="api_protocol-d9529e86456" class="topicref" data-id="api_protocol" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action api_protocol-d9529e86456-link" class="wh-expand-btn"></span><div class="title"><a href="../api/connapi_intro.html" id="api_protocol-d9529e86456-link"><span class="keyword label">连接器 &amp; API</span></a><div class="wh-tooltip"><p class="shortdesc">面向不同编程语言的 DolphinDB API 及连接器，相关协议和用法</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="chap6_plugin-d9529e91976" class="topicref" data-id="chap6_plugin" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action chap6_plugin-d9529e91976-link" class="wh-expand-btn"></span><div class="title"><a href="../plugins/plg_intro.html" id="chap6_plugin-d9529e91976-link"><span class="keyword label">插件</span></a><div class="wh-tooltip"><p class="shortdesc">多个应用场景的插件使用说明和插件开发指导</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="third_party-d9529e94749" class="topicref" data-id="third_party" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action third_party-d9529e94749-link" class="wh-expand-btn"></span><div class="title"><a href="../third_party.html" id="third_party-d9529e94749-link">第三方工具</a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="about_tutorials-d9529e94980" class="topicref" data-id="about_tutorials" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action about_tutorials-d9529e94980-link" class="wh-expand-btn"></span><div class="title"><a href="../tutorials/about_tutorials.html" id="about_tutorials-d9529e94980-link"><span class="keyword label">教程</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 产品使用教程</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="tocId-d9529e101769" class="topicref" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action tocId-d9529e101769-link" class="wh-expand-btn"></span><div class="title"><a href="../rn/server/3_00_1.html" id="tocId-d9529e101769-link">版本说明</a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 版本发布历史</p></div></div></div></li></ul></div>
+		                        
+                            </div>
+                        </nav>
+                    
+                    
+                    <div class="col-lg-7 col-md-9 col-sm-12" id="wh_topic_body">
+                        <button id="wh_close_publication_toc_button" class="close-toc-button d-none" aria-label="Toggle publishing table of content" aria-controls="wh_publication_toc" aria-expanded="true">
+                            <span class="close-toc-icon-container">
+                                <span class="close-toc-icon"></span>     
+                            </span>
+                        </button>
+                        <button id="wh_close_topic_toc_button" class="close-toc-button d-none" aria-label="Toggle topic table of content" aria-controls="wh_topic_toc" aria-expanded="true">
+                            <span class="close-toc-icon-container">
+                                <span class="close-toc-icon"></span>     
+                            </span>
+                        </button>
+                        
+                        <div class=" wh_topic_content body "><main role="main"><article class="- topic/topic topic" role="article" aria-labelledby="ariaid-title1">
+    <h1 class="- topic/title title topictitle1" id="ariaid-title1">时序聚合引擎</h1>
+    <div class="- topic/body body">
+        <p class="- topic/p p">时序聚合引擎由 <code class="+ topic/ph pr-d/codeph ph codeph">createTimeSeriesEngine</code> 函数创建。</p>
+        <p class="- topic/p p"><code class="+ topic/ph pr-d/codeph ph codeph">createTimeSeriesEngine</code> 函数的语法如下：</p>
+        <p class="- topic/p p"><code class="+ topic/ph pr-d/codeph ph codeph">createTimeSeriesEngine(name, windowSize, step, metrics,
+                    dummyTable, outputTable, [timeColumn], [useSystemTime=false], [keyColumn],
+                    [garbageSize], [updateTime], [useWindowStartTime], [roundTime=true],
+                    [snapshotDir], [snapshotIntervalInMsgCount], [fill='none'], [forceTriggerTime],
+                    [raftGroup], [keyPurgeFreqInSec=-1], [closed='left'],
+                    [outputElapsedMicroseconds=false], [subWindow], <span class="- topic/ph ph">[parallelism=1],
+                        </span><span class="- topic/ph ph">[acceptedDelay=0]</span><span class="- topic/ph ph">, [outputHandler=NULL],
+                        [msgAsTable=false]</span>)</code></p>
+    </div>
+    <article class="- topic/topic topic nested1" aria-labelledby="ariaid-title2" id="重要参数简介">
+        <h2 class="- topic/title title topictitle2" id="ariaid-title2">
+            <strong class="+ topic/ph hi-d/b ph b">重要参数</strong>
+        </h2>
+        <div class="- topic/body body">
+            <ul class="- topic/ul ul" id="重要参数简介__ul_svj_sfm_xzb" data-ofbid="重要参数简介__ul_svj_sfm_xzb">
+                <li class="- topic/li li">
+                    <p class="- topic/p p">name：表示引擎的名称，是引擎在一个数据节点上的唯一标识。可包含字母，数字和下划线，但必须以字母开头。</p>
+                </li>
+                <li class="- topic/li li">
+                    <p class="- topic/p p">windowSize：表示计算窗口计算的时间长度</p>
+                </li>
+                <li class="- topic/li li">
+                    <p class="- topic/p p">step：表示窗口每次移动的时间间隔</p>
+                </li>
+                <li class="- topic/li li">
+                    <p class="- topic/p p">metrics：以元代码的格式表示计算公式，支持内置聚合函数和 UDF（自定义聚合函数）</p>
+                </li>
+                <li class="- topic/li li">
+                    <p class="- topic/p p">dummyTable：表示输入数据的表结构</p>
+                </li>
+                <li class="- topic/li li">
+                    <p class="- topic/p p">outputTable：表示结果的输出表</p>
+                </li>
+                <li class="- topic/li li">
+                    <p class="- topic/p p">timeColumn：当 <em class="+ topic/ph hi-d/i ph i">useSystemTime</em>=false 时，指定 dummyTable
+                        中的时间列作为窗口计算的触发信号，即按照事件时间进行流处理</p>
+                </li>
+                <li class="- topic/li li">
+                    <p class="- topic/p p">useSystemTime：当参数值为 true 时，引擎按照系统时间进行流处理，与事件时间无关</p>
+                </li>
+                <li class="- topic/li li">
+                    <p class="- topic/p p">keyColumn：表示分组字段名，例如以每支股票为一组进行计算</p>
+                </li>
+                <li class="- topic/li li">
+                    <p class="- topic/p p">fill：表示若（某个 key 的）某个窗口无数据时填充的方法</p>
+                    <ul class="- topic/ul ul" id="重要参数简介__ul_tvj_sfm_xzb" data-ofbid="重要参数简介__ul_tvj_sfm_xzb">
+                        <li class="- topic/li li">
+                            <p class="- topic/p p">'none': 不输出结果</p>
+                        </li>
+                        <li class="- topic/li li">
+                            <p class="- topic/p p">'null': 输出结果为 NULL</p>
+                        </li>
+                        <li class="- topic/li li">
+                            <p class="- topic/p p">'ffill': 输出上一个有数据的窗口的结果</p>
+                        </li>
+                        <li class="- topic/li li">
+                            <p class="- topic/p p">'具体数值'：该值的数据类型需要和对应的 <em class="+ topic/ph hi-d/i ph i">metrics</em> 计算结果的类型保持一致</p>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+            <p class="- topic/p p">其他参数的详细含义可以参考：<a class="- topic/xref xref" href="../funcs/c/createTimeSeriesEngine.html">createTimeSeriesEngine</a>。</p>
+        </div>
+    </article>
+    <article class="- topic/topic topic nested1" aria-labelledby="ariaid-title3" id="应用例子-1">
+        <h2 class="- topic/title title topictitle2" id="ariaid-title3">
+            <strong class="+ topic/ph hi-d/b ph b">应用例子 1</strong>
+        </h2>
+        <div class="- topic/body body">
+            <p class="- topic/p p">下例说明数据窗口如何规整以及流数据时序引擎如何进行计算。以下代码建立流数据表 <em class="+ topic/ph hi-d/i ph i">trades</em>，包含 time 和 volume 两列。创建时序引擎
+                streamAggr1，每 3 毫秒对过去 6 毫秒的数据计算 sum(volume)。time 列的精度为毫秒，模拟插入的数据流频率也设为每毫秒一条数据。</p>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock language-python">share streamTable(<span class="hl-number">1000</span>:<span class="hl-number">0</span>, `time`volume, [TIMESTAMP, INT]) <strong class="hl-keyword">as</strong> trades
+outputTable = table(<span class="hl-number">10000</span>:<span class="hl-number">0</span>, `time`sumVolume, [TIMESTAMP, INT])
+tradesAggregator = createTimeSeriesEngine(name=<span class="hl-string">"streamAggr1"</span>, windowSize=<span class="hl-number">6</span>, step=<span class="hl-number">3</span>, metrics=&lt;[sum(volume)]&gt;, dummyTable=trades, outputTable=outputTable, timeColumn=`time)
+subscribeTable(tableName=<span class="hl-string">"trades"</span>, actionName=<span class="hl-string">"append_tradesAggregator"</span>, offset=<span class="hl-number">0</span>, handler=append!{tradesAggregator}, msgAsTable=true)    </pre>
+            <p class="- topic/p p">向流数据表 <em class="+ topic/ph hi-d/i ph i">trades</em> 中写入 10 条数据，并查看流数据表 <em class="+ topic/ph hi-d/i ph i">trades</em> 内容：</p>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock language-python"><strong class="hl-keyword">def</strong> writeData(t, n){
+    timev = <span class="hl-number">2018.10</span>.<span class="hl-number">08</span>T01:<span class="hl-number">01</span>:<span class="hl-number">01.001</span> + timestamp(<span class="hl-number">1.</span>.n)
+    volumev = take(<span class="hl-number">1</span>, n)
+    insert into t values(timev, volumev)
+}
+writeData(trades, <span class="hl-number">10</span>)
+
+select * <strong class="hl-keyword">from</strong> trades;</pre>
+            <div class="table-container"><table class="- topic/table table" data-cols="2"><caption></caption><colgroup><col/><col/></colgroup><thead class="- topic/thead thead">
+                        <tr class="- topic/row">
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="应用例子-1__entry__1">time</th>
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="应用例子-1__entry__2">volume</th>
+                        </tr>
+                    </thead><tbody class="- topic/tbody tbody">
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="应用例子-1__entry__1">2018.10.08T01:01:01.002</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="应用例子-1__entry__2">1</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="应用例子-1__entry__1">2018.10.08T01:01:01.003</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="应用例子-1__entry__2">1</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="应用例子-1__entry__1">2018.10.08T01:01:01.004</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="应用例子-1__entry__2">1</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="应用例子-1__entry__1">2018.10.08T01:01:01.005</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="应用例子-1__entry__2">1</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="应用例子-1__entry__1">2018.10.08T01:01:01.006</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="应用例子-1__entry__2">1</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="应用例子-1__entry__1">2018.10.08T01:01:01.007</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="应用例子-1__entry__2">1</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="应用例子-1__entry__1">2018.10.08T01:01:01.008</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="应用例子-1__entry__2">1</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="应用例子-1__entry__1">2018.10.08T01:01:01.009</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="应用例子-1__entry__2">1</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="应用例子-1__entry__1">2018.10.08T01:01:01.010</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="应用例子-1__entry__2">1</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="应用例子-1__entry__1">2018.10.08T01:01:01.011</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="应用例子-1__entry__2">1</td>
+                        </tr>
+                    </tbody></table></div>
+            <p class="- topic/p p">再查看结果表 <em class="+ topic/ph hi-d/i ph i">outputTable</em>:</p>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock language-python">select * <strong class="hl-keyword">from</strong> outputTable;</pre>
+            <div class="table-container"><table class="- topic/table table" data-cols="2"><caption></caption><colgroup><col/><col/></colgroup><thead class="- topic/thead thead">
+                        <tr class="- topic/row">
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="应用例子-1__entry__23">time</th>
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="应用例子-1__entry__24">sumVolume</th>
+                        </tr>
+                    </thead><tbody class="- topic/tbody tbody">
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="应用例子-1__entry__23">2018.10.08T01:01:01.003</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="应用例子-1__entry__24">1</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="应用例子-1__entry__23">2018.10.08T01:01:01.006</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="应用例子-1__entry__24">4</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="应用例子-1__entry__23">2018.10.08T01:01:01.009</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="应用例子-1__entry__24">6</td>
+                        </tr>
+                    </tbody></table></div>
+            <p class="- topic/p p">根据第一条数据时刻规整第一个窗口的起始时间后，窗口以 <em class="+ topic/ph hi-d/i ph i">step</em> 为步长移动。下面详细解释时序引擎的计算过程。为简便起见，以下提到时间时，省略相同的
+                2018.10.08T01:01:01 部分，只列出毫秒部分。基于第一行数据的时间 002，第一个窗口的起始时间规整为 000，到 002 结束，只包含 002
+                一条记录，计算被 003 记录触发，sum(volume) 的结果是 1；第二个窗口从 000 到 005，包含了 4 条数据，计算被 006 记录触发，计算结果为
+                4；第三个窗口从 003 到 008，包含 6 条数据，计算被 009 记录触发，计算结果为 6。虽然第四个窗口从 006 到 011 且含有 6
+                条数据，但是由于该窗口结束之后没有数据，所以该窗口的计算没有被触发。</p>
+            <p class="- topic/p p">若需要重复执行以上程序，应首先解除订阅，并将流数据表 <em class="+ topic/ph hi-d/i ph i">trades</em> 与时序引擎 streamAggr1 二者删除：</p>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock language-python">unsubscribeTable(tableName=<span class="hl-string">"trades"</span>, actionName=<span class="hl-string">"append_tradesAggregator"</span>)
+undef(`trades, SHARED)
+dropStreamEngine(<span class="hl-string">"streamAggr1"</span>)</pre>
+        </div>
+    </article>
+    <article class="- topic/topic topic nested1" aria-labelledby="ariaid-title4" id="应用例子-2">
+        <h2 class="- topic/title title topictitle2" id="ariaid-title4">
+            <strong class="+ topic/ph hi-d/b ph b">应用例子 2</strong>
+        </h2>
+        <div class="- topic/body body">
+            <p class="- topic/p p">DolphinDB 时序聚合引擎支持多个窗口。</p>
+            <p class="- topic/p p">下例说如何对相同的 <em class="+ topic/ph hi-d/i ph i">metrics</em> 按不同的 <em class="+ topic/ph hi-d/i ph i">windowSize</em> 聚合。以下代码建立流数据表 <em class="+ topic/ph hi-d/i ph i">trades</em>，包含 time 和
+                volume 两列。创建时序引擎 streamAggr1，每 3 毫秒对过去 6 毫秒和过去 12 毫秒的数据计算
+                    <code class="+ topic/ph pr-d/codeph ph codeph">sum(volume)</code>。time 列的精度为毫秒，模拟插入的数据流频率也设为每毫秒一条数据。</p>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock language-python">share streamTable(<span class="hl-number">1000</span>:<span class="hl-number">0</span>, `time`volume, [TIMESTAMP, INT]) <strong class="hl-keyword">as</strong> trades
+outputTable = table(<span class="hl-number">10000</span>:<span class="hl-number">0</span>, `time`sumVolume1`sumVolume2, [TIMESTAMP, INT,INT])
+tradesAggregator = createTimeSeriesEngine(name=<span class="hl-string">"streamAggr1"</span>, windowSize=[<span class="hl-number">6</span>,<span class="hl-number">12</span>], step=<span class="hl-number">3</span>, metrics=[&lt;sum(volume)&gt;,&lt;sum(volume)&gt;], dummyTable=trades, outputTable=outputTable, timeColumn=`time)
+subscribeTable(tableName=<span class="hl-string">"trades"</span>, actionName=<span class="hl-string">"append_tradesAggregator"</span>, offset=<span class="hl-number">0</span>, handler=append!{tradesAggregator}, msgAsTable=true)    </pre>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock language-python"><strong class="hl-keyword">def</strong> writeData(t, n){
+    timev = <span class="hl-number">2018.10</span>.<span class="hl-number">08</span>T01:<span class="hl-number">01</span>:<span class="hl-number">01.001</span> + timestamp(<span class="hl-number">1.</span>.n)
+    volumev = take(<span class="hl-number">1</span>, n)
+    insert into t values(timev, volumev)
+}
+writeData(trades, <span class="hl-number">20</span>)
+
+select * <strong class="hl-keyword">from</strong> trades;</pre>
+            <p class="- topic/p p">再查看结果表 <em class="+ topic/ph hi-d/i ph i">outputTable</em>:</p>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock language-python">select * <strong class="hl-keyword">from</strong> outputTable;</pre>
+            <div class="table-container"><table class="- topic/table table" data-cols="3"><caption></caption><colgroup><col/><col/><col/></colgroup><thead class="- topic/thead thead">
+                        <tr class="- topic/row">
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="应用例子-2__entry__1">time</th>
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="应用例子-2__entry__2">sumVolume1</th>
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="应用例子-2__entry__3">sumVolume2</th>
+                        </tr>
+                    </thead><tbody class="- topic/tbody tbody">
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="应用例子-2__entry__1">2018.10.08T01:01:01.003</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="应用例子-2__entry__2">1</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="应用例子-2__entry__3">1</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="应用例子-2__entry__1">2018.10.08T01:01:01.006</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="应用例子-2__entry__2">4</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="应用例子-2__entry__3">4</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="应用例子-2__entry__1">2018.10.08T01:01:01.009</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="应用例子-2__entry__2">6</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="应用例子-2__entry__3">7</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="应用例子-2__entry__1">2018.10.08T01:01:01.012</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="应用例子-2__entry__2">6</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="应用例子-2__entry__3">10</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="应用例子-2__entry__1">2018.10.08T01:01:01.015</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="应用例子-2__entry__2">6</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="应用例子-2__entry__3">12</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="应用例子-2__entry__1">2018.10.08T01:01:01.018</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="应用例子-2__entry__2">6</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="应用例子-2__entry__3">12</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="应用例子-2__entry__1">2018.10.08T01:01:01.021</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="应用例子-2__entry__2">6</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="应用例子-2__entry__3">12</td>
+                        </tr>
+                    </tbody></table></div>
+        </div>
+    </article>
+    <article class="- topic/topic topic nested1" aria-labelledby="ariaid-title5" id="应用例子-3">
+        <h2 class="- topic/title title topictitle2" id="ariaid-title5">
+            <strong class="+ topic/ph hi-d/b ph b">应用例子 3</strong>
+        </h2>
+        <div class="- topic/body body">
+            <p class="- topic/p p">DolphinDB 时序聚合引擎支持使用多种表达式进行实时计算。</p>
+            <ul class="- topic/ul ul">
+                <li class="- topic/li li">
+                    <p class="- topic/p p">一个或多个聚合函数</p>
+                    <pre class="+ topic/pre pr-d/codeblock pre codeblock language-python" id="应用例子-3__codeblock_wg5_cxl_xzb" data-ofbid="应用例子-3__codeblock_wg5_cxl_xzb">tsAggregator = createTimeSeriesEngine(name=<span class="hl-string">"streamAggr1"</span>, windowSize=<span class="hl-number">6</span>, step=<span class="hl-number">3</span>, metrics=&lt;sum(ask)&gt;, dummyTable=quotes, outputTable=outputTable, timeColumn=`time)</pre>
+                </li>
+                <li class="- topic/li li">
+                    <p class="- topic/p p">使用聚合结果进行计算</p>
+                    <pre class="+ topic/pre pr-d/codeblock pre codeblock language-python" id="应用例子-3__codeblock_nth_cxl_xzb" data-ofbid="应用例子-3__codeblock_nth_cxl_xzb">tsAggregator = createTimeSeriesEngine(name=<span class="hl-string">"streamAggr1"</span>, windowSize=<span class="hl-number">6</span>, step=<span class="hl-number">3</span>, metrics=&lt;max(ask)-min(ask)&gt;, dummyTable=quotes, outputTable=outputTable, timeColumn=`time)</pre>
+                </li>
+                <li class="- topic/li li">
+                    <p class="- topic/p p">对列与列的操作结果进行聚合计算</p>
+                    <pre class="+ topic/pre pr-d/codeblock pre codeblock language-python" id="应用例子-3__codeblock_ff5_bxl_xzb" data-ofbid="应用例子-3__codeblock_ff5_bxl_xzb">tsAggregator = createTimeSeriesEngine(name=<span class="hl-string">"streamAggr1"</span>, windowSize=<span class="hl-number">6</span>, step=<span class="hl-number">3</span>, metrics=&lt;max(ask-bid)&gt;, dummyTable=quotes, outputTable=outputTable, timeColumn=`time)</pre>
+                </li>
+                <li class="- topic/li li">
+                    <p class="- topic/p p">输出多个聚合结果</p>
+                    <pre class="+ topic/pre pr-d/codeblock pre codeblock language-python" id="应用例子-3__codeblock_nff_bxl_xzb" data-ofbid="应用例子-3__codeblock_nff_bxl_xzb">tsAggregator = createTimeSeriesEngine(name=<span class="hl-string">"streamAggr1"</span>, windowSize=<span class="hl-number">6</span>, step=<span class="hl-number">3</span>, metrics=&lt;[max((ask-bid)/(ask+bid)*<span class="hl-number">2</span>), min((ask-bid)/(ask+bid)*<span class="hl-number">2</span>)]&gt;, dummyTable=quotes, outputTable=outputTable, timeColumn=`time)</pre>
+                </li>
+                <li class="- topic/li li">
+                    <p class="- topic/p p">使用多参数聚合函数</p>
+                    <pre class="+ topic/pre pr-d/codeblock pre codeblock language-python" id="应用例子-3__codeblock_zmr_1xl_xzb" data-ofbid="应用例子-3__codeblock_zmr_1xl_xzb">tsAggregator = createTimeSeriesEngine(name=<span class="hl-string">"streamAggr1"</span>, windowSize=<span class="hl-number">6</span>, step=<span class="hl-number">3</span>, metrics=&lt;corr(ask,bid)&gt;, dummyTable=quotes, outputTable=outputTable, timeColumn=`time)
+
+tsAggregator = createTimeSeriesEngine(name=<span class="hl-string">"streamAggr1"</span>, windowSize=<span class="hl-number">6</span>, step=<span class="hl-number">3</span>, metrics=&lt;percentile(ask-bid,<span class="hl-number">99</span>)/sum(ask)&gt;, dummyTable=quotes, outputTable=outputTable, timeColumn=`time)</pre>
+                </li>
+                <li class="- topic/li li">
+                    <p class="- topic/p p">使用自定义函数</p>
+                    <pre class="+ topic/pre pr-d/codeblock pre codeblock language-python" id="应用例子-3__codeblock_xs2_1xl_xzb" data-ofbid="应用例子-3__codeblock_xs2_1xl_xzb">defg diff(x,y){
+	<strong class="hl-keyword">return</strong> sum(x)-sum(y)
+}
+tsAggregator = createTimeSeriesEngine(name=<span class="hl-string">"streamAggr1"</span>, windowSize=<span class="hl-number">6</span>, step=<span class="hl-number">3</span>, metrics=&lt;diff(ask, bid)&gt;, dummyTable=quotes, outputTable=outputTable, timeColumn=`time)</pre>
+                </li>
+                <li class="- topic/li li">
+                    <p class="- topic/p p">使用多个返回结果的函数</p>
+                    <pre class="+ topic/pre pr-d/codeblock pre codeblock language-python" id="应用例子-3__codeblock_zhx_zwl_xzb" data-ofbid="应用例子-3__codeblock_zhx_zwl_xzb">defg sums(x){
+	<strong class="hl-keyword">return</strong> [sum(x),sum2(x)]
+}
+tsAggregator = createTimeSeriesEngine(name=<span class="hl-string">"streamAggr1"</span>, windowSize=<span class="hl-number">6</span>, step=<span class="hl-number">3</span>, metrics=&lt;sums(ask) <strong class="hl-keyword">as</strong> `sumAsk`sum2Ask&gt;, dummyTable=quotes, outputTable=outputTable, timeColumn=`time)</pre>
+                </li>
+            </ul>
+            <div class="- topic/note note note note_note" id="应用例子-3__note_ecl_dxl_xzb" data-ofbid="应用例子-3__note_ecl_dxl_xzb"><span class="note__title">注：</span> 不支持聚合函数嵌套调用，例如 <code class="+ topic/ph pr-d/codeph ph codeph">sum(spread(ask,bid))</code>。</div>
+        </div>
+    </article>
+    <article class="- topic/topic topic nested1" aria-labelledby="ariaid-title6" id="应用例子-4">
+        <h2 class="- topic/title title topictitle2" id="ariaid-title6">
+            <strong class="+ topic/ph hi-d/b ph b">应用例子 4</strong>
+        </h2>
+        <div class="- topic/body body">
+            <p class="- topic/p p">系统利用 dummyTable 的 schema 来决定订阅的流数据中每一列的数据类型。dummyTable 有无数据对结果没有任何影响。</p>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock language-python">share streamTable(<span class="hl-number">1000</span>:<span class="hl-number">0</span>, `time`volume, [TIMESTAMP, INT]) <strong class="hl-keyword">as</strong> trades
+modelTable = table(<span class="hl-number">1000</span>:<span class="hl-number">0</span>, `time`volume, [TIMESTAMP, INT])
+outputTable = table(<span class="hl-number">10000</span>:<span class="hl-number">0</span>, `time`sumVolume, [TIMESTAMP, INT])
+tradesAggregator = createTimeSeriesEngine(name=<span class="hl-string">"streamAggr1"</span>, windowSize=<span class="hl-number">5</span>, step=<span class="hl-number">5</span>, metrics=&lt;[sum(volume)]&gt;, dummyTable=modelTable, outputTable=outputTable, timeColumn=`time)
+subscribeTable(tableName=<span class="hl-string">"trades"</span>, actionName=<span class="hl-string">"append_tradesAggregator"</span>, offset=<span class="hl-number">0</span>, handler=append!{tradesAggregator}, msgAsTable=true)    
+
+<strong class="hl-keyword">def</strong> writeData(t,n){
+    timev = <span class="hl-number">2018.10</span>.<span class="hl-number">08</span>T01:<span class="hl-number">01</span>:<span class="hl-number">01.001</span> + timestamp(<span class="hl-number">1.</span>.n)
+    volumev = take(<span class="hl-number">1</span>, n)
+    insert into t values(timev, volumev)
+}
+
+writeData(trades, <span class="hl-number">6</span>)
+
+sleep(<span class="hl-number">1</span>)
+select * <strong class="hl-keyword">from</strong> outputTable</pre>
+        </div>
+    </article>
+    <article class="- topic/topic topic nested1" aria-labelledby="ariaid-title7" id="应用例子-5">
+        <h2 class="- topic/title title topictitle2" id="ariaid-title7">
+            <strong class="+ topic/ph hi-d/b ph b">应用例子 5</strong>
+        </h2>
+        <div class="- topic/body body">
+            <p class="- topic/p p">计算结果可以输出到内存表或流数据表。输出到内存表的数据可以更新或删除，而输出到流数据表的数据无法更新或删除，但是可以通过流数据表将结果作为另一个引擎的数据源再次发布。</p>
+            <p class="- topic/p p">下例中，时序引擎 electricityAggregator1 订阅流数据表 <em class="+ topic/ph hi-d/i ph i">electricity</em>，进行移动均值计算，并将结果输出到流数据表
+                    <em class="+ topic/ph hi-d/i ph i">outputTable1</em>。时序引擎 electricityAggregator2 订阅 <em class="+ topic/ph hi-d/i ph i">outputTable1</em>
+                表，并对移动均值计算结果求移动峰值。</p>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock language-python">share streamTable(<span class="hl-number">1000</span>:<span class="hl-number">0</span>,`time`voltage`current,[TIMESTAMP,DOUBLE,DOUBLE]) <strong class="hl-keyword">as</strong> electricity
+
+//将第一个时序引擎的输出表定义为流数据表，可以再次订阅
+share streamTable(<span class="hl-number">10000</span>:<span class="hl-number">0</span>,`time`avgVoltage`avgCurrent,[TIMESTAMP,DOUBLE,DOUBLE]) <strong class="hl-keyword">as</strong> outputTable1 
+
+electricityAggregator1 = createTimeSeriesEngine(name=<span class="hl-string">"electricityAggregator1"</span>, windowSize=<span class="hl-number">10</span>, step=<span class="hl-number">10</span>, metrics=&lt;[avg(voltage), avg(current)]&gt;, dummyTable=electricity, outputTable=outputTable1, timeColumn=`time, garbageSize=<span class="hl-number">2000</span>)
+subscribeTable(tableName=<span class="hl-string">"electricity"</span>, actionName=<span class="hl-string">"avgElectricity"</span>, offset=<span class="hl-number">0</span>, handler=append!{electricityAggregator1}, msgAsTable=true)
+
+//订阅计算结果，再次进行聚合计算
+outputTable2 =table(<span class="hl-number">10000</span>:<span class="hl-number">0</span>, `time`maxVoltage`maxCurrent, [TIMESTAMP,DOUBLE,DOUBLE])
+electricityAggregator2 = createTimeSeriesEngine(name=<span class="hl-string">"electricityAggregator2"</span>, windowSize=<span class="hl-number">100</span>, step=<span class="hl-number">100</span>, metrics=&lt;[max(avgVoltage), max(avgCurrent)]&gt;, dummyTable=outputTable1, outputTable=outputTable2, timeColumn=`time, garbageSize=<span class="hl-number">2000</span>)
+subscribeTable(tableName=<span class="hl-string">"outputTable1"</span>, actionName=<span class="hl-string">"maxElectricity"</span>, offset=<span class="hl-number">0</span>, handler=append!{electricityAggregator2}, msgAsTable=true);
+
+//向electricity表中插入500条数据
+<strong class="hl-keyword">def</strong> writeData(t, n){
+        timev = <span class="hl-number">2018.10</span>.<span class="hl-number">08</span>T01:<span class="hl-number">01</span>:<span class="hl-number">01.000</span> + timestamp(<span class="hl-number">1.</span>.n)
+        voltage = <span class="hl-number">1.</span>.n * <span class="hl-number">0.1</span>
+        current = <span class="hl-number">1.</span>.n * <span class="hl-number">0.05</span>
+        insert into t values(timev, voltage, current)
+}
+writeData(electricity, <span class="hl-number">500</span>);</pre>
+            <p class="- topic/p p">聚合计算结果:</p>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock language-python">select * <strong class="hl-keyword">from</strong> outputTable2;</pre>
+            <div class="table-container"><table class="- topic/table table" data-cols="3"><caption></caption><colgroup><col/><col/><col/></colgroup><thead class="- topic/thead thead">
+                        <tr class="- topic/row">
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="应用例子-5__entry__1">time</th>
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="应用例子-5__entry__2">maxVoltage</th>
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="应用例子-5__entry__3">maxCurrent</th>
+                        </tr>
+                    </thead><tbody class="- topic/tbody tbody">
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="应用例子-5__entry__1">2018.10.08T01:01:01.100</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="应用例子-5__entry__2">8.45</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="应用例子-5__entry__3">4.225</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="应用例子-5__entry__1">2018.10.08T01:01:01.200</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="应用例子-5__entry__2">18.45</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="应用例子-5__entry__3">9.225</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="应用例子-5__entry__1">2018.10.08T01:01:01.300</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="应用例子-5__entry__2">28.45</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="应用例子-5__entry__3">14.225</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="应用例子-5__entry__1">2018.10.08T01:01:01.400</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="应用例子-5__entry__2">38.45</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="应用例子-5__entry__3">19.225</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="应用例子-5__entry__1">2018.10.08T01:01:01.500</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="应用例子-5__entry__2">48.45</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="应用例子-5__entry__3">24.225</td>
+                        </tr>
+                    </tbody></table></div>
+            <p class="- topic/p p">若要对上述脚本进行重复使用，需先执行以下脚本以清除共享表、订阅以及流数据引擎：</p>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock language-python">unsubscribeTable(tableName=<span class="hl-string">"electricity"</span>, actionName=<span class="hl-string">"avgElectricity"</span>)
+undef(`electricity, SHARED)
+unsubscribeTable(tableName=<span class="hl-string">"outputTable1"</span>, actionName=<span class="hl-string">"maxElectricity"</span>)
+undef(`outputTable1, SHARED)
+dropStreamEngine(<span class="hl-string">"electricityAggregator1"</span>)
+dropStreamEngine(<span class="hl-string">"electricityAggregator2"</span>)</pre>
+        </div>
+    </article>
+    <article class="- topic/topic topic nested1" aria-labelledby="ariaid-title8" id="应用例子6">
+        <h2 class="- topic/title title topictitle2" id="ariaid-title8">
+            <strong class="+ topic/ph hi-d/b ph b">应用例子6</strong>
+        </h2>
+        <div class="- topic/body body">
+            <p class="- topic/p p">下例中，设定 <em class="+ topic/ph hi-d/i ph i">keyColumn</em> 参数为 sym。</p>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock language-python">share streamTable(<span class="hl-number">1000</span>:<span class="hl-number">0</span>, `time`sym`volume, [TIMESTAMP, SYMBOL, INT]) <strong class="hl-keyword">as</strong> trades
+outputTable = table(<span class="hl-number">10000</span>:<span class="hl-number">0</span>, `time`sym`sumVolume, [TIMESTAMP, SYMBOL, INT])
+tradesAggregator = createTimeSeriesEngine(name=<span class="hl-string">"streamAggr1"</span>, windowSize=<span class="hl-number">3</span>, step=<span class="hl-number">3</span>, metrics=&lt;[sum(volume)]&gt;, dummyTable=trades, outputTable=outputTable, timeColumn=`time, useSystemTime=false, keyColumn=`sym, garbageSize=<span class="hl-number">50</span>)
+subscribeTable(tableName=<span class="hl-string">"trades"</span>, actionName=<span class="hl-string">"append_tradesAggregator"</span>, offset=<span class="hl-number">0</span>, handler=append!{tradesAggregator}, msgAsTable=true)    
+
+<strong class="hl-keyword">def</strong> writeData(t, n){
+    timev = <span class="hl-number">2018.10</span>.<span class="hl-number">08</span>T01:<span class="hl-number">01</span>:<span class="hl-number">01.001</span> + timestamp(<span class="hl-number">1.</span>.n)
+    symv =take(`A`B, n)
+    volumev = take(<span class="hl-number">1</span>, n)
+    insert into t values(timev, symv, volumev)
+}
+
+writeData(trades, <span class="hl-number">6</span>)</pre>
+            <p class="- topic/p p">为了方便观察，对 <em class="+ topic/ph hi-d/i ph i">trades</em> 表的 sym 列排序输出：</p>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock language-python">select * <strong class="hl-keyword">from</strong> trades order by sym</pre>
+            <div class="table-container"><table class="- topic/table table" data-cols="3"><caption></caption><colgroup><col/><col/><col/></colgroup><thead class="- topic/thead thead">
+                        <tr class="- topic/row">
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="应用例子6__entry__1">time</th>
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="应用例子6__entry__2">sym</th>
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="应用例子6__entry__3">volume</th>
+                        </tr>
+                    </thead><tbody class="- topic/tbody tbody">
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="应用例子6__entry__1">2018.10.08T01:01:01.002</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="应用例子6__entry__2">A</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="应用例子6__entry__3">1</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="应用例子6__entry__1">2018.10.08T01:01:01.004</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="应用例子6__entry__2">A</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="应用例子6__entry__3">1</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="应用例子6__entry__1">2018.10.08T01:01:01.006</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="应用例子6__entry__2">A</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="应用例子6__entry__3">1</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="应用例子6__entry__1">2018.10.08T01:01:01.003</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="应用例子6__entry__2">B</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="应用例子6__entry__3">1</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="应用例子6__entry__1">2018.10.08T01:01:01.005</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="应用例子6__entry__2">B</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="应用例子6__entry__3">1</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="应用例子6__entry__1">2018.10.08T01:01:01.007</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="应用例子6__entry__2">B</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="应用例子6__entry__3">1</td>
+                        </tr>
+                    </tbody></table></div>
+            <p class="- topic/p p">分组计算结果：</p>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock language-python">select * <strong class="hl-keyword">from</strong> outputTable</pre>
+            <div class="table-container"><table class="- topic/table table" data-cols="3"><caption></caption><colgroup><col/><col/><col/></colgroup><thead class="- topic/thead thead">
+                        <tr class="- topic/row">
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="应用例子6__entry__22">time</th>
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="应用例子6__entry__23">sym</th>
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="应用例子6__entry__24">sumVolume</th>
+                        </tr>
+                    </thead><tbody class="- topic/tbody tbody">
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="应用例子6__entry__22">2018.10.08T01:01:01.003</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="应用例子6__entry__23">A</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="应用例子6__entry__24">1</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="应用例子6__entry__22">2018.10.08T01:01:01.006</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="应用例子6__entry__23">A</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="应用例子6__entry__24">1</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="应用例子6__entry__22">2018.10.08T01:01:01.006</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="应用例子6__entry__23">B</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="应用例子6__entry__24">2</td>
+                        </tr>
+                    </tbody></table></div>
+            <p class="- topic/p p">各组窗口规整后统一从 000 时间点开始，根据 <em class="+ topic/ph hi-d/i ph i">windowSize</em>=3 以及 <em class="+ topic/ph hi-d/i ph i">step</em>=3，每个组的窗口会按照 000-003-006
+                划分。</p>
+            <ul class="- topic/ul ul">
+                <li class="- topic/li li">
+                    <p class="- topic/p p">(1) 在 003，B组有一条数据，但是由于B组在第一个窗口没有任何数据，不会进行计算也不会产生结果，所以B组第一个窗口没有结果输出。</p>
+                </li>
+                <li class="- topic/li li">
+                    <p class="- topic/p p">(2) 004 的A组数据触发A组第一个窗口的计算。</p>
+                </li>
+                <li class="- topic/li li">
+                    <p class="- topic/p p">(3) 006 的A组数据触发A组第二个窗口的计算。</p>
+                </li>
+                <li class="- topic/li li">
+                    <p class="- topic/p p">(4) 007 的B组数据触发B组第二个窗口的计算。</p>
+                </li>
+            </ul>
+            <p class="- topic/p p">如果进行分组聚合计算，流数据源中的每个分组中的 'timeColumn' 必须是递增的，但是整个数据源的 'timeColumn'
+                可以不是递增的；如果没有进行分组聚合，那么整个数据源的 'timeColumn' 必须是递增的，否则时序引擎的输出结果会与预期不符。</p>
+        </div>
+    </article>
+    <article class="- topic/topic topic nested1" aria-labelledby="ariaid-title9" id="应用例子-7">
+        <h2 class="- topic/title title topictitle2" id="ariaid-title9">
+            <strong class="+ topic/ph hi-d/b ph b">应用例子 7</strong>
+        </h2>
+        <div class="- topic/body body">
+            <p class="- topic/p p">通过以下两个例子，可以理解 <em class="+ topic/ph hi-d/i ph i">updateTime</em> 的作用。</p>
+            <p class="- topic/p p">首先创建流数据表并写入数据：</p>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock language-python">share streamTable(<span class="hl-number">1000</span>:<span class="hl-number">0</span>, `time`sym`volume, [TIMESTAMP, SYMBOL, INT]) <strong class="hl-keyword">as</strong> trades
+insert into trades values(<span class="hl-number">2018.10</span>.<span class="hl-number">08</span>T01:<span class="hl-number">01</span>:<span class="hl-number">01.785</span>,`A,<span class="hl-number">10</span>)
+insert into trades values(<span class="hl-number">2018.10</span>.<span class="hl-number">08</span>T01:<span class="hl-number">01</span>:<span class="hl-number">02.125</span>,`B,<span class="hl-number">26</span>)
+insert into trades values(<span class="hl-number">2018.10</span>.<span class="hl-number">08</span>T01:<span class="hl-number">01</span>:<span class="hl-number">10.263</span>,`B,<span class="hl-number">14</span>)
+insert into trades values(<span class="hl-number">2018.10</span>.<span class="hl-number">08</span>T01:<span class="hl-number">01</span>:<span class="hl-number">12.457</span>,`A,<span class="hl-number">28</span>)
+insert into trades values(<span class="hl-number">2018.10</span>.<span class="hl-number">08</span>T01:<span class="hl-number">02</span>:<span class="hl-number">10.789</span>,`A,<span class="hl-number">15</span>)
+insert into trades values(<span class="hl-number">2018.10</span>.<span class="hl-number">08</span>T01:<span class="hl-number">02</span>:<span class="hl-number">12.005</span>,`B,<span class="hl-number">9</span>)
+insert into trades values(<span class="hl-number">2018.10</span>.<span class="hl-number">08</span>T01:<span class="hl-number">02</span>:<span class="hl-number">30.021</span>,`A,<span class="hl-number">10</span>)
+insert into trades values(<span class="hl-number">2018.10</span>.<span class="hl-number">08</span>T01:<span class="hl-number">04</span>:<span class="hl-number">02.236</span>,`A,<span class="hl-number">29</span>)
+insert into trades values(<span class="hl-number">2018.10</span>.<span class="hl-number">08</span>T01:<span class="hl-number">04</span>:<span class="hl-number">04.412</span>,`B,<span class="hl-number">32</span>)
+insert into trades values(<span class="hl-number">2018.10</span>.<span class="hl-number">08</span>T01:<span class="hl-number">04</span>:<span class="hl-number">05.152</span>,`B,<span class="hl-number">23</span>);</pre>
+            <ul class="- topic/ul ul">
+                <li class="- topic/li li">
+                    <p class="- topic/p p">不指定 <em class="+ topic/ph hi-d/i ph i">updateTime</em>：</p>
+                    <pre class="+ topic/pre pr-d/codeblock pre codeblock language-python" id="应用例子-7__codeblock_ntb_fxl_xzb" data-ofbid="应用例子-7__codeblock_ntb_fxl_xzb">output1 = table(<span class="hl-number">10000</span>:<span class="hl-number">0</span>, `time`sym`sumVolume, [TIMESTAMP, SYMBOL, INT])
+agg1 = createTimeSeriesEngine(name=<span class="hl-string">"agg1"</span>, windowSize=<span class="hl-number">60000</span>, step=<span class="hl-number">60000</span>, metrics=&lt;[sum(volume)]&gt;, dummyTable=trades, outputTable=output1, timeColumn=`time, useSystemTime=false, keyColumn=`sym, garbageSize=<span class="hl-number">50</span>, useWindowStartTime=false)
+subscribeTable(tableName=<span class="hl-string">"trades"</span>, actionName=<span class="hl-string">"agg1"</span>, offset=<span class="hl-number">0</span>, handler=append!{agg1}, msgAsTable=true)
+
+sleep(<span class="hl-number">10</span>)
+
+select * <strong class="hl-keyword">from</strong> output1;</pre>
+                    <div class="table-container"><table class="- topic/table table" id="应用例子-7__table_otb_fxl_xzb" data-ofbid="应用例子-7__table_otb_fxl_xzb" data-cols="3"><caption></caption><colgroup><col/><col/><col/></colgroup><thead class="- topic/thead thead">
+                                <tr class="- topic/row">
+                                    <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="应用例子-7__table_otb_fxl_xzb__entry__1">time</th>
+                                    <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="应用例子-7__table_otb_fxl_xzb__entry__2">sym</th>
+                                    <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="应用例子-7__table_otb_fxl_xzb__entry__3">sumVolume</th>
+                                </tr>
+                            </thead><tbody class="- topic/tbody tbody">
+                                <tr class="- topic/row">
+                                    <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="应用例子-7__table_otb_fxl_xzb__entry__1">2018.10.08T01:02:00.000</td>
+                                    <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="应用例子-7__table_otb_fxl_xzb__entry__2">A</td>
+                                    <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="应用例子-7__table_otb_fxl_xzb__entry__3">38</td>
+                                </tr>
+                                <tr class="- topic/row">
+                                    <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="应用例子-7__table_otb_fxl_xzb__entry__1">2018.10.08T01:03:00.000</td>
+                                    <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="应用例子-7__table_otb_fxl_xzb__entry__2">A</td>
+                                    <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="应用例子-7__table_otb_fxl_xzb__entry__3">25</td>
+                                </tr>
+                                <tr class="- topic/row">
+                                    <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="应用例子-7__table_otb_fxl_xzb__entry__1">2018.10.08T01:02:00.000</td>
+                                    <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="应用例子-7__table_otb_fxl_xzb__entry__2">B</td>
+                                    <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="应用例子-7__table_otb_fxl_xzb__entry__3">40</td>
+                                </tr>
+                                <tr class="- topic/row">
+                                    <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="应用例子-7__table_otb_fxl_xzb__entry__1">2018.10.08T01:03:00.000</td>
+                                    <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="应用例子-7__table_otb_fxl_xzb__entry__2">B</td>
+                                    <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="应用例子-7__table_otb_fxl_xzb__entry__3">9</td>
+                                </tr>
+                            </tbody></table></div>
+                </li>
+                <li class="- topic/li li">
+                    <p class="- topic/p p">将 <em class="+ topic/ph hi-d/i ph i">updateTime</em> 设为 1000：</p>
+                    <pre class="+ topic/pre pr-d/codeblock pre codeblock language-python" id="应用例子-7__codeblock_rb4_fxl_xzb" data-ofbid="应用例子-7__codeblock_rb4_fxl_xzb">output2 = keyedTable(`time`sym,<span class="hl-number">10000</span>:<span class="hl-number">0</span>, `time`sym`sumVolume, [TIMESTAMP, SYMBOL, INT])
+agg2 = createTimeSeriesEngine(name=<span class="hl-string">"agg2"</span>, windowSize=<span class="hl-number">60000</span>, step=<span class="hl-number">60000</span>, metrics=&lt;[sum(volume)]&gt;, dummyTable=trades, outputTable=output2, timeColumn=`time, useSystemTime=false, keyColumn=`sym, garbageSize=<span class="hl-number">50</span>, updateTime=<span class="hl-number">1000</span>, useWindowStartTime=false)
+subscribeTable(tableName=<span class="hl-string">"trades"</span>, actionName=<span class="hl-string">"agg2"</span>, offset=<span class="hl-number">0</span>, handler=append!{agg2}, msgAsTable=true)
+
+sleep(<span class="hl-number">2010</span>)
+
+select * <strong class="hl-keyword">from</strong> output2;</pre>
+                    <div class="table-container"><table class="- topic/table table" id="应用例子-7__table_sb4_fxl_xzb" data-ofbid="应用例子-7__table_sb4_fxl_xzb" data-cols="3"><caption></caption><colgroup><col/><col/><col/></colgroup><thead class="- topic/thead thead">
+                                <tr class="- topic/row">
+                                    <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="应用例子-7__table_sb4_fxl_xzb__entry__1">time</th>
+                                    <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="应用例子-7__table_sb4_fxl_xzb__entry__2">sym</th>
+                                    <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="应用例子-7__table_sb4_fxl_xzb__entry__3">sumVolume</th>
+                                </tr>
+                            </thead><tbody class="- topic/tbody tbody">
+                                <tr class="- topic/row">
+                                    <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="应用例子-7__table_sb4_fxl_xzb__entry__1">2018.10.08T01:02:00.000</td>
+                                    <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="应用例子-7__table_sb4_fxl_xzb__entry__2">A</td>
+                                    <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="应用例子-7__table_sb4_fxl_xzb__entry__3">38</td>
+                                </tr>
+                                <tr class="- topic/row">
+                                    <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="应用例子-7__table_sb4_fxl_xzb__entry__1">2018.10.08T01:03:00.000</td>
+                                    <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="应用例子-7__table_sb4_fxl_xzb__entry__2">A</td>
+                                    <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="应用例子-7__table_sb4_fxl_xzb__entry__3">25</td>
+                                </tr>
+                                <tr class="- topic/row">
+                                    <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="应用例子-7__table_sb4_fxl_xzb__entry__1">2018.10.08T01:02:00.000</td>
+                                    <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="应用例子-7__table_sb4_fxl_xzb__entry__2">B</td>
+                                    <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="应用例子-7__table_sb4_fxl_xzb__entry__3">40</td>
+                                </tr>
+                                <tr class="- topic/row">
+                                    <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="应用例子-7__table_sb4_fxl_xzb__entry__1">2018.10.08T01:03:00.000</td>
+                                    <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="应用例子-7__table_sb4_fxl_xzb__entry__2">B</td>
+                                    <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="应用例子-7__table_sb4_fxl_xzb__entry__3">9</td>
+                                </tr>
+                                <tr class="- topic/row">
+                                    <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="应用例子-7__table_sb4_fxl_xzb__entry__1">2018.10.08T01:05:00.000</td>
+                                    <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="应用例子-7__table_sb4_fxl_xzb__entry__2">B</td>
+                                    <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="应用例子-7__table_sb4_fxl_xzb__entry__3">55</td>
+                                </tr>
+                                <tr class="- topic/row">
+                                    <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="应用例子-7__table_sb4_fxl_xzb__entry__1">2018.10.08T01:05:00.000</td>
+                                    <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="应用例子-7__table_sb4_fxl_xzb__entry__2">A</td>
+                                    <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="应用例子-7__table_sb4_fxl_xzb__entry__3">29</td>
+                                </tr>
+                            </tbody></table></div>
+                </li>
+            </ul>
+            <p class="- topic/p p">下面我们介绍以上两个例子在最后一个数据窗口（01:04:00.000 到
+                01:05:00.000）的区别。为简便起见，我们省略日期部分，只列出（小时:分钟:秒.毫秒）部分。假设 time 列时间亦为数据进入时序引擎的时刻。</p>
+            <p class="- topic/p p">(1) 在 01:04:04.236 时，A 分组的第一条记录到达后已经过 2000 毫秒，触发一次 A 组计算，输出表增加一条记录(01:05:00.000, `A,
+                29)。</p>
+            <p class="- topic/p p">(2) 在 01:04:05.152 时的 B 组记录为 01:04:04.412 所在小窗口 [01:04:04.000, 01:04:05.000)
+                之后第一条记录，触发一次 B 组计算，输出表增加一条记录 (01:05:00.000,"B",32)。</p>
+            <p class="- topic/p p">(3) 2000 毫秒后，在 01:04:07.152 时，由于 01:04:05.152 时的 B 组记录仍未参与计算，触发一次 B 组计算，输出一条记录
+                (01:05:00.000,"B",55)。由于输出表的主键为 time 和 sym，并且输出表中已有 (01:05:00.000,"B",32)
+                这条记录，因此将该记录更新为 (01:05:00.000,"B",55)。</p>
+        </div>
+    </article>
+    <article class="- topic/topic topic nested1" aria-labelledby="ariaid-title10" id="应用例子-8">
+        <h2 class="- topic/title title topictitle2" id="ariaid-title10">
+            <strong class="+ topic/ph hi-d/b ph b">应用例子 8</strong>
+        </h2>
+        <div class="- topic/body body">
+            <p class="- topic/p p">通过以下这个例子，可以理解 <em class="+ topic/ph hi-d/i ph i">snapshotDir</em> 和 <em class="+ topic/ph hi-d/i ph i">snapshotIntervalInMsgCount</em> 的作用。如果启用
+                    snapshot，引擎订阅流表时，<em class="+ topic/ph hi-d/i ph i">handler</em> 需是 <code class="+ topic/ph pr-d/codeph ph codeph">appendMsg</code> 函数，需指定
+                    <em class="+ topic/ph hi-d/i ph i">handlerNeedMsgId</em>=true，用来记录快照的消息位置。</p>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock language-python">share streamTable(<span class="hl-number">10000</span>:<span class="hl-number">0</span>,`time`sym`price`id, [TIMESTAMP,SYMBOL,INT,INT]) <strong class="hl-keyword">as</strong> trades
+output1 =table(<span class="hl-number">10000</span>:<span class="hl-number">0</span>, `time`sumprice, [TIMESTAMP,INT]);
+Agg1 = createTimeSeriesEngine(name=`Agg1, windowSize=<span class="hl-number">100</span>, step=<span class="hl-number">50</span>, metrics=&lt;sum(price)&gt;, dummyTable=trades, outputTable=output1, timeColumn=`time, snapshotDir=<span class="hl-string">"/home/server1/snapshotDir"</span>, snapshotIntervalInMsgCount=<span class="hl-number">100</span>)
+subscribeTable(server=<span class="hl-string">""</span>, tableName=<span class="hl-string">"trades"</span>, actionName=<span class="hl-string">"Agg1"</span>,offset= <span class="hl-number">0</span>, handler=appendMsg{Agg1}, msgAsTable=true, handlerNeedMsgId=true)
+
+n=<span class="hl-number">500</span>
+timev=timestamp(<span class="hl-number">1.</span>.n) + <span class="hl-number">2021.03</span>.<span class="hl-number">12</span>T15:<span class="hl-number">00</span>:<span class="hl-number">00.000</span>
+symv = take(`abc`<strong class="hl-keyword">def</strong>, n)
+pricev = int(<span class="hl-number">1.</span>.n)
+id = take(-<span class="hl-number">1</span>, n)
+insert into trades values(timev, symv, pricev, id)
+
+select * <strong class="hl-keyword">from</strong> output1</pre>
+            <div class="table-container"><table class="- topic/table table" data-cols="2"><caption></caption><colgroup><col/><col/></colgroup><thead class="- topic/thead thead">
+                        <tr class="- topic/row">
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="应用例子-8__entry__1">time</th>
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="应用例子-8__entry__2">sumprice</th>
+                        </tr>
+                    </thead><tbody class="- topic/tbody tbody">
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="应用例子-8__entry__1">2021.03.12T15:00:00.050</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="应用例子-8__entry__2">1225</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="应用例子-8__entry__1">2021.03.12T15:00:00.100</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="应用例子-8__entry__2">4950</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="应用例子-8__entry__1">2021.03.12T15:00:00.150</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="应用例子-8__entry__2">9950</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="应用例子-8__entry__1">2021.03.12T15:00:00.200</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="应用例子-8__entry__2">14950</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="应用例子-8__entry__1">2021.03.12T15:00:00.250</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="应用例子-8__entry__2">19950</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="应用例子-8__entry__1">2021.03.12T15:00:00.300</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="应用例子-8__entry__2">24950</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="应用例子-8__entry__1">2021.03.12T15:00:00.350</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="应用例子-8__entry__2">29950</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="应用例子-8__entry__1">2021.03.12T15:00:00.400</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="应用例子-8__entry__2">34950</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="应用例子-8__entry__1">2021.03.12T15:00:00.450</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="应用例子-8__entry__2">39950</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="应用例子-8__entry__1">2021.03.12T15:00:00.500</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="应用例子-8__entry__2">44950</td>
+                        </tr>
+                    </tbody></table></div>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock language-python">getSnapshotMsgId(Agg1) &gt;<span class="hl-number">499</span></pre>
+            <p class="- topic/p p">取消订阅并删除引擎来模拟系统异常</p>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock language-python">unsubscribeTable(, <span class="hl-string">"trades"</span>, <span class="hl-string">"Agg1"</span>)
+dropStreamEngine(<span class="hl-string">"Agg1"</span>)
+Agg1=NULL</pre>
+            <p class="- topic/p p">此时发布端仍在写入数据</p>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock language-python">n=<span class="hl-number">500</span>
+timev=timestamp(<span class="hl-number">501.</span><span class="hl-number">.1000</span>) + <span class="hl-number">2021.03</span>.<span class="hl-number">12</span>T15:<span class="hl-number">00</span>:<span class="hl-number">00.000</span>
+symv = take(`abc`<strong class="hl-keyword">def</strong>, n)
+pricev = int(<span class="hl-number">1.</span>.n)
+id = take(-<span class="hl-number">1</span>, n)
+insert into trades values(timev, symv, pricev, id)</pre>
+            <p class="- topic/p p">再次创建 aggr, 加载 snapshot，从上次处理最后一条消息开始重新订阅</p>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock language-python">Agg1 = createTimeSeriesEngine(name=`Agg1, windowSize=<span class="hl-number">100</span>, step=<span class="hl-number">50</span>, metrics=&lt;sum(price)&gt;, dummyTable=trades, outputTable=output1, timeColumn=`time, snapshotDir=<span class="hl-string">"/home/server1/snapshotDir"</span>, snapshotIntervalInMsgCount=<span class="hl-number">100</span>)
+
+ofst=getSnapshotMsgId(Agg1)
+<strong class="hl-keyword">print</strong>(ofst)
+&gt;<span class="hl-number">499</span>
+
+subscribeTable(server=<span class="hl-string">""</span>, tableName=<span class="hl-string">"trades"</span>, actionName=<span class="hl-string">"Agg1"</span>,offset=ofst+<span class="hl-number">1</span>, handler=appendMsg{Agg1}, msgAsTable=true, handlerNeedMsgId=true)
+
+select * <strong class="hl-keyword">from</strong> output1</pre>
+            <div class="table-container"><table class="- topic/table table" data-cols="2"><caption></caption><colgroup><col/><col/></colgroup><thead class="- topic/thead thead">
+                        <tr class="- topic/row">
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="应用例子-8__entry__23">time</th>
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="应用例子-8__entry__24">sumprice</th>
+                        </tr>
+                    </thead><tbody class="- topic/tbody tbody">
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="应用例子-8__entry__23">2021.03.12T15:00:00.050</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="应用例子-8__entry__24">1225</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="应用例子-8__entry__23">2021.03.12T15:00:00.100</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="应用例子-8__entry__24">4950</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="应用例子-8__entry__23">2021.03.12T15:00:00.150</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="应用例子-8__entry__24">9950</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="应用例子-8__entry__23">2021.03.12T15:00:00.200</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="应用例子-8__entry__24">14950</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="应用例子-8__entry__23">2021.03.12T15:00:00.250</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="应用例子-8__entry__24">19950</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="应用例子-8__entry__23">2021.03.12T15:00:00.300</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="应用例子-8__entry__24">24950</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="应用例子-8__entry__23">2021.03.12T15:00:00.350</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="应用例子-8__entry__24">29950</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="应用例子-8__entry__23">2021.03.12T15:00:00.400</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="应用例子-8__entry__24">34950</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="应用例子-8__entry__23">2021.03.12T15:00:00.450</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="应用例子-8__entry__24">39950</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="应用例子-8__entry__23">2021.03.12T15:00:00.500</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="应用例子-8__entry__24">44950</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="应用例子-8__entry__23">
+                                <strong class="+ topic/ph hi-d/b ph b">2021.03.12T15:00:00.550</strong>
+                            </td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="应用例子-8__entry__24">
+                                <strong class="+ topic/ph hi-d/b ph b">25450</strong>
+                            </td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="应用例子-8__entry__23">
+                                <strong class="+ topic/ph hi-d/b ph b">2021.03.12T15:00:00.600</strong>
+                            </td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="应用例子-8__entry__24">
+                                <strong class="+ topic/ph hi-d/b ph b">5450</strong>
+                            </td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="应用例子-8__entry__23">2021.03.12T15:00:00.650</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="应用例子-8__entry__24">9950</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="应用例子-8__entry__23">2021.03.12T15:00:00.700</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="应用例子-8__entry__24">14950</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="应用例子-8__entry__23">2021.03.12T15:00:00.750</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="应用例子-8__entry__24">19950</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="应用例子-8__entry__23">2021.03.12T15:00:00.800</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="应用例子-8__entry__24">24950</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="应用例子-8__entry__23">2021.03.12T15:00:00.850</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="应用例子-8__entry__24">29950</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="应用例子-8__entry__23">2021.03.12T15:00:00.900</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="应用例子-8__entry__24">34950</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="应用例子-8__entry__23">2021.03.12T15:00:00.950</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="应用例子-8__entry__24">39950</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="应用例子-8__entry__23">2021.03.12T15:00:01.000</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="应用例子-8__entry__24">44950</td>
+                        </tr>
+                    </tbody></table></div>
+            <p class="- topic/p p">结果和订阅不中断一样。</p>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock language-python">share streamTable(<span class="hl-number">10000</span>:<span class="hl-number">0</span>,`time`sym`price`id, [TIMESTAMP,SYMBOL,INT,INT]) <strong class="hl-keyword">as</strong> trades
+output1 =table(<span class="hl-number">10000</span>:<span class="hl-number">0</span>, `time`sumprice, [TIMESTAMP,INT]);
+Agg1 = createTimeSeriesEngine(name=`Agg1, windowSize=<span class="hl-number">100</span>, step=<span class="hl-number">50</span>, metrics=&lt;sum(price)&gt;, dummyTable=trades, outputTable=output1, timeColumn=`time)
+subscribeTable(server=<span class="hl-string">""</span>, tableName=<span class="hl-string">"trades"</span>, actionName=<span class="hl-string">"Agg1"</span>,offset= <span class="hl-number">0</span>, handler=append!{Agg1}, msgAsTable=true)
+
+n=<span class="hl-number">500</span>
+timev=timestamp(<span class="hl-number">1.</span>.n) + <span class="hl-number">2021.03</span>.<span class="hl-number">12</span>T15:<span class="hl-number">00</span>:<span class="hl-number">00.000</span>
+symv = take(`abc`<strong class="hl-keyword">def</strong>, n)
+pricev = int(<span class="hl-number">1.</span>.n)
+id = take(-<span class="hl-number">1</span>, n)
+insert into trades values(timev, symv, pricev, id)
+
+n=<span class="hl-number">500</span>
+timev=timestamp(<span class="hl-number">501.</span><span class="hl-number">.1000</span>) + <span class="hl-number">2021.03</span>.<span class="hl-number">12</span>T15:<span class="hl-number">00</span>:<span class="hl-number">00.000</span>
+symv = take(`abc`<strong class="hl-keyword">def</strong>, n)
+pricev = int(<span class="hl-number">1.</span>.n)
+id = take(-<span class="hl-number">1</span>, n)
+insert into trades values(timev, symv, pricev, id)
+
+select * <strong class="hl-keyword">from</strong> output1</pre>
+            <div class="table-container"><table class="- topic/table table" data-cols="2"><caption></caption><colgroup><col/><col/></colgroup><thead class="- topic/thead thead">
+                        <tr class="- topic/row">
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="应用例子-8__entry__65">time</th>
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="应用例子-8__entry__66">sumprice</th>
+                        </tr>
+                    </thead><tbody class="- topic/tbody tbody">
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="应用例子-8__entry__65">2021.03.12T15:00:00.050</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="应用例子-8__entry__66">1225</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="应用例子-8__entry__65">2021.03.12T15:00:00.100</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="应用例子-8__entry__66">4950</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="应用例子-8__entry__65">2021.03.12T15:00:00.150</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="应用例子-8__entry__66">9950</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="应用例子-8__entry__65">2021.03.12T15:00:00.200</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="应用例子-8__entry__66">14950</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="应用例子-8__entry__65">2021.03.12T15:00:00.250</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="应用例子-8__entry__66">19950</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="应用例子-8__entry__65">2021.03.12T15:00:00.300</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="应用例子-8__entry__66">24950</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="应用例子-8__entry__65">2021.03.12T15:00:00.350</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="应用例子-8__entry__66">29950</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="应用例子-8__entry__65">2021.03.12T15:00:00.400</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="应用例子-8__entry__66">34950</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="应用例子-8__entry__65">2021.03.12T15:00:00.450</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="应用例子-8__entry__66">39950</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="应用例子-8__entry__65">2021.03.12T15:00:00.500</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="应用例子-8__entry__66">44950</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="应用例子-8__entry__65">
+                                <strong class="+ topic/ph hi-d/b ph b">2021.03.12T15:00:00.550</strong>
+                            </td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="应用例子-8__entry__66">
+                                <strong class="+ topic/ph hi-d/b ph b">25450</strong>
+                            </td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="应用例子-8__entry__65">
+                                <strong class="+ topic/ph hi-d/b ph b">2021.03.12T15:00:00.600</strong>
+                            </td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="应用例子-8__entry__66">
+                                <strong class="+ topic/ph hi-d/b ph b">5450</strong>
+                            </td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="应用例子-8__entry__65">2021.03.12T15:00:00.650</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="应用例子-8__entry__66">9950</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="应用例子-8__entry__65">2021.03.12T15:00:00.700</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="应用例子-8__entry__66">14950</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="应用例子-8__entry__65">2021.03.12T15:00:00.750</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="应用例子-8__entry__66">19950</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="应用例子-8__entry__65">2021.03.12T15:00:00.800</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="应用例子-8__entry__66">24950</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="应用例子-8__entry__65">2021.03.12T15:00:00.850</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="应用例子-8__entry__66">29950</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="应用例子-8__entry__65">2021.03.12T15:00:00.900</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="应用例子-8__entry__66">34950</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="应用例子-8__entry__65">2021.03.12T15:00:00.950</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="应用例子-8__entry__66">39950</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="应用例子-8__entry__65">2021.03.12T15:00:01.000</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="应用例子-8__entry__66">44950</td>
+                        </tr>
+                    </tbody></table></div>
+            <p class="- topic/p p">如果不开启 snapshot，即使从上次中断的地方开始订阅，得到的结果也与订阅不中断不一样。</p>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock language-python">share streamTable(<span class="hl-number">10000</span>:<span class="hl-number">0</span>,`time`sym`price`id, [TIMESTAMP,SYMBOL,INT,INT]) <strong class="hl-keyword">as</strong> trades
+output1 =table(<span class="hl-number">10000</span>:<span class="hl-number">0</span>, `time`sumprice, [TIMESTAMP,INT]);
+Agg1 = createTimeSeriesEngine(name=`Agg1, windowSize=<span class="hl-number">100</span>, step=<span class="hl-number">50</span>, metrics=&lt;sum(price)&gt;, dummyTable=trades, outputTable=output1, timeColumn=`time)
+subscribeTable(server=<span class="hl-string">""</span>, tableName=<span class="hl-string">"trades"</span>, actionName=<span class="hl-string">"Agg1"</span>,offset= <span class="hl-number">0</span>, handler=append!{Agg1}, msgAsTable=true)
+
+n=<span class="hl-number">500</span>
+timev=timestamp(<span class="hl-number">1.</span>.n) + <span class="hl-number">2021.03</span>.<span class="hl-number">12</span>T15:<span class="hl-number">00</span>:<span class="hl-number">00.000</span>
+symv = take(`abc`<strong class="hl-keyword">def</strong>, n)
+pricev = int(<span class="hl-number">1.</span>.n)
+id = take(-<span class="hl-number">1</span>, n)
+insert into trades values(timev, symv, pricev, id)
+
+unsubscribeTable(, <span class="hl-string">"trades"</span>, <span class="hl-string">"Agg1"</span>)
+dropStreamEngine(<span class="hl-string">"Agg1"</span>)
+Agg1=NULL
+
+n=<span class="hl-number">500</span>
+timev=timestamp(<span class="hl-number">501.</span><span class="hl-number">.1000</span>) + <span class="hl-number">2021.03</span>.<span class="hl-number">12</span>T15:<span class="hl-number">00</span>:<span class="hl-number">00.000</span>
+symv = take(`abc`<strong class="hl-keyword">def</strong>, n)
+pricev = int(<span class="hl-number">1.</span>.n)
+id = take(-<span class="hl-number">1</span>, n)
+insert into trades values(timev, symv, pricev, id)
+
+Agg1 = createTimeSeriesEngine(name=`Agg1, windowSize=<span class="hl-number">100</span>, step=<span class="hl-number">50</span>, metrics=&lt;sum(price)&gt;, dummyTable=trades, outputTable=output1, timeColumn=`time)
+subscribeTable(server=<span class="hl-string">""</span>, tableName=<span class="hl-string">"trades"</span>, actionName=<span class="hl-string">"Agg1"</span>,offset= <span class="hl-number">500</span>, handler=append!{Agg1}, msgAsTable=true)
+
+select * <strong class="hl-keyword">from</strong> output1</pre>
+            <div class="table-container"><table class="- topic/table table" data-cols="2"><caption></caption><colgroup><col/><col/></colgroup><thead class="- topic/thead thead">
+                        <tr class="- topic/row">
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="应用例子-8__entry__107">time</th>
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="应用例子-8__entry__108">sumprice</th>
+                        </tr>
+                    </thead><tbody class="- topic/tbody tbody">
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="应用例子-8__entry__107">2021.03.12T15:00:00.050</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="应用例子-8__entry__108">1225</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="应用例子-8__entry__107">2021.03.12T15:00:00.100</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="应用例子-8__entry__108">4950</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="应用例子-8__entry__107">2021.03.12T15:00:00.150</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="应用例子-8__entry__108">9950</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="应用例子-8__entry__107">2021.03.12T15:00:00.200</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="应用例子-8__entry__108">14950</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="应用例子-8__entry__107">2021.03.12T15:00:00.250</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="应用例子-8__entry__108">19950</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="应用例子-8__entry__107">2021.03.12T15:00:00.300</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="应用例子-8__entry__108">24950</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="应用例子-8__entry__107">2021.03.12T15:00:00.350</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="应用例子-8__entry__108">29950</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="应用例子-8__entry__107">2021.03.12T15:00:00.400</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="应用例子-8__entry__108">34950</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="应用例子-8__entry__107">2021.03.12T15:00:00.450</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="应用例子-8__entry__108">39950</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="应用例子-8__entry__107">2021.03.12T15:00:00.500</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="应用例子-8__entry__108">44950</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="应用例子-8__entry__107">
+                                <strong class="+ topic/ph hi-d/b ph b">2021.03.12T15:00:00.550</strong>
+                            </td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="应用例子-8__entry__108">
+                                <strong class="+ topic/ph hi-d/b ph b">1225</strong>
+                            </td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="应用例子-8__entry__107">
+                                <strong class="+ topic/ph hi-d/b ph b">2021.03.12T15:00:00.600</strong>
+                            </td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="应用例子-8__entry__108">
+                                <strong class="+ topic/ph hi-d/b ph b">4950</strong>
+                            </td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="应用例子-8__entry__107">2021.03.12T15:00:00.650</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="应用例子-8__entry__108">9950</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="应用例子-8__entry__107">2021.03.12T15:00:00.700</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="应用例子-8__entry__108">14950</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="应用例子-8__entry__107">2021.03.12T15:00:00.750</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="应用例子-8__entry__108">19950</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="应用例子-8__entry__107">2021.03.12T15:00:00.800</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="应用例子-8__entry__108">24950</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="应用例子-8__entry__107">2021.03.12T15:00:00.850</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="应用例子-8__entry__108">29950</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="应用例子-8__entry__107">2021.03.12T15:00:00.900</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="应用例子-8__entry__108">34950</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="应用例子-8__entry__107">2021.03.12T15:00:00.950</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="应用例子-8__entry__108">39950</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="应用例子-8__entry__107">2021.03.12T15:00:01.000</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="应用例子-8__entry__108">44950</td>
+                        </tr>
+                    </tbody></table></div>
+        </div>
+    </article>
+    <article class="- topic/topic topic nested1" aria-labelledby="ariaid-title11" id="应用例子-9">
+        <h2 class="- topic/title title topictitle2" id="ariaid-title11">
+            <strong class="+ topic/ph hi-d/b ph b">应用例子 9</strong>
+        </h2>
+        <div class="- topic/body body">
+            <p class="- topic/p p">使用 <code class="+ topic/ph pr-d/codeph ph codeph">subscribeTable</code> 函数时，可利用 <em class="+ topic/ph hi-d/i ph i">handler</em> 参数过滤订阅的流数据。</p>
+            <p class="- topic/p p">在下例中，传感器采集电压和电流数据并实时上传作为流数据源，其中电压 voltage&lt;=122 或电流 current=NULL
+                的数据需要在进入时序引擎之前过滤掉。</p>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock language-python">share streamTable(<span class="hl-number">1000</span>:<span class="hl-number">0</span>, `time`voltage`current, [TIMESTAMP, DOUBLE, DOUBLE]) <strong class="hl-keyword">as</strong> electricity
+outputTable = table(<span class="hl-number">10000</span>:<span class="hl-number">0</span>, `time`avgVoltage`avgCurrent, [TIMESTAMP, DOUBLE, DOUBLE])
+
+//自定义数据处理过程，过滤 voltage&lt;=<span class="hl-number">122</span> 或 current=NULL的无效数据。
+<strong class="hl-keyword">def</strong> append_after_filtering(inputTable, msg){
+	t = select * <strong class="hl-keyword">from</strong> msg where voltage&gt;<span class="hl-number">122</span>, isValid(current)
+	<strong class="hl-keyword">if</strong>(size(t)&gt;<span class="hl-number">0</span>){
+		insert into inputTable values(t.time,t.voltage,t.current)		
+	}
+}
+electricityAggregator = createTimeSeriesEngine(name=<span class="hl-string">"electricityAggregator"</span>, windowSize=<span class="hl-number">6</span>, step=<span class="hl-number">3</span>, metrics=&lt;[avg(voltage), avg(current)]&gt;, dummyTable=electricity, outputTable=outputTable, timeColumn=`time, garbageSize=<span class="hl-number">2000</span>)
+subscribeTable(tableName=<span class="hl-string">"electricity"</span>, actionName=<span class="hl-string">"avgElectricity"</span>, offset=<span class="hl-number">0</span>, handler=append_after_filtering{electricityAggregator}, msgAsTable=true)
+
+//模拟产生数据
+<strong class="hl-keyword">def</strong> writeData(t, n){
+        timev = <span class="hl-number">2018.10</span>.<span class="hl-number">08</span>T01:<span class="hl-number">01</span>:<span class="hl-number">01.001</span> + timestamp(<span class="hl-number">1.</span>.n)
+        voltage = <span class="hl-number">120</span>+<span class="hl-number">1.</span>.n * <span class="hl-number">1.0</span>
+        current = take([<span class="hl-number">1</span>,NULL,<span class="hl-number">2</span>]*<span class="hl-number">0.1</span>, n)
+        insert into t values(timev, voltage, current);
+}
+writeData(electricity, <span class="hl-number">10</span>)</pre>
+            <p class="- topic/p p">流数据表：</p>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock language-python">select * <strong class="hl-keyword">from</strong> electricity</pre>
+            <div class="table-container"><table class="- topic/table table" data-cols="3"><caption></caption><colgroup><col/><col/><col/></colgroup><thead class="- topic/thead thead">
+                        <tr class="- topic/row">
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="应用例子-9__entry__1">time</th>
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="应用例子-9__entry__2">voltage</th>
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="应用例子-9__entry__3">current</th>
+                        </tr>
+                    </thead><tbody class="- topic/tbody tbody">
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="应用例子-9__entry__1">2018.10.08T01:01:01.002</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="应用例子-9__entry__2">121</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="应用例子-9__entry__3">0.1</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="应用例子-9__entry__1">2018.10.08T01:01:01.003</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="应用例子-9__entry__2">122</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="应用例子-9__entry__3"> </td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="应用例子-9__entry__1">2018.10.08T01:01:01.004</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="应用例子-9__entry__2">123</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="应用例子-9__entry__3">0.2</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="应用例子-9__entry__1">2018.10.08T01:01:01.005</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="应用例子-9__entry__2">124</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="应用例子-9__entry__3">0.1</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="应用例子-9__entry__1">2018.10.08T01:01:01.006</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="应用例子-9__entry__2">125</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="应用例子-9__entry__3"> </td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="应用例子-9__entry__1">2018.10.08T01:01:01.007</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="应用例子-9__entry__2">126</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="应用例子-9__entry__3">0.2</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="应用例子-9__entry__1">2018.10.08T01:01:01.008</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="应用例子-9__entry__2">127</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="应用例子-9__entry__3">0.1</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="应用例子-9__entry__1">2018.10.08T01:01:01.009</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="应用例子-9__entry__2">128</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="应用例子-9__entry__3"> </td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="应用例子-9__entry__1">2018.10.08T01:01:01.010</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="应用例子-9__entry__2">129</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="应用例子-9__entry__3">0.2</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="应用例子-9__entry__1">2018.10.08T01:01:01.011</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="应用例子-9__entry__2">130</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="应用例子-9__entry__3">0.1</td>
+                        </tr>
+                    </tbody></table></div>
+            <p class="- topic/p p">聚合计算结果：</p>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock language-python">select * <strong class="hl-keyword">from</strong> outputTable</pre>
+            <div class="table-container"><table class="- topic/table table" data-cols="3"><caption></caption><colgroup><col/><col/><col/></colgroup><thead class="- topic/thead thead">
+                        <tr class="- topic/row">
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="应用例子-9__entry__34">time</th>
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="应用例子-9__entry__35">avgVoltage</th>
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="应用例子-9__entry__36">avgCurrent</th>
+                        </tr>
+                    </thead><tbody class="- topic/tbody tbody">
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="应用例子-9__entry__34">2018.10.08T01:01:01.006</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="应用例子-9__entry__35">123.5</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="应用例子-9__entry__36">0.15</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="应用例子-9__entry__34">2018.10.08T01:01:01.009</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="应用例子-9__entry__35">125</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="应用例子-9__entry__36">0.15</td>
+                        </tr>
+                    </tbody></table></div>
+            <p class="- topic/p p">由于 voltage&lt;=122 或 current=NULL 的数据已经在进入时序引擎时被过滤了，所以第一个窗口 [000,003)
+                里没有数据，也就没有发生计算。</p>
+        </div>
+    </article>
+    <article class="- topic/topic topic nested1" aria-labelledby="ariaid-title12" id="应用例子-10">
+        <h2 class="- topic/title title topictitle2" id="ariaid-title12">
+            <strong class="+ topic/ph hi-d/b ph b">应用例子 10</strong>
+        </h2>
+        <div class="- topic/body body">
+            <p class="- topic/p p"><em class="+ topic/ph hi-d/i ph i">outputTable</em> 参数除了可以是表之外还可以是其他流数据计算引擎：</p>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock language-python">share streamTable(<span class="hl-number">1000</span>:<span class="hl-number">0</span>, `time`sym`price`volume, [TIMESTAMP, SYMBOL, DOUBLE, INT]) <strong class="hl-keyword">as</strong> trades
+
+share streamTable(<span class="hl-number">1000</span>:<span class="hl-number">0</span>, `time`sym`open`close`high`low`volume, [TIMESTAMP, SYMBOL, DOUBLE, DOUBLE, DOUBLE, DOUBLE, INT]) <strong class="hl-keyword">as</strong> kline
+
+outputTable=table(<span class="hl-number">1000</span>:<span class="hl-number">0</span>, `sym`factor1, [SYMBOL, DOUBLE])
+
+Rengine=createReactiveStateEngine(name=<span class="hl-string">"reactive"</span>, metrics=&lt;[mavg(open, <span class="hl-number">3</span>)]&gt;, dummyTable=kline, outputTable=outputTable, keyColumn=<span class="hl-string">"sym"</span>)
+
+Tengine=createTimeSeriesEngine(name=<span class="hl-string">"timeseries"</span>, windowSize=<span class="hl-number">6000</span>, step=<span class="hl-number">6000</span>, metrics=&lt;[first(price), last(price), max(price), min(price), sum(volume)]&gt;, dummyTable=trades, outputTable=Rengine, timeColumn=`time, useSystemTime=false, keyColumn=`sym)
+//时间序列引擎的结果输入响应式状态引擎
+
+subscribeTable(server=<span class="hl-string">""</span>, tableName=<span class="hl-string">"trades"</span>, actionName=<span class="hl-string">"timeseries"</span>, offset=<span class="hl-number">0</span>, handler=append!{Tengine}, msgAsTable=true)   </pre>
+        </div>
+    </article>
+    <article class="- topic/topic topic nested1" aria-labelledby="ariaid-title13" id="运维相关函数">
+        <h2 class="- topic/title title topictitle2" id="ariaid-title13">
+            <strong class="+ topic/ph hi-d/b ph b">运维相关函数</strong>
+        </h2>
+        <div class="- topic/body body">
+            <p class="- topic/p p">DolphinDB 提供流数据引擎的管理函数，方便查询和管理系统中已经存在的流数据引擎。</p>
+            <ul class="- topic/ul ul">
+                <li class="- topic/li li">
+                    <p class="- topic/p p">获取已定义的流数据引擎清单，可使用函数<code class="+ topic/ph pr-d/codeph ph codeph">getStreamEngineStat (deprecated name:
+                            getAggregatorStat)</code></p>
+                </li>
+                <li class="- topic/li li">
+                    <p class="- topic/p p">获取流数据引擎的句柄，可使用函数<code class="+ topic/ph pr-d/codeph ph codeph">getStreamEngine (deprecated name:
+                            getAggregator)</code></p>
+                </li>
+                <li class="- topic/li li">
+                    <p class="- topic/p p">删除流数据引擎，可使用函数<code class="+ topic/ph pr-d/codeph ph codeph">dropStreamEngine (deprecated name:
+                            dropAggregator)</code></p>
+                </li>
+            </ul>
+        </div>
+    </article>
+</article></main></div>
+                        
+                        
+                        
+                        
+                        
+                        
+                    </div>
+                    
+                        <nav role="navigation" id="wh_topic_toc" aria-label="On this page" class="col-lg-2 d-none d-lg-block navbar d-print-none"> 
+                            <div id="wh_topic_toc_content">
+		                        
+	                            <div class=" wh_topic_toc "><div class="wh_topic_label">在本页上</div><ul><li class="topic-item"><a href="#%E9%87%8D%E8%A6%81%E5%8F%82%E6%95%B0%E7%AE%80%E4%BB%8B" data-tocid="重要参数简介">
+            <strong class="+ topic/ph hi-d/b ph b">重要参数</strong>
+        </a></li><li class="topic-item"><a href="#%E5%BA%94%E7%94%A8%E4%BE%8B%E5%AD%90-1" data-tocid="应用例子-1">
+            <strong class="+ topic/ph hi-d/b ph b">应用例子 1</strong>
+        </a></li><li class="topic-item"><a href="#%E5%BA%94%E7%94%A8%E4%BE%8B%E5%AD%90-2" data-tocid="应用例子-2">
+            <strong class="+ topic/ph hi-d/b ph b">应用例子 2</strong>
+        </a></li><li class="topic-item"><a href="#%E5%BA%94%E7%94%A8%E4%BE%8B%E5%AD%90-3" data-tocid="应用例子-3">
+            <strong class="+ topic/ph hi-d/b ph b">应用例子 3</strong>
+        </a></li><li class="topic-item"><a href="#%E5%BA%94%E7%94%A8%E4%BE%8B%E5%AD%90-4" data-tocid="应用例子-4">
+            <strong class="+ topic/ph hi-d/b ph b">应用例子 4</strong>
+        </a></li><li class="topic-item"><a href="#%E5%BA%94%E7%94%A8%E4%BE%8B%E5%AD%90-5" data-tocid="应用例子-5">
+            <strong class="+ topic/ph hi-d/b ph b">应用例子 5</strong>
+        </a></li><li class="topic-item"><a href="#%E5%BA%94%E7%94%A8%E4%BE%8B%E5%AD%906" data-tocid="应用例子6">
+            <strong class="+ topic/ph hi-d/b ph b">应用例子6</strong>
+        </a></li><li class="topic-item"><a href="#%E5%BA%94%E7%94%A8%E4%BE%8B%E5%AD%90-7" data-tocid="应用例子-7">
+            <strong class="+ topic/ph hi-d/b ph b">应用例子 7</strong>
+        </a></li><li class="topic-item"><a href="#%E5%BA%94%E7%94%A8%E4%BE%8B%E5%AD%90-8" data-tocid="应用例子-8">
+            <strong class="+ topic/ph hi-d/b ph b">应用例子 8</strong>
+        </a></li><li class="topic-item"><a href="#%E5%BA%94%E7%94%A8%E4%BE%8B%E5%AD%90-9" data-tocid="应用例子-9">
+            <strong class="+ topic/ph hi-d/b ph b">应用例子 9</strong>
+        </a></li><li class="topic-item"><a href="#%E5%BA%94%E7%94%A8%E4%BE%8B%E5%AD%90-10" data-tocid="应用例子-10">
+            <strong class="+ topic/ph hi-d/b ph b">应用例子 10</strong>
+        </a></li><li class="topic-item"><a href="#%E8%BF%90%E7%BB%B4%E7%9B%B8%E5%85%B3%E5%87%BD%E6%95%B0" data-tocid="运维相关函数">
+            <strong class="+ topic/ph hi-d/b ph b">运维相关函数</strong>
+        </a></li></ul></div>
+	                        	
+                        	</div>
+                        </nav>
+                    
+                </div>
+            </div>
+            
+            
+            
+        </div> 
+        <footer class="navbar navbar-default wh_footer">
+  <div class=" footer-container mx-auto ">
+<title>Copyright</title><p><b> ©2024 浙江智臾科技有限公司 浙ICP备18048711号-3</b></p>
+  </div>
+</footer>
+        
+        <div id="go2top" class="d-print-none">
+            <span class="oxy-icon oxy-icon-up"></span>
+        </div>
+        
+        <div id="modal_img_large" class="modal">
+            <span class="close oxy-icon oxy-icon-remove"></span>
+            <div id="modal_img_container"></div>
+            <div id="caption"></div>
+        </div>
+        
+        
+        
+    </body>
+</html>

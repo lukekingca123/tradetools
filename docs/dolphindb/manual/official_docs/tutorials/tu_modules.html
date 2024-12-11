@@ -1,0 +1,242 @@
+<!DOCTYPE html><html xmlns="http://www.w3.org/1999/xhtml" xml:lang="zh" lang="zh" data-whc_version="26.0">
+    <head><link rel="shortcut icon" href="../favicon.ico"/><link rel="icon" href="../favicon.ico"/><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><meta http-equiv="X-UA-Compatible" content="IE=edge"/><meta name="description" content="简介 将量化金融与物联网领域常用函数用 DolphinDB 脚本实现并封装在模块中，能够便于 DolphinDB 开发者使用。我们也欢迎 DolphinDB 开发者们贡献模块。在 DolphinDB 中，模块是指只包含函数定义的代码包。它具有以下特点： 模块文件保存在 /modules 目录下。 模块文件名的后缀为 .dos。dos 是 &#34;DolphinScript&#34; 的缩写。 ..."/><meta name="DC.rights.owner" content="(C) 版权 2024"/><meta name="copyright" content="(C) 版权 2024"/><meta name="generator" content="DITA-OT"/><meta name="DC.type" content="topic"/><meta name="DC.coverage" content=""/><meta name="DC.relation" content="../tutorials/about_tutorials.html"/><meta name="DC.relation" content="../tutorials/module_tutorial.md"/><meta name="DC.relation" content="../tutorials/barra_multi_factor_risk_model_0.html"/><meta name="DC.relation" content="../modules/easyNSQ/easynsq_2.md"/><meta name="DC.relation" content="../modules/easyTLDataImport/easytl_data_import.md"/><meta name="DC.relation" content="../modules/gtja191Alpha/191alpha.md"/><meta name="DC.relation" content="../modules/wq101alpha/wq101alpha.md"/><meta name="DC.relation" content="../modules/ta/ta.md"/><meta name="DC.relation" content="../modules/mytt/mytt.md"/><meta name="DC.relation" content="../modules/MarketHoliday/mkt_calendar.md"/><meta name="DC.relation" content="../modules/ops/ops.md"/><meta name="prodname" content="DolphinDB"/><meta name="brand" content="DolphinDB"/><meta name="DC.creator" content="DolphinDB"/><meta name="DC.publisher" content="DDB N/A DDB 200"/><meta name="DC.format" content="HTML5"/><meta name="DC.identifier" content="chap7_tutorials_modules"/><title>模块</title><!--  Generated with Oxygen version 26.0, build number 2024012323.  --><meta name="wh-path2root" content="../"/><meta name="wh-toc-id" content="chap7_tutorials_modules-d9529e97986"/><meta name="wh-source-relpath" content="tutorials/tu_modules.dita"/><meta name="wh-out-relpath" content="tutorials/tu_modules.html"/>
+
+    <link rel="stylesheet" type="text/css" href="../oxygen-webhelp/app/commons.css?buildId=2024012323"/>
+    <link rel="stylesheet" type="text/css" href="../oxygen-webhelp/app/topic.css?buildId=2024012323"/>
+
+    <script src="../oxygen-webhelp/app/options/properties.js?buildId=20240704100525"></script>
+    <script src="../oxygen-webhelp/app/localization/strings.js?buildId=2024012323"></script>
+    <script src="../oxygen-webhelp/app/search/index/keywords.js?buildId=20240704100525"></script>
+    <script defer="defer" src="../oxygen-webhelp/app/commons.js?buildId=2024012323"></script>
+    <script defer="defer" src="../oxygen-webhelp/app/topic.js?buildId=2024012323"></script>
+<link rel="stylesheet" type="text/css" href="../oxygen-webhelp/template/styles.css?buildId=2024012323"/><script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script><script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script></head>
+
+    <body id="chap7_tutorials_modules" class="wh_topic_page frmBody">
+        <a href="#wh_topic_body" class="sr-only sr-only-focusable">
+            跳转到主要内容
+        </a>
+        
+        
+        
+        
+        <header class="navbar navbar-default wh_header">
+    <div class="container-fluid">
+        <div xmlns:whc="http://www.oxygenxml.com/webhelp/components" class="wh_header_flex_container navbar-nav navbar-expand-md navbar-dark">
+            <div class="wh_logo_and_publication_title_container">
+                <div class="wh_logo_and_publication_title">
+                    
+                    <a href="https://www.dolphindb.cn" class=" wh_logo d-none d-sm-block "><img src="../logo.png" alt="  DolphinDB 文档中心  "/></a>
+                    <div class=" wh_publication_title "><a href="../index.html"><span class="booktitle">  <span class="ph mainbooktitle">DolphinDB 文档中心</span>  </span></a></div>
+                    
+                </div>
+                
+                
+            </div>
+
+            <div class="wh_top_menu_and_indexterms_link collapse navbar-collapse" id="wh_top_menu_and_indexterms_link">
+                
+                
+                
+                
+            </div>
+        <div class=" wh_search_input navbar-form wh_topic_page_search search " role="form">
+            
+            
+            
+            <form id="searchForm" method="get" role="search" action="../search.html"><div><input type="search" placeholder="搜索 " class="wh_search_textfield" id="textToSearch" name="searchQuery" aria-label="搜索查询" required="required"/><button type="submit" class="wh_search_button" aria-label="搜索"><span class="search_input_text">搜索</span></button></div></form>
+            
+            <script src="/vendors/react/umd/react.production.min.js" defer="defer"></script>
+<script src="/vendors/react-dom/umd/react-dom.production.min.js" defer="defer"></script>
+<script src="/vendors/dayjs/dayjs.min.js" defer="defer"></script>
+<script src="/vendors/antd/dist/antd.min.js" defer="defer"></script>
+<script src="/vendors/@ant-design/icons/dist/index.umd.min.js" defer="defer"></script>
+<script src="/zh/index.js" type="module"></script>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js" defer="defer"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML" defer="defer"><!--
+
+
+--></script>
+
+            
+        </div></div>
+    </div>
+</header>
+        
+        
+         
+        
+        
+        
+        <div class="container-fluid" id="wh_topic_container">
+            <div class="row">
+
+                <nav class="wh_tools d-print-none navbar-expand-md" aria-label="Tools">
+                    
+                    <div data-tooltip-position="bottom" class=" wh_breadcrumb "><ol class="d-print-none"><li><span class="home"><a href="../index.html"><span>主页</span></a></span></li><li><div class="topicref" data-id="about_tutorials"><div class="title"><a href="../tutorials/about_tutorials.html"><span class="keyword label">教程</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 产品使用教程</p></div></div></div></li><li class="active"><div class="topicref" data-id="chap7_tutorials_modules"><div class="title"><a href="../tutorials/tu_modules.html"><span class="keyword label">模块</span></a></div></div></li></ol></div>
+                    
+                    
+                    
+                    <div class="wh_right_tools">
+                        <button class="wh_hide_highlight" aria-label="切换搜索突出显示" title="切换搜索突出显示"></button>
+                        <button class="webhelp_expand_collapse_sections" data-next-state="collapsed" aria-label="折叠截面" title="折叠截面"></button>
+                        
+                        
+                        
+                        
+                        <div class=" wh_print_link print d-none d-md-inline-block "><button onClick="window.print()" title="打印此页" aria-label="打印此页"></button></div>
+                        
+                        <button type="button" id="wh_toc_button" class="custom-toggler navbar-toggler collapsed wh_toggle_button navbar-light" aria-expanded="false" aria-label="Toggle publishing table of content" aria-controls="wh_publication_toc">
+                            <span class="navbar-toggler-icon"></span>
+                        </button>
+                    </div>
+                    
+                </nav>
+            </div>
+            
+            
+            
+            
+            <div class="wh_content_area">
+                <div class="row">
+                    
+                        <nav id="wh_publication_toc" class="col-lg-3 col-md-3 col-sm-12 d-md-block d-none d-print-none" aria-label="Table of Contents Container">
+                            <div id="wh_publication_toc_content">
+		                        
+                            	<div class=" wh_publication_toc " data-tooltip-position="right"><span class="expand-button-action-labels"><span id="button-expand-action" role="button" aria-label="Expand"></span><span id="button-collapse-action" role="button" aria-label="Collapse"></span><span id="button-pending-action" role="button" aria-label="Pending"></span></span><ul role="tree" aria-label="Table of Contents"><li role="treeitem"><div data-tocid="new_chap_about_sect_ddb_docs_intro-d9529e87" class="topicref" data-id="new_chap_about_sect_ddb_docs_intro" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../about/ddb_docs_intro.html" id="new_chap_about_sect_ddb_docs_intro-d9529e87-link">文档使用说明</a><div class="wh-tooltip"><p class="shortdesc">如何获取 DolphinDB 帮助信息</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="chap1_getstarted-d9529e140" class="topicref" data-id="chap1_getstarted" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action chap1_getstarted-d9529e140-link" class="wh-expand-btn"></span><div class="title"><a href="../getstarted/chap1_getstarted.html" id="chap1_getstarted-d9529e140-link"><span class="keyword label">快速上手</span></a><div class="wh-tooltip"><p class="shortdesc">如何快速部署 DolphinDB、建库建表、写入和查询数据</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="sectionddb_deployment-d9529e335" class="topicref" data-id="sectionddb_deployment" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action sectionddb_deployment-d9529e335-link" class="wh-expand-btn"></span><div class="title"><a href="../deploy/deploy_intro.html" id="sectionddb_deployment-d9529e335-link"><span class="keyword label">部署</span></a><div class="wh-tooltip"><p class="shortdesc">如何在不同的场景中部署 DolphinDB</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="new_chap_database_manage_new_chap_dbmanage_landing_page-d9529e2313" class="topicref" data-id="new_chap_database_manage_new_chap_dbmanage_landing_page" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action new_chap_database_manage_new_chap_dbmanage_landing_page-d9529e2313-link" class="wh-expand-btn"></span><div class="title"><a href="../db_distr_comp/cfg/db_intro.html" id="new_chap_database_manage_new_chap_dbmanage_landing_page-d9529e2313-link"><span class="keyword label">数据库</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 数据库的基本概念</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="chap7_tutorials_streaming-d9529e3490" class="topicref" data-id="chap7_tutorials_streaming" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action chap7_tutorials_streaming-d9529e3490-link" class="wh-expand-btn"></span><div class="title"><a href="../stream/str_intro.html" id="chap7_tutorials_streaming-d9529e3490-link"><span class="keyword label">流数据</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 流数据引擎及流数据计算的基本概念</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="tocId-d9529e7385" class="topicref" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action tocId-d9529e7385-link" class="wh-expand-btn"></span><div class="title"><a href="../db_distr_comp/db_oper/import_data.html" id="tocId-d9529e7385-link">数据迁移</a><div class="wh-tooltip"><p class="shortdesc">如何从不同数据源向 DolphinDB 迁移数据</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="chap7_tutorials_system_management-d9529e7812" class="topicref" data-id="chap7_tutorials_system_management" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action chap7_tutorials_system_management-d9529e7812-link" class="wh-expand-btn"></span><div class="title"><a href="../sys_man/om_intro.html" id="chap7_tutorials_system_management-d9529e7812-link"><span class="keyword label">系统运维</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 的系统运维功能及方法</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="about_language_resources-d9529e16490" class="topicref" data-id="about_language_resources" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action about_language_resources-d9529e16490-link" class="wh-expand-btn"></span><div class="title"><a href="../progr/progr_intro.html" id="about_language_resources-d9529e16490-link"><span class="keyword label">编程语言</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 编程基本概念与方法、SQL 在 DolphinDB 的应用</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="functions_references-d9529e26503" class="topicref" data-id="functions_references" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action functions_references-d9529e26503-link" class="wh-expand-btn"></span><div class="title"><a href="../funcs/funcs_intro.html" id="functions_references-d9529e26503-link"><span class="keyword label">函数参考</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 函数分类、语法、详解及示例</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="api_protocol-d9529e86456" class="topicref" data-id="api_protocol" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action api_protocol-d9529e86456-link" class="wh-expand-btn"></span><div class="title"><a href="../api/connapi_intro.html" id="api_protocol-d9529e86456-link"><span class="keyword label">连接器 &amp; API</span></a><div class="wh-tooltip"><p class="shortdesc">面向不同编程语言的 DolphinDB API 及连接器，相关协议和用法</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="chap6_plugin-d9529e91976" class="topicref" data-id="chap6_plugin" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action chap6_plugin-d9529e91976-link" class="wh-expand-btn"></span><div class="title"><a href="../plugins/plg_intro.html" id="chap6_plugin-d9529e91976-link"><span class="keyword label">插件</span></a><div class="wh-tooltip"><p class="shortdesc">多个应用场景的插件使用说明和插件开发指导</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="third_party-d9529e94749" class="topicref" data-id="third_party" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action third_party-d9529e94749-link" class="wh-expand-btn"></span><div class="title"><a href="../third_party.html" id="third_party-d9529e94749-link">第三方工具</a></div></div></li><li role="treeitem" aria-expanded="true"><div data-tocid="about_tutorials-d9529e94980" class="topicref" data-id="about_tutorials" data-state="expanded"><span role="button" tabindex="0" aria-labelledby="button-collapse-action about_tutorials-d9529e94980-link" class="wh-expand-btn"></span><div class="title"><a href="../tutorials/about_tutorials.html" id="about_tutorials-d9529e94980-link"><span class="keyword label">教程</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 产品使用教程</p></div></div></div><ul role="group" class="navbar-nav nav-list"><li role="treeitem" aria-expanded="false"><div data-tocid="tocId-d9529e95033" class="topicref" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action tocId-d9529e95033-link" class="wh-expand-btn"></span><div class="title"><a href="../tutorials/import_data.html" id="tocId-d9529e95033-link">数据导入</a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="tocId-d9529e95264" class="topicref" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action tocId-d9529e95264-link" class="wh-expand-btn"></span><div class="title"><a href="../tutorials/DolphinDB_TopN.html" id="tocId-d9529e95264-link">数据库</a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="tocId-d9529e95910" class="topicref" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action tocId-d9529e95910-link" class="wh-expand-btn"></span><div class="title"><a href="../tutorials/memory_management.html" id="tocId-d9529e95910-link">系统运维</a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="tocId-d9529e96325" class="topicref" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action tocId-d9529e96325-link" class="wh-expand-btn"></span><div class="title"><a href="../tutorials/hybrid_programming_paradigms.html" id="tocId-d9529e96325-link">编程语言</a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="tocId-d9529e97155" class="topicref" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action tocId-d9529e97155-link" class="wh-expand-btn"></span><div class="title"><a href="../tutorials/data_sync_among_clusters.html" id="tocId-d9529e97155-link">安全与容灾</a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="tocId-d9529e97386" class="topicref" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action tocId-d9529e97386-link" class="wh-expand-btn"></span><div class="title"><a href="../tutorials/streaming_tutorial.html" id="tocId-d9529e97386-link">流数据</a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="tocId-d9529e97893" class="topicref" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action tocId-d9529e97893-link" class="wh-expand-btn"></span><div class="title"><a href="../tutorials/DECIMAL.html" id="tocId-d9529e97893-link">数值处理</a></div></div></li><li role="treeitem" aria-expanded="true" class="active"><div data-tocid="chap7_tutorials_modules-d9529e97986" class="topicref" data-id="chap7_tutorials_modules" data-state="expanded"><span role="button" tabindex="0" aria-labelledby="button-collapse-action chap7_tutorials_modules-d9529e97986-link" class="wh-expand-btn"></span><div class="title"><a href="../tutorials/tu_modules.html" id="chap7_tutorials_modules-d9529e97986-link"><span class="keyword label">模块</span></a></div></div><ul role="group" class="navbar-nav nav-list"><li role="treeitem"><div data-tocid="模块概述-d9529e98033" class="topicref" data-id="模块概述" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../tutorials/module_tutorial.html" id="模块概述-d9529e98033-link">模块概述</a></div></div></li><li role="treeitem"><div data-tocid="基于-dolphindb-的-barra-多因子风险模型实践-d9529e98079" class="topicref" data-id="基于-dolphindb-的-barra-多因子风险模型实践" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../tutorials/barra_multi_factor_risk_model_0.html" id="基于-dolphindb-的-barra-多因子风险模型实践-d9529e98079-link">基于 DolphinDB 的 Barra 多因子风险模型实践</a></div></div></li><li role="treeitem"><div data-tocid="easynsq-实时行情数据接入功能模块-d9529e98125" class="topicref" data-id="easynsq-实时行情数据接入功能模块" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../modules/easyNSQ/easynsq_2.html" id="easynsq-实时行情数据接入功能模块-d9529e98125-link">easyNSQ 实时行情数据接入功能模块</a></div></div></li><li role="treeitem"><div data-tocid="easytldataimport-通联历史数据自动化导入功能模块-d9529e98171" class="topicref" data-id="easytldataimport-通联历史数据自动化导入功能模块" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../modules/easyTLDataImport/easytl_data_import.html" id="easytldataimport-通联历史数据自动化导入功能模块-d9529e98171-link">easyTLDataImport 通联历史数据自动化导入功能模块</a></div></div></li><li role="treeitem"><div data-tocid="国泰君安-191-alpha-因子库-d9529e98217" class="topicref" data-id="国泰君安-191-alpha-因子库" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../modules/gtja191Alpha/191alpha.html" id="国泰君安-191-alpha-因子库-d9529e98217-link">国泰君安 191 Alpha 因子库</a></div></div></li><li role="treeitem"><div data-tocid="worldquant-101-alpha-因子指标库-d9529e98263" class="topicref" data-id="worldquant-101-alpha-因子指标库" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../modules/wq101alpha/wq101alpha.html" id="worldquant-101-alpha-因子指标库-d9529e98263-link">WorldQuant 101 Alpha 因子指标库</a></div></div></li><li role="treeitem"><div data-tocid="技术分析technical-analysis指标库-d9529e98309" class="topicref" data-id="技术分析technical-analysis指标库" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../modules/ta/ta.html" id="技术分析technical-analysis指标库-d9529e98309-link">技术分析（Technical Analysis）指标库</a></div></div></li><li role="treeitem"><div data-tocid="mytt-指标库-d9529e98355" class="topicref" data-id="mytt-指标库" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../modules/mytt/mytt.html" id="mytt-指标库-d9529e98355-link">MyTT 指标库</a></div></div></li><li role="treeitem"><div data-tocid="交易日历-d9529e98401" class="topicref" data-id="交易日历" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../modules/MarketHoliday/mkt_calendar.html" id="交易日历-d9529e98401-link">交易日历</a></div></div></li><li role="treeitem"><div data-tocid="ops-运维函数库-d9529e98447" class="topicref" data-id="ops-运维函数库" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../modules/ops/ops.html" id="ops-运维函数库-d9529e98447-link">ops 运维函数库</a></div></div></li></ul></li><li role="treeitem" aria-expanded="false"><div data-tocid="plugins_apply-d9529e98493" class="topicref" data-id="plugins_apply" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action plugins_apply-d9529e98493-link" class="wh-expand-btn"></span><div class="title"><a href="../tutorials/plugins_apply.html" id="plugins_apply-d9529e98493-link">插件应用</a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="tocId-d9529e98631" class="topicref" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action tocId-d9529e98631-link" class="wh-expand-btn"></span><div class="title"><a href="../tutorials/dolphinscheduler_integration.html" id="tocId-d9529e98631-link">金融场景案例</a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="tocId-d9529e100707" class="topicref" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action tocId-d9529e100707-link" class="wh-expand-btn"></span><div class="title"><a href="../tutorials/iot_examples.html" id="tocId-d9529e100707-link">物联网场景案例</a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="tocId-d9529e101629" class="topicref" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action tocId-d9529e101629-link" class="wh-expand-btn"></span><div class="title"><a href="../tutorials/cluster_scaleout_perf_test.html" id="tocId-d9529e101629-link">测试报告</a></div></div></li></ul></li><li role="treeitem" aria-expanded="false"><div data-tocid="tocId-d9529e101769" class="topicref" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action tocId-d9529e101769-link" class="wh-expand-btn"></span><div class="title"><a href="../rn/server/3_00_1.html" id="tocId-d9529e101769-link">版本说明</a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 版本发布历史</p></div></div></div></li></ul></div>
+		                        
+                            </div>
+                        </nav>
+                    
+                    
+                    <div class="col-lg-7 col-md-9 col-sm-12" id="wh_topic_body">
+                        <button id="wh_close_publication_toc_button" class="close-toc-button d-none" aria-label="Toggle publishing table of content" aria-controls="wh_publication_toc" aria-expanded="true">
+                            <span class="close-toc-icon-container">
+                                <span class="close-toc-icon"></span>     
+                            </span>
+                        </button>
+                        <button id="wh_close_topic_toc_button" class="close-toc-button d-none" aria-label="Toggle topic table of content" aria-controls="wh_topic_toc" aria-expanded="true">
+                            <span class="close-toc-icon-container">
+                                <span class="close-toc-icon"></span>     
+                            </span>
+                        </button>
+                        
+                        <div class=" wh_topic_content body "><main role="main"><article class="- topic/topic topic" role="article" aria-labelledby="chap7_tutorials_modules__title_kwz_s4v_nyb">
+    <h1 class="- topic/title title topictitle1" id="chap7_tutorials_modules__title_kwz_s4v_nyb"><span class="- topic/keyword keyword label">模块</span></h1>
+    <div class="- topic/body body">
+        <section class="- topic/section section" id="chap7_tutorials_modules__module_intro" data-ofbid="chap7_tutorials_modules__module_intro"><h2 class="- topic/title title sectiontitle">简介</h2>
+            
+            <p class="- topic/p p" id="chap7_tutorials_modules__p_bhz_yf2_myb" data-ofbid="chap7_tutorials_modules__p_bhz_yf2_myb">将量化金融与物联网领域常用函数用 DolphinDB 脚本实现并封装在模块中，能够便于 DolphinDB 开发者使用。我们也欢迎
+                DolphinDB 开发者们贡献模块。在 DolphinDB 中，模块是指只包含函数定义的代码包。它具有以下特点：</p>
+            <ul class="- topic/ul ul" id="chap7_tutorials_modules__ul_enb_n5t_vxb" data-ofbid="chap7_tutorials_modules__ul_enb_n5t_vxb">
+                <li class="- topic/li li" id="chap7_tutorials_modules__li_r5g_4g2_myb" data-ofbid="chap7_tutorials_modules__li_r5g_4g2_myb">
+                    <p class="- topic/p p" id="chap7_tutorials_modules__p_chz_yf2_myb" data-ofbid="chap7_tutorials_modules__p_chz_yf2_myb">模块文件保存在 <em class="+ topic/ph hi-d/i ph i" id="chap7_tutorials_modules__i_ubn_hwc_4yb">/modules</em> 目录下。</p>
+                </li>
+                <li class="- topic/li li" id="chap7_tutorials_modules__li_s5g_4g2_myb" data-ofbid="chap7_tutorials_modules__li_s5g_4g2_myb">
+                    <p class="- topic/p p" id="chap7_tutorials_modules__p_dhz_yf2_myb" data-ofbid="chap7_tutorials_modules__p_dhz_yf2_myb">模块文件名的后缀为 .dos。dos 是 "DolphinScript" 的缩写。</p>
+                </li>
+                <li class="- topic/li li" id="chap7_tutorials_modules__li_t5g_4g2_myb" data-ofbid="chap7_tutorials_modules__li_t5g_4g2_myb">
+                    <p class="- topic/p p" id="chap7_tutorials_modules__p_ehz_yf2_myb" data-ofbid="chap7_tutorials_modules__p_ehz_yf2_myb">模块文件第一行只能使用 module 后接模块名以声明模块，例如 <code class="+ topic/ph pr-d/codeph ph codeph">module fileLog</code> 。</p>
+                </li>
+                <li class="- topic/li li" id="chap7_tutorials_modules__li_u5g_4g2_myb" data-ofbid="chap7_tutorials_modules__li_u5g_4g2_myb">
+                    <p class="- topic/p p" id="chap7_tutorials_modules__p_fhz_yf2_myb" data-ofbid="chap7_tutorials_modules__p_fhz_yf2_myb">模块文件除第一行外的内容仅可包含函数定义。</p>
+                </li>
+            </ul>
+        </section>
+        
+        <section class="- topic/section section" id="chap7_tutorials_modules__module_category" data-ofbid="chap7_tutorials_modules__module_category"><h2 class="- topic/title title sectiontitle">目录结构</h2>
+            
+            
+            <p class="- topic/p p" id="chap7_tutorials_modules__p_ghz_yf2_myb" data-ofbid="chap7_tutorials_modules__p_ghz_yf2_myb">一级目录以 module  名称命名，例如 'ta' 模块的一级目录名为 'ta'，该目录下包含了<a class="- topic/xref xref" href="https://github.com/ta-lib/ta-lib-python" target="_blank" rel="external noopener">TA-Lib包</a>中一些常用指标的实现。</p>
+            
+            <p class="- topic/p p" id="chap7_tutorials_modules__p_hhz_yf2_myb" data-ofbid="chap7_tutorials_modules__p_hhz_yf2_myb">每个 module 的一级目录下包含 'src' 和 'test' 目录：</p>
+            <ul class="- topic/ul ul" id="chap7_tutorials_modules__ul_ihz_yf2_myb" data-ofbid="chap7_tutorials_modules__ul_ihz_yf2_myb">
+                <li class="- topic/li li" id="chap7_tutorials_modules__li_v5g_4g2_myb" data-ofbid="chap7_tutorials_modules__li_v5g_4g2_myb">
+                    <p class="- topic/p p" id="chap7_tutorials_modules__p_jhz_yf2_myb" data-ofbid="chap7_tutorials_modules__p_jhz_yf2_myb">'src' 目录下包含所有函数的 DolphinDB 实现脚本。</p>
+                </li>
+                <li class="- topic/li li" id="chap7_tutorials_modules__li_w5g_4g2_myb" data-ofbid="chap7_tutorials_modules__li_w5g_4g2_myb">
+                    <p class="- topic/p p" id="chap7_tutorials_modules__p_khz_yf2_myb" data-ofbid="chap7_tutorials_modules__p_khz_yf2_myb">'test' 目录下包含每个函数的测试用例。测试用例以模块名称和函数名称命名（例如
+                        'test_ta_function_ma.txt'）。</p>
+                </li>
+            </ul>
+        </section>
+        
+        <section class="- topic/section section" id="chap7_tutorials_modules__module-getstarted" data-ofbid="chap7_tutorials_modules__module-getstarted"><h2 class="- topic/title title sectiontitle">快速入门</h2>
+            
+            <p class="- topic/p p" id="chap7_tutorials_modules__p_lhz_yf2_myb" data-ofbid="chap7_tutorials_modules__p_lhz_yf2_myb">下面以本项目中的金融交易数据技术分析模块（ta module）为例，简单演示模块的部署和使用。</p>
+            <ol class="- topic/ol ol" id="chap7_tutorials_modules__ol_mhz_yf2_myb" data-ofbid="chap7_tutorials_modules__ol_mhz_yf2_myb">
+                <li class="- topic/li li" id="chap7_tutorials_modules__li_x5g_4g2_myb" data-ofbid="chap7_tutorials_modules__li_x5g_4g2_myb">
+                    <p class="- topic/p p" id="chap7_tutorials_modules__p_nhz_yf2_myb" data-ofbid="chap7_tutorials_modules__p_nhz_yf2_myb">下载整个项目并解压：</p>
+                    <pre class="+ topic/pre pr-d/codeblock pre codeblock language-cmd" id="chap7_tutorials_modules__codeblock_ohz_yf2_myb" data-ofbid="chap7_tutorials_modules__codeblock_ohz_yf2_myb">unzip dolphindbmodules-master.zip</pre>
+                </li>
+                <li class="- topic/li li" id="chap7_tutorials_modules__li_y5g_4g2_myb" data-ofbid="chap7_tutorials_modules__li_y5g_4g2_myb">
+                    <p class="- topic/p p" id="chap7_tutorials_modules__p_phz_yf2_myb" data-ofbid="chap7_tutorials_modules__p_phz_yf2_myb">在 <em class="+ topic/ph hi-d/i ph i" id="chap7_tutorials_modules__i_vbn_hwc_4yb">/DolphinDB/server/</em> 目录下创建
+                        modules 目录：</p>
+                    <pre class="+ topic/pre pr-d/codeblock pre codeblock language-cmd" id="chap7_tutorials_modules__codeblock_qhz_yf2_myb" data-ofbid="chap7_tutorials_modules__codeblock_qhz_yf2_myb">cp /dolphindbmodules-master/ta/src/ta.dos /DolphinDB/server/modules/</pre>
+                </li>
+                <li class="- topic/li li" id="chap7_tutorials_modules__li_z5g_4g2_myb" data-ofbid="chap7_tutorials_modules__li_z5g_4g2_myb">
+                    <p class="- topic/p p" id="chap7_tutorials_modules__p_rhz_yf2_myb" data-ofbid="chap7_tutorials_modules__p_rhz_yf2_myb">将需要使用的 .dos 的文件复制到 modules 目录下：</p>
+                    <pre class="+ topic/pre pr-d/codeblock pre codeblock language-cmd" id="chap7_tutorials_modules__codeblock_yfk_fwt_vxb" data-ofbid="chap7_tutorials_modules__codeblock_yfk_fwt_vxb">cp /dolphindbmodules-master/ta/src/ta.dos /DolphinDB/server/modules/</pre>
+                </li>
+            </ol>
+            <p class="- topic/p p" id="chap7_tutorials_modules__p_shz_yf2_myb" data-ofbid="chap7_tutorials_modules__p_shz_yf2_myb">以下步骤显示如何在项目中导入模块：</p>
+            <ol class="- topic/ol ol" id="chap7_tutorials_modules__ol_sny_jwt_vxb" data-ofbid="chap7_tutorials_modules__ol_sny_jwt_vxb">
+                <li class="- topic/li li" id="chap7_tutorials_modules__li_avg_4g2_myb" data-ofbid="chap7_tutorials_modules__li_avg_4g2_myb">使用 use 关键字来导入模块 'ta'。<div class="- topic/note note note note_note" id="chap7_tutorials_modules__note_vnv_lwt_vxb" data-ofbid="chap7_tutorials_modules__note_vnv_lwt_vxb"><span class="note__title">注：</span> 使用 use
+                        关键字导入的模块是会话隔离的，仅对当前会话有效</div></li>
+                <li class="- topic/li li" id="chap7_tutorials_modules__li_bvg_4g2_myb" data-ofbid="chap7_tutorials_modules__li_bvg_4g2_myb">导入模块后，我们可以通过以下两种方式来使用模块内的函数：<ul class="- topic/ul ul" id="chap7_tutorials_modules__ul_jtv_4wt_vxb" data-ofbid="chap7_tutorials_modules__ul_jtv_4wt_vxb">
+                    <li class="- topic/li li" id="chap7_tutorials_modules__li_cvg_4g2_myb" data-ofbid="chap7_tutorials_modules__li_cvg_4g2_myb">直接使用模块中的函数：<pre class="+ topic/pre pr-d/codeblock pre codeblock language-cmd" id="chap7_tutorials_modules__codeblock_jnw_pwt_vxb" data-ofbid="chap7_tutorials_modules__codeblock_jnw_pwt_vxb">use ta
+close=<span class="hl-number">1.</span><span class="hl-number">.40</span>
+ma(close, <span class="hl-number">30</span>, <span class="hl-number">0</span>)</pre></li>
+                    <li class="- topic/li li" id="chap7_tutorials_modules__li_dvg_4g2_myb" data-ofbid="chap7_tutorials_modules__li_dvg_4g2_myb">通过完整路径调用模块中的函数：<pre class="+ topic/pre pr-d/codeblock pre codeblock language-cmd" id="chap7_tutorials_modules__codeblock_asm_swt_vxb" data-ofbid="chap7_tutorials_modules__codeblock_asm_swt_vxb">use ta
+close=<span class="hl-number">1.</span><span class="hl-number">.40</span>
+ta::ma(close, <span class="hl-number">30</span>, <span class="hl-number">0</span>)</pre></li>
+                </ul></li>
+            </ol>
+        </section>
+        
+        
+    </div>
+</article></main></div>
+                        
+                        
+                        
+                        
+                        
+                        
+                    </div>
+                    
+                        <nav role="navigation" id="wh_topic_toc" aria-label="On this page" class="col-lg-2 d-none d-lg-block navbar d-print-none"> 
+                            <div id="wh_topic_toc_content">
+		                        
+	                            <div class=" wh_topic_toc "><div class="wh_topic_label">在本页上</div><ul><li class="section-item"><div class="section-title"><a href="#chap7_tutorials_modules__module_intro" data-tocid="chap7_tutorials_modules__module_intro">简介</a></div></li><li class="section-item"><div class="section-title"><a href="#chap7_tutorials_modules__module_category" data-tocid="chap7_tutorials_modules__module_category">目录结构</a></div></li><li class="section-item"><div class="section-title"><a href="#chap7_tutorials_modules__module-getstarted" data-tocid="chap7_tutorials_modules__module-getstarted">快速入门</a></div></li></ul></div>
+	                        	
+                        	</div>
+                        </nav>
+                    
+                </div>
+            </div>
+            
+            
+            
+        </div> 
+        <footer class="navbar navbar-default wh_footer">
+  <div class=" footer-container mx-auto ">
+<title>Copyright</title><p><b> ©2024 浙江智臾科技有限公司 浙ICP备18048711号-3</b></p>
+  </div>
+</footer>
+        
+        <div id="go2top" class="d-print-none">
+            <span class="oxy-icon oxy-icon-up"></span>
+        </div>
+        
+        <div id="modal_img_large" class="modal">
+            <span class="close oxy-icon oxy-icon-remove"></span>
+            <div id="modal_img_container"></div>
+            <div id="caption"></div>
+        </div>
+        
+        
+        
+    </body>
+</html>

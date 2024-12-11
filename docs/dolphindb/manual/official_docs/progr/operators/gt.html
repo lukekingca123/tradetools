@@ -1,0 +1,304 @@
+<!DOCTYPE html><html xmlns="http://www.w3.org/1999/xhtml" xml:lang="zh" lang="zh" data-whc_version="26.0">
+    <head><link rel="shortcut icon" href="../../favicon.ico"/><link rel="icon" href="../../favicon.ico"/><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><meta http-equiv="X-UA-Compatible" content="IE=edge"/><meta name="description" content="语法 X&gt;Y 参数 X 和 Y 可以是标量、数据对、向量、矩阵或集合。当 X 和 Y 都是向量或矩阵时，它们的长度或维度必须相同。 详情 如果X和Y都不是集合，则对X和Y中的元素逐个做&gt;的比较并返回结果。 如果X和Y是集合，则检查Y是否为X的真子集。 例子 1 2 3 &gt; 2; // output [0,0,1] 1 2 3&gt;0 2 4; // output [1,0,0] 2:3&gt;1:6; // ..."/><meta name="DC.rights.owner" content="(C) 版权 2024"/><meta name="copyright" content="(C) 版权 2024"/><meta name="generator" content="DITA-OT"/><meta name="DC.type" content="topic"/><meta name="DC.coverage" content=""/><meta name="DC.relation" content="../../progr/operators/oper_list.html"/><meta name="prodname" content="DolphinDB"/><meta name="brand" content="DolphinDB"/><meta name="DC.creator" content="DolphinDB"/><meta name="DC.publisher" content="DDB N/A DDB 200"/><meta name="DC.format" content="HTML5"/><meta name="DC.identifier" content="gt"/><title>gt(&gt;)</title><!--  Generated with Oxygen version 26.0, build number 2024012323.  --><meta name="wh-path2root" content="../../"/><meta name="wh-toc-id" content="gt-d9529e18593"/><meta name="wh-source-relpath" content="progr/operators/gt.dita"/><meta name="wh-out-relpath" content="progr/operators/gt.html"/>
+
+    <link rel="stylesheet" type="text/css" href="../../oxygen-webhelp/app/commons.css?buildId=2024012323"/>
+    <link rel="stylesheet" type="text/css" href="../../oxygen-webhelp/app/topic.css?buildId=2024012323"/>
+
+    <script src="../../oxygen-webhelp/app/options/properties.js?buildId=20240704100525"></script>
+    <script src="../../oxygen-webhelp/app/localization/strings.js?buildId=2024012323"></script>
+    <script src="../../oxygen-webhelp/app/search/index/keywords.js?buildId=20240704100525"></script>
+    <script defer="defer" src="../../oxygen-webhelp/app/commons.js?buildId=2024012323"></script>
+    <script defer="defer" src="../../oxygen-webhelp/app/topic.js?buildId=2024012323"></script>
+<link rel="stylesheet" type="text/css" href="../../oxygen-webhelp/template/styles.css?buildId=2024012323"/><script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script><script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script></head>
+
+    <body id="gt" class="wh_topic_page frmBody">
+        <a href="#wh_topic_body" class="sr-only sr-only-focusable">
+            跳转到主要内容
+        </a>
+        
+        
+        
+        
+        <header class="navbar navbar-default wh_header">
+    <div class="container-fluid">
+        <div xmlns:whc="http://www.oxygenxml.com/webhelp/components" class="wh_header_flex_container navbar-nav navbar-expand-md navbar-dark">
+            <div class="wh_logo_and_publication_title_container">
+                <div class="wh_logo_and_publication_title">
+                    
+                    <a href="https://www.dolphindb.cn" class=" wh_logo d-none d-sm-block "><img src="../../logo.png" alt="  DolphinDB 文档中心  "/></a>
+                    <div class=" wh_publication_title "><a href="../../index.html"><span class="booktitle">  <span class="ph mainbooktitle">DolphinDB 文档中心</span>  </span></a></div>
+                    
+                </div>
+                
+                
+            </div>
+
+            <div class="wh_top_menu_and_indexterms_link collapse navbar-collapse" id="wh_top_menu_and_indexterms_link">
+                
+                
+                
+                
+            </div>
+        <div class=" wh_search_input navbar-form wh_topic_page_search search " role="form">
+            
+            
+            
+            <form id="searchForm" method="get" role="search" action="../../search.html"><div><input type="search" placeholder="搜索 " class="wh_search_textfield" id="textToSearch" name="searchQuery" aria-label="搜索查询" required="required"/><button type="submit" class="wh_search_button" aria-label="搜索"><span class="search_input_text">搜索</span></button></div></form>
+            
+            <script src="/vendors/react/umd/react.production.min.js" defer="defer"></script>
+<script src="/vendors/react-dom/umd/react-dom.production.min.js" defer="defer"></script>
+<script src="/vendors/dayjs/dayjs.min.js" defer="defer"></script>
+<script src="/vendors/antd/dist/antd.min.js" defer="defer"></script>
+<script src="/vendors/@ant-design/icons/dist/index.umd.min.js" defer="defer"></script>
+<script src="/zh/index.js" type="module"></script>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js" defer="defer"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML" defer="defer"><!--
+
+
+--></script>
+
+            
+        </div></div>
+    </div>
+</header>
+        
+        
+         
+        
+        
+        
+        <div class="container-fluid" id="wh_topic_container">
+            <div class="row">
+
+                <nav class="wh_tools d-print-none navbar-expand-md" aria-label="Tools">
+                    
+                    <div data-tooltip-position="bottom" class=" wh_breadcrumb "><ol class="d-print-none"><li><span class="home"><a href="../../index.html"><span>主页</span></a></span></li><li><div class="topicref" data-id="about_language_resources"><div class="title"><a href="../../progr/progr_intro.html"><span class="keyword label">编程语言</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 编程基本概念与方法、SQL 在 DolphinDB 的应用</p></div></div></div></li><li><div class="topicref" data-id="chap4_db_programming"><div class="title"><a href="../../progr/lang_intro.html"><span class="keyword label">DolphinDB 脚本语言</span></a><div class="wh-tooltip"><p class="shortdesc"> 脚本编程相关概念参考，包括：数据类型与形式、对象、运算符、编程语句、数据操作、函数化编程、文件操作和 SQL 语句。 </p></div></div></div></li><li><div class="topicref" data-id="chap4_sect_operators"><div class="title"><a href="../../progr/operators/operators.html"><span class="keyword label">运算符</span></a></div></div></li><li><div class="topicref" data-id="chap4_sect_objects_list"><div class="title"><a href="../../progr/operators/oper_list.html"><span class="keyword label">定义与用法</span></a></div></div></li><li class="active"><div class="topicref" data-id="gt"><div class="title"><a href="../../progr/operators/gt.html">gt(&gt;)</a></div></div></li></ol></div>
+                    
+                    
+                    
+                    <div class="wh_right_tools">
+                        <button class="wh_hide_highlight" aria-label="切换搜索突出显示" title="切换搜索突出显示"></button>
+                        <button class="webhelp_expand_collapse_sections" data-next-state="collapsed" aria-label="折叠截面" title="折叠截面"></button>
+                        
+                        
+                        
+                        
+                        <div class=" wh_print_link print d-none d-md-inline-block "><button onClick="window.print()" title="打印此页" aria-label="打印此页"></button></div>
+                        
+                        <button type="button" id="wh_toc_button" class="custom-toggler navbar-toggler collapsed wh_toggle_button navbar-light" aria-expanded="false" aria-label="Toggle publishing table of content" aria-controls="wh_publication_toc">
+                            <span class="navbar-toggler-icon"></span>
+                        </button>
+                    </div>
+                    
+                </nav>
+            </div>
+            
+            
+            
+            
+            <div class="wh_content_area">
+                <div class="row">
+                    
+                        <nav id="wh_publication_toc" class="col-lg-3 col-md-3 col-sm-12 d-md-block d-none d-print-none" aria-label="Table of Contents Container">
+                            <div id="wh_publication_toc_content">
+		                        
+                            	<div class=" wh_publication_toc " data-tooltip-position="right"><span class="expand-button-action-labels"><span id="button-expand-action" role="button" aria-label="Expand"></span><span id="button-collapse-action" role="button" aria-label="Collapse"></span><span id="button-pending-action" role="button" aria-label="Pending"></span></span><ul role="tree" aria-label="Table of Contents"><li role="treeitem"><div data-tocid="new_chap_about_sect_ddb_docs_intro-d9529e87" class="topicref" data-id="new_chap_about_sect_ddb_docs_intro" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../about/ddb_docs_intro.html" id="new_chap_about_sect_ddb_docs_intro-d9529e87-link">文档使用说明</a><div class="wh-tooltip"><p class="shortdesc">如何获取 DolphinDB 帮助信息</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="chap1_getstarted-d9529e140" class="topicref" data-id="chap1_getstarted" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action chap1_getstarted-d9529e140-link" class="wh-expand-btn"></span><div class="title"><a href="../../getstarted/chap1_getstarted.html" id="chap1_getstarted-d9529e140-link"><span class="keyword label">快速上手</span></a><div class="wh-tooltip"><p class="shortdesc">如何快速部署 DolphinDB、建库建表、写入和查询数据</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="sectionddb_deployment-d9529e335" class="topicref" data-id="sectionddb_deployment" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action sectionddb_deployment-d9529e335-link" class="wh-expand-btn"></span><div class="title"><a href="../../deploy/deploy_intro.html" id="sectionddb_deployment-d9529e335-link"><span class="keyword label">部署</span></a><div class="wh-tooltip"><p class="shortdesc">如何在不同的场景中部署 DolphinDB</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="new_chap_database_manage_new_chap_dbmanage_landing_page-d9529e2313" class="topicref" data-id="new_chap_database_manage_new_chap_dbmanage_landing_page" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action new_chap_database_manage_new_chap_dbmanage_landing_page-d9529e2313-link" class="wh-expand-btn"></span><div class="title"><a href="../../db_distr_comp/cfg/db_intro.html" id="new_chap_database_manage_new_chap_dbmanage_landing_page-d9529e2313-link"><span class="keyword label">数据库</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 数据库的基本概念</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="chap7_tutorials_streaming-d9529e3490" class="topicref" data-id="chap7_tutorials_streaming" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action chap7_tutorials_streaming-d9529e3490-link" class="wh-expand-btn"></span><div class="title"><a href="../../stream/str_intro.html" id="chap7_tutorials_streaming-d9529e3490-link"><span class="keyword label">流数据</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 流数据引擎及流数据计算的基本概念</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="tocId-d9529e7385" class="topicref" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action tocId-d9529e7385-link" class="wh-expand-btn"></span><div class="title"><a href="../../db_distr_comp/db_oper/import_data.html" id="tocId-d9529e7385-link">数据迁移</a><div class="wh-tooltip"><p class="shortdesc">如何从不同数据源向 DolphinDB 迁移数据</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="chap7_tutorials_system_management-d9529e7812" class="topicref" data-id="chap7_tutorials_system_management" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action chap7_tutorials_system_management-d9529e7812-link" class="wh-expand-btn"></span><div class="title"><a href="../../sys_man/om_intro.html" id="chap7_tutorials_system_management-d9529e7812-link"><span class="keyword label">系统运维</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 的系统运维功能及方法</p></div></div></div></li><li role="treeitem" aria-expanded="true"><div data-tocid="about_language_resources-d9529e16490" class="topicref" data-id="about_language_resources" data-state="expanded"><span role="button" tabindex="0" aria-labelledby="button-collapse-action about_language_resources-d9529e16490-link" class="wh-expand-btn"></span><div class="title"><a href="../../progr/progr_intro.html" id="about_language_resources-d9529e16490-link"><span class="keyword label">编程语言</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 编程基本概念与方法、SQL 在 DolphinDB 的应用</p></div></div></div><ul role="group" class="navbar-nav nav-list"><li role="treeitem" aria-expanded="true"><div data-tocid="chap4_db_programming-d9529e16543" class="topicref" data-id="chap4_db_programming" data-state="expanded"><span role="button" tabindex="0" aria-labelledby="button-collapse-action chap4_db_programming-d9529e16543-link" class="wh-expand-btn"></span><div class="title"><a href="../../progr/lang_intro.html" id="chap4_db_programming-d9529e16543-link"><span class="keyword label">DolphinDB 脚本语言</span></a><div class="wh-tooltip"><p class="shortdesc"> 脚本编程相关概念参考，包括：数据类型与形式、对象、运算符、编程语句、数据操作、函数化编程、文件操作和 SQL 语句。 </p></div></div></div><ul role="group" class="navbar-nav nav-list"><li role="treeitem" aria-expanded="false"><div data-tocid="chap4_sect_datatypes_forms-d9529e16594" class="topicref" data-id="chap4_sect_datatypes_forms" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action chap4_sect_datatypes_forms-d9529e16594-link" class="wh-expand-btn"></span><div class="title"><a href="../../progr/data_types_forms_intro.html" id="chap4_sect_datatypes_forms-d9529e16594-link"><span class="keyword">数据类型与形式</span></a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="chap4_sect_objects-d9529e17632" class="topicref" data-id="chap4_sect_objects" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action chap4_sect_objects-d9529e17632-link" class="wh-expand-btn"></span><div class="title"><a href="../../progr/objs/objects.html" id="chap4_sect_objects-d9529e17632-link"><span class="keyword label">对象</span></a></div></div></li><li role="treeitem" aria-expanded="true"><div data-tocid="chap4_sect_operators-d9529e18069" class="topicref" data-id="chap4_sect_operators" data-state="expanded"><span role="button" tabindex="0" aria-labelledby="button-collapse-action chap4_sect_operators-d9529e18069-link" class="wh-expand-btn"></span><div class="title"><a href="../../progr/operators/operators.html" id="chap4_sect_operators-d9529e18069-link"><span class="keyword label">运算符</span></a></div></div><ul role="group" class="navbar-nav nav-list"><li role="treeitem"><div data-tocid="precedence-d9529e18130" class="topicref" data-id="precedence" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../progr/operators/precedence.html" id="precedence-d9529e18130-link"><span class="keyword label">运算优先级</span></a></div></div></li><li role="treeitem" aria-expanded="true"><div data-tocid="chap4_sect_objects_list-d9529e18177" class="topicref" data-id="chap4_sect_objects_list" data-state="expanded"><span role="button" tabindex="0" aria-labelledby="button-collapse-action chap4_sect_objects_list-d9529e18177-link" class="wh-expand-btn"></span><div class="title"><a href="../../progr/operators/oper_list.html" id="chap4_sect_objects_list-d9529e18177-link"><span class="keyword label">定义与用法</span></a></div></div><ul role="group" class="navbar-nav nav-list"><li role="treeitem"><div data-tocid="add-d9529e18224" class="topicref" data-id="add" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../progr/operators/add.html" id="add-d9529e18224-link">add(+)</a></div></div></li><li role="treeitem"><div data-tocid="and-d9529e18270" class="topicref" data-id="and" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../progr/operators/and.html" id="and-d9529e18270-link">and(&amp;&amp;)</a></div></div></li><li role="treeitem"><div data-tocid="cast-d9529e18316" class="topicref" data-id="cast" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../progr/operators/cast.html" id="cast-d9529e18316-link">cast($)</a></div></div></li><li role="treeitem"><div data-tocid="链式比较-d9529e18362" class="topicref" data-id="链式比较" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../progr/operators/chainingComparison.html" id="链式比较-d9529e18362-link"><span class="keyword label">链式比较</span></a></div></div></li><li role="treeitem"><div data-tocid="div-d9529e18409" class="topicref" data-id="div" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../progr/operators/div.html" id="div-d9529e18409-link">div(/)</a></div></div></li><li role="treeitem"><div data-tocid="dot-d9529e18455" class="topicref" data-id="dot" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../progr/operators/dot.html" id="dot-d9529e18455-link">dot(**)</a></div></div></li><li role="treeitem"><div data-tocid="eq-d9529e18501" class="topicref" data-id="eq" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../progr/operators/eq.html" id="eq-d9529e18501-link">eq(==)</a></div></div></li><li role="treeitem"><div data-tocid="ge-d9529e18547" class="topicref" data-id="ge" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../progr/operators/ge.html" id="ge-d9529e18547-link">ge(&gt;=)</a></div></div></li><li role="treeitem" class="active"><div data-tocid="gt-d9529e18593" class="topicref" data-id="gt" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../progr/operators/gt.html" id="gt-d9529e18593-link">gt(&gt;)</a></div></div></li><li role="treeitem"><div data-tocid="intersectionsetbitand-d9529e18639" class="topicref" data-id="intersectionsetbitand" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../progr/operators/intersectionsetbitAnd.html" id="intersectionsetbitand-d9529e18639-link">intersection(set)/bitAnd(&amp;)</a></div></div></li><li role="treeitem"><div data-tocid="join--d9529e18686" class="topicref" data-id="join-" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../progr/operators/join.html" id="join--d9529e18686-link">join(&lt;-)</a></div></div></li><li role="treeitem"><div data-tocid="le-d9529e18732" class="topicref" data-id="le" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../progr/operators/le.html" id="le-d9529e18732-link">le(&lt;=)</a></div></div></li><li role="treeitem"><div data-tocid="lshift-d9529e18778" class="topicref" data-id="lshift" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../progr/operators/lshift.html" id="lshift-d9529e18778-link">lshift(&lt;&lt;)</a></div></div></li><li role="treeitem"><div data-tocid="lt-d9529e18824" class="topicref" data-id="lt" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../progr/operators/lt.html" id="lt-d9529e18824-link">lt(&lt;)</a></div></div></li><li role="treeitem"><div data-tocid="member-d9529e18870" class="topicref" data-id="member" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../progr/operators/member.html" id="member-d9529e18870-link">member(.)</a></div></div></li><li role="treeitem"><div data-tocid="mod-d9529e18916" class="topicref" data-id="mod" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../progr/operators/mod.html" id="mod-d9529e18916-link">mod(%)</a></div></div></li><li role="treeitem"><div data-tocid="mul-d9529e18962" class="topicref" data-id="mul" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../progr/operators/mul.html" id="mul-d9529e18962-link">mul(*)</a></div></div></li><li role="treeitem"><div data-tocid="ne-d9529e19008" class="topicref" data-id="ne" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../progr/operators/ne.html" id="ne-d9529e19008-link">ne(!= or &lt;&gt;)</a></div></div></li><li role="treeitem"><div data-tocid="neg--d9529e19054" class="topicref" data-id="neg-" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../progr/operators/neg.html" id="neg--d9529e19054-link">neg(-)</a></div></div></li><li role="treeitem"><div data-tocid="not-d9529e19100" class="topicref" data-id="not" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../progr/operators/not.html" id="not-d9529e19100-link">not(!)</a></div></div></li><li role="treeitem"><div data-tocid="or-d9529e19146" class="topicref" data-id="or" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../progr/operators/or.html" id="or-d9529e19146-link">or(||)</a></div></div></li><li role="treeitem"><div data-tocid="pair-d9529e19193" class="topicref" data-id="pair" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../progr/operators/pair.html" id="pair-d9529e19193-link">pair(:)</a></div></div></li><li role="treeitem"><div data-tocid="ratio-d9529e19239" class="topicref" data-id="ratio" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../progr/operators/ratio.html" id="ratio-d9529e19239-link">ratio()</a></div></div></li><li role="treeitem"><div data-tocid="rshift-d9529e19285" class="topicref" data-id="rshift" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../progr/operators/rshift.html" id="rshift-d9529e19285-link">rshift(&gt;&gt;)</a></div></div></li><li role="treeitem"><div data-tocid="seq-d9529e19331" class="topicref" data-id="seq" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../progr/operators/seq.html" id="seq-d9529e19331-link">seq(..)</a></div></div></li><li role="treeitem"><div data-tocid="sub--d9529e19377" class="topicref" data-id="sub-" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../progr/operators/sub.html" id="sub--d9529e19377-link">sub(-)</a></div></div></li><li role="treeitem"><div data-tocid="symmetricdifferencesetbitxor-d9529e19423" class="topicref" data-id="symmetricdifferencesetbitxor" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../progr/operators/symmetricDifferencesetbitXor.html" id="symmetricdifferencesetbitxor-d9529e19423-link">symmetricDifference(set)/bitXor(^)</a></div></div></li><li role="treeitem"><div data-tocid="unionsetbitor-d9529e19469" class="topicref" data-id="unionsetbitor" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../progr/operators/unionsetbitOr.html" id="unionsetbitor-d9529e19469-link">union(set)/bitOr(|)</a></div></div></li><li role="treeitem"><div data-tocid="at-d9529e19515" class="topicref" data-id="at" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../progr/operators/at.html" id="at-d9529e19515-link">at([])</a></div></div></li><li role="treeitem"><div data-tocid="eachat-d9529e19561" class="topicref" data-id="eachat" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../progr/operators/eachAt.html" id="eachat-d9529e19561-link">eachAt(@)</a></div></div></li><li role="treeitem"><div data-tocid="eachat-d9529e19607" class="topicref" data-id="eachat" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../progr/operators/ternary_operator.html" id="eachat-d9529e19607-link"><strong class="ph b">三元运算符(? :)</strong></a></div></div></li></ul></li></ul></li><li role="treeitem" aria-expanded="false"><div data-tocid="chap4_sect_programming_statements-d9529e19654" class="topicref" data-id="chap4_sect_programming_statements" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action chap4_sect_programming_statements-d9529e19654-link" class="wh-expand-btn"></span><div class="title"><a href="../../progr/statements/statements_intro.html" id="chap4_sect_programming_statements-d9529e19654-link"><span class="keyword label">编程语句</span></a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="chap4_sect_data_manipulation-d9529e20900" class="topicref" data-id="chap4_sect_data_manipulation" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action chap4_sect_data_manipulation-d9529e20900-link" class="wh-expand-btn"></span><div class="title"><a href="../../progr/data_mani/dm_intro.html" id="chap4_sect_data_manipulation-d9529e20900-link"><span class="keyword label">数据操作</span></a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="chap4_sect_func_programming-d9529e21873" class="topicref" data-id="chap4_sect_func_programming" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action chap4_sect_func_programming-d9529e21873-link" class="wh-expand-btn"></span><div class="title"><a href="../../progr/func_progr.html" id="chap4_sect_func_programming-d9529e21873-link"><span class="keyword label">函数化编程</span></a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="元编程-d9529e22197" class="topicref" data-id="元编程" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action 元编程-d9529e22197-link" class="wh-expand-btn"></span><div class="title"><a href="../../progr/objs/meta_progr.html" id="元编程-d9529e22197-link"><span class="keyword label">元编程</span></a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="oop-d9529e22337" class="topicref" data-id="oop" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action oop-d9529e22337-link" class="wh-expand-btn"></span><div class="title"><a href="../../progr/oop.html" id="oop-d9529e22337-link">面向对象编程</a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="文件操作-d9529e22705" class="topicref" data-id="文件操作" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action 文件操作-d9529e22705-link" class="wh-expand-btn"></span><div class="title"><a href="../../progr/file_io/file_oper.html" id="文件操作-d9529e22705-link"><span class="keyword label">文件操作</span></a></div></div></li></ul></li><li role="treeitem" aria-expanded="false"><div data-tocid="chap4_sect_sql_statements-d9529e22890" class="topicref" data-id="chap4_sect_sql_statements" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action chap4_sect_sql_statements-d9529e22890-link" class="wh-expand-btn"></span><div class="title"><a href="../../progr/sql/sql_intro.html" id="chap4_sect_sql_statements-d9529e22890-link"><span class="keyword label">SQL 语句</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 中 SQL 语句的基本语法和用法</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="python-parser-简介-d9529e25535" class="topicref" data-id="python-parser-简介" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action python-parser-简介-d9529e25535-link" class="wh-expand-btn"></span><div class="title"><a href="../../progr/py_parser/py_par_intro.html" id="python-parser-简介-d9529e25535-link"><span class="keyword label">Python Parser</span></a></div></div></li></ul></li><li role="treeitem" aria-expanded="false"><div data-tocid="functions_references-d9529e26503" class="topicref" data-id="functions_references" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action functions_references-d9529e26503-link" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/funcs_intro.html" id="functions_references-d9529e26503-link"><span class="keyword label">函数参考</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 函数分类、语法、详解及示例</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="api_protocol-d9529e86456" class="topicref" data-id="api_protocol" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action api_protocol-d9529e86456-link" class="wh-expand-btn"></span><div class="title"><a href="../../api/connapi_intro.html" id="api_protocol-d9529e86456-link"><span class="keyword label">连接器 &amp; API</span></a><div class="wh-tooltip"><p class="shortdesc">面向不同编程语言的 DolphinDB API 及连接器，相关协议和用法</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="chap6_plugin-d9529e91976" class="topicref" data-id="chap6_plugin" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action chap6_plugin-d9529e91976-link" class="wh-expand-btn"></span><div class="title"><a href="../../plugins/plg_intro.html" id="chap6_plugin-d9529e91976-link"><span class="keyword label">插件</span></a><div class="wh-tooltip"><p class="shortdesc">多个应用场景的插件使用说明和插件开发指导</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="third_party-d9529e94749" class="topicref" data-id="third_party" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action third_party-d9529e94749-link" class="wh-expand-btn"></span><div class="title"><a href="../../third_party.html" id="third_party-d9529e94749-link">第三方工具</a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="about_tutorials-d9529e94980" class="topicref" data-id="about_tutorials" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action about_tutorials-d9529e94980-link" class="wh-expand-btn"></span><div class="title"><a href="../../tutorials/about_tutorials.html" id="about_tutorials-d9529e94980-link"><span class="keyword label">教程</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 产品使用教程</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="tocId-d9529e101769" class="topicref" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action tocId-d9529e101769-link" class="wh-expand-btn"></span><div class="title"><a href="../../rn/server/3_00_1.html" id="tocId-d9529e101769-link">版本说明</a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 版本发布历史</p></div></div></div></li></ul></div>
+		                        
+                            </div>
+                        </nav>
+                    
+                    
+                    <div class="col-lg-7 col-md-9 col-sm-12" id="wh_topic_body">
+                        <button id="wh_close_publication_toc_button" class="close-toc-button d-none" aria-label="Toggle publishing table of content" aria-controls="wh_publication_toc" aria-expanded="true">
+                            <span class="close-toc-icon-container">
+                                <span class="close-toc-icon"></span>     
+                            </span>
+                        </button>
+                        <button id="wh_close_topic_toc_button" class="close-toc-button d-none" aria-label="Toggle topic table of content" aria-controls="wh_topic_toc" aria-expanded="true">
+                            <span class="close-toc-icon-container">
+                                <span class="close-toc-icon"></span>     
+                            </span>
+                        </button>
+                        
+                        <div class=" wh_topic_content body "><main role="main"><article class="- topic/topic topic" role="article" aria-labelledby="gt__title_nwy_s4v_nyb">
+    <h1 class="- topic/title title topictitle1" id="gt__title_nwy_s4v_nyb">gt(&gt;)</h1>
+    <div class="- topic/body body">
+        <section class="- topic/section section" id="gt__section_onn_vk3_5yb" data-ofbid="gt__section_onn_vk3_5yb"><h2 class="- topic/title title sectiontitle">语法</h2>
+            
+            <p class="- topic/p p"><code class="+ topic/ph pr-d/codeph ph codeph">X&gt;Y</code></p>
+        </section>
+        <section class="- topic/section section" id="gt__section_aql_wk3_5yb" data-ofbid="gt__section_aql_wk3_5yb"><h2 class="- topic/title title sectiontitle">参数</h2>
+            
+            <p class="- topic/p p"><strong class="+ topic/ph hi-d/b ph b">X</strong> 和 <strong class="+ topic/ph hi-d/b ph b">Y</strong> 可以是标量、数据对、向量、矩阵或集合。当 <em class="+ topic/ph hi-d/i ph i" id="gt__i_xdm_hwc_4yb">X</em> 和 <em class="+ topic/ph hi-d/i ph i" id="gt__i_ydm_hwc_4yb">Y</em> 都是向量或矩阵时，它们的长度或维度必须相同。</p>
+        </section>
+        <section class="- topic/section section" id="gt__section_ozd_xk3_5yb" data-ofbid="gt__section_ozd_xk3_5yb"><h2 class="- topic/title title sectiontitle">详情</h2>
+            
+            <ul class="- topic/ul ul" id="gt__ul_kbr_xk3_5yb" data-ofbid="gt__ul_kbr_xk3_5yb">
+                
+                <li class="- topic/li li">如果X和Y都不是集合，则对X和Y中的元素逐个做&gt;的比较并返回结果。</li>
+                <li class="- topic/li li">如果X和Y是集合，则检查Y是否为X的真子集。</li>
+            </ul>
+        </section>
+        <section class="- topic/section section" id="gt__section_phr_yk3_5yb" data-ofbid="gt__section_phr_yk3_5yb"><h2 class="- topic/title title sectiontitle">例子</h2>
+            
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="gt__codeblock_v4s_yf2_myb" data-ofbid="gt__codeblock_v4s_yf2_myb"><code>1 2 3 &gt; 2;
+// output
+[0,0,1]
+
+1 2 3&gt;0 2 4;
+// output
+[1,0,0]
+
+2:3&gt;1:6;
+// output
+1 : 0
+
+m1=1..6$2:3;
+m1;</code></pre>
+            <div class="table-container"><table class="- topic/table table" id="gt__table_w4s_yf2_myb" data-ofbid="gt__table_w4s_yf2_myb" data-cols="3"><caption></caption><colgroup><col/><col/><col/></colgroup><thead class="- topic/thead thead">
+                        <tr class="- topic/row" id="gt__row_yrd_4g2_myb">
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="gt__entry_zrd_4g2_myb">#0</th>
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="gt__entry_asd_4g2_myb">#1</th>
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="gt__entry_bsd_4g2_myb">#2</th>
+                        </tr>
+                    </thead><tbody class="- topic/tbody tbody">
+                        <tr class="- topic/row" id="gt__row_csd_4g2_myb">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" id="gt__entry_dsd_4g2_myb" headers="gt__entry_zrd_4g2_myb">1</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" id="gt__entry_esd_4g2_myb" headers="gt__entry_asd_4g2_myb">3</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" id="gt__entry_fsd_4g2_myb" headers="gt__entry_bsd_4g2_myb">5</td>
+                        </tr>
+                        <tr class="- topic/row" id="gt__row_gsd_4g2_myb">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" id="gt__entry_hsd_4g2_myb" headers="gt__entry_zrd_4g2_myb">2</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" id="gt__entry_isd_4g2_myb" headers="gt__entry_asd_4g2_myb">4</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" id="gt__entry_jsd_4g2_myb" headers="gt__entry_bsd_4g2_myb">6</td>
+                        </tr>
+                    </tbody></table></div>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="gt__codeblock_x4s_yf2_myb" data-ofbid="gt__codeblock_x4s_yf2_myb"><code>m1 gt 4;</code></pre>
+            <div class="table-container"><table class="- topic/table table" id="gt__table_y4s_yf2_myb" data-ofbid="gt__table_y4s_yf2_myb" data-cols="3"><caption></caption><colgroup><col/><col/><col/></colgroup><thead class="- topic/thead thead">
+                        <tr class="- topic/row" id="gt__row_ksd_4g2_myb">
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="gt__entry_lsd_4g2_myb">#0</th>
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="gt__entry_msd_4g2_myb">#1</th>
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="gt__entry_nsd_4g2_myb">#2</th>
+                        </tr>
+                    </thead><tbody class="- topic/tbody tbody">
+                        <tr class="- topic/row" id="gt__row_osd_4g2_myb">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" id="gt__entry_psd_4g2_myb" headers="gt__entry_lsd_4g2_myb">0</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" id="gt__entry_qsd_4g2_myb" headers="gt__entry_msd_4g2_myb">0</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" id="gt__entry_rsd_4g2_myb" headers="gt__entry_nsd_4g2_myb">1</td>
+                        </tr>
+                        <tr class="- topic/row" id="gt__row_ssd_4g2_myb">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" id="gt__entry_tsd_4g2_myb" headers="gt__entry_lsd_4g2_myb">0</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" id="gt__entry_usd_4g2_myb" headers="gt__entry_msd_4g2_myb">0</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" id="gt__entry_vsd_4g2_myb" headers="gt__entry_nsd_4g2_myb">1</td>
+                        </tr>
+                    </tbody></table></div>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="gt__codeblock_z4s_yf2_myb" data-ofbid="gt__codeblock_z4s_yf2_myb"><code>m2=6..1$2:3;
+m2;</code></pre>
+            <div class="table-container"><table class="- topic/table table" id="gt__table_aps_yf2_myb" data-ofbid="gt__table_aps_yf2_myb" data-cols="3"><caption></caption><colgroup><col/><col/><col/></colgroup><thead class="- topic/thead thead">
+                        <tr class="- topic/row" id="gt__row_wsd_4g2_myb">
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="gt__entry_xsd_4g2_myb">#0</th>
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="gt__entry_ysd_4g2_myb">#1</th>
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="gt__entry_zsd_4g2_myb">#2</th>
+                        </tr>
+                    </thead><tbody class="- topic/tbody tbody">
+                        <tr class="- topic/row" id="gt__row_atd_4g2_myb">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" id="gt__entry_btd_4g2_myb" headers="gt__entry_xsd_4g2_myb">6</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" id="gt__entry_ctd_4g2_myb" headers="gt__entry_ysd_4g2_myb">4</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" id="gt__entry_dtd_4g2_myb" headers="gt__entry_zsd_4g2_myb">2</td>
+                        </tr>
+                        <tr class="- topic/row" id="gt__row_etd_4g2_myb">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" id="gt__entry_ftd_4g2_myb" headers="gt__entry_xsd_4g2_myb">5</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" id="gt__entry_gtd_4g2_myb" headers="gt__entry_ysd_4g2_myb">3</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" id="gt__entry_htd_4g2_myb" headers="gt__entry_zsd_4g2_myb">1</td>
+                        </tr>
+                    </tbody></table></div>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="gt__codeblock_bps_yf2_myb" data-ofbid="gt__codeblock_bps_yf2_myb"><code>m1&gt;m2;</code></pre>
+            <div class="table-container"><table class="- topic/table table" id="gt__table_cps_yf2_myb" data-ofbid="gt__table_cps_yf2_myb" data-cols="3"><caption></caption><colgroup><col/><col/><col/></colgroup><thead class="- topic/thead thead">
+                        <tr class="- topic/row" id="gt__row_itd_4g2_myb">
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="gt__entry_jtd_4g2_myb">#0</th>
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="gt__entry_ktd_4g2_myb">#1</th>
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="gt__entry_ltd_4g2_myb">#2</th>
+                        </tr>
+                    </thead><tbody class="- topic/tbody tbody">
+                        <tr class="- topic/row" id="gt__row_mtd_4g2_myb">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" id="gt__entry_ntd_4g2_myb" headers="gt__entry_jtd_4g2_myb">0</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" id="gt__entry_otd_4g2_myb" headers="gt__entry_ktd_4g2_myb">0</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" id="gt__entry_ptd_4g2_myb" headers="gt__entry_ltd_4g2_myb">1</td>
+                        </tr>
+                        <tr class="- topic/row" id="gt__row_qtd_4g2_myb">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" id="gt__entry_rtd_4g2_myb" headers="gt__entry_jtd_4g2_myb">0</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" id="gt__entry_std_4g2_myb" headers="gt__entry_ktd_4g2_myb">1</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" id="gt__entry_ttd_4g2_myb" headers="gt__entry_ltd_4g2_myb">1</td>
+                        </tr>
+                    </tbody></table></div>
+            <p class="- topic/p p" id="gt__p_dps_yf2_myb" data-ofbid="gt__p_dps_yf2_myb">集合运算： 如果X&gt;Y 那么Y是X的真子集。</p>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="gt__codeblock_eps_yf2_myb" data-ofbid="gt__codeblock_eps_yf2_myb"><code>x=set(4 6);
+x;
+// output
+set(6,4)
+y=set(8 9 4 6);
+y;
+// output
+set(6,4,9,8)
+
+y&gt;x;
+// output
+1
+// x是y的真子集
+
+x&gt;y;
+// output
+0
+// y不是x的真子集
+
+x&gt;x;
+// output
+0
+// x不是x的真子集</code></pre>
+        </section>
+    </div>
+</article></main></div>
+                        
+                        
+                        
+                        
+                        
+                        
+                    </div>
+                    
+                        <nav role="navigation" id="wh_topic_toc" aria-label="On this page" class="col-lg-2 d-none d-lg-block navbar d-print-none"> 
+                            <div id="wh_topic_toc_content">
+		                        
+	                            <div class=" wh_topic_toc "><div class="wh_topic_label">在本页上</div><ul><li class="section-item"><div class="section-title"><a href="#gt__section_onn_vk3_5yb" data-tocid="gt__section_onn_vk3_5yb">语法</a></div></li><li class="section-item"><div class="section-title"><a href="#gt__section_aql_wk3_5yb" data-tocid="gt__section_aql_wk3_5yb">参数</a></div></li><li class="section-item"><div class="section-title"><a href="#gt__section_ozd_xk3_5yb" data-tocid="gt__section_ozd_xk3_5yb">详情</a></div></li><li class="section-item"><div class="section-title"><a href="#gt__section_phr_yk3_5yb" data-tocid="gt__section_phr_yk3_5yb">例子</a></div></li></ul></div>
+	                        	
+                        	</div>
+                        </nav>
+                    
+                </div>
+            </div>
+            
+            
+            
+        </div> 
+        <footer class="navbar navbar-default wh_footer">
+  <div class=" footer-container mx-auto ">
+<title>Copyright</title><p><b> ©2024 浙江智臾科技有限公司 浙ICP备18048711号-3</b></p>
+  </div>
+</footer>
+        
+        <div id="go2top" class="d-print-none">
+            <span class="oxy-icon oxy-icon-up"></span>
+        </div>
+        
+        <div id="modal_img_large" class="modal">
+            <span class="close oxy-icon oxy-icon-remove"></span>
+            <div id="modal_img_container"></div>
+            <div id="caption"></div>
+        </div>
+        
+        
+        
+    </body>
+</html>

@@ -1,0 +1,756 @@
+<!DOCTYPE html><html xmlns="http://www.w3.org/1999/xhtml" xml:lang="zh" lang="zh" data-whc_version="26.0">
+    <head><link rel="shortcut icon" href="../../favicon.ico"/><link rel="icon" href="../../favicon.ico"/><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><meta http-equiv="X-UA-Compatible" content="IE=edge"/><meta name="description" content="通过在 select / exec 关键字后添加 [HINT_EXPLAIN] 来显示 SQL 语句的执行过程，便于 SQL 查询中实时监测查询的速度和执行的顺序。形式如下： select [HINT_EXPLAIN] * from tb where id &gt; 20 注： 添加 [HINT_EXPLAIN] 后的查询语句仅返回一个 JSON 字符串显示了 SQL 的执行过程，不返回查询结果；对于 ..."/><meta name="DC.rights.owner" content="(C) 版权 2024"/><meta name="copyright" content="(C) 版权 2024"/><meta name="generator" content="DITA-OT"/><meta name="DC.type" content="topic"/><meta name="DC.coverage" content=""/><meta name="DC.relation" content="../../progr/sql/hint.html"/><meta name="prodname" content="DolphinDB"/><meta name="brand" content="DolphinDB"/><meta name="DC.creator" content="DolphinDB"/><meta name="DC.publisher" content="DDB N/A DDB 200"/><meta name="DC.format" content="HTML5"/><meta name="DC.identifier" content="hint-explain"/><title>[HINT_EXPLAIN]</title><!--  Generated with Oxygen version 26.0, build number 2024012323.  --><meta name="wh-path2root" content="../../"/><meta name="wh-toc-id" content="hint-explain-d9529e25489"/><meta name="wh-source-relpath" content="progr/sql/hint_explain.dita"/><meta name="wh-out-relpath" content="progr/sql/hint_explain.html"/>
+
+    <link rel="stylesheet" type="text/css" href="../../oxygen-webhelp/app/commons.css?buildId=2024012323"/>
+    <link rel="stylesheet" type="text/css" href="../../oxygen-webhelp/app/topic.css?buildId=2024012323"/>
+
+    <script src="../../oxygen-webhelp/app/options/properties.js?buildId=20240704100525"></script>
+    <script src="../../oxygen-webhelp/app/localization/strings.js?buildId=2024012323"></script>
+    <script src="../../oxygen-webhelp/app/search/index/keywords.js?buildId=20240704100525"></script>
+    <script defer="defer" src="../../oxygen-webhelp/app/commons.js?buildId=2024012323"></script>
+    <script defer="defer" src="../../oxygen-webhelp/app/topic.js?buildId=2024012323"></script>
+<link rel="stylesheet" type="text/css" href="../../oxygen-webhelp/template/styles.css?buildId=2024012323"/><script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script><script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script></head>
+
+    <body id="hint-explain" class="wh_topic_page frmBody">
+        <a href="#wh_topic_body" class="sr-only sr-only-focusable">
+            跳转到主要内容
+        </a>
+        
+        
+        
+        
+        <header class="navbar navbar-default wh_header">
+    <div class="container-fluid">
+        <div xmlns:whc="http://www.oxygenxml.com/webhelp/components" class="wh_header_flex_container navbar-nav navbar-expand-md navbar-dark">
+            <div class="wh_logo_and_publication_title_container">
+                <div class="wh_logo_and_publication_title">
+                    
+                    <a href="https://www.dolphindb.cn" class=" wh_logo d-none d-sm-block "><img src="../../logo.png" alt="  DolphinDB 文档中心  "/></a>
+                    <div class=" wh_publication_title "><a href="../../index.html"><span class="booktitle">  <span class="ph mainbooktitle">DolphinDB 文档中心</span>  </span></a></div>
+                    
+                </div>
+                
+                
+            </div>
+
+            <div class="wh_top_menu_and_indexterms_link collapse navbar-collapse" id="wh_top_menu_and_indexterms_link">
+                
+                
+                
+                
+            </div>
+        <div class=" wh_search_input navbar-form wh_topic_page_search search " role="form">
+            
+            
+            
+            <form id="searchForm" method="get" role="search" action="../../search.html"><div><input type="search" placeholder="搜索 " class="wh_search_textfield" id="textToSearch" name="searchQuery" aria-label="搜索查询" required="required"/><button type="submit" class="wh_search_button" aria-label="搜索"><span class="search_input_text">搜索</span></button></div></form>
+            
+            <script src="/vendors/react/umd/react.production.min.js" defer="defer"></script>
+<script src="/vendors/react-dom/umd/react-dom.production.min.js" defer="defer"></script>
+<script src="/vendors/dayjs/dayjs.min.js" defer="defer"></script>
+<script src="/vendors/antd/dist/antd.min.js" defer="defer"></script>
+<script src="/vendors/@ant-design/icons/dist/index.umd.min.js" defer="defer"></script>
+<script src="/zh/index.js" type="module"></script>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js" defer="defer"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML" defer="defer"><!--
+
+
+--></script>
+
+            
+        </div></div>
+    </div>
+</header>
+        
+        
+         
+        
+        
+        
+        <div class="container-fluid" id="wh_topic_container">
+            <div class="row">
+
+                <nav class="wh_tools d-print-none navbar-expand-md" aria-label="Tools">
+                    
+                    <div data-tooltip-position="bottom" class=" wh_breadcrumb "><ol class="d-print-none"><li><span class="home"><a href="../../index.html"><span>主页</span></a></span></li><li><div class="topicref" data-id="about_language_resources"><div class="title"><a href="../../progr/progr_intro.html"><span class="keyword label">编程语言</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 编程基本概念与方法、SQL 在 DolphinDB 的应用</p></div></div></div></li><li><div class="topicref" data-id="chap4_sect_sql_statements"><div class="title"><a href="../../progr/sql/sql_intro.html"><span class="keyword label">SQL 语句</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 中 SQL 语句的基本语法和用法</p></div></div></div></li><li><div class="topicref" data-id="hint"><div class="title"><a href="../../progr/sql/hint.html"><span class="keyword label">HINT 关键字</span></a></div></div></li><li class="active"><div class="topicref" data-id="hint-explain"><div class="title"><a href="../../progr/sql/hint_explain.html">[HINT_EXPLAIN]</a></div></div></li></ol></div>
+                    
+                    
+                    
+                    <div class="wh_right_tools">
+                        <button class="wh_hide_highlight" aria-label="切换搜索突出显示" title="切换搜索突出显示"></button>
+                        <button class="webhelp_expand_collapse_sections" data-next-state="collapsed" aria-label="折叠截面" title="折叠截面"></button>
+                        
+                        
+                        
+                        
+                        <div class=" wh_print_link print d-none d-md-inline-block "><button onClick="window.print()" title="打印此页" aria-label="打印此页"></button></div>
+                        
+                        <button type="button" id="wh_toc_button" class="custom-toggler navbar-toggler collapsed wh_toggle_button navbar-light" aria-expanded="false" aria-label="Toggle publishing table of content" aria-controls="wh_publication_toc">
+                            <span class="navbar-toggler-icon"></span>
+                        </button>
+                    </div>
+                    
+                </nav>
+            </div>
+            
+            
+            
+            
+            <div class="wh_content_area">
+                <div class="row">
+                    
+                        <nav id="wh_publication_toc" class="col-lg-3 col-md-3 col-sm-12 d-md-block d-none d-print-none" aria-label="Table of Contents Container">
+                            <div id="wh_publication_toc_content">
+		                        
+                            	<div class=" wh_publication_toc " data-tooltip-position="right"><span class="expand-button-action-labels"><span id="button-expand-action" role="button" aria-label="Expand"></span><span id="button-collapse-action" role="button" aria-label="Collapse"></span><span id="button-pending-action" role="button" aria-label="Pending"></span></span><ul role="tree" aria-label="Table of Contents"><li role="treeitem"><div data-tocid="new_chap_about_sect_ddb_docs_intro-d9529e87" class="topicref" data-id="new_chap_about_sect_ddb_docs_intro" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../about/ddb_docs_intro.html" id="new_chap_about_sect_ddb_docs_intro-d9529e87-link">文档使用说明</a><div class="wh-tooltip"><p class="shortdesc">如何获取 DolphinDB 帮助信息</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="chap1_getstarted-d9529e140" class="topicref" data-id="chap1_getstarted" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action chap1_getstarted-d9529e140-link" class="wh-expand-btn"></span><div class="title"><a href="../../getstarted/chap1_getstarted.html" id="chap1_getstarted-d9529e140-link"><span class="keyword label">快速上手</span></a><div class="wh-tooltip"><p class="shortdesc">如何快速部署 DolphinDB、建库建表、写入和查询数据</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="sectionddb_deployment-d9529e335" class="topicref" data-id="sectionddb_deployment" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action sectionddb_deployment-d9529e335-link" class="wh-expand-btn"></span><div class="title"><a href="../../deploy/deploy_intro.html" id="sectionddb_deployment-d9529e335-link"><span class="keyword label">部署</span></a><div class="wh-tooltip"><p class="shortdesc">如何在不同的场景中部署 DolphinDB</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="new_chap_database_manage_new_chap_dbmanage_landing_page-d9529e2313" class="topicref" data-id="new_chap_database_manage_new_chap_dbmanage_landing_page" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action new_chap_database_manage_new_chap_dbmanage_landing_page-d9529e2313-link" class="wh-expand-btn"></span><div class="title"><a href="../../db_distr_comp/cfg/db_intro.html" id="new_chap_database_manage_new_chap_dbmanage_landing_page-d9529e2313-link"><span class="keyword label">数据库</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 数据库的基本概念</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="chap7_tutorials_streaming-d9529e3490" class="topicref" data-id="chap7_tutorials_streaming" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action chap7_tutorials_streaming-d9529e3490-link" class="wh-expand-btn"></span><div class="title"><a href="../../stream/str_intro.html" id="chap7_tutorials_streaming-d9529e3490-link"><span class="keyword label">流数据</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 流数据引擎及流数据计算的基本概念</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="tocId-d9529e7385" class="topicref" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action tocId-d9529e7385-link" class="wh-expand-btn"></span><div class="title"><a href="../../db_distr_comp/db_oper/import_data.html" id="tocId-d9529e7385-link">数据迁移</a><div class="wh-tooltip"><p class="shortdesc">如何从不同数据源向 DolphinDB 迁移数据</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="chap7_tutorials_system_management-d9529e7812" class="topicref" data-id="chap7_tutorials_system_management" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action chap7_tutorials_system_management-d9529e7812-link" class="wh-expand-btn"></span><div class="title"><a href="../../sys_man/om_intro.html" id="chap7_tutorials_system_management-d9529e7812-link"><span class="keyword label">系统运维</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 的系统运维功能及方法</p></div></div></div></li><li role="treeitem" aria-expanded="true"><div data-tocid="about_language_resources-d9529e16490" class="topicref" data-id="about_language_resources" data-state="expanded"><span role="button" tabindex="0" aria-labelledby="button-collapse-action about_language_resources-d9529e16490-link" class="wh-expand-btn"></span><div class="title"><a href="../../progr/progr_intro.html" id="about_language_resources-d9529e16490-link"><span class="keyword label">编程语言</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 编程基本概念与方法、SQL 在 DolphinDB 的应用</p></div></div></div><ul role="group" class="navbar-nav nav-list"><li role="treeitem" aria-expanded="false"><div data-tocid="chap4_db_programming-d9529e16543" class="topicref" data-id="chap4_db_programming" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action chap4_db_programming-d9529e16543-link" class="wh-expand-btn"></span><div class="title"><a href="../../progr/lang_intro.html" id="chap4_db_programming-d9529e16543-link"><span class="keyword label">DolphinDB 脚本语言</span></a><div class="wh-tooltip"><p class="shortdesc"> 脚本编程相关概念参考，包括：数据类型与形式、对象、运算符、编程语句、数据操作、函数化编程、文件操作和 SQL 语句。 </p></div></div></div></li><li role="treeitem" aria-expanded="true"><div data-tocid="chap4_sect_sql_statements-d9529e22890" class="topicref" data-id="chap4_sect_sql_statements" data-state="expanded"><span role="button" tabindex="0" aria-labelledby="button-collapse-action chap4_sect_sql_statements-d9529e22890-link" class="wh-expand-btn"></span><div class="title"><a href="../../progr/sql/sql_intro.html" id="chap4_sect_sql_statements-d9529e22890-link"><span class="keyword label">SQL 语句</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 中 SQL 语句的基本语法和用法</p></div></div></div><ul role="group" class="navbar-nav nav-list"><li role="treeitem" aria-expanded="false"><div data-tocid="ddl-d9529e22941" class="topicref" data-id="ddl" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action ddl-d9529e22941-link" class="wh-expand-btn"></span><div class="title"><a href="../../progr/sql/sql_ddl.html" id="ddl-d9529e22941-link">DDL</a><div class="wh-tooltip"><p class="shortdesc">介绍 DolphinDB 中的数据定义（DDL）语言</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="dml-d9529e23129" class="topicref" data-id="dml" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action dml-d9529e23129-link" class="wh-expand-btn"></span><div class="title"><a href="../../progr/sql/sql_dml.html" id="dml-d9529e23129-link">DML</a><div class="wh-tooltip"><p class="shortdesc">介绍 DolphinDB 中的数据描述（DML）语言</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="dql-d9529e23317" class="topicref" data-id="dql" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action dql-d9529e23317-link" class="wh-expand-btn"></span><div class="title"><a href="../../progr/sql/sql_dql.html" id="dql-d9529e23317-link">DQL</a><div class="wh-tooltip"><p class="shortdesc">介绍 DolphinDB 中的数据查询（DQL）语言</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="predicates-d9529e24196" class="topicref" data-id="predicates" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action predicates-d9529e24196-link" class="wh-expand-btn"></span><div class="title"><a href="../../progr/sql/predicates.html" id="predicates-d9529e24196-link"><span class="keyword label">谓词</span></a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="table_joiners-d9529e24703" class="topicref" data-id="table_joiners" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action table_joiners-d9529e24703-link" class="wh-expand-btn"></span><div class="title"><a href="../../progr/sql/tb_joiner_intro.html" id="table_joiners-d9529e24703-link"><span class="keyword label">表连接</span></a></div></div></li><li role="treeitem"><div data-tocid="执行顺序-d9529e25210" class="topicref" data-id="执行顺序" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../progr/sql/exe_order.html" id="执行顺序-d9529e25210-link"><span class="keyword label">执行顺序</span></a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="landingpage_sql_trace-d9529e25257" class="topicref" data-id="landingpage_sql_trace" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action landingpage_sql_trace-d9529e25257-link" class="wh-expand-btn"></span><div class="title"><a href="../../progr/sql/sql_trace.html" id="landingpage_sql_trace-d9529e25257-link"><span class="keyword label">SQL Trace</span></a></div></div></li><li role="treeitem" aria-expanded="true"><div data-tocid="hint-d9529e25442" class="topicref" data-id="hint" data-state="expanded"><span role="button" tabindex="0" aria-labelledby="button-collapse-action hint-d9529e25442-link" class="wh-expand-btn"></span><div class="title"><a href="../../progr/sql/hint.html" id="hint-d9529e25442-link"><span class="keyword label">HINT 关键字</span></a></div></div><ul role="group" class="navbar-nav nav-list"><li role="treeitem" class="active"><div data-tocid="hint-explain-d9529e25489" class="topicref" data-id="hint-explain" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../progr/sql/hint_explain.html" id="hint-explain-d9529e25489-link">[HINT_EXPLAIN]</a></div></div></li></ul></li></ul></li><li role="treeitem" aria-expanded="false"><div data-tocid="python-parser-简介-d9529e25535" class="topicref" data-id="python-parser-简介" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action python-parser-简介-d9529e25535-link" class="wh-expand-btn"></span><div class="title"><a href="../../progr/py_parser/py_par_intro.html" id="python-parser-简介-d9529e25535-link"><span class="keyword label">Python Parser</span></a></div></div></li></ul></li><li role="treeitem" aria-expanded="false"><div data-tocid="functions_references-d9529e26503" class="topicref" data-id="functions_references" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action functions_references-d9529e26503-link" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/funcs_intro.html" id="functions_references-d9529e26503-link"><span class="keyword label">函数参考</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 函数分类、语法、详解及示例</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="api_protocol-d9529e86456" class="topicref" data-id="api_protocol" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action api_protocol-d9529e86456-link" class="wh-expand-btn"></span><div class="title"><a href="../../api/connapi_intro.html" id="api_protocol-d9529e86456-link"><span class="keyword label">连接器 &amp; API</span></a><div class="wh-tooltip"><p class="shortdesc">面向不同编程语言的 DolphinDB API 及连接器，相关协议和用法</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="chap6_plugin-d9529e91976" class="topicref" data-id="chap6_plugin" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action chap6_plugin-d9529e91976-link" class="wh-expand-btn"></span><div class="title"><a href="../../plugins/plg_intro.html" id="chap6_plugin-d9529e91976-link"><span class="keyword label">插件</span></a><div class="wh-tooltip"><p class="shortdesc">多个应用场景的插件使用说明和插件开发指导</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="third_party-d9529e94749" class="topicref" data-id="third_party" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action third_party-d9529e94749-link" class="wh-expand-btn"></span><div class="title"><a href="../../third_party.html" id="third_party-d9529e94749-link">第三方工具</a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="about_tutorials-d9529e94980" class="topicref" data-id="about_tutorials" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action about_tutorials-d9529e94980-link" class="wh-expand-btn"></span><div class="title"><a href="../../tutorials/about_tutorials.html" id="about_tutorials-d9529e94980-link"><span class="keyword label">教程</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 产品使用教程</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="tocId-d9529e101769" class="topicref" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action tocId-d9529e101769-link" class="wh-expand-btn"></span><div class="title"><a href="../../rn/server/3_00_1.html" id="tocId-d9529e101769-link">版本说明</a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 版本发布历史</p></div></div></div></li></ul></div>
+		                        
+                            </div>
+                        </nav>
+                    
+                    
+                    <div class="col-lg-7 col-md-9 col-sm-12" id="wh_topic_body">
+                        <button id="wh_close_publication_toc_button" class="close-toc-button d-none" aria-label="Toggle publishing table of content" aria-controls="wh_publication_toc" aria-expanded="true">
+                            <span class="close-toc-icon-container">
+                                <span class="close-toc-icon"></span>     
+                            </span>
+                        </button>
+                        <button id="wh_close_topic_toc_button" class="close-toc-button d-none" aria-label="Toggle topic table of content" aria-controls="wh_topic_toc" aria-expanded="true">
+                            <span class="close-toc-icon-container">
+                                <span class="close-toc-icon"></span>     
+                            </span>
+                        </button>
+                        
+                        <div class=" wh_topic_content body "><main role="main"><article class="- topic/topic topic" role="article" aria-labelledby="hint-explain__title_r5w_s4v_nyb">
+  <h1 class="- topic/title title topictitle1" id="hint-explain__title_r5w_s4v_nyb">[HINT_EXPLAIN]</h1>
+  <div class="- topic/body body">
+    <p class="- topic/p p" id="hint-explain__p_h5x_yf2_myb" data-ofbid="hint-explain__p_h5x_yf2_myb">通过在 select / exec 关键字后添加 <code class="+ topic/ph pr-d/codeph ph codeph">[HINT_EXPLAIN]</code> 来显示 SQL 语句的执行过程，便于 SQL 查询中实时监测查询的速度和执行的顺序。形式如下：</p>
+    <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="hint-explain__codeblock_i5x_yf2_myb" data-ofbid="hint-explain__codeblock_i5x_yf2_myb"><code>select [HINT_EXPLAIN] * from tb where id &gt; 20</code></pre>
+    <div class="- topic/note note note note_note" id="hint-explain__note_g3s_1ql_jxb" data-ofbid="hint-explain__note_g3s_1ql_jxb"><span class="note__title">注：</span> 添加 <code class="+ topic/ph pr-d/codeph ph codeph">[HINT_EXPLAIN]</code> 后的查询语句仅返回一个 JSON 字符串显示了 SQL
+      的执行过程，不返回查询结果；对于 UPDATE 或者 DELETE 语句，目前还不支持查看执行计划。</div>
+    <p class="- topic/p p" id="hint-explain__p_j5x_yf2_myb" data-ofbid="hint-explain__p_j5x_yf2_myb">
+      <code class="+ topic/ph pr-d/codeph ph codeph">[HINT_EXPLAIN]</code> 支持分区表查询和非分区表查询，对于分区表查询，执行计划会体现 <code class="+ topic/ph pr-d/codeph ph codeph">map-reduce</code> 的过程。下面以一个分布式查询为例，来说明 JSON 字符串内各标签的组成和含义。</p>
+    <p class="- topic/p p" id="hint-explain__p_k5x_yf2_myb" data-ofbid="hint-explain__p_k5x_yf2_myb">返回的 JSON 字符串的最外层包含 <code class="+ topic/ph pr-d/codeph ph codeph">measurement</code> 和 <code class="+ topic/ph pr-d/codeph ph codeph">explain</code> 两个标签。</p>
+    <section class="- topic/section section" id="hint-explain__section_i24_yb1_5yb" data-ofbid="hint-explain__section_i24_yb1_5yb"><h2 class="- topic/title title sectiontitle">measurement</h2>
+      
+      <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="hint-explain__codeblock_evx_yf2_myb" data-ofbid="hint-explain__codeblock_evx_yf2_myb"><code>"measurement":"microsecond"</code></pre>
+      <p class="- topic/p p" id="hint-explain__p_fvx_yf2_myb" data-ofbid="hint-explain__p_fvx_yf2_myb">表示 SQL 查询执行计划的开销时间的单位为微秒。内部所有 <code class="+ topic/ph pr-d/codeph ph codeph">cost</code> 标签表示的耗时，均以微秒为单位。</p>
+    </section>
+    <section class="- topic/section section" id="hint-explain__section_xpc_zb1_5yb" data-ofbid="hint-explain__section_xpc_zb1_5yb"><h2 class="- topic/title title sectiontitle">explain</h2>
+      
+      <p class="- topic/p p"><code class="+ topic/ph pr-d/codeph ph codeph">explain</code> 内包含的标签从上往下的顺序代表该 <code class="+ topic/ph pr-d/codeph ph codeph">explain</code> 对应的 SQL 语句的执行顺序。若 SQL
+          查询包含嵌套子句，<code class="+ topic/ph pr-d/codeph ph codeph">explain</code> 可能会嵌套在其它子标签中。</p>
+      <p class="- topic/p p" id="hint-explain__p_iwx_yf2_myb" data-ofbid="hint-explain__p_iwx_yf2_myb">
+        <code class="+ topic/ph pr-d/codeph ph codeph">explain</code> 的构成如下：</p>
+      <ul class="- topic/ul ul" id="hint-explain__ul_jwx_yf2_myb" data-ofbid="hint-explain__ul_jwx_yf2_myb">
+        <li class="- topic/li li" id="hint-explain__li_rgg_4g2_myb" data-ofbid="hint-explain__li_rgg_4g2_myb">
+          <p class="- topic/p p" id="hint-explain__p_kwx_yf2_myb" data-ofbid="hint-explain__p_kwx_yf2_myb">
+            <code class="+ topic/ph pr-d/codeph ph codeph">rows</code>：查询返回的记录数。</p>
+        </li>
+        <li class="- topic/li li" id="hint-explain__li_sgg_4g2_myb" data-ofbid="hint-explain__li_sgg_4g2_myb">
+          <p class="- topic/p p" id="hint-explain__p_lwx_yf2_myb" data-ofbid="hint-explain__p_lwx_yf2_myb">
+            <code class="+ topic/ph pr-d/codeph ph codeph">cost</code>：查询耗时。</p>
+        </li>
+      </ul>
+      <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="hint-explain__codeblock_mwx_yf2_myb" data-ofbid="hint-explain__codeblock_mwx_yf2_myb"><code>{
+  "measurement":"microsecond",
+  "explain": {
+      /* 可能包含的其他子标签模块 */
+      "rows": 20000,
+      "cost": 100
+  }
+}</code></pre>
+      <p class="- topic/p p" id="hint-explain__p_nwx_yf2_myb" data-ofbid="hint-explain__p_nwx_yf2_myb">分布式查询包含三个阶段 map → merge → reduce，通常这三个标签均包含在根标签 explain 中, 例如：</p>
+      <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="hint-explain__codeblock_owx_yf2_myb" data-ofbid="hint-explain__codeblock_owx_yf2_myb"><code>{
+  "measurement":"microsecond",
+  "explain":{
+      "from":{...},
+      "map":{...},
+      "merge":{...},
+      "reduce":{...},
+      "rows":10,
+      "cost":23530
+  }
+}</code></pre>
+      <p class="- topic/p p" id="hint-explain__p_pwx_yf2_myb" data-ofbid="hint-explain__p_pwx_yf2_myb">通常，系统会对某些查询条件进行优化。单机模式创建一个以 <code class="+ topic/ph pr-d/codeph ph codeph">date</code> 列为分区的分区表，查询该表的
+          <code class="+ topic/ph pr-d/codeph ph codeph">date</code> 列在单个分区的全部数据。</p>
+      <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="hint-explain__codeblock_qwx_yf2_myb" data-ofbid="hint-explain__codeblock_qwx_yf2_myb"><code>select [HINT_EXPLAIN] * from t1 where date = 2022.01.01</code></pre>
+      <p class="- topic/p p" id="hint-explain__p_rwx_yf2_myb" data-ofbid="hint-explain__p_rwx_yf2_myb">此时，该查询语句会被优化，返回如下的结果：</p>
+      <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="hint-explain__codeblock_swx_yf2_myb" data-ofbid="hint-explain__codeblock_swx_yf2_myb"><code>{
+  "measurement":"microsecond",
+  "explain":{
+      "from":{ ... },
+      "optimize":{ ... },
+      "rows":185,
+      "cost":987
+  }
+}</code></pre>
+    </section>
+    <section class="- topic/section section" id="hint-explain__section_kw5_zb1_5yb" data-ofbid="hint-explain__section_kw5_zb1_5yb"><h2 class="- topic/title title sectiontitle">from</h2>
+      
+      <p class="- topic/p p"><code class="+ topic/ph pr-d/codeph ph codeph">from</code> 标签说明了 SQL 语句中 <code class="+ topic/ph pr-d/codeph ph codeph">from</code> 子句解析后的执行过程。</p>
+      <p class="- topic/p p" id="hint-explain__p_oyx_yf2_myb" data-ofbid="hint-explain__p_oyx_yf2_myb">根据 <code class="+ topic/ph pr-d/codeph ph codeph">from</code> 子句的不同， <code class="+ topic/ph pr-d/codeph ph codeph">from</code>
+        标签模块下可能包含着不同的子模块。以下列举了几种可能的场景：</p>
+      <ol class="- topic/ol ol" id="hint-explain__ol_wss_y21_5yb" data-ofbid="hint-explain__ol_wss_y21_5yb">
+        <li class="- topic/li li"><code class="+ topic/ph pr-d/codeph ph codeph">from</code> 后接一个表对象，例如 <code class="+ topic/ph pr-d/codeph ph codeph">select xref [HINT_EXPLAIN] * from pt
+          </code>。<pre class="+ topic/pre pr-d/codeblock pre codeblock" id="hint-explain__codeblock_mxq_bf1_5yb" data-ofbid="hint-explain__codeblock_mxq_bf1_5yb"><code>"from": {
+  "cost": 3  // from 子句的耗时
+}</code></pre></li>
+        <li class="- topic/li li"><code class="+ topic/ph pr-d/codeph ph codeph">from</code> 子句嵌套 SQL 语句，例如 <code class="+ topic/ph pr-d/codeph ph codeph"><em class="+ topic/ph hi-d/i ph i" id="hint-explain__i_e5k_hwc_4yb">select [HINT_EXPLAIN]
+              * from (select max(x) as maxx from loadTable(“dfs://valuedb”,’pt’) group by month)
+              where maxx &lt;
+            0.9994</em></code>。<pre class="+ topic/pre pr-d/codeblock pre codeblock" id="hint-explain__codeblock_syx_yf2_myb" data-ofbid="hint-explain__codeblock_syx_yf2_myb"><code>"from": {
+  "cost": 33571,  // from 子句的耗时
+  "detail": {
+      "sql": "select [98304] max(x) as maxx from loadTable("dfs://valuedb", "pt") group by month",   // 嵌套的SQL语句
+      "explain": { ... } // 嵌套的SQL语句的explain
+  }
+}</code></pre><p class="- topic/p p" id="hint-explain__p_tyx_yf2_myb" data-ofbid="hint-explain__p_tyx_yf2_myb">可以看到由于包含嵌套的子句， <code class="+ topic/ph pr-d/codeph ph codeph">explain</code> 标签嵌套在了
+              <code class="+ topic/ph pr-d/codeph ph codeph">from</code> 标签中。</p></li>
+        <li class="- topic/li li">from 跟表连接相关的子句，例如 <code class="+ topic/ph pr-d/codeph ph codeph"><em class="+ topic/ph hi-d/i ph i" id="hint-explain__i_f5k_hwc_4yb">select [HINT_EXPLAIN] * from lsj(pt1,
+              pt2, “date”)</em></code>。若使用 2.00.12 之前的版本，此处的 <code class="+ topic/ph pr-d/codeph ph codeph">from</code> 子句为 <em class="+ topic/ph hi-d/i ph i">lsj(pt1,
+            pt2, "date")</em>， <code class="+ topic/ph pr-d/codeph ph codeph">cost</code> 耗时只是获取待连接的表 pt1, pt2 数据源的耗时，两表未发生
+          join。<pre class="+ topic/pre pr-d/codeblock pre codeblock" id="hint-explain__codeblock_vqf_sr5_x1c" data-ofbid="hint-explain__codeblock_vqf_sr5_x1c"><code>"from": {
+  "cost": 3,  // from 子句的耗时
+  "detail": "materialize for JOIN" // 表示子句中包含 join 操作
+}</code></pre>若使用 2.00.12/3.00.0 及之后的版本，“from“ 字段更改为 “materialization“ 字段，且 “detail“
+          字段被替换为左表和右表数据源的 script。<pre class="+ topic/pre pr-d/codeblock pre codeblock" id="hint-explain__codeblock_rdx_5r5_x1c" data-ofbid="hint-explain__codeblock_rdx_5r5_x1c"><code>"materialization":{
+    "cost": 37,                   // 准备左右表数据源的总耗时
+    "left": "pt1",                // join 函数第一个参数的 script
+    "right": "select * from pt2"  // join 函数第二个参数的 script
+}</code></pre></li>
+      </ol>
+    </section>
+        <section class="- topic/section section" id="hint-explain__section_osp_1nf_xbc" data-ofbid="hint-explain__section_osp_1nf_xbc"><h2 class="- topic/title title sectiontitle">vectorindex</h2>
+            
+            <p class="- topic/p p">向量索引的处理过程信息将记录在此标签模块。仅当 from 后为一指定了向量索引的分布式表时，才会出现此标签。</p>
+            <p class="- topic/p p">useIndex：本次查询是否满足使用向量索引的条件，true 代表满足。当为 false 时，不会包含其他子标签。</p>
+            <p class="- topic/p p">cost：在向量索引的处理过程中花费的时间。</p>
+            <p class="- topic/p p">inputRows：通过 where 条件输入给向量索引的行数。</p>
+            <p class="- topic/p p">outputRows：经过向量索引处理完后输出的行数。</p>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="hint-explain__codeblock_zwz_bnf_xbc" data-ofbid="hint-explain__codeblock_zwz_bnf_xbc"><code>"vectorindex": {
+	"useIndex": true,
+	"cost": 457470,
+	"inputRows": 200000,
+	"outputRows": 3000
+}，</code></pre>
+        </section>
+        <section class="- topic/section section" id="hint-explain__section_yhd_zyt_x1c" data-ofbid="hint-explain__section_yhd_zyt_x1c"><h2 class="- topic/title title sectiontitle">where</h2>
+            
+            <p class="- topic/p p"><code class="+ topic/ph pr-d/codeph ph codeph">TSDBIndexPrefiltering</code>：在 TSDB 引擎中，通过 where 条件从 Level File
+                文件索引筛选所需数据信息。</p>
+            <ul class="- topic/ul ul" id="hint-explain__ul_zh1_1zt_x1c" data-ofbid="hint-explain__ul_zh1_1zt_x1c">
+                <li class="- topic/li li">blocksToBeScanned：待扫描的 TSDB 引擎 Level File 文件的 Blocks 数量。</li>
+                <li class="- topic/li li">matchedWhereConditions：where 子句中针对 sort key
+                    的匹配条件数量，包括等值、非等值（不含链式比较）、in、between、like 等条件。</li>
+            </ul>
+            <p class="- topic/p p">rows：满足 where 过滤条件的行数。</p>
+            <div class="- topic/p p">cost：where 子句的查询耗时。<pre class="+ topic/pre pr-d/codeblock pre codeblock" id="hint-explain__codeblock_x13_tjs_z1c" data-ofbid="hint-explain__codeblock_x13_tjs_z1c"><code>"where": {
+    "TSDBIndexPrefiltering": {
+        "blocksToBeScanned": 0,
+        "matchedWhereConditions": 1
+    },
+    "rows": 0,
+    "cost": 416
+}</code></pre></div>
+        </section>
+    <section class="- topic/section section" id="hint-explain__section_mkc_1c1_5yb" data-ofbid="hint-explain__section_mkc_1c1_5yb"><h2 class="- topic/title title sectiontitle">map</h2>
+      
+      <p class="- topic/p p"><code class="+ topic/ph pr-d/codeph ph codeph">map</code> 阶段会统计 SQL 查询涉及到的所有分区（包括本地节点 local 和远程节点 remote
+        的分区），然后生成相应的子查询，并把子查询分发到涉及到的所有分区，进行并行查询。</p>
+      <p class="- topic/p p" id="hint-explain__p_q1y_yf2_myb" data-ofbid="hint-explain__p_q1y_yf2_myb">下面是一个 <code class="+ topic/ph pr-d/codeph ph codeph">map</code> 标签模块中可能包含的子模块：</p>
+      <ul class="- topic/ul ul" id="hint-explain__ul_r1y_yf2_myb" data-ofbid="hint-explain__ul_r1y_yf2_myb">
+        <li class="- topic/li li" id="hint-explain__li_tgg_4g2_myb" data-ofbid="hint-explain__li_tgg_4g2_myb"><code class="+ topic/ph pr-d/codeph ph codeph">generate_reshuffle_query</code>：是分布式 join 独有的标签，包含进行
+                    generate_reshuffle_query 过程的信息。generate_reshuffle_query 是进行分布式 join 前将数据按照 join
+                    列连续存储在内存区的一个操作。如果 join 列是分区列，则不会进行该操作。(仅 2.00 及以上版本支持分布式 join)</li>
+        <li class="- topic/li li" id="hint-explain__li_ugg_4g2_myb" data-ofbid="hint-explain__li_ugg_4g2_myb"><code class="+ topic/ph pr-d/codeph ph codeph">partitions</code> : 本次查询的分区信息，其子标签 local 和 remote
+          分别表示查询的分区位于本地节点的数量和查询的分区位于远程节点的数量。</li>
+        <li class="- topic/li li" id="hint-explain__li_vgg_4g2_myb" data-ofbid="hint-explain__li_vgg_4g2_myb">
+          <code class="+ topic/ph pr-d/codeph ph codeph">cost</code>：map 阶段完成所有过程所消耗的总时间（此时所有子查询都执行完成）。</li>
+        <li class="- topic/li li" id="hint-explain__li_wgg_4g2_myb" data-ofbid="hint-explain__li_wgg_4g2_myb">
+          <p class="- topic/p p" id="hint-explain__p_v1y_yf2_myb" data-ofbid="hint-explain__p_v1y_yf2_myb"><code class="+ topic/ph pr-d/codeph ph codeph">detail</code>：map 阶段查询子句的执行细节。</p>
+          <ul class="- topic/ul ul" id="hint-explain__ul_lst_zf1_5yb" data-ofbid="hint-explain__ul_lst_zf1_5yb">
+            <li class="- topic/li li">most：耗时最多的子查询的信息。</li>
+            <li class="- topic/li li">least：耗时最少的子查询的信息。</li>
+          </ul>
+        </li>
+      </ul>
+      <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="hint-explain__codeblock_w1y_yf2_myb" data-ofbid="hint-explain__codeblock_w1y_yf2_myb"><code>"map": {
+  "generate_reshuffle_query": {
+      "cost": 2
+  },
+  "partitions": {
+      "local": 10,
+      "remote": 5,
+  },
+  "cost": 100,
+  "detail": {
+      "most": {
+      "sql": "select time,id,value from pt [partition = /iot/1]",
+      "explain": { ... }
+      },
+      "least": {
+      "sql": "select time,id,value from pt [partition = /iot/4]",
+      "explain": { ... },
+      }
+  }
+}</code></pre>
+    </section>
+    <section class="- topic/section section" id="hint-explain__section_yqj_1c1_5yb" data-ofbid="hint-explain__section_yqj_1c1_5yb"><h2 class="- topic/title title sectiontitle">optimize</h2>
+      
+      <p class="- topic/p p">查询优化会显示在 <code class="+ topic/ph pr-d/codeph ph codeph">optimize</code> 标签模块中。</p>
+      <p class="- topic/p p" id="hint-explain__p_ady_yf2_myb" data-ofbid="hint-explain__p_ady_yf2_myb">
+        <code class="+ topic/ph pr-d/codeph ph codeph">optimize</code>：查询优化的细节。组成如下所示：</p>
+      <p class="- topic/p p" id="hint-explain__p_bdy_yf2_myb" data-ofbid="hint-explain__p_bdy_yf2_myb">
+        <code class="+ topic/ph pr-d/codeph ph codeph">field</code>：可以是被优化的字段，如："where", "join", "group"；也可以是优化的场景说明，如 "single partition
+        query"。</p>
+      <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="hint-explain__codeblock_cdy_yf2_myb" data-ofbid="hint-explain__codeblock_cdy_yf2_myb"><code>"optimize": {
+  "cost": 3,
+  "field": ["where", "join", "group"],
+  "sql": "..."  // 优化之后的SQL语句
+}</code></pre>
+      <p class="- topic/p p" id="hint-explain__p_ddy_yf2_myb" data-ofbid="hint-explain__p_ddy_yf2_myb">以下列举了几种可能优化的场景：</p>
+      <ol class="- topic/ol ol" id="hint-explain__ol_fd3_2g1_5yb" data-ofbid="hint-explain__ol_fd3_2g1_5yb">
+        
+        <li class="- topic/li li">只查询单个分区数据，其 <code class="+ topic/ph pr-d/codeph ph codeph">map</code>
+            阶段的执行过程如下：<pre class="+ topic/pre pr-d/codeblock pre codeblock" id="hint-explain__codeblock_fdy_yf2_myb" data-ofbid="hint-explain__codeblock_fdy_yf2_myb"><code>"map": {
+  "partitions": {
+      "local": 1,   // 或者0
+      "remote": 0,   // 或者1
+  },
+  "cost": 100,
+  "optimize": {
+      "field": "single partition query",
+      "sql": "...",
+      "explain": { ... }
+  }
+}</code></pre><p class="- topic/p p" id="hint-explain__p_gdy_yf2_myb" data-ofbid="hint-explain__p_gdy_yf2_myb">单分区情况下，查询任务只涉及到对应分区的单个节点，因此不需要进行
+              <code class="+ topic/ph pr-d/codeph ph codeph">merge</code>。</p></li>
+        <li class="- topic/li li">context by + csort + limit。对于 context by 和 csort 以及 limit 配合使用的 SQL
+          查询，系统内部进行了查询优化：<pre class="+ topic/pre pr-d/codeblock pre codeblock" id="hint-explain__codeblock_jdy_yf2_myb" data-ofbid="hint-explain__codeblock_jdy_yf2_myb"><code>select * from pt where device in ["a", "b"] context by device csort time limit n</code></pre>其中
+          pt 可以是单分区表或者组合分区的分区表。优化需满足以下几个条件：<ol class="- topic/ol ol" type="a" id="hint-explain__ol_ldy_yf2_myb" data-ofbid="hint-explain__ol_ldy_yf2_myb">
+            <li class="- topic/li li" id="hint-explain__li_xgg_4g2_myb" data-ofbid="hint-explain__li_xgg_4g2_myb">context by 指定的列在 where 子句中进行了条件过滤。 比如上例中的 device, where 子句中筛选了
+                <code class="+ topic/ph pr-d/codeph ph codeph">device in ["a", "b"]</code> 的数据。</li>
+            <li class="- topic/li li" id="hint-explain__li_ygg_4g2_myb" data-ofbid="hint-explain__li_ygg_4g2_myb">csort 指定的列（如例中的 time）是分区列, 且分区方式是 VALUE 或 RANGE。</li>
+            <li class="- topic/li li" id="hint-explain__li_zgg_4g2_myb" data-ofbid="hint-explain__li_zgg_4g2_myb">csort, context by 只能指定单列。</li>
+            <li class="- topic/li li" id="hint-explain__li_ahg_4g2_myb" data-ofbid="hint-explain__li_ahg_4g2_myb">context by 指定的列也需要一起输出（通过 select 语句指定该列）。</li>
+          </ol>此时返回的结果中， <code class="+ topic/ph pr-d/codeph ph codeph">map</code>
+          标签模块的组成如下所示：<pre class="+ topic/pre pr-d/codeblock pre codeblock" id="hint-explain__codeblock_rdy_yf2_myb" data-ofbid="hint-explain__codeblock_rdy_yf2_myb"><code>"map":{
+  "optimize":{
+      "cost":4,  // 完成优化耗费的时间
+      "field":"optimize for CONTEXT BY + CSORT + LIMIT: partial parallel execution."
+  },
+  "cost":1082  // 完成 map 阶段耗费的时间
+}</code></pre>如果进行了查询优化，返回结果可能不包含 <code class="+ topic/ph pr-d/codeph ph codeph">merge</code> 和 <code class="+ topic/ph pr-d/codeph ph codeph">reduce</code> 阶段。</li>
+      </ol>
+    </section>
+    <section class="- topic/section section" id="hint-explain__section_f5t_1c1_5yb" data-ofbid="hint-explain__section_f5t_1c1_5yb"><h2 class="- topic/title title sectiontitle">merge</h2>
+      
+      <p class="- topic/p p"><code class="+ topic/ph pr-d/codeph ph codeph">merge</code> 阶段会将 <code class="+ topic/ph pr-d/codeph ph codeph">map</code> 阶段分配到各个节点的子查询的结果进行合并。</p>
+      <p class="- topic/p p" id="hint-explain__p_y2y_yf2_myb" data-ofbid="hint-explain__p_y2y_yf2_myb">下面是一个 <code class="+ topic/ph pr-d/codeph ph codeph">merge</code> 标签模块中可能包含的子模块：</p>
+      <ul class="- topic/ul ul" id="hint-explain__ul_z2y_yf2_myb" data-ofbid="hint-explain__ul_z2y_yf2_myb">
+        <li class="- topic/li li" id="hint-explain__li_ehg_4g2_myb" data-ofbid="hint-explain__li_ehg_4g2_myb"><code class="+ topic/ph pr-d/codeph ph codeph">row</code>： <code class="+ topic/ph pr-d/codeph ph codeph">merge</code> 后的结果的总行数。</li>
+        <li class="- topic/li li" id="hint-explain__li_fhg_4g2_myb" data-ofbid="hint-explain__li_fhg_4g2_myb"><code class="+ topic/ph pr-d/codeph ph codeph">cost</code>： <code class="+ topic/ph pr-d/codeph ph codeph">merge</code> 阶段消耗的时间。</li>
+        <li class="- topic/li li" id="hint-explain__li_ghg_4g2_myb" data-ofbid="hint-explain__li_ghg_4g2_myb"><code class="+ topic/ph pr-d/codeph ph codeph">detail</code>： <code class="+ topic/ph pr-d/codeph ph codeph">merge</code> 阶段查询子句的执行细节。 <ul class="- topic/ul ul" id="hint-explain__ul_tfv_wf1_5yb" data-ofbid="hint-explain__ul_tfv_wf1_5yb">
+            
+            <li class="- topic/li li">most：返回行数最多的子查询的信息。</li>
+            <li class="- topic/li li">least：返回行数最少的子查询的信息。</li>
+          </ul></li>
+      </ul>
+      <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="hint-explain__codeblock_dfy_yf2_myb" data-ofbid="hint-explain__codeblock_dfy_yf2_myb"><code>"merge": {
+  "row": 10000,
+  "cost": 50,
+  "detail": {
+      "most": {  // 返回行数最多的SubQuery
+      "sql": "select time,id,value from pt [partition = /iot/6]",
+      "explain": { ...}
+      },
+      "least": {
+      "sql": "select time,id,value from pt [partition = /iot/9]",
+      "explain": { ...}
+      }
+  }
+
+}</code></pre>
+    </section>
+    <section class="- topic/section section" id="hint-explain__section_hs2_bc1_5yb" data-ofbid="hint-explain__section_hs2_bc1_5yb"><h2 class="- topic/title title sectiontitle">reduce</h2>
+      
+      <p class="- topic/p p">reduce 阶段通常是对子查询返回的结果做收尾处理，通常是对 merge 的结果表做最后一次查询。执行计划是否包含 reduce 阶段视具体情况而定。</p>
+      <p class="- topic/p p" id="hint-explain__p_ehy_yf2_myb" data-ofbid="hint-explain__p_ehy_yf2_myb">下面介绍一个 <code class="+ topic/ph pr-d/codeph ph codeph">reduce</code> 标签模块中可能包含的子模块：</p>
+      <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="hint-explain__codeblock_fhy_yf2_myb" data-ofbid="hint-explain__codeblock_fhy_yf2_myb"><code>"reduce": {
+  "sql": "...",  // Final Query
+  "explain": { ... }
+}</code></pre>
+      <p class="- topic/p p" id="hint-explain__p_ghy_yf2_myb" data-ofbid="hint-explain__p_ghy_yf2_myb">除了上述在分布式查询各个阶段说明的标签模块以外，实际运行的结果中还可能包含一部分其他 SQL 相关的子标签模块。显示如下： </p>
+      <p class="- topic/p p" id="hint-explain__p_hhy_yf2_myb" data-ofbid="hint-explain__p_hhy_yf2_myb"><strong class="+ topic/ph hi-d/b ph b">join, csort, sort以及pivotBy标签模块，只包含 cost 指标：</strong>
+      </p>
+      <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="hint-explain__codeblock_ihy_yf2_myb" data-ofbid="hint-explain__codeblock_ihy_yf2_myb"><code>"join": {
+"cost": 10
+}</code></pre>
+    </section>
+    <section class="- topic/section section" id="hint-explain__section_vn4_bc1_5yb" data-ofbid="hint-explain__section_vn4_bc1_5yb"><h2 class="- topic/title title sectiontitle">groupBy</h2>
+      
+      <ul class="- topic/ul ul" id="hint-explain__ul_mjy_yf2_myb" data-ofbid="hint-explain__ul_mjy_yf2_myb">
+        <li class="- topic/li li" id="hint-explain__li_k3g_4g2_myb" data-ofbid="hint-explain__li_k3g_4g2_myb"><code class="+ topic/ph pr-d/codeph ph codeph">sortKey</code>：是否利用了表的 <em class="+ topic/ph hi-d/i ph i" id="hint-explain__i_iyk_hwc_4yb">sortColumn</em> 来进行 groupBy。如果该值为true, 则没有 <code class="+ topic/ph pr-d/codeph ph codeph">algo</code>
+          标签。</li>
+        <li class="- topic/li li" id="hint-explain__li_l3g_4g2_myb" data-ofbid="hint-explain__li_l3g_4g2_myb"><code class="+ topic/ph pr-d/codeph ph codeph">algo</code>：分组算法, 可以为: "hash", "vectorize", "sort"。当分组算法为
+          “sort” 时，将显示以下两个字段：<ul class="- topic/ul ul" id="hint-explain__ul_djb_4s3_gyb" data-ofbid="hint-explain__ul_djb_4s3_gyb">
+            <li class="- topic/li li" id="hint-explain__li_m3g_4g2_myb" data-ofbid="hint-explain__li_m3g_4g2_myb"><code class="+ topic/ph pr-d/codeph ph codeph">inplaceOptimization</code> 是否进行了 inplace
+              Optimization，即预先分配所需的内存来存储所有分组的查询结果，而不是每计算一组结果就进行小规模的内存分配，避免了频繁的小内存分配带来的开销，且节省了中间内存的使用。</li>
+            <li class="- topic/li li" id="hint-explain__li_n3g_4g2_myb" data-ofbid="hint-explain__li_n3g_4g2_myb"><code class="+ topic/ph pr-d/codeph ph codeph">optimizedColumns</code> 若
+                <code class="+ topic/ph pr-d/codeph ph codeph">inplaceOptimization</code> 为 true，则该字段将显示进行了 inplace Optimization
+              的列名。</li>
+          </ul></li>
+        <li class="- topic/li li" id="hint-explain__li_o3g_4g2_myb" data-ofbid="hint-explain__li_o3g_4g2_myb"><code class="+ topic/ph pr-d/codeph ph codeph">fill</code>： <a class="- topic/xref xref" href="interval.html">interval</a>
+          插值填充过程的标签。</li>
+      </ul>
+      <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="hint-explain__codeblock_qjy_yf2_myb" data-ofbid="hint-explain__codeblock_qjy_yf2_myb"><code>
+"groupBy":{
+ <span class="- topic/ph ph">"sortKey":false,</span>
+ "algo":"hash",
+ "cost":8
+}
+// group by 搭配 interval 使用
+"groupBy": {
+ <span class="- topic/ph ph">"sortKey": false,</span>
+ "algo": "hash",
+ "fill": {
+ "cost": 23
+ },
+ "cost": 248
+}
+// 进行 inplace Optimization
+"groupBy": {
+ <span class="- topic/ph ph">"sortKey": false,</span>
+ "algo": "sort",
+ "inplaceOptimization": true,
+ "optimizedColumns": [
+ "std_price0"
+ ],
+ "cost": 16422
+},</code></pre>
+    </section>
+    <section class="- topic/section section" id="hint-explain__section_hh1_cc1_5yb" data-ofbid="hint-explain__section_hh1_cc1_5yb"><h2 class="- topic/title title sectiontitle">contextBy</h2>
+      
+      <p class="- topic/p p">
+        <code class="+ topic/ph pr-d/codeph ph codeph">sortKey</code>：是否利用了表的 <em class="+ topic/ph hi-d/i ph i">sortColumn</em> 来做 contextBy。</p>
+      <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="hint-explain__codeblock_cmy_yf2_myb" data-ofbid="hint-explain__codeblock_cmy_yf2_myb"><code>"contextBy":{
+  <span class="- topic/ph ph">"sortKey":false,</span>
+  "cost":1994
+}</code></pre>
+    </section>
+  </div>
+  <article class="- topic/topic topic nested1" aria-labelledby="ariaid-title2" id="topic_r2x_5lf_y1c">
+    <h2 class="- topic/title title topictitle2" id="ariaid-title2">表连接</h2>
+    <div class="- topic/body body">
+      <p class="- topic/p p">自 2.00.12/3.00.0 版本起，<code class="+ topic/ph pr-d/codeph ph codeph">HINT_EXPLAIN</code> 支持显示如下表连接操作：</p>
+      <ul class="- topic/ul ul" id="topic_r2x_5lf_y1c__ul_ssn_cs5_x1c" data-ofbid="topic_r2x_5lf_y1c__ul_ssn_cs5_x1c">
+        <li class="- topic/li li">cross join</li>
+        <li class="- topic/li li">inner join</li>
+        <li class="- topic/li li">left join</li>
+        <li class="- topic/li li">left semi join</li>
+        <li class="- topic/li li">right join</li>
+        <li class="- topic/li li">full join</li>
+      </ul>
+      <div class="- topic/note note note note_note" id="topic_r2x_5lf_y1c__note_bht_ykf_y1c" data-ofbid="topic_r2x_5lf_y1c__note_bht_ykf_y1c"><span class="note__title">注：</span> 如果表连接操作中存在分区内存表，则不遵循本节说明。</div>
+      <section class="- topic/section section" id="topic_r2x_5lf_y1c__section_gqd_ylf_y1c" data-ofbid="topic_r2x_5lf_y1c__section_gqd_ylf_y1c"><h3 class="- topic/title title sectiontitle">标准 SQL 写法的表连接查询</h3>
+        
+        <p class="- topic/p p">SQL 示例如下：</p>
+        <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="topic_r2x_5lf_y1c__codeblock_g42_2s5_x1c" data-ofbid="topic_r2x_5lf_y1c__codeblock_g42_2s5_x1c"><code>select [HINT_EXPLAIN] * from pt1 left join t2 on pt1.p1=t2.p2 where p1+p2&gt;4 and p2 &lt; 6</code></pre>
+        <p class="- topic/p p">使用标准 SQL 写法的表连接查询的显示输出由如下模块依情况进行组合，且一个模块的输出中也可能包含其他模块的输出：</p>
+        <ul class="- topic/ul ul" id="topic_r2x_5lf_y1c__ul_h42_2s5_x1c" data-ofbid="topic_r2x_5lf_y1c__ul_h42_2s5_x1c">
+          <li class="- topic/li li">SQL 引擎</li>
+          <li class="- topic/li li">多表 Join 框架</li>
+          <li class="- topic/li li">Pipelined Join 执行过程</li>
+          <li class="- topic/li li">串行 Join 执行过程</li>
+          <li class="- topic/li li">取数据过程</li>
+        </ul>
+        <p class="- topic/p p"><strong class="+ topic/ph hi-d/b ph b">SQL 引擎</strong></p>
+        <div class="- topic/p p">与其他模块的数据构成相同。<pre class="+ topic/pre pr-d/codeblock pre codeblock" id="topic_r2x_5lf_y1c__codeblock_kjh_hs5_x1c" data-ofbid="topic_r2x_5lf_y1c__codeblock_kjh_hs5_x1c"><code>{
+    "measurement": "microsecond",
+    "explain": {
+        // &lt;UniversalTableJoinImp explain 结果&gt;
+        "rows": 10,                             //查询返回的记录数
+        "cost": 237                             //查询耗时
+    },
+}</code></pre></div>
+        <p class="- topic/p p"><strong class="+ topic/ph hi-d/b ph b">多表 Join 框架</strong></p>
+        <ul class="- topic/ul ul" id="topic_r2x_5lf_y1c__ul_ixq_3s5_x1c" data-ofbid="topic_r2x_5lf_y1c__ul_ixq_3s5_x1c">
+          <li class="- topic/li li"><code class="+ topic/ph pr-d/codeph ph codeph">numPipelinedStages</code>：能用 pipeline 的 join 数量。</li>
+          <li class="- topic/li li"><code class="+ topic/ph pr-d/codeph ph codeph">numSerialStages</code>：不能用 pipeline 的 join 数量。</li>
+          <li class="- topic/li li"><code class="+ topic/ph pr-d/codeph ph codeph">pipelinedStages</code>：包含 Pipelined Join 执行过程的 explain 结果。下节将详细介绍。</li>
+          <li class="- topic/li li"><code class="+ topic/ph pr-d/codeph ph codeph">serialStages</code>：包含串行 Join 执行过程的 explain 结果。后文将详细介绍。</li>
+        </ul>
+        <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="topic_r2x_5lf_y1c__codeblock_gmb_js5_x1c" data-ofbid="topic_r2x_5lf_y1c__codeblock_gmb_js5_x1c"><code>"numPipelinedStages": 2, 
+"numSerialStages": 3,              
+"pipelinedStages": {
+    // &lt;Pipelined Join 执行过程的 explain 结果&gt;
+},
+"serialStages": {
+    // &lt;串行 Join 执行过程的 explain 结果&gt;
+}</code></pre>
+        <p class="- topic/p p"><strong class="+ topic/ph hi-d/b ph b">Pipelined Join 执行过程如下：</strong></p>
+        <ul class="- topic/ul ul" id="topic_r2x_5lf_y1c__ul_x2d_ks5_x1c" data-ofbid="topic_r2x_5lf_y1c__ul_x2d_ks5_x1c">
+          <li class="- topic/li li"><code class="+ topic/ph pr-d/codeph ph codeph">rows</code>：pipeline 阶段产生结果的行数。</li>
+          <li class="- topic/li li"><code class="+ topic/ph pr-d/codeph ph codeph">cost</code>：pipeline 阶段总耗时。</li>
+          <li class="- topic/li li"><code class="+ topic/ph pr-d/codeph ph codeph">numTasks</code>：pipeline 任务数。</li>
+          <li class="- topic/li li"><code class="+ topic/ph pr-d/codeph ph codeph">most</code>：耗时最长的任务。<ul class="- topic/ul ul" id="topic_r2x_5lf_y1c__ul_y2d_ks5_x1c" data-ofbid="topic_r2x_5lf_y1c__ul_y2d_ks5_x1c">
+              <li class="- topic/li li"><code class="+ topic/ph pr-d/codeph ph codeph">cost</code>：此 pipeline 运行耗时。</li>
+              <li class="- topic/li li"><code class="+ topic/ph pr-d/codeph ph codeph">segments</code>：此 pipeline 每张表的分区 path，如果是内存表则为""，如果是分区表但被剪枝则为"&lt;Empty
+                Segment&gt;"。</li>
+              <li class="- topic/li li"><code class="+ topic/ph pr-d/codeph ph codeph">explain</code>：<ul class="- topic/ul ul" id="topic_r2x_5lf_y1c__ul_z2d_ks5_x1c" data-ofbid="topic_r2x_5lf_y1c__ul_z2d_ks5_x1c">
+                  <li class="- topic/li li"><code class="+ topic/ph pr-d/codeph ph codeph">left</code>：取数据过程的 explain 结果，如果是分区表但被剪枝则为 "sql":"&lt;Empty
+                    Segment&gt;"。</li>
+                  <li class="- topic/li li"><code class="+ topic/ph pr-d/codeph ph codeph">right</code>：取数据过程的 explain 结果。</li>
+                  <li class="- topic/li li"><code class="+ topic/ph pr-d/codeph ph codeph">join</code>：<ul class="- topic/ul ul" id="topic_r2x_5lf_y1c__ul_afd_ks5_x1c" data-ofbid="topic_r2x_5lf_y1c__ul_afd_ks5_x1c">
+                      <li class="- topic/li li"><code class="+ topic/ph pr-d/codeph ph codeph">script</code>：join 操作的脚本。</li>
+                      <li class="- topic/li li"><code class="+ topic/ph pr-d/codeph ph codeph">predicates</code>：下推到此次 join 的谓词。</li>
+                      <li class="- topic/li li"><code class="+ topic/ph pr-d/codeph ph codeph">rows</code>：此次 join 的结果行数。</li>
+                      <li class="- topic/li li"><code class="+ topic/ph pr-d/codeph ph codeph">cost</code>：join 运行耗时。</li>
+                    </ul></li>
+                </ul></li>
+              <li class="- topic/li li"><code class="+ topic/ph pr-d/codeph ph codeph">least</code>：耗时最短的任务，格式与<code class="+ topic/ph pr-d/codeph ph codeph">most</code>相同。</li>
+              <li class="- topic/li li"><code class="+ topic/ph pr-d/codeph ph codeph">resultPartitionInfo</code>：join 结果的分区信息。<ul class="- topic/ul ul" id="topic_r2x_5lf_y1c__ul_bfd_ks5_x1c" data-ofbid="topic_r2x_5lf_y1c__ul_bfd_ks5_x1c">
+                  <li class="- topic/li li"><code class="+ topic/ph pr-d/codeph ph codeph">isPartitioned</code>：join 结果是否分区，如果为 true 则有下面的字段。</li>
+                  <li class="- topic/li li"><code class="+ topic/ph pr-d/codeph ph codeph">estimatedRows</code>：估计的总行数。</li>
+                  <li class="- topic/li li"><code class="+ topic/ph pr-d/codeph ph codeph">domainType</code>：结果复用的 database 的分区方式，如果没有复用，值为 NULL。</li>
+                  <li class="- topic/li li"><code class="+ topic/ph pr-d/codeph ph codeph">domainScheme</code>：如果 "domainType" 不为 NULL，其分区 scheme。</li>
+                  <li class="- topic/li li"><code class="+ topic/ph pr-d/codeph ph codeph">partitionColumns</code>：结果分区列。</li>
+                  <li class="- topic/li li"><code class="+ topic/ph pr-d/codeph ph codeph">useSeqPartition</code>：结果是否用 SEQ 方式分区。</li>
+                </ul></li>
+              <li class="- topic/li li"><code class="+ topic/ph pr-d/codeph ph codeph">totalExecutionCost</code>：执行 pipeline 任务的总耗时（不包含生成分区表的耗时）。</li>
+              <li class="- topic/li li"><code class="+ topic/ph pr-d/codeph ph codeph">totalAppendCost</code>：结果生成分区表的总耗时。</li>
+              <li class="- topic/li li"><code class="+ topic/ph pr-d/codeph ph codeph">final</code>：最终查询结果。如果 pipeline 覆盖所有 join，会有一次最终查询，下面是对应的 explain 结果、<ul class="- topic/ul ul" id="topic_r2x_5lf_y1c__ul_cfd_ks5_x1c" data-ofbid="topic_r2x_5lf_y1c__ul_cfd_ks5_x1c">
+                  <li class="- topic/li li"><code class="+ topic/ph pr-d/codeph ph codeph">sql</code>：最终查询 SQL。</li>
+                  <li class="- topic/li li"><code class="+ topic/ph pr-d/codeph ph codeph">rows</code>：最终查询的结果行数 。</li>
+                  <li class="- topic/li li"><code class="+ topic/ph pr-d/codeph ph codeph">cost</code>：最终查询耗时。</li>
+                  <li class="- topic/li li"><code class="+ topic/ph pr-d/codeph ph codeph">explain</code>：最终查询的 explain 结果。</li>
+                </ul></li>
+            </ul></li>
+        </ul>
+        <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="topic_r2x_5lf_y1c__codeblock_b4h_ls5_x1c" data-ofbid="topic_r2x_5lf_y1c__codeblock_b4h_ls5_x1c"><code>"pipelinedStages": {
+    "rows": 10,                    
+    "cost": 35,                   
+    "numTasks": 10,                
+    "most": {                     
+        "cost": 20,              
+        "segments": [
+            "20210101/Key1",
+            ""
+        ],
+        "explain": {
+            "stage1": {
+                "left": {
+                    // &lt;取数据过程的 explain 结果&gt;
+                },
+                "right": {
+                    // &lt;取数据过程的 explain 结果&gt;
+                },
+                "join": {
+                    "script": "ej(t1, t2, `id, `id)",     
+                    "predicates": [
+                        "t1.id &gt; 3",
+                        "t2.id &lt; 5"
+                    ],
+                    "rows": 10,                   
+                    "cost": 152                   
+                }
+            },
+            "stage2": {
+                "right": {
+                    // &lt;取数据过程的 explain 结果&gt;
+                },
+                "join": {
+                    // 与上面 "join" 格式相同
+                }
+            },
+            ...
+        }
+    },
+    "least": {
+        // 与 "most" 格式相同
+    },
+    "resultPartitionInfo": {
+        "isPartitioned": true,                  
+        "estimatedRows": 50000,                 
+        "domainType": "NULL/VALUE/HASH/...",    
+        "domainScheme": [1, 2, 3],             
+        "partitionColumns": ["col1", "col2"],  
+        "useSeqPartition": false                
+    "totalExecutionCost": 20,                   
+    "totalAppendCost": 30,                     
+    "final": {
+        "sql": "...",       
+        "rows": 10,         
+        "cost": 237,       
+        "explain": {
+            // &lt;最终查询的 explain 结果&gt;
+        }
+    }
+},</code></pre>
+        <p class="- topic/p p"><strong class="+ topic/ph hi-d/b ph b">串行 Join 执行过程</strong></p>
+        <ul class="- topic/ul ul" id="topic_r2x_5lf_y1c__ul_qyn_ms5_x1c" data-ofbid="topic_r2x_5lf_y1c__ul_qyn_ms5_x1c">
+          <li class="- topic/li li"><code class="+ topic/ph pr-d/codeph ph codeph">rows</code>：串行阶段产生结果的行数。</li>
+          <li class="- topic/li li"><code class="+ topic/ph pr-d/codeph ph codeph">cost</code>：串行阶段总耗时。</li>
+          <li class="- topic/li li"><code class="+ topic/ph pr-d/codeph ph codeph">stage</code>：编号从 pipeline 后一个编号开始。如果完全没有 pipeline 阶段，第一次 join 会有
+            "left"，即取左表数据的 explain 结果。</li>
+          <li class="- topic/li li"><code class="+ topic/ph pr-d/codeph ph codeph">left</code>：取数据过程的 explain 结果。</li>
+          <li class="- topic/li li"><code class="+ topic/ph pr-d/codeph ph codeph">right</code>：取数据过程的 explain 结果。</li>
+          <li class="- topic/li li"><code class="+ topic/ph pr-d/codeph ph codeph">resultPartitionInfo</code>：join 结果的分区信息。<ul class="- topic/ul ul" id="topic_r2x_5lf_y1c__ul_ryn_ms5_x1c" data-ofbid="topic_r2x_5lf_y1c__ul_ryn_ms5_x1c">
+              <li class="- topic/li li"><code class="+ topic/ph pr-d/codeph ph codeph">partitionParamsSet</code>：此次 join
+                结果是否尝试分区。对除了最后一次以外的join，"partitionParamsSet" 为 true，且有其他字段。</li>
+              <li class="- topic/li li"><code class="+ topic/ph pr-d/codeph ph codeph">forcePartition</code>：是否强制生成分区结果。</li>
+              <li class="- topic/li li"><code class="+ topic/ph pr-d/codeph ph codeph">domainType</code>：结果复用的 database 的分区方式，如果没有复用，值为 NULL。</li>
+              <li class="- topic/li li"><code class="+ topic/ph pr-d/codeph ph codeph">domainScheme</code>：如果 "domainType" 不为 NULL，其分区 scheme。</li>
+              <li class="- topic/li li"><code class="+ topic/ph pr-d/codeph ph codeph">partitionColumns</code>：结果分区列。</li>
+              <li class="- topic/li li"><code class="+ topic/ph pr-d/codeph ph codeph">useSeqPartition</code>：结果是否用 SEQ 方式分区。</li>
+              <li class="- topic/li li"><code class="+ topic/ph pr-d/codeph ph codeph">numForcedPartitions</code>：在 "domainType" 为 NULL 且 "useSeqPartition" 为
+                false 时默认 HASH 分区的强制分区数量，-1 为未设置。</li>
+            </ul></li>
+        </ul>
+        <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="topic_r2x_5lf_y1c__codeblock_ehx_ms5_x1c" data-ofbid="topic_r2x_5lf_y1c__codeblock_ehx_ms5_x1c"><code>"serialStages": {
+    "rows": 10,                         
+    "cost": 30,                         
+    "stage3": {
+        "left": {
+            // &lt;取数据过程的 explain 结果&gt;
+        },
+        "right": {
+            // &lt;取数据过程的 explain 结果&gt;
+        },
+        "join": {
+            "sql": "...",              
+            "rows": 10,                 
+            "cost": 237,                
+            "resultPartitionInfo": {
+                "partitionParamsSet": true,             
+                                                       
+                "forcePartition": true,                 
+                "domainType": "NULL/VALUE/HASH/...",    
+                "domainScheme": [1, 2, 3],              
+                "partitionColumns": ["col1", "col2"],   
+                "useSeqPartition": false                
+                "numForcedPartitions": -1,                                                                  
+            },
+            "explain": {
+                // &lt;本次 join 查询的 explain 结果&gt;
+            }
+        }
+    },
+    "stage4": {
+        "right": {
+            // &lt;取数据过程的 explain 结果&gt;
+        },
+        "join": {
+            // 与上面的 "join" 格式相同
+        }
+    },
+    ...
+},</code></pre>
+        <p class="- topic/p p"><strong class="+ topic/ph hi-d/b ph b">取数据过程</strong></p>
+        <ul class="- topic/ul ul" id="topic_r2x_5lf_y1c__ul_srf_4s5_x1c" data-ofbid="topic_r2x_5lf_y1c__ul_srf_4s5_x1c">
+          <li class="- topic/li li"><code class="+ topic/ph pr-d/codeph ph codeph">sql</code>：取数据的 SQL。</li>
+          <li class="- topic/li li"><code class="+ topic/ph pr-d/codeph ph codeph">rows</code>：取到的数据条数。</li>
+          <li class="- topic/li li"><code class="+ topic/ph pr-d/codeph ph codeph">cost</code>：取数据 SQL 运行耗时。</li>
+          <li class="- topic/li li"><code class="+ topic/ph pr-d/codeph ph codeph">resultPartitionInfo</code>：join 结果的分区信息。<ul class="- topic/ul ul" id="topic_r2x_5lf_y1c__ul_trf_4s5_x1c" data-ofbid="topic_r2x_5lf_y1c__ul_trf_4s5_x1c">
+              <li class="- topic/li li"><code class="+ topic/ph pr-d/codeph ph codeph">partitionParamsSet</code>：取数据结果是否尝试分区；若为 true，且有其他字段。</li>
+              <li class="- topic/li li"><code class="+ topic/ph pr-d/codeph ph codeph">forcePartition</code>：是否强制生成分区结果。</li>
+              <li class="- topic/li li"><code class="+ topic/ph pr-d/codeph ph codeph">domainType</code>：结果复用的 database 的分区方式，如果没有复用，值为 NULL。</li>
+              <li class="- topic/li li"><code class="+ topic/ph pr-d/codeph ph codeph">domainScheme</code>：如果 "domainType" 不为 NULL，其分区 scheme。</li>
+              <li class="- topic/li li"><code class="+ topic/ph pr-d/codeph ph codeph">partitionColumns</code>：结果分区列</li>
+              <li class="- topic/li li"><code class="+ topic/ph pr-d/codeph ph codeph">useSeqPartition</code>：结果是否用 SEQ 方式分区。</li>
+              <li class="- topic/li li"><code class="+ topic/ph pr-d/codeph ph codeph">numForcedPartitions</code>：在 "domainType" 为 NULL 且 "useSeqPartition" 为
+                false 时默认 HASH 分区的强制分区数量，-1 为未设置。</li>
+            </ul></li>
+        </ul>
+        <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="topic_r2x_5lf_y1c__codeblock_ikc_ps5_x1c" data-ofbid="topic_r2x_5lf_y1c__codeblock_ikc_ps5_x1c"><code>"sql": "...",       
+"rows": 10,          
+"cost": 237,        
+"resultPartitionInfo": {
+    "partitionParamsSet": true,             
+    "forcePartition": true,                 
+    "domainType": "NULL/VALUE/HASH/...",    
+    "domainScheme": [1, 2, 3],              
+    "partitionColumns": ["col1", "col2"],   
+    "useSeqPartition": false                
+    "numForcedPartitions": -1,                                                         
+},
+"explain": {
+    // &lt;取当前表数据的查询的 explain 结果&gt;
+}</code></pre>
+      </section>
+      <section class="- topic/section section" id="topic_r2x_5lf_y1c__section_o5x_cmf_y1c" data-ofbid="topic_r2x_5lf_y1c__section_o5x_cmf_y1c"><h3 class="- topic/title title sectiontitle">使用函数写法的 Join 查询</h3>
+        
+        <p class="- topic/p p">由于分区全部覆盖，使用函数写法的 Join 查询的 explain 的结果维持原先格式。SQL 语句示例：</p>
+        <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="topic_r2x_5lf_y1c__codeblock_lws_qs5_x1c" data-ofbid="topic_r2x_5lf_y1c__codeblock_lws_qs5_x1c"><code>select [HINT_EXPLAIN] * from ej(pt1,pt2,`p1,`p2)</code></pre>
+        <p class="- topic/p p"><strong class="+ topic/ph hi-d/b ph b">使用 cj 的特殊情况说明：</strong></p>
+        <p class="- topic/p p">在满足以下所有条件时，连续 <code class="+ topic/ph pr-d/codeph ph codeph">cj</code> 的输出结果遵循前文所述的标准 SQL 输出结构：</p>
+        <ul class="- topic/ul ul" id="topic_r2x_5lf_y1c__ul_jxc_rs5_x1c" data-ofbid="topic_r2x_5lf_y1c__ul_jxc_rs5_x1c">
+          <li class="- topic/li li">查询的 from 是不涉及分区内存表的连续多表 <code class="+ topic/ph pr-d/codeph ph codeph">cj</code>，不涉及其他 join 类型。</li>
+          <li class="- topic/li li">嵌套的任何一次 <code class="+ topic/ph pr-d/codeph ph codeph">cj</code> 只能出现在外层 <code class="+ topic/ph pr-d/codeph ph codeph">cj</code> 的左表。<ul class="- topic/ul ul" id="topic_r2x_5lf_y1c__ul_kxc_rs5_x1c" data-ofbid="topic_r2x_5lf_y1c__ul_kxc_rs5_x1c">
+              <li class="- topic/li li">这是一个符合条件的例子：<code class="+ topic/ph pr-d/codeph ph codeph">cj(cj(cj(t1, t2), t3), t4)</code></li>
+              <li class="- topic/li li">这是一个不符合条件的例子：<code class="+ topic/ph pr-d/codeph ph codeph">cj(t1, cj(t2, t3))</code></li>
+            </ul></li>
+          <li class="- topic/li li">cj 以及 表 的外面可以嵌套任意个子查询，但不能是 pivot by
+            查询。例子：<pre class="+ topic/pre pr-d/codeblock pre codeblock" id="topic_r2x_5lf_y1c__codeblock_mxc_rs5_x1c" data-ofbid="topic_r2x_5lf_y1c__codeblock_mxc_rs5_x1c"><code>select * from cj(select * from cj(select * from cj(t1, t2), t3), select * from
+                t4)</code></pre></li>
+        </ul>
+      </section>
+      <p class="- topic/p p">通过打印 SQL 执行过程，分析 SQL 语句执行中每一部分的耗时，可以帮助我们优化 SQL 语句，提升执行效率。具体的优化场景可以参考 <a class="- topic/xref xref" href="../../tutorials/DolphinDB_Explain.html">DolphinDB SQL执行计划教程</a>
+      </p>
+    </div>
+  </article>
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+</article></main></div>
+                        
+                        
+                        
+                        
+                        
+                        
+                    </div>
+                    
+                        <nav role="navigation" id="wh_topic_toc" aria-label="On this page" class="col-lg-2 d-none d-lg-block navbar d-print-none"> 
+                            <div id="wh_topic_toc_content">
+		                        
+	                            <div class=" wh_topic_toc "><div class="wh_topic_label">在本页上</div><ul><li class="section-item"><div class="section-title"><a href="#hint-explain__section_i24_yb1_5yb" data-tocid="hint-explain__section_i24_yb1_5yb">measurement</a></div></li><li class="section-item"><div class="section-title"><a href="#hint-explain__section_xpc_zb1_5yb" data-tocid="hint-explain__section_xpc_zb1_5yb">explain</a></div></li><li class="section-item"><div class="section-title"><a href="#hint-explain__section_kw5_zb1_5yb" data-tocid="hint-explain__section_kw5_zb1_5yb">from</a></div></li><li class="section-item"><div class="section-title"><a href="#hint-explain__section_osp_1nf_xbc" data-tocid="hint-explain__section_osp_1nf_xbc">vectorindex</a></div></li><li class="section-item"><div class="section-title"><a href="#hint-explain__section_yhd_zyt_x1c" data-tocid="hint-explain__section_yhd_zyt_x1c">where</a></div></li><li class="section-item"><div class="section-title"><a href="#hint-explain__section_mkc_1c1_5yb" data-tocid="hint-explain__section_mkc_1c1_5yb">map</a></div></li><li class="section-item"><div class="section-title"><a href="#hint-explain__section_yqj_1c1_5yb" data-tocid="hint-explain__section_yqj_1c1_5yb">optimize</a></div></li><li class="section-item"><div class="section-title"><a href="#hint-explain__section_f5t_1c1_5yb" data-tocid="hint-explain__section_f5t_1c1_5yb">merge</a></div></li><li class="section-item"><div class="section-title"><a href="#hint-explain__section_hs2_bc1_5yb" data-tocid="hint-explain__section_hs2_bc1_5yb">reduce</a></div></li><li class="section-item"><div class="section-title"><a href="#hint-explain__section_vn4_bc1_5yb" data-tocid="hint-explain__section_vn4_bc1_5yb">groupBy</a></div></li><li class="section-item"><div class="section-title"><a href="#hint-explain__section_hh1_cc1_5yb" data-tocid="hint-explain__section_hh1_cc1_5yb">contextBy</a></div></li><li class="topic-item"><a href="#topic_r2x_5lf_y1c" data-tocid="topic_r2x_5lf_y1c">表连接</a><ul><li class="section-item"><div class="section-title"><a href="#topic_r2x_5lf_y1c__section_gqd_ylf_y1c" data-tocid="topic_r2x_5lf_y1c__section_gqd_ylf_y1c">标准 SQL 写法的表连接查询</a></div></li><li class="section-item"><div class="section-title"><a href="#topic_r2x_5lf_y1c__section_o5x_cmf_y1c" data-tocid="topic_r2x_5lf_y1c__section_o5x_cmf_y1c">使用函数写法的 Join 查询</a></div></li></ul></li></ul></div>
+	                        	
+                        	</div>
+                        </nav>
+                    
+                </div>
+            </div>
+            
+            
+            
+        </div> 
+        <footer class="navbar navbar-default wh_footer">
+  <div class=" footer-container mx-auto ">
+<title>Copyright</title><p><b> ©2024 浙江智臾科技有限公司 浙ICP备18048711号-3</b></p>
+  </div>
+</footer>
+        
+        <div id="go2top" class="d-print-none">
+            <span class="oxy-icon oxy-icon-up"></span>
+        </div>
+        
+        <div id="modal_img_large" class="modal">
+            <span class="close oxy-icon oxy-icon-remove"></span>
+            <div id="modal_img_container"></div>
+            <div id="caption"></div>
+        </div>
+        
+        
+        
+    </body>
+</html>

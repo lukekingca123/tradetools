@@ -1,0 +1,358 @@
+<!DOCTYPE html><html xmlns="http://www.w3.org/1999/xhtml" xml:lang="zh" lang="zh" data-whc_version="26.0">
+    <head><link rel="shortcut icon" href="../../favicon.ico"/><link rel="icon" href="../../favicon.ico"/><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><meta http-equiv="X-UA-Compatible" content="IE=edge"/><meta name="description" content="loadTextEx(dbHandle, tableName, partitionColumns, filename, [delimiter], [schema], [skipRows=0], [transform] , [sortColumns], [atomic=false], [arrayDelimiter], [containHeader], [arrayMarker] ) ..."/><meta name="DC.rights.owner" content="(C) 版权 2024"/><meta name="copyright" content="(C) 版权 2024"/><meta name="generator" content="DITA-OT"/><meta name="DC.type" content="topic"/><meta name="DC.coverage" content=""/><meta name="DC.relation" content="../../funcs/funcs_intro.html"/><meta name="prodname" content="DolphinDB"/><meta name="brand" content="DolphinDB"/><meta name="DC.creator" content="DolphinDB"/><meta name="DC.publisher" content="DDB N/A DDB 200"/><meta name="DC.format" content="HTML5"/><meta name="DC.identifier" content="loadtextex"/><title>loadTextEx</title><!--  Generated with Oxygen version 26.0, build number 2024012323.  --><meta name="wh-path2root" content="../../"/><meta name="wh-toc-id" content="loadtextex-d9529e56512"/><meta name="wh-source-relpath" content="funcs/l/loadTextEx.dita"/><meta name="wh-out-relpath" content="funcs/l/loadTextEx.html"/>
+
+    <link rel="stylesheet" type="text/css" href="../../oxygen-webhelp/app/commons.css?buildId=2024012323"/>
+    <link rel="stylesheet" type="text/css" href="../../oxygen-webhelp/app/topic.css?buildId=2024012323"/>
+
+    <script src="../../oxygen-webhelp/app/options/properties.js?buildId=20240704100525"></script>
+    <script src="../../oxygen-webhelp/app/localization/strings.js?buildId=2024012323"></script>
+    <script src="../../oxygen-webhelp/app/search/index/keywords.js?buildId=20240704100525"></script>
+    <script defer="defer" src="../../oxygen-webhelp/app/commons.js?buildId=2024012323"></script>
+    <script defer="defer" src="../../oxygen-webhelp/app/topic.js?buildId=2024012323"></script>
+<link rel="stylesheet" type="text/css" href="../../oxygen-webhelp/template/styles.css?buildId=2024012323"/><script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script><script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script></head>
+
+    <body id="loadtextex" class="wh_topic_page frmBody">
+        <a href="#wh_topic_body" class="sr-only sr-only-focusable">
+            跳转到主要内容
+        </a>
+        
+        
+        
+        
+        <header class="navbar navbar-default wh_header">
+    <div class="container-fluid">
+        <div xmlns:whc="http://www.oxygenxml.com/webhelp/components" class="wh_header_flex_container navbar-nav navbar-expand-md navbar-dark">
+            <div class="wh_logo_and_publication_title_container">
+                <div class="wh_logo_and_publication_title">
+                    
+                    <a href="https://www.dolphindb.cn" class=" wh_logo d-none d-sm-block "><img src="../../logo.png" alt="  DolphinDB 文档中心  "/></a>
+                    <div class=" wh_publication_title "><a href="../../index.html"><span class="booktitle">  <span class="ph mainbooktitle">DolphinDB 文档中心</span>  </span></a></div>
+                    
+                </div>
+                
+                
+            </div>
+
+            <div class="wh_top_menu_and_indexterms_link collapse navbar-collapse" id="wh_top_menu_and_indexterms_link">
+                
+                
+                
+                
+            </div>
+        <div class=" wh_search_input navbar-form wh_topic_page_search search " role="form">
+            
+            
+            
+            <form id="searchForm" method="get" role="search" action="../../search.html"><div><input type="search" placeholder="搜索 " class="wh_search_textfield" id="textToSearch" name="searchQuery" aria-label="搜索查询" required="required"/><button type="submit" class="wh_search_button" aria-label="搜索"><span class="search_input_text">搜索</span></button></div></form>
+            
+            <script src="/vendors/react/umd/react.production.min.js" defer="defer"></script>
+<script src="/vendors/react-dom/umd/react-dom.production.min.js" defer="defer"></script>
+<script src="/vendors/dayjs/dayjs.min.js" defer="defer"></script>
+<script src="/vendors/antd/dist/antd.min.js" defer="defer"></script>
+<script src="/vendors/@ant-design/icons/dist/index.umd.min.js" defer="defer"></script>
+<script src="/zh/index.js" type="module"></script>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js" defer="defer"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML" defer="defer"><!--
+
+
+--></script>
+
+            
+        </div></div>
+    </div>
+</header>
+        
+        
+         
+        
+        
+        
+        <div class="container-fluid" id="wh_topic_container">
+            <div class="row">
+
+                <nav class="wh_tools d-print-none navbar-expand-md" aria-label="Tools">
+                    
+                    <div data-tooltip-position="bottom" class=" wh_breadcrumb "><ol class="d-print-none"><li><span class="home"><a href="../../index.html"><span>主页</span></a></span></li><li><div class="topicref" data-id="functions_references"><div class="title"><a href="../../funcs/funcs_intro.html"><span class="keyword label">函数参考</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 函数分类、语法、详解及示例</p></div></div></div></li><li><div class="topicref"><div class="title"><a href="../../funcs/a/abs.html">函数一览</a></div></div></li><li><div class="topicref"><div class="title"><a href="../../funcs/l/lasso.html">L</a></div></div></li><li class="active"><div class="topicref" data-id="loadtextex"><div class="title"><a href="../../funcs/l/loadTextEx.html">loadTextEx</a></div></div></li></ol></div>
+                    
+                    
+                    
+                    <div class="wh_right_tools">
+                        <button class="wh_hide_highlight" aria-label="切换搜索突出显示" title="切换搜索突出显示"></button>
+                        <button class="webhelp_expand_collapse_sections" data-next-state="collapsed" aria-label="折叠截面" title="折叠截面"></button>
+                        
+                        
+                        
+                        
+                        <div class=" wh_print_link print d-none d-md-inline-block "><button onClick="window.print()" title="打印此页" aria-label="打印此页"></button></div>
+                        
+                        <button type="button" id="wh_toc_button" class="custom-toggler navbar-toggler collapsed wh_toggle_button navbar-light" aria-expanded="false" aria-label="Toggle publishing table of content" aria-controls="wh_publication_toc">
+                            <span class="navbar-toggler-icon"></span>
+                        </button>
+                    </div>
+                    
+                </nav>
+            </div>
+            
+            
+            
+            
+            <div class="wh_content_area">
+                <div class="row">
+                    
+                        <nav id="wh_publication_toc" class="col-lg-3 col-md-3 col-sm-12 d-md-block d-none d-print-none" aria-label="Table of Contents Container">
+                            <div id="wh_publication_toc_content">
+		                        
+                            	<div class=" wh_publication_toc " data-tooltip-position="right"><span class="expand-button-action-labels"><span id="button-expand-action" role="button" aria-label="Expand"></span><span id="button-collapse-action" role="button" aria-label="Collapse"></span><span id="button-pending-action" role="button" aria-label="Pending"></span></span><ul role="tree" aria-label="Table of Contents"><li role="treeitem"><div data-tocid="new_chap_about_sect_ddb_docs_intro-d9529e87" class="topicref" data-id="new_chap_about_sect_ddb_docs_intro" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../about/ddb_docs_intro.html" id="new_chap_about_sect_ddb_docs_intro-d9529e87-link">文档使用说明</a><div class="wh-tooltip"><p class="shortdesc">如何获取 DolphinDB 帮助信息</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="chap1_getstarted-d9529e140" class="topicref" data-id="chap1_getstarted" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action chap1_getstarted-d9529e140-link" class="wh-expand-btn"></span><div class="title"><a href="../../getstarted/chap1_getstarted.html" id="chap1_getstarted-d9529e140-link"><span class="keyword label">快速上手</span></a><div class="wh-tooltip"><p class="shortdesc">如何快速部署 DolphinDB、建库建表、写入和查询数据</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="sectionddb_deployment-d9529e335" class="topicref" data-id="sectionddb_deployment" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action sectionddb_deployment-d9529e335-link" class="wh-expand-btn"></span><div class="title"><a href="../../deploy/deploy_intro.html" id="sectionddb_deployment-d9529e335-link"><span class="keyword label">部署</span></a><div class="wh-tooltip"><p class="shortdesc">如何在不同的场景中部署 DolphinDB</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="new_chap_database_manage_new_chap_dbmanage_landing_page-d9529e2313" class="topicref" data-id="new_chap_database_manage_new_chap_dbmanage_landing_page" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action new_chap_database_manage_new_chap_dbmanage_landing_page-d9529e2313-link" class="wh-expand-btn"></span><div class="title"><a href="../../db_distr_comp/cfg/db_intro.html" id="new_chap_database_manage_new_chap_dbmanage_landing_page-d9529e2313-link"><span class="keyword label">数据库</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 数据库的基本概念</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="chap7_tutorials_streaming-d9529e3490" class="topicref" data-id="chap7_tutorials_streaming" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action chap7_tutorials_streaming-d9529e3490-link" class="wh-expand-btn"></span><div class="title"><a href="../../stream/str_intro.html" id="chap7_tutorials_streaming-d9529e3490-link"><span class="keyword label">流数据</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 流数据引擎及流数据计算的基本概念</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="tocId-d9529e7385" class="topicref" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action tocId-d9529e7385-link" class="wh-expand-btn"></span><div class="title"><a href="../../db_distr_comp/db_oper/import_data.html" id="tocId-d9529e7385-link">数据迁移</a><div class="wh-tooltip"><p class="shortdesc">如何从不同数据源向 DolphinDB 迁移数据</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="chap7_tutorials_system_management-d9529e7812" class="topicref" data-id="chap7_tutorials_system_management" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action chap7_tutorials_system_management-d9529e7812-link" class="wh-expand-btn"></span><div class="title"><a href="../../sys_man/om_intro.html" id="chap7_tutorials_system_management-d9529e7812-link"><span class="keyword label">系统运维</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 的系统运维功能及方法</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="about_language_resources-d9529e16490" class="topicref" data-id="about_language_resources" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action about_language_resources-d9529e16490-link" class="wh-expand-btn"></span><div class="title"><a href="../../progr/progr_intro.html" id="about_language_resources-d9529e16490-link"><span class="keyword label">编程语言</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 编程基本概念与方法、SQL 在 DolphinDB 的应用</p></div></div></div></li><li role="treeitem" aria-expanded="true"><div data-tocid="functions_references-d9529e26503" class="topicref" data-id="functions_references" data-state="expanded"><span role="button" tabindex="0" aria-labelledby="button-collapse-action functions_references-d9529e26503-link" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/funcs_intro.html" id="functions_references-d9529e26503-link"><span class="keyword label">函数参考</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 函数分类、语法、详解及示例</p></div></div></div><ul role="group" class="navbar-nav nav-list"><li role="treeitem"><div data-tocid="funcs_by_topics-d9529e26556" class="topicref" data-id="funcs_by_topics" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/funcs_by_topics.html" id="funcs_by_topics-d9529e26556-link"><span class="keyword label">函数分类</span></a></div></div></li><li role="treeitem" aria-expanded="true"><div data-tocid="tocId-d9529e26603" class="topicref" data-state="expanded"><span role="button" tabindex="0" aria-labelledby="button-collapse-action tocId-d9529e26603-link" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/a/abs.html" id="tocId-d9529e26603-link">函数一览</a></div></div><ul role="group" class="navbar-nav nav-list"><li role="treeitem" aria-expanded="false"><div data-tocid="tocId-d9529e26604" class="topicref" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action tocId-d9529e26604-link" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/a/abs.html" id="tocId-d9529e26604-link">A</a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="tocId-d9529e28634" class="topicref" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action tocId-d9529e28634-link" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/b/backup.html" id="tocId-d9529e28634-link">B</a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="tocId-d9529e30248" class="topicref" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action tocId-d9529e30248-link" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/c/cacheDS_.html" id="tocId-d9529e30248-link">C</a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="tocId-d9529e37682" class="topicref" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action tocId-d9529e37682-link" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/d/dailyAlignedBar.html" id="tocId-d9529e37682-link">D</a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="tocId-d9529e40877" class="topicref" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action tocId-d9529e40877-link" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/e/eig.html" id="tocId-d9529e40877-link">E</a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="tocId-d9529e42767" class="topicref" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action tocId-d9529e42767-link" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/f/ffill_.html" id="tocId-d9529e42767-link">F</a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="tocId-d9529e44196" class="topicref" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action tocId-d9529e44196-link" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/g/gaussiankde.html" id="tocId-d9529e44196-link">G</a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="tocId-d9529e50472" class="topicref" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action tocId-d9529e50472-link" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/h/hashBucket.html" id="tocId-d9529e50472-link">H</a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="tocId-d9529e50887" class="topicref" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action tocId-d9529e50887-link" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/i/ifirstHit.html" id="tocId-d9529e50887-link">I</a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="tocId-d9529e54479" class="topicref" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action tocId-d9529e54479-link" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/j/join.html" id="tocId-d9529e54479-link">J</a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="tocId-d9529e54572" class="topicref" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action tocId-d9529e54572-link" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/k/kama.html" id="tocId-d9529e54572-link">K</a></div></div></li><li role="treeitem" aria-expanded="true"><div data-tocid="tocId-d9529e55034" class="topicref" data-state="expanded"><span role="button" tabindex="0" aria-labelledby="button-collapse-action tocId-d9529e55034-link" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/l/lasso.html" id="tocId-d9529e55034-link">L</a></div></div><ul role="group" class="navbar-nav nav-list"><li role="treeitem"><div data-tocid="lasso-d9529e55035" class="topicref" data-id="lasso" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/l/lasso.html" id="lasso-d9529e55035-link">lasso</a></div></div></li><li role="treeitem"><div data-tocid="lassobasic-d9529e55081" class="topicref" data-id="lassobasic" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/l/lassoBasic.html" id="lassobasic-d9529e55081-link">lassoBasic</a></div></div></li><li role="treeitem"><div data-tocid="lassocv-d9529e55127" class="topicref" data-id="lassocv" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/l/lassoCV.html" id="lassocv-d9529e55127-link">lassoCV</a></div></div></li><li role="treeitem"><div data-tocid="last-d9529e55173" class="topicref" data-id="last" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/l/last.html" id="last-d9529e55173-link">last</a></div></div></li><li role="treeitem"><div data-tocid="lastnot-d9529e55219" class="topicref" data-id="lastnot" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/l/lastNot.html" id="lastnot-d9529e55219-link">lastNot</a></div></div></li><li role="treeitem"><div data-tocid="lastweekofmonth-d9529e55265" class="topicref" data-id="lastweekofmonth" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/l/lastWeekOfMonth.html" id="lastweekofmonth-d9529e55265-link">lastWeekOfMonth</a></div></div></li><li role="treeitem"><div data-tocid="latestindexedtable-d9529e55311" class="topicref" data-id="latestindexedtable" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/l/latestIndexedTable.html" id="latestindexedtable-d9529e55311-link">latestIndexedTable</a></div></div></li><li role="treeitem"><div data-tocid="latestkeyedtable-d9529e55357" class="topicref" data-id="latestkeyedtable" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/l/latestKeyedTable.html" id="latestkeyedtable-d9529e55357-link">latestKeyedTable</a></div></div></li><li role="treeitem"><div data-tocid="le-d9529e55403" class="topicref" data-id="le" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/l/le.html" id="le-d9529e55403-link">le</a></div></div></li><li role="treeitem"><div data-tocid="left-d9529e55449" class="topicref" data-id="left" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/l/left.html" id="left-d9529e55449-link">left</a></div></div></li><li role="treeitem"><div data-tocid="lfill-d9529e55495" class="topicref" data-id="lfill" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/l/lfill_.html" id="lfill-d9529e55495-link">lfill!</a></div></div></li><li role="treeitem"><div data-tocid="lfill-d9529e55542" class="topicref" data-id="lfill" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/l/lfill.html" id="lfill-d9529e55542-link">lfill</a></div></div></li><li role="treeitem"><div data-tocid="license-d9529e55588" class="topicref" data-id="license" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/l/license.html" id="license-d9529e55588-link"><span class="keyword">license</span></a></div></div></li><li role="treeitem"><div data-tocid="like-d9529e55635" class="topicref" data-id="like" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/l/like.html" id="like-d9529e55635-link">like</a></div></div></li><li role="treeitem"><div data-tocid="lineartimetrend-d9529e55681" class="topicref" data-id="lineartimetrend" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/l/linearTimeTrend.html" id="lineartimetrend-d9529e55681-link">linearTimeTrend</a></div></div></li><li role="treeitem"><div data-tocid="linprog-d9529e55727" class="topicref" data-id="linprog" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/l/linprog.html" id="linprog-d9529e55727-link">linprog</a></div></div></li><li role="treeitem"><div data-tocid="listremoteplugins-d9529e55773" class="topicref" data-id="listremoteplugins" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/l/listRemotePlugins.html" id="listremoteplugins-d9529e55773-link">listRemotePlugins</a></div></div></li><li role="treeitem"><div data-tocid="listtables-d9529e55819" class="topicref" data-id="listtables" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/l/listTables.html" id="listtables-d9529e55819-link">listTables</a></div></div></li><li role="treeitem"><div data-tocid="loadbackup-d9529e55865" class="topicref" data-id="loadbackup" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/l/loadBackup.html" id="loadbackup-d9529e55865-link">loadBackup</a></div></div></li><li role="treeitem"><div data-tocid="loaddistributedinmemorytable-d9529e55911" class="topicref" data-id="loaddistributedinmemorytable" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/l/loadDistributedInMemoryTable.html" id="loaddistributedinmemorytable-d9529e55911-link">loadDistributedInMemoryTable</a></div></div></li><li role="treeitem"><div data-tocid="loadipcinmemorytable-d9529e55957" class="topicref" data-id="loadipcinmemorytable" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/l/loadIPCInMemoryTable.html" id="loadipcinmemorytable-d9529e55957-link">loadIPCInMemoryTable</a></div></div></li><li role="treeitem"><div data-tocid="loadmodel-d9529e56003" class="topicref" data-id="loadmodel" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/l/loadModel.html" id="loadmodel-d9529e56003-link">loadModel</a></div></div></li><li role="treeitem"><div data-tocid="loadmodule-d9529e56050" class="topicref" data-id="loadmodule" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/l/loadModule.html" id="loadmodule-d9529e56050-link"><span class="keyword">loadModule</span></a></div></div></li><li role="treeitem"><div data-tocid="loadmodulefromscript-d9529e56097" class="topicref" data-id="loadmodulefromscript" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/l/loadmodulefromscript.html" id="loadmodulefromscript-d9529e56097-link">loadModuleFromScript</a></div></div></li><li role="treeitem"><div data-tocid="loadmvcctable-d9529e56143" class="topicref" data-id="loadmvcctable" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/l/loadMvccTable.html" id="loadmvcctable-d9529e56143-link">loadMvccTable</a></div></div></li><li role="treeitem"><div data-tocid="loadnpy-d9529e56189" class="topicref" data-id="loadnpy" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/l/loadNpy.html" id="loadnpy-d9529e56189-link">loadNpy</a></div></div></li><li role="treeitem"><div data-tocid="loadnpz-d9529e56235" class="topicref" data-id="loadnpz" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/l/loadNpz.html" id="loadnpz-d9529e56235-link">loadNpz</a></div></div></li><li role="treeitem"><div data-tocid="loadplugin-d9529e56281" class="topicref" data-id="loadplugin" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/l/loadPlugin.html" id="loadplugin-d9529e56281-link"><span class="keyword">loadPlugin</span></a></div></div></li><li role="treeitem"><div data-tocid="loadrecord-d9529e56328" class="topicref" data-id="loadrecord" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/l/loadRecord.html" id="loadrecord-d9529e56328-link">loadRecord</a></div></div></li><li role="treeitem"><div data-tocid="loadtable-d9529e56374" class="topicref" data-id="loadtable" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/l/loadTable.html" id="loadtable-d9529e56374-link">loadTable</a></div></div></li><li role="treeitem"><div data-tocid="loadtablebysql-d9529e56420" class="topicref" data-id="loadtablebysql" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/l/loadTableBySQL.html" id="loadtablebysql-d9529e56420-link">loadTableBySQL</a></div></div></li><li role="treeitem"><div data-tocid="loadtext-d9529e56466" class="topicref" data-id="loadtext" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/l/loadText.html" id="loadtext-d9529e56466-link">loadText</a></div></div></li><li role="treeitem" class="active"><div data-tocid="loadtextex-d9529e56512" class="topicref" data-id="loadtextex" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/l/loadTextEx.html" id="loadtextex-d9529e56512-link">loadTextEx</a></div></div></li><li role="treeitem"><div data-tocid="loc-d9529e56559" class="topicref" data-id="loc" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/l/loc.html" id="loc-d9529e56559-link">loc</a></div></div></li><li role="treeitem"><div data-tocid="localtime-d9529e56605" class="topicref" data-id="localtime" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/l/localtime.html" id="localtime-d9529e56605-link"><span class="keyword">localtime</span></a></div></div></li><li role="treeitem"><div data-tocid="loess-d9529e56652" class="topicref" data-id="loess" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/l/loess.html" id="loess-d9529e56652-link"><span class="keyword">loess</span></a></div></div></li><li role="treeitem"><div data-tocid="log-d9529e56699" class="topicref" data-id="log" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/l/log.html" id="log-d9529e56699-link">log</a></div></div></li><li role="treeitem"><div data-tocid="log1p-d9529e56745" class="topicref" data-id="log1p" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/l/log1p.html" id="log1p-d9529e56745-link">log1p</a></div></div></li><li role="treeitem"><div data-tocid="log2-d9529e56791" class="topicref" data-id="log2" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/l/log2.html" id="log2-d9529e56791-link">log2</a></div></div></li><li role="treeitem"><div data-tocid="log10-d9529e56837" class="topicref" data-id="log10" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/l/log10.html" id="log10-d9529e56837-link">log10</a></div></div></li><li role="treeitem"><div data-tocid="login-d9529e56883" class="topicref" data-id="login" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/l/login.html" id="login-d9529e56883-link">login</a></div></div></li><li role="treeitem"><div data-tocid="logisticregression-d9529e56929" class="topicref" data-id="logisticregression" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/l/logisticRegression.html" id="logisticregression-d9529e56929-link">logisticRegression</a></div></div></li><li role="treeitem"><div data-tocid="logout-d9529e56975" class="topicref" data-id="logout" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/l/logout.html" id="logout-d9529e56975-link">logout</a></div></div></li><li role="treeitem"><div data-tocid="long-d9529e57021" class="topicref" data-id="long" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/l/long.html" id="long-d9529e57021-link">long</a></div></div></li><li role="treeitem"><div data-tocid="lowdouble-d9529e57068" class="topicref" data-id="lowdouble" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/l/lowDouble.html" id="lowdouble-d9529e57068-link">lowDouble</a></div></div></li><li role="treeitem"><div data-tocid="lower-d9529e57114" class="topicref" data-id="lower" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/l/lower.html" id="lower-d9529e57114-link">lower</a></div></div></li><li role="treeitem"><div data-tocid="lowerbound-d9529e57160" class="topicref" data-id="lowerbound" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/l/lowerbound.html" id="lowerbound-d9529e57160-link">lowerBound</a></div></div></li><li role="treeitem"><div data-tocid="lowlong-d9529e57206" class="topicref" data-id="lowlong" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/l/lowlong.html" id="lowlong-d9529e57206-link">lowLong</a></div></div></li><li role="treeitem"><div data-tocid="lowrange-d9529e57252" class="topicref" data-id="lowrange" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/l/lowRange.html" id="lowrange-d9529e57252-link">lowRange</a></div></div></li><li role="treeitem"><div data-tocid="lpad-d9529e57298" class="topicref" data-id="lpad" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/l/lpad.html" id="lpad-d9529e57298-link">lpad</a></div></div></li><li role="treeitem"><div data-tocid="lshift-d9529e57344" class="topicref" data-id="lshift" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/l/lshift.html" id="lshift-d9529e57344-link">lshift</a></div></div></li><li role="treeitem"><div data-tocid="lt-d9529e57390" class="topicref" data-id="lt" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/l/lt.html" id="lt-d9529e57390-link">lt</a></div></div></li><li role="treeitem"><div data-tocid="ltrim-d9529e57436" class="topicref" data-id="ltrim" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/l/ltrim.html" id="ltrim-d9529e57436-link">ltrim</a></div></div></li><li role="treeitem"><div data-tocid="lu-d9529e57482" class="topicref" data-id="lu" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/l/lu.html" id="lu-d9529e57482-link">lu</a></div></div></li></ul></li><li role="treeitem" aria-expanded="false"><div data-tocid="tocId-d9529e57528" class="topicref" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action tocId-d9529e57528-link" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/m/ma.html" id="tocId-d9529e57528-link">M</a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="tocId-d9529e62047" class="topicref" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action tocId-d9529e62047-link" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/n/nanInfFill.html" id="tocId-d9529e62047-link">N</a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="tocId-d9529e62878" class="topicref" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action tocId-d9529e62878-link" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/o/objByName.html" id="tocId-d9529e62878-link">O</a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="tocId-d9529e63247" class="topicref" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action tocId-d9529e63247-link" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/p/pack.html" id="tocId-d9529e63247-link">P</a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="tocId-d9529e64948" class="topicref" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action tocId-d9529e64948-link" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/q/qclp.html" id="tocId-d9529e64948-link">Q</a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="tocId-d9529e65317" class="topicref" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action tocId-d9529e65317-link" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/r/rad2deg.html" id="tocId-d9529e65317-link">R</a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="tocId-d9529e71497" class="topicref" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action tocId-d9529e71497-link" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/s/saveAsNpy.html" id="tocId-d9529e71497-link">S</a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="tocId-d9529e77874" class="topicref" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action tocId-d9529e77874-link" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/t/t3.html" id="tocId-d9529e77874-link">T</a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="tocId-d9529e81706" class="topicref" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action tocId-d9529e81706-link" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/u/undef.html" id="tocId-d9529e81706-link">U</a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="tocId-d9529e82492" class="topicref" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action tocId-d9529e82492-link" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/v/valueChanged.html" id="tocId-d9529e82492-link">V</a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="tocId-d9529e82862" class="topicref" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action tocId-d9529e82862-link" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/w/warmupStreamEngine.html" id="tocId-d9529e82862-link">W</a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="tocId-d9529e84015" class="topicref" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action tocId-d9529e84015-link" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/x/xdb.html" id="tocId-d9529e84015-link">X</a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="tocId-d9529e84108" class="topicref" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action tocId-d9529e84108-link" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/y/year.html" id="tocId-d9529e84108-link">Y</a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="tocId-d9529e84248" class="topicref" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action tocId-d9529e84248-link" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/z/zigzag.html" id="tocId-d9529e84248-link">Z</a></div></div></li><li role="treeitem"><div data-tocid="types_formats-d9529e84387" class="topicref" data-id="types_formats" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/appendix.html" id="types_formats-d9529e84387-link">附录</a></div></div></li></ul></li><li role="treeitem" aria-expanded="false"><div data-tocid="chap8_sect_series_o_funcs-d9529e84433" class="topicref" data-id="chap8_sect_series_o_funcs" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action chap8_sect_series_o_funcs-d9529e84433-link" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/themes/themes.html" id="chap8_sect_series_o_funcs-d9529e84433-link">系列函数</a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="高阶函数-d9529e84855" class="topicref" data-id="高阶函数" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action 高阶函数-d9529e84855-link" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/ho_funcs/ho_funcs.html" id="高阶函数-d9529e84855-link">高阶函数</a></div></div></li></ul></li><li role="treeitem" aria-expanded="false"><div data-tocid="api_protocol-d9529e86456" class="topicref" data-id="api_protocol" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action api_protocol-d9529e86456-link" class="wh-expand-btn"></span><div class="title"><a href="../../api/connapi_intro.html" id="api_protocol-d9529e86456-link"><span class="keyword label">连接器 &amp; API</span></a><div class="wh-tooltip"><p class="shortdesc">面向不同编程语言的 DolphinDB API 及连接器，相关协议和用法</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="chap6_plugin-d9529e91976" class="topicref" data-id="chap6_plugin" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action chap6_plugin-d9529e91976-link" class="wh-expand-btn"></span><div class="title"><a href="../../plugins/plg_intro.html" id="chap6_plugin-d9529e91976-link"><span class="keyword label">插件</span></a><div class="wh-tooltip"><p class="shortdesc">多个应用场景的插件使用说明和插件开发指导</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="third_party-d9529e94749" class="topicref" data-id="third_party" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action third_party-d9529e94749-link" class="wh-expand-btn"></span><div class="title"><a href="../../third_party.html" id="third_party-d9529e94749-link">第三方工具</a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="about_tutorials-d9529e94980" class="topicref" data-id="about_tutorials" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action about_tutorials-d9529e94980-link" class="wh-expand-btn"></span><div class="title"><a href="../../tutorials/about_tutorials.html" id="about_tutorials-d9529e94980-link"><span class="keyword label">教程</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 产品使用教程</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="tocId-d9529e101769" class="topicref" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action tocId-d9529e101769-link" class="wh-expand-btn"></span><div class="title"><a href="../../rn/server/3_00_1.html" id="tocId-d9529e101769-link">版本说明</a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 版本发布历史</p></div></div></div></li></ul></div>
+		                        
+                            </div>
+                        </nav>
+                    
+                    
+                    <div class="col-lg-7 col-md-9 col-sm-12" id="wh_topic_body">
+                        <button id="wh_close_publication_toc_button" class="close-toc-button d-none" aria-label="Toggle publishing table of content" aria-controls="wh_publication_toc" aria-expanded="true">
+                            <span class="close-toc-icon-container">
+                                <span class="close-toc-icon"></span>     
+                            </span>
+                        </button>
+                        <button id="wh_close_topic_toc_button" class="close-toc-button d-none" aria-label="Toggle topic table of content" aria-controls="wh_topic_toc" aria-expanded="true">
+                            <span class="close-toc-icon-container">
+                                <span class="close-toc-icon"></span>     
+                            </span>
+                        </button>
+                        
+                        <div class=" wh_topic_content body "><main role="main"><article class="- topic/topic topic" role="article" aria-labelledby="ariaid-title1">
+    <h1 class="- topic/title title topictitle1" id="ariaid-title1">loadTextEx</h1>
+
+    <article class="- topic/topic topic nested1" aria-labelledby="ariaid-title2" id="语法">
+        <h2 class="- topic/title title topictitle2" id="ariaid-title2">语法</h2>
+        <div class="- topic/body body">
+            <p class="- topic/p p" id="语法__p_wc2_5hn_ryb" data-ofbid="语法__p_wc2_5hn_ryb"><code class="+ topic/ph pr-d/codeph ph codeph">loadTextEx(dbHandle, tableName, partitionColumns,
+                    filename, [delimiter], [schema], [skipRows=0], [transform]<span class="- topic/ph ph">, [sortColumns], [atomic=false], [arrayDelimiter],
+                        [containHeader], [arrayMarker]</span>)</code></p>
+        </div>
+    </article>
+    <article class="- topic/topic topic nested1" aria-labelledby="ariaid-title3" id="参数">
+        <h2 class="- topic/title title topictitle2" id="ariaid-title3">参数</h2>
+        <div class="- topic/body body">
+            <p class="- topic/p p" id="参数__p_xc2_5hn_ryb" data-ofbid="参数__p_xc2_5hn_ryb"><strong class="+ topic/ph hi-d/b ph b">dbHandle</strong> 是数据库的句柄，可以是内存数据库或分布式数据库。</p>
+            <p class="- topic/p p" id="参数__p_yc2_5hn_ryb" data-ofbid="参数__p_yc2_5hn_ryb"><strong class="+ topic/ph hi-d/b ph b">tableName</strong> 是一个字符串，表示表的名称。</p>
+            <p class="- topic/p p" id="参数__p_zc2_5hn_ryb" data-ofbid="参数__p_zc2_5hn_ryb"><strong class="+ topic/ph hi-d/b ph b">partitionColumns</strong>
+                    是字符串标量或向量，表示分区列。对于顺序分区类型的数据库，<em class="+ topic/ph hi-d/i ph i">partitionColumns</em>
+                    为空字符串""。对于组合分区类型的数据库，<em class="+ topic/ph hi-d/i ph i">partitionColumns</em> 是字符串向量。</p>
+            <p class="- topic/p p" id="参数__p_ad2_5hn_ryb" data-ofbid="参数__p_ad2_5hn_ryb"><strong class="+ topic/ph hi-d/b ph b">filename</strong> 是字符串，表示数据文件的路径。仅支持 CSV
+                格式的文件。若传入其他格式文件，则无法保证数据准确性。</p>
+            <p class="- topic/p p" id="参数__p_bd2_5hn_ryb" data-ofbid="参数__p_bd2_5hn_ryb"><strong class="+ topic/ph hi-d/b ph b">delimiter</strong> 字符串标量，表示数据文件中各列的分隔符。分隔符可以是一个或多个字符，默认是逗号（","）。</p>
+            <p class="- topic/p p" id="参数__p_cd2_5hn_ryb" data-ofbid="参数__p_cd2_5hn_ryb"><strong class="+ topic/ph hi-d/b ph b">schema</strong> 是一个表，用于指定各列的数据类型。具体请参考 <a class="- topic/xref xref" href="loadText.html">loadText</a> 的 <em class="+ topic/ph hi-d/i ph i">schema</em> 参数。</p>
+            <p class="- topic/p p" id="参数__p_dd2_5hn_ryb" data-ofbid="参数__p_dd2_5hn_ryb"><strong class="+ topic/ph hi-d/b ph b">skipRows</strong> 是0到1024之间的整数，表示从文件头开始忽略的行数。它是一个可选参数。默认值为0。</p>
+            <p class="- topic/p p" id="参数__p_ed2_5hn_ryb" data-ofbid="参数__p_ed2_5hn_ryb"><strong class="+ topic/ph hi-d/b ph b">transform</strong> 是一元函数，并且该函数接受的参数必须是一个表。</p>
+            <p class="- topic/p p"><strong class="+ topic/ph hi-d/b ph b">sortColumns</strong> 字符串标量或向量，用于指定每一分区内的排序列，<span class="- topic/ph ph">每次</span>写入<span class="- topic/ph ph">磁盘</span>的数据在每一分区内将按 <em class="+ topic/ph hi-d/i ph i">sortColumns</em>
+                进行排序。系统默认 <em class="+ topic/ph hi-d/i ph i">sortColumns</em> （指定多列时） 最后一列为时间列，其余列字段作为排序的索引列，称作 sort key。每一分区内，同一个
+                sort key 组合值对应的数据将按时间列顺序连续存放在一起。查询时，若查询条件包含索引列，可以快速定位数据所在的数据块位置，提高查询性能。</p>
+            <ul class="- topic/ul ul" id="参数__ul_o3c_2jr_jbc" data-ofbid="参数__ul_o3c_2jr_jbc">
+                <li class="- topic/li li">
+                    <p class="- topic/p p">仅当 dbHandle 指示的数据库采用 “TSDB” 引擎（engine=”TSDB”）时，本参数才生效。</p>
+                </li>
+                <li class="- topic/li li">
+                    <p class="- topic/p p" id="参数__p_nss_thn_ryb" data-ofbid="参数__p_nss_thn_ryb"><em class="+ topic/ph hi-d/i ph i">sortColumns</em> 只能是 INTEGER, TEMPORAL, LITERAL 类别（除
+                        BLOB） 或 DECIMAL 类型。</p>
+                    <ul class="- topic/ul ul" id="参数__ul_oss_thn_ryb" data-ofbid="参数__ul_oss_thn_ryb">
+                        <li class="- topic/li li">
+                            <p class="- topic/p p" id="参数__p_pss_thn_ryb" data-ofbid="参数__p_pss_thn_ryb">若 <em class="+ topic/ph hi-d/i ph i">sortColumns</em> 指定为多列，则 <em class="+ topic/ph hi-d/i ph i">sortColumns</em>
+                                的最后一列必须为时间列，其余列为索引列，且索引列不能为为 TIME, TIMESTAMP, NANOTIME,
+                                NANOTIMESTAMP 类型。</p>
+                        </li>
+                        <li class="- topic/li li">
+                            <p class="- topic/p p" id="参数__p_qss_thn_ryb" data-ofbid="参数__p_qss_thn_ryb">若 <em class="+ topic/ph hi-d/i ph i">sortColumns</em> 仅指定一列，则该列作为 sort
+                                key，其类型不能为TIME, TIMESTAMP, NANOTIME, NANOTIMESTAMP。若
+                                    <em class="+ topic/ph hi-d/i ph i">sortColumns</em> 指定为一列时间列 （非分区列），且同时指定了
+                                    <em class="+ topic/ph hi-d/i ph i">sortKeyMappingFunction</em>，则查询的过滤条件中 <em class="+ topic/ph hi-d/i ph i">sortColumns</em>
+                                只能与相同时间类型的值进行比较。</p>
+                        </li>
+                    </ul>
+                </li>
+                <li class="- topic/li li">频繁查询的字段适合设置为 <em class="+ topic/ph hi-d/i ph i">sortColumns</em>，且建议优先把查询频率高的字段作为 <em class="+ topic/ph hi-d/i ph i">sortColumns</em>
+                    中位置靠前的列。</li>
+                <li class="- topic/li li">为保证性能最优，建议每个分区内索引列的组合数（sort key）不超过1000个。</li>
+                <li class="- topic/li li"><em class="+ topic/ph hi-d/i ph i">sortColumns</em> 是每个分区内部 level file 内数据的排序依据，与其是否为分区字段无关。</li>
+            </ul>
+            <p class="- topic/p p" id="参数__p_ld2_5hn_ryb" data-ofbid="参数__p_ld2_5hn_ryb"><strong class="+ topic/ph hi-d/b ph b">atomic</strong> 是一个布尔值，表示开启 Cache Engine
+                的情况下，是否保证文件加载的原子性。设置为 true，一个文件的加载过程视为一个完整的事务；设置为 false，加载一个文件的过程分为多个事务进行。</p>
+            <div class="- topic/note note note note_note" id="参数__note_jtx_q5j_syb" data-ofbid="参数__note_jtx_q5j_syb"><span class="note__title">注：</span> 如果要加载的文件超过 Cache Engine 大小，必须设置
+                    <em class="+ topic/ph hi-d/i ph i">atomic</em> = false。否则，一个事务可能卡住（既不能提交，也不能回滚）。</div>
+            <p class="- topic/p p" id="参数__p_nd2_5hn_ryb" data-ofbid="参数__p_nd2_5hn_ryb"><strong class="+ topic/ph hi-d/b ph b">arrayDelimiter</strong>
+                是数据文件中数组向量列的分隔符。默认是逗号。由于不支持自动识别数组向量，必须同步修改 <em class="+ topic/ph hi-d/i ph i">schema</em> 的 type 列修为数组向量类型。</p>
+            <p class="- topic/p p" id="参数__p_od2_5hn_ryb" data-ofbid="参数__p_od2_5hn_ryb"><strong class="+ topic/ph hi-d/b ph b">containHeader</strong>
+                布尔值，表示数据文件是否包含标题行，默认为空。具体请参考 <a class="- topic/xref xref" href="loadText.html">loadText</a> 的
+                    <em class="+ topic/ph hi-d/i ph i">containHeader</em> 参数。</p>
+            <p class="- topic/p p"><strong class="+ topic/ph hi-d/b ph b">arrayMarker </strong> 包含两个字符的字符串或或 CHAR
+                类型数据对，两个字符分别表示数组向量左右边界的标识符。默认标识符为双引号（"）。</p>
+            <ul class="- topic/ul ul" id="参数__ul_nyb_lc5_x1c" data-ofbid="参数__ul_nyb_lc5_x1c">
+                <li class="- topic/li li">
+                    <p class="- topic/p p">不能包含空格、Tab(<code class="+ topic/ph pr-d/codeph ph codeph">\t</code>)
+                        和换行符(<code class="+ topic/ph pr-d/codeph ph codeph">\t</code>和<code class="+ topic/ph pr-d/codeph ph codeph">\n</code>)。</p>
+                </li>
+                <li class="- topic/li li">
+                    <p class="- topic/p p">不能包含数字或字母。</p>
+                </li>
+                <li class="- topic/li li">
+                    <p class="- topic/p p">如果其中一个为双引号(")，另一个也必须为双引号。</p>
+                </li>
+                <li class="- topic/li li">
+                    <p class="- topic/p p">如果标识符为 <code class="+ topic/ph pr-d/codeph ph codeph">'</code>，<code class="+ topic/ph pr-d/codeph ph codeph">"</code> 或<code class="+ topic/ph pr-d/codeph ph codeph">\</code>
+                        ，需视情况添加转义符。例如 <code class="+ topic/ph pr-d/codeph ph codeph">arrayMarker="\"\""</code>。</p>
+                </li>
+                <li class="- topic/li li">
+                    <p class="- topic/p p">如果 <em class="+ topic/ph hi-d/i ph i">delimiter </em>是单个字符，则 <em class="+ topic/ph hi-d/i ph i">arrayMarker </em>不能包含与其相同的字符。</p>
+                </li>
+                <li class="- topic/li li">
+                    <p class="- topic/p p">如果 <em class="+ topic/ph hi-d/i ph i">delimiter </em>是多个字符，则 <em class="+ topic/ph hi-d/i ph i">arrayMarker</em> 左边界不能与 <em class="+ topic/ph hi-d/i ph i">delimiter
+                        </em>的首个字符相同。</p>
+                </li>
+            </ul>
+        </div>
+    </article>
+    <article class="- topic/topic topic nested1" aria-labelledby="ariaid-title4" id="详请">
+        <h2 class="- topic/title title topictitle2" id="ariaid-title4">详请</h2>
+        <div class="- topic/body body">
+            <p class="- topic/p p" id="详请__p_pd2_5hn_ryb" data-ofbid="详请__p_pd2_5hn_ryb">将数据文件加载到数据库中。</p>
+            <ul class="- topic/ul ul" id="详请__ul_qd2_5hn_ryb" data-ofbid="详请__ul_qd2_5hn_ryb">
+                <li class="- topic/li li">
+                    <p class="- topic/p p" id="详请__p_rd2_5hn_ryb" data-ofbid="详请__p_rd2_5hn_ryb">如果要将数据文件加载到分布式数据库中，必须指定 <em class="+ topic/ph hi-d/i ph i">tableName</em>，并且不能为空字符串。</p>
+                </li>
+                <li class="- topic/li li">
+                    <p class="- topic/p p" id="详请__p_sd2_5hn_ryb" data-ofbid="详请__p_sd2_5hn_ryb">如果要将数据文件加载到内存数据库中，那么 <em class="+ topic/ph hi-d/i ph i">tableName</em> 为空字符串或者不指定
+                            <em class="+ topic/ph hi-d/i ph i">tableName</em>。</p>
+                </li>
+            </ul>
+            <p class="- topic/p p" id="详请__p_td2_5hn_ryb" data-ofbid="详请__p_td2_5hn_ryb">如果指定了 <em class="+ topic/ph hi-d/i ph i">transform</em> 参数，需要先创建分区表，再加载数据。系统会对数据文件中的数据执行
+                    <em class="+ topic/ph hi-d/i ph i">transform</em> 参数指定的函数，再将得到的结果保存到数据库中。</p>
+            <p class="- topic/p p" id="详请__p_ud2_5hn_ryb" data-ofbid="详请__p_ud2_5hn_ryb"><code class="+ topic/ph pr-d/codeph ph codeph">loadTextEx</code> 函数与 <a class="- topic/xref xref" href="loadText.html">loadText</a> 函数有很多共同之处，例如第一行数据是否判断为列名，如何确定各列的数据类型，列名的要求及自动调整等。细节请参见 <a class="- topic/xref xref" href="loadText.html">loadText</a> 函数文档。</p>
+        </div>
+    </article>
+    <article class="- topic/topic topic nested1" aria-labelledby="ariaid-title5" id="例子">
+        <h2 class="- topic/title title topictitle2" id="ariaid-title5">例子</h2>
+        <div class="- topic/body body">
+            <p class="- topic/p p" id="例子__p_vd2_5hn_ryb" data-ofbid="例子__p_vd2_5hn_ryb">使用以下脚本生成模拟的数据文件：</p>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="例子__codeblock_wd2_5hn_ryb" data-ofbid="例子__codeblock_wd2_5hn_ryb"><code>n=10000
+ID=rand(100, n)
+dates=2017.08.07..2017.08.11
+date=rand(dates, n)
+vol=rand(1..10 join int(), n)
+t=table(ID, date, vol)
+saveText(t, "/home/DolphinDB/Data/t.txt");</code></pre>
+            <p class="- topic/p p">例. 把 t.txt 文件加载到范围分区类型的分布式数据库中，分区列为 ID。</p>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="例子__codeblock_xd2_5hn_ryb" data-ofbid="例子__codeblock_xd2_5hn_ryb"><code>db = database(directory="dfs://rangedb", partitionType=RANGE, partitionScheme=0 51 101)
+pt=loadTextEx(dbHandle=db,tableName=`pt, partitionColumns=`ID, filename="/home/DolphinDB/Data/t.txt");</code></pre>
+            <p class="- topic/p p">例. 将文本文件加载到使用 TSDB 存储引擎创建的分布式数据库中。</p>
+
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="例子__codeblock_yd2_5hn_ryb" data-ofbid="例子__codeblock_yd2_5hn_ryb"><code>db = database(directory="dfs://rangedb", partitionType=RANGE, partitionScheme=0 51 101, engine='TSDB')
+pt=loadTextEx(dbHandle=db, tableName=`pt, partitionColumns=`ID, filename="/home/DolphinDB/Data/t.txt", sortColumns=`ID`date);</code></pre>
+            <p class="- topic/p p">例. 把 t.txt 文件加载到组合分区类型的分布式数据库中，分区列为 date 和 ID。</p>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="例子__codeblock_zd2_5hn_ryb" data-ofbid="例子__codeblock_zd2_5hn_ryb"><code>dbDate = database(directory="", partitionType=VALUE, partitionScheme=2017.08.07..2017.08.11)
+dbID=database(directory="", partitionType=RANGE, partitionScheme=0 51 101)
+db = database(directory="dfs://compoDB", partitionType=COMPO, partitionScheme=[dbDate, dbID])
+pt = loadTextEx(dbHandle=db,tableName=`pt, partitionColumns=`date`ID, filename="/home/DolphinDB/Data/t.txt");</code></pre>
+            <p class="- topic/p p">例. 把 t.txt 加载到值分区类型分内存数据库中，分区列为 date。</p>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="例子__codeblock_a22_5hn_ryb" data-ofbid="例子__codeblock_a22_5hn_ryb"><code>db = database(directory="", partitionType=VALUE, partitionScheme=2017.08.07..2017.08.11)
+pt = db.loadTextEx(tableName="", partitionColumns=`date, filename="/home/DolphinDB/Data/t.txt");
+
+pt.sortBy!(`ID`x);</code></pre>
+            <p class="- topic/p p">例. 示例文件的 vol 列包含空值，将空值填充为0后再加载到组合分区类型的分布式数据库中。</p>
+
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="例子__codeblock_b22_5hn_ryb" data-ofbid="例子__codeblock_b22_5hn_ryb"><code>dbDate = database(directory="", partitionType=VALUE, partitionScheme=2017.08.07..2017.08.11)
+dbID=database(directory="", partitionType=RANGE, partitionScheme=0 51 101)
+db = database(directory="dfs://compoDB", partitionType=COMPO, partitionScheme=[dbDate, dbID]);
+
+pt=db.createPartitionedTable(table=t, tableName=`pt, partitionColumns=`date`ID)
+pt=loadTextEx(dbHandle=db, tableName=`pt, partitionColumns=`date`ID, filename="/home/DolphinDB/Data/t.txt", transform=nullFill!{,0});</code></pre>
+            <p class="- topic/p p">例. 加载包含数组向量列的数据</p>
+
+            <p class="- topic/p p" id="例子__p_c22_5hn_ryb" data-ofbid="例子__p_c22_5hn_ryb">使用以下脚本模拟生成一个 csv 文本文件：</p>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="例子__codeblock_d22_5hn_ryb" data-ofbid="例子__codeblock_d22_5hn_ryb"><code>bid = array(DOUBLE[], 0, 20).append!([1.4799 1.479 1.4787, 1.4796 1.479 1.4784, 1.4791 1.479 1.4784])
+ask = array(DOUBLE[], 0, 20).append!([1.4821 1.4825 1.4828, 1.4818 1.482 1.4821, 1.4814 1.4818 1.482])
+TradeDate = 2022.01.01 + 1..3
+SecurityID = rand(`APPL`AMZN`IBM, 3)
+t = table(SecurityID as `sid, TradeDate as `date, bid as `bid, ask as `ask)
+t;
+saveText(t,filename="/home/DolphinDB/Data/t.csv",delimiter=',',append=true)</code></pre>
+            <p class="- topic/p p" id="例子__p_e22_5hn_ryb" data-ofbid="例子__p_e22_5hn_ryb">然后调用 loadTextEx 导出该文件：</p>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="例子__codeblock_f22_5hn_ryb" data-ofbid="例子__codeblock_f22_5hn_ryb"><code>db = database(directory="dfs://testDB", partitionType=VALUE, partitionScheme=`APPL`AMZN`IBM)
+path = "/home/DolphinDB/Data/t.csv"
+schema = extractTextSchema(path);
+update schema set type = "DOUBLE[]" where name="bid" or name ="ask"
+t = loadTextEx(dbHandle=db, tableName=`t, partitionColumns=`sid, filename=path, schema=schema, arrayDelimiter=",");
+select * from t;</code></pre>
+            <div class="table-container"><table class="- topic/table table" id="例子__table_g22_5hn_ryb" data-ofbid="例子__table_g22_5hn_ryb" data-cols="4"><caption></caption><colgroup><col/><col/><col/><col/></colgroup><thead class="- topic/thead thead">
+                        <tr class="- topic/row">
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="例子__table_g22_5hn_ryb__entry__1">sid</th>
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="例子__table_g22_5hn_ryb__entry__2">date</th>
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="例子__table_g22_5hn_ryb__entry__3">bid</th>
+                            <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="例子__table_g22_5hn_ryb__entry__4">ask</th>
+                        </tr>
+                    </thead><tbody class="- topic/tbody tbody">
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_g22_5hn_ryb__entry__1">APPL</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_g22_5hn_ryb__entry__2">2022.01.02</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_g22_5hn_ryb__entry__3">[1.4799,1.479,1.4787]</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_g22_5hn_ryb__entry__4">[1.4821,1.4825,1.4828]</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_g22_5hn_ryb__entry__1">IBM</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_g22_5hn_ryb__entry__2">2022.01.03</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_g22_5hn_ryb__entry__3">[1.4796,1.479,1.4784]</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_g22_5hn_ryb__entry__4">[1.4818,1.482,1.4821]</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_g22_5hn_ryb__entry__1">IBM</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_g22_5hn_ryb__entry__2">2022.01.04</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_g22_5hn_ryb__entry__3">[1.4791,1.479,1.4784]</td>
+                            <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="例子__table_g22_5hn_ryb__entry__4">[1.4814,1.4818,1.482]</td>
+                        </tr>
+                    </tbody></table></div>
+        </div>
+    </article>
+</article></main></div>
+                        
+                        
+                        
+                        
+                        
+                        
+                    </div>
+                    
+                        <nav role="navigation" id="wh_topic_toc" aria-label="On this page" class="col-lg-2 d-none d-lg-block navbar d-print-none"> 
+                            <div id="wh_topic_toc_content">
+		                        
+	                            <div class=" wh_topic_toc "><div class="wh_topic_label">在本页上</div><ul><li class="topic-item"><a href="#%E8%AF%AD%E6%B3%95" data-tocid="语法">语法</a></li><li class="topic-item"><a href="#%E5%8F%82%E6%95%B0" data-tocid="参数">参数</a></li><li class="topic-item"><a href="#%E8%AF%A6%E8%AF%B7" data-tocid="详请">详请</a></li><li class="topic-item"><a href="#%E4%BE%8B%E5%AD%90" data-tocid="例子">例子</a></li></ul></div>
+	                        	
+                        	</div>
+                        </nav>
+                    
+                </div>
+            </div>
+            
+            
+            
+        </div> 
+        <footer class="navbar navbar-default wh_footer">
+  <div class=" footer-container mx-auto ">
+<title>Copyright</title><p><b> ©2024 浙江智臾科技有限公司 浙ICP备18048711号-3</b></p>
+  </div>
+</footer>
+        
+        <div id="go2top" class="d-print-none">
+            <span class="oxy-icon oxy-icon-up"></span>
+        </div>
+        
+        <div id="modal_img_large" class="modal">
+            <span class="close oxy-icon oxy-icon-remove"></span>
+            <div id="modal_img_container"></div>
+            <div id="caption"></div>
+        </div>
+        
+        
+        
+    </body>
+</html>

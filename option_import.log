@@ -1,0 +1,426 @@
+2024-12-11 12:51:05,285 - INFO - 使用前50个文件进行测试导入
+2024-12-11 12:51:05,484 - INFO - 数据库结构创建成功
+2024-12-11 12:51:05,485 - INFO - 找到 50 个数据文件
+2024-12-11 12:51:05,509 - WARNING - 文件 test_options_data/AAPL160603C00055000.csv 缺少列: oi
+2024-12-11 12:51:05,509 - WARNING - 文件 test_options_data/AAPL160603C00055000.csv 缺少列: strike
+2024-12-11 12:51:05,510 - WARNING - 文件 test_options_data/AAPL160603C00055000.csv 缺少列: expiry
+2024-12-11 12:51:05,510 - WARNING - 文件 test_options_data/AAPL160603C00055000.csv 缺少列: type
+2024-12-11 12:51:05,535 - ERROR - 导入批次数据失败: <Exception> in run: Server response: 'append!(loadTable("dfs://optiondb", "options"), data) => Only a table can append to another table.' script: '
+                    loadTable("dfs://optiondb", "options").append!(data)
+                    '
+2024-12-11 12:51:05,539 - WARNING - 文件 test_options_data/AAPL160603C00060000.csv 缺少列: oi
+2024-12-11 12:51:05,539 - WARNING - 文件 test_options_data/AAPL160603C00060000.csv 缺少列: strike
+2024-12-11 12:51:05,540 - WARNING - 文件 test_options_data/AAPL160603C00060000.csv 缺少列: expiry
+2024-12-11 12:51:05,540 - WARNING - 文件 test_options_data/AAPL160603C00060000.csv 缺少列: type
+2024-12-11 12:51:05,542 - ERROR - 导入批次数据失败: <Exception> in run: Server response: 'append!(loadTable("dfs://optiondb", "options"), data) => Only a table can append to another table.' script: '
+                    loadTable("dfs://optiondb", "options").append!(data)
+                    '
+2024-12-11 12:51:05,547 - WARNING - 文件 test_options_data/AAPL160603C00065000.csv 缺少列: oi
+2024-12-11 12:51:05,547 - WARNING - 文件 test_options_data/AAPL160603C00065000.csv 缺少列: strike
+2024-12-11 12:51:05,548 - WARNING - 文件 test_options_data/AAPL160603C00065000.csv 缺少列: expiry
+2024-12-11 12:51:05,548 - WARNING - 文件 test_options_data/AAPL160603C00065000.csv 缺少列: type
+2024-12-11 12:51:05,551 - ERROR - 导入批次数据失败: <Exception> in run: Server response: 'append!(loadTable("dfs://optiondb", "options"), data) => Only a table can append to another table.' script: '
+                    loadTable("dfs://optiondb", "options").append!(data)
+                    '
+2024-12-11 12:51:05,556 - WARNING - 文件 test_options_data/AAPL160603C00080000.csv 缺少列: oi
+2024-12-11 12:51:05,557 - WARNING - 文件 test_options_data/AAPL160603C00080000.csv 缺少列: strike
+2024-12-11 12:51:05,557 - WARNING - 文件 test_options_data/AAPL160603C00080000.csv 缺少列: expiry
+2024-12-11 12:51:05,558 - WARNING - 文件 test_options_data/AAPL160603C00080000.csv 缺少列: type
+2024-12-11 12:51:05,561 - ERROR - 导入批次数据失败: <Exception> in run: Server response: 'append!(loadTable("dfs://optiondb", "options"), data) => Only a table can append to another table.' script: '
+                    loadTable("dfs://optiondb", "options").append!(data)
+                    '
+2024-12-11 12:51:05,568 - WARNING - 文件 test_options_data/AAPL160603C00081000.csv 缺少列: oi
+2024-12-11 12:51:05,569 - WARNING - 文件 test_options_data/AAPL160603C00081000.csv 缺少列: strike
+2024-12-11 12:51:05,570 - WARNING - 文件 test_options_data/AAPL160603C00081000.csv 缺少列: expiry
+2024-12-11 12:51:05,571 - WARNING - 文件 test_options_data/AAPL160603C00081000.csv 缺少列: type
+2024-12-11 12:51:05,574 - ERROR - 导入批次数据失败: <Exception> in run: Server response: 'append!(loadTable("dfs://optiondb", "options"), data) => Only a table can append to another table.' script: '
+                    loadTable("dfs://optiondb", "options").append!(data)
+                    '
+2024-12-11 12:51:05,579 - WARNING - 文件 test_options_data/AAPL160603C00082000.csv 缺少列: oi
+2024-12-11 12:51:05,579 - WARNING - 文件 test_options_data/AAPL160603C00082000.csv 缺少列: strike
+2024-12-11 12:51:05,580 - WARNING - 文件 test_options_data/AAPL160603C00082000.csv 缺少列: expiry
+2024-12-11 12:51:05,581 - WARNING - 文件 test_options_data/AAPL160603C00082000.csv 缺少列: type
+2024-12-11 12:51:05,585 - ERROR - 导入批次数据失败: <Exception> in run: Server response: 'append!(loadTable("dfs://optiondb", "options"), data) => Only a table can append to another table.' script: '
+                    loadTable("dfs://optiondb", "options").append!(data)
+                    '
+2024-12-11 12:51:05,590 - WARNING - 文件 test_options_data/AAPL160603C00083000.csv 缺少列: oi
+2024-12-11 12:51:05,590 - WARNING - 文件 test_options_data/AAPL160603C00083000.csv 缺少列: strike
+2024-12-11 12:51:05,591 - WARNING - 文件 test_options_data/AAPL160603C00083000.csv 缺少列: expiry
+2024-12-11 12:51:05,592 - WARNING - 文件 test_options_data/AAPL160603C00083000.csv 缺少列: type
+2024-12-11 12:51:05,594 - ERROR - 导入批次数据失败: <Exception> in run: Server response: 'append!(loadTable("dfs://optiondb", "options"), data) => Only a table can append to another table.' script: '
+                    loadTable("dfs://optiondb", "options").append!(data)
+                    '
+2024-12-11 12:51:05,603 - WARNING - 文件 test_options_data/AAPL160603C00084000.csv 缺少列: oi
+2024-12-11 12:51:05,604 - WARNING - 文件 test_options_data/AAPL160603C00084000.csv 缺少列: strike
+2024-12-11 12:51:05,604 - WARNING - 文件 test_options_data/AAPL160603C00084000.csv 缺少列: expiry
+2024-12-11 12:51:05,605 - WARNING - 文件 test_options_data/AAPL160603C00084000.csv 缺少列: type
+2024-12-11 12:51:05,607 - ERROR - 导入批次数据失败: <Exception> in run: Server response: 'append!(loadTable("dfs://optiondb", "options"), data) => Only a table can append to another table.' script: '
+                    loadTable("dfs://optiondb", "options").append!(data)
+                    '
+2024-12-11 12:51:05,612 - WARNING - 文件 test_options_data/AAPL160603C00085000.csv 缺少列: oi
+2024-12-11 12:51:05,612 - WARNING - 文件 test_options_data/AAPL160603C00085000.csv 缺少列: strike
+2024-12-11 12:51:05,613 - WARNING - 文件 test_options_data/AAPL160603C00085000.csv 缺少列: expiry
+2024-12-11 12:51:05,614 - WARNING - 文件 test_options_data/AAPL160603C00085000.csv 缺少列: type
+2024-12-11 12:51:05,618 - ERROR - 导入批次数据失败: <Exception> in run: Server response: 'append!(loadTable("dfs://optiondb", "options"), data) => Only a table can append to another table.' script: '
+                    loadTable("dfs://optiondb", "options").append!(data)
+                    '
+2024-12-11 12:51:05,627 - WARNING - 文件 test_options_data/AAPL160603C00086000.csv 缺少列: oi
+2024-12-11 12:51:05,627 - WARNING - 文件 test_options_data/AAPL160603C00086000.csv 缺少列: strike
+2024-12-11 12:51:05,628 - WARNING - 文件 test_options_data/AAPL160603C00086000.csv 缺少列: expiry
+2024-12-11 12:51:05,628 - WARNING - 文件 test_options_data/AAPL160603C00086000.csv 缺少列: type
+2024-12-11 12:51:05,631 - ERROR - 导入批次数据失败: <Exception> in run: Server response: 'append!(loadTable("dfs://optiondb", "options"), data) => Only a table can append to another table.' script: '
+                    loadTable("dfs://optiondb", "options").append!(data)
+                    '
+2024-12-11 12:51:05,640 - WARNING - 文件 test_options_data/AAPL160603C00087000.csv 缺少列: oi
+2024-12-11 12:51:05,640 - WARNING - 文件 test_options_data/AAPL160603C00087000.csv 缺少列: strike
+2024-12-11 12:51:05,641 - WARNING - 文件 test_options_data/AAPL160603C00087000.csv 缺少列: expiry
+2024-12-11 12:51:05,642 - WARNING - 文件 test_options_data/AAPL160603C00087000.csv 缺少列: type
+2024-12-11 12:51:05,644 - ERROR - 导入批次数据失败: <Exception> in run: Server response: 'append!(loadTable("dfs://optiondb", "options"), data) => Only a table can append to another table.' script: '
+                    loadTable("dfs://optiondb", "options").append!(data)
+                    '
+2024-12-11 12:51:05,651 - WARNING - 文件 test_options_data/AAPL160603C00087500.csv 缺少列: oi
+2024-12-11 12:51:05,651 - WARNING - 文件 test_options_data/AAPL160603C00087500.csv 缺少列: strike
+2024-12-11 12:51:05,652 - WARNING - 文件 test_options_data/AAPL160603C00087500.csv 缺少列: expiry
+2024-12-11 12:51:05,652 - WARNING - 文件 test_options_data/AAPL160603C00087500.csv 缺少列: type
+2024-12-11 12:51:05,655 - ERROR - 导入批次数据失败: <Exception> in run: Server response: 'append!(loadTable("dfs://optiondb", "options"), data) => Only a table can append to another table.' script: '
+                    loadTable("dfs://optiondb", "options").append!(data)
+                    '
+2024-12-11 12:51:05,662 - WARNING - 文件 test_options_data/AAPL160603C00088000.csv 缺少列: oi
+2024-12-11 12:51:05,662 - WARNING - 文件 test_options_data/AAPL160603C00088000.csv 缺少列: strike
+2024-12-11 12:51:05,663 - WARNING - 文件 test_options_data/AAPL160603C00088000.csv 缺少列: expiry
+2024-12-11 12:51:05,664 - WARNING - 文件 test_options_data/AAPL160603C00088000.csv 缺少列: type
+2024-12-11 12:51:05,669 - ERROR - 导入批次数据失败: <Exception> in run: Server response: 'append!(loadTable("dfs://optiondb", "options"), data) => Only a table can append to another table.' script: '
+                    loadTable("dfs://optiondb", "options").append!(data)
+                    '
+2024-12-11 12:51:05,683 - WARNING - 文件 test_options_data/AAPL160603C00088500.csv 缺少列: oi
+2024-12-11 12:51:05,684 - WARNING - 文件 test_options_data/AAPL160603C00088500.csv 缺少列: strike
+2024-12-11 12:51:05,685 - WARNING - 文件 test_options_data/AAPL160603C00088500.csv 缺少列: expiry
+2024-12-11 12:51:05,686 - WARNING - 文件 test_options_data/AAPL160603C00088500.csv 缺少列: type
+2024-12-11 12:51:05,689 - ERROR - 导入批次数据失败: <Exception> in run: Server response: 'append!(loadTable("dfs://optiondb", "options"), data) => Only a table can append to another table.' script: '
+                    loadTable("dfs://optiondb", "options").append!(data)
+                    '
+2024-12-11 12:51:05,697 - WARNING - 文件 test_options_data/AAPL160603C00089000.csv 缺少列: oi
+2024-12-11 12:51:05,700 - WARNING - 文件 test_options_data/AAPL160603C00089000.csv 缺少列: strike
+2024-12-11 12:51:05,701 - WARNING - 文件 test_options_data/AAPL160603C00089000.csv 缺少列: expiry
+2024-12-11 12:51:05,702 - WARNING - 文件 test_options_data/AAPL160603C00089000.csv 缺少列: type
+2024-12-11 12:51:05,707 - ERROR - 导入批次数据失败: <Exception> in run: Server response: 'append!(loadTable("dfs://optiondb", "options"), data) => Only a table can append to another table.' script: '
+                    loadTable("dfs://optiondb", "options").append!(data)
+                    '
+2024-12-11 12:51:05,716 - WARNING - 文件 test_options_data/AAPL160603C00089500.csv 缺少列: oi
+2024-12-11 12:51:05,717 - WARNING - 文件 test_options_data/AAPL160603C00089500.csv 缺少列: strike
+2024-12-11 12:51:05,718 - WARNING - 文件 test_options_data/AAPL160603C00089500.csv 缺少列: expiry
+2024-12-11 12:51:05,718 - WARNING - 文件 test_options_data/AAPL160603C00089500.csv 缺少列: type
+2024-12-11 12:51:05,723 - ERROR - 导入批次数据失败: <Exception> in run: Server response: 'append!(loadTable("dfs://optiondb", "options"), data) => Only a table can append to another table.' script: '
+                    loadTable("dfs://optiondb", "options").append!(data)
+                    '
+2024-12-11 12:51:05,731 - WARNING - 文件 test_options_data/AAPL160603C00090000.csv 缺少列: oi
+2024-12-11 12:51:05,732 - WARNING - 文件 test_options_data/AAPL160603C00090000.csv 缺少列: strike
+2024-12-11 12:51:05,734 - WARNING - 文件 test_options_data/AAPL160603C00090000.csv 缺少列: expiry
+2024-12-11 12:51:05,737 - WARNING - 文件 test_options_data/AAPL160603C00090000.csv 缺少列: type
+2024-12-11 12:51:05,742 - ERROR - 导入批次数据失败: <Exception> in run: Server response: 'append!(loadTable("dfs://optiondb", "options"), data) => Only a table can append to another table.' script: '
+                    loadTable("dfs://optiondb", "options").append!(data)
+                    '
+2024-12-11 12:51:05,748 - WARNING - 文件 test_options_data/AAPL160603C00090500.csv 缺少列: oi
+2024-12-11 12:51:05,748 - WARNING - 文件 test_options_data/AAPL160603C00090500.csv 缺少列: strike
+2024-12-11 12:51:05,749 - WARNING - 文件 test_options_data/AAPL160603C00090500.csv 缺少列: expiry
+2024-12-11 12:51:05,750 - WARNING - 文件 test_options_data/AAPL160603C00090500.csv 缺少列: type
+2024-12-11 12:51:05,754 - ERROR - 导入批次数据失败: <Exception> in run: Server response: 'append!(loadTable("dfs://optiondb", "options"), data) => Only a table can append to another table.' script: '
+                    loadTable("dfs://optiondb", "options").append!(data)
+                    '
+2024-12-11 12:51:05,762 - WARNING - 文件 test_options_data/AAPL160603C00091000.csv 缺少列: oi
+2024-12-11 12:51:05,763 - WARNING - 文件 test_options_data/AAPL160603C00091000.csv 缺少列: strike
+2024-12-11 12:51:05,765 - WARNING - 文件 test_options_data/AAPL160603C00091000.csv 缺少列: expiry
+2024-12-11 12:51:05,768 - WARNING - 文件 test_options_data/AAPL160603C00091000.csv 缺少列: type
+2024-12-11 12:51:05,774 - ERROR - 导入批次数据失败: <Exception> in run: Server response: 'append!(loadTable("dfs://optiondb", "options"), data) => Only a table can append to another table.' script: '
+                    loadTable("dfs://optiondb", "options").append!(data)
+                    '
+2024-12-11 12:51:05,784 - WARNING - 文件 test_options_data/AAPL160603C00091500.csv 缺少列: oi
+2024-12-11 12:51:05,785 - WARNING - 文件 test_options_data/AAPL160603C00091500.csv 缺少列: strike
+2024-12-11 12:51:05,786 - WARNING - 文件 test_options_data/AAPL160603C00091500.csv 缺少列: expiry
+2024-12-11 12:51:05,787 - WARNING - 文件 test_options_data/AAPL160603C00091500.csv 缺少列: type
+2024-12-11 12:51:05,791 - ERROR - 导入批次数据失败: <Exception> in run: Server response: 'append!(loadTable("dfs://optiondb", "options"), data) => Only a table can append to another table.' script: '
+                    loadTable("dfs://optiondb", "options").append!(data)
+                    '
+2024-12-11 12:51:05,801 - WARNING - 文件 test_options_data/AAPL160603C00092000.csv 缺少列: oi
+2024-12-11 12:51:05,802 - WARNING - 文件 test_options_data/AAPL160603C00092000.csv 缺少列: strike
+2024-12-11 12:51:05,802 - WARNING - 文件 test_options_data/AAPL160603C00092000.csv 缺少列: expiry
+2024-12-11 12:51:05,803 - WARNING - 文件 test_options_data/AAPL160603C00092000.csv 缺少列: type
+2024-12-11 12:51:05,808 - ERROR - 导入批次数据失败: <Exception> in run: Server response: 'append!(loadTable("dfs://optiondb", "options"), data) => Only a table can append to another table.' script: '
+                    loadTable("dfs://optiondb", "options").append!(data)
+                    '
+2024-12-11 12:51:05,816 - WARNING - 文件 test_options_data/AAPL160603C00092500.csv 缺少列: oi
+2024-12-11 12:51:05,817 - WARNING - 文件 test_options_data/AAPL160603C00092500.csv 缺少列: strike
+2024-12-11 12:51:05,817 - WARNING - 文件 test_options_data/AAPL160603C00092500.csv 缺少列: expiry
+2024-12-11 12:51:05,817 - WARNING - 文件 test_options_data/AAPL160603C00092500.csv 缺少列: type
+2024-12-11 12:51:05,822 - ERROR - 导入批次数据失败: <Exception> in run: Server response: 'append!(loadTable("dfs://optiondb", "options"), data) => Only a table can append to another table.' script: '
+                    loadTable("dfs://optiondb", "options").append!(data)
+                    '
+2024-12-11 12:51:05,831 - WARNING - 文件 test_options_data/AAPL160603C00093000.csv 缺少列: oi
+2024-12-11 12:51:05,832 - WARNING - 文件 test_options_data/AAPL160603C00093000.csv 缺少列: strike
+2024-12-11 12:51:05,832 - WARNING - 文件 test_options_data/AAPL160603C00093000.csv 缺少列: expiry
+2024-12-11 12:51:05,832 - WARNING - 文件 test_options_data/AAPL160603C00093000.csv 缺少列: type
+2024-12-11 12:51:05,836 - ERROR - 导入批次数据失败: <Exception> in run: Server response: 'append!(loadTable("dfs://optiondb", "options"), data) => Only a table can append to another table.' script: '
+                    loadTable("dfs://optiondb", "options").append!(data)
+                    '
+2024-12-11 12:51:05,842 - WARNING - 文件 test_options_data/AAPL160603C00093500.csv 缺少列: oi
+2024-12-11 12:51:05,843 - WARNING - 文件 test_options_data/AAPL160603C00093500.csv 缺少列: strike
+2024-12-11 12:51:05,843 - WARNING - 文件 test_options_data/AAPL160603C00093500.csv 缺少列: expiry
+2024-12-11 12:51:05,844 - WARNING - 文件 test_options_data/AAPL160603C00093500.csv 缺少列: type
+2024-12-11 12:51:05,848 - ERROR - 导入批次数据失败: <Exception> in run: Server response: 'append!(loadTable("dfs://optiondb", "options"), data) => Only a table can append to another table.' script: '
+                    loadTable("dfs://optiondb", "options").append!(data)
+                    '
+2024-12-11 12:51:05,855 - WARNING - 文件 test_options_data/AAPL160603C00094000.csv 缺少列: oi
+2024-12-11 12:51:05,855 - WARNING - 文件 test_options_data/AAPL160603C00094000.csv 缺少列: strike
+2024-12-11 12:51:05,855 - WARNING - 文件 test_options_data/AAPL160603C00094000.csv 缺少列: expiry
+2024-12-11 12:51:05,855 - WARNING - 文件 test_options_data/AAPL160603C00094000.csv 缺少列: type
+2024-12-11 12:51:05,859 - ERROR - 导入批次数据失败: <Exception> in run: Server response: 'append!(loadTable("dfs://optiondb", "options"), data) => Only a table can append to another table.' script: '
+                    loadTable("dfs://optiondb", "options").append!(data)
+                    '
+2024-12-11 12:51:05,866 - WARNING - 文件 test_options_data/AAPL160603C00094500.csv 缺少列: oi
+2024-12-11 12:51:05,866 - WARNING - 文件 test_options_data/AAPL160603C00094500.csv 缺少列: strike
+2024-12-11 12:51:05,867 - WARNING - 文件 test_options_data/AAPL160603C00094500.csv 缺少列: expiry
+2024-12-11 12:51:05,867 - WARNING - 文件 test_options_data/AAPL160603C00094500.csv 缺少列: type
+2024-12-11 12:51:05,871 - ERROR - 导入批次数据失败: <Exception> in run: Server response: 'append!(loadTable("dfs://optiondb", "options"), data) => Only a table can append to another table.' script: '
+                    loadTable("dfs://optiondb", "options").append!(data)
+                    '
+2024-12-11 12:51:05,877 - WARNING - 文件 test_options_data/AAPL160603C00095000.csv 缺少列: oi
+2024-12-11 12:51:05,877 - WARNING - 文件 test_options_data/AAPL160603C00095000.csv 缺少列: strike
+2024-12-11 12:51:05,877 - WARNING - 文件 test_options_data/AAPL160603C00095000.csv 缺少列: expiry
+2024-12-11 12:51:05,878 - WARNING - 文件 test_options_data/AAPL160603C00095000.csv 缺少列: type
+2024-12-11 12:51:05,881 - ERROR - 导入批次数据失败: <Exception> in run: Server response: 'append!(loadTable("dfs://optiondb", "options"), data) => Only a table can append to another table.' script: '
+                    loadTable("dfs://optiondb", "options").append!(data)
+                    '
+2024-12-11 12:51:05,885 - WARNING - 文件 test_options_data/AAPL160603C00095500.csv 缺少列: oi
+2024-12-11 12:51:05,886 - WARNING - 文件 test_options_data/AAPL160603C00095500.csv 缺少列: strike
+2024-12-11 12:51:05,886 - WARNING - 文件 test_options_data/AAPL160603C00095500.csv 缺少列: expiry
+2024-12-11 12:51:05,886 - WARNING - 文件 test_options_data/AAPL160603C00095500.csv 缺少列: type
+2024-12-11 12:51:05,889 - ERROR - 导入批次数据失败: <Exception> in run: Server response: 'append!(loadTable("dfs://optiondb", "options"), data) => Only a table can append to another table.' script: '
+                    loadTable("dfs://optiondb", "options").append!(data)
+                    '
+2024-12-11 12:51:05,894 - WARNING - 文件 test_options_data/AAPL160603C00096000.csv 缺少列: oi
+2024-12-11 12:51:05,895 - WARNING - 文件 test_options_data/AAPL160603C00096000.csv 缺少列: strike
+2024-12-11 12:51:05,895 - WARNING - 文件 test_options_data/AAPL160603C00096000.csv 缺少列: expiry
+2024-12-11 12:51:05,895 - WARNING - 文件 test_options_data/AAPL160603C00096000.csv 缺少列: type
+2024-12-11 12:51:05,899 - ERROR - 导入批次数据失败: <Exception> in run: Server response: 'append!(loadTable("dfs://optiondb", "options"), data) => Only a table can append to another table.' script: '
+                    loadTable("dfs://optiondb", "options").append!(data)
+                    '
+2024-12-11 12:51:05,905 - WARNING - 文件 test_options_data/AAPL160603C00096500.csv 缺少列: oi
+2024-12-11 12:51:05,905 - WARNING - 文件 test_options_data/AAPL160603C00096500.csv 缺少列: strike
+2024-12-11 12:51:05,905 - WARNING - 文件 test_options_data/AAPL160603C00096500.csv 缺少列: expiry
+2024-12-11 12:51:05,905 - WARNING - 文件 test_options_data/AAPL160603C00096500.csv 缺少列: type
+2024-12-11 12:51:05,909 - ERROR - 导入批次数据失败: <Exception> in run: Server response: 'append!(loadTable("dfs://optiondb", "options"), data) => Only a table can append to another table.' script: '
+                    loadTable("dfs://optiondb", "options").append!(data)
+                    '
+2024-12-11 12:51:05,915 - WARNING - 文件 test_options_data/AAPL160603C00097000.csv 缺少列: oi
+2024-12-11 12:51:05,915 - WARNING - 文件 test_options_data/AAPL160603C00097000.csv 缺少列: strike
+2024-12-11 12:51:05,915 - WARNING - 文件 test_options_data/AAPL160603C00097000.csv 缺少列: expiry
+2024-12-11 12:51:05,916 - WARNING - 文件 test_options_data/AAPL160603C00097000.csv 缺少列: type
+2024-12-11 12:51:05,919 - ERROR - 导入批次数据失败: <Exception> in run: Server response: 'append!(loadTable("dfs://optiondb", "options"), data) => Only a table can append to another table.' script: '
+                    loadTable("dfs://optiondb", "options").append!(data)
+                    '
+2024-12-11 12:51:05,923 - WARNING - 文件 test_options_data/AAPL160603C00097500.csv 缺少列: oi
+2024-12-11 12:51:05,924 - WARNING - 文件 test_options_data/AAPL160603C00097500.csv 缺少列: strike
+2024-12-11 12:51:05,924 - WARNING - 文件 test_options_data/AAPL160603C00097500.csv 缺少列: expiry
+2024-12-11 12:51:05,924 - WARNING - 文件 test_options_data/AAPL160603C00097500.csv 缺少列: type
+2024-12-11 12:51:05,927 - ERROR - 导入批次数据失败: <Exception> in run: Server response: 'append!(loadTable("dfs://optiondb", "options"), data) => Only a table can append to another table.' script: '
+                    loadTable("dfs://optiondb", "options").append!(data)
+                    '
+2024-12-11 12:51:05,933 - WARNING - 文件 test_options_data/AAPL160603C00098000.csv 缺少列: oi
+2024-12-11 12:51:05,933 - WARNING - 文件 test_options_data/AAPL160603C00098000.csv 缺少列: strike
+2024-12-11 12:51:05,933 - WARNING - 文件 test_options_data/AAPL160603C00098000.csv 缺少列: expiry
+2024-12-11 12:51:05,933 - WARNING - 文件 test_options_data/AAPL160603C00098000.csv 缺少列: type
+2024-12-11 12:51:05,937 - ERROR - 导入批次数据失败: <Exception> in run: Server response: 'append!(loadTable("dfs://optiondb", "options"), data) => Only a table can append to another table.' script: '
+                    loadTable("dfs://optiondb", "options").append!(data)
+                    '
+2024-12-11 12:51:05,942 - WARNING - 文件 test_options_data/AAPL160603C00098500.csv 缺少列: oi
+2024-12-11 12:51:05,942 - WARNING - 文件 test_options_data/AAPL160603C00098500.csv 缺少列: strike
+2024-12-11 12:51:05,942 - WARNING - 文件 test_options_data/AAPL160603C00098500.csv 缺少列: expiry
+2024-12-11 12:51:05,942 - WARNING - 文件 test_options_data/AAPL160603C00098500.csv 缺少列: type
+2024-12-11 12:51:05,945 - ERROR - 导入批次数据失败: <Exception> in run: Server response: 'append!(loadTable("dfs://optiondb", "options"), data) => Only a table can append to another table.' script: '
+                    loadTable("dfs://optiondb", "options").append!(data)
+                    '
+2024-12-11 12:51:05,950 - WARNING - 文件 test_options_data/AAPL160603C00099000.csv 缺少列: oi
+2024-12-11 12:51:05,951 - WARNING - 文件 test_options_data/AAPL160603C00099000.csv 缺少列: strike
+2024-12-11 12:51:05,951 - WARNING - 文件 test_options_data/AAPL160603C00099000.csv 缺少列: expiry
+2024-12-11 12:51:05,951 - WARNING - 文件 test_options_data/AAPL160603C00099000.csv 缺少列: type
+2024-12-11 12:51:05,954 - ERROR - 导入批次数据失败: <Exception> in run: Server response: 'append!(loadTable("dfs://optiondb", "options"), data) => Only a table can append to another table.' script: '
+                    loadTable("dfs://optiondb", "options").append!(data)
+                    '
+2024-12-11 12:51:05,959 - WARNING - 文件 test_options_data/AAPL160603C00099500.csv 缺少列: oi
+2024-12-11 12:51:05,959 - WARNING - 文件 test_options_data/AAPL160603C00099500.csv 缺少列: strike
+2024-12-11 12:51:05,960 - WARNING - 文件 test_options_data/AAPL160603C00099500.csv 缺少列: expiry
+2024-12-11 12:51:05,960 - WARNING - 文件 test_options_data/AAPL160603C00099500.csv 缺少列: type
+2024-12-11 12:51:05,963 - ERROR - 导入批次数据失败: <Exception> in run: Server response: 'append!(loadTable("dfs://optiondb", "options"), data) => Only a table can append to another table.' script: '
+                    loadTable("dfs://optiondb", "options").append!(data)
+                    '
+2024-12-11 12:51:05,970 - WARNING - 文件 test_options_data/AAPL160603C00100000.csv 缺少列: oi
+2024-12-11 12:51:05,970 - WARNING - 文件 test_options_data/AAPL160603C00100000.csv 缺少列: strike
+2024-12-11 12:51:05,971 - WARNING - 文件 test_options_data/AAPL160603C00100000.csv 缺少列: expiry
+2024-12-11 12:51:05,971 - WARNING - 文件 test_options_data/AAPL160603C00100000.csv 缺少列: type
+2024-12-11 12:51:05,974 - ERROR - 导入批次数据失败: <Exception> in run: Server response: 'append!(loadTable("dfs://optiondb", "options"), data) => Only a table can append to another table.' script: '
+                    loadTable("dfs://optiondb", "options").append!(data)
+                    '
+2024-12-11 12:51:05,978 - WARNING - 文件 test_options_data/AAPL160603C00101000.csv 缺少列: oi
+2024-12-11 12:51:05,979 - WARNING - 文件 test_options_data/AAPL160603C00101000.csv 缺少列: strike
+2024-12-11 12:51:05,979 - WARNING - 文件 test_options_data/AAPL160603C00101000.csv 缺少列: expiry
+2024-12-11 12:51:05,979 - WARNING - 文件 test_options_data/AAPL160603C00101000.csv 缺少列: type
+2024-12-11 12:51:05,982 - ERROR - 导入批次数据失败: <Exception> in run: Server response: 'append!(loadTable("dfs://optiondb", "options"), data) => Only a table can append to another table.' script: '
+                    loadTable("dfs://optiondb", "options").append!(data)
+                    '
+2024-12-11 12:51:05,987 - WARNING - 文件 test_options_data/AAPL160603C00102000.csv 缺少列: oi
+2024-12-11 12:51:05,987 - WARNING - 文件 test_options_data/AAPL160603C00102000.csv 缺少列: strike
+2024-12-11 12:51:05,988 - WARNING - 文件 test_options_data/AAPL160603C00102000.csv 缺少列: expiry
+2024-12-11 12:51:05,988 - WARNING - 文件 test_options_data/AAPL160603C00102000.csv 缺少列: type
+2024-12-11 12:51:05,990 - ERROR - 导入批次数据失败: <Exception> in run: Server response: 'append!(loadTable("dfs://optiondb", "options"), data) => Only a table can append to another table.' script: '
+                    loadTable("dfs://optiondb", "options").append!(data)
+                    '
+2024-12-11 12:51:05,995 - WARNING - 文件 test_options_data/AAPL160603C00103000.csv 缺少列: oi
+2024-12-11 12:51:05,995 - WARNING - 文件 test_options_data/AAPL160603C00103000.csv 缺少列: strike
+2024-12-11 12:51:05,995 - WARNING - 文件 test_options_data/AAPL160603C00103000.csv 缺少列: expiry
+2024-12-11 12:51:05,995 - WARNING - 文件 test_options_data/AAPL160603C00103000.csv 缺少列: type
+2024-12-11 12:51:05,998 - ERROR - 导入批次数据失败: <Exception> in run: Server response: 'append!(loadTable("dfs://optiondb", "options"), data) => Only a table can append to another table.' script: '
+                    loadTable("dfs://optiondb", "options").append!(data)
+                    '
+2024-12-11 12:51:06,004 - WARNING - 文件 test_options_data/AAPL160603C00104000.csv 缺少列: oi
+2024-12-11 12:51:06,004 - WARNING - 文件 test_options_data/AAPL160603C00104000.csv 缺少列: strike
+2024-12-11 12:51:06,005 - WARNING - 文件 test_options_data/AAPL160603C00104000.csv 缺少列: expiry
+2024-12-11 12:51:06,005 - WARNING - 文件 test_options_data/AAPL160603C00104000.csv 缺少列: type
+2024-12-11 12:51:06,008 - ERROR - 导入批次数据失败: <Exception> in run: Server response: 'append!(loadTable("dfs://optiondb", "options"), data) => Only a table can append to another table.' script: '
+                    loadTable("dfs://optiondb", "options").append!(data)
+                    '
+2024-12-11 12:51:06,013 - WARNING - 文件 test_options_data/AAPL160603C00105000.csv 缺少列: oi
+2024-12-11 12:51:06,013 - WARNING - 文件 test_options_data/AAPL160603C00105000.csv 缺少列: strike
+2024-12-11 12:51:06,013 - WARNING - 文件 test_options_data/AAPL160603C00105000.csv 缺少列: expiry
+2024-12-11 12:51:06,014 - WARNING - 文件 test_options_data/AAPL160603C00105000.csv 缺少列: type
+2024-12-11 12:51:06,016 - ERROR - 导入批次数据失败: <Exception> in run: Server response: 'append!(loadTable("dfs://optiondb", "options"), data) => Only a table can append to another table.' script: '
+                    loadTable("dfs://optiondb", "options").append!(data)
+                    '
+2024-12-11 12:51:06,020 - WARNING - 文件 test_options_data/AAPL160603C00106000.csv 缺少列: oi
+2024-12-11 12:51:06,021 - WARNING - 文件 test_options_data/AAPL160603C00106000.csv 缺少列: strike
+2024-12-11 12:51:06,021 - WARNING - 文件 test_options_data/AAPL160603C00106000.csv 缺少列: expiry
+2024-12-11 12:51:06,021 - WARNING - 文件 test_options_data/AAPL160603C00106000.csv 缺少列: type
+2024-12-11 12:51:06,023 - ERROR - 导入批次数据失败: <Exception> in run: Server response: 'append!(loadTable("dfs://optiondb", "options"), data) => Only a table can append to another table.' script: '
+                    loadTable("dfs://optiondb", "options").append!(data)
+                    '
+2024-12-11 12:51:06,027 - WARNING - 文件 test_options_data/AAPL160603C00107000.csv 缺少列: oi
+2024-12-11 12:51:06,027 - WARNING - 文件 test_options_data/AAPL160603C00107000.csv 缺少列: strike
+2024-12-11 12:51:06,027 - WARNING - 文件 test_options_data/AAPL160603C00107000.csv 缺少列: expiry
+2024-12-11 12:51:06,027 - WARNING - 文件 test_options_data/AAPL160603C00107000.csv 缺少列: type
+2024-12-11 12:51:06,029 - ERROR - 导入批次数据失败: <Exception> in run: Server response: 'append!(loadTable("dfs://optiondb", "options"), data) => Only a table can append to another table.' script: '
+                    loadTable("dfs://optiondb", "options").append!(data)
+                    '
+2024-12-11 12:51:06,035 - WARNING - 文件 test_options_data/AAPL160603C00108000.csv 缺少列: oi
+2024-12-11 12:51:06,036 - WARNING - 文件 test_options_data/AAPL160603C00108000.csv 缺少列: strike
+2024-12-11 12:51:06,037 - WARNING - 文件 test_options_data/AAPL160603C00108000.csv 缺少列: expiry
+2024-12-11 12:51:06,037 - WARNING - 文件 test_options_data/AAPL160603C00108000.csv 缺少列: type
+2024-12-11 12:51:06,040 - ERROR - 导入批次数据失败: <Exception> in run: Server response: 'append!(loadTable("dfs://optiondb", "options"), data) => Only a table can append to another table.' script: '
+                    loadTable("dfs://optiondb", "options").append!(data)
+                    '
+2024-12-11 12:51:06,043 - WARNING - 文件 test_options_data/AAPL160603C00109000.csv 缺少列: oi
+2024-12-11 12:51:06,044 - WARNING - 文件 test_options_data/AAPL160603C00109000.csv 缺少列: strike
+2024-12-11 12:51:06,044 - WARNING - 文件 test_options_data/AAPL160603C00109000.csv 缺少列: expiry
+2024-12-11 12:51:06,044 - WARNING - 文件 test_options_data/AAPL160603C00109000.csv 缺少列: type
+2024-12-11 12:51:06,046 - ERROR - 导入批次数据失败: <Exception> in run: Server response: 'append!(loadTable("dfs://optiondb", "options"), data) => Only a table can append to another table.' script: '
+                    loadTable("dfs://optiondb", "options").append!(data)
+                    '
+2024-12-11 12:51:06,049 - WARNING - 文件 test_options_data/AAPL160603C00110000.csv 缺少列: oi
+2024-12-11 12:51:06,050 - WARNING - 文件 test_options_data/AAPL160603C00110000.csv 缺少列: strike
+2024-12-11 12:51:06,050 - WARNING - 文件 test_options_data/AAPL160603C00110000.csv 缺少列: expiry
+2024-12-11 12:51:06,050 - WARNING - 文件 test_options_data/AAPL160603C00110000.csv 缺少列: type
+2024-12-11 12:51:06,052 - ERROR - 导入批次数据失败: <Exception> in run: Server response: 'append!(loadTable("dfs://optiondb", "options"), data) => Only a table can append to another table.' script: '
+                    loadTable("dfs://optiondb", "options").append!(data)
+                    '
+2024-12-11 12:51:06,056 - WARNING - 文件 test_options_data/AAPL160603C00111000.csv 缺少列: oi
+2024-12-11 12:51:06,056 - WARNING - 文件 test_options_data/AAPL160603C00111000.csv 缺少列: strike
+2024-12-11 12:51:06,056 - WARNING - 文件 test_options_data/AAPL160603C00111000.csv 缺少列: expiry
+2024-12-11 12:51:06,057 - WARNING - 文件 test_options_data/AAPL160603C00111000.csv 缺少列: type
+2024-12-11 12:51:06,059 - ERROR - 导入批次数据失败: <Exception> in run: Server response: 'append!(loadTable("dfs://optiondb", "options"), data) => Only a table can append to another table.' script: '
+                    loadTable("dfs://optiondb", "options").append!(data)
+                    '
+2024-12-11 12:51:06,062 - WARNING - 文件 test_options_data/AAPL160603C00112000.csv 缺少列: oi
+2024-12-11 12:51:06,063 - WARNING - 文件 test_options_data/AAPL160603C00112000.csv 缺少列: strike
+2024-12-11 12:51:06,063 - WARNING - 文件 test_options_data/AAPL160603C00112000.csv 缺少列: expiry
+2024-12-11 12:51:06,063 - WARNING - 文件 test_options_data/AAPL160603C00112000.csv 缺少列: type
+2024-12-11 12:51:06,065 - ERROR - 导入批次数据失败: <Exception> in run: Server response: 'append!(loadTable("dfs://optiondb", "options"), data) => Only a table can append to another table.' script: '
+                    loadTable("dfs://optiondb", "options").append!(data)
+                    '
+2024-12-11 12:51:06,069 - WARNING - 文件 test_options_data/AAPL160603C00113000.csv 缺少列: oi
+2024-12-11 12:51:06,069 - WARNING - 文件 test_options_data/AAPL160603C00113000.csv 缺少列: strike
+2024-12-11 12:51:06,069 - WARNING - 文件 test_options_data/AAPL160603C00113000.csv 缺少列: expiry
+2024-12-11 12:51:06,069 - WARNING - 文件 test_options_data/AAPL160603C00113000.csv 缺少列: type
+2024-12-11 12:51:06,071 - ERROR - 导入批次数据失败: <Exception> in run: Server response: 'append!(loadTable("dfs://optiondb", "options"), data) => Only a table can append to another table.' script: '
+                    loadTable("dfs://optiondb", "options").append!(data)
+                    '
+2024-12-11 12:51:06,071 - INFO - 成功导入 0 条记录
+2024-12-11 12:52:00,042 - INFO - 使用前50个文件进行测试导入
+2024-12-11 12:52:00,043 - ERROR - 处理过程中发生错误: name 'dolphindb' is not defined
+2024-12-11 12:52:29,118 - INFO - 使用前50个文件进行测试导入
+2024-12-11 12:52:29,170 - ERROR - 处理过程中发生错误: <Exception> in run: Server response: 'createPartitionedTable(db, options, "options", "date") => Usage: createPartitionedTable(dbHandle, table, tableName, partitionColumns, [compressMethods], [sortColumns|primaryKey], [keepDuplicates=ALL], [sortKeyMappingFunction], [softDelete=false], [indexes], [latestKeyCache=true]). The data type of partitioning column [date] doesn't match the partition scheme in dbHandle.' script: '
+        if(existsDatabase("dfs://optiondb")){
+            dropDatabase("dfs://optiondb")
+        }
+        db = database("dfs://optiondb", VALUE, 2016..2022)
+        options = table(1:0, `symbol`strike`expiry`type`open`high`low`close`volume`vwap`timestamp`transactions`otc`date`oi, 
+                       [SYMBOL, DOUBLE, DATE, SYMBOL, DOUBLE, DOUBLE, DOUBLE, DOUBLE, LONG, DOUBLE, LONG, LONG, BOOL, DATETIME, LONG])
+        db.createPartitionedTable(options, "options", "date")
+        '
+2024-12-11 12:53:06,640 - INFO - 使用前50个文件进行测试导入
+2024-12-11 12:53:06,678 - INFO - 数据库结构创建成功
+2024-12-11 12:53:06,678 - INFO - 找到 50 个数据文件
+2024-12-11 12:53:06,694 - ERROR - 导入文件 test_options_data/AAPL160603C00055000.csv 时发生错误: 'Series' object is not callable
+2024-12-11 12:53:06,698 - ERROR - 导入文件 test_options_data/AAPL160603C00060000.csv 时发生错误: 'Series' object is not callable
+2024-12-11 12:53:06,706 - ERROR - 导入文件 test_options_data/AAPL160603C00065000.csv 时发生错误: 'Series' object is not callable
+2024-12-11 12:53:06,711 - ERROR - 导入文件 test_options_data/AAPL160603C00080000.csv 时发生错误: 'Series' object is not callable
+2024-12-11 12:53:06,714 - ERROR - 导入文件 test_options_data/AAPL160603C00081000.csv 时发生错误: 'Series' object is not callable
+2024-12-11 12:53:06,721 - ERROR - 导入文件 test_options_data/AAPL160603C00082000.csv 时发生错误: 'Series' object is not callable
+2024-12-11 12:53:06,727 - ERROR - 导入文件 test_options_data/AAPL160603C00083000.csv 时发生错误: 'Series' object is not callable
+2024-12-11 12:53:06,731 - ERROR - 导入文件 test_options_data/AAPL160603C00084000.csv 时发生错误: 'Series' object is not callable
+2024-12-11 12:53:06,736 - ERROR - 导入文件 test_options_data/AAPL160603C00085000.csv 时发生错误: 'Series' object is not callable
+2024-12-11 12:53:06,740 - ERROR - 导入文件 test_options_data/AAPL160603C00086000.csv 时发生错误: 'Series' object is not callable
+2024-12-11 12:53:06,745 - ERROR - 导入文件 test_options_data/AAPL160603C00087000.csv 时发生错误: 'Series' object is not callable
+2024-12-11 12:53:06,750 - ERROR - 导入文件 test_options_data/AAPL160603C00087500.csv 时发生错误: 'Series' object is not callable
+2024-12-11 12:53:06,756 - ERROR - 导入文件 test_options_data/AAPL160603C00088000.csv 时发生错误: 'Series' object is not callable
+2024-12-11 12:53:06,760 - ERROR - 导入文件 test_options_data/AAPL160603C00088500.csv 时发生错误: 'Series' object is not callable
+2024-12-11 12:53:06,764 - ERROR - 导入文件 test_options_data/AAPL160603C00089000.csv 时发生错误: 'Series' object is not callable
+2024-12-11 12:53:06,771 - ERROR - 导入文件 test_options_data/AAPL160603C00089500.csv 时发生错误: 'Series' object is not callable
+2024-12-11 12:53:06,775 - ERROR - 导入文件 test_options_data/AAPL160603C00090000.csv 时发生错误: 'Series' object is not callable
+2024-12-11 12:53:06,779 - ERROR - 导入文件 test_options_data/AAPL160603C00090500.csv 时发生错误: 'Series' object is not callable
+2024-12-11 12:53:06,784 - ERROR - 导入文件 test_options_data/AAPL160603C00091000.csv 时发生错误: 'Series' object is not callable
+2024-12-11 12:53:06,790 - ERROR - 导入文件 test_options_data/AAPL160603C00091500.csv 时发生错误: 'Series' object is not callable
+2024-12-11 12:53:06,794 - ERROR - 导入文件 test_options_data/AAPL160603C00092000.csv 时发生错误: 'Series' object is not callable
+2024-12-11 12:53:06,798 - ERROR - 导入文件 test_options_data/AAPL160603C00092500.csv 时发生错误: 'Series' object is not callable
+2024-12-11 12:53:06,804 - ERROR - 导入文件 test_options_data/AAPL160603C00093000.csv 时发生错误: 'Series' object is not callable
+2024-12-11 12:53:06,809 - ERROR - 导入文件 test_options_data/AAPL160603C00093500.csv 时发生错误: 'Series' object is not callable
+2024-12-11 12:53:06,814 - ERROR - 导入文件 test_options_data/AAPL160603C00094000.csv 时发生错误: 'Series' object is not callable
+2024-12-11 12:53:06,820 - ERROR - 导入文件 test_options_data/AAPL160603C00094500.csv 时发生错误: 'Series' object is not callable
+2024-12-11 12:53:06,825 - ERROR - 导入文件 test_options_data/AAPL160603C00095000.csv 时发生错误: 'Series' object is not callable
+2024-12-11 12:53:06,829 - ERROR - 导入文件 test_options_data/AAPL160603C00095500.csv 时发生错误: 'Series' object is not callable
+2024-12-11 12:53:06,833 - ERROR - 导入文件 test_options_data/AAPL160603C00096000.csv 时发生错误: 'Series' object is not callable
+2024-12-11 12:53:06,841 - ERROR - 导入文件 test_options_data/AAPL160603C00096500.csv 时发生错误: 'Series' object is not callable
+2024-12-11 12:53:06,845 - ERROR - 导入文件 test_options_data/AAPL160603C00097000.csv 时发生错误: 'Series' object is not callable
+2024-12-11 12:53:06,850 - ERROR - 导入文件 test_options_data/AAPL160603C00097500.csv 时发生错误: 'Series' object is not callable
+2024-12-11 12:53:06,856 - ERROR - 导入文件 test_options_data/AAPL160603C00098000.csv 时发生错误: 'Series' object is not callable
+2024-12-11 12:53:06,862 - ERROR - 导入文件 test_options_data/AAPL160603C00098500.csv 时发生错误: 'Series' object is not callable
+2024-12-11 12:53:06,870 - ERROR - 导入文件 test_options_data/AAPL160603C00099000.csv 时发生错误: 'Series' object is not callable
+2024-12-11 12:53:06,875 - ERROR - 导入文件 test_options_data/AAPL160603C00099500.csv 时发生错误: 'Series' object is not callable
+2024-12-11 12:53:06,881 - ERROR - 导入文件 test_options_data/AAPL160603C00100000.csv 时发生错误: 'Series' object is not callable
+2024-12-11 12:53:06,888 - ERROR - 导入文件 test_options_data/AAPL160603C00101000.csv 时发生错误: 'Series' object is not callable
+2024-12-11 12:53:06,894 - ERROR - 导入文件 test_options_data/AAPL160603C00102000.csv 时发生错误: 'Series' object is not callable
+2024-12-11 12:53:06,900 - ERROR - 导入文件 test_options_data/AAPL160603C00103000.csv 时发生错误: 'Series' object is not callable
+2024-12-11 12:53:06,908 - ERROR - 导入文件 test_options_data/AAPL160603C00104000.csv 时发生错误: 'Series' object is not callable
+2024-12-11 12:53:06,915 - ERROR - 导入文件 test_options_data/AAPL160603C00105000.csv 时发生错误: 'Series' object is not callable
+2024-12-11 12:53:06,922 - ERROR - 导入文件 test_options_data/AAPL160603C00106000.csv 时发生错误: 'Series' object is not callable
+2024-12-11 12:53:06,929 - ERROR - 导入文件 test_options_data/AAPL160603C00107000.csv 时发生错误: 'Series' object is not callable
+2024-12-11 12:53:06,933 - ERROR - 导入文件 test_options_data/AAPL160603C00108000.csv 时发生错误: 'Series' object is not callable
+2024-12-11 12:53:06,942 - ERROR - 导入文件 test_options_data/AAPL160603C00109000.csv 时发生错误: 'Series' object is not callable
+2024-12-11 12:53:06,946 - ERROR - 导入文件 test_options_data/AAPL160603C00110000.csv 时发生错误: 'Series' object is not callable
+2024-12-11 12:53:06,953 - ERROR - 导入文件 test_options_data/AAPL160603C00111000.csv 时发生错误: 'Series' object is not callable
+2024-12-11 12:53:06,958 - ERROR - 导入文件 test_options_data/AAPL160603C00112000.csv 时发生错误: 'Series' object is not callable
+2024-12-11 12:53:06,962 - ERROR - 导入文件 test_options_data/AAPL160603C00113000.csv 时发生错误: 'Series' object is not callable
+2024-12-11 12:53:06,963 - INFO - 成功导入 0 条记录
+2024-12-11 13:21:32,836 - INFO - 将使用 50 个文件进行测试导入
+2024-12-11 13:21:32,899 - INFO - 数据库结构创建成功，使用RANGE分区
+2024-12-11 13:21:32,899 - INFO - 找到 50 个数据文件
+2024-12-11 13:21:33,316 - INFO - 成功导入 4116 条记录
+2024-12-11 13:21:33,320 - INFO - 数据库中总记录数:    count
+0   4116

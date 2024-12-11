@@ -1,0 +1,763 @@
+<!DOCTYPE html><html xmlns="http://www.w3.org/1999/xhtml" xml:lang="zh" lang="zh" data-whc_version="26.0">
+    <head><link rel="shortcut icon" href="../favicon.ico"/><link rel="icon" href="../favicon.ico"/><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><meta http-equiv="X-UA-Compatible" content="IE=edge"/><meta name="description" content="数据面板（亦称为 Dashboard）是一个强大的数据可视化和分析工具，旨在帮助用户更好地理解和利用数据。 数据面板在数据分析和资源监控领域具有广泛的应用场景，因为它提供了许多强大功能和优势，包括： 直观的数据可视化：通过各种图表，可以帮助用户将数据转化为可理解的信息，从而能够更深入地了解业务或监控资源。 ..."/><meta name="DC.rights.owner" content="(C) 版权 2024"/><meta name="copyright" content="(C) 版权 2024"/><meta name="generator" content="DITA-OT"/><meta name="DC.type" content="topic"/><meta name="DC.coverage" content=""/><meta name="DC.subject" content="数据面板,dashboard,dash board"/><meta name="keywords" content="数据面板, dashboard, dash board"/><meta name="indexterms" content="数据面板, dashboard, dash board, 数据面板, dashboard, dash board, 数据面板, dashboard, dash board"/><meta name="DC.relation" content="../db_distr_comp/db_man/web/intro.html"/><meta name="prodname" content="DolphinDB"/><meta name="brand" content="DolphinDB"/><meta name="DC.creator" content="DolphinDB"/><meta name="DC.publisher" content="DDB N/A DDB 200"/><meta name="DC.format" content="HTML5"/><meta name="DC.identifier" content="dashboard-使用教程"/><meta name="wh-search-title" content="数据面板"/><title>数据面板</title><!--  Generated with Oxygen version 26.0, build number 2024012323.  --><meta name="wh-path2root" content="../"/><meta name="wh-toc-id" content="dashboard-使用教程-d9529e1382"/><meta name="wh-source-relpath" content="tutorials/dashboard_tutorial.dita"/><meta name="wh-out-relpath" content="tutorials/dashboard_tutorial.html"/>
+
+    <link rel="stylesheet" type="text/css" href="../oxygen-webhelp/app/commons.css?buildId=2024012323"/>
+    <link rel="stylesheet" type="text/css" href="../oxygen-webhelp/app/topic.css?buildId=2024012323"/>
+
+    <script src="../oxygen-webhelp/app/options/properties.js?buildId=20240704100525"></script>
+    <script src="../oxygen-webhelp/app/localization/strings.js?buildId=2024012323"></script>
+    <script src="../oxygen-webhelp/app/search/index/keywords.js?buildId=20240704100525"></script>
+    <script defer="defer" src="../oxygen-webhelp/app/commons.js?buildId=2024012323"></script>
+    <script defer="defer" src="../oxygen-webhelp/app/topic.js?buildId=2024012323"></script>
+<link rel="stylesheet" type="text/css" href="../oxygen-webhelp/template/styles.css?buildId=2024012323"/><script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script><script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script></head>
+
+    <body id="dashboard-使用教程" class="wh_topic_page frmBody">
+        <a href="#wh_topic_body" class="sr-only sr-only-focusable">
+            跳转到主要内容
+        </a>
+        
+        
+        
+        
+        <header class="navbar navbar-default wh_header">
+    <div class="container-fluid">
+        <div xmlns:whc="http://www.oxygenxml.com/webhelp/components" class="wh_header_flex_container navbar-nav navbar-expand-md navbar-dark">
+            <div class="wh_logo_and_publication_title_container">
+                <div class="wh_logo_and_publication_title">
+                    
+                    <a href="https://www.dolphindb.cn" class=" wh_logo d-none d-sm-block "><img src="../logo.png" alt="  DolphinDB 文档中心  "/></a>
+                    <div class=" wh_publication_title "><a href="../index.html"><span class="booktitle">  <span class="ph mainbooktitle">DolphinDB 文档中心</span>  </span></a></div>
+                    
+                </div>
+                
+                
+            </div>
+
+            <div class="wh_top_menu_and_indexterms_link collapse navbar-collapse" id="wh_top_menu_and_indexterms_link">
+                
+                
+                
+                
+            </div>
+        <div class=" wh_search_input navbar-form wh_topic_page_search search " role="form">
+            
+            
+            
+            <form id="searchForm" method="get" role="search" action="../search.html"><div><input type="search" placeholder="搜索 " class="wh_search_textfield" id="textToSearch" name="searchQuery" aria-label="搜索查询" required="required"/><button type="submit" class="wh_search_button" aria-label="搜索"><span class="search_input_text">搜索</span></button></div></form>
+            
+            <script src="/vendors/react/umd/react.production.min.js" defer="defer"></script>
+<script src="/vendors/react-dom/umd/react-dom.production.min.js" defer="defer"></script>
+<script src="/vendors/dayjs/dayjs.min.js" defer="defer"></script>
+<script src="/vendors/antd/dist/antd.min.js" defer="defer"></script>
+<script src="/vendors/@ant-design/icons/dist/index.umd.min.js" defer="defer"></script>
+<script src="/zh/index.js" type="module"></script>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js" defer="defer"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML" defer="defer"><!--
+
+
+--></script>
+
+            
+        </div></div>
+    </div>
+</header>
+        
+        
+         
+        
+        
+        
+        <div class="container-fluid" id="wh_topic_container">
+            <div class="row">
+
+                <nav class="wh_tools d-print-none navbar-expand-md" aria-label="Tools">
+                    
+                    <div data-tooltip-position="bottom" class=" wh_breadcrumb "><ol class="d-print-none"><li><span class="home"><a href="../index.html"><span>主页</span></a></span></li><li><div class="topicref" data-id="sectionddb_deployment"><div class="title"><a href="../deploy/deploy_intro.html"><span class="keyword label">部署</span></a><div class="wh-tooltip"><p class="shortdesc">如何在不同的场景中部署 DolphinDB</p></div></div></div></li><li><div class="topicref" data-id="chap1_sect_using_clients"><div class="title"><a href="../db_distr_comp/clients.html">数据库管理工具</a></div></div></li><li><div class="topicref" data-id="intro"><div class="title"><a href="../db_distr_comp/db_man/web/intro.html"><span class="keyword label">Web 集群管理器</span></a></div></div></li><li class="active"><div class="topicref" data-id="dashboard-使用教程"><div class="title"><a href="../tutorials/dashboard_tutorial.html"><span class="keyword label">数据面板</span></a><div class="wh-tooltip"><p class="shortdesc">数据面板</p></div></div></div></li></ol></div>
+                    
+                    
+                    
+                    <div class="wh_right_tools">
+                        <button class="wh_hide_highlight" aria-label="切换搜索突出显示" title="切换搜索突出显示"></button>
+                        <button class="webhelp_expand_collapse_sections" data-next-state="collapsed" aria-label="折叠截面" title="折叠截面"></button>
+                        
+                        
+                        
+                        
+                        <div class=" wh_print_link print d-none d-md-inline-block "><button onClick="window.print()" title="打印此页" aria-label="打印此页"></button></div>
+                        
+                        <button type="button" id="wh_toc_button" class="custom-toggler navbar-toggler collapsed wh_toggle_button navbar-light" aria-expanded="false" aria-label="Toggle publishing table of content" aria-controls="wh_publication_toc">
+                            <span class="navbar-toggler-icon"></span>
+                        </button>
+                    </div>
+                    
+                </nav>
+            </div>
+            
+            
+            
+            
+            <div class="wh_content_area">
+                <div class="row">
+                    
+                        <nav id="wh_publication_toc" class="col-lg-3 col-md-3 col-sm-12 d-md-block d-none d-print-none" aria-label="Table of Contents Container">
+                            <div id="wh_publication_toc_content">
+		                        
+                            	<div class=" wh_publication_toc " data-tooltip-position="right"><span class="expand-button-action-labels"><span id="button-expand-action" role="button" aria-label="Expand"></span><span id="button-collapse-action" role="button" aria-label="Collapse"></span><span id="button-pending-action" role="button" aria-label="Pending"></span></span><ul role="tree" aria-label="Table of Contents"><li role="treeitem"><div data-tocid="new_chap_about_sect_ddb_docs_intro-d9529e87" class="topicref" data-id="new_chap_about_sect_ddb_docs_intro" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../about/ddb_docs_intro.html" id="new_chap_about_sect_ddb_docs_intro-d9529e87-link">文档使用说明</a><div class="wh-tooltip"><p class="shortdesc">如何获取 DolphinDB 帮助信息</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="chap1_getstarted-d9529e140" class="topicref" data-id="chap1_getstarted" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action chap1_getstarted-d9529e140-link" class="wh-expand-btn"></span><div class="title"><a href="../getstarted/chap1_getstarted.html" id="chap1_getstarted-d9529e140-link"><span class="keyword label">快速上手</span></a><div class="wh-tooltip"><p class="shortdesc">如何快速部署 DolphinDB、建库建表、写入和查询数据</p></div></div></div></li><li role="treeitem" aria-expanded="true"><div data-tocid="sectionddb_deployment-d9529e335" class="topicref" data-id="sectionddb_deployment" data-state="expanded"><span role="button" tabindex="0" aria-labelledby="button-collapse-action sectionddb_deployment-d9529e335-link" class="wh-expand-btn"></span><div class="title"><a href="../deploy/deploy_intro.html" id="sectionddb_deployment-d9529e335-link"><span class="keyword label">部署</span></a><div class="wh-tooltip"><p class="shortdesc">如何在不同的场景中部署 DolphinDB</p></div></div></div><ul role="group" class="navbar-nav nav-list"><li role="treeitem" aria-expanded="false"><div data-tocid="tocId-d9529e388" class="topicref" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action tocId-d9529e388-link" class="wh-expand-btn"></span><div class="title"><a href="../tutorials/standalone_server.html" id="tocId-d9529e388-link">单节点部署与升级</a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="tocId-d9529e481" class="topicref" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action tocId-d9529e481-link" class="wh-expand-btn"></span><div class="title"><a href="../tutorials/single_machine_cluster_deploy.html" id="tocId-d9529e481-link">集群部署与升级</a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="tocId-d9529e666" class="topicref" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action tocId-d9529e666-link" class="wh-expand-btn"></span><div class="title"><a href="../tutorials/docker_single_deployment.html" id="tocId-d9529e666-link">云环境部署</a></div></div></li><li role="treeitem"><div data-tocid="linux-系统部署准备-d9529e943" class="topicref" data-id="linux-系统部署准备" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../tutorials/prep_linux_for_deploy.html" id="linux-系统部署准备-d9529e943-link">Linux 系统部署准备</a></div></div></li><li role="treeitem" aria-expanded="true"><div data-tocid="chap1_sect_using_clients-d9529e989" class="topicref" data-id="chap1_sect_using_clients" data-state="expanded"><span role="button" tabindex="0" aria-labelledby="button-collapse-action chap1_sect_using_clients-d9529e989-link" class="wh-expand-btn"></span><div class="title"><a href="../db_distr_comp/clients.html" id="chap1_sect_using_clients-d9529e989-link">数据库管理工具</a></div></div><ul role="group" class="navbar-nav nav-list"><li role="treeitem" aria-expanded="true"><div data-tocid="intro-d9529e1062" class="topicref" data-id="intro" data-state="expanded"><span role="button" tabindex="0" aria-labelledby="button-collapse-action intro-d9529e1062-link" class="wh-expand-btn"></span><div class="title"><a href="../db_distr_comp/db_man/web/intro.html" id="intro-d9529e1062-link"><span class="keyword label">Web 集群管理器</span></a></div></div><ul role="group" class="navbar-nav nav-list"><li role="treeitem"><div data-tocid="getting_start-d9529e1136" class="topicref" data-id="getting_start" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../db_distr_comp/db_man/web/GettingStart.html" id="getting_start-d9529e1136-link">如何开始</a></div></div></li><li role="treeitem"><div data-tocid="cluster_overview-d9529e1182" class="topicref" data-id="cluster_overview" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../db_distr_comp/db_man/web/cluster_overview.html" id="cluster_overview-d9529e1182-link"><span class="keyword">集群总览</span></a></div></div></li><li role="treeitem"><div data-tocid="cfg_man-d9529e1229" class="topicref" data-id="cfg_man" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../db_distr_comp/db_man/web/cfg_man.html" id="cfg_man-d9529e1229-link">配置管理</a></div></div></li><li role="treeitem"><div data-tocid="module_introduction-d9529e1275" class="topicref" data-id="module_introduction" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../db_distr_comp/db_man/web/Shell.html" id="module_introduction-d9529e1275-link">交互编程</a></div></div></li><li role="treeitem"><div data-tocid="querybuilder-d9529e1335" class="topicref" data-id="querybuilder" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../db_distr_comp/db_man/web/querybuilder.html" id="querybuilder-d9529e1335-link"><span class="keyword">查询向导</span></a></div></div></li><li role="treeitem" class="active"><div data-tocid="dashboard-使用教程-d9529e1382" class="topicref" data-id="dashboard-使用教程" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../tutorials/dashboard_tutorial.html" id="dashboard-使用教程-d9529e1382-link"><span class="keyword label">数据面板</span></a><div class="wh-tooltip"><p class="shortdesc">数据面板</p></div></div></div></li><li role="treeitem"><div data-tocid="job_management-d9529e1498" class="topicref" data-id="job_management" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../db_distr_comp/db_man/web/job_man.html" id="job_management-d9529e1498-link"><span class="keyword">作业管理</span></a></div></div></li><li role="treeitem"><div data-tocid="stream_monitor-d9529e1545" class="topicref" data-id="stream_monitor" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../db_distr_comp/db_man/web/stream_monitor.html" id="stream_monitor-d9529e1545-link"><span class="keyword label">流计算监控</span></a><div class="wh-tooltip"><p class="shortdesc">流计算监控</p></div></div></div></li><li role="treeitem"><div data-tocid="cep-d9529e1661" class="topicref" data-id="cep" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../db_distr_comp/db_man/web/cep.html" id="cep-d9529e1661-link">CEP 流计算引擎状态</a></div></div></li><li role="treeitem"><div data-tocid="access_man-d9529e1707" class="topicref" data-id="access_man" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../db_distr_comp/db_man/web/access_man.html" id="access_man-d9529e1707-link">权限管理</a></div></div></li><li role="treeitem"><div data-tocid="function_panel-d9529e1754" class="topicref" data-id="function_panel" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../db_distr_comp/db_man/web/log.html" id="function_panel-d9529e1754-link"><span class="keyword">日志查看</span></a></div></div></li><li role="treeitem"><div data-tocid="function_panel-d9529e1801" class="topicref" data-id="function_panel" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../db_distr_comp/db_man/web/feature_settings.html" id="function_panel-d9529e1801-link"><span class="keyword">功能设置</span></a></div></div></li></ul></li><li role="treeitem"><div data-tocid="vscode_client-d9529e1848" class="topicref" data-id="vscode_client" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../db_distr_comp/vscode.html" id="vscode_client-d9529e1848-link"><span class="keyword label">VS Code 插件</span></a></div></div></li><li role="treeitem"><div data-tocid="gui_client-d9529e1922" class="topicref" data-id="gui_client" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../db_distr_comp/gui.html" id="gui_client-d9529e1922-link"><span class="keyword label">GUI 客户端</span></a></div></div></li><li role="treeitem"><div data-tocid="notebook_client-d9529e1983" class="topicref" data-id="notebook_client" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../db_distr_comp/jupyter.html" id="notebook_client-d9529e1983-link">Jupyter Notebook 客户端</a></div></div></li><li role="treeitem"><div data-tocid="terminal_client-d9529e2029" class="topicref" data-id="terminal_client" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../db_distr_comp/terminal.html" id="terminal_client-d9529e2029-link"><span class="keyword">DolphinDB 终端</span></a></div></div></li></ul></li><li role="treeitem" aria-expanded="false"><div data-tocid="parameters_configuration-d9529e2076" class="topicref" data-id="parameters_configuration" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action parameters_configuration-d9529e2076-link" class="wh-expand-btn"></span><div class="title"><a href="../db_distr_comp/cfg/para_cfg.html" id="parameters_configuration-d9529e2076-link"><span class="keyword label">参数配置</span></a></div></div></li></ul></li><li role="treeitem" aria-expanded="false"><div data-tocid="new_chap_database_manage_new_chap_dbmanage_landing_page-d9529e2313" class="topicref" data-id="new_chap_database_manage_new_chap_dbmanage_landing_page" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action new_chap_database_manage_new_chap_dbmanage_landing_page-d9529e2313-link" class="wh-expand-btn"></span><div class="title"><a href="../db_distr_comp/cfg/db_intro.html" id="new_chap_database_manage_new_chap_dbmanage_landing_page-d9529e2313-link"><span class="keyword label">数据库</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 数据库的基本概念</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="chap7_tutorials_streaming-d9529e3490" class="topicref" data-id="chap7_tutorials_streaming" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action chap7_tutorials_streaming-d9529e3490-link" class="wh-expand-btn"></span><div class="title"><a href="../stream/str_intro.html" id="chap7_tutorials_streaming-d9529e3490-link"><span class="keyword label">流数据</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 流数据引擎及流数据计算的基本概念</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="tocId-d9529e7385" class="topicref" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action tocId-d9529e7385-link" class="wh-expand-btn"></span><div class="title"><a href="../db_distr_comp/db_oper/import_data.html" id="tocId-d9529e7385-link">数据迁移</a><div class="wh-tooltip"><p class="shortdesc">如何从不同数据源向 DolphinDB 迁移数据</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="chap7_tutorials_system_management-d9529e7812" class="topicref" data-id="chap7_tutorials_system_management" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action chap7_tutorials_system_management-d9529e7812-link" class="wh-expand-btn"></span><div class="title"><a href="../sys_man/om_intro.html" id="chap7_tutorials_system_management-d9529e7812-link"><span class="keyword label">系统运维</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 的系统运维功能及方法</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="about_language_resources-d9529e16490" class="topicref" data-id="about_language_resources" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action about_language_resources-d9529e16490-link" class="wh-expand-btn"></span><div class="title"><a href="../progr/progr_intro.html" id="about_language_resources-d9529e16490-link"><span class="keyword label">编程语言</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 编程基本概念与方法、SQL 在 DolphinDB 的应用</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="functions_references-d9529e26503" class="topicref" data-id="functions_references" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action functions_references-d9529e26503-link" class="wh-expand-btn"></span><div class="title"><a href="../funcs/funcs_intro.html" id="functions_references-d9529e26503-link"><span class="keyword label">函数参考</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 函数分类、语法、详解及示例</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="api_protocol-d9529e86456" class="topicref" data-id="api_protocol" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action api_protocol-d9529e86456-link" class="wh-expand-btn"></span><div class="title"><a href="../api/connapi_intro.html" id="api_protocol-d9529e86456-link"><span class="keyword label">连接器 &amp; API</span></a><div class="wh-tooltip"><p class="shortdesc">面向不同编程语言的 DolphinDB API 及连接器，相关协议和用法</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="chap6_plugin-d9529e91976" class="topicref" data-id="chap6_plugin" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action chap6_plugin-d9529e91976-link" class="wh-expand-btn"></span><div class="title"><a href="../plugins/plg_intro.html" id="chap6_plugin-d9529e91976-link"><span class="keyword label">插件</span></a><div class="wh-tooltip"><p class="shortdesc">多个应用场景的插件使用说明和插件开发指导</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="third_party-d9529e94749" class="topicref" data-id="third_party" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action third_party-d9529e94749-link" class="wh-expand-btn"></span><div class="title"><a href="../third_party.html" id="third_party-d9529e94749-link">第三方工具</a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="about_tutorials-d9529e94980" class="topicref" data-id="about_tutorials" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action about_tutorials-d9529e94980-link" class="wh-expand-btn"></span><div class="title"><a href="../tutorials/about_tutorials.html" id="about_tutorials-d9529e94980-link"><span class="keyword label">教程</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 产品使用教程</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="tocId-d9529e101769" class="topicref" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action tocId-d9529e101769-link" class="wh-expand-btn"></span><div class="title"><a href="../rn/server/3_00_1.html" id="tocId-d9529e101769-link">版本说明</a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 版本发布历史</p></div></div></div></li></ul></div>
+		                        
+                            </div>
+                        </nav>
+                    
+                    
+                    <div class="col-lg-7 col-md-9 col-sm-12" id="wh_topic_body">
+                        <button id="wh_close_publication_toc_button" class="close-toc-button d-none" aria-label="Toggle publishing table of content" aria-controls="wh_publication_toc" aria-expanded="true">
+                            <span class="close-toc-icon-container">
+                                <span class="close-toc-icon"></span>     
+                            </span>
+                        </button>
+                        <button id="wh_close_topic_toc_button" class="close-toc-button d-none" aria-label="Toggle topic table of content" aria-controls="wh_topic_toc" aria-expanded="true">
+                            <span class="close-toc-icon-container">
+                                <span class="close-toc-icon"></span>     
+                            </span>
+                        </button>
+                        
+                        <div class=" wh_topic_content body "><main role="main"><article class="- topic/topic topic" role="article" aria-labelledby="ariaid-title1">
+
+    <h1 class="- topic/title title topictitle1" id="ariaid-title1"><span class="- topic/keyword keyword label">数据面板</span></h1>
+    <div class="- topic/body body">
+        <p class="- topic/p p">数据面板（亦称为 Dashboard）是一个强大的数据可视化和分析工具，旨在帮助用户更好地理解和利用数据。</p>
+        <p class="- topic/p p">数据面板在数据分析和资源监控领域具有广泛的应用场景，因为它提供了许多强大功能和优势，包括：</p>
+        <ul class="- topic/ul ul">
+            <li class="- topic/li li">
+                <p class="- topic/p p">直观的数据可视化：通过各种图表，可以帮助用户将数据转化为可理解的信息，从而能够更深入地了解业务或监控资源。</p>
+            </li>
+            <li class="- topic/li li">
+                <p class="- topic/p p">灵活性和可定制性：提供了多种图表，旨在满足各种行业和用例的需求。用户可以自定义布局、颜色、数据源等，以满足用户的特定需求。</p>
+            </li>
+            <li class="- topic/li li">
+                <p class="- topic/p p">数据互动性：支持用户与数据进行互动，包括筛选、搜索等功能，以便能够深入挖掘信息。</p>
+            </li>
+            <li class="- topic/li li">
+                <p class="- topic/p p">实时数据更新：用户可以通过配置，实现从多个数据源获取实时数据，确保始终处于最新的信息状态。</p>
+            </li>
+            <li class="- topic/li li">
+                <p class="- topic/p p">安全性和权限管理：提供强大的数据安全性和权限管理功能，以确保只有授权用户可以访问敏感信息。</p>
+            </li>
+        </ul>
+        <p class="- topic/p p">下文将介绍如何创建面板、创建图表、设置数据源、设计可视化、分享面板。无论您是新手还是有相关产品使用经验的用户，本文都将帮助您快速上手以上功能。</p>
+    </div>
+    <article class="- topic/topic topic nested1" aria-labelledby="ariaid-title2" id="基本概念">
+        <h2 class="- topic/title title topictitle2" id="ariaid-title2">基本概念</h2>
+        <div class="- topic/body body">
+            <p class="- topic/p p">为便于用户理解，这里列举本文中用到的一些名词概念：</p>
+            <ul class="- topic/ul ul">
+                <li class="- topic/li li"><strong class="+ topic/ph hi-d/b ph b">数据面板</strong>：主要的工作区，用于组织和显示多个图表。</li>
+                <li class="- topic/li li"><strong class="+ topic/ph hi-d/b ph b">图表</strong>：数据的展示形式。</li>
+                <li class="- topic/li li"><strong class="+ topic/ph hi-d/b ph b">数据源</strong>：DolphinDB 作为数据层，为其提供数据服务。对 DolphinDB 中的对象，如 DFS
+                    表或流数据表的一个查询，就是一个数据源。</li>
+                <li class="- topic/li li"><strong class="+ topic/ph hi-d/b ph b">变量</strong>：用于动态控制仪表板中的查询元素，帮助用户在运行时更改数据源的特定参数，以便更灵活地分析和呈现数据。</li>
+            </ul>
+        </div>
+    </article>
+    <article class="- topic/topic topic nested1" aria-labelledby="ariaid-title3" id="权限管理">
+        <h2 class="- topic/title title topictitle2" id="ariaid-title3">权限管理</h2>
+        <div class="- topic/body body">
+            <p class="- topic/p p">数据面板的数据来自 DolphinDB ，因此其遵循严格的权限管理。用户只能对自己有权访问的库表或流数据表进行图表展示。有关具体权限规则，参考：<a class="- topic/xref xref" href="ACL_and_Security.html">用户权限管理</a>。</p>
+        </div>
+    </article>
+    <article class="- topic/topic topic nested1" aria-labelledby="ariaid-title4" id="安装部署">
+        <h2 class="- topic/title title topictitle2" id="ariaid-title4">安装部署</h2>
+        <article class="- topic/topic topic nested2" aria-labelledby="ariaid-title5" id="部署">
+            <h3 class="- topic/title title topictitle3" id="ariaid-title5">部署</h3>
+            <div class="- topic/body body">
+                <p class="- topic/p p">数据面板仅支持 2.00 系列版本，暂不支持 1.30 系列版本。仅支持浏览器语言为中文时使用。</p>
+                <p class="- topic/p p">数据面板做 2.00.11 开始内置的 Web 组件，用户在升级到此版本后无需额外部署。</p>
+                <p class="- topic/p p">如果 2.00.11 之前版本的用户希望使用此功能，请下载最新版本的安装包，用其中的 server/web/ 目录替换原有的 web。如果 DolphinDB
+                    server 是以集群模式部署，需要将每个节点对应的 web 全部替换。其中 web 目录支持热替换，用户无需重启集群。</p>
+                <p class="- topic/p p">用户可通过在浏览器中访问 <code class="+ topic/ph pr-d/codeph ph codeph">&lt;ip&gt;:&lt;port&gt;</code> 进入 web 界面。这里的 ip 和 port
+                    须指定为数据节点或计算节点。</p>
+                <p class="- topic/p p"><span class="+ topic/keyword ui-d/wintitle keyword wintitle">数据面板</span> 位于功能面板中，点击即可进入数据面板页面。</p>
+                <figure class="- topic/fig fig fignone" id="部署__fig_wnt_q2w_yzb" data-ofbid="部署__fig_wnt_q2w_yzb"><figcaption data-caption-side="top" class="- topic/title title figcap"><span class="figtitleprefix fig--title-label">图<span class="fig--title-label-number"> 1</span><span class="fig--title-label-punctuation">. </span></span><span class="fig--title">数据面板</span></figcaption>
+                    
+                    <img class="- topic/image image" id="部署__image_pxs_mcw_yzb" src="../db_distr_comp/db_man/images/dashboard_1_1.png"/>
+                </figure>
+            </div>
+                </article>
+                
+        <article class="- topic/topic topic nested2" aria-labelledby="ariaid-title6" id="初始化">
+            <h3 class="- topic/title title topictitle3" id="ariaid-title6">初始化</h3>
+            <div class="- topic/body body">
+                <p class="- topic/p p">首次使用时，需要管理员 admin 在数据节点进行初始化。不能由其他用户或在其他节点执行。</p>
+                <ol class="- topic/ol ol">
+                    <li class="- topic/li li">
+                        <p class="- topic/p p">以 admin 身份登录 web 界面后，点击左侧边栏的“数据面板”功能，点击界面中的“初始化”按键。</p>
+                    </li>
+                    <li class="- topic/li li">
+                        <p class="- topic/p p">对于 2.00.11 及之后版本，需在节点的配置文件中增加以下配置，然后重启集群，即完成初始化。</p>
+                        <ul class="- topic/ul ul">
+                            <li class="- topic/li li">如果是单节点模式部署，配置文件为 dolphindb.cfg</li>
+                            <li class="- topic/li li">如果是集群模式部署，配置文件为 controller.cfg</li>
+                            <li class="- topic/li li">如果是高可用集群模式部署，需要修改所有控制节点对应的 controller.cfg</li>
+                        </ul>
+                        <pre class="+ topic/pre pr-d/codeblock pre codeblock"><code>thirdPartyCreateUserCallback=dashboard_grant_functionviews
+thirdPartyDeleteUserCallback=dashboard_delete_user</code></pre>
+                    </li>
+                    <li class="- topic/li li">
+                        <div class="- topic/p p">对于 2.00.11 之前的版本，无需其他初始化步骤。但必须注意：<strong class="+ topic/ph hi-d/b ph b">2.00.11
+                                之前的版本，初始化后创建用户时，需要管理员手动调用以下命令，才可为新创建的用户赋权使用 Dashboard。如果将来 server
+                                升级为
+                            2.00.11及之后版本，需要执行一次步骤2。</strong><pre class="+ topic/pre pr-d/codeblock pre codeblock" id="初始化__codeblock_qwk_khh_b1c" data-ofbid="初始化__codeblock_qwk_khh_b1c"><code>dashboard_grant_functionviews(&lt;newUserName&gt;, NULL, false)</code></pre></div>
+                    </li>
+                </ol>
+            </div>
+        </article>
+        </article>
+    <article class="- topic/topic topic nested1" aria-labelledby="ariaid-title7" id="topic_p5g_pyp_s1c">
+        <h2 class="- topic/title title topictitle2" id="ariaid-title7">基本操作</h2>
+        <article class="- topic/topic topic nested2" aria-labelledby="ariaid-title8" id="创建面板">
+            <h3 class="- topic/title title topictitle3" id="ariaid-title8">创建面板</h3>
+            <div class="- topic/body body">
+                <figure class="- topic/fig fig fignone" id="创建面板__fig_ln4_52w_yzb" data-ofbid="创建面板__fig_ln4_52w_yzb">
+                    <img class="- topic/image image" id="创建面板__image_nn4_52w_yzb" src="../db_distr_comp/db_man/images/dashboard_1_2.png"/>
+                </figure>
+                <p class="- topic/p p">在数据面板界面点击 “新建” ，输入要创建的面板名称，点击确定，可以创建一个空面板。</p>
+                <p class="- topic/p p">导出和导入功能：可以对已有面板的进行备份和迁移。导入和导出通过 json 格式文件实现。导入时，请确保 json 文件内容符合 数据面板配置要求。</p>
+                <p class="- topic/p p">分享功能：可通过链接的方式将面板分享给其他用户。选中面板后点击批量分享，即可获得模板对应的链接。将链接分享给集群中的其他用户，其他用户访问链接后需要先登录自己账号，然后即可进入预览模式，不可编辑。</p>
+            </div>
+        </article>
+        <article class="- topic/topic topic nested2" aria-labelledby="ariaid-title9" id="编辑面板">
+            <h3 class="- topic/title title topictitle3" id="ariaid-title9">编辑面板</h3>
+            <div class="- topic/body body">
+                <figure class="- topic/fig fig fignone" id="编辑面板__fig_dhh_v2w_yzb" data-ofbid="编辑面板__fig_dhh_v2w_yzb">
+                    <img class="- topic/image image" id="编辑面板__image_fhh_v2w_yzb" src="../db_distr_comp/db_man/images/dashboard_1_3.png" height="546" width="1152"/>
+                </figure>
+                <ol class="- topic/ol ol" id="编辑面板__ol_gff_qyp_s1c" data-ofbid="编辑面板__ol_gff_qyp_s1c">
+                    <li class="- topic/li li">
+                        <p class="- topic/p p">面板切换：在本节点的不同数据面板间切换。</p>
+                    </li>
+                    <li class="- topic/li li">
+                        <p class="- topic/p p">回到主界面：返回数据面板主界面。</p>
+                    </li>
+                    <li class="- topic/li li">
+                        <p class="- topic/p p">新增：创建一个空面板。</p>
+                    </li>
+                    <li class="- topic/li li">
+                        <p class="- topic/p p">保存：保存当前面板。</p>
+                    </li>
+                    <li class="- topic/li li">
+                        <p class="- topic/p p">导出：将本面板的相关配置信息以 json 文件的格式保存。</p>
+                    </li>
+                    <li class="- topic/li li">
+                        <p class="- topic/p p">创建副本：创建一个当前面板的副本。</p>
+                    </li>
+                    <li class="- topic/li li">
+                        <p class="- topic/p p">导入：将包含面板配置信息的 json文件 导入从而实现面板导入。</p>
+                    </li>
+                    <li class="- topic/li li">
+                        <p class="- topic/p p">修改名称：更改当前面板的名称。</p>
+                    </li>
+                    <li class="- topic/li li">
+                        <p class="- topic/p p">分享：将当前面板通过链接的形式分享给其他用户。分享前应确保最新改动已经保存。</p>
+                    </li>
+                    <li class="- topic/li li">
+                        <p class="- topic/p p">删除：删除当前面板。</p>
+                    </li>
+                    <li class="- topic/li li">
+                        <p class="- topic/p p">自动保存：开启后，每间隔一分钟会自动保存一次。</p>
+                    </li>
+                    <li class="- topic/li li">
+                        <p class="- topic/p p">模式切换：切换编辑模式和预览模式。</p>
+                    </li>
+                    <li class="- topic/li li">
+                        <p class="- topic/p p">变量：由当前用户的变量，以供数据源和图表展示使用。</p>
+                    </li>
+                    <li class="- topic/li li">
+                        <p class="- topic/p p">数据源：设置当前用户的数据源，以供图表展示使用。</p>
+                    </li>
+                    <li class="- topic/li li">
+                        <p class="- topic/p p">图表列表：可供用户选用的所有图表。</p>
+                    </li>
+                    <li class="- topic/li li">
+                        <p class="- topic/p p">面板工作区：用户可在此编排图表。</p>
+                    </li>
+                    <li class="- topic/li li">
+                        <p class="- topic/p p">图表配置区：选中面板工作区的某一图表后才会显示，用于配置当前图表的信息。</p>
+                    </li>
+                </ol>
+            </div>
+        </article>
+        <article class="- topic/topic topic nested2" aria-labelledby="ariaid-title10" id="编辑变量">
+            <h3 class="- topic/title title topictitle3" id="ariaid-title10">编辑变量</h3>
+            <div class="- topic/body body">
+                <figure class="- topic/fig fig fignone" id="编辑变量__fig_zb2_w2w_yzb" data-ofbid="编辑变量__fig_zb2_w2w_yzb">
+                    <img class="- topic/image image" id="编辑变量__image_cc2_w2w_yzb" src="../db_distr_comp/db_man/images/dashboard_1_4.png"/>
+                </figure>
+                <p class="- topic/p p"><strong class="+ topic/ph hi-d/b ph b">新建</strong>：为当前数据面板新增变量。</p>
+                <p class="- topic/p p"><strong class="+ topic/ph hi-d/b ph b">重命名</strong>：指为当前变量重命名，变量名显示在左侧。</p>
+                <p class="- topic/p p"><strong class="+ topic/ph hi-d/b ph b">删除</strong>：删除当前变量。</p>
+                <p class="- topic/p p"><strong class="+ topic/ph hi-d/b ph b">复制</strong>：复制当前变量，可在不同数据面板的配置变量界面，通过 ctrl+v 粘贴。</p>
+                <p class="- topic/p p"><strong class="+ topic/ph hi-d/b ph b">显示名称</strong>：指当前变量在图表中显示的名称，如变量symbol，在图表中显示为债券名称。</p>
+                <p class="- topic/p p"><strong class="+ topic/ph hi-d/b ph b">变量类型</strong>：有单选、多选、自由文本、日期四种类型。其中单选和多选需要新增可选项，新增界面会在类型是为单选或多选时显示。</p>
+                <p class="- topic/p p"><strong class="+ topic/ph hi-d/b ph b">变量值</strong>：显示当前的变量值。如果是首次新增，应为变量设置一个初始值。如果是单选变量，在变量值选定为某一可选项后，无法在可选项列表中删除该项。如要删除，需要先修改变量值的选择。</p>
+                <img class="- topic/image image" id="编辑变量__image_kvw_55j_xbc" src="../db_distr_comp/db_man/images/dashboard_1_23.png"/>
+                <p class="- topic/p p">当变量类型为单选或多选时，可以通过 SQL 导入的方式生成可选值。SQL
+                    必须返回一个包含两列的表，第一列作为标签，第二列作为值。</p>
+            </div>
+        </article>
+        <article class="- topic/topic topic nested2" aria-labelledby="ariaid-title11" id="编辑数据源">
+            <h3 class="- topic/title title topictitle3" id="ariaid-title11">编辑数据源</h3>
+            <div class="- topic/body body">
+                <p class="- topic/p p">数据源可以选择 “表格” 和 “矩阵“ 两种数据类型。其中矩阵仅可作为热力图的数据源，可通过 DolphinDB SQL
+                    编辑数据源；而”表格“可以选择“DolphinDB SQL”或“流数据” 两种方式编辑。</p>
+                <figure class="- topic/fig fig fignone" id="编辑数据源__fig_ypk_w2w_yzb" data-ofbid="编辑数据源__fig_ypk_w2w_yzb">
+                    <img class="- topic/image image" id="编辑数据源__image_aqk_w2w_yzb" src="../db_distr_comp/db_man/images/dashboard_1_5.png"/>
+                </figure>
+                <p class="- topic/p p"><strong class="+ topic/ph hi-d/b ph b">新建</strong>：为当前数据面板新增数据源。</p>
+                <p class="- topic/p p"><strong class="+ topic/ph hi-d/b ph b">重命名</strong>：为当前数据源重命名，数据源名称显示在左侧。</p>
+                <p class="- topic/p p"><strong class="+ topic/ph hi-d/b ph b">删除</strong>：删除当前数据源。</p>
+                <p class="- topic/p p"><strong class="+ topic/ph hi-d/b ph b">复制</strong>：复制当前数据源，可在不同数据面板的配置数据源界面，通过 ctrl+v 粘贴。</p>
+                <p class="- topic/p p"><strong class="+ topic/ph hi-d/b ph b">DolphinDB SQL</strong>，在代码区编辑需要查询的内容：</p>
+                <ul class="- topic/ul ul" id="编辑数据源__ul_hff_qyp_s1c" data-ofbid="编辑数据源__ul_hff_qyp_s1c">
+                    <li class="- topic/li li">
+                        <p class="- topic/p p">如需通过变量灵活配置，可以点击插入变量实现；</p>
+                    </li>
+                    <li class="- topic/li li">
+                        <p class="- topic/p p">自动刷新可以及时获取最新信息；</p>
+                    </li>
+                    <li class="- topic/li li">
+                        <p class="- topic/p p">最大行数将展示结果的前n条数据，若不设置最大行数，则默认展示所有数据。</p>
+                    </li>
+                </ul>
+                <p class="- topic/p p"><strong class="+ topic/ph hi-d/b ph b">流数据</strong>，左侧会显示当前节点所有流数据表，用户也可以手动过滤检索，选择需要展示数据的流数据表：</p>
+                <ul class="- topic/ul ul" id="编辑数据源__ul_iff_qyp_s1c" data-ofbid="编辑数据源__ul_iff_qyp_s1c">
+                    <li class="- topic/li li">
+                        <p class="- topic/p p">点选某个流表时，右侧会展示列名预览。</p>
+                    </li>
+                    <li class="- topic/li li">
+                        <p class="- topic/p p">下方“IP 端口”展示当前连接的节点。</p>
+                    </li>
+                    <li class="- topic/li li">
+                        <p class="- topic/p p">过滤分为列过滤和表达式过滤。列过滤需要在 DolphinDB 客户端配合函数
+                                <code class="+ topic/ph pr-d/codeph ph codeph">setStreamTableFilterColumn</code>
+                            指定过滤列；表达式过滤直接设置条件表达式，不符合条件的数据将被过滤掉，例如 <code class="+ topic/ph pr-d/codeph ph codeph">colName==3</code></p>
+                    </li>
+                    <li class="- topic/li li">
+                        <p class="- topic/p p">最大行数将展示结果的前n条数据，若不设置最大行数，则默认展示所有数据。</p>
+                    </li>
+                </ul>
+            </div>
+        </article>
+        <article class="- topic/topic topic nested2" aria-labelledby="ariaid-title12" id="选择图表">
+            <h3 class="- topic/title title topictitle3" id="ariaid-title12">选择图表</h3>
+            <div class="- topic/body body">
+                <p class="- topic/p p">数据面板提供了柱状图、折线图、饼图、表格、K线、混合图、订单图、富文本、描述表、编辑器、仪表盘、雷达图、变量、散点图、热力图等 15
+                    个图供用户选择，其中柱状图、折线图、多源图、散点图、混合图支持进行阈值设置。可以通过”阈值类型“选项将阈值设置为百分比或绝对值两种类型，其中百分比是指相对于该轴当前的最大值。展示类型包括以下三种选项：</p>
+                <ul class="- topic/ul ul" id="选择图表__ul_evl_hpv_x1c" data-ofbid="选择图表__ul_evl_hpv_x1c">
+                    <li class="- topic/li li">
+                        <p class="- topic/p p">不展示：隐藏阈值。</p>
+                    </li>
+                    <li class="- topic/li li">
+                        <p class="- topic/p p">区域填充：将当前阈值到大于此阈值的最小阈值之间的区域填充为其对应的颜色。例如，设置阈值 20% 为绿色，阈值 80% 为红色，则
+                            20%-80%之间填充为绿色，80%以上填充为红色。</p>
+                    </li>
+                    <li class="- topic/li li">
+                        <p class="- topic/p p">线条：通过一条线来标识区域的下边界。线条的类型、线宽和颜色允许多种选择。例如，设置阈值 20% 为绿色，阈值 80% 为红色，则 20%
+                            处有一条绿色线，80% 处有一条红色线。</p>
+                    </li>
+                </ul>
+                <p class="- topic/p p">各图表的效果展示图详见附录。</p>
+                <p class="- topic/p p">使用时，在左侧图标列表选择要设置的图表，鼠标左键点击将其拖拽至工作区空白处；再点击“点击填充数据源”，选择一个数据源。</p>
+                <p class="- topic/p p">点击选中此图表，可按需调整其位置和大小。</p>
+                <p class="- topic/p p">图表右上角的复制按键，即可复制当前图表到剪贴板；在当前或其他数据面板通过 ctrl+v 实现粘贴。</p>
+                <div class="- topic/note note note note_note" id="选择图表__note_gr3_y2w_yzb" data-ofbid="选择图表__note_gr3_y2w_yzb"><span class="note__title">注：</span> 
+                    <ul class="- topic/ul ul" id="选择图表__ul_spp_y2w_yzb" data-ofbid="选择图表__ul_spp_y2w_yzb">
+                        <li class="- topic/li li">
+                            <p class="- topic/p p">如果目标数据面板上没有足够的空间展示，会导致图表之间重叠，需手动拖动调整位置。</p>
+                        </li>
+                        <li class="- topic/li li">
+                            <p class="- topic/p p">如果先复制图，再复制数据源，需要在图表的编辑数据源处重新“应用”一下数据源。</p>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </article>
+    </article>
+    <article class="- topic/topic topic nested1" aria-labelledby="ariaid-title13" id="topic_zhq_vyp_s1c">
+        <h2 class="- topic/title title topictitle2" id="ariaid-title13">实例演示，使用数据面板展示 K 线图</h2>
+        <div class="- topic/body body">
+            <p class="- topic/p p">已知 DolphinDB 当前节点有流表 klineStream 实时接收 K 线数据，klineStream
+                的表结构如下表所示，列”m1_“、”m5_“、”m15_“、”m30_“、”m60_“前缀分别对应1分钟、5分钟、15分钟、30分钟、60分钟K线，”open“、”high“、”low“、”close“、”volume“分别对应开盘价、最高价、最低价、收盘价和成交量。</p>
+            <div class="table-container"><table class="- topic/table table" id="topic_zhq_vyp_s1c__table_e4d_xyp_s1c" data-ofbid="topic_zhq_vyp_s1c__table_e4d_xyp_s1c" data-cols="2"><caption></caption><colgroup><col/><col/></colgroup><thead class="- topic/thead thead">
+                        <tr class="- topic/row">
+                            <th class="- topic/entry entry colsep-0 rowsep-0" id="topic_zhq_vyp_s1c__table_e4d_xyp_s1c__entry__1">name</th>
+                            <th class="- topic/entry entry colsep-0 rowsep-0" id="topic_zhq_vyp_s1c__table_e4d_xyp_s1c__entry__2">typeString</th>
+                        </tr>
+                    </thead><tbody class="- topic/tbody tbody">
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry colsep-0 rowsep-0" headers="topic_zhq_vyp_s1c__table_e4d_xyp_s1c__entry__1">createTime</td>
+                            <td class="- topic/entry entry colsep-0 rowsep-0" headers="topic_zhq_vyp_s1c__table_e4d_xyp_s1c__entry__2">TIMESTAMP</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry colsep-0 rowsep-0" headers="topic_zhq_vyp_s1c__table_e4d_xyp_s1c__entry__1">SECURITYID</td>
+                            <td class="- topic/entry entry colsep-0 rowsep-0" headers="topic_zhq_vyp_s1c__table_e4d_xyp_s1c__entry__2">SYMBOL</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry colsep-0 rowsep-0" headers="topic_zhq_vyp_s1c__table_e4d_xyp_s1c__entry__1">m1_open</td>
+                            <td class="- topic/entry entry colsep-0 rowsep-0" headers="topic_zhq_vyp_s1c__table_e4d_xyp_s1c__entry__2">DOUBLE</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry colsep-0 rowsep-0" headers="topic_zhq_vyp_s1c__table_e4d_xyp_s1c__entry__1">m1_high</td>
+                            <td class="- topic/entry entry colsep-0 rowsep-0" headers="topic_zhq_vyp_s1c__table_e4d_xyp_s1c__entry__2">DOUBLE</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry colsep-0 rowsep-0" headers="topic_zhq_vyp_s1c__table_e4d_xyp_s1c__entry__1">m1_low</td>
+                            <td class="- topic/entry entry colsep-0 rowsep-0" headers="topic_zhq_vyp_s1c__table_e4d_xyp_s1c__entry__2">DOUBLE</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry colsep-0 rowsep-0" headers="topic_zhq_vyp_s1c__table_e4d_xyp_s1c__entry__1">m1_close</td>
+                            <td class="- topic/entry entry colsep-0 rowsep-0" headers="topic_zhq_vyp_s1c__table_e4d_xyp_s1c__entry__2">DOUBLE</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry colsep-0 rowsep-0" headers="topic_zhq_vyp_s1c__table_e4d_xyp_s1c__entry__1">m1_volume</td>
+                            <td class="- topic/entry entry colsep-0 rowsep-0" headers="topic_zhq_vyp_s1c__table_e4d_xyp_s1c__entry__2">LONG</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry colsep-0 rowsep-0" headers="topic_zhq_vyp_s1c__table_e4d_xyp_s1c__entry__1">m5_open</td>
+                            <td class="- topic/entry entry colsep-0 rowsep-0" headers="topic_zhq_vyp_s1c__table_e4d_xyp_s1c__entry__2">DOUBLE</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry colsep-0 rowsep-0" headers="topic_zhq_vyp_s1c__table_e4d_xyp_s1c__entry__1">m5_high</td>
+                            <td class="- topic/entry entry colsep-0 rowsep-0" headers="topic_zhq_vyp_s1c__table_e4d_xyp_s1c__entry__2">DOUBLE</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry colsep-0 rowsep-0" headers="topic_zhq_vyp_s1c__table_e4d_xyp_s1c__entry__1">m5_low</td>
+                            <td class="- topic/entry entry colsep-0 rowsep-0" headers="topic_zhq_vyp_s1c__table_e4d_xyp_s1c__entry__2">DOUBLE</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry colsep-0 rowsep-0" headers="topic_zhq_vyp_s1c__table_e4d_xyp_s1c__entry__1">m5_close</td>
+                            <td class="- topic/entry entry colsep-0 rowsep-0" headers="topic_zhq_vyp_s1c__table_e4d_xyp_s1c__entry__2">DOUBLE</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry colsep-0 rowsep-0" headers="topic_zhq_vyp_s1c__table_e4d_xyp_s1c__entry__1">m5_volume</td>
+                            <td class="- topic/entry entry colsep-0 rowsep-0" headers="topic_zhq_vyp_s1c__table_e4d_xyp_s1c__entry__2">LONG</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry colsep-0 rowsep-0" headers="topic_zhq_vyp_s1c__table_e4d_xyp_s1c__entry__1">m15_open</td>
+                            <td class="- topic/entry entry colsep-0 rowsep-0" headers="topic_zhq_vyp_s1c__table_e4d_xyp_s1c__entry__2">DOUBLE</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry colsep-0 rowsep-0" headers="topic_zhq_vyp_s1c__table_e4d_xyp_s1c__entry__1">m15_high</td>
+                            <td class="- topic/entry entry colsep-0 rowsep-0" headers="topic_zhq_vyp_s1c__table_e4d_xyp_s1c__entry__2">DOUBLE</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry colsep-0 rowsep-0" headers="topic_zhq_vyp_s1c__table_e4d_xyp_s1c__entry__1">m15_low</td>
+                            <td class="- topic/entry entry colsep-0 rowsep-0" headers="topic_zhq_vyp_s1c__table_e4d_xyp_s1c__entry__2">DOUBLE</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry colsep-0 rowsep-0" headers="topic_zhq_vyp_s1c__table_e4d_xyp_s1c__entry__1">m15_close</td>
+                            <td class="- topic/entry entry colsep-0 rowsep-0" headers="topic_zhq_vyp_s1c__table_e4d_xyp_s1c__entry__2">DOUBLE</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry colsep-0 rowsep-0" headers="topic_zhq_vyp_s1c__table_e4d_xyp_s1c__entry__1">m15_volume</td>
+                            <td class="- topic/entry entry colsep-0 rowsep-0" headers="topic_zhq_vyp_s1c__table_e4d_xyp_s1c__entry__2">LONG</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry colsep-0 rowsep-0" headers="topic_zhq_vyp_s1c__table_e4d_xyp_s1c__entry__1">m30_open</td>
+                            <td class="- topic/entry entry colsep-0 rowsep-0" headers="topic_zhq_vyp_s1c__table_e4d_xyp_s1c__entry__2">DOUBLE</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry colsep-0 rowsep-0" headers="topic_zhq_vyp_s1c__table_e4d_xyp_s1c__entry__1">m30_high</td>
+                            <td class="- topic/entry entry colsep-0 rowsep-0" headers="topic_zhq_vyp_s1c__table_e4d_xyp_s1c__entry__2">DOUBLE</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry colsep-0 rowsep-0" headers="topic_zhq_vyp_s1c__table_e4d_xyp_s1c__entry__1">m30_low</td>
+                            <td class="- topic/entry entry colsep-0 rowsep-0" headers="topic_zhq_vyp_s1c__table_e4d_xyp_s1c__entry__2">DOUBLE</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry colsep-0 rowsep-0" headers="topic_zhq_vyp_s1c__table_e4d_xyp_s1c__entry__1">m30_close</td>
+                            <td class="- topic/entry entry colsep-0 rowsep-0" headers="topic_zhq_vyp_s1c__table_e4d_xyp_s1c__entry__2">DOUBLE</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry colsep-0 rowsep-0" headers="topic_zhq_vyp_s1c__table_e4d_xyp_s1c__entry__1">m30_volume</td>
+                            <td class="- topic/entry entry colsep-0 rowsep-0" headers="topic_zhq_vyp_s1c__table_e4d_xyp_s1c__entry__2">LONG</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry colsep-0 rowsep-0" headers="topic_zhq_vyp_s1c__table_e4d_xyp_s1c__entry__1">m60_open</td>
+                            <td class="- topic/entry entry colsep-0 rowsep-0" headers="topic_zhq_vyp_s1c__table_e4d_xyp_s1c__entry__2">DOUBLE</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry colsep-0 rowsep-0" headers="topic_zhq_vyp_s1c__table_e4d_xyp_s1c__entry__1">m60_high</td>
+                            <td class="- topic/entry entry colsep-0 rowsep-0" headers="topic_zhq_vyp_s1c__table_e4d_xyp_s1c__entry__2">DOUBLE</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry colsep-0 rowsep-0" headers="topic_zhq_vyp_s1c__table_e4d_xyp_s1c__entry__1">m60_low</td>
+                            <td class="- topic/entry entry colsep-0 rowsep-0" headers="topic_zhq_vyp_s1c__table_e4d_xyp_s1c__entry__2">DOUBLE</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry colsep-0 rowsep-0" headers="topic_zhq_vyp_s1c__table_e4d_xyp_s1c__entry__1">m60_close</td>
+                            <td class="- topic/entry entry colsep-0 rowsep-0" headers="topic_zhq_vyp_s1c__table_e4d_xyp_s1c__entry__2">DOUBLE</td>
+                        </tr>
+                        <tr class="- topic/row">
+                            <td class="- topic/entry entry colsep-0 rowsep-0" headers="topic_zhq_vyp_s1c__table_e4d_xyp_s1c__entry__1">m60_volume</td>
+                            <td class="- topic/entry entry colsep-0 rowsep-0" headers="topic_zhq_vyp_s1c__table_e4d_xyp_s1c__entry__2">LONG</td>
+                        </tr>
+                    </tbody></table></div>
+        </div>
+        <article class="- topic/topic topic nested2" aria-labelledby="ariaid-title14" id="创建面板-1">
+            <h3 class="- topic/title title topictitle3" id="ariaid-title14">创建面板</h3>
+            <div class="- topic/body body">
+                <p class="- topic/p p">点击 ”新建“，输入新数据面板名称为”K线 “，点击”确定“，创建一个空面板。</p>
+            </div>
+        </article>
+        <article class="- topic/topic topic nested2" aria-labelledby="ariaid-title15" id="配置变量">
+            <h3 class="- topic/title title topictitle3" id="ariaid-title15">配置变量</h3>
+            <div class="- topic/body body">
+                <ol class="- topic/ol ol" id="配置变量__ol_f4d_xyp_s1c" data-ofbid="配置变量__ol_f4d_xyp_s1c">
+                    <li class="- topic/li li">
+                        <p class="- topic/p p">点击页面上方中央的编辑按键，切换到编辑模式。</p>
+                    </li>
+                    <li class="- topic/li li">
+                        <p class="- topic/p p">点击 ”变量” -&gt;”新建” ，将新变量命名为“频率”：</p>
+                        <ul class="- topic/ul ul" id="配置变量__ul_bvz_z2w_yzb" data-ofbid="配置变量__ul_bvz_z2w_yzb">
+                            <li class="- topic/li li">显示名称设置为“K线频率”，</li>
+                            <li class="- topic/li li">变量类型设置为“单选”，</li>
+                            <li class="- topic/li li">可选项新增5项，标签依次为“1分钟”、“5分钟”、“15分钟”、“30分钟”、“1小时”，其对应的值分别为”m1_“、”m5_“、”m15_“、”m30_“、”m60_“，</li>
+                            <li class="- topic/li li">变量值可任选一个，例如“1分钟”。</li>
+                        </ul>
+                    </li>
+                    <li class="- topic/li li">
+                        <p class="- topic/p p">点击 “保存”。</p>
+                        <img class="- topic/image image" id="配置变量__image_nxk_1fw_yzb" src="../db_distr_comp/db_man/images/dashboard_1_6.png"/>
+                    </li>
+                </ol>
+                <ol class="- topic/ol ol" id="配置变量__ol_g4d_xyp_s1c" data-ofbid="配置变量__ol_g4d_xyp_s1c">
+                    <li class="- topic/li li">
+                        <p class="- topic/p p">点击 ”变量” -&gt;”新建” ，将新变量命名为“symbol”：</p>
+                    </li>
+                    <li class="- topic/li li">
+                        <p class="- topic/p p">显示名称设置为“债券名称”，</p>
+                    </li>
+                    <li class="- topic/li li">
+                        <p class="- topic/p p">变量类型设置为“自由文本”，</p>
+                    </li>
+                    <li class="- topic/li li">
+                        <p class="- topic/p p">变量值可设置为流表中SECURITYID的任一取值，例如 230210</p>
+                    </li>
+                    <li class="- topic/li li">
+                        <p class="- topic/p p">点击 ”保存”。</p>
+                        <img class="- topic/image image" id="配置变量__image_h4d_xyp_s1c" src="../db_distr_comp/db_man/images/dashboard_1_7.png"/>
+                    </li>
+                </ol>
+            </div>
+        </article>
+        <article class="- topic/topic topic nested2" aria-labelledby="ariaid-title16" id="配置数据源">
+            <h3 class="- topic/title title topictitle3" id="ariaid-title16">配置数据源</h3>
+            <div class="- topic/body body">
+                <p class="- topic/p p">点击 “数据源”-&gt;”新建”，将新数据源命名为“K线”，在右侧选择“DolphinDB 脚本/SQL”，输入脚本</p>
+                <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="配置数据源__codeblock_i4d_xyp_s1c" data-ofbid="配置数据源__codeblock_i4d_xyp_s1c"><code>select createtime, securityid, decimal32({{频率}}high,4) as high,{{频率}}low as low,{{频率}}close as close,{{频率}}open as open,{{频率}}volume as volume,ma({{频率}}close, 5, 1) as ma5, ma({{频率}}close, 10, 1) as ma10, ma({{频率}}close, 20, 1) as ma20, ma({{频率}}close, 60, 1) as ma60 from klineStream where securityid == '{{symbol}}'</code></pre>
+                <p class="- topic/p p">脚本中的 <code class="+ topic/ph pr-d/codeph ph codeph">{{频率}}</code> 和 <code class="+ topic/ph pr-d/codeph ph codeph">{{symbol}}</code>
+                    通过点击下方的"插入变量"-&gt;"频率"和"symbol"，将上步骤中配置的变量插入。</p>
+                <p class="- topic/p p">开启自动刷新，并设置间隔时间为 1s，最大行数设置为 150 ，点击“保存”。</p>
+            </div>
+        </article>
+        <article class="- topic/topic topic nested2" aria-labelledby="ariaid-title17" id="配置图表">
+            <h3 class="- topic/title title topictitle3" id="ariaid-title17">配置图表</h3>
+            <div class="- topic/body body">
+                <ol class="- topic/ol ol" id="配置图表__ol_j4d_xyp_s1c" data-ofbid="配置图表__ol_j4d_xyp_s1c">
+                    <li class="- topic/li li">将左侧的“K线”拖动至面板空白处，点击“点击填充数据源”，选择之前配置的数据源“K线”。</li>
+                    <li class="- topic/li li">点击图表，在界面右侧配置本图表的各项属性：</li>
+                </ol>
+                <ul class="- topic/ul ul" id="配置图表__ul_k4d_xyp_s1c" data-ofbid="配置图表__ul_k4d_xyp_s1c">
+                    <li class="- topic/li li">
+                        <p class="- topic/p p">基本属性：</p>
+                        <ul class="- topic/ul ul" id="配置图表__ul_l4d_xyp_s1c" data-ofbid="配置图表__ul_l4d_xyp_s1c">
+                            <li class="- topic/li li">标题设置为“K线”，并根据需求设置标题字号和内边距等参数，</li>
+                            <li class="- topic/li li">提示框设置为”是“，代表当光标移动到图中某一位置时，是否显示这个一点的数据值，</li>
+                            <li class="- topic/li li">X 轴、Y 轴缩略图，代表是否开启缩略轴。这里将 X 轴缩略轴设置为”是“，以便用户通过调整鼠标滚轮显示特定时间窗口的图像。</li>
+                        </ul>
+                    </li>
+                    <li class="- topic/li li">
+                        <p class="- topic/p p">变量设置：</p>
+                        <ul class="- topic/ul ul" id="配置图表__ul_m4d_xyp_s1c" data-ofbid="配置图表__ul_m4d_xyp_s1c">
+                            <li class="- topic/li li">配置数据源时插入了变量“频率”和“symbol”，所以设置关联变量为“频率”和“symbol”。</li>
+                            <li class="- topic/li li">每行变量数表示在图表中，每行展示可调整的变量数，设置为2 。</li>
+                            <li class="- topic/li li">查询按钮设置为“是”。考虑到变量“symbol”是自由文本类型，在文本输入过程中实时刷新查询会占用不必要的资源，所以将此选项设置为“是“，当变量调整完成后点击查询才会结合新的变量做查询。</li>
+                        </ul>
+                    </li>
+                    <li class="- topic/li li">
+                        <p class="- topic/p p">X轴配置：类型是时间轴，名称是时间，坐标列是 createtime ，时间格式化 HH:mm:ss 。</p>
+                    </li>
+                    <li class="- topic/li li">
+                        <p class="- topic/p p">Y轴配置：</p>
+                        <ul class="- topic/ul ul" id="配置图表__ul_n4d_xyp_s1c" data-ofbid="配置图表__ul_n4d_xyp_s1c">
+                            <li class="- topic/li li">Y 轴 1：类型是数据轴，名称是 k 线，位置是左侧。</li>
+                            <li class="- topic/li li">Y 轴 2：类型是数据轴，名称是交易量，位置是右侧。</li>
+                        </ul>
+                    </li>
+                    <li class="- topic/li li">
+                        <p class="- topic/p p">数据列：</p>
+                        <ul class="- topic/ul ul" id="配置图表__ul_o4d_xyp_s1c" data-ofbid="配置图表__ul_o4d_xyp_s1c">
+                            <li class="- topic/li li">数据列1：OHLC 分别对应表中字段”open“、”high“、”low“、”close“，关联 Y 轴”k线“。</li>
+                            <li class="- topic/li li">数据列2：交易量 volume，关联 Y 轴 ”交易量“。</li>
+                            <li class="- topic/li li">通过点击”增加数据列“依次添加数据列3, 4, 5,
+                                6，分别设置数据列和名称为"ma5"、"ma10"、"ma20"、"ma60"，关联 Y 轴 "k线" 。</li>
+                        </ul>
+                    </li>
+                    <li class="- topic/li li">
+                        <p class="- topic/p p">每行变量数：图中每行最多展示的变量数上限</p>
+                    </li>
+                    <li class="- topic/li li">
+                        <p class="- topic/p p">查询按钮：是否设置一个查询按钮，每当更改变量后，需要点击查询按钮生效</p>
+                    </li>
+                    <li class="- topic/li li">
+                        <p class="- topic/p p">按钮文案：上述按钮可展示为其他名称</p>
+                    </li>
+                </ul>
+                <div class="- topic/note note note note_note" id="配置图表__note_vcf_xdt_c1c" data-ofbid="配置图表__note_vcf_xdt_c1c"><span class="note__title">注：</span> 完成以上所有配置后，必须点击页面上方工具栏中的“保存”按键以保存上述设置。</div>
+                <p class="- topic/p p">最终K线图的展示效果如下图所示：</p>
+                <figure class="- topic/fig fig fignone" id="配置图表__fig_drw_dfw_yzb" data-ofbid="配置图表__fig_drw_dfw_yzb">
+                    <img class="- topic/image image" id="配置图表__image_grw_dfw_yzb" src="../db_distr_comp/db_man/images/dashboard_1_8.png"/>
+                </figure>
+            </div>
+        </article>
+    </article>
+    <article class="- topic/topic topic nested1" aria-labelledby="ariaid-title18" id="topic_ug1_zyp_s1c">
+        <h2 class="- topic/title title topictitle2" id="ariaid-title18">附录</h2>
+        <div class="- topic/body body">
+            <p class="- topic/p p">当 X 轴为时间轴或数据轴时，支持设置X轴为特定范围的时间轴。</p>
+            <figure class="- topic/fig fig fignone" id="topic_ug1_zyp_s1c__fig_tsz_4dw_yzb" data-ofbid="topic_ug1_zyp_s1c__fig_tsz_4dw_yzb"><figcaption data-caption-side="top" class="- topic/title title figcap"><span class="figtitleprefix fig--title-label">图<span class="fig--title-label-number"> 2</span><span class="fig--title-label-punctuation">. </span></span><span class="fig--title">柱状图</span></figcaption>
+                
+                <img class="- topic/image image" id="topic_ug1_zyp_s1c__image_em3_qdw_yzb" src="../db_distr_comp/db_man/images/dashboard_1_9.png"/>
+            </figure>
+            <p class="- topic/p p">当 X 轴为时间轴或数据轴时，支持设置 X 轴为特定范围的时间轴。</p>
+            <p class="- topic/p p">可在图表配置区的数据列一栏，通过设置自定义端标签，可以在图中实时展示最新值和自定义标签。</p>
+            <div class="- topic/note note note note_note" id="topic_ug1_zyp_s1c__note_rdl_pqv_x1c" data-ofbid="topic_ug1_zyp_s1c__note_rdl_pqv_x1c"><span class="note__title">注：</span> 如果需要调整 Y 轴的分度值，可以调整 “刻度间隔” 的数值：<br/><img class="- topic/image image" id="topic_ug1_zyp_s1c__image_ifx_hrv_x1c" src="../db_distr_comp/db_man/images/yzhoukedujiange.png" height="210" width="122"/><br/></div>
+            <figure class="- topic/fig fig fignone" id="topic_ug1_zyp_s1c__fig_bhg_5dw_yzb" data-ofbid="topic_ug1_zyp_s1c__fig_bhg_5dw_yzb"><figcaption data-caption-side="top" class="- topic/title title figcap"><span class="figtitleprefix fig--title-label">图<span class="fig--title-label-number"> 3</span><span class="fig--title-label-punctuation">. </span></span><span class="fig--title">折线图</span></figcaption>
+                
+                <img class="- topic/image image" id="topic_ug1_zyp_s1c__image_jvg_wdw_yzb" src="../db_distr_comp/db_man/images/dashboard_1_10.png"/>
+            </figure>
+            <p class="- topic/p p">饼图中的颜色最多支持9种。</p>
+            <figure class="- topic/fig fig fignone" id="topic_ug1_zyp_s1c__fig_ilm_xdw_yzb" data-ofbid="topic_ug1_zyp_s1c__fig_ilm_xdw_yzb"><figcaption data-caption-side="top" class="- topic/title title figcap"><span class="figtitleprefix fig--title-label">图<span class="fig--title-label-number"> 4</span><span class="fig--title-label-punctuation">. </span></span><span class="fig--title">饼图</span></figcaption>
+                
+                <img class="- topic/image image" id="topic_ug1_zyp_s1c__image_dr2_ydw_yzb" src="../db_distr_comp/db_man/images/dashboard_1_11.png"/>
+            </figure>
+            <p class="- topic/p p">列配置中，可以设置是否排序，设置为“是”，点击表格中对应的列名可以切换排序方式。</p>
+            <figure class="- topic/fig fig fignone" id="topic_ug1_zyp_s1c__fig_qnn_zdw_yzb" data-ofbid="topic_ug1_zyp_s1c__fig_qnn_zdw_yzb"><figcaption data-caption-side="top" class="- topic/title title figcap"><span class="figtitleprefix fig--title-label">图<span class="fig--title-label-number"> 5</span><span class="fig--title-label-punctuation">. </span></span><span class="fig--title">表格</span></figcaption>
+                
+                <img class="- topic/image image" id="topic_ug1_zyp_s1c__image_wjg_12w_yzb" src="../db_distr_comp/db_man/images/dashboard_1_12.png"/>
+            </figure>
+            <p class="- topic/p p">当 X 轴为时间轴或数据轴时，支持设置X轴为特定范围的时间轴。</p>
+            <p class="- topic/p p">用户可以通过 “列样式” 和 “表头样式” 调整列数据和列表头的字号、文字色和背景色。</p>
+            <figure class="- topic/fig fig fignone" id="topic_ug1_zyp_s1c__fig_x22_b2w_yzb" data-ofbid="topic_ug1_zyp_s1c__fig_x22_b2w_yzb"><figcaption data-caption-side="top" class="- topic/title title figcap"><span class="figtitleprefix fig--title-label">图<span class="fig--title-label-number"> 6</span><span class="fig--title-label-punctuation">. </span></span><span class="fig--title">K 线图</span></figcaption>
+                
+                <img class="- topic/image image" id="topic_ug1_zyp_s1c__image_dny_b2w_yzb" src="../db_distr_comp/db_man/images/dashboard_1_13.png"/>
+            </figure>
+            <p class="- topic/p p">当 X 轴为时间轴或数据轴时，支持设置X轴为特定范围的时间轴。 </p>
+            <figure class="- topic/fig fig fignone" id="topic_ug1_zyp_s1c__fig_upd_d2w_yzb" data-ofbid="topic_ug1_zyp_s1c__fig_upd_d2w_yzb"><figcaption data-caption-side="top" class="- topic/title title figcap"><span class="figtitleprefix fig--title-label">图<span class="fig--title-label-number"> 7</span><span class="fig--title-label-punctuation">. </span></span><span class="fig--title">混合图</span></figcaption>
+                
+                <img class="- topic/image image" id="topic_ug1_zyp_s1c__image_qvp_d2w_yzb" src="../db_distr_comp/db_man/images/dashboard_1_14.png"/>
+            </figure>
+            <figure class="- topic/fig fig fignone" id="topic_ug1_zyp_s1c__fig_dcs_22w_yzb" data-ofbid="topic_ug1_zyp_s1c__fig_dcs_22w_yzb"><figcaption data-caption-side="top" class="- topic/title title figcap"><span class="figtitleprefix fig--title-label">图<span class="fig--title-label-number"> 8</span><span class="fig--title-label-punctuation">. </span></span><span class="fig--title">订单图</span></figcaption>
+                
+                <img class="- topic/image image" id="topic_ug1_zyp_s1c__image_q2f_f2w_yzb" src="../db_distr_comp/db_man/images/dashboard_1_15.png"/>
+            </figure>
+            <figure class="- topic/fig fig fignone" id="topic_ug1_zyp_s1c__fig_ibp_f2w_yzb" data-ofbid="topic_ug1_zyp_s1c__fig_ibp_f2w_yzb"><figcaption data-caption-side="top" class="- topic/title title figcap"><span class="figtitleprefix fig--title-label">图<span class="fig--title-label-number"> 9</span><span class="fig--title-label-punctuation">. </span></span><span class="fig--title">富文本</span></figcaption>
+                
+                <img class="- topic/image image" id="topic_ug1_zyp_s1c__image_kz2_g2w_yzb" src="../db_distr_comp/db_man/images/dashboard_1_16.png"/>
+            </figure>
+            <figure class="- topic/fig fig fignone" id="topic_ug1_zyp_s1c__fig_p1q_g2w_yzb" data-ofbid="topic_ug1_zyp_s1c__fig_p1q_g2w_yzb"><figcaption data-caption-side="top" class="- topic/title title figcap"><span class="figtitleprefix fig--title-label">图<span class="fig--title-label-number"> 10</span><span class="fig--title-label-punctuation">. </span></span><span class="fig--title">描述表</span></figcaption>
+                
+                <img class="- topic/image image" id="topic_ug1_zyp_s1c__image_iyb_h2w_yzb" src="../db_distr_comp/db_man/images/dashboard_1_17.png"/>
+            </figure>
+            <figure class="- topic/fig fig fignone" id="topic_ug1_zyp_s1c__fig_khs_h2w_yzb" data-ofbid="topic_ug1_zyp_s1c__fig_khs_h2w_yzb"><figcaption data-caption-side="top" class="- topic/title title figcap"><span class="figtitleprefix fig--title-label">图<span class="fig--title-label-number"> 11</span><span class="fig--title-label-punctuation">. </span></span><span class="fig--title">编辑器</span></figcaption>
+                
+                <img class="- topic/image image" id="topic_ug1_zyp_s1c__image_hnf_32w_yzb" src="../db_distr_comp/db_man/images/dashboard_1_18.png"/>
+            </figure>
+            <figure class="- topic/fig fig fignone" id="topic_ug1_zyp_s1c__fig_ecm_32w_yzb" data-ofbid="topic_ug1_zyp_s1c__fig_ecm_32w_yzb"><figcaption data-caption-side="top" class="- topic/title title figcap"><span class="figtitleprefix fig--title-label">图<span class="fig--title-label-number"> 12</span><span class="fig--title-label-punctuation">. </span></span><span class="fig--title">仪表盘</span></figcaption>
+                
+                <img class="- topic/image image" id="topic_ug1_zyp_s1c__image_nmy_32w_yzb" src="../db_distr_comp/db_man/images/dashboard_1_19.png"/>
+            </figure>
+            <p class="- topic/p p">在数据配置栏，可设置表盘范围、标签字号、值字号、值精度以及分段数。</p>
+            <p class="- topic/p p">雷达图中的颜色最多支持9种。</p>
+            <figure class="- topic/fig fig fignone" id="topic_ug1_zyp_s1c__fig_l5x_k2w_yzb" data-ofbid="topic_ug1_zyp_s1c__fig_l5x_k2w_yzb"><figcaption data-caption-side="top" class="- topic/title title figcap"><span class="figtitleprefix fig--title-label">图<span class="fig--title-label-number"> 13</span><span class="fig--title-label-punctuation">. </span></span><span class="fig--title">雷达图</span></figcaption>
+                
+                <img class="- topic/image image" id="topic_ug1_zyp_s1c__image_jkk_l2w_yzb" src="../db_distr_comp/db_man/images/dashboard_1_20.png"/>
+            </figure>
+            <figure class="- topic/fig fig fignone" id="topic_ug1_zyp_s1c__fig_n4w_l2w_yzb" data-ofbid="topic_ug1_zyp_s1c__fig_n4w_l2w_yzb"><figcaption data-caption-side="top" class="- topic/title title figcap"><span class="figtitleprefix fig--title-label">图<span class="fig--title-label-number"> 14</span><span class="fig--title-label-punctuation">. </span></span><span class="fig--title">变量</span></figcaption>
+                
+                <img class="- topic/image image" id="topic_ug1_zyp_s1c__image_w12_m2w_yzb" src="../db_distr_comp/db_man/images/dashboard_1_21.png"/>
+            </figure>
+            <p class="- topic/p p">当 X 轴为时间轴或数据轴时，支持设置X轴为特定范围的时间轴。</p>
+            <figure class="- topic/fig fig fignone" id="topic_ug1_zyp_s1c__fig_bzh_n2w_yzb" data-ofbid="topic_ug1_zyp_s1c__fig_bzh_n2w_yzb"><figcaption data-caption-side="top" class="- topic/title title figcap"><span class="figtitleprefix fig--title-label">图<span class="fig--title-label-number"> 15</span><span class="fig--title-label-punctuation">. </span></span><span class="fig--title">散点图</span></figcaption>
+                
+                <img class="- topic/image image" id="topic_ug1_zyp_s1c__image_qjq_n2w_yzb" src="../db_distr_comp/db_man/images/dashboard_1_22.png"/>
+            </figure>
+            <figure class="- topic/fig fig fignone" id="topic_ug1_zyp_s1c__fig_xdg_r4v_x1c" data-ofbid="topic_ug1_zyp_s1c__fig_xdg_r4v_x1c"><figcaption data-caption-side="top" class="- topic/title title figcap"><span class="figtitleprefix fig--title-label">图<span class="fig--title-label-number"> 16</span><span class="fig--title-label-punctuation">. </span></span><span class="fig--title">热力图</span></figcaption>
+                
+                <br/><img class="- topic/image image" id="topic_ug1_zyp_s1c__image_ebv_x4v_x1c" src="../db_distr_comp/db_man/images/relitu.png" height="316" width="535"/><br/>
+            </figure>
+            <p class="- topic/p p">当数据源设置为矩阵形式时，热力图的配置项无需选择数据列与坐标列。图中显示的横纵坐标对应于矩阵的行列标签。</p>
+            <figure class="- topic/fig fig fignone" id="topic_ug1_zyp_s1c__fig_jbr_xrv_x1c" data-ofbid="topic_ug1_zyp_s1c__fig_jbr_xrv_x1c"><figcaption data-caption-side="top" class="- topic/title title figcap"><span class="figtitleprefix fig--title-label">图<span class="fig--title-label-number"> 17</span><span class="fig--title-label-punctuation">. </span></span><span class="fig--title">多源图</span></figcaption>
+                
+                <br/><img class="- topic/image image" id="topic_ug1_zyp_s1c__image_jmz_zrv_x1c" src="../db_distr_comp/db_man/images/multisource_graph.png" height="212" width="959"/><br/>
+            </figure>
+            <p class="- topic/p p">用户可以在多源图中选择多个数据源，将多个源的数据展示在一张图上。</p>
+            <p class="- topic/p p">在基本属性栏中，提供了自动画图模式。</p>
+            <ul class="- topic/ul ul" id="topic_ug1_zyp_s1c__ul_azt_yrv_x1c" data-ofbid="topic_ug1_zyp_s1c__ul_azt_yrv_x1c">
+                <li class="- topic/li li">
+                    <p class="- topic/p p">当选择 ”是“ 时，会增加 “X 轴类型” 配置项。系统会选择表中第一列数据类型为 “X 轴类型” 的列作为 X 轴，默认为时间类型，包括 DATE,
+                        MONTH, TIME, MINUTE, SECOND, DATETIME, TIMESTAMP, NANOTIME, NANOTIMESTAMP,
+                        DATEHOUR 类型；数值类型列作为数据列，包括 SHORT, INT, LONG, FLOAT, DOUBLE, DECIMAL32,
+                        DECIMAL64, DECIMAL128
+                        类型。此时用户可以在数据列配置栏中设置配置规则，使用包括数据源匹配、列名完全匹配、列明正则匹配和类型匹配等四种匹配方式，选择将其中的部分数据列隐藏或展示。</p>
+                </li>
+                <li class="- topic/li li">
+                    <p class="- topic/p p">当选择 ”否“ 时，用户可自行设置 X 轴、Y 轴，并在数据列配置栏中配置数据列。</p>
+                </li>
+            </ul>
+        </div>
+    </article>
+    </article></main></div>
+                        
+                        
+                        
+                        
+                        
+                        
+                    </div>
+                    
+                        <nav role="navigation" id="wh_topic_toc" aria-label="On this page" class="col-lg-2 d-none d-lg-block navbar d-print-none"> 
+                            <div id="wh_topic_toc_content">
+		                        
+	                            <div class=" wh_topic_toc "><div class="wh_topic_label">在本页上</div><ul><li class="topic-item"><a href="#%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5" data-tocid="基本概念">基本概念</a></li><li class="topic-item"><a href="#%E6%9D%83%E9%99%90%E7%AE%A1%E7%90%86" data-tocid="权限管理">权限管理</a></li><li class="topic-item"><a href="#%E5%AE%89%E8%A3%85%E9%83%A8%E7%BD%B2" data-tocid="安装部署">安装部署</a><ul><li class="topic-item"><a href="#%E9%83%A8%E7%BD%B2" data-tocid="部署">部署</a></li><li class="topic-item"><a href="#%E5%88%9D%E5%A7%8B%E5%8C%96" data-tocid="初始化">初始化</a></li></ul></li><li class="topic-item"><a href="#topic_p5g_pyp_s1c" data-tocid="topic_p5g_pyp_s1c">基本操作</a><ul><li class="topic-item"><a href="#%E5%88%9B%E5%BB%BA%E9%9D%A2%E6%9D%BF" data-tocid="创建面板">创建面板</a></li><li class="topic-item"><a href="#%E7%BC%96%E8%BE%91%E9%9D%A2%E6%9D%BF" data-tocid="编辑面板">编辑面板</a></li><li class="topic-item"><a href="#%E7%BC%96%E8%BE%91%E5%8F%98%E9%87%8F" data-tocid="编辑变量">编辑变量</a></li><li class="topic-item"><a href="#%E7%BC%96%E8%BE%91%E6%95%B0%E6%8D%AE%E6%BA%90" data-tocid="编辑数据源">编辑数据源</a></li><li class="topic-item"><a href="#%E9%80%89%E6%8B%A9%E5%9B%BE%E8%A1%A8" data-tocid="选择图表">选择图表</a></li></ul></li><li class="topic-item"><a href="#topic_zhq_vyp_s1c" data-tocid="topic_zhq_vyp_s1c">实例演示，使用数据面板展示 K 线图</a><ul><li class="topic-item"><a href="#%E5%88%9B%E5%BB%BA%E9%9D%A2%E6%9D%BF-1" data-tocid="创建面板-1">创建面板</a></li><li class="topic-item"><a href="#%E9%85%8D%E7%BD%AE%E5%8F%98%E9%87%8F" data-tocid="配置变量">配置变量</a></li><li class="topic-item"><a href="#%E9%85%8D%E7%BD%AE%E6%95%B0%E6%8D%AE%E6%BA%90" data-tocid="配置数据源">配置数据源</a></li><li class="topic-item"><a href="#%E9%85%8D%E7%BD%AE%E5%9B%BE%E8%A1%A8" data-tocid="配置图表">配置图表</a></li></ul></li><li class="topic-item"><a href="#topic_ug1_zyp_s1c" data-tocid="topic_ug1_zyp_s1c">附录</a></li></ul></div>
+	                        	
+                        	</div>
+                        </nav>
+                    
+                </div>
+            </div>
+            
+            
+            
+        </div> 
+        <footer class="navbar navbar-default wh_footer">
+  <div class=" footer-container mx-auto ">
+<title>Copyright</title><p><b> ©2024 浙江智臾科技有限公司 浙ICP备18048711号-3</b></p>
+  </div>
+</footer>
+        
+        <div id="go2top" class="d-print-none">
+            <span class="oxy-icon oxy-icon-up"></span>
+        </div>
+        
+        <div id="modal_img_large" class="modal">
+            <span class="close oxy-icon oxy-icon-remove"></span>
+            <div id="modal_img_container"></div>
+            <div id="caption"></div>
+        </div>
+        
+        
+        
+    </body>
+</html>

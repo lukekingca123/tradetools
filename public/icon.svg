@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="512" height="512" viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <!-- 背景圆形 -->
+    <circle cx="256" cy="256" r="240" fill="#2563EB"/>
+    
+    <!-- 图表线条 -->
+    <path d="M128 384L192 288L256 336L320 192L384 240" 
+          stroke="white" 
+          stroke-width="24" 
+          stroke-linecap="round" 
+          stroke-linejoin="round"/>
+    
+    <!-- 小圆点 -->
+    <circle cx="192" cy="288" r="12" fill="white"/>
+    <circle cx="256" cy="336" r="12" fill="white"/>
+    <circle cx="320" cy="192" r="12" fill="white"/>
+</svg>

@@ -1,0 +1,574 @@
+<!DOCTYPE html><html xmlns="http://www.w3.org/1999/xhtml" xml:lang="zh" lang="zh" data-whc_version="26.0">
+    <head><link rel="shortcut icon" href="../favicon.ico"/><link rel="icon" href="../favicon.ico"/><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><meta http-equiv="X-UA-Compatible" content="IE=edge"/><meta name="description" content="DolphinDB JavaScript API 是一个 JavaScript 库，封装了操作 DolphinDB 数据库的能力，如：连接数据库、执行脚本、调用函数、上传变量等 NPM 链接：https://www.npmjs.com/package/dolphindb 使用 WebSocket 与 DolphinDB 数据库通信，用二进制格式进行数据交换，支持流数据实时推送 支持在浏览器环境和 ..."/><meta name="DC.rights.owner" content="(C) 版权 2024"/><meta name="copyright" content="(C) 版权 2024"/><meta name="generator" content="DITA-OT"/><meta name="DC.type" content="topic"/><meta name="DC.coverage" content=""/><meta name="DC.relation" content="../api/connapi_intro.html"/><meta name="prodname" content="DolphinDB"/><meta name="brand" content="DolphinDB"/><meta name="DC.creator" content="DolphinDB"/><meta name="DC.publisher" content="DDB N/A DDB 200"/><meta name="DC.format" content="HTML5"/><meta name="DC.identifier" content="javascript-api"/><title>JavaScript API</title><!--  Generated with Oxygen version 26.0, build number 2024012323.  --><meta name="wh-path2root" content="../"/><meta name="wh-toc-id" content="&lt;?xml version=&#34;1.0&#34; encoding=&#34;UTF-8&#34;?&gt;&lt;?workdir /tmp/temp20240704100525325/api?&gt;&lt;?workdir-uri file:/tmp/temp20240704100525325/api/?&gt;&lt;?path2project ../?&gt;&lt;?path2project-uri ../?&gt;&lt;?path2rootmap-uri ../?&gt;&lt;topic xmlns:dita-ot=&#34;http://dita-ot.sourceforge.net/ns/201007/dita-ot&#34; xmlns:ditaarch=&#34;http://dita.oasis-open.org/architecture/2005/&#34; class=&#34;- topic/topic &#34; ditaarch:DITAArchVersion=&#34;2.0&#34; domains=&#34;a(props audience) a(props deliveryTarget) a(props otherprops) a(props platform) a(props product)&#34; id=&#34;javascript-api&#34; specializations=&#34;@props/audience @props/deliveryTarget @props/otherprops @props/platform @props/product&#34; xtrc=&#34;topic:1;1:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/api/js.md&#34;&gt;&lt;title class=&#34;- topic/title &#34; xtrc=&#34;title:1;1:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/api/js.md&#34;&gt;JavaScript API&lt;/title&gt;&lt;prolog class=&#34;- topic/prolog &#34;&gt;&lt;author class=&#34;- topic/author &#34; xtrc=&#34;author:1;12:17&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/ddb_doc_centre.ditamap&#34;&gt;DolphinDB&lt;/author&gt;&lt;publisherinformation class=&#34;- topic/publisher bookmap/publisherinformation &#34; xtrc=&#34;publisherinformation:1;14:31&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/ddb_doc_centre.ditamap&#34;&gt; &lt;person class=&#34;- topic/data bookmap/person &#34; xtrc=&#34;person:1;15:21&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/ddb_doc_centre.ditamap&#34;&gt;DDB&lt;/person&gt; &lt;printlocation class=&#34;- topic/data bookmap/printlocation &#34; xtrc=&#34;printlocation:1;16:28&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/ddb_doc_centre.ditamap&#34;&gt;N/A&lt;/printlocation&gt; &lt;published class=&#34;- topic/data bookmap/published &#34; xtrc=&#34;published:1;17:24&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/ddb_doc_centre.ditamap&#34;&gt; &lt;person class=&#34;- topic/data bookmap/person &#34; xtrc=&#34;person:2;18:25&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/ddb_doc_centre.ditamap&#34;&gt;DDB&lt;/person&gt; &lt;publishtype class=&#34;- topic/data bookmap/publishtype &#34; value=&#34;HTML&#34; xtrc=&#34;publishtype:1;19:44&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/ddb_doc_centre.ditamap&#34;/&gt; &lt;revisionid class=&#34;- topic/ph bookmap/revisionid &#34; xtrc=&#34;revisionid:1;20:29&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/ddb_doc_centre.ditamap&#34;&gt;200&lt;/revisionid&gt; &lt;summary class=&#34;- topic/ph bookmap/summary &#34; xtrc=&#34;summary:1;22:27&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/ddb_doc_centre.ditamap&#34;/&gt; &lt;data class=&#34;- topic/data &#34; xtrc=&#34;data:1;23:24&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/ddb_doc_centre.ditamap&#34;/&gt; &lt;/published&gt; &lt;data class=&#34;- topic/data &#34; xtrc=&#34;data:2;25:20&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/ddb_doc_centre.ditamap&#34;/&gt; &lt;/publisherinformation&gt;&lt;metadata class=&#34;- topic/metadata &#34;&gt;&lt;audience class=&#34;- topic/audience &#34; xtrc=&#34;audience:2;39:20&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/ddb_doc_centre.ditamap&#34;/&gt;&lt;audience class=&#34;- topic/audience &#34; xtrc=&#34;audience:1;28:24&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/ddb_doc_centre.ditamap&#34;/&gt;&lt;category class=&#34;- topic/category &#34; xtrc=&#34;category:1;29:24&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/ddb_doc_centre.ditamap&#34;/&gt;&lt;prodinfo class=&#34;- topic/prodinfo &#34; xtrc=&#34;prodinfo:1;34:23&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/ddb_doc_centre.ditamap&#34;&gt; &lt;prodname class=&#34;- topic/prodname &#34; xtrc=&#34;prodname:1;35:27&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/ddb_doc_centre.ditamap&#34;&gt;DolphinDB&lt;/prodname&gt; &lt;brand class=&#34;- topic/brand &#34; xtrc=&#34;brand:1;36:24&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/ddb_doc_centre.ditamap&#34;&gt;DolphinDB&lt;/brand&gt; &lt;/prodinfo&gt;&lt;/metadata&gt;&lt;/prolog&gt;&lt;body class=&#34;- topic/body &#34; xtrc=&#34;body:1;1:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/api/js.md&#34;/&gt;&lt;related-links class=&#34;- topic/related-links &#34;&gt;&lt;linkpool class=&#34;- topic/linkpool &#34; xtrc=&#34;topicref:115;300:81&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/chap_connapi.ditamap&#34;&gt;&lt;link class=&#34;- topic/link &#34; format=&#34;dita&#34; href=&#34;../api/connapi_intro.dita&#34; mapclass=&#34;- map/topicref bookmap/chapter &#34; role=&#34;parent&#34; scope=&#34;local&#34; type=&#34;topic&#34; xtrc=&#34;topicref:1;5:45&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/chap_connapi.ditamap&#34;&gt;&lt;?ditaot usertext?&gt;&lt;linktext class=&#34;- topic/linktext &#34;&gt;&lt;?ditaot usertext?&gt;连接器与 API&lt;/linktext&gt;&lt;?ditaot usershortdesc?&gt;&lt;desc class=&#34;- topic/desc &#34;&gt;面向不同编程语言的 DolphinDB API 及连接器，相关协议和用法&lt;/desc&gt;&lt;/link&gt;&lt;/linkpool&gt;&lt;/related-links&gt;&lt;topic class=&#34;- topic/topic &#34; ditaarch:DITAArchVersion=&#34;2.0&#34; domains=&#34;a(props audience) a(props deliveryTarget) a(props otherprops) a(props platform) a(props product)&#34; id=&#34;简介&#34; specializations=&#34;@props/audience @props/deliveryTarget @props/otherprops @props/platform @props/product&#34; xtrc=&#34;topic:2;3:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/api/js.md&#34;&gt;&lt;title class=&#34;- topic/title &#34; xtrc=&#34;title:2;3:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/api/js.md&#34;&gt;简介&lt;/title&gt;&lt;body class=&#34;- topic/body &#34; xtrc=&#34;body:2;3:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/api/js.md&#34;&gt;&lt;p class=&#34;- topic/p &#34; xtrc=&#34;p:1;4:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/api/js.md&#34;&gt;DolphinDB JavaScript API 是一个 JavaScript 库，封装了操作 DolphinDB 数据库的能力，如：连接数据库、执行脚本、调用函数、上传变量等&lt;/p&gt;&lt;p class=&#34;- topic/p &#34; xtrc=&#34;p:2;6:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/api/js.md&#34;&gt;NPM 链接：https://www.npmjs.com/package/dolphindb&lt;/p&gt;&lt;/body&gt;&lt;/topic&gt;&lt;topic class=&#34;- topic/topic &#34; ditaarch:DITAArchVersion=&#34;2.0&#34; domains=&#34;a(props audience) a(props deliveryTarget) a(props otherprops) a(props platform) a(props product)&#34; id=&#34;特性&#34; specializations=&#34;@props/audience @props/deliveryTarget @props/otherprops @props/platform @props/product&#34; xtrc=&#34;topic:3;8:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/api/js.md&#34;&gt;&lt;title class=&#34;- topic/title &#34; xtrc=&#34;title:3;8:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/api/js.md&#34;&gt;特性&lt;/title&gt;&lt;body class=&#34;- topic/body &#34; xtrc=&#34;body:3;8:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/api/js.md&#34;&gt;&lt;ul class=&#34;- topic/ul &#34; xtrc=&#34;ul:1;10:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/api/js.md&#34;&gt;&lt;li class=&#34;- topic/li &#34; xtrc=&#34;li:1;10:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/api/js.md&#34;&gt;使用 WebSocket 与 DolphinDB 数据库通信，用二进制格式进行数据交换，支持流数据实时推送&lt;/li&gt;&lt;li class=&#34;- topic/li &#34; xtrc=&#34;li:2;11:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/api/js.md&#34;&gt;支持在浏览器环境和 Node.js 环境中运行&lt;/li&gt;&lt;li class=&#34;- topic/li &#34; xtrc=&#34;li:3;12:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/api/js.md&#34;&gt;使用了 JavaScript 中的 Int32Array 等 TypedArray 处理二进制数据，性能较高&lt;/li&gt;&lt;li class=&#34;- topic/li &#34; xtrc=&#34;li:4;13:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/api/js.md&#34;&gt;单次调用支持最大 2 GB 数据的序列化上传，下载数据量不受限制&lt;/li&gt;&lt;/ul&gt;&lt;/body&gt;&lt;/topic&gt;&lt;topic class=&#34;- topic/topic &#34; ditaarch:DITAArchVersion=&#34;2.0&#34; domains=&#34;a(props audience) a(props deliveryTarget) a(props otherprops) a(props platform) a(props product)&#34; id=&#34;用法&#34; specializations=&#34;@props/audience @props/deliveryTarget @props/otherprops @props/platform @props/product&#34; xtrc=&#34;topic:4;15:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/api/js.md&#34;&gt;&lt;title class=&#34;- topic/title &#34; xtrc=&#34;title:4;15:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/api/js.md&#34;&gt;用法&lt;/title&gt;&lt;body class=&#34;- topic/body &#34; xtrc=&#34;body:4;15:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/api/js.md&#34;/&gt;&lt;topic class=&#34;- topic/topic &#34; ditaarch:DITAArchVersion=&#34;2.0&#34; domains=&#34;a(props audience) a(props deliveryTarget) a(props otherprops) a(props platform) a(props product)&#34; id=&#34;初始化并连接到-dolphindb&#34; specializations=&#34;@props/audience @props/deliveryTarget @props/otherprops @props/platform @props/product&#34; xtrc=&#34;topic:5;17:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/api/js.md&#34;&gt;&lt;title class=&#34;- topic/title &#34; xtrc=&#34;title:5;17:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/api/js.md&#34;&gt;初始化并连接到 DolphinDB&lt;/title&gt;&lt;body class=&#34;- topic/body &#34; xtrc=&#34;body:5;17:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/api/js.md&#34;/&gt;&lt;topic class=&#34;- topic/topic &#34; ditaarch:DITAArchVersion=&#34;2.0&#34; domains=&#34;a(props audience) a(props deliveryTarget) a(props otherprops) a(props platform) a(props product)&#34; id=&#34;方法一在浏览器中直接使用构建好的-cdn-版本&#34; specializations=&#34;@props/audience @props/deliveryTarget @props/otherprops @props/platform @props/product&#34; xtrc=&#34;topic:6;19:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/api/js.md&#34;&gt;&lt;title class=&#34;- topic/title &#34; xtrc=&#34;title:6;19:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/api/js.md&#34;&gt;方法一：在浏览器中直接使用构建好的 CDN 版本&lt;/title&gt;&lt;body class=&#34;- topic/body &#34; xtrc=&#34;body:6;19:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/api/js.md&#34;&gt;&lt;p class=&#34;- topic/p &#34; xtrc=&#34;p:3;21:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/api/js.md&#34;&gt;保存以下内容到 &lt;codeph class=&#34;+ topic/ph pr-d/codeph &#34; xtrc=&#34;codeph:1;21:9&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/api/js.md&#34;&gt;example.html&lt;/codeph&gt; 文件，用浏览器打开即可运行，F12 打开调试控制台可以看到日志&lt;/p&gt;&lt;codeblock class=&#34;+ topic/pre pr-d/codeblock &#34; outputclass=&#34;html&#34; xml:space=&#34;preserve&#34; xtrc=&#34;codeblock:1;23:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/api/js.md&#34;&gt;&amp;lt;!doctype html&amp;gt; &amp;lt;html&amp;gt; &amp;lt;head&amp;gt; &amp;lt;title&amp;gt;DolphinDB&amp;lt;/title&amp;gt; &amp;lt;meta charset='utf-8' /&amp;gt; &amp;lt;/head&amp;gt; &amp;lt;body&amp;gt; &amp;lt;script type=&#34;module&#34;&amp;gt; import { DDB } from 'https://cdn.dolphindb.cn/assets/api.js' let ddb = new DDB('ws://127.0.0.1:8848') await ddb.connect() console.log( await ddb.execute('1 + 1') ) console.log( await ddb.invoke('add', [1, 1]) ) &amp;lt;/script&amp;gt; &amp;lt;/body&amp;gt; &amp;lt;/html&amp;gt;&lt;/codeblock&gt;&lt;/body&gt;&lt;/topic&gt;&lt;topic class=&#34;- topic/topic &#34; ditaarch:DITAArchVersion=&#34;2.0&#34; domains=&#34;a(props audience) a(props deliveryTarget) a(props otherprops) a(props platform) a(props product)&#34; id=&#34;方法二在项目中安装-npm-包并导入&#34; specializations=&#34;@props/audience @props/deliveryTarget @props/otherprops @props/platform @props/product&#34; xtrc=&#34;topic:7;50:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/api/js.md&#34;&gt;&lt;title class=&#34;- topic/title &#34; xtrc=&#34;title:7;50:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/api/js.md&#34;&gt;方法二：在项目中安装 npm 包并导入&lt;/title&gt;&lt;body class=&#34;- topic/body &#34; xtrc=&#34;body:7;50:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/api/js.md&#34;/&gt;&lt;topic class=&#34;- topic/topic &#34; ditaarch:DITAArchVersion=&#34;2.0&#34; domains=&#34;a(props audience) a(props deliveryTarget) a(props otherprops) a(props platform) a(props product)&#34; id=&#34;1-安装&#34; specializations=&#34;@props/audience @props/deliveryTarget @props/otherprops @props/platform @props/product&#34; xtrc=&#34;topic:8;52:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/api/js.md&#34;&gt;&lt;title class=&#34;- topic/title &#34; xtrc=&#34;title:8;52:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/api/js.md&#34;&gt;1. 安装&lt;/title&gt;&lt;body class=&#34;- topic/body &#34; xtrc=&#34;body:8;52:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/api/js.md&#34;&gt;&lt;p class=&#34;- topic/p &#34; xtrc=&#34;p:4;54:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/api/js.md&#34;&gt;1.1. 在机器上安装最新版的 Node.js 及浏览器。&lt;/p&gt;&lt;ul class=&#34;- topic/ul &#34; xtrc=&#34;ul:2;55:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/api/js.md&#34;&gt;&lt;li class=&#34;- topic/li &#34; xtrc=&#34;li:5;55:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/api/js.md&#34;&gt;windows: https://nodejs.org/en/download/prebuilt-installer/current&lt;/li&gt;&lt;li class=&#34;- topic/li &#34; xtrc=&#34;li:6;56:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/api/js.md&#34;&gt;linux: https://github.com/nodesource/distributions?tab=readme-ov-file#debian-and-ubuntu-based-distributions&lt;/li&gt;&lt;/ul&gt;&lt;p class=&#34;- topic/p &#34; xtrc=&#34;p:5;58:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/api/js.md&#34;&gt;1.2. （可选）使用以下命令创建新项目。如果已有项目，可跳过此步。&lt;/p&gt;&lt;codeblock class=&#34;+ topic/pre pr-d/codeblock &#34; outputclass=&#34;bash&#34; xml:space=&#34;preserve&#34; xtrc=&#34;codeblock:2;59:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/api/js.md&#34;&gt;mkdir dolphindb-example cd dolphindb-example npm init --yes&lt;/codeblock&gt;&lt;p class=&#34;- topic/p &#34; xtrc=&#34;p:6;65:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/api/js.md&#34;&gt;1.3. 用编辑器打开 package.json 文件，在 &lt;codeph class=&#34;+ topic/ph pr-d/codeph &#34; xtrc=&#34;codeph:2;65:31&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/api/js.md&#34;&gt;&#34;main&#34;: &#34;./index.js&#34;&lt;/codeph&gt; 下方加入一行 &#34;type&#34;: &#34;module&#34;, 这样能够启用 ECMAScript modules，在后面代码中可以使用 &lt;codeph class=&#34;+ topic/ph pr-d/codeph &#34; xtrc=&#34;codeph:3;65:116&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/api/js.md&#34;&gt;import { DDB } from 'dolphindb'&lt;/codeph&gt; 导入 npm 包。&lt;/p&gt;&lt;p class=&#34;- topic/p &#34; xtrc=&#34;p:7;67:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/api/js.md&#34;&gt;1.4. 在项目中安装 npm 包。&lt;/p&gt;&lt;codeblock class=&#34;+ topic/pre pr-d/codeblock &#34; outputclass=&#34;bash&#34; xml:space=&#34;preserve&#34; xtrc=&#34;codeblock:3;68:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/api/js.md&#34;&gt;npm install dolphindb&lt;/codeblock&gt;&lt;/body&gt;&lt;/topic&gt;&lt;topic class=&#34;- topic/topic &#34; ditaarch:DITAArchVersion=&#34;2.0&#34; domains=&#34;a(props audience) a(props deliveryTarget) a(props otherprops) a(props platform) a(props product)&#34; id=&#34;2-使用&#34; specializations=&#34;@props/audience @props/deliveryTarget @props/otherprops @props/platform @props/product&#34; xtrc=&#34;topic:9;72:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/api/js.md&#34;&gt;&lt;title class=&#34;- topic/title &#34; xtrc=&#34;title:9;72:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/api/js.md&#34;&gt;2. 使用&lt;/title&gt;&lt;body class=&#34;- topic/body &#34; xtrc=&#34;body:9;72:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/api/js.md&#34;&gt;&lt;codeblock class=&#34;+ topic/pre pr-d/codeblock &#34; outputclass=&#34;ts&#34; xml:space=&#34;preserve&#34; xtrc=&#34;codeblock:4;74:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/api/js.md&#34;&gt;// 2.1 在浏览器环境中用下面的方法导入 import { DDB } from 'dolphindb/browser.js' // 2.1 在 Node.js 环境中用下面的方法导入 // import { DDB } from 'dolphindb' // 已有的使用 CommonJS 模块的项目的导入方法为 const { DDB } = await import('dolphindb') // 2.2 使用 WebSocket URL 初始化连接到 DolphinDB 的实例（不建立实际的网络连接） let ddb = new DDB('ws://127.0.0.1:8848') // 使用 HTTPS 加密 // let ddb = new DDB('wss://dolphindb.com') // 2.3 建立到 DolphinDB 的连接（要求 DolphinDB 数据库版本不低于 1.30.16 或 2.00.4） await ddb.connect()&lt;/codeblock&gt;&lt;/body&gt;&lt;/topic&gt;&lt;/topic&gt;&lt;topic class=&#34;- topic/topic &#34; ditaarch:DITAArchVersion=&#34;2.0&#34; domains=&#34;a(props audience) a(props deliveryTarget) a(props otherprops) a(props platform) a(props product)&#34; id=&#34;代码补全函数提示数据&#34; specializations=&#34;@props/audience @props/deliveryTarget @props/otherprops @props/platform @props/product&#34; xtrc=&#34;topic:10;92:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/api/js.md&#34;&gt;&lt;title class=&#34;- topic/title &#34; xtrc=&#34;title:10;92:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/api/js.md&#34;&gt;代码补全、函数提示数据&lt;/title&gt;&lt;body class=&#34;- topic/body &#34; xtrc=&#34;body:10;92:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/api/js.md&#34;&gt;&lt;ul class=&#34;- topic/ul &#34; xtrc=&#34;ul:3;93:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/api/js.md&#34;&gt;&lt;li class=&#34;- topic/li &#34; xtrc=&#34;li:7;93:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/api/js.md&#34;&gt;https://cdn.dolphindb.cn/assets/docs.zh.json&lt;/li&gt;&lt;li class=&#34;- topic/li &#34; xtrc=&#34;li:8;94:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/api/js.md&#34;&gt;https://cdn.dolphindb.cn/assets/docs.en.json&lt;/li&gt;&lt;/ul&gt;&lt;/body&gt;&lt;/topic&gt;&lt;topic class=&#34;- topic/topic &#34; ditaarch:DITAArchVersion=&#34;2.0&#34; domains=&#34;a(props audience) a(props deliveryTarget) a(props otherprops) a(props platform) a(props product)&#34; id=&#34;ddb-连接选项&#34; specializations=&#34;@props/audience @props/deliveryTarget @props/otherprops @props/platform @props/product&#34; xtrc=&#34;topic:11;97:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/api/js.md&#34;&gt;&lt;title class=&#34;- topic/title &#34; xtrc=&#34;title:11;97:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/api/js.md&#34;&gt;DDB 连接选项&lt;/title&gt;&lt;body class=&#34;- topic/body &#34; xtrc=&#34;body:11;97:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/api/js.md&#34;&gt;&lt;codeblock class=&#34;+ topic/pre pr-d/codeblock &#34; outputclass=&#34;ts&#34; xml:space=&#34;preserve&#34; xtrc=&#34;codeblock:5;99:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/api/js.md&#34;&gt;let ddb = new DDB('ws://127.0.0.1:8848', { // 是否在建立连接后自动登录，默认 `true` autologin: true, // DolphinDB 登录用户名，默认 `'admin'` username: 'admin', // DolphinDB 登录密码，默认 `'123456'` password: '123456', // 设置 python session flag，默认 `false` python: false, // 设置当前会话执行的 sql 标准, 请使用 SqlStandard 枚举进行传参，默认 `DolphinDB` // sql: SqlStandard.MySQL, // sql: SqlStandard.Oracle, // 设置该选项后，该数据库连接只用于流数据，详细用法见后文 `5. 流数据` streaming: undefined })&lt;/codeblock&gt;&lt;/body&gt;&lt;/topic&gt;&lt;/topic&gt;&lt;topic class=&#34;- topic/topic &#34; ditaarch:DITAArchVersion=&#34;2.0&#34; domains=&#34;a(props audience) a(props deliveryTarget) a(props otherprops) a(props platform) a(props product)&#34; id=&#34;调用函数&#34; specializations=&#34;@props/audience @props/deliveryTarget @props/otherprops @props/platform @props/product&#34; xtrc=&#34;topic:12;123:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/api/js.md&#34;&gt;&lt;title class=&#34;- topic/title &#34; xtrc=&#34;title:12;123:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/api/js.md&#34;&gt;调用函数&lt;/title&gt;&lt;body class=&#34;- topic/body &#34; xtrc=&#34;body:12;123:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/api/js.md&#34;/&gt;&lt;topic class=&#34;- topic/topic &#34; ditaarch:DITAArchVersion=&#34;2.0&#34; domains=&#34;a(props audience) a(props deliveryTarget) a(props otherprops) a(props platform) a(props product)&#34; id=&#34;invoke-方法&#34; specializations=&#34;@props/audience @props/deliveryTarget @props/otherprops @props/platform @props/product&#34; xtrc=&#34;topic:13;124:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/api/js.md&#34;&gt;&lt;title class=&#34;- topic/title &#34; xtrc=&#34;title:13;124:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/api/js.md&#34;&gt;&lt;codeph class=&#34;+ topic/ph pr-d/codeph &#34; xtrc=&#34;codeph:4;124:6&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/api/js.md&#34;&gt;invoke&lt;/codeph&gt; 方法&lt;/title&gt;&lt;body class=&#34;- topic/body &#34; xtrc=&#34;body:13;124:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/api/js.md&#34;/&gt;&lt;topic class=&#34;- topic/topic &#34; ditaarch:DITAArchVersion=&#34;2.0&#34; domains=&#34;a(props audience) a(props deliveryTarget) a(props otherprops) a(props platform) a(props product)&#34; id=&#34;invoke-方法代码示例&#34; specializations=&#34;@props/audience @props/deliveryTarget @props/otherprops @props/platform @props/product&#34; xtrc=&#34;topic:14;125:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/api/js.md&#34;&gt;&lt;title class=&#34;- topic/title &#34; xtrc=&#34;title:14;125:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/api/js.md&#34;&gt;&lt;codeph class=&#34;+ topic/ph pr-d/codeph &#34; xtrc=&#34;codeph:5;125:7&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/api/js.md&#34;&gt;invoke&lt;/codeph&gt; 方法代码示例&lt;/title&gt;&lt;body class=&#34;- topic/body &#34; xtrc=&#34;body:14;125:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/api/js.md&#34;&gt;&lt;codeblock class=&#34;+ topic/pre pr-d/codeblock &#34; outputclass=&#34;ts&#34; xml:space=&#34;preserve&#34; xtrc=&#34;codeblock:6;126:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/api/js.md&#34;&gt;const result = await ddb.invoke('add', [1, 1]) // TypeScript: const result = await ddb.invoke&amp;lt;number&amp;gt;('add', [1, 1]) console.log(result === 2) // true&lt;/codeblock&gt;&lt;p class=&#34;- topic/p &#34; xtrc=&#34;p:8;133:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/api/js.md&#34;&gt;上面例子中，上传了两个参数 1 (对应 DolphinDB 中的 int 类型) 到 DolphinDB 数据库，作为 add 函数的参数，并接收函数调用的结果 result&lt;/p&gt;&lt;p class=&#34;- topic/p &#34; xtrc=&#34;p:9;135:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/api/js.md&#34;&gt;&lt;codeph class=&#34;+ topic/ph pr-d/codeph &#34; xtrc=&#34;codeph:6;135:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/api/js.md&#34;&gt;&amp;lt;number&amp;gt;&lt;/codeph&gt; 用于 TypeScript 推断返回值的类型&lt;/p&gt;&lt;/body&gt;&lt;/topic&gt;&lt;topic class=&#34;- topic/topic &#34; ditaarch:DITAArchVersion=&#34;2.0&#34; domains=&#34;a(props audience) a(props deliveryTarget) a(props otherprops) a(props platform) a(props product)&#34; id=&#34;invoke-方法声明&#34; specializations=&#34;@props/audience @props/deliveryTarget @props/otherprops @props/platform @props/product&#34; xtrc=&#34;topic:15;137:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/api/js.md&#34;&gt;&lt;title class=&#34;- topic/title &#34; xtrc=&#34;title:15;137:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/api/js.md&#34;&gt;&lt;codeph class=&#34;+ topic/ph pr-d/codeph &#34; xtrc=&#34;codeph:7;137:7&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/api/js.md&#34;&gt;invoke&lt;/codeph&gt; 方法声明&lt;/title&gt;&lt;body class=&#34;- topic/body &#34; xtrc=&#34;body:15;137:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/api/js.md&#34;&gt;&lt;codeblock class=&#34;+ topic/pre pr-d/codeblock &#34; outputclass=&#34;ts&#34; xml:space=&#34;preserve&#34; xtrc=&#34;codeblock:7;138:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/api/js.md&#34;&gt;/** 调用 dolphindb 函数，传入 js 原生数组作为参数，返回 js 原生对象或值（调用 DdbObj.data() 后的结果）*/ async invoke &amp;lt;TResult = any&amp;gt; ( /** 函数名 */ func: string, /** `[ ]` 调用参数，可以是 js 原生数组 */ args?: any[], /** 调用选项 */ options?: { /** 紧急 flag。使用 urgent worker 执行，防止被其它作业阻塞 */ urgent?: boolean /** 设置结点 alias 时发送到集群中对应的结点执行 (使用 DolphinDB 中的 rpc 方法) */ node?: string /** 设置多个结点 alias 时发送到集群中对应的多个结点执行 (使用 DolphinDB 中的 pnodeRun 方法) */ nodes?: string[] /** 设置 node 参数且参数数组为空时必传，需指定函数类型，其它情况下不传 */ func_type?: DdbFunctionType /** 设置 nodes 参数时选传，其它情况不传 */ add_node_alias?: boolean /** 处理本次 rpc 期间的消息 (DdbMessage) */ listener?: DdbMessageListener } = { } ): Promise&amp;lt;TResult&amp;gt;&lt;/codeblock&gt;&lt;/body&gt;&lt;/topic&gt;&lt;/topic&gt;&lt;topic class=&#34;- topic/topic &#34; ditaarch:DITAArchVersion=&#34;2.0&#34; domains=&#34;a(props audience) a(props deliveryTarget) a(props otherprops) a(props platform) a(props product)&#34; id=&#34;call-方法&#34; specializations=&#34;@props/audience @props/deliveryTarget @props/otherprops @props/platform @props/product&#34; xtrc=&#34;topic:16;170:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/api/js.md&#34;&gt;&lt;title class=&#34;- topic/title &#34; xtrc=&#34;title:16;170:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/api/js.md&#34;&gt;&lt;codeph class=&#34;+ topic/ph pr-d/codeph &#34; xtrc=&#34;codeph:8;170:6&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/api/js.md&#34;&gt;call&lt;/codeph&gt; 方法&lt;/title&gt;&lt;body class=&#34;- topic/body &#34; xtrc=&#34;body:16;170:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/api/js.md&#34;/&gt;&lt;topic class=&#34;- topic/topic &#34; ditaarch:DITAArchVersion=&#34;2.0&#34; domains=&#34;a(props audience) a(props deliveryTarget) a(props otherprops) a(props platform) a(props product)&#34; id=&#34;call-方法代码示例&#34; specializations=&#34;@props/audience @props/deliveryTarget @props/otherprops @props/platform @props/product&#34; xtrc=&#34;topic:17;171:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/api/js.md&#34;&gt;&lt;title class=&#34;- topic/title &#34; xtrc=&#34;title:17;171:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/api/js.md&#34;&gt;&lt;codeph class=&#34;+ topic/ph pr-d/codeph &#34; xtrc=&#34;codeph:9;171:7&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/api/js.md&#34;&gt;call&lt;/codeph&gt; 方法代码示例&lt;/title&gt;&lt;body class=&#34;- topic/body &#34; xtrc=&#34;body:17;171:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/api/js.md&#34;&gt;&lt;codeblock class=&#34;+ topic/pre pr-d/codeblock &#34; outputclass=&#34;ts&#34; xml:space=&#34;preserve&#34; xtrc=&#34;codeblock:8;172:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/api/js.md&#34;&gt;import { DdbInt } from 'dolphindb' const result = await ddb.call('add', [new DdbInt(1), new DdbInt(1)]) // TypeScript: const result = await ddb.call&amp;lt;DdbInt&amp;gt;('add', [new DdbInt(1), new DdbInt(1)]) console.log(result.value === 2) // true&lt;/codeblock&gt;&lt;/body&gt;&lt;topic class=&#34;- topic/topic &#34; ditaarch:DITAArchVersion=&#34;2.0&#34; domains=&#34;a(props audience) a(props deliveryTarget) a(props otherprops) a(props platform) a(props product)&#34; id=&#34;用-ddbobj-对象来表示-dolphindb-中的数据类型&#34; specializations=&#34;@props/audience @props/deliveryTarget @props/otherprops @props/platform @props/product&#34; xtrc=&#34;topic:18;181:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/api/js.md&#34;&gt;&lt;title class=&#34;- topic/title &#34; xtrc=&#34;title:18;181:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/api/js.md&#34;&gt;用 DdbObj 对象来表示 DolphinDB 中的数据类型&lt;/title&gt;&lt;body class=&#34;- topic/body &#34; xtrc=&#34;body:18;181:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/api/js.md&#34;&gt;&lt;p class=&#34;- topic/p &#34; xtrc=&#34;p:10;183:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/api/js.md&#34;&gt;上面例子中，上传了两个参数 1 (对应 DolphinDB 中的 int 类型) 到 DolphinDB 数据库，作为 add 函数的参数，并接收函数调用的结果 result&lt;/p&gt;&lt;p class=&#34;- topic/p &#34; xtrc=&#34;p:11;185:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/api/js.md&#34;&gt;&lt;codeph class=&#34;+ topic/ph pr-d/codeph &#34; xtrc=&#34;codeph:10;185:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/api/js.md&#34;&gt;&amp;lt;DdbInt&amp;gt;&lt;/codeph&gt; 用于 TypeScript 推断返回值的类型&lt;/p&gt;&lt;ul class=&#34;- topic/ul &#34; xtrc=&#34;ul:4;187:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/api/js.md&#34;&gt;&lt;li class=&#34;- topic/li &#34; xtrc=&#34;li:9;187:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/api/js.md&#34;&gt;result 是一个 &lt;codeph class=&#34;+ topic/ph pr-d/codeph &#34; xtrc=&#34;codeph:11;187:14&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/api/js.md&#34;&gt;DdbInt&lt;/codeph&gt;，也是 &lt;codeph class=&#34;+ topic/ph pr-d/codeph &#34; xtrc=&#34;codeph:12;187:26&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/api/js.md&#34;&gt;DdbObj&amp;lt;number&amp;gt;&lt;/codeph&gt;&lt;/li&gt;&lt;li class=&#34;- topic/li &#34; xtrc=&#34;li:10;188:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/api/js.md&#34;&gt;result.form 是 &lt;codeph class=&#34;+ topic/ph pr-d/codeph &#34; xtrc=&#34;codeph:13;188:17&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/api/js.md&#34;&gt;DdbForm.scalar&lt;/codeph&gt;&lt;/li&gt;&lt;li class=&#34;- topic/li &#34; xtrc=&#34;li:11;189:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/api/js.md&#34;&gt;result.type 是 &lt;codeph class=&#34;+ topic/ph pr-d/codeph &#34; xtrc=&#34;codeph:14;189:17&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/api/js.md&#34;&gt;DdbType.int&lt;/codeph&gt;&lt;/li&gt;&lt;li class=&#34;- topic/li &#34; xtrc=&#34;li:12;190:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/api/js.md&#34;&gt;result.value 是 JavaScript 中原生的 &lt;codeph class=&#34;+ topic/ph pr-d/codeph &#34; xtrc=&#34;codeph:15;190:34&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/api/js.md&#34;&gt;number&lt;/codeph&gt; (int 的取值范围及精度可以用 JavaScript 的 number 准确表示)&lt;/li&gt;&lt;/ul&gt;&lt;p class=&#34;- topic/p &#34; xtrc=&#34;p:12;192:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/api/js.md&#34;&gt;建议先了解一下 JavaScript 中的 TypedArray 相关的概念，可以参考:&lt;?linebreak?&gt;https://stackoverflow.com/questions/42416783/where-to-use-arraybuffer-vs-typed-array-in-javascript&lt;?linebreak?&gt;https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/TypedArray&lt;/p&gt;&lt;codeblock class=&#34;+ topic/pre pr-d/codeblock &#34; outputclass=&#34;ts&#34; xml:space=&#34;preserve&#34; xtrc=&#34;codeblock:9;196:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/api/js.md&#34;&gt;/** 可以表示所有 DolphinDB 数据库中的数据类型 */ class DdbObj &amp;lt;T extends DdbValue = DdbValue&amp;gt; { /** 是否为小端 (little endian) */ le: boolean /** 数据形式 https://www.dolphindb.cn/cn/help/DataTypesandStructures/DataForms/index.html */ form: DdbForm /** 数据类型 https://www.dolphindb.cn/cn/help/DataTypesandStructures/DataTypes/index.html */ type: DdbType /** 占用 parse 时传入的 buf 的长度 */ length: number /** table name / column name */ name?: string /** 最低维、第 1 维 - vector: rows = n, cols = 1 - pair: rows = 2, cols = 1 - matrix: rows = n, cols = m - set: 同 vector - dict: 包含 keys, values 向量 - table: 同 matrix */ rows?: number /** 第 2 维 */ cols?: number /** 实际数据。不同的 DdbForm, DdbType 使用 DdbValue 中不同的类型来表示实际数据 */ value: T /** 原始二进制数据，仅在 parse_object 为 false 时通过 parse_message 生成的顶层对象有这个属性 */ buffer?: Uint8Array constructor (data: Partial&amp;lt;DdbObj&amp;gt; &amp;amp; { form: DdbForm, type: DdbType, length: number }) { Object.assign(this, data) } } class DdbInt extends DdbObj&amp;lt;number&amp;gt; { constructor (value: number) { super({ form: DdbForm.scalar, type: DdbType.int, length: 4, value }) } } // ... 还有很多快捷类，如 DdbString, DdbLong, DdbDouble, DdbVectorDouble, DdbVectorAny 等 type DdbValue = null | boolean | number | [number, number] | bigint | string | string[] | Uint8Array | Int16Array | Int32Array | Float32Array | Float64Array | BigInt64Array | Uint8Array[] | DdbObj[] | DdbFunctionDefValue | DdbSymbolExtendedValue enum DdbForm { scalar = 0, vector = 1, pair = 2, matrix = 3, set = 4, dict = 5, table = 6, chart = 7, chunk = 8, } enum DdbType { void = 0, bool = 1, char = 2, short = 3, int = 4, long = 5, // ... timestamp = 12, // ... double = 16, symbol = 17, string = 18, // ... }&lt;/codeblock&gt;&lt;/body&gt;&lt;/topic&gt;&lt;topic class=&#34;- topic/topic &#34; ditaarch:DITAArchVersion=&#34;2.0&#34; domains=&#34;a(props audience) a(props deliveryTarget) a(props otherprops) a(props platform) a(props product)&#34; id=&#34;无快捷类的类型&#34; specializations=&#34;@props/audience @props/deliveryTarget @props/otherprops @props/platform @props/product&#34; xtrc=&#34;topic:19;288:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/api/js.md&#34;&gt;&lt;title class=&#34;- topic/title &#34; xtrc=&#34;title:19;288:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/api/js.md&#34;&gt;无快捷类的类型&lt;/title&gt;&lt;body class=&#34;- topic/body &#34; xtrc=&#34;body:19;288:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/api/js.md&#34;&gt;&lt;p class=&#34;- topic/p &#34; xtrc=&#34;p:13;290:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/api/js.md&#34;&gt;对于没有快捷类的类型，可指定 form 和 type 手动创建 DdbObj 对象&lt;/p&gt;&lt;codeblock class=&#34;+ topic/pre pr-d/codeblock &#34; outputclass=&#34;ts&#34; xml:space=&#34;preserve&#34; xtrc=&#34;codeblock:10;292:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/api/js.md&#34;&gt;// 通过 DdbDateTime 快捷类创建 new DdbDateTime(1644573600) // 等价于手动通过 DdbObj 创建 form = scalar, type = datetime 的对象 const obj = new DdbObj({ form: DdbForm.scalar, type: DdbType.datetime, value: 1644573600, length: 0 }) // value 在 js 中对应类型及取值可以参考 ddb.eval 返回的结果 (见后文 `eval` 方法声明) const obj = await ddb.eval('2022.02.11 10:00:00') console.log(obj.form === DdbForm.scalar) console.log(obj.type === DdbType.datetime) console.log(obj.value) // 再比如创建一个 set // 参考 ddb.eval // const obj = await ddb.eval('set([1, 2, 3])') // console.log(obj.value) const obj = new DdbObj({ form: DdbForm.set, type: DdbType.int, value: Int32Array.of(1, 2, 3), length: 0 }) // 使用快捷类较为简单 const obj = new DdbSetInt( new Set([1, 2, 3]) )&lt;/codeblock&gt;&lt;/body&gt;&lt;/topic&gt;&lt;topic class=&#34;- topic/topic &#34; ditaarch:DITAArchVersion=&#34;2.0&#34; domains=&#34;a(props audience) a(props deliveryTarget) a(props otherprops) a(props platform) a(props product)&#34; id=&#34;scalar-形式的-null-对象&#34; specializations=&#34;@props/audience @props/deliveryTarget @props/otherprops @props/platform @props/product&#34; xtrc=&#34;topic:20;328:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/api/js.md&#34;&gt;&lt;title class=&#34;- topic/title &#34; xtrc=&#34;title:20;328:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/api/js.md&#34;&gt;scalar 形式的 NULL 对象&lt;/title&gt;&lt;body class=&#34;- topic/body &#34; xtrc=&#34;body:20;328:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/api/js.md&#34;&gt;&lt;p class=&#34;- topic/p &#34; xtrc=&#34;p:14;330:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/api/js.md&#34;&gt;scalar 形式的 NULL 对象，其对应 DdbObj 的 value 为 JavaScript 中的 null：&lt;/p&gt;&lt;codeblock class=&#34;+ topic/pre pr-d/codeblock &#34; outputclass=&#34;ts&#34; xml:space=&#34;preserve&#34; xtrc=&#34;codeblock:11;332:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/api/js.md&#34;&gt;;(await ddb.eval('double()')).value === null // 创建 NULL 对象 new DdbInt(null) new DdbDouble(null)&lt;/codeblock&gt;&lt;/body&gt;&lt;/topic&gt;&lt;/topic&gt;&lt;topic class=&#34;- topic/topic &#34; ditaarch:DITAArchVersion=&#34;2.0&#34; domains=&#34;a(props audience) a(props deliveryTarget) a(props otherprops) a(props platform) a(props product)&#34; id=&#34;call-方法声明&#34; specializations=&#34;@props/audience @props/deliveryTarget @props/otherprops @props/platform @props/product&#34; xtrc=&#34;topic:21;340:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/api/js.md&#34;&gt;&lt;title class=&#34;- topic/title &#34; xtrc=&#34;title:21;340:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/api/js.md&#34;&gt;&lt;codeph class=&#34;+ topic/ph pr-d/codeph &#34; xtrc=&#34;codeph:16;340:7&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/api/js.md&#34;&gt;call&lt;/codeph&gt; 方法声明&lt;/title&gt;&lt;body class=&#34;- topic/body &#34; xtrc=&#34;body:21;340:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/api/js.md&#34;&gt;&lt;codeblock class=&#34;+ topic/pre pr-d/codeblock &#34; outputclass=&#34;ts&#34; xml:space=&#34;preserve&#34; xtrc=&#34;codeblock:12;341:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/api/js.md&#34;&gt;async call &amp;lt;T extends DdbObj&amp;gt; ( /** 函数名 */ func: string, /** 调用参数 (传入的原生 string 和 boolean 会被自动转换为 DdbObj&amp;lt;string&amp;gt; 和 DdbObj&amp;lt;boolean&amp;gt;) */ args?: (DdbObj | string | boolean)[] = [ ], /** 调用选项 */ options?: { /** 紧急 flag。使用 urgent worker 执行，防止被其它作业阻塞 */ urgent?: boolean /** 设置结点 alias 时发送到集群中对应的结点执行 (使用 DolphinDB 中的 rpc 方法) */ node?: string /** 设置多个结点 alias 时发送到集群中对应的多个结点执行 (使用 DolphinDB 中的 pnodeRun 方法) */ nodes?: string[] /** 设置 node 参数时必传，需指定函数类型，其它情况下不传 */ func_type?: DdbFunctionType /** 设置 nodes 参数时选传，其它情况不传 */ add_node_alias?: boolean } = { } ): Promise&amp;lt;T&amp;gt;&lt;/codeblock&gt;&lt;/body&gt;&lt;/topic&gt;&lt;/topic&gt;&lt;/topic&gt;&lt;topic class=&#34;- topic/topic &#34; ditaarch:DITAArchVersion=&#34;2.0&#34; domains=&#34;a(props audience) a(props deliveryTarget) a(props otherprops) a(props platform) a(props product)&#34; id=&#34;执行脚本&#34; specializations=&#34;@props/audience @props/deliveryTarget @props/otherprops @props/platform @props/product&#34; xtrc=&#34;topic:22;369:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/api/js.md&#34;&gt;&lt;title class=&#34;- topic/title &#34; xtrc=&#34;title:22;369:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/api/js.md&#34;&gt;执行脚本&lt;/title&gt;&lt;body class=&#34;- topic/body &#34; xtrc=&#34;body:22;369:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/api/js.md&#34;/&gt;&lt;topic class=&#34;- topic/topic &#34; ditaarch:DITAArchVersion=&#34;2.0&#34; domains=&#34;a(props audience) a(props deliveryTarget) a(props otherprops) a(props platform) a(props product)&#34; id=&#34;execute-方法&#34; specializations=&#34;@props/audience @props/deliveryTarget @props/otherprops @props/platform @props/product&#34; xtrc=&#34;topic:23;370:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/api/js.md&#34;&gt;&lt;title class=&#34;- topic/title &#34; xtrc=&#34;title:23;370:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/api/js.md&#34;&gt;&lt;codeph class=&#34;+ topic/ph pr-d/codeph &#34; xtrc=&#34;codeph:17;370:6&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/api/js.md&#34;&gt;execute&lt;/codeph&gt; 方法&lt;/title&gt;&lt;body class=&#34;- topic/body &#34; xtrc=&#34;body:23;370:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/api/js.md&#34;/&gt;&lt;topic class=&#34;- topic/topic &#34; ditaarch:DITAArchVersion=&#34;2.0&#34; domains=&#34;a(props audience) a(props deliveryTarget) a(props otherprops) a(props platform) a(props product)&#34; id=&#34;execute-方法代码示例&#34; specializations=&#34;@props/audience @props/deliveryTarget @props/otherprops @props/platform @props/product&#34; xtrc=&#34;topic:24;371:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/api/js.md&#34;&gt;&lt;title class=&#34;- topic/title &#34; xtrc=&#34;title:24;371:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/api/js.md&#34;&gt;&lt;codeph class=&#34;+ topic/ph pr-d/codeph &#34; xtrc=&#34;codeph:18;371:7&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/api/js.md&#34;&gt;execute&lt;/codeph&gt; 方法代码示例&lt;/title&gt;&lt;body class=&#34;- topic/body &#34; xtrc=&#34;body:24;371:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/api/js.md&#34;&gt;&lt;codeblock class=&#34;+ topic/pre pr-d/codeblock &#34; outputclass=&#34;ts&#34; xml:space=&#34;preserve&#34; xtrc=&#34;codeblock:13;372:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/api/js.md&#34;&gt;const result = await ddb.execute( 'def foo (a, b) {\n' + ' return a + b\n' + '}\n' + 'foo(1l, 1l)\n' ) // TypeScript: // const result = await ddb.execute&amp;lt;bigint&amp;gt;(...) console.log(result.value === 2n) // true&lt;/codeblock&gt;&lt;p class=&#34;- topic/p &#34; xtrc=&#34;p:15;386:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/api/js.md&#34;&gt;上面例子中，通过字符串上传了一段脚本到 DolphinDB 数据库执行，并接收最后一条语句 &lt;codeph class=&#34;+ topic/ph pr-d/codeph &#34; xtrc=&#34;codeph:19;386:47&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/api/js.md&#34;&gt;foo(1l, 1l)&lt;/codeph&gt; 执行结果 result&lt;/p&gt;&lt;p class=&#34;- topic/p &#34; xtrc=&#34;p:16;388:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/api/js.md&#34;&gt;&lt;codeph class=&#34;+ topic/ph pr-d/codeph &#34; xtrc=&#34;codeph:20;388:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/api/js.md&#34;&gt;&amp;lt;bigint&amp;gt;&lt;/codeph&gt; 用于 TypeScript 推断返回值的类型&lt;/p&gt;&lt;ul class=&#34;- topic/ul &#34; xtrc=&#34;ul:5;390:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/api/js.md&#34;&gt;&lt;li class=&#34;- topic/li &#34; xtrc=&#34;li:13;390:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/api/js.md&#34;&gt;result 是一个 &lt;codeph class=&#34;+ topic/ph pr-d/codeph &#34; xtrc=&#34;codeph:21;390:14&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/api/js.md&#34;&gt;bigint&lt;/codeph&gt;&lt;/li&gt;&lt;/ul&gt;&lt;p class=&#34;- topic/p &#34; xtrc=&#34;p:17;392:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/api/js.md&#34;&gt;只要 WebSocket 连接不断开，在后续的会话中 &lt;codeph class=&#34;+ topic/ph pr-d/codeph &#34; xtrc=&#34;codeph:22;392:28&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/api/js.md&#34;&gt;foo&lt;/codeph&gt; 这个自定义函数会一直存在，可复用，比如后续通过 &lt;codeph class=&#34;+ topic/ph pr-d/codeph &#34; xtrc=&#34;codeph:23;392:58&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/api/js.md&#34;&gt;await ddb.invoke&amp;lt;number&amp;gt;('foo', [1, 1])&lt;/codeph&gt; 调用这个自定义函数&lt;/p&gt;&lt;/body&gt;&lt;/topic&gt;&lt;topic class=&#34;- topic/topic &#34; ditaarch:DITAArchVersion=&#34;2.0&#34; domains=&#34;a(props audience) a(props deliveryTarget) a(props otherprops) a(props platform) a(props product)&#34; id=&#34;execute-方法声明&#34; specializations=&#34;@props/audience @props/deliveryTarget @props/otherprops @props/platform @props/product&#34; xtrc=&#34;topic:25;394:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/api/js.md&#34;&gt;&lt;title class=&#34;- topic/title &#34; xtrc=&#34;title:25;394:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/api/js.md&#34;&gt;&lt;codeph class=&#34;+ topic/ph pr-d/codeph &#34; xtrc=&#34;codeph:24;394:7&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/api/js.md&#34;&gt;execute&lt;/codeph&gt; 方法声明&lt;/title&gt;&lt;body class=&#34;- topic/body &#34; xtrc=&#34;body:25;394:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/api/js.md&#34;&gt;&lt;codeblock class=&#34;+ topic/pre pr-d/codeblock &#34; outputclass=&#34;ts&#34; xml:space=&#34;preserve&#34; xtrc=&#34;codeblock:14;395:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/api/js.md&#34;&gt;/** 执行 dolphindb 脚本，返回 js 原生对象或值（调用 DdbObj.data() 后的结果）*/ async execute &amp;lt;TResult = any&amp;gt; ( /** 执行的脚本 */ script: string, /** 执行选项 */ options?: { /** 紧急 flag，确保提交的脚本使用 urgent worker 处理，防止被其它作业阻塞 */ urgent?: boolean /** listener?: 处理本次 rpc 期间的消息 (DdbMessage) */ listener?: DdbMessageListener } ): Promise&amp;lt;TResult&amp;gt;&lt;/codeblock&gt;&lt;/body&gt;&lt;/topic&gt;&lt;/topic&gt;&lt;topic class=&#34;- topic/topic &#34; ditaarch:DITAArchVersion=&#34;2.0&#34; domains=&#34;a(props audience) a(props deliveryTarget) a(props otherprops) a(props platform) a(props product)&#34; id=&#34;eval-方法&#34; specializations=&#34;@props/audience @props/deliveryTarget @props/otherprops @props/platform @props/product&#34; xtrc=&#34;topic:26;411:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/api/js.md&#34;&gt;&lt;title class=&#34;- topic/title &#34; xtrc=&#34;title:26;411:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/api/js.md&#34;&gt;&lt;codeph class=&#34;+ topic/ph pr-d/codeph &#34; xtrc=&#34;codeph:25;411:6&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/api/js.md&#34;&gt;eval&lt;/codeph&gt; 方法&lt;/title&gt;&lt;body class=&#34;- topic/body &#34; xtrc=&#34;body:26;411:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/api/js.md&#34;/&gt;&lt;topic class=&#34;- topic/topic &#34; ditaarch:DITAArchVersion=&#34;2.0&#34; domains=&#34;a(props audience) a(props deliveryTarget) a(props otherprops) a(props platform) a(props product)&#34; id=&#34;eval-方法代码示例&#34; specializations=&#34;@props/audience @props/deliveryTarget @props/otherprops @props/platform @props/product&#34; xtrc=&#34;topic:27;412:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/api/js.md&#34;&gt;&lt;title class=&#34;- topic/title &#34; xtrc=&#34;title:27;412:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/api/js.md&#34;&gt;&lt;codeph class=&#34;+ topic/ph pr-d/codeph &#34; xtrc=&#34;codeph:26;412:7&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/api/js.md&#34;&gt;eval&lt;/codeph&gt; 方法代码示例&lt;/title&gt;&lt;body class=&#34;- topic/body &#34; xtrc=&#34;body:27;412:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/api/js.md&#34;&gt;&lt;codeblock class=&#34;+ topic/pre pr-d/codeblock &#34; outputclass=&#34;ts&#34; xml:space=&#34;preserve&#34; xtrc=&#34;codeblock:15;413:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/api/js.md&#34;&gt;const result = await ddb.eval( 'def foo (a, b) {\n' + ' return a + b\n' + '}\n' + 'foo(1l, 1l)\n' ) // TypeScript: // import type { DdbLong } from 'dolphindb' // const result = await ddb.eval&amp;lt;DdbLong&amp;gt;(...) console.log(result.value === 2n) // true&lt;/codeblock&gt;&lt;p class=&#34;- topic/p &#34; xtrc=&#34;p:18;428:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/api/js.md&#34;&gt;上面例子中，通过字符串上传了一段脚本到 DolphinDB 数据库执行，并接收最后一条语句 &lt;codeph class=&#34;+ topic/ph pr-d/codeph &#34; xtrc=&#34;codeph:27;428:47&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/api/js.md&#34;&gt;foo(1l, 1l)&lt;/codeph&gt; 执行结果 result&lt;/p&gt;&lt;p class=&#34;- topic/p &#34; xtrc=&#34;p:19;430:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/api/js.md&#34;&gt;&lt;codeph class=&#34;+ topic/ph pr-d/codeph &#34; xtrc=&#34;codeph:28;430:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/api/js.md&#34;&gt;&amp;lt;DdbLong&amp;gt;&lt;/codeph&gt; 用于 TypeScript 推断返回值的类型&lt;/p&gt;&lt;ul class=&#34;- topic/ul &#34; xtrc=&#34;ul:6;432:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/api/js.md&#34;&gt;&lt;li class=&#34;- topic/li &#34; xtrc=&#34;li:14;432:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/api/js.md&#34;&gt;result 是一个 &lt;codeph class=&#34;+ topic/ph pr-d/codeph &#34; xtrc=&#34;codeph:29;432:14&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/api/js.md&#34;&gt;DdbLong&lt;/codeph&gt;，也是 &lt;codeph class=&#34;+ topic/ph pr-d/codeph &#34; xtrc=&#34;codeph:30;432:27&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/api/js.md&#34;&gt;DdbObj&amp;lt;bigint&amp;gt;&lt;/codeph&gt;&lt;/li&gt;&lt;li class=&#34;- topic/li &#34; xtrc=&#34;li:15;433:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/api/js.md&#34;&gt;result.form 是 &lt;codeph class=&#34;+ topic/ph pr-d/codeph &#34; xtrc=&#34;codeph:31;433:17&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/api/js.md&#34;&gt;DdbForm.scalar&lt;/codeph&gt;&lt;/li&gt;&lt;li class=&#34;- topic/li &#34; xtrc=&#34;li:16;434:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/api/js.md&#34;&gt;result.type 是 &lt;codeph class=&#34;+ topic/ph pr-d/codeph &#34; xtrc=&#34;codeph:32;434:17&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/api/js.md&#34;&gt;DdbType.long&lt;/codeph&gt;&lt;/li&gt;&lt;li class=&#34;- topic/li &#34; xtrc=&#34;li:17;435:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/api/js.md&#34;&gt;result.value 是 JavaScript 中原生的 &lt;codeph class=&#34;+ topic/ph pr-d/codeph &#34; xtrc=&#34;codeph:33;435:34&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/api/js.md&#34;&gt;bigint&lt;/codeph&gt; (long 的精度不能用 JavaScript 的 number 准确表示，但可以用 bigint 表示)&lt;/li&gt;&lt;/ul&gt;&lt;/body&gt;&lt;/topic&gt;&lt;topic class=&#34;- topic/topic &#34; ditaarch:DITAArchVersion=&#34;2.0&#34; domains=&#34;a(props audience) a(props deliveryTarget) a(props otherprops) a(props platform) a(props product)&#34; id=&#34;eval-方法声明&#34; specializations=&#34;@props/audience @props/deliveryTarget @props/otherprops @props/platform @props/product&#34; xtrc=&#34;topic:28;437:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/api/js.md&#34;&gt;&lt;title class=&#34;- topic/title &#34; xtrc=&#34;title:28;437:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/api/js.md&#34;&gt;&lt;codeph class=&#34;+ topic/ph pr-d/codeph &#34; xtrc=&#34;codeph:34;437:7&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/api/js.md&#34;&gt;eval&lt;/codeph&gt; 方法声明&lt;/title&gt;&lt;body class=&#34;- topic/body &#34; xtrc=&#34;body:28;437:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/api/js.md&#34;&gt;&lt;codeblock class=&#34;+ topic/pre pr-d/codeblock &#34; outputclass=&#34;ts&#34; xml:space=&#34;preserve&#34; xtrc=&#34;codeblock:16;438:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/api/js.md&#34;&gt;/** 执行 dolphindb 脚本，返回 DdbObj 对象）*/ async eval &amp;lt;T extends DdbObj&amp;gt; ( /** 执行的脚本 */ script: string, /** 执行选项 */ options: { /** 紧急 flag，确保提交的脚本使用 urgent worker 处理，防止被其它作业阻塞 */ urgent?: boolean } = { } ): Promise&amp;lt;T&amp;gt;&lt;/codeblock&gt;&lt;/body&gt;&lt;/topic&gt;&lt;/topic&gt;&lt;/topic&gt;&lt;topic class=&#34;- topic/topic &#34; ditaarch:DITAArchVersion=&#34;2.0&#34; domains=&#34;a(props audience) a(props deliveryTarget) a(props otherprops) a(props platform) a(props product)&#34; id=&#34;上传变量&#34; specializations=&#34;@props/audience @props/deliveryTarget @props/otherprops @props/platform @props/product&#34; xtrc=&#34;topic:29;452:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/api/js.md&#34;&gt;&lt;title class=&#34;- topic/title &#34; xtrc=&#34;title:29;452:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/api/js.md&#34;&gt;上传变量&lt;/title&gt;&lt;body class=&#34;- topic/body &#34; xtrc=&#34;body:29;452:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/api/js.md&#34;/&gt;&lt;topic class=&#34;- topic/topic &#34; ditaarch:DITAArchVersion=&#34;2.0&#34; domains=&#34;a(props audience) a(props deliveryTarget) a(props otherprops) a(props platform) a(props product)&#34; id=&#34;例子&#34; specializations=&#34;@props/audience @props/deliveryTarget @props/otherprops @props/platform @props/product&#34; xtrc=&#34;topic:30;453:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/api/js.md&#34;&gt;&lt;title class=&#34;- topic/title &#34; xtrc=&#34;title:30;453:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/api/js.md&#34;&gt;例子&lt;/title&gt;&lt;body class=&#34;- topic/body &#34; xtrc=&#34;body:30;453:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/api/js.md&#34;&gt;&lt;codeblock class=&#34;+ topic/pre pr-d/codeblock &#34; outputclass=&#34;ts&#34; xml:space=&#34;preserve&#34; xtrc=&#34;codeblock:17;454:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/api/js.md&#34;&gt;import { DdbVectorDouble } from 'dolphindb' let a = new Array(10000) a.fill(1.0) ddb.upload(['bar1', 'bar2'], [new DdbVectorDouble(a), new DdbVectorDouble(a)])&lt;/codeblock&gt;&lt;p class=&#34;- topic/p &#34; xtrc=&#34;p:20;463:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/api/js.md&#34;&gt;上面的例子中，上传了 &lt;codeph class=&#34;+ topic/ph pr-d/codeph &#34; xtrc=&#34;codeph:35;463:12&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/api/js.md&#34;&gt;bar1&lt;/codeph&gt;, &lt;codeph class=&#34;+ topic/ph pr-d/codeph &#34; xtrc=&#34;codeph:36;463:20&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/api/js.md&#34;&gt;bar2&lt;/codeph&gt; 两个变量，变量值是长度为 10000 的 double 向量&lt;/p&gt;&lt;p class=&#34;- topic/p &#34; xtrc=&#34;p:21;465:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/api/js.md&#34;&gt;只要 WebSocket 连接不断开，在后续的会话中 &lt;codeph class=&#34;+ topic/ph pr-d/codeph &#34; xtrc=&#34;codeph:37;465:28&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/api/js.md&#34;&gt;bar1&lt;/codeph&gt;, &lt;codeph class=&#34;+ topic/ph pr-d/codeph &#34; xtrc=&#34;codeph:38;465:36&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/api/js.md&#34;&gt;bar2&lt;/codeph&gt; 这些变量会一直存在，可复用&lt;/p&gt;&lt;/body&gt;&lt;/topic&gt;&lt;topic class=&#34;- topic/topic &#34; ditaarch:DITAArchVersion=&#34;2.0&#34; domains=&#34;a(props audience) a(props deliveryTarget) a(props otherprops) a(props platform) a(props product)&#34; id=&#34;upload-方法声明&#34; specializations=&#34;@props/audience @props/deliveryTarget @props/otherprops @props/platform @props/product&#34; xtrc=&#34;topic:31;467:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/api/js.md&#34;&gt;&lt;title class=&#34;- topic/title &#34; xtrc=&#34;title:31;467:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/api/js.md&#34;&gt;&lt;codeph class=&#34;+ topic/ph pr-d/codeph &#34; xtrc=&#34;codeph:39;467:6&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/api/js.md&#34;&gt;upload&lt;/codeph&gt; 方法声明&lt;/title&gt;&lt;body class=&#34;- topic/body &#34; xtrc=&#34;body:31;467:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/api/js.md&#34;&gt;&lt;codeblock class=&#34;+ topic/pre pr-d/codeblock &#34; outputclass=&#34;ts&#34; xml:space=&#34;preserve&#34; xtrc=&#34;codeblock:18;468:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/api/js.md&#34;&gt;async upload ( /** 上传的变量名 */ vars: string[], /** 上传的变量值 */ args: (DdbObj | string | boolean)[] ): Promise&amp;lt;void&amp;gt;&lt;/codeblock&gt;&lt;/body&gt;&lt;/topic&gt;&lt;/topic&gt;&lt;topic class=&#34;- topic/topic &#34; ditaarch:DITAArchVersion=&#34;2.0&#34; domains=&#34;a(props audience) a(props deliveryTarget) a(props otherprops) a(props platform) a(props product)&#34; id=&#34;其他例子&#34; specializations=&#34;@props/audience @props/deliveryTarget @props/otherprops @props/platform @props/product&#34; xtrc=&#34;topic:32;479:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/api/js.md&#34;&gt;&lt;title class=&#34;- topic/title &#34; xtrc=&#34;title:32;479:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/api/js.md&#34;&gt;其他例子&lt;/title&gt;&lt;body class=&#34;- topic/body &#34; xtrc=&#34;body:32;479:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/api/js.md&#34;&gt;&lt;codeblock class=&#34;+ topic/pre pr-d/codeblock &#34; outputclass=&#34;ts&#34; xml:space=&#34;preserve&#34; xtrc=&#34;codeblock:19;481:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/api/js.md&#34;&gt;import { nulls, DdbInt, timestamp2str, DdbVectorSymbol, DdbTable, DdbVectorDouble } from 'dolphindb' // 将 DolphinDB 中的 timestamp 格式化为 string timestamp2str( ( await ddb.call('now', [false]) // TypeScript: await ddb.call&amp;lt;DdbObj&amp;lt;bigint&amp;gt;&amp;gt;('now', [false]) ).value ) === '2022.02.23 17:23:13.494' // 创建 symbol vector new DdbVectorSymbol(['aaa', 'aaa', 'aaa', 'aaa', 'aaa', 'bbb']) // 使用 JavaScript 原生数组创建含有 NULL 值的 double vector new DdbVectorDouble([0.1, null, 0.3]) // 使用 JavaScript TypedArray 更加高效且节约内存的创建 double vector let av = new Float64Array(3) av[0] = 0.1 av[1] = nulls.double av[2] = 0.3 new DdbVectorDouble(av) // 创建 DdbTable new DdbTable( [ new DdbVectorDouble([0.1, 0.2, null], 'col0'), new DdbVectorSymbol(['a', 'b', 'c'], 'col1') ], 'mytable' )&lt;/codeblock&gt;&lt;/body&gt;&lt;/topic&gt;&lt;topic class=&#34;- topic/topic &#34; ditaarch:DITAArchVersion=&#34;2.0&#34; domains=&#34;a(props audience) a(props deliveryTarget) a(props otherprops) a(props platform) a(props product)&#34; id=&#34;流数据&#34; specializations=&#34;@props/audience @props/deliveryTarget @props/otherprops @props/platform @props/product&#34; xtrc=&#34;topic:33;516:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/api/js.md&#34;&gt;&lt;title class=&#34;- topic/title &#34; xtrc=&#34;title:33;516:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/api/js.md&#34;&gt;流数据&lt;/title&gt;&lt;body class=&#34;- topic/body &#34; xtrc=&#34;body:33;516:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/api/js.md&#34;&gt;&lt;codeblock class=&#34;+ topic/pre pr-d/codeblock &#34; outputclass=&#34;ts&#34; xml:space=&#34;preserve&#34; xtrc=&#34;codeblock:20;518:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/api/js.md&#34;&gt;// 新建流数据连接配置 let sddb = new DDB('ws://192.168.0.43:8800', { autologin: true, username: 'admin', password: '123456', streaming: { table: '要订阅的流表名称', // 流数据处理回调, message 的类型是 StreamingMessage handler (message) { console.log(message) } } }) // 建立连接 await sddb.connect()&lt;/codeblock&gt;&lt;p class=&#34;- topic/p &#34; xtrc=&#34;p:22;538:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/api/js.md&#34;&gt;连接建立后接收到的流数据会作为 message 参数调用 handler, message 的类型是 StreamingMessage, 如下:&lt;/p&gt;&lt;codeblock class=&#34;+ topic/pre pr-d/codeblock &#34; outputclass=&#34;ts&#34; xml:space=&#34;preserve&#34; xtrc=&#34;codeblock:21;540:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/api/js.md&#34;&gt;export interface StreamingParams { table: string action?: string handler (message: StreamingMessage): any } export interface StreamingMessage &amp;lt;TRows = any&amp;gt; extends StreamingParams { /** server 发送消息的时间 (nano seconds since epoch) std::chrono::system_clock::now().time_since_epoch() / std::chrono::nanoseconds(1) */ time: bigint /** message id */ id: bigint /** 订阅主题，即一个订阅的名称。 它是一个字符串，由订阅表所在节点的别名、流数据表名称和订阅任务名称（如果指定了 actionName）组合而成，使用 `/` 分隔 */ topic: string /** 流数据 */ data: DdbTableData&amp;lt;TRows&amp;gt; window: { /** 建立连接开始 offset = 0, 随着 window 的移动逐渐增加 */ offset: number /** 历史数据 */ data: TRows[] /** 每次接收到的 obj 组成的数组 */ objs: DdbObj&amp;lt;DdbVectorObj[]&amp;gt;[] } /** 成功订阅后，后续推送过来的 message 解析错误，则会设置 error 并调用 handler */ error?: Error }&lt;/codeblock&gt;&lt;/body&gt;&lt;/topic&gt;&lt;topic class=&#34;- topic/topic &#34; ditaarch:DITAArchVersion=&#34;2.0&#34; domains=&#34;a(props audience) a(props deliveryTarget) a(props otherprops) a(props platform) a(props product)&#34; id=&#34;开发方法&#34; specializations=&#34;@props/audience @props/deliveryTarget @props/otherprops @props/platform @props/product&#34; xtrc=&#34;topic:34;580:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/api/js.md&#34;&gt;&lt;title class=&#34;- topic/title &#34; xtrc=&#34;title:34;580:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/api/js.md&#34;&gt;开发方法&lt;/title&gt;&lt;body class=&#34;- topic/body &#34; xtrc=&#34;body:34;580:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/api/js.md&#34;&gt;&lt;codeblock class=&#34;+ topic/pre pr-d/codeblock &#34; outputclass=&#34;shell&#34; xml:space=&#34;preserve&#34; xtrc=&#34;codeblock:22;582:1&#34; xtrf=&#34;file:/var/lib/jenkins/workspace/packDocCN/documentation/zh/api/js.md&#34;&gt;# 安装最新版的 nodejs (见上文) # 安装 pnpm 包管理器 npm install -g pnpm git clone https://github.com/dolphindb/api-javascript.git cd api-javascript # 安装项目依赖 pnpm install # 将 .vscode/settings.template.json 复制为 .vscode/settings.json cp .vscode/settings.template.json .vscode/settings.json # 参考 package.json 中的 scripts # 构建 pnpm run build # lint pnpm run lint # 测试 pnpm run test # 扫描词条 pnpm run scan # 手动补全未翻译词条 # 再次运行扫描以更新词典文件 dict.json pnpm run scan&lt;/codeblock&gt;&lt;/body&gt;&lt;/topic&gt;&lt;/topic&gt;&lt;/topic&gt;"/><meta name="wh-source-relpath" content="api/js.md"/><meta name="wh-out-relpath" content="api/js.html"/>
+
+    <link rel="stylesheet" type="text/css" href="../oxygen-webhelp/app/commons.css?buildId=2024012323"/>
+    <link rel="stylesheet" type="text/css" href="../oxygen-webhelp/app/topic.css?buildId=2024012323"/>
+
+    <script src="../oxygen-webhelp/app/options/properties.js?buildId=20240704100525"></script>
+    <script src="../oxygen-webhelp/app/localization/strings.js?buildId=2024012323"></script>
+    <script src="../oxygen-webhelp/app/search/index/keywords.js?buildId=20240704100525"></script>
+    <script defer="defer" src="../oxygen-webhelp/app/commons.js?buildId=2024012323"></script>
+    <script defer="defer" src="../oxygen-webhelp/app/topic.js?buildId=2024012323"></script>
+<link rel="stylesheet" type="text/css" href="../oxygen-webhelp/template/styles.css?buildId=2024012323"/><script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script><script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script></head>
+
+    <body id="javascript-api" class="wh_topic_page frmBody">
+        <a href="#wh_topic_body" class="sr-only sr-only-focusable">
+            跳转到主要内容
+        </a>
+        
+        
+        
+        
+        <header class="navbar navbar-default wh_header">
+    <div class="container-fluid">
+        <div xmlns:whc="http://www.oxygenxml.com/webhelp/components" class="wh_header_flex_container navbar-nav navbar-expand-md navbar-dark">
+            <div class="wh_logo_and_publication_title_container">
+                <div class="wh_logo_and_publication_title">
+                    
+                    <a href="https://www.dolphindb.cn" class=" wh_logo d-none d-sm-block "><img src="../logo.png" alt="  DolphinDB 文档中心  "/></a>
+                    <div class=" wh_publication_title "><a href="../index.html"><span class="booktitle">  <span class="ph mainbooktitle">DolphinDB 文档中心</span>  </span></a></div>
+                    
+                </div>
+                
+                
+            </div>
+
+            <div class="wh_top_menu_and_indexterms_link collapse navbar-collapse" id="wh_top_menu_and_indexterms_link">
+                
+                
+                
+                
+            </div>
+        <div class=" wh_search_input navbar-form wh_topic_page_search search " role="form">
+            
+            
+            
+            <form id="searchForm" method="get" role="search" action="../search.html"><div><input type="search" placeholder="搜索 " class="wh_search_textfield" id="textToSearch" name="searchQuery" aria-label="搜索查询" required="required"/><button type="submit" class="wh_search_button" aria-label="搜索"><span class="search_input_text">搜索</span></button></div></form>
+            
+            <script src="/vendors/react/umd/react.production.min.js" defer="defer"></script>
+<script src="/vendors/react-dom/umd/react-dom.production.min.js" defer="defer"></script>
+<script src="/vendors/dayjs/dayjs.min.js" defer="defer"></script>
+<script src="/vendors/antd/dist/antd.min.js" defer="defer"></script>
+<script src="/vendors/@ant-design/icons/dist/index.umd.min.js" defer="defer"></script>
+<script src="/zh/index.js" type="module"></script>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js" defer="defer"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML" defer="defer"><!--
+
+
+--></script>
+
+            
+        </div></div>
+    </div>
+</header>
+        
+        
+         
+        
+        
+        
+        <div class="container-fluid" id="wh_topic_container">
+            <div class="row">
+
+                <nav class="wh_tools d-print-none navbar-expand-md" aria-label="Tools">
+                    
+                    <div data-tooltip-position="bottom" class=" wh_breadcrumb "><ol class="d-print-none"><li><span class="home"><a href="../index.html"><span>主页</span></a></span></li><li><div class="topicref" data-id="api_protocol"><div class="title"><a href="../api/connapi_intro.html"><span class="keyword label">连接器 &amp; API</span></a><div class="wh-tooltip"><p class="shortdesc">面向不同编程语言的 DolphinDB API 及连接器，相关协议和用法</p></div></div></div></li><li class="active"><div class="topicref" data-id="javascript-api"><div class="title"><a href="../api/js.html">JavaScript API</a></div></div></li></ol></div>
+                    
+                    
+                    
+                    <div class="wh_right_tools">
+                        <button class="wh_hide_highlight" aria-label="切换搜索突出显示" title="切换搜索突出显示"></button>
+                        <button class="webhelp_expand_collapse_sections" data-next-state="collapsed" aria-label="折叠截面" title="折叠截面"></button>
+                        
+                        
+                        
+                        
+                        <div class=" wh_print_link print d-none d-md-inline-block "><button onClick="window.print()" title="打印此页" aria-label="打印此页"></button></div>
+                        
+                        <button type="button" id="wh_toc_button" class="custom-toggler navbar-toggler collapsed wh_toggle_button navbar-light" aria-expanded="false" aria-label="Toggle publishing table of content" aria-controls="wh_publication_toc">
+                            <span class="navbar-toggler-icon"></span>
+                        </button>
+                    </div>
+                    
+                </nav>
+            </div>
+            
+            
+            
+            
+            <div class="wh_content_area">
+                <div class="row">
+                    
+                        <nav id="wh_publication_toc" class="col-lg-3 col-md-3 col-sm-12 d-md-block d-none d-print-none" aria-label="Table of Contents Container">
+                            <div id="wh_publication_toc_content">
+		                        
+                            	<div class=" wh_publication_toc " data-tooltip-position="right"><span class="expand-button-action-labels"><span id="button-expand-action" role="button" aria-label="Expand"></span><span id="button-collapse-action" role="button" aria-label="Collapse"></span><span id="button-pending-action" role="button" aria-label="Pending"></span></span><ul role="tree" aria-label="Table of Contents"><li role="treeitem"><div data-tocid="new_chap_about_sect_ddb_docs_intro-d9529e87" class="topicref" data-id="new_chap_about_sect_ddb_docs_intro" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../about/ddb_docs_intro.html" id="new_chap_about_sect_ddb_docs_intro-d9529e87-link">文档使用说明</a><div class="wh-tooltip"><p class="shortdesc">如何获取 DolphinDB 帮助信息</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="chap1_getstarted-d9529e140" class="topicref" data-id="chap1_getstarted" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action chap1_getstarted-d9529e140-link" class="wh-expand-btn"></span><div class="title"><a href="../getstarted/chap1_getstarted.html" id="chap1_getstarted-d9529e140-link"><span class="keyword label">快速上手</span></a><div class="wh-tooltip"><p class="shortdesc">如何快速部署 DolphinDB、建库建表、写入和查询数据</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="sectionddb_deployment-d9529e335" class="topicref" data-id="sectionddb_deployment" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action sectionddb_deployment-d9529e335-link" class="wh-expand-btn"></span><div class="title"><a href="../deploy/deploy_intro.html" id="sectionddb_deployment-d9529e335-link"><span class="keyword label">部署</span></a><div class="wh-tooltip"><p class="shortdesc">如何在不同的场景中部署 DolphinDB</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="new_chap_database_manage_new_chap_dbmanage_landing_page-d9529e2313" class="topicref" data-id="new_chap_database_manage_new_chap_dbmanage_landing_page" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action new_chap_database_manage_new_chap_dbmanage_landing_page-d9529e2313-link" class="wh-expand-btn"></span><div class="title"><a href="../db_distr_comp/cfg/db_intro.html" id="new_chap_database_manage_new_chap_dbmanage_landing_page-d9529e2313-link"><span class="keyword label">数据库</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 数据库的基本概念</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="chap7_tutorials_streaming-d9529e3490" class="topicref" data-id="chap7_tutorials_streaming" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action chap7_tutorials_streaming-d9529e3490-link" class="wh-expand-btn"></span><div class="title"><a href="../stream/str_intro.html" id="chap7_tutorials_streaming-d9529e3490-link"><span class="keyword label">流数据</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 流数据引擎及流数据计算的基本概念</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="tocId-d9529e7385" class="topicref" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action tocId-d9529e7385-link" class="wh-expand-btn"></span><div class="title"><a href="../db_distr_comp/db_oper/import_data.html" id="tocId-d9529e7385-link">数据迁移</a><div class="wh-tooltip"><p class="shortdesc">如何从不同数据源向 DolphinDB 迁移数据</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="chap7_tutorials_system_management-d9529e7812" class="topicref" data-id="chap7_tutorials_system_management" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action chap7_tutorials_system_management-d9529e7812-link" class="wh-expand-btn"></span><div class="title"><a href="../sys_man/om_intro.html" id="chap7_tutorials_system_management-d9529e7812-link"><span class="keyword label">系统运维</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 的系统运维功能及方法</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="about_language_resources-d9529e16490" class="topicref" data-id="about_language_resources" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action about_language_resources-d9529e16490-link" class="wh-expand-btn"></span><div class="title"><a href="../progr/progr_intro.html" id="about_language_resources-d9529e16490-link"><span class="keyword label">编程语言</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 编程基本概念与方法、SQL 在 DolphinDB 的应用</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="functions_references-d9529e26503" class="topicref" data-id="functions_references" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action functions_references-d9529e26503-link" class="wh-expand-btn"></span><div class="title"><a href="../funcs/funcs_intro.html" id="functions_references-d9529e26503-link"><span class="keyword label">函数参考</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 函数分类、语法、详解及示例</p></div></div></div></li><li role="treeitem" aria-expanded="true"><div data-tocid="api_protocol-d9529e86456" class="topicref" data-id="api_protocol" data-state="expanded"><span role="button" tabindex="0" aria-labelledby="button-collapse-action api_protocol-d9529e86456-link" class="wh-expand-btn"></span><div class="title"><a href="../api/connapi_intro.html" id="api_protocol-d9529e86456-link"><span class="keyword label">连接器 &amp; API</span></a><div class="wh-tooltip"><p class="shortdesc">面向不同编程语言的 DolphinDB API 及连接器，相关协议和用法</p></div></div></div><ul role="group" class="navbar-nav nav-list"><li role="treeitem" aria-expanded="false"><div data-tocid="cpp_api-d9529e86509" class="topicref" data-id="cpp_api" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action cpp_api-d9529e86509-link" class="wh-expand-btn"></span><div class="title"><a href="../api/cpp/cpp_api.html" id="cpp_api-d9529e86509-link">C++ API</a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="chap5_sectpythonapi-d9529e88349" class="topicref" data-id="chap5_sectpythonapi" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action chap5_sectpythonapi-d9529e88349-link" class="wh-expand-btn"></span><div class="title"><a href="../api/python/py.html" id="chap5_sectpythonapi-d9529e88349-link"><span class="keyword label">Python API</span></a></div></div></li><li role="treeitem"><div data-tocid="c-api-d9529e90273" class="topicref" data-id="c-api" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../api/csharp.html" id="c-api-d9529e90273-link">C# API</a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="javaapi_landingpage-d9529e90319" class="topicref" data-id="javaapi_landingpage" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action javaapi_landingpage-d9529e90319-link" class="wh-expand-btn"></span><div class="title"><a href="../api/java_api/newjava.html" id="javaapi_landingpage-d9529e90319-link">Java API</a></div></div></li><li role="treeitem"><div data-tocid="jdbc-连接器-d9529e91745" class="topicref" data-id="jdbc-连接器" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../api/jdbc.html" id="jdbc-连接器-d9529e91745-link">JDBC 连接器</a></div></div></li><li role="treeitem"><div data-tocid="go-api-d9529e91791" class="topicref" data-id="go-api" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../api/go.html" id="go-api-d9529e91791-link">Go API</a></div></div></li><li role="treeitem" class="active"><div data-tocid="javascript-api-d9529e91837" class="topicref" data-id="javascript-api" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../api/js.html" id="javascript-api-d9529e91837-link">JavaScript API</a></div></div></li><li role="treeitem"><div data-tocid="json-api-d9529e91883" class="topicref" data-id="json-api" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../api/json.html" id="json-api-d9529e91883-link">JSON API</a></div></div></li><li role="treeitem"><div data-tocid="r-api-d9529e91929" class="topicref" data-id="r-api" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../api/r.html" id="r-api-d9529e91929-link">R API</a></div></div></li></ul></li><li role="treeitem" aria-expanded="false"><div data-tocid="chap6_plugin-d9529e91976" class="topicref" data-id="chap6_plugin" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action chap6_plugin-d9529e91976-link" class="wh-expand-btn"></span><div class="title"><a href="../plugins/plg_intro.html" id="chap6_plugin-d9529e91976-link"><span class="keyword label">插件</span></a><div class="wh-tooltip"><p class="shortdesc">多个应用场景的插件使用说明和插件开发指导</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="third_party-d9529e94749" class="topicref" data-id="third_party" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action third_party-d9529e94749-link" class="wh-expand-btn"></span><div class="title"><a href="../third_party.html" id="third_party-d9529e94749-link">第三方工具</a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="about_tutorials-d9529e94980" class="topicref" data-id="about_tutorials" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action about_tutorials-d9529e94980-link" class="wh-expand-btn"></span><div class="title"><a href="../tutorials/about_tutorials.html" id="about_tutorials-d9529e94980-link"><span class="keyword label">教程</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 产品使用教程</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="tocId-d9529e101769" class="topicref" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action tocId-d9529e101769-link" class="wh-expand-btn"></span><div class="title"><a href="../rn/server/3_00_1.html" id="tocId-d9529e101769-link">版本说明</a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 版本发布历史</p></div></div></div></li></ul></div>
+		                        
+                            </div>
+                        </nav>
+                    
+                    
+                    <div class="col-lg-7 col-md-9 col-sm-12" id="wh_topic_body">
+                        <button id="wh_close_publication_toc_button" class="close-toc-button d-none" aria-label="Toggle publishing table of content" aria-controls="wh_publication_toc" aria-expanded="true">
+                            <span class="close-toc-icon-container">
+                                <span class="close-toc-icon"></span>     
+                            </span>
+                        </button>
+                        <button id="wh_close_topic_toc_button" class="close-toc-button d-none" aria-label="Toggle topic table of content" aria-controls="wh_topic_toc" aria-expanded="true">
+                            <span class="close-toc-icon-container">
+                                <span class="close-toc-icon"></span>     
+                            </span>
+                        </button>
+                        
+                        <div class=" wh_topic_content body "><main role="main"><article class="- topic/topic topic" role="article" aria-labelledby="ariaid-title1"><h1 class="- topic/title title topictitle1" id="ariaid-title1">JavaScript API</h1><div class="- topic/body body"></div><article class="- topic/topic topic nested1" aria-labelledby="ariaid-title2" id="简介"><h2 class="- topic/title title topictitle2" id="ariaid-title2">简介</h2><div class="- topic/body body"><p class="- topic/p p">DolphinDB JavaScript API 是一个 JavaScript 库，封装了操作 DolphinDB 数据库的能力，如：连接数据库、执行脚本、调用函数、上传变量等</p><p class="- topic/p p">NPM 链接：https://www.npmjs.com/package/dolphindb</p></div></article><article class="- topic/topic topic nested1" aria-labelledby="ariaid-title3" id="特性"><h2 class="- topic/title title topictitle2" id="ariaid-title3">特性</h2><div class="- topic/body body"><ul class="- topic/ul ul"><li class="- topic/li li">使用 WebSocket 与 DolphinDB 数据库通信，用二进制格式进行数据交换，支持流数据实时推送</li><li class="- topic/li li">支持在浏览器环境和 Node.js 环境中运行</li><li class="- topic/li li">使用了 JavaScript 中的 Int32Array 等 TypedArray 处理二进制数据，性能较高</li><li class="- topic/li li">单次调用支持最大 2 GB 数据的序列化上传，下载数据量不受限制</li></ul></div></article><article class="- topic/topic topic nested1" aria-labelledby="ariaid-title4" id="用法"><h2 class="- topic/title title topictitle2" id="ariaid-title4">用法</h2><div class="- topic/body body"></div><article class="- topic/topic topic nested2" aria-labelledby="ariaid-title5" id="初始化并连接到-dolphindb"><h3 class="- topic/title title topictitle3" id="ariaid-title5">初始化并连接到 DolphinDB</h3><div class="- topic/body body"></div><article class="- topic/topic topic nested3" aria-labelledby="ariaid-title6" id="方法一在浏览器中直接使用构建好的-cdn-版本"><h4 class="- topic/title title topictitle4" id="ariaid-title6">方法一：在浏览器中直接使用构建好的 CDN 版本</h4><div class="- topic/body body"><p class="- topic/p p">保存以下内容到 <code class="+ topic/ph pr-d/codeph ph codeph">example.html</code> 文件，用浏览器打开即可运行，F12 打开调试控制台可以看到日志</p><pre class="+ topic/pre pr-d/codeblock pre codeblock html"><code>&lt;!doctype html&gt;
+&lt;html&gt;
+    &lt;head&gt;
+        &lt;title&gt;DolphinDB&lt;/title&gt;
+        &lt;meta charset='utf-8' /&gt;
+    &lt;/head&gt;
+    &lt;body&gt;
+        &lt;script type="module"&gt;
+            import { DDB } from 'https://cdn.dolphindb.cn/assets/api.js'
+            
+            let ddb = new DDB('ws://127.0.0.1:8848')
+            
+            await ddb.connect()
+            
+            console.log(
+                await ddb.execute('1 + 1')
+            )
+            
+            console.log(
+                await ddb.invoke('add', [1, 1])
+            )
+        &lt;/script&gt;
+    &lt;/body&gt;
+&lt;/html&gt;</code></pre></div></article><article class="- topic/topic topic nested3" aria-labelledby="ariaid-title7" id="方法二在项目中安装-npm-包并导入"><h4 class="- topic/title title topictitle4" id="ariaid-title7">方法二：在项目中安装 npm 包并导入</h4><div class="- topic/body body"></div><article class="- topic/topic topic nested4" aria-labelledby="ariaid-title8" id="1-安装"><h5 class="- topic/title title topictitle5" id="ariaid-title8">1. 安装</h5><div class="- topic/body body"><p class="- topic/p p">1.1. 在机器上安装最新版的 Node.js 及浏览器。</p><ul class="- topic/ul ul"><li class="- topic/li li">windows: https://nodejs.org/en/download/prebuilt-installer/current</li><li class="- topic/li li">linux: https://github.com/nodesource/distributions?tab=readme-ov-file#debian-and-ubuntu-based-distributions</li></ul><p class="- topic/p p">1.2. （可选）使用以下命令创建新项目。如果已有项目，可跳过此步。</p><pre class="+ topic/pre pr-d/codeblock pre codeblock bash"><code>mkdir dolphindb-example
+cd dolphindb-example
+npm init --yes</code></pre><p class="- topic/p p">1.3. 用编辑器打开 package.json 文件，在 <code class="+ topic/ph pr-d/codeph ph codeph">"main": "./index.js"</code> 下方加入一行 "type": "module", 这样能够启用 ECMAScript modules，在后面代码中可以使用 <code class="+ topic/ph pr-d/codeph ph codeph">import { DDB } from 'dolphindb'</code> 导入 npm 包。</p><p class="- topic/p p">1.4. 在项目中安装 npm 包。</p><pre class="+ topic/pre pr-d/codeblock pre codeblock bash"><code>npm install dolphindb</code></pre></div></article><article class="- topic/topic topic nested4" aria-labelledby="ariaid-title9" id="2-使用"><h5 class="- topic/title title topictitle5" id="ariaid-title9">2. 使用</h5><div class="- topic/body body"><pre class="+ topic/pre pr-d/codeblock pre codeblock ts"><code>// 2.1 在浏览器环境中用下面的方法导入
+import { DDB } from 'dolphindb/browser.js'
+
+// 2.1 在 Node.js 环境中用下面的方法导入
+// import { DDB } from 'dolphindb'
+// 已有的使用 CommonJS 模块的项目的导入方法为 const { DDB } = await import('dolphindb')
+
+// 2.2 使用 WebSocket URL 初始化连接到 DolphinDB 的实例（不建立实际的网络连接）
+let ddb = new DDB('ws://127.0.0.1:8848')
+
+// 使用 HTTPS 加密
+// let ddb = new DDB('wss://dolphindb.com')
+
+// 2.3 建立到 DolphinDB 的连接（要求 DolphinDB 数据库版本不低于 1.30.16 或 2.00.4）
+await ddb.connect()</code></pre></div></article></article><article class="- topic/topic topic nested3" aria-labelledby="ariaid-title10" id="代码补全函数提示数据"><h4 class="- topic/title title topictitle4" id="ariaid-title10">代码补全、函数提示数据</h4><div class="- topic/body body"><ul class="- topic/ul ul"><li class="- topic/li li">https://cdn.dolphindb.cn/assets/docs.zh.json</li><li class="- topic/li li">https://cdn.dolphindb.cn/assets/docs.en.json</li></ul></div></article><article class="- topic/topic topic nested3" aria-labelledby="ariaid-title11" id="ddb-连接选项"><h4 class="- topic/title title topictitle4" id="ariaid-title11">DDB 连接选项</h4><div class="- topic/body body"><pre class="+ topic/pre pr-d/codeblock pre codeblock ts"><code>let ddb = new DDB('ws://127.0.0.1:8848', {
+    // 是否在建立连接后自动登录，默认 `true`
+    autologin: true,
+    
+    // DolphinDB 登录用户名，默认 `'admin'`
+    username: 'admin',
+    
+    // DolphinDB 登录密码，默认 `'123456'`
+    password: '123456',
+    
+    // 设置 python session flag，默认 `false`
+    python: false,
+    
+    // 设置当前会话执行的 sql 标准, 请使用 SqlStandard 枚举进行传参，默认 `DolphinDB`
+    // sql: SqlStandard.MySQL,
+    // sql: SqlStandard.Oracle,
+    
+    // 设置该选项后，该数据库连接只用于流数据，详细用法见后文 `5. 流数据`
+    streaming: undefined
+})</code></pre></div></article></article><article class="- topic/topic topic nested2" aria-labelledby="ariaid-title12" id="调用函数"><h3 class="- topic/title title topictitle3" id="ariaid-title12">调用函数</h3><div class="- topic/body body"></div><article class="- topic/topic topic nested3" aria-labelledby="ariaid-title13" id="invoke-方法"><h4 class="- topic/title title topictitle4" id="ariaid-title13"><code class="+ topic/ph pr-d/codeph ph codeph">invoke</code> 方法</h4><div class="- topic/body body"></div><article class="- topic/topic topic nested4" aria-labelledby="ariaid-title14" id="invoke-方法代码示例"><h5 class="- topic/title title topictitle5" id="ariaid-title14"><code class="+ topic/ph pr-d/codeph ph codeph">invoke</code> 方法代码示例</h5><div class="- topic/body body"><pre class="+ topic/pre pr-d/codeblock pre codeblock ts"><code>const result = await ddb.invoke('add', [1, 1])
+// TypeScript: const result = await ddb.invoke&lt;number&gt;('add', [1, 1])
+
+console.log(result === 2)  // true</code></pre><p class="- topic/p p">上面例子中，上传了两个参数 1 (对应 DolphinDB 中的 int 类型) 到 DolphinDB 数据库，作为 add 函数的参数，并接收函数调用的结果 result</p><p class="- topic/p p"><code class="+ topic/ph pr-d/codeph ph codeph">&lt;number&gt;</code> 用于 TypeScript 推断返回值的类型</p></div></article><article class="- topic/topic topic nested4" aria-labelledby="ariaid-title15" id="invoke-方法声明"><h5 class="- topic/title title topictitle5" id="ariaid-title15"><code class="+ topic/ph pr-d/codeph ph codeph">invoke</code> 方法声明</h5><div class="- topic/body body"><pre class="+ topic/pre pr-d/codeblock pre codeblock ts"><code>/** 调用 dolphindb 函数，传入 js 原生数组作为参数，返回 js 原生对象或值（调用 DdbObj.data() 后的结果）*/
+async invoke &lt;TResult = any&gt; (
+    /** 函数名 */
+    func: string, 
+    
+    /** `[ ]` 调用参数，可以是 js 原生数组 */
+    args?: any[], 
+    
+    /** 调用选项 */
+    options?: {
+        /** 紧急 flag。使用 urgent worker 执行，防止被其它作业阻塞 */
+        urgent?: boolean
+        
+        /** 设置结点 alias 时发送到集群中对应的结点执行 (使用 DolphinDB 中的 rpc 方法) */
+        node?: string
+        
+        /** 设置多个结点 alias 时发送到集群中对应的多个结点执行 (使用 DolphinDB 中的 pnodeRun 方法) */
+        nodes?: string[]
+        
+        /** 设置 node 参数且参数数组为空时必传，需指定函数类型，其它情况下不传 */
+        func_type?: DdbFunctionType
+        
+        /** 设置 nodes 参数时选传，其它情况不传 */
+        add_node_alias?: boolean
+        
+        /** 处理本次 rpc 期间的消息 (DdbMessage) */
+        listener?: DdbMessageListener
+    } = { }
+): Promise&lt;TResult&gt;</code></pre></div></article></article><article class="- topic/topic topic nested3" aria-labelledby="ariaid-title16" id="call-方法"><h4 class="- topic/title title topictitle4" id="ariaid-title16"><code class="+ topic/ph pr-d/codeph ph codeph">call</code> 方法</h4><div class="- topic/body body"></div><article class="- topic/topic topic nested4" aria-labelledby="ariaid-title17" id="call-方法代码示例"><h5 class="- topic/title title topictitle5" id="ariaid-title17"><code class="+ topic/ph pr-d/codeph ph codeph">call</code> 方法代码示例</h5><div class="- topic/body body"><pre class="+ topic/pre pr-d/codeblock pre codeblock ts"><code>import { DdbInt } from 'dolphindb'
+
+const result = await ddb.call('add', [new DdbInt(1), new DdbInt(1)])
+// TypeScript: const result = await ddb.call&lt;DdbInt&gt;('add', [new DdbInt(1), new DdbInt(1)])
+
+console.log(result.value === 2)  // true</code></pre></div><article class="- topic/topic topic nested5" aria-labelledby="ariaid-title18" id="用-ddbobj-对象来表示-dolphindb-中的数据类型"><h6 class="- topic/title title topictitle6" id="ariaid-title18">用 DdbObj 对象来表示 DolphinDB 中的数据类型</h6><div class="- topic/body body"><p class="- topic/p p">上面例子中，上传了两个参数 1 (对应 DolphinDB 中的 int 类型) 到 DolphinDB 数据库，作为 add 函数的参数，并接收函数调用的结果 result</p><p class="- topic/p p"><code class="+ topic/ph pr-d/codeph ph codeph">&lt;DdbInt&gt;</code> 用于 TypeScript 推断返回值的类型</p><ul class="- topic/ul ul"><li class="- topic/li li">result 是一个 <code class="+ topic/ph pr-d/codeph ph codeph">DdbInt</code>，也是 <code class="+ topic/ph pr-d/codeph ph codeph">DdbObj&lt;number&gt;</code></li><li class="- topic/li li">result.form 是 <code class="+ topic/ph pr-d/codeph ph codeph">DdbForm.scalar</code></li><li class="- topic/li li">result.type 是 <code class="+ topic/ph pr-d/codeph ph codeph">DdbType.int</code></li><li class="- topic/li li">result.value 是 JavaScript 中原生的 <code class="+ topic/ph pr-d/codeph ph codeph">number</code> (int 的取值范围及精度可以用 JavaScript 的 number 准确表示)</li></ul><p class="- topic/p p">建议先了解一下 JavaScript 中的 TypedArray 相关的概念，可以参考:<br/>https://stackoverflow.com/questions/42416783/where-to-use-arraybuffer-vs-typed-array-in-javascript<br/>https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/TypedArray</p><pre class="+ topic/pre pr-d/codeblock pre codeblock ts"><code>/** 可以表示所有 DolphinDB 数据库中的数据类型 */
+class DdbObj &lt;T extends DdbValue = DdbValue&gt; {
+    /** 是否为小端 (little endian) */
+    le: boolean
+    
+    /** 数据形式 https://www.dolphindb.cn/cn/help/DataTypesandStructures/DataForms/index.html */
+    form: DdbForm
+    
+    /** 数据类型 https://www.dolphindb.cn/cn/help/DataTypesandStructures/DataTypes/index.html */
+    type: DdbType
+    
+    /** 占用 parse 时传入的 buf 的长度 */
+    length: number
+    
+    /** table name / column name */
+    name?: string
+    
+    /**
+        最低维、第 1 维
+        - vector: rows = n, cols = 1
+        - pair:   rows = 2, cols = 1
+        - matrix: rows = n, cols = m
+        - set:    同 vector
+        - dict:   包含 keys, values 向量
+        - table:  同 matrix
+    */
+    rows?: number
+    
+    /** 第 2 维 */
+    cols?: number
+    
+    /** 实际数据。不同的 DdbForm, DdbType 使用 DdbValue 中不同的类型来表示实际数据 */
+    value: T
+    
+    /** 原始二进制数据，仅在 parse_object 为 false 时通过 parse_message 生成的顶层对象有这个属性 */
+    buffer?: Uint8Array
+    
+    constructor (data: Partial&lt;DdbObj&gt; &amp; { form: DdbForm, type: DdbType, length: number }) {
+        Object.assign(this, data)
+    }
+}
+
+class DdbInt extends DdbObj&lt;number&gt; {
+    constructor (value: number) {
+        super({
+            form: DdbForm.scalar,
+            type: DdbType.int,
+            length: 4,
+            value
+        })
+    }
+}
+
+// ... 还有很多快捷类，如 DdbString, DdbLong, DdbDouble, DdbVectorDouble, DdbVectorAny 等
+
+type DdbValue = 
+    null | boolean | number | [number, number] | bigint | string | string[] | 
+    Uint8Array | Int16Array | Int32Array | Float32Array | Float64Array | BigInt64Array | Uint8Array[] | 
+    DdbObj[] | DdbFunctionDefValue | DdbSymbolExtendedValue
+    
+
+enum DdbForm {
+    scalar = 0,
+    vector = 1,
+    pair = 2,
+    matrix = 3,
+    set = 4,
+    dict = 5,
+    table = 6,
+    chart = 7,
+    chunk = 8,
+}
+
+
+enum DdbType {
+    void = 0,
+    bool = 1,
+    char = 2,
+    short = 3,
+    int = 4,
+    long = 5,
+    // ...
+    timestamp = 12,
+    // ...
+    double = 16,
+    symbol = 17,
+    string = 18,
+    // ...
+}</code></pre></div></article><article class="- topic/topic topic nested5" aria-labelledby="ariaid-title19" id="无快捷类的类型"><h6 class="- topic/title title topictitle6" id="ariaid-title19">无快捷类的类型</h6><div class="- topic/body body"><p class="- topic/p p">对于没有快捷类的类型，可指定 form 和 type 手动创建 DdbObj 对象</p><pre class="+ topic/pre pr-d/codeblock pre codeblock ts"><code>// 通过 DdbDateTime 快捷类创建
+new DdbDateTime(1644573600)
+
+// 等价于手动通过 DdbObj 创建 form = scalar, type = datetime 的对象
+const obj = new DdbObj({
+    form: DdbForm.scalar,
+    type: DdbType.datetime,
+    value: 1644573600,
+    length: 0
+})
+
+
+// value 在 js 中对应类型及取值可以参考 ddb.eval 返回的结果 (见后文 `eval` 方法声明)
+const obj = await ddb.eval('2022.02.11 10:00:00')
+console.log(obj.form === DdbForm.scalar)
+console.log(obj.type === DdbType.datetime)
+console.log(obj.value)
+
+// 再比如创建一个 set
+// 参考 ddb.eval
+// const obj = await ddb.eval('set([1, 2, 3])')
+// console.log(obj.value)
+const obj = new DdbObj({
+    form: DdbForm.set,
+    type: DdbType.int,
+    value: Int32Array.of(1, 2, 3),
+    length: 0
+})
+
+// 使用快捷类较为简单
+const obj = new DdbSetInt(
+    new Set([1, 2, 3])
+)</code></pre></div></article><article class="- topic/topic topic nested5" aria-labelledby="ariaid-title20" id="scalar-形式的-null-对象"><h6 class="- topic/title title topictitle6" id="ariaid-title20">scalar 形式的 NULL 对象</h6><div class="- topic/body body"><p class="- topic/p p">scalar 形式的 NULL 对象，其对应 DdbObj 的 value 为 JavaScript 中的 null：</p><pre class="+ topic/pre pr-d/codeblock pre codeblock ts"><code>;(await ddb.eval('double()')).value === null
+
+// 创建 NULL 对象
+new DdbInt(null)
+new DdbDouble(null)</code></pre></div></article></article><article class="- topic/topic topic nested4" aria-labelledby="ariaid-title21" id="call-方法声明"><h5 class="- topic/title title topictitle5" id="ariaid-title21"><code class="+ topic/ph pr-d/codeph ph codeph">call</code> 方法声明</h5><div class="- topic/body body"><pre class="+ topic/pre pr-d/codeblock pre codeblock ts"><code>async call &lt;T extends DdbObj&gt; (
+    /** 函数名 */
+    func: string,
+    
+    /** 调用参数 (传入的原生 string 和 boolean 会被自动转换为 DdbObj&lt;string&gt; 和 DdbObj&lt;boolean&gt;) */
+    args?: (DdbObj | string | boolean)[] = [ ],
+    
+    /** 调用选项 */
+    options?: {
+        /** 紧急 flag。使用 urgent worker 执行，防止被其它作业阻塞 */
+        urgent?: boolean
+        
+        /** 设置结点 alias 时发送到集群中对应的结点执行 (使用 DolphinDB 中的 rpc 方法) */
+        node?: string
+        
+        /** 设置多个结点 alias 时发送到集群中对应的多个结点执行 (使用 DolphinDB 中的 pnodeRun 方法) */
+        nodes?: string[]
+        
+        /** 设置 node 参数时必传，需指定函数类型，其它情况下不传 */
+        func_type?: DdbFunctionType
+        
+        /** 设置 nodes 参数时选传，其它情况不传 */
+        add_node_alias?: boolean
+    } = { }
+): Promise&lt;T&gt;</code></pre></div></article></article></article><article class="- topic/topic topic nested2" aria-labelledby="ariaid-title22" id="执行脚本"><h3 class="- topic/title title topictitle3" id="ariaid-title22">执行脚本</h3><div class="- topic/body body"></div><article class="- topic/topic topic nested3" aria-labelledby="ariaid-title23" id="execute-方法"><h4 class="- topic/title title topictitle4" id="ariaid-title23"><code class="+ topic/ph pr-d/codeph ph codeph">execute</code> 方法</h4><div class="- topic/body body"></div><article class="- topic/topic topic nested4" aria-labelledby="ariaid-title24" id="execute-方法代码示例"><h5 class="- topic/title title topictitle5" id="ariaid-title24"><code class="+ topic/ph pr-d/codeph ph codeph">execute</code> 方法代码示例</h5><div class="- topic/body body"><pre class="+ topic/pre pr-d/codeblock pre codeblock ts"><code>const result = await ddb.execute(
+    'def foo (a, b) {\n' +
+    '    return a + b\n' +
+    '}\n' +
+    'foo(1l, 1l)\n'
+)
+
+// TypeScript:
+// const result = await ddb.execute&lt;bigint&gt;(...)
+
+console.log(result.value === 2n)  // true</code></pre><p class="- topic/p p">上面例子中，通过字符串上传了一段脚本到 DolphinDB 数据库执行，并接收最后一条语句 <code class="+ topic/ph pr-d/codeph ph codeph">foo(1l, 1l)</code> 执行结果 result</p><p class="- topic/p p"><code class="+ topic/ph pr-d/codeph ph codeph">&lt;bigint&gt;</code> 用于 TypeScript 推断返回值的类型</p><ul class="- topic/ul ul"><li class="- topic/li li">result 是一个 <code class="+ topic/ph pr-d/codeph ph codeph">bigint</code></li></ul><p class="- topic/p p">只要 WebSocket 连接不断开，在后续的会话中 <code class="+ topic/ph pr-d/codeph ph codeph">foo</code> 这个自定义函数会一直存在，可复用，比如后续通过 <code class="+ topic/ph pr-d/codeph ph codeph">await ddb.invoke&lt;number&gt;('foo', [1, 1])</code> 调用这个自定义函数</p></div></article><article class="- topic/topic topic nested4" aria-labelledby="ariaid-title25" id="execute-方法声明"><h5 class="- topic/title title topictitle5" id="ariaid-title25"><code class="+ topic/ph pr-d/codeph ph codeph">execute</code> 方法声明</h5><div class="- topic/body body"><pre class="+ topic/pre pr-d/codeblock pre codeblock ts"><code>/** 执行 dolphindb 脚本，返回 js 原生对象或值（调用 DdbObj.data() 后的结果）*/
+async execute &lt;TResult = any&gt; (
+    /** 执行的脚本 */
+    script: string, 
+    
+    /** 执行选项 */
+    options?: {
+        /** 紧急 flag，确保提交的脚本使用 urgent worker 处理，防止被其它作业阻塞 */
+        urgent?: boolean
+        /** listener?: 处理本次 rpc 期间的消息 (DdbMessage) */
+        listener?: DdbMessageListener
+    }
+): Promise&lt;TResult&gt;</code></pre></div></article></article><article class="- topic/topic topic nested3" aria-labelledby="ariaid-title26" id="eval-方法"><h4 class="- topic/title title topictitle4" id="ariaid-title26"><code class="+ topic/ph pr-d/codeph ph codeph">eval</code> 方法</h4><div class="- topic/body body"></div><article class="- topic/topic topic nested4" aria-labelledby="ariaid-title27" id="eval-方法代码示例"><h5 class="- topic/title title topictitle5" id="ariaid-title27"><code class="+ topic/ph pr-d/codeph ph codeph">eval</code> 方法代码示例</h5><div class="- topic/body body"><pre class="+ topic/pre pr-d/codeblock pre codeblock ts"><code>const result = await ddb.eval(
+    'def foo (a, b) {\n' +
+    '    return a + b\n' +
+    '}\n' +
+    'foo(1l, 1l)\n'
+)
+
+// TypeScript:
+// import type { DdbLong } from 'dolphindb'
+// const result = await ddb.eval&lt;DdbLong&gt;(...)
+
+console.log(result.value === 2n)  // true</code></pre><p class="- topic/p p">上面例子中，通过字符串上传了一段脚本到 DolphinDB 数据库执行，并接收最后一条语句 <code class="+ topic/ph pr-d/codeph ph codeph">foo(1l, 1l)</code> 执行结果 result</p><p class="- topic/p p"><code class="+ topic/ph pr-d/codeph ph codeph">&lt;DdbLong&gt;</code> 用于 TypeScript 推断返回值的类型</p><ul class="- topic/ul ul"><li class="- topic/li li">result 是一个 <code class="+ topic/ph pr-d/codeph ph codeph">DdbLong</code>，也是 <code class="+ topic/ph pr-d/codeph ph codeph">DdbObj&lt;bigint&gt;</code></li><li class="- topic/li li">result.form 是 <code class="+ topic/ph pr-d/codeph ph codeph">DdbForm.scalar</code></li><li class="- topic/li li">result.type 是 <code class="+ topic/ph pr-d/codeph ph codeph">DdbType.long</code></li><li class="- topic/li li">result.value 是 JavaScript 中原生的 <code class="+ topic/ph pr-d/codeph ph codeph">bigint</code> (long 的精度不能用 JavaScript 的 number 准确表示，但可以用 bigint 表示)</li></ul></div></article><article class="- topic/topic topic nested4" aria-labelledby="ariaid-title28" id="eval-方法声明"><h5 class="- topic/title title topictitle5" id="ariaid-title28"><code class="+ topic/ph pr-d/codeph ph codeph">eval</code> 方法声明</h5><div class="- topic/body body"><pre class="+ topic/pre pr-d/codeblock pre codeblock ts"><code>/** 执行 dolphindb 脚本，返回 DdbObj 对象）*/
+async eval &lt;T extends DdbObj&gt; (
+    /** 执行的脚本 */
+    script: string,
+    
+    /** 执行选项 */
+    options: {
+        /** 紧急 flag，确保提交的脚本使用 urgent worker 处理，防止被其它作业阻塞 */
+        urgent?: boolean
+    } = { }
+): Promise&lt;T&gt;</code></pre></div></article></article></article><article class="- topic/topic topic nested2" aria-labelledby="ariaid-title29" id="上传变量"><h3 class="- topic/title title topictitle3" id="ariaid-title29">上传变量</h3><div class="- topic/body body"></div><article class="- topic/topic topic nested3" aria-labelledby="ariaid-title30" id="例子"><h4 class="- topic/title title topictitle4" id="ariaid-title30">例子</h4><div class="- topic/body body"><pre class="+ topic/pre pr-d/codeblock pre codeblock ts"><code>import { DdbVectorDouble } from 'dolphindb'
+
+let a = new Array(10000)
+a.fill(1.0)
+
+ddb.upload(['bar1', 'bar2'], [new DdbVectorDouble(a), new DdbVectorDouble(a)])</code></pre><p class="- topic/p p">上面的例子中，上传了 <code class="+ topic/ph pr-d/codeph ph codeph">bar1</code>, <code class="+ topic/ph pr-d/codeph ph codeph">bar2</code> 两个变量，变量值是长度为 10000 的 double 向量</p><p class="- topic/p p">只要 WebSocket 连接不断开，在后续的会话中 <code class="+ topic/ph pr-d/codeph ph codeph">bar1</code>, <code class="+ topic/ph pr-d/codeph ph codeph">bar2</code> 这些变量会一直存在，可复用</p></div></article><article class="- topic/topic topic nested3" aria-labelledby="ariaid-title31" id="upload-方法声明"><h4 class="- topic/title title topictitle4" id="ariaid-title31"><code class="+ topic/ph pr-d/codeph ph codeph">upload</code> 方法声明</h4><div class="- topic/body body"><pre class="+ topic/pre pr-d/codeblock pre codeblock ts"><code>async upload (
+    /** 上传的变量名 */
+    vars: string[],
+    
+    /** 上传的变量值 */
+    args: (DdbObj | string | boolean)[]
+): Promise&lt;void&gt;</code></pre></div></article></article><article class="- topic/topic topic nested2" aria-labelledby="ariaid-title32" id="其他例子"><h3 class="- topic/title title topictitle3" id="ariaid-title32">其他例子</h3><div class="- topic/body body"><pre class="+ topic/pre pr-d/codeblock pre codeblock ts"><code>import { nulls, DdbInt, timestamp2str, DdbVectorSymbol, DdbTable, DdbVectorDouble } from 'dolphindb'
+
+// 将 DolphinDB 中的 timestamp 格式化为 string
+timestamp2str(
+    (
+        await ddb.call('now', [false])
+        // TypeScript: await ddb.call&lt;DdbObj&lt;bigint&gt;&gt;('now', [false])
+    ).value
+) === '2022.02.23 17:23:13.494'
+
+// 创建 symbol vector
+new DdbVectorSymbol(['aaa', 'aaa', 'aaa', 'aaa', 'aaa', 'bbb'])
+
+// 使用 JavaScript 原生数组创建含有 NULL 值的 double vector
+new DdbVectorDouble([0.1, null, 0.3])
+
+// 使用 JavaScript TypedArray 更加高效且节约内存的创建 double vector
+let av = new Float64Array(3)
+av[0] = 0.1
+av[1] = nulls.double
+av[2] = 0.3
+new DdbVectorDouble(av)
+
+// 创建 DdbTable
+new DdbTable(
+    [
+        new DdbVectorDouble([0.1, 0.2, null], 'col0'),
+        new DdbVectorSymbol(['a', 'b', 'c'], 'col1')
+    ],
+    'mytable'
+)</code></pre></div></article><article class="- topic/topic topic nested2" aria-labelledby="ariaid-title33" id="流数据"><h3 class="- topic/title title topictitle3" id="ariaid-title33">流数据</h3><div class="- topic/body body"><pre class="+ topic/pre pr-d/codeblock pre codeblock ts"><code>// 新建流数据连接配置
+let sddb = new DDB('ws://192.168.0.43:8800', {
+    autologin: true,
+    username: 'admin',
+    password: '123456',
+    streaming: {
+        table: '要订阅的流表名称',
+        
+        // 流数据处理回调, message 的类型是 StreamingMessage
+        handler (message) {
+            console.log(message)
+        }
+    }
+})
+
+// 建立连接
+await sddb.connect()</code></pre><p class="- topic/p p">连接建立后接收到的流数据会作为 message 参数调用 handler, message 的类型是 StreamingMessage, 如下:</p><pre class="+ topic/pre pr-d/codeblock pre codeblock ts"><code>export interface StreamingParams {
+    table: string
+    action?: string
+    
+    handler (message: StreamingMessage): any
+}
+
+export interface StreamingMessage &lt;TRows = any&gt; extends StreamingParams {
+    /** server 发送消息的时间 (nano seconds since epoch)  
+        std::chrono::system_clock::now().time_since_epoch() / std::chrono::nanoseconds(1) */
+    time: bigint
+    
+    /** message id */
+    id: bigint
+    
+    /** 订阅主题，即一个订阅的名称。
+        它是一个字符串，由订阅表所在节点的别名、流数据表名称和订阅任务名称（如果指定了 actionName）组合而成，使用 `/` 分隔 */
+    topic: string
+    
+    /** 流数据 */
+    data: DdbTableData&lt;TRows&gt;
+    
+    window: {
+        /** 建立连接开始 offset = 0, 随着 window 的移动逐渐增加 */
+        offset: number
+        
+        /** 历史数据 */
+        data: TRows[]
+        
+        /** 每次接收到的 obj 组成的数组 */
+        objs: DdbObj&lt;DdbVectorObj[]&gt;[]
+    }
+    
+    /** 成功订阅后，后续推送过来的 message 解析错误，则会设置 error 并调用 handler */
+    error?: Error
+}</code></pre></div></article><article class="- topic/topic topic nested2" aria-labelledby="ariaid-title34" id="开发方法"><h3 class="- topic/title title topictitle3" id="ariaid-title34">开发方法</h3><div class="- topic/body body"><pre class="+ topic/pre pr-d/codeblock pre codeblock shell"><code># 安装最新版的 nodejs (见上文)
+
+# 安装 pnpm 包管理器
+npm install -g pnpm
+
+git clone https://github.com/dolphindb/api-javascript.git
+
+cd api-javascript
+
+# 安装项目依赖
+pnpm install
+
+# 将 .vscode/settings.template.json 复制为 .vscode/settings.json
+cp .vscode/settings.template.json .vscode/settings.json
+
+# 参考 package.json 中的 scripts
+
+# 构建
+pnpm run build
+
+# lint
+pnpm run lint
+
+# 测试
+pnpm run test
+
+# 扫描词条
+pnpm run scan
+# 手动补全未翻译词条
+# 再次运行扫描以更新词典文件 dict.json
+pnpm run scan</code></pre></div></article></article></article></main></div>
+                        
+                        
+                        
+                        
+                        
+                        
+                    </div>
+                    
+                        <nav role="navigation" id="wh_topic_toc" aria-label="On this page" class="col-lg-2 d-none d-lg-block navbar d-print-none"> 
+                            <div id="wh_topic_toc_content">
+		                        
+	                            <div class=" wh_topic_toc "><div class="wh_topic_label">在本页上</div><ul><li class="topic-item"><a href="#%E7%AE%80%E4%BB%8B" data-tocid="简介">简介</a></li><li class="topic-item"><a href="#%E7%89%B9%E6%80%A7" data-tocid="特性">特性</a></li><li class="topic-item"><a href="#%E7%94%A8%E6%B3%95" data-tocid="用法">用法</a><ul><li class="topic-item"><a href="#%E5%88%9D%E5%A7%8B%E5%8C%96%E5%B9%B6%E8%BF%9E%E6%8E%A5%E5%88%B0-dolphindb" data-tocid="初始化并连接到-dolphindb">初始化并连接到 DolphinDB</a><ul><li class="topic-item"><a href="#%E6%96%B9%E6%B3%95%E4%B8%80%E5%9C%A8%E6%B5%8F%E8%A7%88%E5%99%A8%E4%B8%AD%E7%9B%B4%E6%8E%A5%E4%BD%BF%E7%94%A8%E6%9E%84%E5%BB%BA%E5%A5%BD%E7%9A%84-cdn-%E7%89%88%E6%9C%AC" data-tocid="方法一在浏览器中直接使用构建好的-cdn-版本">方法一：在浏览器中直接使用构建好的 CDN 版本</a></li><li class="topic-item"><a href="#%E6%96%B9%E6%B3%95%E4%BA%8C%E5%9C%A8%E9%A1%B9%E7%9B%AE%E4%B8%AD%E5%AE%89%E8%A3%85-npm-%E5%8C%85%E5%B9%B6%E5%AF%BC%E5%85%A5" data-tocid="方法二在项目中安装-npm-包并导入">方法二：在项目中安装 npm 包并导入</a><ul><li class="topic-item"><a href="#1-%E5%AE%89%E8%A3%85" data-tocid="1-安装">1. 安装</a></li><li class="topic-item"><a href="#2-%E4%BD%BF%E7%94%A8" data-tocid="2-使用">2. 使用</a></li></ul></li><li class="topic-item"><a href="#%E4%BB%A3%E7%A0%81%E8%A1%A5%E5%85%A8%E5%87%BD%E6%95%B0%E6%8F%90%E7%A4%BA%E6%95%B0%E6%8D%AE" data-tocid="代码补全函数提示数据">代码补全、函数提示数据</a></li><li class="topic-item"><a href="#ddb-%E8%BF%9E%E6%8E%A5%E9%80%89%E9%A1%B9" data-tocid="ddb-连接选项">DDB 连接选项</a></li></ul></li><li class="topic-item"><a href="#%E8%B0%83%E7%94%A8%E5%87%BD%E6%95%B0" data-tocid="调用函数">调用函数</a><ul><li class="topic-item"><a href="#invoke-%E6%96%B9%E6%B3%95" data-tocid="invoke-方法"><code class="+ topic/ph pr-d/codeph ph codeph">invoke</code> 方法</a><ul><li class="topic-item"><a href="#invoke-%E6%96%B9%E6%B3%95%E4%BB%A3%E7%A0%81%E7%A4%BA%E4%BE%8B" data-tocid="invoke-方法代码示例"><code class="+ topic/ph pr-d/codeph ph codeph">invoke</code> 方法代码示例</a></li><li class="topic-item"><a href="#invoke-%E6%96%B9%E6%B3%95%E5%A3%B0%E6%98%8E" data-tocid="invoke-方法声明"><code class="+ topic/ph pr-d/codeph ph codeph">invoke</code> 方法声明</a></li></ul></li><li class="topic-item"><a href="#call-%E6%96%B9%E6%B3%95" data-tocid="call-方法"><code class="+ topic/ph pr-d/codeph ph codeph">call</code> 方法</a><ul><li class="topic-item"><a href="#call-%E6%96%B9%E6%B3%95%E4%BB%A3%E7%A0%81%E7%A4%BA%E4%BE%8B" data-tocid="call-方法代码示例"><code class="+ topic/ph pr-d/codeph ph codeph">call</code> 方法代码示例</a><ul><li class="topic-item"><a href="#%E7%94%A8-ddbobj-%E5%AF%B9%E8%B1%A1%E6%9D%A5%E8%A1%A8%E7%A4%BA-dolphindb-%E4%B8%AD%E7%9A%84%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B" data-tocid="用-ddbobj-对象来表示-dolphindb-中的数据类型">用 DdbObj 对象来表示 DolphinDB 中的数据类型</a></li><li class="topic-item"><a href="#%E6%97%A0%E5%BF%AB%E6%8D%B7%E7%B1%BB%E7%9A%84%E7%B1%BB%E5%9E%8B" data-tocid="无快捷类的类型">无快捷类的类型</a></li><li class="topic-item"><a href="#scalar-%E5%BD%A2%E5%BC%8F%E7%9A%84-null-%E5%AF%B9%E8%B1%A1" data-tocid="scalar-形式的-null-对象">scalar 形式的 NULL 对象</a></li></ul></li><li class="topic-item"><a href="#call-%E6%96%B9%E6%B3%95%E5%A3%B0%E6%98%8E" data-tocid="call-方法声明"><code class="+ topic/ph pr-d/codeph ph codeph">call</code> 方法声明</a></li></ul></li></ul></li><li class="topic-item"><a href="#%E6%89%A7%E8%A1%8C%E8%84%9A%E6%9C%AC" data-tocid="执行脚本">执行脚本</a><ul><li class="topic-item"><a href="#execute-%E6%96%B9%E6%B3%95" data-tocid="execute-方法"><code class="+ topic/ph pr-d/codeph ph codeph">execute</code> 方法</a><ul><li class="topic-item"><a href="#execute-%E6%96%B9%E6%B3%95%E4%BB%A3%E7%A0%81%E7%A4%BA%E4%BE%8B" data-tocid="execute-方法代码示例"><code class="+ topic/ph pr-d/codeph ph codeph">execute</code> 方法代码示例</a></li><li class="topic-item"><a href="#execute-%E6%96%B9%E6%B3%95%E5%A3%B0%E6%98%8E" data-tocid="execute-方法声明"><code class="+ topic/ph pr-d/codeph ph codeph">execute</code> 方法声明</a></li></ul></li><li class="topic-item"><a href="#eval-%E6%96%B9%E6%B3%95" data-tocid="eval-方法"><code class="+ topic/ph pr-d/codeph ph codeph">eval</code> 方法</a><ul><li class="topic-item"><a href="#eval-%E6%96%B9%E6%B3%95%E4%BB%A3%E7%A0%81%E7%A4%BA%E4%BE%8B" data-tocid="eval-方法代码示例"><code class="+ topic/ph pr-d/codeph ph codeph">eval</code> 方法代码示例</a></li><li class="topic-item"><a href="#eval-%E6%96%B9%E6%B3%95%E5%A3%B0%E6%98%8E" data-tocid="eval-方法声明"><code class="+ topic/ph pr-d/codeph ph codeph">eval</code> 方法声明</a></li></ul></li></ul></li><li class="topic-item"><a href="#%E4%B8%8A%E4%BC%A0%E5%8F%98%E9%87%8F" data-tocid="上传变量">上传变量</a><ul><li class="topic-item"><a href="#%E4%BE%8B%E5%AD%90" data-tocid="例子">例子</a></li><li class="topic-item"><a href="#upload-%E6%96%B9%E6%B3%95%E5%A3%B0%E6%98%8E" data-tocid="upload-方法声明"><code class="+ topic/ph pr-d/codeph ph codeph">upload</code> 方法声明</a></li></ul></li><li class="topic-item"><a href="#%E5%85%B6%E4%BB%96%E4%BE%8B%E5%AD%90" data-tocid="其他例子">其他例子</a></li><li class="topic-item"><a href="#%E6%B5%81%E6%95%B0%E6%8D%AE" data-tocid="流数据">流数据</a></li><li class="topic-item"><a href="#%E5%BC%80%E5%8F%91%E6%96%B9%E6%B3%95" data-tocid="开发方法">开发方法</a></li></ul></li></ul></div>
+	                        	
+                        	</div>
+                        </nav>
+                    
+                </div>
+            </div>
+            
+            
+            
+        </div> 
+        <footer class="navbar navbar-default wh_footer">
+  <div class=" footer-container mx-auto ">
+<title>Copyright</title><p><b> ©2024 浙江智臾科技有限公司 浙ICP备18048711号-3</b></p>
+  </div>
+</footer>
+        
+        <div id="go2top" class="d-print-none">
+            <span class="oxy-icon oxy-icon-up"></span>
+        </div>
+        
+        <div id="modal_img_large" class="modal">
+            <span class="close oxy-icon oxy-icon-remove"></span>
+            <div id="modal_img_container"></div>
+            <div id="caption"></div>
+        </div>
+        
+        
+        
+    </body>
+</html>

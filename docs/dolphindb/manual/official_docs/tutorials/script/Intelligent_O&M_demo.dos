@@ -1,0 +1,427 @@
+/**** 功能及性能概要 ****/
+/*
+功能概要：
+1、测试场景一：实时计算生料磨每小时的汇总产量
+2、测试场景二：根据状态指标计算设备累计开停机时长
+3、测试场景三：根据指定时间段内状态突变次数计算累计开停机次数
+4、测试场景四：根据状态突变，抽取记录（实时流计算）
+5、测试场景五：根据状态值，计算设备最大持续运行时间
+6、测试场景六：根据可加指标实时计算变化率,超出指定值进行记录并推送消息
+7、测试场景七：根据电流计算一段时间内设备的累计空载时间
+8、测试场景八：计算指定时间段范围内（窗口时间）电机轴承的平均温度
+9、测试场景九：指标根据表达式的二次计算
+10、测试场景十：分组汇总计算，条件筛选
+11、测试场景十一：每个整点的平均值相减，比如1~2点的值减去0~1点的值，就这样一直循环下去。
+
+数据集：
+    记录描述：100台设备，每台1000测点，采集频率5分钟1次，10天记录
+    记录行数：2.88亿 行
+    磁盘占用：1234MB
+    字段数量：6
+    字段样式：ts: 数采时间，deviceCode:设备编号，logicalPositionId: 逻辑位置ID，physicalPositionId: 物理位置ID，propertyCode: 属性测点编码，propertyValue: 测点值（累计产量）
+
+*/
+
+/**** 步骤一：部署及清理测试环境 ****/
+//建议server 2.00.10及以上版本，建议在linux环境下运行
+login(`admin,`123456)
+
+//清理缓存
+undef(all)
+clearAllCache()
+
+//清空数据库，环境初始化
+if(existsDatabase("dfs://db_test")){dropDatabase("dfs://db_test")}
+
+/**** 步骤二：建库、建表 ****/
+
+/*
+数据建模：
+100台设备，每台1000测点，采集频率5分钟1次，INT类型。
+1）每天记录数：28，800，000
+2）每条记录大小：24字节
+    DATETIME（4字节），SYMBOL（4字节），INT（4字节）
+3）每天空间占用（压缩前）：691.2 MB
+4）建议以“天”进行值分区，每分区=691.2 MB
+5）分区索引为“时间戳”
+*/
+
+//新建“采集表”
+dbname="dfs://db_test"
+tablename="collect"
+cols_info=`ts`deviceCode`logicalPositionId`physicalPositionId`propertyCode`propertyValue
+cols_type=[DATETIME,SYMBOL,SYMBOL,SYMBOL,SYMBOL,INT]
+t=table(1:0,cols_info,cols_type)
+
+db=database(dbname,VALUE,[datehour(2022.12.01)],engine=`TSDB)
+pt=createPartitionedTable(db,t,tablename,`ts,,`deviceCode`ts)
+
+
+/**** 步骤三：写入数据 ****/
+
+//新建自定义函数（入参：begindate开始时间，enddate停止时间；）
+def write_virtual_data(day,devicenum,pointnum,rate,times){
+    //设备ID
+    deviceCodes="361RP"+lpad(string(0..(devicenum-1)),2,"0")
+    //测点ID
+    propertyCodes="361RP"+lpad(string(0..(devicenum*pointnum-1)),5,"0")
+    //1000个逻辑位置和物理位置
+    logicalPositionIds=string(0..999)
+    physicalPositionIds=string(0..999)
+    tsAll = datetime(day)+rate*(0..287)
+    cnt = floor(tsAll.size() \ times)
+    for(i in 0..cnt){
+        if(i != cnt){
+            n=devicenum*pointnum*times //写入测点数
+            ts = take(tsAll[(i*times):((i+1)*times)],n)
+        }
+        else{
+            n=devicenum*pointnum*(tsAll.size()-(i*times)) //写入测点数
+            ts = take(tsAll[(i*times):tsAll.size()],n)
+        }
+        deviceCode = stretch(deviceCodes,n)
+        logicalPositionId=stretch(logicalPositionIds,n)
+        physicalPositionId=stretch(physicalPositionIds,n)
+        propertyCode=stretch(propertyCodes,n)
+        propertyValue=rand(1000, n)
+        t=table(ts,deviceCode,logicalPositionId,physicalPositionId,propertyCode,propertyValue)
+        pt=loadTable("dfs://db_test",`collect)
+        pt.append!(t)
+        t=NULL
+    }
+}
+
+
+//通过批处理作业提交任务，模拟实时写入 
+begindate=2022.01.01
+enddate = 2022.01.10   
+devicenum=100                    //设备数
+pointnum=1000                   //每台设备的测点数
+rate=5*60                       //采样间隔（5分钟）
+times=10                        //采样10次写入一次
+
+for(day in begindate..enddate){
+    submitJob(`write_virtual_data, `write_virtual_data, write_virtual_data,day,devicenum,pointnum,rate,times)
+}
+//检查作业状态
+getRecentJobs(10)
+
+flushTSDBCache()
+
+//取消作业
+//cancelJob(`write_virtual_data)
+
+/**** 步骤四、数据查询 Demo ****/
+
+//加载表，赋值给 pt （表变量赋值仅加载元数据）
+pt=loadTable("dfs://db_test",`collect)
+
+//查看数据总数
+timer t=select count(*) from pt 
+
+select distinct deviceCode from pt
+
+//数据检查
+timer t = select * from pt where propertyCode="361RP02022" and ts = 2022.01.01 00:00:00	
+
+
+/****************************************************************************************************/
+//1、测试场景一：根据状态指标计算设备累计开停机时长
+//数据准备：模拟数据，将采样值改成0,1
+device="361RP88"
+point="361RP88002"
+dt=select * from pt where deviceCode=device and propertyCode=point 
+update!(dt,`propertyValue,rand(0 1,dt.size()))
+select * from dt where deviceCode=device and propertyCode=point  //检查数据
+//处理累计时长  0为关机时长，1为开机时长
+t = select *,nullFill(deltas(ts),ts.next()-ts) as duration from dt where deviceCode=device and propertyCode=point
+//输出（分钟）
+select sum(duration)/60 as duration from t where propertyValue in (1,0) group by bar(ts,1H),deviceCode,logicalPositionId,physicalPositionId,propertyValue
+
+
+/****************************************************************************************************/
+//2、测试场景二：根据指定时间段内状态突变次数计算累计开停机次数
+//状态1为开机，状态-1为关机，count为次数
+t= select *,nullFill(deltas(propertyValue),1) AS deltas_propertyValue  from dt where deviceCode=device and propertyCode=point and ts between 2022.01.01 00:00:00 : 2022.01.01 01:59:59 
+//输出
+select count(*) from t where deltas_propertyValue in (1,-1) group by deviceCode,logicalPositionId,physicalPositionId,bar(ts,1H),deltas_propertyValue
+
+
+/****************************************************************************************************/
+//3、测试场景三：根据状态值，计算设备最大持续运行时间
+//数据准备，累计时间
+t = select *,nullFill(deltas(ts),ts.next()-ts) as duration,nullFill(deltas(propertyValue),1) as value from dt where deviceCode=device and propertyCode=point and ts between 2022.01.01 00:00:00 : 2022.01.01 01:59:59 order by ts
+
+t=select sum(iif(propertyValue==1, duration, 0)) as duration_running_max,sum(iif(propertyValue==1, 0,duration)) as duration_stop_max from t group by deviceCode,logicalPositionId,physicalPositionId,segment(propertyValue,false)
+t
+//输出（分钟）
+select max(duration_running_max)/60 as duration_running_max,max(duration_stop_max)/60 as duration_stop_max from t group by deviceCode,logicalPositionId,physicalPositionId
+
+
+/****************************************************************************************************/
+//4、测试场景四：计算生料磨每小时的汇总产量
+
+//获取一个设备，一个测点
+device="361RP88"
+point="361RP88001"
+//检查设备
+select * from pt where deviceCode=device and propertyCode=point order by ts
+//输出
+timer t=select ts,deviceCode,logicalPositionId,physicalPositionId,sum(propertyValue) as production_amount_hour from pt where ts between 2022.01.01 00:00:00 : 2022.01.01 02:59:59 and deviceCode=device and propertyCode=point group by bar(ts,1H) as ts,deviceCode,logicalPositionId,physicalPositionId
+t
+
+
+//自定义函数视图，供应用端调用：
+def production_amount_hour(device,point,begintime,endtime){
+    //业务判断，合法性校验
+    if (datetime(endtime)-datetime(begintime)>24*3600*30){
+        return(toStdJson([-1,"查询时间不能超过30天"]))
+    }
+    t=select deviceCode,logicalPositionId,physicalPositionId,sum(propertyValue) as production_amount_hour,ts from loadTable("dfs://db_test",`collect) where ts between begintime : endtime and deviceCode=device and propertyCode=point group by bar(ts,1H) as ts,deviceCode,logicalPositionId,physicalPositionId
+    return t
+}
+
+//添加函数视图
+addFunctionView(production_amount_hour)
+// dropFunctionView(`production_amount_hour)
+
+production_amount_hour(device,point,2022.01.01 00:00:00,2022.03.01 00:00:00)    //业务判断
+production_amount_hour(device,point,2022.01.01 00:00:00,2022.01.01 23:59:59)    //应用端正常查询，并输出结果
+
+
+/****************************************************************************************************/
+//5、测试场景五：根据可加指标实时计算变化率,超出指定值进行记录并推送消息
+//数据准备
+device="361RP88"
+point="361RP88006"
+t=select * from pt where deviceCode=device and propertyCode=point 
+//统计变化率
+t = select *,deltas(propertyValue) as duration,prev(propertyValue) as propertyValue_before,propertyValue as propertyValue_now from t where deviceCode=device and propertyCode=point and ts between 2022.01.01 00:00:00 : 2022.01.01 01:59:59 
+// //输出（函数视图方法同场景一）
+select ts,deviceCode,logicalPositionId,physicalPositionId,propertyCode,propertyValue_before,propertyValue_now, string(format(abs(propertyValue_now-propertyValue_before)*100.0/propertyValue_before,"0.00"))+"%" as rate from t where abs(propertyValue_now-propertyValue_before)/propertyValue_before>1
+
+/****************************************************************************************************/
+//6、测试场景六：根据电流计算一段时间内设备的累计空载时间
+device="361RP17"
+point="361RP17007"
+t=select * from pt where deviceCode=device and propertyCode=point 
+//统计空载时间
+t = select *,deltas(ts) as duration,nullFill(prev(propertyValue),propertyValue) as before from t where deviceCode=device and propertyCode=point and ts between 2022.01.01 00:00:00 : 2022.01.01 01:59:59 
+//输出（函数视图方法同场景一）
+select sum(duration)/60 from t where before<=60 group by bar(ts,1H),deviceCode,logicalPositionId,physicalPositionId
+
+
+/****************************************************************************************************/
+//7、测试场景七：计算指定时间段范围内（窗口时间）电机轴承的平均温度
+device="361RP17"
+point="361RP17008"
+//输出
+select *,mavg(propertyValue,2) from pt where deviceCode=device and propertyCode=point and ts between 2022.01.01 00:00:00 : 2022.01.01 01:59:59 context by deviceCode,logicalPositionId,physicalPositionId,propertyCode
+
+//串联突变率，详见场景四 + 场景六
+
+
+/****************************************************************************************************/
+//8、测试场景八：指标根据表达式的二次计算
+device="361RP17"
+point="361RP17009"
+dt=select * from pt where deviceCode=device and propertyCode=point 
+update!(dt,`propertyValue,rand(100,dt.size()))
+//取值
+a=select * from dt where propertyValue <=60
+b=select * from dt where propertyValue >60 and propertyValue<80
+c=select * from dt where propertyValue >=80
+//分类
+a.addColumn(`temperature_level,SYMBOL)
+b.addColumn(`temperature_level,SYMBOL)
+c.addColumn(`temperature_level,SYMBOL)
+a[`temperature_level]="A"
+b[`temperature_level]="B"
+c[`temperature_level]="C"
+//合并数据
+t=a.append!(b).append!(c)
+//输出
+select * from t order by ts
+
+
+/****************************************************************************************************/
+//9、测试场景九：分组汇总计算，条件筛选
+device="361RP88"
+point="361RP88010"
+//过去一小时数据
+now=2022.01.01 05:00:00
+dt=select * from pt where ts>=datetime(now)-360 and ts<now
+//输出
+select deviceCode,propertyCode,now as max_ts,avg(propertyValue) as hour_avg from dt where deviceCode=device and propertyCode=point group by deviceCode,propertyCode
+
+
+/****************************************************************************************************/
+//10、测试场景十：每个整点的平均值相减，比如1~2点的值减去0~1点的值，就这样一直循环下去。
+//规划说明：
+//步骤一：用时序引擎，数据按整点规整。
+//步骤二：用响应式状态引擎，进行差值计算。
+//步骤三：输出到result表
+
+//清理环境
+try{unsubscribeTable(,`outTable, "act_sub_hour")}catch(ex){}
+try{unsubscribeTable(,`inTable, "act_hour")}catch(ex){}
+try{dropStreamEngine("sub_hour")}catch(ex){}
+try{dropStreamEngine(`hour)}catch(ex){}
+try{undef(`outTable, SHARED)}catch(ex){}
+try{undef(`inTable, SHARED)}catch(ex){}
+try{undef(`result, SHARED)}catch(ex){}
+
+//数据写入
+share streamTable(1000:0, `ts`deviceCode`logicalPositionId`physicalPositionId`propertyCode`propertyValue,
+        [DATETIME,SYMBOL,SYMBOL,SYMBOL,SYMBOL,DOUBLE]) as inTable
+
+//时序引擎的输出表
+share streamTable(1000:0, `ts`deviceCode`propertyCode`propertyValue,
+        [DATETIME,SYMBOL,SYMBOL,DOUBLE]) as outTable
+
+//时序引擎，实时计算均值指标（窗口1h，步长1h，每个设备的每个测点为一组进行分组计算）
+hour = createTimeSeriesEngine(name="hour",  windowSize=3600, step=3600, metrics=<[avg(propertyValue)]>, dummyTable=inTable, outputTable=outTable, timeColumn=`ts, keyColumn=[`deviceCode,`propertyCode])
+subscribeTable(tableName="inTable", actionName="act_hour", offset=0, handler=append!{hour}, msgAsTable=true, batchSize=50, throttle=1, hash=0)
+
+//状态响应引擎，每个相邻整点值相减
+share streamTable(1000:0, `deviceCode`propertyCode`ts`sub_propertyValue,
+        [SYMBOL,SYMBOL,DATETIME,DOUBLE]) as result
+sub_hour = createReactiveStateEngine(name="sub_hour", metrics = <[ts,deltas(propertyValue)]>, dummyTable=outTable, outputTable=result, keyColumn=[`deviceCode,`propertyCode])
+subscribeTable(tableName="outTable", actionName="act_sub_hour", offset=0, handler=append!{sub_hour}, msgAsTable=true, batchSize=50, throttle=1, hash=0)
+
+//将某个设备的数据写入，启动流式框架
+pt = loadTable("dfs://db_test", "collect");
+select count(*) from pt; 
+t = select * from pt where deviceCode = "361RP00" and propertyCode = "361RP00000"
+inTable.append!(t);
+
+//流数据引擎计算窗口内的平均值
+select * from outTable where deviceCode = "361RP00" and propertyCode = "361RP00000";
+//sql查询窗口内的平均值
+select format(avg(propertyValue),"0.00") from t where deviceCode = "361RP00" and propertyCode = "361RP00000" group by datehour(ts)
+
+//差值
+select * from result
+
+//查看流数据引擎状态
+getStreamEngineStat().TimeSeriesEngine
+getStreamEngineStat().ReactiveStateEngine
+
+
+/****************************************************************************************************/
+//11、测试场景十一：根据状态突变，抽取记录（实时流计算）
+
+//清理环境
+try{unsubscribeTable(tableName="mainStream", actionName="act_subscribe_calculate")}catch(ex){}
+try{unsubscribeTable(tableName="mainStream", actionName="detect_rate")}catch(ex){}
+undef(`mainStream)
+undef(`calc_result)
+try{dropStreamTable("mainStream")}catch(ex){}
+try{dropStreamTable("calc_result")}catch(ex){}
+try{dropAggregator("engine_status")}catch(ex){}
+
+//新建流数据表,接收实时写入数据
+share streamTable(20000:0,pt.schema().colDefs.name,pt.schema().colDefs.typeString) as mainStream
+
+//新建流数据表，保存处理后结果数据
+share streamTable(20000:0,`propertyCode`ts`deviceCode`logicalPositionId`physicalPositionId`propertyValue,[SYMBOL,DATETIME,SYMBOL,INT,INT,INT]) as calc_result
+
+//使用流数据响应式状态引擎，进行数据筛选处理
+engine = createReactiveStateEngine("engine_status", <[ts,deviceCode,logicalPositionId,physicalPositionId,propertyValue]>, mainStream, calc_result,`propertyCode,<propertyValue!=prev(propertyValue)>)
+
+//开启订阅d
+subscribeTable(tableName="mainStream", actionName="act_subscribe_calculate", offset=0, handler=append!{engine}, msgAsTable=true, batchSize=10000, throttle=1,hash=1);
+
+//使用回放，模拟持续写入流数据表的场景
+device="361RP17"
+point="361RP17006"
+rate=5*60                           //回放倍速（每秒播放5分钟的数据，每小时数据12秒执行完毕）
+begintime=2022.01.01 00:00:00       //数据开始时间
+endtime  =2022.01.01 01:00:00       //数据结束时间
+dt=select * from pt where deviceCode=device and propertyCode=point and ts between begintime:endtime order by ts
+update!(dt,`propertyValue,rand(0 1,dt.size()))
+
+//批处理调用replay函数，后台执行回放
+submitJob("replay_output", "replay_output_stream", replay, dt ,mainStream, `ts, `ts, rate,false)
+
+//检查数据
+//开机
+select * from calc_result where  propertyValue=1 
+//关机
+select * from calc_result where  propertyValue=0
+
+//推送到应用端。《subScrebe_result.py》，详情可查看python对流数据的订阅。
+/*** python代码开始 ****
+from threading import Event
+import dolphindb as ddb
+import pandas as pd
+import numpy as np
+s = ddb.session()
+s.enableStreaming(8000)
+def handler(lst):
+   print(lst)
+s.subscribe("127.0.0.1", 8848, handler, "calc_result")
+Event().wait()
+*** python代码结束 ****/
+
+//12.实时检测异常值,以指标变化率为例
+//清理环境
+try{unsubscribeTable(tableName="mainStream", actionName="act_subscribe_calculate")}catch(ex){}
+try{unsubscribeTable(tableName="mainStream", actionName="detect_rate")}catch(ex){}
+try{unsubscribeTable(tableName="abnormalRes", actionName="sendEmail")}catch(ex){}
+undef(`mainStream)
+undef(`abnormalRes)
+try{dropStreamTable("mainStream")}catch(ex){}
+try{dropStreamTable("abnormalRes")}catch(ex){}
+try{dropAggregator("detect_rate")}catch(ex){}
+
+//新建流数据表,接收实时写入数据
+share streamTable(20000:0,pt.schema().colDefs.name,pt.schema().colDefs.typeString) as mainStream
+
+//新建流数据表，保存异常结果
+share streamTable(1000:0, `ts`propertyCode`type`metric, [DATETIME, SYMBOL, INT, STRING]) as abnormalRes
+
+// 创建异常检测引擎
+detect_rate = createAnomalyDetectionEngine(name="detect_rate",metrics=<[abs(propertyValue \ prev(propertyValue)-1)>1]>,dummyTable=mainStream,
+                                           outputTable=abnormalRes,timeColumn=`ts,keyColumn=`propertyCode)
+
+// 订阅实时数据
+subscribeTable(tableName=`mainStream,actionName='detect_rate',offset=-1,handler=append!{detect_rate},msgAsTable=true)
+
+//使用回放，模拟持续写入流数据表的场景
+device="361RP17"
+point="361RP17006"
+rate=5*60                           //回放倍速（每秒播放5分钟的数据，每小时数据12秒执行完毕）
+begintime=2022.01.01 00:00:00       //数据开始时间
+endtime  =2022.01.01 02:00:00       //数据结束时间
+dt=select * from pt where deviceCode=device and propertyCode=point and ts between begintime:endtime order by ts
+submitJob("replay_output", "replay_output_stream", replay, dt ,mainStream, `ts, `ts, rate,false)
+
+select * from abnormalRes
+
+//将异常检测结果以邮件形式输出告警
+try{loadPlugin('./plugins/httpClient/PluginHttpClient.txt')}catch(ex){}
+
+def sendEmail(userId,pwd,recipient,mutable msg){
+    ts = exec ts from msg
+    propertyCode = exec propertyCode from msg
+
+    sendMsg = string(ts)+" the propertyCode "+string(propertyCode)+" rate is greater than 1"
+    sendMsg = concat(sendMsg,"<br>")
+    httpClient::sendEmail(userId,pwd,recipient,"rate is greater than 1",sendMsg)
+}
+
+userId='huikang.xu@dolphindb.com'
+pwd='DolphinDB@123'
+recipient='1583748740@qq.com'
+
+subscribeTable(tableName=`abnormalRes,actionName='sendEmail',offset=0,handler=sendEmail{userId,pwd,recipient},msgAsTable=true,batchSize=10000,throttle=10)
+
+
+//流数据表运维相关
+getStreamingStat().subWorkers
+getStreamEngineStat()
+
+
+
+

@@ -1,0 +1,1882 @@
+<!DOCTYPE html><html xmlns="http://www.w3.org/1999/xhtml" xml:lang="zh" lang="zh" data-whc_version="26.0">
+    <head><link rel="shortcut icon" href="../favicon.ico"/><link rel="icon" href="../favicon.ico"/><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><meta http-equiv="X-UA-Compatible" content="IE=edge"/><meta name="description" content="2018 年 发布了中国 A 股全市场股票模型（The Barra China Equity Model，即 Barra CNE6 模型）。与传统的时间序列回归模型有所不同，Barra ..."/><meta name="DC.rights.owner" content="(C) 版权 2024"/><meta name="copyright" content="(C) 版权 2024"/><meta name="generator" content="DITA-OT"/><meta name="DC.type" content="topic"/><meta name="DC.coverage" content=""/><meta name="DC.relation" content="../tutorials/tu_modules.html"/><meta name="prodname" content="DolphinDB"/><meta name="brand" content="DolphinDB"/><meta name="DC.creator" content="DolphinDB"/><meta name="DC.publisher" content="DDB N/A DDB 200"/><meta name="DC.format" content="HTML5"/><meta name="DC.identifier" content="基于-dolphindb-的-barra-多因子风险模型实践"/><title>基于 DolphinDB 的 Barra 多因子风险模型实践</title><!--  Generated with Oxygen version 26.0, build number 2024012323.  --><meta name="wh-path2root" content="../"/><meta name="wh-toc-id" content="基于-dolphindb-的-barra-多因子风险模型实践-d9529e98079"/><meta name="wh-source-relpath" content="tutorials/barra_multi_factor_risk_model_0.dita"/><meta name="wh-out-relpath" content="tutorials/barra_multi_factor_risk_model_0.html"/>
+
+    <link rel="stylesheet" type="text/css" href="../oxygen-webhelp/app/commons.css?buildId=2024012323"/>
+    <link rel="stylesheet" type="text/css" href="../oxygen-webhelp/app/topic.css?buildId=2024012323"/>
+
+    <script src="../oxygen-webhelp/app/options/properties.js?buildId=20240704100525"></script>
+    <script src="../oxygen-webhelp/app/localization/strings.js?buildId=2024012323"></script>
+    <script src="../oxygen-webhelp/app/search/index/keywords.js?buildId=20240704100525"></script>
+    <script defer="defer" src="../oxygen-webhelp/app/commons.js?buildId=2024012323"></script>
+    <script defer="defer" src="../oxygen-webhelp/app/topic.js?buildId=2024012323"></script>
+<link rel="stylesheet" type="text/css" href="../oxygen-webhelp/template/styles.css?buildId=2024012323"/><script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script><script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script></head>
+
+    <body id="基于-dolphindb-的-barra-多因子风险模型实践" class="wh_topic_page frmBody">
+        <a href="#wh_topic_body" class="sr-only sr-only-focusable">
+            跳转到主要内容
+        </a>
+        
+        
+        
+        
+        <header class="navbar navbar-default wh_header">
+    <div class="container-fluid">
+        <div xmlns:whc="http://www.oxygenxml.com/webhelp/components" class="wh_header_flex_container navbar-nav navbar-expand-md navbar-dark">
+            <div class="wh_logo_and_publication_title_container">
+                <div class="wh_logo_and_publication_title">
+                    
+                    <a href="https://www.dolphindb.cn" class=" wh_logo d-none d-sm-block "><img src="../logo.png" alt="  DolphinDB 文档中心  "/></a>
+                    <div class=" wh_publication_title "><a href="../index.html"><span class="booktitle">  <span class="ph mainbooktitle">DolphinDB 文档中心</span>  </span></a></div>
+                    
+                </div>
+                
+                
+            </div>
+
+            <div class="wh_top_menu_and_indexterms_link collapse navbar-collapse" id="wh_top_menu_and_indexterms_link">
+                
+                
+                
+                
+            </div>
+        <div class=" wh_search_input navbar-form wh_topic_page_search search " role="form">
+            
+            
+            
+            <form id="searchForm" method="get" role="search" action="../search.html"><div><input type="search" placeholder="搜索 " class="wh_search_textfield" id="textToSearch" name="searchQuery" aria-label="搜索查询" required="required"/><button type="submit" class="wh_search_button" aria-label="搜索"><span class="search_input_text">搜索</span></button></div></form>
+            
+            <script src="/vendors/react/umd/react.production.min.js" defer="defer"></script>
+<script src="/vendors/react-dom/umd/react-dom.production.min.js" defer="defer"></script>
+<script src="/vendors/dayjs/dayjs.min.js" defer="defer"></script>
+<script src="/vendors/antd/dist/antd.min.js" defer="defer"></script>
+<script src="/vendors/@ant-design/icons/dist/index.umd.min.js" defer="defer"></script>
+<script src="/zh/index.js" type="module"></script>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js" defer="defer"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML" defer="defer"><!--
+
+
+--></script>
+
+            
+        </div></div>
+    </div>
+</header>
+        
+        
+         
+        
+        
+        
+        <div class="container-fluid" id="wh_topic_container">
+            <div class="row">
+
+                <nav class="wh_tools d-print-none navbar-expand-md" aria-label="Tools">
+                    
+                    <div data-tooltip-position="bottom" class=" wh_breadcrumb "><ol class="d-print-none"><li><span class="home"><a href="../index.html"><span>主页</span></a></span></li><li><div class="topicref" data-id="about_tutorials"><div class="title"><a href="../tutorials/about_tutorials.html"><span class="keyword label">教程</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 产品使用教程</p></div></div></div></li><li><div class="topicref" data-id="chap7_tutorials_modules"><div class="title"><a href="../tutorials/tu_modules.html"><span class="keyword label">模块</span></a></div></div></li><li class="active"><div class="topicref" data-id="基于-dolphindb-的-barra-多因子风险模型实践"><div class="title"><a href="../tutorials/barra_multi_factor_risk_model_0.html">基于 DolphinDB 的 Barra 多因子风险模型实践</a></div></div></li></ol></div>
+                    
+                    
+                    
+                    <div class="wh_right_tools">
+                        <button class="wh_hide_highlight" aria-label="切换搜索突出显示" title="切换搜索突出显示"></button>
+                        <button class="webhelp_expand_collapse_sections" data-next-state="collapsed" aria-label="折叠截面" title="折叠截面"></button>
+                        
+                        
+                        
+                        
+                        <div class=" wh_print_link print d-none d-md-inline-block "><button onClick="window.print()" title="打印此页" aria-label="打印此页"></button></div>
+                        
+                        <button type="button" id="wh_toc_button" class="custom-toggler navbar-toggler collapsed wh_toggle_button navbar-light" aria-expanded="false" aria-label="Toggle publishing table of content" aria-controls="wh_publication_toc">
+                            <span class="navbar-toggler-icon"></span>
+                        </button>
+                    </div>
+                    
+                </nav>
+            </div>
+            
+            
+            
+            
+            <div class="wh_content_area">
+                <div class="row">
+                    
+                        <nav id="wh_publication_toc" class="col-lg-3 col-md-3 col-sm-12 d-md-block d-none d-print-none" aria-label="Table of Contents Container">
+                            <div id="wh_publication_toc_content">
+		                        
+                            	<div class=" wh_publication_toc " data-tooltip-position="right"><span class="expand-button-action-labels"><span id="button-expand-action" role="button" aria-label="Expand"></span><span id="button-collapse-action" role="button" aria-label="Collapse"></span><span id="button-pending-action" role="button" aria-label="Pending"></span></span><ul role="tree" aria-label="Table of Contents"><li role="treeitem"><div data-tocid="new_chap_about_sect_ddb_docs_intro-d9529e87" class="topicref" data-id="new_chap_about_sect_ddb_docs_intro" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../about/ddb_docs_intro.html" id="new_chap_about_sect_ddb_docs_intro-d9529e87-link">文档使用说明</a><div class="wh-tooltip"><p class="shortdesc">如何获取 DolphinDB 帮助信息</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="chap1_getstarted-d9529e140" class="topicref" data-id="chap1_getstarted" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action chap1_getstarted-d9529e140-link" class="wh-expand-btn"></span><div class="title"><a href="../getstarted/chap1_getstarted.html" id="chap1_getstarted-d9529e140-link"><span class="keyword label">快速上手</span></a><div class="wh-tooltip"><p class="shortdesc">如何快速部署 DolphinDB、建库建表、写入和查询数据</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="sectionddb_deployment-d9529e335" class="topicref" data-id="sectionddb_deployment" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action sectionddb_deployment-d9529e335-link" class="wh-expand-btn"></span><div class="title"><a href="../deploy/deploy_intro.html" id="sectionddb_deployment-d9529e335-link"><span class="keyword label">部署</span></a><div class="wh-tooltip"><p class="shortdesc">如何在不同的场景中部署 DolphinDB</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="new_chap_database_manage_new_chap_dbmanage_landing_page-d9529e2313" class="topicref" data-id="new_chap_database_manage_new_chap_dbmanage_landing_page" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action new_chap_database_manage_new_chap_dbmanage_landing_page-d9529e2313-link" class="wh-expand-btn"></span><div class="title"><a href="../db_distr_comp/cfg/db_intro.html" id="new_chap_database_manage_new_chap_dbmanage_landing_page-d9529e2313-link"><span class="keyword label">数据库</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 数据库的基本概念</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="chap7_tutorials_streaming-d9529e3490" class="topicref" data-id="chap7_tutorials_streaming" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action chap7_tutorials_streaming-d9529e3490-link" class="wh-expand-btn"></span><div class="title"><a href="../stream/str_intro.html" id="chap7_tutorials_streaming-d9529e3490-link"><span class="keyword label">流数据</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 流数据引擎及流数据计算的基本概念</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="tocId-d9529e7385" class="topicref" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action tocId-d9529e7385-link" class="wh-expand-btn"></span><div class="title"><a href="../db_distr_comp/db_oper/import_data.html" id="tocId-d9529e7385-link">数据迁移</a><div class="wh-tooltip"><p class="shortdesc">如何从不同数据源向 DolphinDB 迁移数据</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="chap7_tutorials_system_management-d9529e7812" class="topicref" data-id="chap7_tutorials_system_management" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action chap7_tutorials_system_management-d9529e7812-link" class="wh-expand-btn"></span><div class="title"><a href="../sys_man/om_intro.html" id="chap7_tutorials_system_management-d9529e7812-link"><span class="keyword label">系统运维</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 的系统运维功能及方法</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="about_language_resources-d9529e16490" class="topicref" data-id="about_language_resources" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action about_language_resources-d9529e16490-link" class="wh-expand-btn"></span><div class="title"><a href="../progr/progr_intro.html" id="about_language_resources-d9529e16490-link"><span class="keyword label">编程语言</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 编程基本概念与方法、SQL 在 DolphinDB 的应用</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="functions_references-d9529e26503" class="topicref" data-id="functions_references" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action functions_references-d9529e26503-link" class="wh-expand-btn"></span><div class="title"><a href="../funcs/funcs_intro.html" id="functions_references-d9529e26503-link"><span class="keyword label">函数参考</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 函数分类、语法、详解及示例</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="api_protocol-d9529e86456" class="topicref" data-id="api_protocol" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action api_protocol-d9529e86456-link" class="wh-expand-btn"></span><div class="title"><a href="../api/connapi_intro.html" id="api_protocol-d9529e86456-link"><span class="keyword label">连接器 &amp; API</span></a><div class="wh-tooltip"><p class="shortdesc">面向不同编程语言的 DolphinDB API 及连接器，相关协议和用法</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="chap6_plugin-d9529e91976" class="topicref" data-id="chap6_plugin" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action chap6_plugin-d9529e91976-link" class="wh-expand-btn"></span><div class="title"><a href="../plugins/plg_intro.html" id="chap6_plugin-d9529e91976-link"><span class="keyword label">插件</span></a><div class="wh-tooltip"><p class="shortdesc">多个应用场景的插件使用说明和插件开发指导</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="third_party-d9529e94749" class="topicref" data-id="third_party" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action third_party-d9529e94749-link" class="wh-expand-btn"></span><div class="title"><a href="../third_party.html" id="third_party-d9529e94749-link">第三方工具</a></div></div></li><li role="treeitem" aria-expanded="true"><div data-tocid="about_tutorials-d9529e94980" class="topicref" data-id="about_tutorials" data-state="expanded"><span role="button" tabindex="0" aria-labelledby="button-collapse-action about_tutorials-d9529e94980-link" class="wh-expand-btn"></span><div class="title"><a href="../tutorials/about_tutorials.html" id="about_tutorials-d9529e94980-link"><span class="keyword label">教程</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 产品使用教程</p></div></div></div><ul role="group" class="navbar-nav nav-list"><li role="treeitem" aria-expanded="false"><div data-tocid="tocId-d9529e95033" class="topicref" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action tocId-d9529e95033-link" class="wh-expand-btn"></span><div class="title"><a href="../tutorials/import_data.html" id="tocId-d9529e95033-link">数据导入</a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="tocId-d9529e95264" class="topicref" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action tocId-d9529e95264-link" class="wh-expand-btn"></span><div class="title"><a href="../tutorials/DolphinDB_TopN.html" id="tocId-d9529e95264-link">数据库</a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="tocId-d9529e95910" class="topicref" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action tocId-d9529e95910-link" class="wh-expand-btn"></span><div class="title"><a href="../tutorials/memory_management.html" id="tocId-d9529e95910-link">系统运维</a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="tocId-d9529e96325" class="topicref" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action tocId-d9529e96325-link" class="wh-expand-btn"></span><div class="title"><a href="../tutorials/hybrid_programming_paradigms.html" id="tocId-d9529e96325-link">编程语言</a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="tocId-d9529e97155" class="topicref" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action tocId-d9529e97155-link" class="wh-expand-btn"></span><div class="title"><a href="../tutorials/data_sync_among_clusters.html" id="tocId-d9529e97155-link">安全与容灾</a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="tocId-d9529e97386" class="topicref" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action tocId-d9529e97386-link" class="wh-expand-btn"></span><div class="title"><a href="../tutorials/streaming_tutorial.html" id="tocId-d9529e97386-link">流数据</a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="tocId-d9529e97893" class="topicref" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action tocId-d9529e97893-link" class="wh-expand-btn"></span><div class="title"><a href="../tutorials/DECIMAL.html" id="tocId-d9529e97893-link">数值处理</a></div></div></li><li role="treeitem" aria-expanded="true"><div data-tocid="chap7_tutorials_modules-d9529e97986" class="topicref" data-id="chap7_tutorials_modules" data-state="expanded"><span role="button" tabindex="0" aria-labelledby="button-collapse-action chap7_tutorials_modules-d9529e97986-link" class="wh-expand-btn"></span><div class="title"><a href="../tutorials/tu_modules.html" id="chap7_tutorials_modules-d9529e97986-link"><span class="keyword label">模块</span></a></div></div><ul role="group" class="navbar-nav nav-list"><li role="treeitem"><div data-tocid="模块概述-d9529e98033" class="topicref" data-id="模块概述" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../tutorials/module_tutorial.html" id="模块概述-d9529e98033-link">模块概述</a></div></div></li><li role="treeitem" class="active"><div data-tocid="基于-dolphindb-的-barra-多因子风险模型实践-d9529e98079" class="topicref" data-id="基于-dolphindb-的-barra-多因子风险模型实践" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../tutorials/barra_multi_factor_risk_model_0.html" id="基于-dolphindb-的-barra-多因子风险模型实践-d9529e98079-link">基于 DolphinDB 的 Barra 多因子风险模型实践</a></div></div></li><li role="treeitem"><div data-tocid="easynsq-实时行情数据接入功能模块-d9529e98125" class="topicref" data-id="easynsq-实时行情数据接入功能模块" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../modules/easyNSQ/easynsq_2.html" id="easynsq-实时行情数据接入功能模块-d9529e98125-link">easyNSQ 实时行情数据接入功能模块</a></div></div></li><li role="treeitem"><div data-tocid="easytldataimport-通联历史数据自动化导入功能模块-d9529e98171" class="topicref" data-id="easytldataimport-通联历史数据自动化导入功能模块" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../modules/easyTLDataImport/easytl_data_import.html" id="easytldataimport-通联历史数据自动化导入功能模块-d9529e98171-link">easyTLDataImport 通联历史数据自动化导入功能模块</a></div></div></li><li role="treeitem"><div data-tocid="国泰君安-191-alpha-因子库-d9529e98217" class="topicref" data-id="国泰君安-191-alpha-因子库" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../modules/gtja191Alpha/191alpha.html" id="国泰君安-191-alpha-因子库-d9529e98217-link">国泰君安 191 Alpha 因子库</a></div></div></li><li role="treeitem"><div data-tocid="worldquant-101-alpha-因子指标库-d9529e98263" class="topicref" data-id="worldquant-101-alpha-因子指标库" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../modules/wq101alpha/wq101alpha.html" id="worldquant-101-alpha-因子指标库-d9529e98263-link">WorldQuant 101 Alpha 因子指标库</a></div></div></li><li role="treeitem"><div data-tocid="技术分析technical-analysis指标库-d9529e98309" class="topicref" data-id="技术分析technical-analysis指标库" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../modules/ta/ta.html" id="技术分析technical-analysis指标库-d9529e98309-link">技术分析（Technical Analysis）指标库</a></div></div></li><li role="treeitem"><div data-tocid="mytt-指标库-d9529e98355" class="topicref" data-id="mytt-指标库" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../modules/mytt/mytt.html" id="mytt-指标库-d9529e98355-link">MyTT 指标库</a></div></div></li><li role="treeitem"><div data-tocid="交易日历-d9529e98401" class="topicref" data-id="交易日历" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../modules/MarketHoliday/mkt_calendar.html" id="交易日历-d9529e98401-link">交易日历</a></div></div></li><li role="treeitem"><div data-tocid="ops-运维函数库-d9529e98447" class="topicref" data-id="ops-运维函数库" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../modules/ops/ops.html" id="ops-运维函数库-d9529e98447-link">ops 运维函数库</a></div></div></li></ul></li><li role="treeitem" aria-expanded="false"><div data-tocid="plugins_apply-d9529e98493" class="topicref" data-id="plugins_apply" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action plugins_apply-d9529e98493-link" class="wh-expand-btn"></span><div class="title"><a href="../tutorials/plugins_apply.html" id="plugins_apply-d9529e98493-link">插件应用</a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="tocId-d9529e98631" class="topicref" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action tocId-d9529e98631-link" class="wh-expand-btn"></span><div class="title"><a href="../tutorials/dolphinscheduler_integration.html" id="tocId-d9529e98631-link">金融场景案例</a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="tocId-d9529e100707" class="topicref" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action tocId-d9529e100707-link" class="wh-expand-btn"></span><div class="title"><a href="../tutorials/iot_examples.html" id="tocId-d9529e100707-link">物联网场景案例</a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="tocId-d9529e101629" class="topicref" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action tocId-d9529e101629-link" class="wh-expand-btn"></span><div class="title"><a href="../tutorials/cluster_scaleout_perf_test.html" id="tocId-d9529e101629-link">测试报告</a></div></div></li></ul></li><li role="treeitem" aria-expanded="false"><div data-tocid="tocId-d9529e101769" class="topicref" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action tocId-d9529e101769-link" class="wh-expand-btn"></span><div class="title"><a href="../rn/server/3_00_1.html" id="tocId-d9529e101769-link">版本说明</a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 版本发布历史</p></div></div></div></li></ul></div>
+		                        
+                            </div>
+                        </nav>
+                    
+                    
+                    <div class="col-lg-7 col-md-9 col-sm-12" id="wh_topic_body">
+                        <button id="wh_close_publication_toc_button" class="close-toc-button d-none" aria-label="Toggle publishing table of content" aria-controls="wh_publication_toc" aria-expanded="true">
+                            <span class="close-toc-icon-container">
+                                <span class="close-toc-icon"></span>     
+                            </span>
+                        </button>
+                        <button id="wh_close_topic_toc_button" class="close-toc-button d-none" aria-label="Toggle topic table of content" aria-controls="wh_topic_toc" aria-expanded="true">
+                            <span class="close-toc-icon-container">
+                                <span class="close-toc-icon"></span>     
+                            </span>
+                        </button>
+                        
+                        <div class=" wh_topic_content body "><main role="main"><article class="- topic/topic topic" role="article" aria-labelledby="ariaid-title1">
+    <h1 class="- topic/title title topictitle1" id="ariaid-title1">基于 DolphinDB 的 Barra 多因子风险模型实践</h1>
+    <div class="- topic/body body">
+        <p class="- topic/p p">2018 年  发布了中国 A 股全市场股票模型（The Barra China Equity Model，即 Barra CNE6
+            模型）。与传统的时间序列回归模型有所不同，Barra
+            模型能够更高效准确地捕捉横截面上机构头寸在各种因子（包括市值等风格因子）上的暴露。并且当模型中纳入具有时序记忆的变量时，它可以共享截面回归和时序回归模型的一些优良性质。该模型采用多层次的因子体系，能够更精细地预测和解释中国股票市场的风险，对中国
+            A 股的风险评估、组合优化和量化策略产生了积极且广泛的影响。</p>
+        <p class="- topic/p p">本文将详细介绍通过 DolphinDB 实现 Barra CNE6 中的  长期模型的整个流程。</p>
+    </div>
+    <article class="- topic/topic topic nested1" aria-labelledby="ariaid-title2" id="lrw_fcg_41c">
+        <h2 class="- topic/title title topictitle2" id="ariaid-title2">1. Barra 多因子模型简介</h2>
+        <article class="- topic/topic topic nested2" aria-labelledby="ariaid-title3" id="rrt_gcg_41c">
+            <h3 class="- topic/title title topictitle3" id="ariaid-title3">1.1. Barra 多因子模型</h3>
+            <div class="- topic/body body">
+                <p class="- topic/p p">Barra 多因子模型基于多因子回归体系，将风格因子、市场因子和行业因子与收益率进行联合建模，以获取收益率和特质收益率。本文构建的 Barra 模型以 CNE6
+                    模型为准。</p>
+                <p class="- topic/p p">CNE6 模型是 Barra 的面向中国股票市场的多因子模型。该模型考虑了一个国家因子、多个行业因子以及多个风格因子。假设市场中共有 N 支股票，P 个行业，以及
+                    Q 个风格因子。在任意给定时间点，该模型使用因子暴露和个股收益率构建截面回归（cross-sectional regression）如下</p>
+                <figure class="- topic/fig fig fignone" id="rrt_gcg_41c__fig_yxv_ycg_41c" data-ofbid="rrt_gcg_41c__fig_yxv_ycg_41c"><figcaption data-caption-side="top" class="- topic/title title figcap"><span class="figtitleprefix fig--title-label">图<span class="fig--title-label-number"> 1</span><span class="fig--title-label-punctuation">. </span></span><span class="fig--title">CNE6 模型</span></figcaption>
+                    
+                    <br/><img class="- topic/image image" id="rrt_gcg_41c__image_dyv_ycg_41c" src="images/barra_multi_factor_risk_model/1.1-1.png"/><br/>
+                </figure>
+                <p class="- topic/p p">其中<img class="- topic/image image" src="images/barra_multi_factor_risk_model/rn.png"/> 是第 n
+                        支股票的收益率，<img class="- topic/image image" src="images/barra_multi_factor_risk_model/rf.png"/>是无风险收益率。<img class="- topic/image image" src="images/barra_multi_factor_risk_model/xipn.png"/>是股票
+                    n 在行业<img class="- topic/image image" src="images/barra_multi_factor_risk_model/ip.png"/>的暴露，如果假设一个公司只能属于一个行业，那么<img class="- topic/image image" src="images/barra_multi_factor_risk_model/xipn.png"/>的取值为
+                    0（代表该股票不属于这个行业）或者 1（代表该股票属于这个行业）。<img class="- topic/image image" src="images/barra_multi_factor_risk_model/xsqn.png"/>是股票 n 在风格因子<img class="- topic/image image" src="images/barra_multi_factor_risk_model/sq.png"/>的暴露，它的取值经过了某种标准化（标准化的方法会在下文说明）。<img class="- topic/image image" src="images/barra_multi_factor_risk_model/un.png"/>为股票 n
+                        的超额收益中无法被因子解释的部分，因此也被称为该股票的特异性收益。<img class="- topic/image image" src="images/barra_multi_factor_risk_model/fc.png"/>为国家因子的因子收益率（所有股票在国家因子上的暴露都是 1）；<img class="- topic/image image" src="images/barra_multi_factor_risk_model/fip.png"/>为行业<img class="- topic/image image" src="images/barra_multi_factor_risk_model/ip.png"/>因子的因子收益率；<img class="- topic/image image" src="images/barra_multi_factor_risk_model/fsq.png"/>为风格因子<img class="- topic/image image" src="images/barra_multi_factor_risk_model/sq.png"/>的因子收益率。 下图为 Barra
+                    多因子模型的流程图。从计算初始因子开始，对每个因子进行单因子模型检验，包括稳定性、有效性和一致性的相关检验；根据检验结果，使用 DolphinDB
+                    接口合成指定的一级和二级因子。对于已合成的因子，DolphinDB 建立了收益预测模型和风险矩阵调整，并从拟合优度、偏差统计量以及 Q
+                    统计量等角度对模型进行了评估。最后，基于收益风险模型对投资组合进行风险评估和组合优化。</p>
+                <figure class="- topic/fig fig fignone" id="rrt_gcg_41c__fig_ayd_lcg_41c" data-ofbid="rrt_gcg_41c__fig_ayd_lcg_41c"><figcaption data-caption-side="top" class="- topic/title title figcap"><span class="figtitleprefix fig--title-label">图<span class="fig--title-label-number"> 2</span><span class="fig--title-label-punctuation">. </span></span><span class="fig--title">Barra 多因子模型流程图</span></figcaption>
+                    
+                    <br/><img class="- topic/image image" id="rrt_gcg_41c__image_gyd_lcg_41c" src="images/barra_multi_factor_risk_model/Barra_multifactor_workflow.png"/><br/>
+                </figure>
+            </div>
+        </article>
+        <article class="- topic/topic topic nested2" aria-labelledby="ariaid-title4" id="pmz_lcg_41c">
+            <h3 class="- topic/title title topictitle3" id="ariaid-title4">1.2. Barra 收益风险模型</h3>
+            <div class="- topic/body body">
+                <p class="- topic/p p">Barra 多因子模型的核心目的在于准确评估个股和因子的风险，并通过时序的收益风险评估辅助投资判断。基于 CNE6
+                    模型，可以简化个股收益率为因子收益率和个股特异性收益率的线性组合。</p>
+                <br/><img class="- topic/image image" id="pmz_lcg_41c__image_tsx_yv1_p1c" src="images/barra_multi_factor_risk_model/1.2-1.png"/><br/>
+                <p class="- topic/p p">其中，<img class="- topic/image image" id="pmz_lcg_41c__image_xhs_wv1_p1c" src="images/barra_multi_factor_risk_model/r.png"/>为 N 个个股收益率的向量（N*1 维），<img class="- topic/image image" id="pmz_lcg_41c__image_yhs_wv1_p1c" src="images/barra_multi_factor_risk_model/x.png"/>为当期因子暴露矩阵（N*k 维，k 为因子个数），<img class="- topic/image image" id="pmz_lcg_41c__image_zhs_wv1_p1c" src="images/barra_multi_factor_risk_model/f.png"/>为 k 个因子的收益率向量（k*\1 维），<img class="- topic/image image" id="pmz_lcg_41c__image_a3s_wv1_p1c" src="images/barra_multi_factor_risk_model/u.png"/>为 N 个个股的特异性收益率的向量（N*1 维）。</p>
+                <p class="- topic/p p">对上述等式左右两边分别求协方差矩阵得到如下公式，将个股协方差矩阵<img class="- topic/image image" src="images/barra_multi_factor_risk_model/v.png"/>分解为因子收益率协方差矩阵<img class="- topic/image image" src="images/barra_multi_factor_risk_model/vf.png"/>、特质收益协方差矩阵<img class="- topic/image image" src="images/barra_multi_factor_risk_model/delta.png"/>。公式如下：</p>
+                <br/><img class="- topic/image image" src="images/barra_multi_factor_risk_model/1.2-2.png"/><br/>
+                <p class="- topic/p p">若从股票收益率的协方差矩阵的角度评估风险，可能存在由于股票数 N 远大于交易日期数 252 导致股票收益率协方差矩阵满秩的问题，且需要计算 N*(N+1)/2
+                    次，复杂度很高。基于 Barra 模型，为求得股票收益率的风险矩阵<img class="- topic/image image" src="images/barra_multi_factor_risk_model/v.png"/>，只需要分别求得因子收益率的风险矩阵<img class="- topic/image image" src="images/barra_multi_factor_risk_model/vf.png"/>以及个股特异性收益的风险矩阵<img class="- topic/image image" src="images/barra_multi_factor_risk_model/delta.png"/>，只需要计算 n* (n + 1) /
+                    2 + n 次，进一步规避了收益率协方差矩阵满秩的问题。</p>
+            </div>
+        </article>
+    </article>
+    <article class="- topic/topic topic nested1" aria-labelledby="ariaid-title5" id="mhm_mcg_41c">
+        <h2 class="- topic/title title topictitle2" id="ariaid-title5">2. 基于 DolphinDB 的因子合成</h2>
+        <div class="- topic/body body">
+            <p class="- topic/p p">本文首先基于 <code class="+ topic/ph pr-d/codeph ph codeph">barraFactorsCal</code> 模块得到用于建模的多因子窄表，具体流程如下：</p>
+            <ol class="- topic/ol ol">
+                <li class="- topic/li li">基于 <code class="+ topic/ph pr-d/codeph ph codeph">getXXXX</code> 函数计算风格因子。</li>
+                <li class="- topic/li li">基于 <code class="+ topic/ph pr-d/codeph ph codeph">getIndustryFactors</code> 函数计算行业因子。</li>
+                <li class="- topic/li li">基于 <code class="+ topic/ph pr-d/codeph ph codeph">getRegTable</code> 函数对风格因子、行业因子合并，并填充缺失值得到用于单因子模型检验的回归因子表。</li>
+                <li class="- topic/li li">基于 <code class="+ topic/ph pr-d/codeph ph codeph">getFactorsValidation</code> 函数针对回归因子表生成每个因子对应的 IC、 指标。</li>
+                <li class="- topic/li li">针对不同因子加权方法，基于 <code class="+ topic/ph pr-d/codeph ph codeph">getFSLevelFactor</code> 函数合成三级因子得到用于建立 Barra
+                    多因子模型的一级因子窄表。</li>
+            </ol>
+            <figure class="- topic/fig fig fignone" id="mhm_mcg_41c__fig_yzl_ncg_41c" data-ofbid="mhm_mcg_41c__fig_yzl_ncg_41c"><figcaption data-caption-side="top" class="- topic/title title figcap"><span class="figtitleprefix fig--title-label">图<span class="fig--title-label-number"> 3</span><span class="fig--title-label-punctuation">. </span></span><span class="fig--title">因子合成流程图</span></figcaption>
+                
+                <br/><img class="- topic/image image" id="mhm_mcg_41c__image_c1m_ncg_41c" src="images/barra_multi_factor_risk_model/%E5%9B%A0%E5%AD%90%E5%90%88%E6%88%90%E6%B5%81%E7%A8%8B%E5%9B%BE.png"/><br/>
+            </figure>
+        </div>
+        <article class="- topic/topic topic nested2" aria-labelledby="ariaid-title6" id="fkj_4cg_41c">
+            <h3 class="- topic/title title topictitle3" id="ariaid-title6">2.1. 风格因子计算</h3>
+            <div class="- topic/body body">
+                <p class="- topic/p p">首先计算单个三级风格因子，一级、二级风格因子基于如下风格因子关系表合成得到。其中具有预测属性的 ETOPF_STD, ETOPF, EGRLF, DTOPF
+                    等因子对模型的影响不稳定，暂不考虑。</p>
+                <div class="table-container"><table class="- topic/table table frame-all" id="fkj_4cg_41c__table_wb5_lv1_p1c" data-ofbid="fkj_4cg_41c__table_wb5_lv1_p1c" data-cols="4"><caption class="- topic/title title tablecap" data-caption-side="top" data-is-repeated="true"><span class="table--title-label">表<span class="table--title-label-number"> 1</span><span class="table--title-label-punctuation">. </span></span><span class="table--title">风格因子关系表</span></caption><colgroup><col/><col/><col/><col/></colgroup><thead class="- topic/thead thead">
+                            <tr class="- topic/row">
+                                <th class="- topic/entry entry colsep-1 rowsep-1" id="fkj_4cg_41c__table_wb5_lv1_p1c__entry__1">一级因子</th>
+                                <th class="- topic/entry entry colsep-1 rowsep-1" id="fkj_4cg_41c__table_wb5_lv1_p1c__entry__2">二级因子</th>
+                                <th class="- topic/entry entry colsep-1 rowsep-1" id="fkj_4cg_41c__table_wb5_lv1_p1c__entry__3">三级因子</th>
+                                <th class="- topic/entry entry colsep-0 rowsep-1" id="fkj_4cg_41c__table_wb5_lv1_p1c__entry__4">定义</th>
+                            </tr>
+                        </thead><tbody class="- topic/tbody tbody">
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry colsep-1 rowsep-1" headers="fkj_4cg_41c__table_wb5_lv1_p1c__entry__1" rowspan="23">Quality</td>
+                                <td class="- topic/entry entry colsep-1 rowsep-1" headers="fkj_4cg_41c__table_wb5_lv1_p1c__entry__2" rowspan="3">Earnings Quality</td>
+                                <td class="- topic/entry entry colsep-1 rowsep-1" headers="fkj_4cg_41c__table_wb5_lv1_p1c__entry__3">ABS</td>
+                                <td class="- topic/entry entry colsep-0 rowsep-1" headers="fkj_4cg_41c__table_wb5_lv1_p1c__entry__4">资产负债表应计项目</td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry colsep-1 rowsep-1" headers="fkj_4cg_41c__table_wb5_lv1_p1c__entry__3">ACF_TTM</td>
+                                <td class="- topic/entry entry colsep-0 rowsep-1" headers="fkj_4cg_41c__table_wb5_lv1_p1c__entry__4">现金流量表应计项目_滚动</td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry colsep-1 rowsep-1" headers="fkj_4cg_41c__table_wb5_lv1_p1c__entry__3">ACF_LYR</td>
+                                <td class="- topic/entry entry colsep-0 rowsep-1" headers="fkj_4cg_41c__table_wb5_lv1_p1c__entry__4">现金流量表应计项目_静态</td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry colsep-1 rowsep-1" headers="fkj_4cg_41c__table_wb5_lv1_p1c__entry__2" rowspan="6">Earnings Variability</td>
+                                <td class="- topic/entry entry colsep-1 rowsep-1" headers="fkj_4cg_41c__table_wb5_lv1_p1c__entry__3">VSAL_TTM</td>
+                                <td class="- topic/entry entry colsep-0 rowsep-1" headers="fkj_4cg_41c__table_wb5_lv1_p1c__entry__4">营收波动_滚动</td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry colsep-1 rowsep-1" headers="fkj_4cg_41c__table_wb5_lv1_p1c__entry__3">VSAL_LYR</td>
+                                <td class="- topic/entry entry colsep-0 rowsep-1" headers="fkj_4cg_41c__table_wb5_lv1_p1c__entry__4">营收波动_静态</td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry colsep-1 rowsep-1" headers="fkj_4cg_41c__table_wb5_lv1_p1c__entry__3">VERN_TTM</td>
+                                <td class="- topic/entry entry colsep-0 rowsep-1" headers="fkj_4cg_41c__table_wb5_lv1_p1c__entry__4">盈利波动_滚动</td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry colsep-1 rowsep-1" headers="fkj_4cg_41c__table_wb5_lv1_p1c__entry__3">VERN_LYR</td>
+                                <td class="- topic/entry entry colsep-0 rowsep-1" headers="fkj_4cg_41c__table_wb5_lv1_p1c__entry__4">盈利波动_静态</td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry colsep-1 rowsep-1" headers="fkj_4cg_41c__table_wb5_lv1_p1c__entry__3">VFLO_TTM</td>
+                                <td class="- topic/entry entry colsep-0 rowsep-1" headers="fkj_4cg_41c__table_wb5_lv1_p1c__entry__4">现金流波动_滚动</td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry colsep-1 rowsep-1" headers="fkj_4cg_41c__table_wb5_lv1_p1c__entry__3">VFLO_LYR</td>
+                                <td class="- topic/entry entry colsep-0 rowsep-1" headers="fkj_4cg_41c__table_wb5_lv1_p1c__entry__4">现金流波动_静态</td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry colsep-1 rowsep-1" headers="fkj_4cg_41c__table_wb5_lv1_p1c__entry__2" rowspan="3">Investment Quality</td>
+                                <td class="- topic/entry entry colsep-1 rowsep-1" headers="fkj_4cg_41c__table_wb5_lv1_p1c__entry__3">AGRO</td>
+                                <td class="- topic/entry entry colsep-0 rowsep-1" headers="fkj_4cg_41c__table_wb5_lv1_p1c__entry__4">总资产增长率</td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry colsep-1 rowsep-1" headers="fkj_4cg_41c__table_wb5_lv1_p1c__entry__3">IGRO</td>
+                                <td class="- topic/entry entry colsep-0 rowsep-1" headers="fkj_4cg_41c__table_wb5_lv1_p1c__entry__4">新发股增长率</td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry colsep-1 rowsep-1" headers="fkj_4cg_41c__table_wb5_lv1_p1c__entry__3">CXGRO</td>
+                                <td class="- topic/entry entry colsep-0 rowsep-1" headers="fkj_4cg_41c__table_wb5_lv1_p1c__entry__4">资本支出增长率</td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry colsep-1 rowsep-1" headers="fkj_4cg_41c__table_wb5_lv1_p1c__entry__2" rowspan="3">Leverage</td>
+                                <td class="- topic/entry entry colsep-1 rowsep-1" headers="fkj_4cg_41c__table_wb5_lv1_p1c__entry__3">MLEV</td>
+                                <td class="- topic/entry entry colsep-0 rowsep-1" headers="fkj_4cg_41c__table_wb5_lv1_p1c__entry__4">市场杠杆</td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry colsep-1 rowsep-1" headers="fkj_4cg_41c__table_wb5_lv1_p1c__entry__3">BLEV</td>
+                                <td class="- topic/entry entry colsep-0 rowsep-1" headers="fkj_4cg_41c__table_wb5_lv1_p1c__entry__4">账面杠杆</td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry colsep-1 rowsep-1" headers="fkj_4cg_41c__table_wb5_lv1_p1c__entry__3">DTOA</td>
+                                <td class="- topic/entry entry colsep-0 rowsep-1" headers="fkj_4cg_41c__table_wb5_lv1_p1c__entry__4">资产负债比</td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry colsep-1 rowsep-1" headers="fkj_4cg_41c__table_wb5_lv1_p1c__entry__2" rowspan="8">Profitability</td>
+                                <td class="- topic/entry entry colsep-1 rowsep-1" headers="fkj_4cg_41c__table_wb5_lv1_p1c__entry__3">ATO_TTM</td>
+                                <td class="- topic/entry entry colsep-0 rowsep-1" headers="fkj_4cg_41c__table_wb5_lv1_p1c__entry__4">资产周转率_滚动</td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry colsep-1 rowsep-1" headers="fkj_4cg_41c__table_wb5_lv1_p1c__entry__3">ATO_LYR</td>
+                                <td class="- topic/entry entry colsep-0 rowsep-1" headers="fkj_4cg_41c__table_wb5_lv1_p1c__entry__4">资产周转率_静态</td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry colsep-1 rowsep-1" headers="fkj_4cg_41c__table_wb5_lv1_p1c__entry__3">GP_TTM</td>
+                                <td class="- topic/entry entry colsep-0 rowsep-1" headers="fkj_4cg_41c__table_wb5_lv1_p1c__entry__4">资产毛利率_滚动</td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry colsep-1 rowsep-1" headers="fkj_4cg_41c__table_wb5_lv1_p1c__entry__3">GP_LYR</td>
+                                <td class="- topic/entry entry colsep-0 rowsep-1" headers="fkj_4cg_41c__table_wb5_lv1_p1c__entry__4">资产毛利率_静态</td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry colsep-1 rowsep-1" headers="fkj_4cg_41c__table_wb5_lv1_p1c__entry__3">GPM_TTM</td>
+                                <td class="- topic/entry entry colsep-0 rowsep-1" headers="fkj_4cg_41c__table_wb5_lv1_p1c__entry__4">销售毛利率_滚动</td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry colsep-1 rowsep-1" headers="fkj_4cg_41c__table_wb5_lv1_p1c__entry__3">GPM_LYR</td>
+                                <td class="- topic/entry entry colsep-0 rowsep-1" headers="fkj_4cg_41c__table_wb5_lv1_p1c__entry__4">销售毛利率_静态</td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry colsep-1 rowsep-1" headers="fkj_4cg_41c__table_wb5_lv1_p1c__entry__3">ROA_TTM</td>
+                                <td class="- topic/entry entry colsep-0 rowsep-1" headers="fkj_4cg_41c__table_wb5_lv1_p1c__entry__4">总资产收益率_滚动</td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry colsep-1 rowsep-1" headers="fkj_4cg_41c__table_wb5_lv1_p1c__entry__3">ROA_LYR</td>
+                                <td class="- topic/entry entry colsep-0 rowsep-1" headers="fkj_4cg_41c__table_wb5_lv1_p1c__entry__4">总资产收益率_静态</td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry colsep-1 rowsep-1" headers="fkj_4cg_41c__table_wb5_lv1_p1c__entry__1" rowspan="8">Value</td>
+                                <td class="- topic/entry entry colsep-1 rowsep-1" headers="fkj_4cg_41c__table_wb5_lv1_p1c__entry__2">Btop</td>
+                                <td class="- topic/entry entry colsep-1 rowsep-1" headers="fkj_4cg_41c__table_wb5_lv1_p1c__entry__3">BTOP</td>
+                                <td class="- topic/entry entry colsep-0 rowsep-1" headers="fkj_4cg_41c__table_wb5_lv1_p1c__entry__4">账面市值比</td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry colsep-1 rowsep-1" headers="fkj_4cg_41c__table_wb5_lv1_p1c__entry__2" rowspan="5">Earning Yield</td>
+                                <td class="- topic/entry entry colsep-1 rowsep-1" headers="fkj_4cg_41c__table_wb5_lv1_p1c__entry__3">CETOP_TTM</td>
+                                <td class="- topic/entry entry colsep-0 rowsep-1" headers="fkj_4cg_41c__table_wb5_lv1_p1c__entry__4">现金盈利价格比_滚动</td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry colsep-1 rowsep-1" headers="fkj_4cg_41c__table_wb5_lv1_p1c__entry__3">CETOP_LYR</td>
+                                <td class="- topic/entry entry colsep-0 rowsep-1" headers="fkj_4cg_41c__table_wb5_lv1_p1c__entry__4">现金盈利价格比_静态</td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry colsep-1 rowsep-1" headers="fkj_4cg_41c__table_wb5_lv1_p1c__entry__3">ETOP_TTM</td>
+                                <td class="- topic/entry entry colsep-0 rowsep-1" headers="fkj_4cg_41c__table_wb5_lv1_p1c__entry__4">预测盈利收益率_滚动</td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry colsep-1 rowsep-1" headers="fkj_4cg_41c__table_wb5_lv1_p1c__entry__3">ETOP_LYR</td>
+                                <td class="- topic/entry entry colsep-0 rowsep-1" headers="fkj_4cg_41c__table_wb5_lv1_p1c__entry__4">预测盈利收益率_静态</td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry colsep-1 rowsep-1" headers="fkj_4cg_41c__table_wb5_lv1_p1c__entry__3">EM</td>
+                                <td class="- topic/entry entry colsep-0 rowsep-1" headers="fkj_4cg_41c__table_wb5_lv1_p1c__entry__4">企业盈利价值比率</td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry colsep-1 rowsep-1" headers="fkj_4cg_41c__table_wb5_lv1_p1c__entry__2" rowspan="2">Long-Term Reversal</td>
+                                <td class="- topic/entry entry colsep-1 rowsep-1" headers="fkj_4cg_41c__table_wb5_lv1_p1c__entry__3">LTRSTR</td>
+                                <td class="- topic/entry entry colsep-0 rowsep-1" headers="fkj_4cg_41c__table_wb5_lv1_p1c__entry__4">长期反转相对强度</td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry colsep-1 rowsep-1" headers="fkj_4cg_41c__table_wb5_lv1_p1c__entry__3">LTHALPHA</td>
+                                <td class="- topic/entry entry colsep-0 rowsep-1" headers="fkj_4cg_41c__table_wb5_lv1_p1c__entry__4">长期反转超额收益</td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry colsep-1 rowsep-1" headers="fkj_4cg_41c__table_wb5_lv1_p1c__entry__1" rowspan="4">Growth</td>
+                                <td class="- topic/entry entry colsep-1 rowsep-1" headers="fkj_4cg_41c__table_wb5_lv1_p1c__entry__2" rowspan="4">Growth</td>
+                                <td class="- topic/entry entry colsep-1 rowsep-1" headers="fkj_4cg_41c__table_wb5_lv1_p1c__entry__3">EGRO_TTM</td>
+                                <td class="- topic/entry entry colsep-0 rowsep-1" headers="fkj_4cg_41c__table_wb5_lv1_p1c__entry__4">每股营收增长率_滚动</td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry colsep-1 rowsep-1" headers="fkj_4cg_41c__table_wb5_lv1_p1c__entry__3">EGRO_LYR</td>
+                                <td class="- topic/entry entry colsep-0 rowsep-1" headers="fkj_4cg_41c__table_wb5_lv1_p1c__entry__4">每股营收增长率_静态</td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry colsep-1 rowsep-1" headers="fkj_4cg_41c__table_wb5_lv1_p1c__entry__3">SGRO_TTM</td>
+                                <td class="- topic/entry entry colsep-0 rowsep-1" headers="fkj_4cg_41c__table_wb5_lv1_p1c__entry__4">每股收益增长率_滚动</td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry colsep-1 rowsep-1" headers="fkj_4cg_41c__table_wb5_lv1_p1c__entry__3">SGRO_LYR</td>
+                                <td class="- topic/entry entry colsep-0 rowsep-1" headers="fkj_4cg_41c__table_wb5_lv1_p1c__entry__4">每股收益增长率_静态</td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry colsep-1 rowsep-1" headers="fkj_4cg_41c__table_wb5_lv1_p1c__entry__1" rowspan="4">Liquidity</td>
+                                <td class="- topic/entry entry colsep-1 rowsep-1" headers="fkj_4cg_41c__table_wb5_lv1_p1c__entry__2" rowspan="4">Liquidity</td>
+                                <td class="- topic/entry entry colsep-1 rowsep-1" headers="fkj_4cg_41c__table_wb5_lv1_p1c__entry__3">STOM</td>
+                                <td class="- topic/entry entry colsep-0 rowsep-1" headers="fkj_4cg_41c__table_wb5_lv1_p1c__entry__4">月换手率</td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry colsep-1 rowsep-1" headers="fkj_4cg_41c__table_wb5_lv1_p1c__entry__3">STOQ</td>
+                                <td class="- topic/entry entry colsep-0 rowsep-1" headers="fkj_4cg_41c__table_wb5_lv1_p1c__entry__4">季换手率</td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry colsep-1 rowsep-1" headers="fkj_4cg_41c__table_wb5_lv1_p1c__entry__3">STOA</td>
+                                <td class="- topic/entry entry colsep-0 rowsep-1" headers="fkj_4cg_41c__table_wb5_lv1_p1c__entry__4">年换手率</td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry colsep-1 rowsep-1" headers="fkj_4cg_41c__table_wb5_lv1_p1c__entry__3">ATVR</td>
+                                <td class="- topic/entry entry colsep-0 rowsep-1" headers="fkj_4cg_41c__table_wb5_lv1_p1c__entry__4">年化交易比率</td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry colsep-1 rowsep-1" headers="fkj_4cg_41c__table_wb5_lv1_p1c__entry__1" rowspan="4">Volatility</td>
+                                <td class="- topic/entry entry colsep-1 rowsep-1" headers="fkj_4cg_41c__table_wb5_lv1_p1c__entry__2">Beta</td>
+                                <td class="- topic/entry entry colsep-1 rowsep-1" headers="fkj_4cg_41c__table_wb5_lv1_p1c__entry__3">HBETA</td>
+                                <td class="- topic/entry entry colsep-0 rowsep-1" headers="fkj_4cg_41c__table_wb5_lv1_p1c__entry__4">贝塔</td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry colsep-1 rowsep-1" headers="fkj_4cg_41c__table_wb5_lv1_p1c__entry__2" rowspan="3">Residual Volatility</td>
+                                <td class="- topic/entry entry colsep-1 rowsep-1" headers="fkj_4cg_41c__table_wb5_lv1_p1c__entry__3">HSIGMA</td>
+                                <td class="- topic/entry entry colsep-0 rowsep-1" headers="fkj_4cg_41c__table_wb5_lv1_p1c__entry__4">特异波动率</td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry colsep-1 rowsep-1" headers="fkj_4cg_41c__table_wb5_lv1_p1c__entry__3">DASTD</td>
+                                <td class="- topic/entry entry colsep-0 rowsep-1" headers="fkj_4cg_41c__table_wb5_lv1_p1c__entry__4">波动率</td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry colsep-1 rowsep-1" headers="fkj_4cg_41c__table_wb5_lv1_p1c__entry__3">CMRA</td>
+                                <td class="- topic/entry entry colsep-0 rowsep-1" headers="fkj_4cg_41c__table_wb5_lv1_p1c__entry__4">累计收益</td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry colsep-1 rowsep-1" headers="fkj_4cg_41c__table_wb5_lv1_p1c__entry__1" rowspan="2">Size</td>
+                                <td class="- topic/entry entry colsep-1 rowsep-1" headers="fkj_4cg_41c__table_wb5_lv1_p1c__entry__2">Size</td>
+                                <td class="- topic/entry entry colsep-1 rowsep-1" headers="fkj_4cg_41c__table_wb5_lv1_p1c__entry__3">LNCAP</td>
+                                <td class="- topic/entry entry colsep-0 rowsep-1" headers="fkj_4cg_41c__table_wb5_lv1_p1c__entry__4">对数市值</td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry colsep-1 rowsep-1" headers="fkj_4cg_41c__table_wb5_lv1_p1c__entry__2">Mid Cap</td>
+                                <td class="- topic/entry entry colsep-1 rowsep-1" headers="fkj_4cg_41c__table_wb5_lv1_p1c__entry__3">MIDCAP</td>
+                                <td class="- topic/entry entry colsep-0 rowsep-1" headers="fkj_4cg_41c__table_wb5_lv1_p1c__entry__4">中市值</td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry colsep-1 rowsep-1" headers="fkj_4cg_41c__table_wb5_lv1_p1c__entry__1" rowspan="2">Momentum</td>
+                                <td class="- topic/entry entry colsep-1 rowsep-1" headers="fkj_4cg_41c__table_wb5_lv1_p1c__entry__2" rowspan="2">Momentum</td>
+                                <td class="- topic/entry entry colsep-1 rowsep-1" headers="fkj_4cg_41c__table_wb5_lv1_p1c__entry__3">RSTR</td>
+                                <td class="- topic/entry entry colsep-0 rowsep-1" headers="fkj_4cg_41c__table_wb5_lv1_p1c__entry__4">市场相对强度</td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry colsep-1 rowsep-1" headers="fkj_4cg_41c__table_wb5_lv1_p1c__entry__3">HALPHA</td>
+                                <td class="- topic/entry entry colsep-0 rowsep-1" headers="fkj_4cg_41c__table_wb5_lv1_p1c__entry__4">历史超额收益</td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry colsep-1 rowsep-0" headers="fkj_4cg_41c__table_wb5_lv1_p1c__entry__1">Dividend Yield</td>
+                                <td class="- topic/entry entry colsep-1 rowsep-0" headers="fkj_4cg_41c__table_wb5_lv1_p1c__entry__2">Dividend Yield</td>
+                                <td class="- topic/entry entry colsep-1 rowsep-0" headers="fkj_4cg_41c__table_wb5_lv1_p1c__entry__3">DTOP</td>
+                                <td class="- topic/entry entry colsep-0 rowsep-0" headers="fkj_4cg_41c__table_wb5_lv1_p1c__entry__4">股息收益率</td>
+                            </tr>
+                        </tbody></table></div>
+                <p class="- topic/p p">在调用计算单个三级风格因子时，采用 get + 因子名（首字母大写），例如，Blev（ Leverage）, Stom（Size Turnover
+                    Momentum）, Stoq（Stock Quality）因子计算如下：</p>
+                <pre class="+ topic/pre pr-d/codeblock pre codeblock"><code>getBlev(startTime = 2022.01.03,windows = 365,endTime = 2023.01.02)   
+getStom(startTime = 2022.01.03,windows = 21,endTime = 2023.01.02)
+getStoq(startTime = 2022.01.03,windows = 63,endTime = 2023.01.02)</code></pre>
+                <p class="- topic/p p">单个因子计算函数的返回结果均是窄表，返回结果大致如下：</p>
+                <figure class="- topic/fig fig fignone" id="fkj_4cg_41c__fig_wf3_pcg_41c" data-ofbid="fkj_4cg_41c__fig_wf3_pcg_41c"><figcaption data-caption-side="top" class="- topic/title title figcap"><span class="figtitleprefix fig--title-label">图<span class="fig--title-label-number"> 4</span><span class="fig--title-label-punctuation">. </span></span><span class="fig--title">单个因子计算函数返回的窄表结果示例图</span></figcaption>
+                    
+                    <br/><img class="- topic/image image" id="fkj_4cg_41c__image_bg3_pcg_41c" src="images/barra_multi_factor_risk_model/sample.png"/><br/>
+                </figure>
+            </div>
+        </article>
+        <article class="- topic/topic topic nested2" aria-labelledby="ariaid-title7" id="yp1_qcg_41c">
+            <h3 class="- topic/title title topictitle3" id="ariaid-title7">2.2. 行业因子计算</h3>
+            <div class="- topic/body body">
+                <p class="- topic/p p">采用申万一级 <code class="+ topic/ph pr-d/codeph ph codeph">SW_2021</code>、中信一级 <code class="+ topic/ph pr-d/codeph ph codeph"></code> 行业分类哑变量因子，
+                    依据市值给出权重，接口中提供行业因子市值加权。</p>
+                <div class="table-container"><table class="- topic/table table" data-cols="2"><caption></caption><colgroup><col/><col/></colgroup><thead class="- topic/thead thead">
+                            <tr class="- topic/row">
+                                <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="yp1_qcg_41c__entry__1"> 接口 </th>
+                                <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="yp1_qcg_41c__entry__2"> 说明 </th>
+                            </tr>
+                        </thead><tbody class="- topic/tbody tbody">
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="yp1_qcg_41c__entry__1">
+                                    <code class="+ topic/ph pr-d/codeph ph codeph">getIndustry</code>
+                                </td>
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="yp1_qcg_41c__entry__2">获取原始行业因子步骤一：获取月末交易日和行业交易代码。步骤二：基于交易日数据获取行业数据。步骤三：基于 onehot
+                                    编码生成宽表并求和汇总。</td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="yp1_qcg_41c__entry__1">
+                                    <code class="+ topic/ph pr-d/codeph ph codeph">getIndusrtyWeighted</code>
+                                </td>
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="yp1_qcg_41c__entry__2">获取行业因子权重步骤一：获取月末交易日和行业交易代码。步骤二：基于交易日数据获取各行业数据、市场数据。步骤三：关联上述两表，计算每个行业占总行业的权重，并找出在指定行业中占比最大的个股。</td>
+                            </tr>
+                            <tr class="- topic/row">
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="yp1_qcg_41c__entry__1">
+                                    <code class="+ topic/ph pr-d/codeph ph codeph">getIndusrtyFactor</code>
+                                </td>
+                                <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="yp1_qcg_41c__entry__2">获取加权后的行业因子：<ol class="- topic/ol ol" id="yp1_qcg_41c__ol_ifq_pv1_p1c" data-ofbid="yp1_qcg_41c__ol_ifq_pv1_p1c">
+                                        
+                                        <li class="- topic/li li"><code class="+ topic/ph pr-d/codeph ph codeph">getIndustry</code> 获取原始行业因子。</li>
+                                        <li class="- topic/li li"><code class="+ topic/ph pr-d/codeph ph codeph">getIndusrtyWeighted</code> 获取行业权重。</li>
+                                    </ol></td>
+                            </tr>
+                        </tbody></table></div>
+                <p class="- topic/p p">部分返回结果如下：</p>
+                <pre class="+ topic/pre pr-d/codeblock pre codeblock"><code>getIndustry(startTime = 2022.01.01,endTime = 2023.01.02,method = 'SW_2021')</code></pre>
+                <figure class="- topic/fig fig fignone" id="yp1_qcg_41c__fig_kdz_qcg_41c" data-ofbid="yp1_qcg_41c__fig_kdz_qcg_41c"><figcaption data-caption-side="top" class="- topic/title title figcap"><span class="figtitleprefix fig--title-label">图<span class="fig--title-label-number"> 5</span><span class="fig--title-label-punctuation">. </span></span><span class="fig--title">对应的部分返回结果图一</span></figcaption>
+                    
+                    <br/><img class="- topic/image image" id="yp1_qcg_41c__image_pdz_qcg_41c" src="images/barra_multi_factor_risk_model/%E5%AF%B9%E5%BA%94%E7%9A%84%E9%83%A8%E5%88%86%E8%BF%94%E5%9B%9E%E7%BB%93%E6%9E%9C%E5%9B%BE%E4%B8%80.png"/><br/>
+                </figure>
+                <pre class="+ topic/pre pr-d/codeblock pre codeblock"><code>getIndusrtyWeighted(startTime = 2022.01.03,endTime = 2023.01.02,method = 'SW_2021')</code></pre>
+                <figure class="- topic/fig fig fignone" id="yp1_qcg_41c__fig_q3b_scg_41c" data-ofbid="yp1_qcg_41c__fig_q3b_scg_41c"><figcaption data-caption-side="top" class="- topic/title title figcap"><span class="figtitleprefix fig--title-label">图<span class="fig--title-label-number"> 6</span><span class="fig--title-label-punctuation">. </span></span><span class="fig--title">对应的部分返回结果图二</span></figcaption>
+                    
+                    <br/><img class="- topic/image image" id="yp1_qcg_41c__image_v3b_scg_41c" src="images/barra_multi_factor_risk_model/%E5%AF%B9%E5%BA%94%E7%9A%84%E9%83%A8%E5%88%86%E8%BF%94%E5%9B%9E%E7%BB%93%E6%9E%9C%E5%9B%BE%E4%BA%8C.png"/><br/>
+                </figure>
+                <pre class="+ topic/pre pr-d/codeblock pre codeblock"><code>getIndusrtyFactor(startTime = 2022.01.03,endTime = 2023.01.02,method = 'SW_2021')</code></pre>
+                <figure class="- topic/fig fig fignone" id="yp1_qcg_41c__fig_yzf_tcg_41c" data-ofbid="yp1_qcg_41c__fig_yzf_tcg_41c"><figcaption data-caption-side="top" class="- topic/title title figcap"><span class="figtitleprefix fig--title-label">图<span class="fig--title-label-number"> 7</span><span class="fig--title-label-punctuation">. </span></span><span class="fig--title">对应的部分返回结果图三</span></figcaption>
+                    
+                    <br/><img class="- topic/image image" id="yp1_qcg_41c__image_d1g_tcg_41c" src="images/barra_multi_factor_risk_model/%E5%AF%B9%E5%BA%94%E7%9A%84%E9%83%A8%E5%88%86%E8%BF%94%E5%9B%9E%E7%BB%93%E6%9E%9C%E5%9B%BE%E4%B8%89.png"/><br/>
+                </figure>
+            </div>
+        </article>
+        <article class="- topic/topic topic nested2" aria-labelledby="ariaid-title8" id="txy_zcg_41c">
+            <h3 class="- topic/title title topictitle3" id="ariaid-title8">2.3. 因子预处理</h3>
+            <div class="- topic/body body">
+                <p class="- topic/p p">在对原始三级风格因子进行计算后，通常需要经过一定的标准化的数据清洗流程才能进一步合成因子，DolphinDB 使用了  法去极值并采用
+                    中的市值标准化流程。</p>
+            </div>
+            <article class="- topic/topic topic nested3" aria-labelledby="ariaid-title9" id="rsp_1dg_41c">
+                <h4 class="- topic/title title topictitle4" id="ariaid-title9">2.3.1. 风格因子 MAD 法去极值</h4>
+                <div class="- topic/body body">
+                    <p class="- topic/p p"> 方法（median absolute deviation
+                        方法），该方法使用中位数，较于传统的均值标准差具有稳健（robust）性质，不会被极端异常值影响结果，是对减均值后标准差处理的改进方法。
+                        方法相对于其他离群值检测方法的优点在于它对离群值的鲁棒性较强。本文中  方法对应接口函数 <code class="+ topic/ph pr-d/codeph ph codeph">winsorized</code>
+                        。</p>
+                    <pre class="+ topic/pre pr-d/codeblock pre codeblock"><code>/* winsorized
+对因子表进行winsorized处理
+因子表必须包含三列：记录日期、股票代码和原始因子，其中原始因子必须是第三列
+Input :
+         tbName
+Output:  
+         factor table after winsorized */</code></pre>
+                    <p class="- topic/p p"> 方法的具体实现步骤如下：</p>
+                    <ol class="- topic/ol ol">
+                        <li class="- topic/li li">
+                            <p class="- topic/p p">计算数据集的中位数（Median）作为数据的中心位置。</p>
+                        </li>
+                        <li class="- topic/li li">
+                            <p class="- topic/p p">对每个数据点，计算其与中位数的绝对偏差（Absolute Deviation）。</p>
+                        </li>
+                        <li class="- topic/li li">
+                            <div class="- topic/p p">计算所有绝对偏差的中位数，即 Median Absolute Deviation。<br/><img class="- topic/image image" id="rsp_1dg_41c__image_oxp_bw1_p1c" src="images/barra_multi_factor_risk_model/2.3.1-1.png"/><br/></div>
+                        </li>
+                        <li class="- topic/li li">
+                            <div class="- topic/p p">确定离群值的阈值。通常，离群值被定义为与中位数的偏差超过一定倍数（如 3 倍）的 的数据点。<br/><img class="- topic/image image" id="rsp_1dg_41c__image_hkx_bw1_p1c" src="images/barra_multi_factor_risk_model/2.3.1-2.png"/><br/></div>
+                        </li>
+                        <li class="- topic/li li">
+                            <div class="- topic/p p">鉴定离群值。对于超过阈值的数据点，可以将其标记为离群值或进行进一步的分析。<br/><img class="- topic/image image" id="rsp_1dg_41c__image_cyl_cw1_p1c" src="images/barra_multi_factor_risk_model/2.3.1-3.png"/><br/></div>
+                        </li>
+                    </ol>
+                </div>
+            </article>
+            <article class="- topic/topic topic nested3" aria-labelledby="ariaid-title10" id="j3d_bdg_41c">
+                <h4 class="- topic/title title topictitle4" id="ariaid-title10">2.3.2. 风格因子市值加权标准化</h4>
+                <div class="- topic/body body">
+                    <p class="- topic/p p">市值加权标准化是为了去除极端市值对因子计算贡献产生影响（Barra ）。该方法是为了将因子量纲统一在相接近的水平。对于第 <em class="+ topic/ph hi-d/i ph i">n</em> 个个股的第
+                            <em class="+ topic/ph hi-d/i ph i">k</em> 个原始因子暴露<img class="- topic/image image" src="images/barra_multi_factor_risk_model/xrawnk.png"/>，标准化流程为：</p>
+                    <figure class="- topic/fig fig fignone" id="j3d_bdg_41c__fig_cd1_dw1_p1c" data-ofbid="j3d_bdg_41c__fig_cd1_dw1_p1c">
+                        <br/><img class="- topic/image image" id="j3d_bdg_41c__image_gd1_dw1_p1c" src="images/barra_multi_factor_risk_model/2.3.2-1.png"/><br/>
+                    </figure>
+                    <p class="- topic/p p">其中<img class="- topic/image image" src="images/barra_multi_factor_risk_model/muk.png"/>和<img class="- topic/image image" src="images/barra_multi_factor_risk_model/sigmak.png"/>分别是对应因子的市值加权均值、等权标准差。(Barra )</p>
+                    <p class="- topic/p p">本文市值加权标准化对应接口函数 <code class="+ topic/ph pr-d/codeph ph codeph">standardized</code>，其中
+                            <code class="+ topic/ph pr-d/codeph ph codeph">adjusted=true</code> 表示采纳市值中性化处理。</p>
+                    <pre class="+ topic/pre pr-d/codeblock pre codeblock"><code>/* standardized
+对因子表进行标准化和市值中性化处理
+因子表必须有三列：记录日期、股票代码和原始因子，原始因子必须是第三列
+Input :
+         tbName
+         adjusted    Market-neutralize or not
+Output:  
+         factor table after standardized */</code></pre>
+                </div>
+            </article>
+            <article class="- topic/topic topic nested3" aria-labelledby="ariaid-title11" id="m1p_bdg_41c">
+                <h4 class="- topic/title title topictitle4" id="ariaid-title11">2.3.3. 风格因子、行业因子合并</h4>
+                <div class="- topic/body body">
+                    <p class="- topic/p p">以上两种接口函数 <code class="+ topic/ph pr-d/codeph ph codeph">winsorized</code>, <code class="+ topic/ph pr-d/codeph ph codeph">standardized</code> 嵌入在
+                            <code class="+ topic/ph pr-d/codeph ph codeph">getAllFactors</code> 函数中，<code class="+ topic/ph pr-d/codeph ph codeph">getAllFactors</code> 通过指定参数
+                            <em class="+ topic/ph hi-d/i ph i">normlizing</em> 和 <em class="+ topic/ph hi-d/i ph i">scaling</em> 分别实现标准化和去极值的过程。此外在得到行业因子、风格因子后，基于
+                            <code class="+ topic/ph pr-d/codeph ph codeph">getAllFactors</code> 函数可以得到合并了上述所有因子的宽表，可进一步用于单因子的有效性检验。</p>
+                    <pre class="+ topic/pre pr-d/codeblock pre codeblock"><code>/* getAllFactors
+获取所有因子
+Input:   normlizing           true   (Default)   标准化
+         scaling              true   (Default)   去极值
+         decap                true   (Default)   市值中性化
+         industry_weighted    true   (Default)   行业市值权重加权
+         industry_method     'CITIC' (Default)、'SW_2021'
+         startTime         2022.01.03(Default)
+         endTime           2023.01.02(Default)
+Output:  
+         factor table */</code></pre>
+                    <pre class="+ topic/pre pr-d/codeblock pre codeblock"><code>Factors = getAllFactors(st = st,et = et, normlizing = true, scaling = true,decap = false,industry_method = 'CITIC', industry_weighted = false)
+select * from Factors limit 100</code></pre>
+                </div>
+            </article>
+            <article class="- topic/topic topic nested3" aria-labelledby="ariaid-title12" id="dfg_cdg_41c">
+                <h4 class="- topic/title title topictitle4" id="ariaid-title12">2.3.4. 因子缺失值处理</h4>
+                <div class="- topic/body body">
+                    <p class="- topic/p p">在构建因子回归模型前，为避免因子缺失值对于回归模型结果的影响，需要对因子缺失值做进一步的处理。本文中针对所有原始因子的缺失值处理的函数接口为
+                            <code class="+ topic/ph pr-d/codeph ph codeph">getRegTable</code>，本文选择采用均值填充以处理缺失值。</p>
+                    <pre class="+ topic/pre pr-d/codeblock pre codeblock"><code>/* getRegTable
+ 获取用于回归的经过处理的回归因子表、包含个股收益率、因子暴露、行业因子、行业变量、回归权重
+Input:   
+        factorsTable         false  (Default)          是否使用提供的初始因子表
+        tbName               NULL   (Default)          初始因子表
+        normlizing           true   (Default)          标准化
+        scaling              true   (Default)          去极值
+        decap                true   (Default)          回归市值中性化
+        industry_weighted    true   (Default)          行业因子加权重
+        industry_method     'CITIC' (Default)、'SW_2021'
+        st                2022.01.03(Default)
+        et                2023.01.02(Default)
+Output:  
+        regression table  
+ */</code></pre>
+                    <div class="- topic/note note note note_note" id="dfg_cdg_41c__note_e2b_2gg_41c" data-ofbid="dfg_cdg_41c__note_e2b_2gg_41c"><span class="note__title">注：</span> 初始因子表 <code class="+ topic/ph pr-d/codeph ph codeph">tbName</code>，当且仅当
+                            <em class="+ topic/ph hi-d/i ph i">factorsTable</em> 为 true 时，需要传入已经使用 <code class="+ topic/ph pr-d/codeph ph codeph">getAllFactors</code>
+                        函数标准化过、去极值过、市值中性化过、行业因子加权重过的全因子表（或者筛选过股票后的部分个股因子表）。并且若提供因子表，该函数相应参数
+                            <em class="+ topic/ph hi-d/i ph i">normlizing</em>, <em class="+ topic/ph hi-d/i ph i">scaling</em>, <em class="+ topic/ph hi-d/i ph i">decap</em>, <em class="+ topic/ph hi-d/i ph i">weighted</em> 是 false
+                        或 true 对结果没有影响，即 <code class="+ topic/ph pr-d/codeph ph codeph">tmpReg = getRegTable(factorsTable = true,tbName =
+                            Factors,st= st,et = et)</code>。</div>
+                    <p class="- topic/p p">通过调用：</p>
+                    <pre class="+ topic/pre pr-d/codeblock pre codeblock"><code>fTable = getRegTable(factorsTable = true,tbName = Factors,st = st, et = et,normlizing = normlizing ,scaling = scaling, decap = decap, 
+industry_method = industry_method, industry_weighted = industry_weighted)</code></pre>
+                    <p class="- topic/p p">执行上述命令可以实现如下效果：</p>
+                    <p class="- topic/p p">处理之前，<code class="+ topic/ph pr-d/codeph ph codeph">getAllFactors</code> 得到的原始三级因子宽表：</p>
+                    <figure class="- topic/fig fig fignone" id="dfg_cdg_41c__fig_tsh_ddg_41c" data-ofbid="dfg_cdg_41c__fig_tsh_ddg_41c"><figcaption data-caption-side="top" class="- topic/title title figcap"><span class="figtitleprefix fig--title-label">图<span class="fig--title-label-number"> 8</span><span class="fig--title-label-punctuation">. </span></span><span class="fig--title">处理前的原始三级因子宽表示例图</span></figcaption>
+                        
+                        <br/><img class="- topic/image image" id="dfg_cdg_41c__image_xsh_ddg_41c" src="images/barra_multi_factor_risk_model/%E5%A4%84%E7%90%86%E5%89%8D%E7%9A%84%E5%8E%9F%E5%A7%8B%E4%B8%89%E7%BA%A7%E5%9B%A0%E5%AD%90%E5%AE%BD%E8%A1%A8%E7%A4%BA%E4%BE%8B%E5%9B%BE.png"/><br/>
+                    </figure>
+                    <p class="- topic/p p">处理之后，<code class="+ topic/ph pr-d/codeph ph codeph">getRegTable</code> 处理后的三级因子宽表：</p>
+                    <figure class="- topic/fig fig fignone" id="dfg_cdg_41c__fig_vv3_2dg_41c" data-ofbid="dfg_cdg_41c__fig_vv3_2dg_41c"><figcaption data-caption-side="top" class="- topic/title title figcap"><span class="figtitleprefix fig--title-label">图<span class="fig--title-label-number"> 9</span><span class="fig--title-label-punctuation">. </span></span><span class="fig--title">处理后的三级因子宽表示例图</span></figcaption>
+                        
+                        <br/><img class="- topic/image image" id="dfg_cdg_41c__image_zv3_2dg_41c" src="images/barra_multi_factor_risk_model/%E5%A4%84%E7%90%86%E5%90%8E%E7%9A%84%E4%B8%89%E7%BA%A7%E5%9B%A0%E5%AD%90%E5%AE%BD%E8%A1%A8%E7%A4%BA%E4%BE%8B%E5%9B%BE.png"/><br/>
+                    </figure>
+                </div>
+            </article>
+        </article>
+        <article class="- topic/topic topic nested2" aria-labelledby="ariaid-title13" id="ugz_fdg_41c">
+            <h3 class="- topic/title title topictitle3" id="ariaid-title13">2.4. 单因子模型检验</h3>
+            <article class="- topic/topic topic nested3" aria-labelledby="ariaid-title14" id="zkj_gdg_41c">
+                <h4 class="- topic/title title topictitle4" id="ariaid-title14">2.4.1. WLS 回归模型</h4>
+                <div class="- topic/body body">
+                    <ul class="- topic/ul ul">
+                        <li class="- topic/li li">针对风格因子 <em class="+ topic/ph hi-d/i ph i">s</em>，单因子的检验回归模型如下：<br/><img class="- topic/image image" id="zkj_gdg_41c__image_stx_fdg_41c" src="images/barra_multi_factor_risk_model/2.4.1-1.png"/><br/><p class="- topic/p p">此处使用 （Weighted Least
+                                    Squares，加权最小二乘）以<img class="- topic/image image" id="zkj_gdg_41c__image_ttx_fdg_41c" src="images/barra_multi_factor_risk_model/rn,t.png"/>为因变量，以风格因子 <em class="+ topic/ph hi-d/i ph i">s</em> 的因子载荷<img class="- topic/image image" id="zkj_gdg_41c__image_utx_fdg_41c" src="images/barra_multi_factor_risk_model/xn,s,t.png"/>为自变量，预测<img class="- topic/image image" id="zkj_gdg_41c__image_vtx_fdg_41c" src="images/barra_multi_factor_risk_model/fst.png"/>（风格因子的收益率）。</p></li>
+                        <li class="- topic/li li">针对行业因子 *i，*单因子的检验回归模型如下：<br/><img class="- topic/image image" id="zkj_gdg_41c__image_ift_hdg_41c" src="images/barra_multi_factor_risk_model/2.4.1-2.png"/><br/><p class="- topic/p p">此处使用 以<img class="- topic/image image" id="zkj_gdg_41c__image_jft_hdg_41c" src="images/barra_multi_factor_risk_model/rn,t.png"/>为因变量，以行业因子 <em class="+ topic/ph hi-d/i ph i">i</em> 的因子载荷<img class="- topic/image image" id="zkj_gdg_41c__image_kft_hdg_41c" src="images/barra_multi_factor_risk_model/xn,i,t.png"/>为自变量，预测<img class="- topic/image image" id="zkj_gdg_41c__image_lft_hdg_41c" src="images/barra_multi_factor_risk_model/fit.png"/>（行业因子的收益率）</p><p class="- topic/p p">本文的 回归模型的接口为
+                                    <code class="+ topic/ph pr-d/codeph ph codeph">getOneFactorValidate</code>，函数嵌套在
+                                    <code class="+ topic/ph pr-d/codeph ph codeph">styleValidate</code>
+                                    风格因子检验函数、<code class="+ topic/ph pr-d/codeph ph codeph">industryValidate</code>
+                            行业因子检验函数中。</p><pre class="+ topic/pre pr-d/codeblock pre codeblock" id="zkj_gdg_41c__codeblock_mft_hdg_41c" data-ofbid="zkj_gdg_41c__codeblock_mft_hdg_41c"><code>/* getOneFactorValidate
+获取moving wls单因子回归结果统计量的聚合函数
+Input:   y          因变量
+         x          自变量
+         w          权重
+Output:  
+         wls stat  "beta","tstat","R2","AdjustedR2", "Residual" */</code></pre></li>
+                    </ul>
+                </div>
+            </article>
+            <article class="- topic/topic topic nested3" aria-labelledby="ariaid-title15" id="djg_3dg_41c">
+                <h4 class="- topic/title title topictitle4" id="ariaid-title15">2.4.2. T 检验</h4>
+                <div class="- topic/body body">
+                    <p class="- topic/p p">t 值检验是检验对应变量的因子收益是否显著区别于 0，可以用来衡量因子的有效性以及一致性。其计算方法为：<img class="- topic/image image" src="images/barra_multi_factor_risk_model/2.4.2-1.png"/>，其中<img class="- topic/image image" src="images/barra_multi_factor_risk_model/2.4.2-2.png"/>为估计因子收益<img class="- topic/image image" src="images/barra_multi_factor_risk_model/hatfit.png"/>的标准误差。本文的 t
+                        检验主要基于 <code class="+ topic/ph pr-d/codeph ph codeph">getOneFactorValidate</code> 接口的  回归模型得到的 t 统计量进行评估。</p>
+                </div>
+            </article>
+            <article class="- topic/topic topic nested3" aria-labelledby="ariaid-title16" id="xsn_3dg_41c">
+                <h4 class="- topic/title title topictitle4" id="ariaid-title16">2.4.3. Factor Stability Coefficient</h4>
+                <div class="- topic/body body">
+                    <p class="- topic/p p">在构建多因子模型时，必须要考虑到因子暴露的稳定性。如果因子暴露矩阵每次计算时的变化特别大，那么该模型的稳健性较差。故本文引入因子稳定性系数（Factor
+                        Stability Coefficient, ）指标，其定义为这个月的因子暴露矩阵与下个月因子暴露矩阵的相关性。</p>
+                    <p class="- topic/p p">通常情况下， 指标是通过比较从不同数据集或不同时间点上进行的、两个独立的因子分析所得到的因子载荷来进行计算的。本文通过
+                            <code class="+ topic/ph pr-d/codeph ph codeph">getFactorsValidation</code> 函数基于斯皮尔曼相关系数（Spearman's Rank
+                        Correlation Coefficient）计算  指标，令<img class="- topic/image image" src="images/barra_multi_factor_risk_model/dt.png"/>为因子暴露<img class="- topic/image image" src="images/barra_multi_factor_risk_model/xn,i,t.png"/>的第 <em class="+ topic/ph hi-d/i ph i">t</em>
+                        期与第 <em class="+ topic/ph hi-d/i ph i">t+1</em> 期的位次值之差。<img class="- topic/image image" src="images/barra_multi_factor_risk_model/2.4.3-1.png"/>，则
+                        系数计算方法为：</p>
+                    <figure class="- topic/fig fig fignone" id="xsn_3dg_41c__fig_icb_wy1_p1c" data-ofbid="xsn_3dg_41c__fig_icb_wy1_p1c">
+                        <br/><img class="- topic/image image" id="xsn_3dg_41c__image_lcb_wy1_p1c" src="images/barra_multi_factor_risk_model/2.4.3-2.png"/><br/>
+                    </figure>
+                    <p class="- topic/p p">研究人员通常使用阈值来解释 Factor Stability Coefficient。例如， 大于 0.8 通常被认为表示较好的稳定性或一致性，而低于
+                        0.5 的值可能表示稳定性较差。</p>
+                </div>
+            </article>
+            <article class="- topic/topic topic nested3" aria-labelledby="ariaid-title17" id="jvg_jdg_41c">
+                <h4 class="- topic/title title topictitle4" id="ariaid-title17">2.4.4. Information Coefficient</h4>
+                <div class="- topic/body body">
+                    <p class="- topic/p p">Information Coefficient（IC）值是因子对下期收益率的预测与下期实际收益率的相关性，IC
+                        代表的是预测值和实现值之间的相关性，通常用于评价预测能力（即选股能力）。在实际计算中，因子 𝑘 的 IC 值一般是指个股第 𝑇 期在因子 𝑘
+                        上的暴露度与 𝑇 +1 期的收益率的相关系数。因子 IC
+                        值反映的是个股下期收益率和本期因子暴露度的线性相关程度，表示使用该因子进行收益率预测的稳健性。IC 的计算方式有两种： IC、rank IC。本文在
+                            <code class="+ topic/ph pr-d/codeph ph codeph">getFactorsValidation</code> 函数基于 <em class="+ topic/ph hi-d/i ph i">Spearman</em> 相关系数计算 Rank
+                        IC 值。</p>
+                    <figure class="- topic/fig fig fignone" id="jvg_jdg_41c__fig_mfr_wy1_p1c" data-ofbid="jvg_jdg_41c__fig_mfr_wy1_p1c">
+                        <br/><img class="- topic/image image" id="jvg_jdg_41c__image_pfr_wy1_p1c" src="images/barra_multi_factor_risk_model/2.4.4-1.png"/><br/>
+                    </figure>
+                    <p class="- topic/p p">IC 值被认为在 0.03 上时与市场存在一致或相反的波动规律，此时该因子存在一定的有效性。</p>
+                </div>
+            </article>
+            <article class="- topic/topic topic nested3" aria-labelledby="ariaid-title18" id="epq_jdg_41c">
+                <h4 class="- topic/title title topictitle4" id="ariaid-title18">2.4.5. 基于 DolphinDB 实现单因子有效性检验</h4>
+                <div class="- topic/body body">
+                    <p class="- topic/p p">本文的单因子有效性检验的对应接口函数
+                        <code class="+ topic/ph pr-d/codeph ph codeph">getFactorsValidation</code>。该函数通过输入计算得到的全因子表，给出了每一个单因子模型的单因子收益，t
+                        统计量，拟合优度， 指标和 IC 值。通过这些值可以全面系统地对所有因子进行分析，如下列图所示：</p>
+                    <pre class="+ topic/pre pr-d/codeblock pre codeblock"><code>Input:   
+         factorsTable         false  (Default)   是否使用提供的因子表
+         tbName               NULL   (Default)   回归因子表
+         normlizing           true   (Default)   标准化
+         scaling              true   (Default)   去极值
+         decap                true   (Default)   市值中性化
+         industry_weighted    true   (Default)   行业因子加权重
+         industry_method     'CITIC' (Default)、'SW_2021'
+         st                   2022.01.03(Default)
+         et                   2023.01.02(Default)
+Output:  
+         factor test table  factor_return、tstat、R2、fsc、IC
+         */</code></pre>
+                    <ul class="- topic/ul ul">
+                        <li class="- topic/li li">步骤一：首先获取所有因子的检验指标。<pre class="+ topic/pre pr-d/codeblock pre codeblock" id="epq_jdg_41c__codeblock_bzn_kdg_41c" data-ofbid="epq_jdg_41c__codeblock_bzn_kdg_41c"><code>// 获取单风格因子有效性、一致性、稳定性检验
+factorsValid = getFactorsValidation(factorsTable = true,tbName = out,st = 2022.01.03, et = 2023.01.02, normlizing = true,scaling = true, decap = true,industry_method = 'CITIC', industry_weighted = true)</code></pre></li>
+                        <li class="- topic/li li">步骤二：绘制因子的
+                                月频时序图，评价因子稳定性。<pre class="+ topic/pre pr-d/codeblock pre codeblock" id="epq_jdg_41c__codeblock_tvf_mdg_41c" data-ofbid="epq_jdg_41c__codeblock_tvf_mdg_41c"><code>tmp = select record_date,valueType.regexReplace("_stat","") as valueType, fsc from factorsValid 
+tmppivot = select fsc from tmp pivot by record_date,valueType
+tbfsc = sql(select = sqlCol(tmppivot.columnNames()[11:20]),from = tmppivot).eval()
+plot(tbfsc,tmppivot.record_date,extras={multiYAxes: false},title = "因子fsc 月频时序图")</code></pre><figure class="- topic/fig fig fignone" id="epq_jdg_41c__fig_c3x_kdg_41c" data-ofbid="epq_jdg_41c__fig_c3x_kdg_41c"><figcaption data-caption-side="top" class="- topic/title title figcap"><span class="figtitleprefix fig--title-label">图<span class="fig--title-label-number"> 10</span><span class="fig--title-label-punctuation">. </span></span><span class="fig--title">因子的 月频时序图</span></figcaption>
+                                
+                                <br/><img class="- topic/image image" id="epq_jdg_41c__image_h3x_kdg_41c" src="images/barra_multi_factor_risk_model/%E5%9B%A0%E5%AD%90%E7%9A%84%20FSC%20%E6%9C%88%E9%A2%91%E6%97%B6%E5%BA%8F%E5%9B%BE.png"/><br/>
+                            </figure><p class="- topic/p p"> 大部分处于 0.8 以上的因子被公认为因子具备较高的稳定性。上图中除 em, dastd, dtoa
+                                外的其他因子具备较好的稳定性。</p></li>
+                        <li class="- topic/li li">步骤三：绘制因子的 IC 月频时序图，评价因子一致性。IC 值被认为在 0.03
+                                上时与市场存在一致或相反的波动规律，此时该因子存在一定的有效性。<pre class="+ topic/pre pr-d/codeblock pre codeblock" id="epq_jdg_41c__codeblock_k1k_4dg_41c" data-ofbid="epq_jdg_41c__codeblock_k1k_4dg_41c"><code>tmp1 = select record_date,valueType.regexReplace("_stat","") as valueType, abs(ic) as ic from factorsValid 
+tmppivot1 = select ic from tmp1 pivot by record_date,valueType
+tbic = sql(select = sqlCol(tmppivot1.columnNames()[2:10]),from = tmppivot1).eval()
+baseline = take(0.03,(shape tbic)[0])
+plot(table(tbic,baseline),tmppivot1.record_date,extras={multiYAxes: false},title = "因子ic 月频时序图")</code></pre><figure class="- topic/fig fig fignone" id="epq_jdg_41c__fig_k51_ndg_41c" data-ofbid="epq_jdg_41c__fig_k51_ndg_41c"><figcaption data-caption-side="top" class="- topic/title title figcap"><span class="figtitleprefix fig--title-label">图<span class="fig--title-label-number"> 11</span><span class="fig--title-label-punctuation">. </span></span><span class="fig--title">因子的 IC 月频时序图</span></figcaption>
+                                
+                                <br/><img class="- topic/image image" id="epq_jdg_41c__image_o51_ndg_41c" src="images/barra_multi_factor_risk_model/%E5%9B%A0%E5%AD%90%E7%9A%84%20IC%20%E6%9C%88%E9%A2%91%E6%97%B6%E5%BA%8F%E5%9B%BE.png"/><br/>
+                            </figure><p class="- topic/p p">可以观察到 atvr（Annualized Traded Value Ratio，年交易比值）因子在 2017
+                                年前保持着较强的相关性，而 2018-2022 年期间 8 个因子呈现周期性起伏的规律。</p></li>
+                        <li class="- topic/li li">步骤四：绘制因子
+                                t_stat，评价因子有效性。<pre class="+ topic/pre pr-d/codeblock pre codeblock" id="epq_jdg_41c__codeblock_av3_qdg_41c" data-ofbid="epq_jdg_41c__codeblock_av3_qdg_41c"><code>tmp2 = select record_date,valueType.regexReplace("_stat","") as valueType, tstat from factorsValid 
+tmppivot2 = select tstat from tmp2 pivot by record_date,valueType
+tbstat = sql(select = sqlCol(tmppivot2.columnNames()[11:20]),from = tmppivot2).eval()
+
+baseline_neg = take(-0.03,(shape tbstat)[0])
+baseline_pos = take(0.03,(shape tbstat)[0])
+plot(table(tbstat,baseline_neg,baseline_pos),tmppivot2.record_date, extras={multiYAxes: false},title = "因子t_stat 月频时序图")</code></pre><figure class="- topic/fig fig fignone" id="epq_jdg_41c__fig_nl2_pdg_41c" data-ofbid="epq_jdg_41c__fig_nl2_pdg_41c"><figcaption data-caption-side="top" class="- topic/title title figcap"><span class="figtitleprefix fig--title-label">图<span class="fig--title-label-number"> 12</span><span class="fig--title-label-punctuation">. </span></span><span class="fig--title">因子 t_stat 月频时序图</span></figcaption>
+                                
+                                <br/><img class="- topic/image image" id="epq_jdg_41c__image_rl2_pdg_41c" src="images/barra_multi_factor_risk_model/%E5%9B%A0%E5%AD%90%20t_stat%20%E6%9C%88%E9%A2%91%E6%97%B6%E5%BA%8F%E5%9B%BE.png"/><br/>
+                            </figure><p class="- topic/p p">图中大部分因子的 t 值距离基线 0.03 和 -0.03 有相当的距离。例如 dastd 和 cmra，一个显著高于
+                                0.03，另一个则显著低于 -0.03。由此可得结论：在 18 年之前，这两个因子与市场存在着显著的正负相关性。</p></li>
+                    </ul>
+                </div>
+            </article>
+        </article>
+        <article class="- topic/topic topic nested2" aria-labelledby="ariaid-title19" id="zy5_qdg_41c">
+            <h3 class="- topic/title title topictitle3" id="ariaid-title19">2.5. 多因子合成</h3>
+            <div class="- topic/body body">
+                <p class="- topic/p p">针对已经得到的三级因子和因子的有效性识别的结果，用户可以进行下一步因子的合成。因子合成的方法参考华泰证券中给出的部分方法，例如等权法和历史信息法。</p>
+                <ol class="- topic/ol ol">
+                    <li class="- topic/li li">等权法（equal），对相应的三级因子等权合成二级、一级因子。例如对 、ACF_TTM 这两个因子各赋 1/2 的权重合成 Earnings
+                        Quality 因子。</li>
+                    <li class="- topic/li li">历史收益率加权方法（ir），根据在单因子模型检验获得中的三级因子收益率标准化后得到加权系数加权得到二级因子。</li>
+                    <li class="- topic/li li">信息系数比率法（ic_ir），由因子检验获得的 IC 值对因子进行合成。举例来说，设<img class="- topic/image image" src="images/barra_multi_factor_risk_model/k%C3%97t.png"/>维的矩阵<img class="- topic/image image" src="images/barra_multi_factor_risk_model/x.png"/>为过去<img class="- topic/image image" src="images/barra_multi_factor_risk_model/T.png"/>个截面期上的<img class="- topic/image image" src="images/barra_multi_factor_risk_model/k.png"/>个因子的 IC 矩阵，<img class="- topic/image image" src="images/barra_multi_factor_risk_model/barx.png"/>是矩阵<img class="- topic/image image" src="images/barra_multi_factor_risk_model/x.png"/>的行均值，<img class="- topic/image image" src="images/barra_multi_factor_risk_model/k%C3%97k.png"/>的矩阵<img class="- topic/image image" src="images/barra_multi_factor_risk_model/v.png"/>是<img class="- topic/image image" src="images/barra_multi_factor_risk_model/x.png"/>的协方差阵，则可以取<img class="- topic/image image" src="images/barra_multi_factor_risk_model/v-1barx.png"/>作为权重加权得到各级因子。</li>
+                </ol>
+                <p class="- topic/p p">本文因子合成的对应接口函数 <code class="+ topic/ph pr-d/codeph ph codeph">getFSLevelFactor</code>，其中 <em class="+ topic/ph hi-d/i ph i">firstFactors</em>
+                    中二级因子的名称需要与 <em class="+ topic/ph hi-d/i ph i">secondFactors</em> 中的二级因子的名称一一对应；<em class="+ topic/ph hi-d/i ph i">secondFactors</em>
+                    中的三级因子需要与输入的因子表 <em class="+ topic/ph hi-d/i ph i">factorsTable</em> 字段名对应（支持大小写匹配）。</p>
+                <pre class="+ topic/pre pr-d/codeblock pre codeblock"><code>Input:   
+         factorsTable     NULL  (Default) (getRegTable函数返回的全因子表）
+         factorsValid     NULL  (Default) (getFactorsValdition接口返回的单因子收益和检验表)
+        
+         firstFactors     NULL        一级因子二级因子关系json
+         secondFactors    NULL        二级因子三级因子关系json
+         normlizing       true         是否对合成的因子标准化
+         method           "equal"等权、 "ir"历史收益率、"ic_ir"信息系数比率 合成因子方法
+         level            "S"、"F"    指定一级二级因子  合成二级(S)一级(F)风格因子
+ 
+
+Output:  
+         factorsTable     返回按指定关系合成的(可直接用于回归模型的)风格大类因子和行业因子</code></pre>
+                <pre class="+ topic/pre pr-d/codeblock pre codeblock"><code>st = 2022.01.03 
+et = 2023.01.02
+normlizing = true
+scaling = true
+decap = true
+industry_method = 'CITIC'
+industry_weighted = true
+Factors = getAllFactors(st= st,et = et, normlizing = normlizing,scaling = scaling,
+                        decap = decap,industry_method = industry_method,
+                        industry_weighted = industry_weighted)
+
+select * from Factors limit 100
+
+// 对原始因子宽表的缺失值进行处理
+fTable = getRegTable(factorsTable = true,tbName = Factors,st= st,et = et, 
+                     normlizing = normlizing ,scaling = scaling ,
+                     decap = decap,industry_method = industry_method,
+                     industry_weighted = industry_weighted)
+
+// 因子有效性检验
+// 获取单风格因子有效性、一致性、稳定性检验
+factorsValid = getFactorsValidation(factorsTable = true,tbName = Factors,st = st,
+                                    et = et , normlizing = normlizing,scaling = scaling,
+                                    decap = decap,industry_method = industry_method,
+                                    industry_weighted = industry_weighted)
+factorsValid
+
+update factorsValid set tstat = abs(tstat)
+
+// 计算fsc
+tmp = select record_date,valueType.regexReplace("_stat","") as valueType, fsc from factorsValid 
+tmppivot = select fsc from tmp pivot by record_date,valueType
+tbfsc = sql(select = sqlCol(tmppivot.columnNames()[11:20]),from = tmppivot).eval()
+plot(tbfsc,tmppivot.record_date,extras={multiYAxes: false},title = "因子fsc 月频时序图")
+
+// 计算ic
+tmp1 = select record_date,valueType.regexReplace("_stat","") as valueType, abs(ic) as ic from factorsValid 
+tmppivot1 = select ic from tmp1 pivot by record_date,valueType
+tbic = sql(select = sqlCol(tmppivot1.columnNames()[2:10]),from = tmppivot1).eval()
+
+baseline = take(0.03,(shape tbic)[0])
+plot(table(tbic,baseline),tmppivot1.record_date, extras={multiYAxes: false},title = "因子ic 月频时序图")
+
+// 计算tstat
+tmp2 = select record_date,valueType.regexReplace("_stat","") as valueType, tstat from factorsValid 
+tmppivot2 = select tstat from tmp2 pivot by record_date,valueType
+tbstat = sql(select = sqlCol(tmppivot2.columnNames()[11:20]),from = tmppivot2).eval()
+
+baseline_neg = take(-0.03,(shape tbstat)[0])
+baseline_pos = take(0.03,(shape tbstat)[0])
+plot(table(tbstat,baseline_neg,baseline_pos), tmppivot2.record_date,extras={multiYAxes: false}, title = "因子t_stat 月频时序图")</code></pre>
+                <p class="- topic/p p">由如下的合成一级因子结果可以看到 'abs','acf_ttm','acf_lyr','vsal_ttm','vsal_lyr' 等因子被合成为 Quality
+                    等一级因子。</p>
+                <p class="- topic/p p">合成因子前：</p>
+                <figure class="- topic/fig fig fignone" id="zy5_qdg_41c__fig_hlb_jz1_p1c" data-ofbid="zy5_qdg_41c__fig_hlb_jz1_p1c"><figcaption data-caption-side="top" class="- topic/title title figcap"><span class="figtitleprefix fig--title-label">图<span class="fig--title-label-number"> 13</span><span class="fig--title-label-punctuation">. </span></span><span class="fig--title">合成因子前的因子暴露</span></figcaption>
+                    
+                    <br/><img class="- topic/image image" id="zy5_qdg_41c__image_klb_jz1_p1c" src="images/barra_multi_factor_risk_model/%E5%90%88%E6%88%90%E5%9B%A0%E5%AD%90%E5%89%8D%E7%9A%84%E5%9B%A0%E5%AD%90%E6%9A%B4%E9%9C%B2.png"/><br/>
+                </figure>
+                <p class="- topic/p p">合成后的一级因子：</p>
+                <figure class="- topic/fig fig fignone" id="zy5_qdg_41c__fig_hdh_jz1_p1c" data-ofbid="zy5_qdg_41c__fig_hdh_jz1_p1c"><figcaption data-caption-side="top" class="- topic/title title figcap"><span class="figtitleprefix fig--title-label">图<span class="fig--title-label-number"> 14</span><span class="fig--title-label-punctuation">. </span></span><span class="fig--title">合成因子后的因子暴露</span></figcaption>
+                    
+                    <br/><img class="- topic/image image" id="zy5_qdg_41c__image_ldh_jz1_p1c" src="images/barra_multi_factor_risk_model/%E5%90%88%E6%88%90%E5%9B%A0%E5%AD%90%E5%90%8E%E7%9A%84%E5%9B%A0%E5%AD%90%E6%9A%B4%E9%9C%B2.png"/><br/>
+                </figure>
+            </div>
+        </article>
+        <article class="- topic/topic topic nested2" aria-labelledby="ariaid-title20" id="otv_rdg_41c">
+            <h3 class="- topic/title title topictitle3" id="ariaid-title20">2.6. 自定义因子的多因子合成</h3>
+            <article class="- topic/topic topic nested3" aria-labelledby="ariaid-title21" id="emd_sdg_41c">
+                <h4 class="- topic/title title topictitle4" id="ariaid-title21">2.6.1. 基于对自定义因子预处理</h4>
+                <div class="- topic/body body">
+                    <ul class="- topic/ul ul">
+                        <li class="- topic/li li">对已有因子数据做预处理，可以调用因子预处理的
+                                <code class="+ topic/ph pr-d/codeph ph codeph">winsorized</code>、<code class="+ topic/ph pr-d/codeph ph codeph">standardized</code>
+                            等函数以实现对风格因子实现极值化、标准化处理。</li>
+                        <li class="- topic/li li">对上述步骤处理后的因子数据处理缺失值，避免因子缺失值对于回归模型结果的影响。</li>
+                    </ul>
+                    <p class="- topic/p p">假设最后的因子表为 <code class="+ topic/ph pr-d/codeph ph codeph">Factors</code> 表，则可以通过如下方式调用 <code class="+ topic/ph pr-d/codeph ph codeph">getRegTable</code>
+                        函数进行缺失值处理。</p>
+                    <pre class="+ topic/pre pr-d/codeblock pre codeblock"><code>fTable= getRegTable(factorsTable = true,tbName = Factors,st= st,et = et)</code></pre>
+                </div>
+            </article>
+            <article class="- topic/topic topic nested3" aria-labelledby="ariaid-title22" id="tcn_sdg_41c">
+                <h4 class="- topic/title title topictitle4" id="ariaid-title22">2.6.2. 对自定义进行单因子模型检验</h4>
+                <div class="- topic/body body">
+                    <p class="- topic/p p">假设最后的因子表为 <code class="+ topic/ph pr-d/codeph ph codeph">Factors</code> 表，则可以通过如下方式调用
+                            <code class="+ topic/ph pr-d/codeph ph codeph">getFactorsValidation</code>函数进行单因子模型检验，进一步筛选有效因子。</p>
+                    <pre class="+ topic/pre pr-d/codeblock pre codeblock"><code>factorsValid= getFactorsValidation(factorsTable = true,tbName = Factors,st= st,et = et)</code></pre>
+                </div>
+            </article>
+            <article class="- topic/topic topic nested3" aria-labelledby="ariaid-title23" id="jkv_sdg_41c">
+                <h4 class="- topic/title title topictitle4" id="ariaid-title23">2.6.3. 基于自定义因子进行多因子合成</h4>
+                <div class="- topic/body body">
+                    <p class="- topic/p p">在指定与自定义因子一一对应的一级因子、二级因子后，通过<code class="+ topic/ph pr-d/codeph ph codeph">getFSLevelFactor</code>函数生成基于自定义因子合成后的一级、二级因子。</p>
+                    <pre class="+ topic/pre pr-d/codeblock pre codeblock"><code>getFSLevelFactor(fTable,factorsValid,firstFactors,secondFactors,false , "ir",level = "F") getFSLevelFactor(fTable,factorsValid,firstFactors,secondFactors,false , "ir",level = "S")</code></pre>
+                </div>
+            </article>
+        </article>
+    </article>
+    <article class="- topic/topic topic nested1" aria-labelledby="ariaid-title24" id="fk3_5dg_41c">
+        <h2 class="- topic/title title topictitle2" id="ariaid-title24">3. 基于 DolphinDB 的收益风险模型</h2>
+        <div class="- topic/body body">
+            <p class="- topic/p p">合成一级因子后，用户就可以基于全部的因子给出收益和风险的模型构建过程，包括所有因子收益、偏差统计量和拟合优度。偏差统计量可以给出模型预测的风险与实际风险的偏差。而拟合优度则反应的是所有因子对市场收益的解释力度，拟合优度越接近于
+                1 说明模型的稳健性，准确程度越高。</p>
+            <p class="- topic/p p">本文收益风险模型对应接口函数
+                <code class="+ topic/ph pr-d/codeph ph codeph">getRetTable</code>，函数输出为：计算返回因子风险协方差矩阵、特质性收益风险协方差矩阵、bias_statistic、stR2、tstat
+                和因子收益率。通过这些返回值可以给出因子风险和特异性风险，以及模型估计的风险准确性评估（bias），模型的解释力度评估（stR2）。</p>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock"><code>/* getRetTable
+Input:   
+         facTable         NULL  (Default)            (getFSLevelFactor函数返回的）全因子表
+         adjust           true  (Default)            是否进行Newey_West调整
+         shrink           true  (Default)            是否进行贝叶斯收缩
+         eigenfactor      true  (Default)            是否进行特征因子调整
+         
+Output:  
+         factorsRetTable   
+*/</code></pre>
+        </div>
+        <article class="- topic/topic topic nested2" aria-labelledby="ariaid-title25" id="ip5_5dg_41c">
+            <h3 class="- topic/title title topictitle3" id="ariaid-title25">3.1. 基于 WLS 构建 Barra 多因子模型</h3>
+            <div class="- topic/body body">
+                <p class="- topic/p p">本文首先通过 moving wls 多因子回归模型，函数接口为 <code class="+ topic/ph pr-d/codeph ph codeph">getAllFactorValidate</code>。</p>
+                <pre class="+ topic/pre pr-d/codeblock pre codeblock"><code>/* getAllFactorValidate
+获取moving wls多因子回归结果统计量的聚合函数
+Input:   y          因变量
+         x          自变量
+         w          权重
+Output:  
+         wls stat "beta","tstat","R2","AdjustedR2","Residual" */</code></pre>
+                <p class="- topic/p p">在构建得到 Barra 多因子回归模型后，再基于 <code class="+ topic/ph pr-d/codeph ph codeph">getRetTable</code> 函数计算如下模型评估指标：</p>
+                <ol class="- topic/ol ol">
+                    <li class="- topic/li li">stR<sup class="+ topic/ph hi-d/sup ph sup">2</sup>：该值为 Barra 中定义的 <em class="+ topic/ph hi-d/i ph i">Studentized R_2</em> ，计算方法为：<p class="- topic/p p"><img class="- topic/image image" id="ip5_5dg_41c__image_xwb_xdg_41c" src="images/barra_multi_factor_risk_model/3.1-1.png"/>，其中<img class="- topic/image image" id="ip5_5dg_41c__image_ywb_xdg_41c" src="images/barra_multi_factor_risk_model/rn.png"/>为个股<img class="- topic/image image" id="ip5_5dg_41c__image_zwb_xdg_41c" src="images/barra_multi_factor_risk_model/n.png"/>的超额收益，<img class="- topic/image image" id="ip5_5dg_41c__image_axb_xdg_41c" src="images/barra_multi_factor_risk_model/epsilonn.png"/>为截面回归的残差，<img class="- topic/image image" id="ip5_5dg_41c__image_bxb_xdg_41c" src="images/barra_multi_factor_risk_model/wn.png"/>是个股的加权权重，<img class="- topic/image image" id="ip5_5dg_41c__image_cxb_xdg_41c" src="images/barra_multi_factor_risk_model/hnn.png"/>为<img class="- topic/image image" id="ip5_5dg_41c__image_dxb_xdg_41c" src="images/barra_multi_factor_risk_model/3.1-2.png"/>的第<img class="- topic/image image" id="ip5_5dg_41c__image_exb_xdg_41c" src="images/barra_multi_factor_risk_model/n.png"/>个对角元，<img class="- topic/image image" id="ip5_5dg_41c__image_fxb_xdg_41c" src="images/barra_multi_factor_risk_model/x.png"/>是因子暴露矩阵。</p></li>
+                    <li class="- topic/li li"><img class="- topic/image image" id="ip5_5dg_41c__image_wpg_zdg_41c" src="images/barra_multi_factor_risk_model/xiaot.png"/>检验：该值为标准的 <em class="+ topic/ph hi-d/i ph i">t</em> 统计量，用来衡量回归系数的统计显著性。</li>
+                    <li class="- topic/li li">偏差统计量（bias_statistic）：该统计量是一种通用的衡量模型预测程度的统计量，直观来看，该统计量计算的是实际的风险比上预测的风险。令<img class="- topic/image image" id="ip5_5dg_41c__image_zx5_12g_41c" src="images/barra_multi_factor_risk_model/rnt.png"/>为组合<img class="- topic/image image" id="ip5_5dg_41c__image_ay5_12g_41c" src="images/barra_multi_factor_risk_model/n.png"/>在<img class="- topic/image image" id="ip5_5dg_41c__image_by5_12g_41c" src="images/barra_multi_factor_risk_model/xiaot.png"/>时刻的收益率，<img class="- topic/image image" id="ip5_5dg_41c__image_cy5_12g_41c" src="images/barra_multi_factor_risk_model/sigmant.png"/>是<img class="- topic/image image" id="ip5_5dg_41c__image_dy5_12g_41c" src="images/barra_multi_factor_risk_model/xiaot.png"/>时刻的波动率预测。计算方法为：令<img class="- topic/image image" id="ip5_5dg_41c__image_ey5_12g_41c" src="images/barra_multi_factor_risk_model/3.1-3.png"/>，可理解为对<img class="- topic/image image" id="ip5_5dg_41c__image_fy5_12g_41c" src="images/barra_multi_factor_risk_model/rnt.png"/>的波动率进行标准化，则预测准确则<img class="- topic/image image" id="ip5_5dg_41c__image_gy5_12g_41c" src="images/barra_multi_factor_risk_model/bnt.png"/>的标准差为 1。组合<img class="- topic/image image" id="ip5_5dg_41c__image_hy5_12g_41c" src="images/barra_multi_factor_risk_model/n.png"/>在<img class="- topic/image image" id="ip5_5dg_41c__image_iy5_12g_41c" src="images/barra_multi_factor_risk_model/xiaot.png"/>时刻的偏差统计量为：<br/><img class="- topic/image image" id="ip5_5dg_41c__image_tl4_12g_41c" src="images/barra_multi_factor_risk_model/3.1-4.png"/><br/><p class="- topic/p p">其中<img class="- topic/image image" id="ip5_5dg_41c__image_ul4_12g_41c" src="images/barra_multi_factor_risk_model/T.png"/>是总截面时间数。当收益率符合正态分布的假设下，偏差统计量<img class="- topic/image image" id="ip5_5dg_41c__image_vl4_12g_41c" src="images/barra_multi_factor_risk_model/bn.png"/>的 95% 置信区间为：</p><br/><img class="- topic/image image" id="ip5_5dg_41c__image_wl4_12g_41c" src="images/barra_multi_factor_risk_model/3.1-5.png"/><br/><p class="- topic/p p">因此当观测发现<img class="- topic/image image" id="ip5_5dg_41c__image_dfh_b2g_41c" src="images/barra_multi_factor_risk_model/bn.png"/>接近 1 时，则可以初步推断模型的预测值是比较准确的。</p></li>
+                    <li class="- topic/li li">Q 统计量（Q_statistic）：基于偏差统计量中计算的<img class="- topic/image image" id="ip5_5dg_41c__image_cb4_b2g_41c" src="images/barra_multi_factor_risk_model/bnt.png"/>，该统计量惩罚了欠拟合或者过拟合的情况，Q 统计量的计算方法为： 令<img class="- topic/image image" id="ip5_5dg_41c__image_db4_b2g_41c" src="images/barra_multi_factor_risk_model/3.1-6.png"/>，<img class="- topic/image image" id="ip5_5dg_41c__image_eb4_b2g_41c" src="images/barra_multi_factor_risk_model/3.1-7.png"/>。</li>
+                </ol>
+            </div>
+        </article>
+        <article class="- topic/topic topic nested2" aria-labelledby="ariaid-title26" id="w25_b2g_41c">
+            <h3 class="- topic/title title topictitle3" id="ariaid-title26">3.2. 风险调整</h3>
+            <div class="- topic/body body">
+                <p class="- topic/p p">在构建得到 Barra 多因子回归模型后，若要求解 Barra 模型中的个股收益率协方差矩阵，则需要分别求解因子收益率协方差矩阵<img class="- topic/image image" src="images/barra_multi_factor_risk_model/vf.png"/>、特质收益协方差矩阵<img class="- topic/image image" src="images/barra_multi_factor_risk_model/delta.png"/>。然而基于样本求解得到的<img class="- topic/image image" src="images/barra_multi_factor_risk_model/vf.png"/>、<img class="- topic/image image" src="images/barra_multi_factor_risk_model/delta.png"/>估计结果都是有偏的，因此需要分别对因子收益率风险矩阵、特质收益协方差矩阵分别进行协方差调整。</p>
+            </div>
+            <article class="- topic/topic topic nested3" aria-labelledby="ariaid-title27" id="dft_22g_41c">
+                <h4 class="- topic/title title topictitle4" id="ariaid-title27">3.2.1. 因子收益率风险调整</h4>
+                <article class="- topic/topic topic nested4" aria-labelledby="ariaid-title28" id="rgb_f2g_41c">
+                    <h5 class="- topic/title title topictitle5" id="ariaid-title28">3.2.1.1. Newey_West 调整</h5>
+                    <div class="- topic/body body">
+                        <p class="- topic/p p">Barra 模型必须进行 Newey-West 协方差调整的原因主要有以下两点：</p>
+                        <ul class="- topic/ul ul">
+                            <li class="- topic/li li">Barra
+                                的多因子模型是日频的，然而风险预测模型是月频的，因此需要对日频的协方差矩阵通过尺度变化，转化成月频的协方差矩阵，而这个过程必须考虑日频因子收益率的自相关性。</li>
+                            <li class="- topic/li li">实际应用中，基于 Barra
+                                    多因子模型预测的因子收益率往往存在时序相关性。此时样本风险矩阵并不是真实收益率风险矩阵的相合估计（随着样本数增加，相合估计会收敛于真实值，这有助于计算估计量的估计误差），因此需要调整由计算出来的日收益率存在<img class="- topic/image image" src="images/barra_multi_factor_risk_model/q.png"/>阶序列性导致因子收益率的风险矩阵<img class="- topic/image image" src="images/barra_multi_factor_risk_model/vf.png"/>。</li>
+                        </ul>
+                        <p class="- topic/p p">本文 Newey-West 协方差调整的接口为 <code class="+ topic/ph pr-d/codeph ph codeph">Newye_West</code> 函数，在
+                                <code class="+ topic/ph pr-d/codeph ph codeph">getRetTable</code> 函数的 <code class="+ topic/ph pr-d/codeph ph codeph">adjust=true</code>
+                            时调用。</p>
+                        <pre class="+ topic/pre pr-d/codeblock pre codeblock"><code>/* Newye_West
+Newye_West调整得到协方差矩阵
+Input:   
+         ret                    收益率表
+         q                      收益率自相关阶数
+Output:  
+         cov                    Newye_West调整后的协方差阵
+*/
+</code></pre>
+                        <p class="- topic/p p">上述接口主要实现步骤如下：</p>
+                        <ol class="- topic/ol ol">
+                            <li class="- topic/li li">假设<img class="- topic/image image" src="images/barra_multi_factor_risk_model/ft.png"/>可满足<img class="- topic/image image" src="images/barra_multi_factor_risk_model/maq.png"/>过程，则可先基于移动平均过程进行简单校验，如下：<br/><img class="- topic/image image" id="rgb_f2g_41c__image_zzl_g2g_41c" src="images/barra_multi_factor_risk_model/3.2.1.1-1.png"/><br/><p class="- topic/p p">其中<img class="- topic/image image" id="rgb_f2g_41c__image_a1m_g2g_41c" src="images/barra_multi_factor_risk_model/3.2.1.1-2.png"/>为不考虑自相关性的样本协方差矩阵，<img class="- topic/image image" id="rgb_f2g_41c__image_b1m_g2g_41c" src="images/barra_multi_factor_risk_model/3.2.1.1-3.png"/>代表着由当期的收益率向量以及滞后期的收益率向量所得到的自协方差矩阵，但<img class="- topic/image image" id="rgb_f2g_41c__image_c1m_g2g_41c" src="images/barra_multi_factor_risk_model/gammai.png"/>本身并不对称，因此对于任何的滞后期 i，都需要<img class="- topic/image image" id="rgb_f2g_41c__image_d1m_g2g_41c" src="images/barra_multi_factor_risk_model/gammai.png"/>和<img class="- topic/image image" id="rgb_f2g_41c__image_e1m_g2g_41c" src="images/barra_multi_factor_risk_model/gamma'i.png"/>成对出现。</p></li>
+                            <li class="- topic/li li">对<img class="- topic/image image" id="rgb_f2g_41c__image_bnb_h2g_41c" src="images/barra_multi_factor_risk_model/gammai.png"/>的修正加入 Bartlett 权重系数<img class="- topic/image image" id="rgb_f2g_41c__image_cnb_h2g_41c" src="images/barra_multi_factor_risk_model/3.2.1.1-4.png"/>，该系数与滞后期成反比，若收益率向量间的滞后期越长，则赋予<img class="- topic/image image" id="rgb_f2g_41c__image_dnb_h2g_41c" src="images/barra_multi_factor_risk_model/gammai.png"/>的权重则越小。经过证明可以发现，该修正后所得到的样本风险矩阵<img class="- topic/image image" id="rgb_f2g_41c__image_enb_h2g_41c" src="images/barra_multi_factor_risk_model/vf.png"/>是真实的风险矩阵的相合估计，且是半正定矩阵。<br/><img class="- topic/image image" id="rgb_f2g_41c__image_ymv_g2g_41c" src="images/barra_multi_factor_risk_model/3.2.1.1-5.png"/><br/></li>
+                        </ol>
+                    </div>
+                </article>
+                <article class="- topic/topic topic nested4" aria-labelledby="ariaid-title29" id="xqf_h2g_41c">
+                    <h5 class="- topic/title title topictitle5" id="ariaid-title29">3.2.1.2. Eigenfactor 调整</h5>
+                    <div class="- topic/body body">
+                        <p class="- topic/p p">令<img class="- topic/image image" src="images/barra_multi_factor_risk_model/vf.png"/>是<img class="- topic/image image" src="images/barra_multi_factor_risk_model/k%C3%97k.png"/>的因子协方差矩阵，利用特征分解，可以将<img class="- topic/image image" src="images/barra_multi_factor_risk_model/vf.png"/>写成对角形式<img class="- topic/image image" src="images/barra_multi_factor_risk_model/3.2.1.2-1.png"/>，其中<img class="- topic/image image" src="images/barra_multi_factor_risk_model/u0.png"/>是<img class="- topic/image image" src="images/barra_multi_factor_risk_model/vf.png"/>中相应特征值的特征向量组成的特征向量旋转矩阵。业务上来说，假设有 N 支股票，则<img class="- topic/image image" src="images/barra_multi_factor_risk_model/u0.png"/>的每一列都是一个特征因子投资组合权重（N*1 维），以该权重构建得到 eigenfactor
+                            portfolio（特征因子投资组合，来自特征向量 eigenvector），其中<img class="- topic/image image" src="images/barra_multi_factor_risk_model/d0.png"/>的每一个对角元则是相应的
+                            eigenfactor portfolio 的波动风险。eigenfactor portfolio
+                            在构建投资组合的最优化构建中有很大的意义：</p>
+                        <ul class="- topic/ul ul">
+                            <li class="- topic/li li">eigenfactor 之间彼此独立，两两之间的协方差为零。</li>
+                            <li class="- topic/li li">方差最小的 eigenfactor 代表以最小化组合方差为目标函数实现的组合，而方差最大的 eigenfactor
+                                代表以最大化组合方差为目标函数实现的组合。</li>
+                        </ul>
+                        <p class="- topic/p p">然而若直接特征分解会存在偏差，其中风险越小的 eigenfactor portfolio 的偏差反而较大，因此需要进行 Eigenfactor
+                            调整。本文 Eigenfactor 调整对应的接口为 <code class="+ topic/ph pr-d/codeph ph codeph">eigenCovAdjusted</code> 函数，在
+                                <code class="+ topic/ph pr-d/codeph ph codeph">getRetTable</code>函数中当参数 <code class="+ topic/ph pr-d/codeph ph codeph">eigenfactor=true</code>
+                            时被调用。</p>
+                        <pre class="+ topic/pre pr-d/codeblock pre codeblock"><code>/* eigenCovAdjusted
+eigenCovAdjusted调整风格因子协方差
+Input:   
+         cov                    因子收益率协方差阵
+         M                      蒙特卡罗模拟：重采样次数
+         
+Output:  
+         cov                    eigenCovAdjusted调整后的协方差阵
+*/</code></pre>
+                        <p class="- topic/p p">上述接口的主要实现步骤如下：</p>
+                        <ul class="- topic/ul ul">
+                            <li class="- topic/li li">步骤一，首先基于蒙特卡洛模拟构造出相对于“真实值”的具有偏差的协方差矩阵<img class="- topic/image image" src="images/barra_multi_factor_risk_model/3.2.1.2-2.png"/>，即”模拟协方差矩阵“。<ul class="- topic/ul ul">
+                                    <li class="- topic/li li">生成服从均值为 0，协方差为<img class="- topic/image image" src="images/barra_multi_factor_risk_model/d0.png"/>的<img class="- topic/image image" src="images/barra_multi_factor_risk_model/k%C3%97t.png"/>维的多元正态因子收益<img class="- topic/image image" src="images/barra_multi_factor_risk_model/bm.png"/>，每一行代表一个 eigenfactor 的收益率序列。因此<img class="- topic/image image" src="images/barra_multi_factor_risk_model/3.2.1.2-3.png"/>代表了原因子的模拟的收益时间序列，其对应的协方差矩阵<img class="- topic/image image" src="images/barra_multi_factor_risk_model/3.2.1.2-4.png"/>即为得到的模拟协方差矩阵。</li>
+                                    <li class="- topic/li li">进一步特征分解，即可得到模拟的 eigenfactor 的协方差矩阵<img class="- topic/image image" src="images/barra_multi_factor_risk_model/3.2.1.2-2.png"/>。</li>
+                                </ul></li>
+                            <li class="- topic/li li">步骤二，以上模拟的 eigenfactor<img class="- topic/image image" src="images/barra_multi_factor_risk_model/um.png"/>实际上是以样本协方差矩阵<img class="- topic/image image" src="images/barra_multi_factor_risk_model/vf.png"/>作为真实的因子收益率协方差矩阵的得到的，其中<img class="- topic/image image" src="images/barra_multi_factor_risk_model/vf.png"/>可以理解为<img class="- topic/image image" src="images/barra_multi_factor_risk_model/vm.png"/>的真实值，<img class="- topic/image image" src="images/barra_multi_factor_risk_model/vm.png"/>是<img class="- topic/image image" src="images/barra_multi_factor_risk_model/vf.png"/>的无偏估计；因此模拟的”真实协方差矩阵“为<img class="- topic/image image" src="images/barra_multi_factor_risk_model/3.2.1.2-5.png"/>。</li>
+                            <li class="- topic/li li">步骤三，计算缩放量/偏差调整系数。由以上得到的<img class="- topic/image image" src="images/barra_multi_factor_risk_model/dm.png"/>和<img class="- topic/image image" src="images/barra_multi_factor_risk_model/tildedm.png"/>的对角元<img class="- topic/image image" src="images/barra_multi_factor_risk_model/dmk.png"/>和<img class="- topic/image image" src="images/barra_multi_factor_risk_model/tildedmk.png"/>，可以计算得到偏差调整系数<img class="- topic/image image" src="images/barra_multi_factor_risk_model/3.2.1.2-6.png"/>，其中<img class="- topic/image image" src="images/barra_multi_factor_risk_model/m.png"/>为 <strong class="+ topic/ph hi-d/b ph b">Bootstrap</strong> 模拟总次数。</li>
+                            <li class="- topic/li li">步骤四，调整基于样本计算得到的 eigenfactor 矩阵<img class="- topic/image image" src="images/barra_multi_factor_risk_model/d0.png"/>：<img class="- topic/image image" src="images/barra_multi_factor_risk_model/3.2.1.2-7.png"/>，其中<img class="- topic/image image" src="images/barra_multi_factor_risk_model/xiaov.png"/>是由<img class="- topic/image image" src="images/barra_multi_factor_risk_model/vk.png"/>生成的对角矩阵，最终可以给出经过调整后的协方差矩阵<img class="- topic/image image" src="images/barra_multi_factor_risk_model/3.2.1.2-8.png"/>。</li>
+                        </ul>
+                    </div>
+                </article>
+            </article>
+            <article class="- topic/topic topic nested3" aria-labelledby="ariaid-title30" id="qmm_h2g_41c">
+                <h4 class="- topic/title title topictitle4" id="ariaid-title30">3.2.2. 基于贝叶斯收缩的个股特异性收益率风险调整</h4>
+                <div class="- topic/body body">
+                    <p class="- topic/p p">贝叶斯收缩（Bayesian Shrinkage）是一个常见的将先验和样本估计值结合起来的手段。进行贝叶斯收缩调整的主要原因是，基于 Barram
+                        模型使用样本内数据计算出的特异性波动率在样本外的持续性很差，极高或极低的个股波动率可能会出现均值回归的情况，那么波动率会被高估或低估。</p>
+                    <p class="- topic/p p">本文的贝叶斯收缩的接口为 <code class="+ topic/ph pr-d/codeph ph codeph">BayesShrinkage</code> 函数，在
+                            <code class="+ topic/ph pr-d/codeph ph codeph">getRetTable</code> 函数中当参数 <code class="+ topic/ph pr-d/codeph ph codeph">shrink=true</code>
+                        时被调用。</p>
+                    <pre class="+ topic/pre pr-d/codeblock pre codeblock"><code>/* BayesShrinkage
+BayesShrinkage调整特质波动率
+Input:   
+         cov                    特质收益率协方差阵
+         weight                 市值权重
+         q                      λ_F 压缩系数
+         
+Output:  
+         cov                    BayesShrinkage调整后的协方差阵
+*/</code></pre>
+                    <p class="- topic/p p">上述接口的实现步骤如下：</p>
+                    <ul class="- topic/ul ul">
+                        <li class="- topic/li li">步骤一，计算样本估计值——基于  预测得到的特异性收益的风险<img class="- topic/image image" src="images/barra_multi_factor_risk_model/hatsigman.png"/>。</li>
+                        <li class="- topic/li li">步骤二，计算先验值——首先选择与目标个股处在同一市值的所有股票，再基于市值加权计算的特异性收益率的波动的平均值。<br/><img class="- topic/image image" id="qmm_h2g_41c__image_wfb_j2g_41c" src="images/barra_multi_factor_risk_model/3.2.2-1.png"/><br/><p class="- topic/p p">其中 Barra
+                                    把所有个股按照市值分成十档，<img class="- topic/image image" id="qmm_h2g_41c__image_xfb_j2g_41c" src="images/barra_multi_factor_risk_model/sn.png"/>表示对应的市值档位，<img class="- topic/image image" id="qmm_h2g_41c__image_yfb_j2g_41c" src="images/barra_multi_factor_risk_model/hatsigman.png"/>为同处在<img class="- topic/image image" id="qmm_h2g_41c__image_zfb_j2g_41c" src="images/barra_multi_factor_risk_model/sn.png"/>市值档位下的 n 支股票的特异性收益率的波动，<img class="- topic/image image" id="qmm_h2g_41c__image_agb_j2g_41c" src="images/barra_multi_factor_risk_model/wn.png"/>表示 n 支股票按照市值计算的权重。</p></li>
+                        <li class="- topic/li li">步骤三，贝叶斯收缩（使样本估计值向先验靠拢），计算后验估计。<br/><img class="- topic/image image" id="qmm_h2g_41c__image_ptr_j2g_41c" src="images/barra_multi_factor_risk_model/3.2.2-2.png"/><br/><p class="- topic/p p"><img class="- topic/image image" id="qmm_h2g_41c__image_qtr_j2g_41c" src="images/barra_multi_factor_risk_model/vn.png"/>是在收缩时赋予先验的权重（称为收缩强度系数），具体公式如下：</p><br/><img class="- topic/image image" id="qmm_h2g_41c__image_rtr_j2g_41c" src="images/barra_multi_factor_risk_model/3.2.2-3.png"/><br/><p class="- topic/p p">其中<img class="- topic/image image" id="qmm_h2g_41c__image_str_j2g_41c" src="images/barra_multi_factor_risk_model/nsn.png"/>是当前个股市值档位中的个股总数，<img class="- topic/image image" id="qmm_h2g_41c__image_ttr_j2g_41c" src="images/barra_multi_factor_risk_model/3.2.2-4.png"/>为样本特异性波动率与先验的偏离程度，<img class="- topic/image image" id="qmm_h2g_41c__image_utr_j2g_41c" src="images/barra_multi_factor_risk_model/3.2.2-5.png"/>为<img class="- topic/image image" id="qmm_h2g_41c__image_vtr_j2g_41c" src="images/barra_multi_factor_risk_model/sn.png"/>市值档位下样本特异性波动率与先验的偏离程度的标准差，<img class="- topic/image image" id="qmm_h2g_41c__image_wtr_j2g_41c" src="images/barra_multi_factor_risk_model/q.png"/>为经验压缩系数，其意义在于更偏重组内的标准差还是更偏重股票相对组内均值的偏差。当<img class="- topic/image image" id="qmm_h2g_41c__image_xtr_j2g_41c" src="images/barra_multi_factor_risk_model/3.2.2-4.png"/>越高，即目标股票的特异性收益率的波动的偏离程度越高，此时样本估计值越不靠谱，因此赋予先验的权重<img class="- topic/image image" id="qmm_h2g_41c__image_ytr_j2g_41c" src="images/barra_multi_factor_risk_model/vn.png"/>则越高。</p></li>
+                    </ul>
+                </div>
+            </article>
+        </article>
+        <article class="- topic/topic topic nested2" aria-labelledby="ariaid-title31" id="apb_k2g_41c">
+            <h3 class="- topic/title title topictitle3" id="ariaid-title31">3.3. 基于 DolphinDB 的收益风险模型展示</h3>
+            <div class="- topic/body body">
+                <p class="- topic/p p">如下，首先基于 <code class="+ topic/ph pr-d/codeph ph codeph">getRetTable</code> 接口得到的收益风险模型，并绘制得到的对应的模型评估指标（R2、T 统计量、Bias
+                    统计量等）。如下绘制模型的 <em class="+ topic/ph hi-d/i ph i">𝑆𝑡𝑢𝑑𝑒𝑛𝑡𝑖𝑧𝑒𝑑 R_2</em> ，可知 12 年至 22 年模型的解释力最低为 5%，最高为
+                    84%，平均为 37%，因此模型的解释力度较高。</p>
+                <pre class="+ topic/pre pr-d/codeblock pre codeblock"><code>// 一级因子收益率回归  
+retOut1 = getRetTable(facTable1,adjust = true)                                    
+// adjust采用Newey-West协方差调整、当市场收益率存在序列自相关时采用此方法
+retOut1 = getRetTable(facTable1,adjust = false,shrink = false)                    
+// shrink采用贝叶斯收缩调整特异性风险、推荐使用
+retOut1 = getRetTable(facTable1,adjust = true,shrink = true)                     
+ // 特异性风险采用bayesian shrinkage
+retOut1 = getRetTable(facTable1,adjust = true,shrink = true,eigenfactor = true)   
+// 因子风险采用eigenfactor adjust,当市场关联密切时采用此方法
+retOut1 = getRetTable(facTable1,adjust = true,shrink = true,eigenfactor = true)   
+// 综上，推荐使用
+retOut1 = getRetTable(facTable1,adjust = false,shrink = true,eigenfactor = true)  
+// 综上，推荐使用
+retOut1 = getRetTable(facTable1,adjust = false,shrink = true,eigenfactor = true)  
+// 综上，推荐使用
+retOut1 = getRetTable(fTable,adjust = false,shrink = true,eigenfactor = false)    
+// 综上，推荐使用
+undef(`retOut)
+retOut = getRetTable(facTable1,adjust = true,shrink = false ,eigenfactor = false)  
+// 综上，推荐使用
+retOut1.stock_risk[string(2022.12.30)]   // 12.30的特质收益协方差矩阵
+retOut1.fac_risk[string(2022.12.30)]     // 12.30的风险因子协方差矩阵
+retOut1.R2                               // R2
+retOut1.res                              // 特质收益
+retOut1.tstat                            // t-stat
+retOut1.fac_ret                          // 因子收益
+retOut1.bias                             // bias统计量
+
+plot(retOut1.R2.stR2,retOut1.R2.record_date,"𝑆𝑡𝑢𝑑𝑒𝑛𝑡𝑖𝑧𝑒𝑑 R2 月频时序图")</code></pre>
+                <figure class="- topic/fig fig fignone" id="apb_k2g_41c__fig_wf2_l2g_41c" data-ofbid="apb_k2g_41c__fig_wf2_l2g_41c"><figcaption data-caption-side="top" class="- topic/title title figcap"><span class="figtitleprefix fig--title-label">图<span class="fig--title-label-number"> 15</span><span class="fig--title-label-punctuation">. </span></span><span class="fig--title">studentized R2 月频时序图</span></figcaption>
+                    
+                    <br/><img class="- topic/image image" id="apb_k2g_41c__image_ag2_l2g_41c" src="images/barra_multi_factor_risk_model/studentized%20R2%20%E6%9C%88%E9%A2%91%E6%97%B6%E5%BA%8F%E5%9B%BE.png"/><br/>
+                </figure>
+            </div>
+        </article>
+    </article>
+    <article class="- topic/topic topic nested1" aria-labelledby="ariaid-title32" id="awy_l2g_41c">
+        <h2 class="- topic/title title topictitle2" id="ariaid-title32">4. 基于 DolphinDB 的 Barra 多因子模型应用</h2>
+        <article class="- topic/topic topic nested2" aria-labelledby="ariaid-title33" id="v5j_m2g_41c">
+            <h3 class="- topic/title title topictitle3" id="ariaid-title33">4.1. 预测个股收益</h3>
+            <div class="- topic/body body">
+                <p class="- topic/p p">预测个股收益的方法比较多样，可以通过经济学或其他模型实现通过时间序列<img class="- topic/image image" src="images/barra_multi_factor_risk_model/fmt.png"/>，<img class="- topic/image image" src="images/barra_multi_factor_risk_model/fit.png"/>，<img class="- topic/image image" src="images/barra_multi_factor_risk_model/fst.png"/>和<img class="- topic/image image" src="images/barra_multi_factor_risk_model/unt.png"/>给出 t+1
+                    期的预测因子收益，再得到预测个股收益。由于 Barra 多因子模型建立时没有考虑可投资性的要求，因此基于 Barra
+                    多因子模型的预测收益应用较少。为简化模型，DolphinDB 给出基于 Barra 模型的滞后一期预测模型。</p>
+                <br/><img class="- topic/image image" src="images/barra_multi_factor_risk_model/4.1-1.png"/><br/>
+                <br/><img class="- topic/image image" src="images/barra_multi_factor_risk_model/4.1-2.png"/><br/>
+                <p class="- topic/p p">注意：到第<img class="- topic/image image" src="images/barra_multi_factor_risk_model/xiaot.png"/>期末时，已经获得第<img class="- topic/image image" src="images/barra_multi_factor_risk_model/xiaot.png"/>期的个股收益<img class="- topic/image image" src="images/barra_multi_factor_risk_model/rn,t.png"/>，<img class="- topic/image image" src="images/barra_multi_factor_risk_model/xn,i,t-1.png"/>，<img class="- topic/image image" src="images/barra_multi_factor_risk_model/xn,s,t-1.png"/>和<img class="- topic/image image" src="images/barra_multi_factor_risk_model/xn,i,t.png"/>，<img class="- topic/image image" src="images/barra_multi_factor_risk_model/xn,s,t.png"/>。将<img class="- topic/image image" src="images/barra_multi_factor_risk_model/rn,t.png"/>，<img class="- topic/image image" src="images/barra_multi_factor_risk_model/xn,i,t-1.png"/>和<img class="- topic/image image" src="images/barra_multi_factor_risk_model/xn,s,t-1.png"/>代入模型后可以得到滞后一期具备预测性的<img class="- topic/image image" src="images/barra_multi_factor_risk_model/fmt.png"/>，<img class="- topic/image image" src="images/barra_multi_factor_risk_model/fit.png"/>，<img class="- topic/image image" src="images/barra_multi_factor_risk_model/fst.png"/>和<img class="- topic/image image" src="images/barra_multi_factor_risk_model/unt.png"/>，此时结合<img class="- topic/image image" src="images/barra_multi_factor_risk_model/xiaot.png"/>期末的<img class="- topic/image image" src="images/barra_multi_factor_risk_model/xn,i,t.png"/>,<img class="- topic/image image" src="images/barra_multi_factor_risk_model/xn,s,t.png"/>，即可得到预测的<img class="- topic/image image" src="images/barra_multi_factor_risk_model/xiaot.png"/>期的个股收益。与直接的 Barra
+                        因子建模预测相比：此建模使得模型估计出的<img class="- topic/image image" src="images/barra_multi_factor_risk_model/fmt.png"/>，<img class="- topic/image image" src="images/barra_multi_factor_risk_model/fit.png"/>，<img class="- topic/image image" src="images/barra_multi_factor_risk_model/fst.png"/>和<img class="- topic/image image" src="images/barra_multi_factor_risk_model/unt.png"/>具备滞后一阶的部分预测性。</p>
+                <p class="- topic/p p">本文因此基于上述模型预测个股收益的对应接口函数 <code class="+ topic/ph pr-d/codeph ph codeph">getPredicOut</code>，假设待预测的因子为全因子表的最后一期（全因子表前
+                    t-1 数据必须完整），则基于本月初（即上月末的因子暴露预测本月末的个股收益）可计算预期因子收益率，并返回预期模型的因子协方差矩阵
+                    (因子风险)、特质性收益协方差矩阵 (个股风险)、拟合优度<img class="- topic/image image" src="images/barra_multi_factor_risk_model/r2.png"/>、校正后的拟合优度<img class="- topic/image image" src="images/barra_multi_factor_risk_model/adr2.png"/>、校正后的拟合优度<img class="- topic/image image" src="images/barra_multi_factor_risk_model/srt2.png"/>、<img class="- topic/image image" src="images/barra_multi_factor_risk_model/tstat.png"/>统计量，以评估模型预测准确度。</p>
+                <pre class="+ topic/pre pr-d/codeblock pre codeblock"><code>/* getPredicOut
+Input:   
+         facTable         NULL  (Default)                    (必须)因子表      
+Output:  
+         predictRetTable   
+*/</code></pre>
+                <p class="- topic/p p">如下为调用<code class="+ topic/ph pr-d/codeph ph codeph">getPredicOut</code>接口的具体脚本：</p>
+                <pre class="+ topic/pre pr-d/codeblock pre codeblock"><code>predictOut = getPredicOut(facTable1)         
+pr = select * from predictOut.predict_ret    // 利用本期因子暴露预测最后一期的收益率
+predictOut.R2                               // 预测模型R2
+predictOut.res                              // 预测模型特质收益
+predictOut.tstat                            // 预测模型t-stat
+predictOut.fac_ret                          // 预测模型因子收益
+predictOut.bias                             // 预测模型bias统计量</code></pre>
+                <div class="- topic/note note note note_note" id="v5j_m2g_41c__note_elc_n2g_41c" data-ofbid="v5j_m2g_41c__note_elc_n2g_41c"><span class="note__title">注：</span> <code class="+ topic/ph pr-d/codeph ph codeph">predictOut = getPredicOut(facTable1)</code>
+                    的结果较多。如需查看，推荐持久化后再查看结果，或者可以取出来部分较少的结果，除去预测收益外，包含
+                    R2、t-stat、月频的因子收益、特质收益、风险因子协方差矩阵、特质风险表、bias 统计量的所有结果。</div>
+            </div>
+        </article>
+        <article class="- topic/topic topic nested2" aria-labelledby="ariaid-title34" id="xzr_n2g_41c">
+            <h3 class="- topic/title title topictitle3" id="ariaid-title34">4.2. 组合权重优化</h3>
+            <div class="- topic/body body">
+                <p class="- topic/p p">组合权重优化在多因子模型中起到了至关重要的作用。组合权重优化的目的在于将组合的风险特征完全定量化，使得投资经理可以清楚地了解组合的收益来源和风险暴露。权重优化的目标函数，优化目标多种多样，例如可以控制最小预测收益并最小组合风险、控制最小本期收益并最小组合风险、控制最大风险并最大化预测收益、控制最大风险并最大化本期收益等等。组合权重优化的过程包含
+                    2 个因素：目标函数和约束条件。</p>
+            </div>
+            <article class="- topic/topic topic nested3" aria-labelledby="ariaid-title35" id="rhh_42g_41c">
+                <h4 class="- topic/title title topictitle4" id="ariaid-title35">4.2.1. 目标函数</h4>
+                <div class="- topic/body body">
+                    <p class="- topic/p p">假设投资组合中的每只股票的特质因子收益率与共同因子收益率不相关，并且每只股票的特质因子收益率也不相关，因此若<img class="- topic/image image" src="images/barra_multi_factor_risk_model/wt.png"/>表示投资组合中各股票的权重，则投资组合 <em class="+ topic/ph hi-d/i ph i">P</em> 的风险矩阵可表示为如下表达式：</p>
+                    <br/><img class="- topic/image image" src="images/barra_multi_factor_risk_model/4.2.1-1.png"/><br/>
+                </div>
+            </article>
+            <article class="- topic/topic topic nested3" aria-labelledby="ariaid-title36" id="jft_42g_41c">
+                <h4 class="- topic/title title topictitle4" id="ariaid-title36">4.2.2. 约束条件</h4>
+                <div class="- topic/body body">
+                    <ul class="- topic/ul ul">
+                        <li class="- topic/li li">
+                            <strong class="+ topic/ph hi-d/b ph b">行业中性</strong>
+                            <p class="- topic/p p">行业中性是指多头组合的行业配置与对冲基准的行业配置相一致。行业中性配置的目的在于剔除行业因子对策略收益的影响，仅考察行业内部个股的超额收益。假设<img class="- topic/image image" id="jft_42g_41c__image_ag3_q2g_41c" src="images/barra_multi_factor_risk_model/h.png"/>为样本股票的行业因子哑变量矩阵，<img class="- topic/image image" id="jft_42g_41c__image_bg3_q2g_41c" src="images/barra_multi_factor_risk_model/xiaoh.png"/>为沪深 300 中 30 个行业的对应权重，那么行业中性的权重<img class="- topic/image image" id="jft_42g_41c__image_cg3_q2g_41c" src="images/barra_multi_factor_risk_model/w.png"/>满足：</p><br/><img class="- topic/image image" id="jft_42g_41c__image_dg3_q2g_41c" src="images/barra_multi_factor_risk_model/4.2.2-1.png"/><br/></li>
+                        <li class="- topic/li li">
+                            <strong class="+ topic/ph hi-d/b ph b">风格因子中性</strong>
+                            <p class="- topic/p p">风格因子中性是指多头组合的风格因子较之对冲基准的风险暴露为
+                                    0。风格因子中性配置的目的是消除投资组合与市场风格因子之间的风险暴露，使投资组合的收益主要来源于阿尔法收益，而不是某一特定的市场风格。假设<img class="- topic/image image" id="jft_42g_41c__image_wgv_q2g_41c" src="images/barra_multi_factor_risk_model/x.png"/>为样本第<img class="- topic/image image" id="jft_42g_41c__image_xgv_q2g_41c" src="images/barra_multi_factor_risk_model/xiaok.png"/>个因子的载荷截面，<img class="- topic/image image" id="jft_42g_41c__image_ygv_q2g_41c" src="images/barra_multi_factor_risk_model/wbench.png"/>为沪深 300 指数对应权重，那么因子<img class="- topic/image image" id="jft_42g_41c__image_zgv_q2g_41c" src="images/barra_multi_factor_risk_model/xiaok.png"/>的风格中性权重<img class="- topic/image image" id="jft_42g_41c__image_ahv_q2g_41c" src="images/barra_multi_factor_risk_model/w.png"/>满足：</p><br/><img class="- topic/image image" id="jft_42g_41c__image_bhv_q2g_41c" src="images/barra_multi_factor_risk_model/4.2.2-2.png"/><br/></li>
+                        <li class="- topic/li li">
+                            <strong class="+ topic/ph hi-d/b ph b">现金中性</strong>
+                            <p class="- topic/p p">现金中性是指多空市值保持一致，不留方向性敞口。则现金中性的权重<img class="- topic/image image" id="jft_42g_41c__image_alh_s2g_41c" src="images/barra_multi_factor_risk_model/w.png"/>满足：</p><br/><img class="- topic/image image" id="jft_42g_41c__image_blh_s2g_41c" src="images/barra_multi_factor_risk_model/4.2.2-3.png"/><br/></li>
+                        <li class="- topic/li li">
+                            <strong class="+ topic/ph hi-d/b ph b">最小收益预测</strong>
+                            <p class="- topic/p p">控制最小预测收益是 Barra
+                                多因子模型中组合权重优化的一个约束条件，其目的是确保投资组合具备一定的最低收益水平，并帮助控制风险、避免非理性配置以及维持模型一致性。这样可以使投资组合更符合投资目标和风险偏好，并提高整体投资组合的稳定性和可预测性。假设
+                                    <img class="- topic/image image" id="jft_42g_41c__image_e1b_t2g_41c" src="images/barra_multi_factor_risk_model/rmin.png"/>为基准收益率，则投资组合的权重<img class="- topic/image image" id="jft_42g_41c__image_f1b_t2g_41c" src="images/barra_multi_factor_risk_model/w.png"/>应满足：</p><br/><img class="- topic/image image" id="jft_42g_41c__image_g1b_t2g_41c" src="images/barra_multi_factor_risk_model/4.2.2-4.png"/><br/></li>
+                    </ul>
+                </div>
+            </article>
+            <article class="- topic/topic topic nested3" aria-labelledby="ariaid-title37" id="tzl_t2g_41c">
+                <h4 class="- topic/title title topictitle4" id="ariaid-title37">4.2.3. 基于 DolphinDB 实现组合权重优化</h4>
+                <div class="- topic/body body">
+                    <p class="- topic/p p">本文给出行业基准中性和风格基准中性下的控制最小预测收益并最小组合风险方法，对应接口函数
+                            <code class="+ topic/ph pr-d/codeph ph codeph">getOptimizeWeights</code>，即实现如下的优化目标。在此接口函数中，可以通过
+                            <code class="+ topic/ph pr-d/codeph ph codeph">deIndustry</code> 和 <code class="+ topic/ph pr-d/codeph ph codeph">deStyle</code>
+                        指定是否行业中性和风格中性：</p>
+                    <br/><img class="- topic/image image" src="images/barra_multi_factor_risk_model/4.2.3-1.png"/><br/>
+                    <pre class="+ topic/pre pr-d/codeblock pre codeblock"><code>/* getOptimizeWeights
+组合权重优化中的聚合函数
+Input:   
+         covf              因子收益协方差矩阵
+         delta             特质收益协方差矩阵
+         st                2022.01.03(Default)                
+         et                2023.01.02(Default)
+         ret               预期收益
+         r                 0.05                               设置的最小预测收益
+         tbName            因子暴露
+         deIndustry        true                               行业中性
+         deStyle           true                               风格中性
+ 
+Output:  
+         weightTable       返回预测的资产配置权重
+*/</code></pre>
+                    <p class="- topic/p p">基于 <code class="+ topic/ph pr-d/codeph ph codeph">getOptimizeWeights</code> 接口，可以通过如下脚本实现在控制最小收益下的最小化风险：</p>
+                    <pre class="+ topic/pre pr-d/codeblock pre codeblock"><code>optionCode = exec stock_code from getPredicOut(facTable1).predict_ret 
+             order by return_day desc limit 20           
+// 初步筛选stock1
+optionCode = exec stock_code from getPredicOut(facTable2).predict_ret 
+             order by return_day desc limit 20  
+
+// 控制收益、最小化风险模型
+portWeight1 = getOptimizeWeights(facTable = facTable1,retOut = retOut1,
+                                 st = st,et = et, method ="minRiskControlRet",
+                                 r = 0.05,optionCode = optionCode)      
+// 获得权重组合
+portWeight2 = getOptimizeWeights(facTable = facTable2,retOut = retOut2,
+                                 st = st,et = et, method ="minRiskControlRet",
+                                 r = 0.05, optionCode = optionCode)
+
+index_code = '000300'
+CodePre = set(exec stock_code from getPredicOut(facTable1).predict_ret 
+              order by return_day desc limit 200)          
+ // 初步筛选stock2
+CodeWeight = set(exec stock_code 
+                from getBenchMark(st=st,et=et,code = index_code) 
+                where i_weight != 0)
+CodeFac =set(exec stock_code from facTable1 )
+optionCode = (CodePre&amp;CodeWeight&amp;CodeFac).keys()
+portWeight3 = getOptimizeWeights(facTable = facTable1,retOut = retOut1,
+                                 st = st,et = et, method ="minRiskControlRet",
+                                 r = 0.005,deStyle = true,optionCode = optionCode)  
+// 获得权重组合,并实现在风格上的风险敞口为0
+portWeight3 = getOptimizeWeights(facTable = facTable1,retOut = retOut1,st = st,
+                                 et = et, method ="minRiskControlRet",r = 0.005,
+                                 deIndustry = true,optionCode = optionCode)  
+// 获得权重组合,并实现在行业上的风险敞口为0
+portWeight4 = getOptimizeWeights(facTable = facTable2,retOut = retOut2,st = st,
+                                 et = et, method ="minRiskControlRet",r = 0.05,
+                                 optionCode = optionCode)</code></pre>
+                </div>
+            </article>
+        </article>
+        <article class="- topic/topic topic nested2" aria-labelledby="ariaid-title38" id="sbg_52g_41c">
+            <h3 class="- topic/title title topictitle3" id="ariaid-title38">4.3. 资产配置评估</h3>
+            <article class="- topic/topic topic nested3" aria-labelledby="ariaid-title39" id="nwl_52g_41c">
+                <h4 class="- topic/title title topictitle4" id="ariaid-title39">4.3.1. 评估事后资产配置</h4>
+                <div class="- topic/body body">
+                    <p class="- topic/p p">事后资产配置指在实际收益数据可用之后，根据实际的历史收益数据进行的资产配置。这个过程发生在投资决策之后，基于实际观察到的历史收益数据对资产进行重新配置。因此根据市值或者是等权法评估已有指数的
+                        Bias，可以计算出指定组合的偏差统计量和 Q 统计量，以对事后资产配置进行评估。</p>
+                    <ul class="- topic/ul ul">
+                        <li class="- topic/li li">因子（组合）Bias</li>
+                        <li class="- topic/li li">资产（组合）Bias</li>
+                    </ul>
+                    <p class="- topic/p p">本文基于 <code class="+ topic/ph pr-d/codeph ph codeph">getFacSpecialBias</code> 函数，计算事后资产配置的 Bias 统计量，以评估事后资产配置。</p>
+                    <pre class="+ topic/pre pr-d/codeblock pre codeblock"><code>/*
+获取因子的Bias时序统计量和获取个股的特质收益统计量
+Input：
+   retOut   getRetTable()函数返回的结果
+   index_name  指数代码
+   method   等权方法或者流通市值方法 'equal'，'float_market'
+Output:
+   Bias统计量
+*/</code></pre>
+                </div>
+                <article class="- topic/topic topic nested4" aria-labelledby="ariaid-title40" id="jkt_52g_41c">
+                    <h5 class="- topic/title title topictitle5" id="ariaid-title40">4.3.1.1. 事后因子组合评估</h5>
+                    <div class="- topic/body body">
+                        <p class="- topic/p p">如下脚本，假设 <code class="+ topic/ph pr-d/codeph ph codeph">facTable1</code> 为实际投资的所有因子组合表，基于
+                                <code class="+ topic/ph pr-d/codeph ph codeph">getFacSpecialBias</code> 计算因子收益率的 Bias、个股特异性的 Bias
+                            以评估事后因子组合。</p>
+                        <pre class="+ topic/pre pr-d/codeblock pre codeblock"><code>// 因子组合
+retOut = getRetTable(facTable1,adjust = true,shrink = false ,eigenfactor = false)  
+// 综上，推荐使用
+// 获取所有因子的时序bias统计量的值和所有个股的时序bias统计量值
+biasOut = getFacSpecialBias(retOut)
+
+// 因子bias
+tmpfBias = select bias_stat from biasOut.fac_bias pivot by record_date,valueType
+tmpfBias = tmpfBias[23:]
+tbfBias = sql(select = sqlCol(tmpfBias.columnNames()[1:9]),from = tmpfBias).eval()
+
+plot(tbfBias,tmpfBias.record_date,extras={multiYAxes: false}, title = "因子模型因子Bias统计量时序图")
+plot(tbfBias,tmpfBias.record_date,extras={multiYAxes: false})
+
+code0 = parseExpr("rowAvg("+ concat(tmpfBias.columnNames()[1:],',') + ")")
+avgfBias =  sql(select = sqlColAlias(code0,'avg_bias_stat'),from = tmpfBias ).eval()
+plot(avgfBias,tmpfBias.record_date,extras={multiYAxes: false}, title = "因子均值Bias统计量时序图")
+plot(avgfBias,tmpfBias.record_date,extras={multiYAxes: false})
+
+// 个股特异bias
+tmpsBias = select mean(bias_stat) from biasOut.stock_bias group by record_date
+tmpsBias = tmpsBias[23:]
+
+plot(tmpsBias.avg_bias_stat,tmpsBias.record_date, extras={multiYAxes: false},title = "因子模型特异风险Bias统计量时序图")</code></pre>
+                        <p class="- topic/p p">如下，分别绘制事后多因子模型的因子 Bias 统计量时序图以及因子均值 Bias 统计量时序图，其中  月频模型的八类风格因子 Bias
+                            统计量长期来看均处于 1 附近，均值为 0.9962，模型对因子的风险预估较为准确，而因子均值 Bias 统计量也长期稳定在 1
+                            附近，因此可以看出，不论是从因子风险角度还是特异风险角度，本模型的估计均较为准确。</p>
+                        <figure class="- topic/fig fig fignone" id="jkt_52g_41c__fig_hym_v2g_41c" data-ofbid="jkt_52g_41c__fig_hym_v2g_41c"><figcaption data-caption-side="top" class="- topic/title title figcap"><span class="figtitleprefix fig--title-label">图<span class="fig--title-label-number"> 16</span><span class="fig--title-label-punctuation">. </span></span><span class="fig--title">因子 Bias 统计量时序图</span></figcaption>
+                            
+                            <br/><img class="- topic/image image" id="jkt_52g_41c__image_mym_v2g_41c" src="images/barra_multi_factor_risk_model/%E5%9B%A0%E5%AD%90%20Bias%20%E7%BB%9F%E8%AE%A1%E9%87%8F%E6%97%B6%E5%BA%8F%E5%9B%BE.png"/><br/>
+                        </figure>
+                        <p class="- topic/p p">因子均值 Bias 曲线：</p>
+                        <figure class="- topic/fig fig fignone" id="jkt_52g_41c__fig_arn_w2g_41c" data-ofbid="jkt_52g_41c__fig_arn_w2g_41c"><figcaption data-caption-side="top" class="- topic/title title figcap"><span class="figtitleprefix fig--title-label">图<span class="fig--title-label-number"> 17</span><span class="fig--title-label-punctuation">. </span></span><span class="fig--title">因子均值 Bias 统计量时序图</span></figcaption>
+                            
+                            <br/><img class="- topic/image image" id="jkt_52g_41c__image_frn_w2g_41c" src="images/barra_multi_factor_risk_model/%E5%9B%A0%E5%AD%90%E5%9D%87%E5%80%BC%20Bias%20%E7%BB%9F%E8%AE%A1%E9%87%8F%E6%97%B6%E5%BA%8F%E5%9B%BE.png"/><br/>
+                        </figure>
+                        <p class="- topic/p p">因子模型特异风险 Bias 统计量评估：</p>
+                        <figure class="- topic/fig fig fignone" id="jkt_52g_41c__fig_gkn_x2g_41c" data-ofbid="jkt_52g_41c__fig_gkn_x2g_41c"><figcaption data-caption-side="top" class="- topic/title title figcap"><span class="figtitleprefix fig--title-label">图<span class="fig--title-label-number"> 18</span><span class="fig--title-label-punctuation">. </span></span><span class="fig--title">因子模型特异风险 Bias 统计量时序图</span></figcaption>
+                            
+                            <br/><img class="- topic/image image" id="jkt_52g_41c__image_lkn_x2g_41c" src="images/barra_multi_factor_risk_model/%E5%9B%A0%E5%AD%90%E6%A8%A1%E5%9E%8B%E7%89%B9%E5%BC%82%E9%A3%8E%E9%99%A9%20Bias%20%E7%BB%9F%E8%AE%A1%E9%87%8F%E6%97%B6%E5%BA%8F%E5%9B%BE.png"/><br/>
+                        </figure>
+                    </div>
+                </article>
+                <article class="- topic/topic topic nested4" aria-labelledby="ariaid-title41" id="sph_y2g_41c">
+                    <h5 class="- topic/title title topictitle5" id="ariaid-title41">4.3.1.2. 事后资产组合评估</h5>
+                    <div class="- topic/body body">
+                        <p class="- topic/p p">本文以沪深 300 指数的等权资产组合为例，基于 <code class="+ topic/ph pr-d/codeph ph codeph">getFacSpecialBias</code> 计算其 Bias
+                            统计量，并绘制沪深 300 的等权资产组合 Bias 如下所示。</p>
+                        <pre class="+ topic/pre pr-d/codeblock pre codeblock"><code>/* 简单资产配置评估 */
+// 计算指数配置的Bias统计量
+tmpIndexbiasbn = getFacSpecialBias(retOut,'000300','equal').stock_bias
+tmpIndexBias = select wavg(bias_stat,weight) from tmpIndexbiasbn group by record_date
+plot(tmpIndexBias.wavg_bias_stat,tmpIndexBias.record_date,extras={multiYAxes: false})
+tmpIndexbiasbn = getFacSpecialBias(retOut,'000300','float_market').stock_bias
+tmpIndexBias = select wavg(bias_stat,weight) from tmpIndexbiasbn group by record_date
+
+plot(tmpIndexBias.wavg_bias_stat,tmpIndexBias.record_date,extras={multiYAxes: false})</code></pre>
+                        <figure class="- topic/fig fig fignone" id="sph_y2g_41c__fig_up5_y2g_41c" data-ofbid="sph_y2g_41c__fig_up5_y2g_41c"><figcaption data-caption-side="top" class="- topic/title title figcap"><span class="figtitleprefix fig--title-label">图<span class="fig--title-label-number"> 19</span><span class="fig--title-label-punctuation">. </span></span><span class="fig--title">沪深 300 的等权资产组合 Bias </span></figcaption>
+                            
+                            <br/><img class="- topic/image image" id="sph_y2g_41c__image_zp5_y2g_41c" src="images/barra_multi_factor_risk_model/%E6%B2%AA%E6%B7%B1%20300%20%E7%9A%84%E7%AD%89%E6%9D%83%E8%B5%84%E4%BA%A7%E7%BB%84%E5%90%88%20Bias.png"/><br/>
+                        </figure>
+                        <p class="- topic/p p">上图中 Bias 均值为 1.08，说明对沪深 300 的等权资产配置风险预测与实际风险较为一致。</p>
+                        <figure class="- topic/fig fig fignone" id="sph_y2g_41c__fig_zbr_z2g_41c" data-ofbid="sph_y2g_41c__fig_zbr_z2g_41c"><figcaption data-caption-side="top" class="- topic/title title figcap"><span class="figtitleprefix fig--title-label">图<span class="fig--title-label-number"> 20</span><span class="fig--title-label-punctuation">. </span></span><span class="fig--title">沪深 300 的市值加权资产组合 Bias </span></figcaption>
+                            
+                            <br/><img class="- topic/image image" id="sph_y2g_41c__image_gcr_z2g_41c" src="images/barra_multi_factor_risk_model/%E6%B2%AA%E6%B7%B1%20300%20%E7%9A%84%E5%B8%82%E5%80%BC%E5%8A%A0%E6%9D%83%E8%B5%84%E4%BA%A7%E7%BB%84%E5%90%88%20Bias.png"/><br/>
+                        </figure>
+                        <p class="- topic/p p">上图中 Bias 均值为 1.08，说明对沪深 300 的流通市值加权资产配置风险预测与实际风险也较为一致。</p>
+                    </div>
+                </article>
+            </article>
+            <article class="- topic/topic topic nested3" aria-labelledby="ariaid-title42" id="bvj_1fg_41c">
+                <h4 class="- topic/title title topictitle4" id="ariaid-title42">4.3.2. 评估事前预测模型资产配置</h4>
+                <div class="- topic/body body">
+                    <p class="- topic/p p">事前资产配置指在实际收益数据可用之前，根据模型的预测和假设进行的资产配置。这个过程发生在投资决策之前，基于模型的预测结果和投资者的目标、约束条件等进行资产配置。根据已经由优化目标得到组合权重或是给定的组合权重，可以计算出指定组合的偏差统计量和
+                        Q 统计量，观察指定资产配置组合权重的合理性或是评估优化权重的好坏。</p>
+                    <p class="- topic/p p">本文基于 <code class="+ topic/ph pr-d/codeph ph codeph">getPortfolioAccuracy</code> 接口以评估事前资产配置组合。</p>
+                    <pre class="+ topic/pre pr-d/codeblock pre codeblock"><code>/* getPortfolioAccuracy
+计算资产组合的时序偏差统计量、Q-统计量
+Input:                                      
+         facTable          NULL   (Default)   (getFSLevelFactor函数返回的）全因子回归表
+         retOut            NULL  (Default)    （getRetTable函数返回的）全因子收益表    
+         st                2022.01.03(Default)                
+         et                2023.01.02(Default)
+         index_code        指定资产组合        '000300'、'399101'
+         method            权重配比方法        "float_value"  流通市值加权，"equal" 等权
+Output:  
+         accuracyTable   
+*/</code></pre>
+                    <p class="- topic/p p">假设以沪深 300 指数的等权资产组合为例，基于 <code class="+ topic/ph pr-d/codeph ph codeph">getPortfolioAccuracy</code>
+                        函数计算事前预测资产组合的偏差，发现 B<sub class="+ topic/ph hi-d/sub ph sub">n</sub> 统计量的均值为 0.335&lt;1，但此处 Bias
+                        结果与事前预测得到的组合权重有关，因此说明沪深 300 指数的等权组合对未来风险的可预测性较弱，建议重新配置资产组合。</p>
+                    <pre class="+ topic/pre pr-d/codeblock pre codeblock"><code>/* 计算预测模型的bias、q统计量 */
+index_code = '000300'
+st = 2022.01.03 
+et = 2023.01.02
+outAccurary = getPortfolioAccuracy(st,et,facTable1,retOut,index_code,'equal')
+outAccurary = outAccurary[2:]
+baseline = take(1,(shape outAccurary)[0])
+plot(table(outAccurary.bias_statistic,baseline),outAccurary.record_date, extras={multiYAxes: false})
+mean(outAccurary) </code></pre>
+                    <br/><img class="- topic/image image" src="images/barra_multi_factor_risk_model/4.3.2-1.png" alt="image-20231219-101958.png"/><br/>
+                </div>
+            </article>
+        </article>
+    </article>
+    <article class="- topic/topic topic nested1" aria-labelledby="ariaid-title43" id="ojr_1fg_41c">
+        <h2 class="- topic/title title topictitle2" id="ariaid-title43">5. 基于 DolphinDB 的 Barra 模型实现和应用</h2>
+        <div class="- topic/body body">
+            <p class="- topic/p p">本模块将详细说明 基于 DolphinDB 的 Barra 模型实现和应用的使用流程和注意事项。</p>
+        </div>
+        <article class="- topic/topic topic nested2" aria-labelledby="ariaid-title44" id="rvh_bfg_41c">
+            <h3 class="- topic/title title topictitle3" id="ariaid-title44">5.1. 因子计算模块 barraFactorsCal</h3>
+            <div class="- topic/body body">
+                <p class="- topic/p p">第一步首先是准备相应的真实数据或者模拟数据：可以参考附件中的建库建表模拟数据的脚本，然后加载所有的计算因子的脚本和模型调用验证脚本。</p>
+            </div>
+            <article class="- topic/topic topic nested3" aria-labelledby="ariaid-title45" id="rl4_bfg_41c">
+                <h4 class="- topic/title title topictitle4" id="ariaid-title45">5.1.1. 风格因子计算</h4>
+                <div class="- topic/body body">
+                    <p class="- topic/p p">下面开始计算因子，单个三级因子的计算流程如下：</p>
+                    <pre class="+ topic/pre pr-d/codeblock pre codeblock"><code>// Get full original fatcors    查看原始风格三级因子
+getAbs(startTime = 2022.01.03,endTime = 2023.01.02)
+getAcf(method='TTM',startTime = 2022.01.03,endTime = 2023.01.02)                
+//'TTM'(Default)
+getAcf(method='LYR',startTime = 2022.01.03,endTime = 2023.01.02)
+getVsal(method='TTM',startTime = 2022.01.03,windows = 1825,endTime = 2023.01.02)
+getVsal(method='LYR',startTime = 2022.01.03,windows = 1825,endTime = 2023.01.02)   
+//'LYR'(Default)
+getVern(method='TTM',startTime = 2022.01.03,windows = 1825,endTime = 2023.01.02)    
+getVern(method='LYR',startTime = 2022.01.03,windows = 1825,endTime = 2023.01.02)   
+//'LYR'(Default)
+getVflo(method='TTM',startTime = 2022.01.03,windows = 1825,endTime = 2023.01.02)
+getVflo(method='LYR',startTime = 2022.01.03,windows = 1825,endTime = 2023.01.02)  
+ //'LYR'(Default)
+getCetop(method='TTM',startTime = 2022.01.03,endTime = 2023.01.02)              
+//'TTM'(Default)
+getCetop(method='LYR',startTime = 2022.01.03,endTime = 2023.01.02)              
+getEtop(method='TTM',startTime = 2022.01.03,endTime = 2023.01.02)               
+//'TTM'(Default)
+getEtop(method='LYR',startTime = 2022.01.03,endTime = 2023.01.02)
+getEgro(method='TTM',startTime = 2022.01.03,windows = 1825,endTime = 2023.01.02)
+getEgro(method='LYR',startTime = 2022.01.03,windows = 1825,endTime = 2023.01.02)   
+//'LYR'(Default)
+getSgro(method='TTM',startTime = 2022.01.03,windows = 1825,endTime = 2023.01.02)
+getSgro(method='LYR',startTime = 2022.01.03,windows = 1825,endTime = 2023.01.02)   
+//'LYR'(Default)
+getAgro(startTime = 2022.01.03,windows = 1825,endTime = 2023.01.02)
+getIgro(startTime = 2022.01.03,windows = 1825,endTime = 2023.01.02)
+getMlev(startTime = 2022.01.03,windows = 365,endTime = 2023.01.02)
+getDtoa(startTime = 2022.01.03,windows = 365,endTime = 2023.01.02)
+getBlev(startTime = 2022.01.03,windows = 365,endTime = 2023.01.02)   
+getStom(startTime = 2022.01.03,windows = 21,endTime = 2023.01.02)
+getStoq(startTime = 2022.01.03,windows = 63,endTime = 2023.01.02)
+getStoa(startTime = 2022.01.03,windows = 365,endTime = 2023.01.02)
+getAtvr(startTime = 2022.01.03,windows = 252,halfLife = 63,endTime = 2023.01.02)
+getLtrstr(startTime = 2022.01.03,windowsReturn = 1040,windowsAvg = 11,lagged = 273, halfLife = 260,endTime = 2023.01.02)
+getLthalpha(startTime = 2022.01.03,windowsReturn = 1040,windowsAvg = 11, lagged = 273,halfLife = 260,endTime = 2023.01.02)
+getMidcap(startTime = 2022.01.03,endTime = 2023.01.02)
+getRstr(startTime = 2022.01.03,windowsReturn = 252,windowsAvg = 11,lagged = 11, halfLife = 126,endTime = 2023.01.02)
+getHalpha(startTime = 2022.01.03,windowsReturn = 252,windowsAvg = 11,lagged = 11, halfLife = 126,endTime = 2023.01.02)
+getAto(method='TTM',startTime = 2022.01.03,endTime = 2023.01.02)                
+//'TTM'(Default)
+getAto(method='LYR',startTime = 2022.01.03,endTime = 2023.01.02)
+getRoa(method='TTM',startTime = 2022.01.03,endTime = 2023.01.02)               
+ //'TTM'(Default)
+getRoa(method='LYR',startTime = 2022.01.03,endTime = 2023.01.02)
+getBtop(startTime = 2022.01.03,endTime = 2023.01.02)
+getDtop(startTime = 2022.01.03,windows = 365,endTime = 2023.01.02)
+getHbeta(startTime = 2022.01.03,windowsReturn = 252,halfLife = 63, endTime = 2023.01.02)
+getHsigma(startTime = 2022.01.03,windowsReturn = 252,halfLife = 63, endTime = 2023.01.02)
+getDastd(startTime = 2022.01.03,windowsReturn = 252,halfLife = 42, endTime = 2023.01.02)
+getCmra(startTime = 2022.01.03,windowsReturn = 365,endTime = 2023.01.02)
+getLncap(startTime = 2022.01.03,endTime = 2023.01.02)
+getCxgro(startTime = 2022.01.03,windows = 5,endTime = 2023.01.02)
+getGp(method='TTM',startTime = 2022.01.03,windows = 365,endTime = 2023.01.02)
+getGp(method='LYR',startTime = 2022.01.03,windows = 365,endTime = 2023.01.02)    
+ //'LYR'(Default)
+getGpm(method='TTM',startTime = 2022.01.03,windows = 365,endTime = 2023.01.02)
+getGpm(method='LYR',startTime = 2022.01.03,windows = 365,endTime = 2023.01.02)    
+//'LYR'(Default)
+getEm(startTime = 2022.01.03,windows = 365,endTime = 2023.01.02)</code></pre>
+                </div>
+            </article>
+            <article class="- topic/topic topic nested3" aria-labelledby="ariaid-title46" id="mz5_bfg_41c">
+                <h4 class="- topic/title title topictitle4" id="ariaid-title46">5.1.2. 行业因子计算</h4>
+                <div class="- topic/body body">
+                    <p class="- topic/p p">有了计算单个风格因子的函数后，调用 <code class="+ topic/ph pr-d/codeph ph codeph">getIndustry</code> 等函数获得行业因子：</p>
+                    <pre class="+ topic/pre pr-d/codeblock pre codeblock"><code>// 获取原始行业因子
+getIndustry(startTime = 2022.01.01,endTime = 2023.01.02,method = 'SW_2021') 
+getIndustry(startTime = 2022.01.01,endTime = 2023.01.02,method = 'CITIC')
+// 获取行业因子权重
+getIndustryWeighted(startTime = 2022.01.03,endTime = 2023.01.02,method = 'SW_2021')
+getIndustryWeighted(startTime = 2022.01.03,endTime = 2023.01.02,method = 'CITIC')
+// 获取加权后的行业因子
+getIndustryFactor(startTime = 2022.01.03,endTime = 2023.01.02,method = 'SW_2021')
+getIndustryFactor(startTime = 2022.01.03,endTime = 2023.01.02,method = 'CITIC')</code></pre>
+                </div>
+            </article>
+        </article>
+        <article class="- topic/topic topic nested2" aria-labelledby="ariaid-title47" id="nzk_cfg_41c">
+            <h3 class="- topic/title title topictitle3" id="ariaid-title47">5.2. 因子合成模块 barraFactorsMerge</h3>
+            <article class="- topic/topic topic nested3" aria-labelledby="ariaid-title48" id="lmq_cfg_41c">
+                <h4 class="- topic/title title topictitle4" id="ariaid-title48">5.2.1. 因子预处理</h4>
+                <div class="- topic/body body">
+                    <p class="- topic/p p">在计算得到所有风格因子后，可以调用 <code class="+ topic/ph pr-d/codeph ph codeph">standardized</code>、<code class="+ topic/ph pr-d/codeph ph codeph">winsorized</code>
+                        对风格因子进行标准化、去极值处理。</p>
+                    <pre class="+ topic/pre pr-d/codeblock pre codeblock"><code>//factors use for factorValidation 去极值、标准化、市场中性   
+//在同种类别因子中，如若包含ttm或者lyr，只能选取其中一种纳入模型 
+abs = standardized(winsorized(getAbs(startTime = 2022.01.03,endTime = 2023.01.02)),
+                   adjusted = true)
+acf_ttm = standardized(winsorized(getAcf(method='TTM',startTime = 2022.01.03, endTime = 2023.01.02)),adjusted = true)   //'TTM'(Default)
+acf_lyr = standardized(winsorized(getAcf(method='LYR',startTime = 2022.01.03, endTime = 2023.01.02)),adjusted = true)
+vsal_ttm = standardized(winsorized(getVsal(method='TTM',startTime = 2022.01.03, windows = 1825,endTime = 2023.01.02)),adjusted = true)
+vsal_lyr = standardized(winsorized(getVsal(method='LYR',startTime = 2022.01.03, windows = 1825,endTime = 2023.01.02)),adjusted = true) 
+                   //'LYR'(Default)
+vern_ttm = standardized(winsorized(getVern(method='TTM',startTime = 2022.01.03, windows = 1825,endTime = 2023.01.02)),adjusted = true)    
+vern_lyr = standardized(winsorized(getVern(method='LYR',startTime = 2022.01.03, windows = 1825,endTime = 2023.01.02)),adjusted = true)   
+                  //'LYR'(Default)
+vflo_ttm = standardized(winsorized(getVflo(method='TTM',startTime = 2022.01.03, windows = 1825,endTime = 2023.01.02)),adjusted = true)
+vflo_lyr = standardized(winsorized(getVflo(method='LYR',startTime = 2022.01.03, windows = 1825,endTime = 2023.01.02)),adjusted = true)
+                    //'LYR'(Default)
+cetop_ttm = standardized(winsorized(getCetop(method='TTM',startTime = 2022.01.03, endTime = 2023.01.02)),adjusted = true)             
+                   //'TTM'(Default)
+cetop_lyr = standardized(winsorized(getCetop(method='LYR',startTime = 2022.01.03, endTime = 2023.01.02)),adjusted = true)             
+etop_ttm = standardized(winsorized(getEtop(method='TTM',startTime = 2022.01.03, endTime = 2023.01.02)),adjusted = true)              
+                    //'TTM'(Default)
+etop_lyr = standardized(winsorized(getEtop(method='LYR',startTime = 2022.01.03, endTime = 2023.01.02)),adjusted = true)
+egro_ttm = standardized(winsorized(getEgro(method='TTM',startTime = 2022.01.03, windows = 1825,endTime = 2023.01.02)),adjusted = true)
+egro_lyr = standardized(winsorized(getEgro(method='LYR',startTime = 2022.01.03, windows = 1825,endTime = 2023.01.02)),adjusted = true)
+                    //'LYR'(Default)
+sgro_ttm = standardized(winsorized(getSgro(method='TTM',startTime = 2022.01.03, windows = 1825,endTime = 2023.01.02)),adjusted = true)
+sgro_lyr = standardized(winsorized(getSgro(method='LYR',startTime = 2022.01.03, windows = 1825,endTime = 2023.01.02)),adjusted = true)  
+                   //'LYR'(Default)
+agro = standardized(winsorized(getAgro(startTime = 2022.01.03,windows = 1825, endTime = 2023.01.02)),adjusted = true)
+igro = standardized(winsorized(getIgro(startTime = 2022.01.03,windows = 1825, endTime = 2023.01.02)),adjusted = true)
+mlev = standardized(winsorized(getMlev(startTime = 2022.01.03,windows = 365, endTime = 2023.01.02)),adjusted = true)
+dtoa = standardized(winsorized(getDtoa(startTime = 2022.01.03,windows = 365, endTime = 2023.01.02)),adjusted = true)
+blev = standardized(winsorized(getBlev(startTime = 2022.01.03,windows = 365, endTime = 2023.01.02)),adjusted = true)
+stom = standardized(winsorized(getStom(startTime = 2022.01.03,windows = 21, endTime = 2023.01.02)),adjusted = true)
+stoq = standardized(winsorized(getStoq(startTime = 2022.01.03,windows = 63, endTime = 2023.01.02)),adjusted = true)
+stoa = standardized(winsorized(getStoa(startTime = 2022.01.03,windows = 365, endTime = 2023.01.02)),adjusted = true)
+atvr = standardized(winsorized(getAtvr(startTime = 2022.01.03,windows = 252, halfLife = 63,endTime = 2023.01.02)),adjusted = true)
+ltrstr = standardized(winsorized(getLtrstr(startTime = 2022.01.03, windowsReturn = 1040,windowsAvg = 11,lagged = 273, halfLife = 260,endTime = 2023.01.02)),adjusted = true)
+lthalpha = standardized(winsorized(getLthalpha(startTime = 2022.01.03, windowsReturn = 1040,windowsAvg = 11,lagged = 273, halfLife = 260,endTime = 2023.01.02)),adjusted = true)
+midcap = standardized(winsorized(getMidcap(startTime = 2022.01.03, endTime = 2023.01.02)),adjusted = true)
+rstr = standardized(winsorized(getRstr(startTime = 2022.01.03, windowsReturn = 252,windowsAvg = 11,lagged = 11, halfLife = 126,endTime = 2023.01.02)),adjusted = true)
+halpha = standardized(winsorized(getHalpha(startTime = 2022.01.03, windowsReturn = 252,windowsAvg = 11,lagged = 11, halfLife = 126,endTime = 2023.01.02)),adjusted = true)
+ato_ttm = standardized(winsorized(getAto(method='TTM',startTime = 2022.01.03, endTime = 2023.01.02)),adjusted = true)   //'TTM'(Default)
+ato_lyr = standardized(winsorized(getAto(method='LYR',startTime = 2022.01.03, endTime = 2023.01.02)),adjusted = true)  
+roa_ttm = standardized(winsorized(getRoa(method='TTM',startTime = 2022.01.03, endTime = 2023.01.02)),adjusted = true)   //'TTM'(Default)
+roa_lyr = standardized(winsorized(getRoa(method='LYR',startTime = 2022.01.03, endTime = 2023.01.02)),adjusted = true)
+btop = standardized(winsorized(getBtop(startTime = 2022.01.03, endTime = 2023.01.02)),adjusted = true)
+dtop = standardized(winsorized(getDtop(startTime = 2022.01.03,windows = 365, endTime = 2023.01.02)),adjusted = true)
+hbeta = standardized(winsorized(getHbeta(startTime = 2022.01.03, windowsReturn = 252,halfLife = 63, endTime = 2023.01.02)),adjusted = true)
+hsigma = standardized(winsorized(getHsigma(startTime = 2022.01.03, windowsReturn = 252, halfLife = 63,endTime = 2023.01.02)), adjusted = true)
+dastd = standardized(winsorized(getDastd(startTime = 2022.01.03, windowsReturn = 252,halfLife = 42, endTime = 2023.01.02)),adjusted = true)
+cmra = standardized(winsorized(getCmra(startTime = 2022.01.03,windowsReturn = 365, endTime = 2023.01.02)),adjusted = true)
+lncap = standardized(winsorized(getLncap(startTime = 2021.12.01, endTime = 2023.01.02)),adjusted = false)
+cxgro = standardized(winsorized(getCxgro(startTime = 2022.01.03, windows = 1825, endTime = 2023.01.02)),adjusted = true)
+gp_ttm = standardized(winsorized(getGp(method='TTM',startTime = 2022.01.03, windows = 365,endTime = 2023.01.02)),adjusted = true)
+gp_lyr = standardized(winsorized(getGp(method='LYR',startTime = 2022.01.03, windows = 365,endTime = 2023.01.02)),adjusted = true) 
+                   //'LYR'(Default)
+gpm_ttm = standardized(winsorized(getGpm(method='TTM',startTime = 2022.01.03, windows = 365,endTime = 2023.01.02)),adjusted = true)
+gpm_lyr = standardized(winsorized(getGpm(method='LYR',startTime = 2022.01.03, windows = 365,endTime = 2023.01.02)),adjusted = true)  
+                   //'LYR'(Default)
+em = standardized(winsorized(getEm(startTime = 2022.01.03,windows = 365, endTime = 2023.01.02)),adjusted = true)</code></pre>
+                </div>
+            </article>
+            <article class="- topic/topic topic nested3" aria-labelledby="ariaid-title49" id="lpx_cfg_41c">
+                <h4 class="- topic/title title topictitle4" id="ariaid-title49">5.2.2. 风格因子、行业因子合并</h4>
+                <div class="- topic/body body">
+                    <p class="- topic/p p">接下来，批量通过调用函数并行计算所有因子，包括风格因子和行业因子（如果需要查看单个风格因子或行业因子，推荐使用上述的单个因子计算函数）：</p>
+                    <pre class="+ topic/pre pr-d/codeblock pre codeblock"><code>/* Barra 因子+模型全流程 */
+st = 2012.12.01
+et = 2023.01.02
+normlizing = true
+scaling = true
+decap = false
+industry_method = 'CITIC'
+industry_weighted = false
+
+
+// 获取所有因子、包括行业因子、风格因子
+Factors = getAllFactors(st=st,et =et, normlizing = true,scaling = true,
+                   decap = false,industry_method = 'CITIC',
+                   industry_weighted = false)
+Factors = getAllFactors(st=st,et =et, normlizing = true,scaling = true,
+                   decap = false,industry_method = 'SW_2021',
+                   industry_weighted = false)
+select * from Factors limit 100</code></pre>
+                </div>
+            </article>
+            <article class="- topic/topic topic nested3" aria-labelledby="ariaid-title50" id="v2k_dfg_41c">
+                <h4 class="- topic/title title topictitle4" id="ariaid-title50">5.2.3. 因子有效性检验</h4>
+                <div class="- topic/body body">
+                    <p class="- topic/p p">接下来对三级因子进行单因子检验，并画出相应的检验指标：（具体画图结果可参考本教程 2.4.5 的结果）</p>
+                    <pre class="+ topic/pre pr-d/codeblock pre codeblock"><code>st = 2022.01.03 
+et = 2023.01.02
+normlizing = true
+scaling = true
+decap = true
+industry_method = 'CITIC'
+industry_weighted = true
+Factors = getAllFactors(st= st,et = et, normlizing = normlizing,
+                        scaling = scaling,decap = decap,
+                        industry_method = industry_method,
+                        industry_weighted = industry_weighted)
+
+select * from Factors limit 100
+
+// 对原始因子宽表的缺失值进行处理
+fTable = getRegTable(factorsTable = true,tbName = Factors,st= st,et = et,
+                    normlizing = normlizing ,scaling = scaling ,decap = decap,
+                    industry_method = industry_method,
+                    industry_weighted = industry_weighted)
+
+// 因子有效性检验
+// 获取单风格因子有效性、一致性、稳定性检验
+factorsValid = getFactorsValidation(factorsTable = true,tbName = Factors,
+                                    st = st,et = et , normlizing = normlizing,
+                                    scaling = scaling,decap = decap,
+                                    industry_method = industry_method,
+                                    industry_weighted = industry_weighted)
+factorsValid
+
+update factorsValid set tstat = abs(tstat)
+
+// 计算fsc
+tmp = select record_date,valueType.regexReplace("_stat","") as valueType,
+             fsc from factorsValid 
+tmppivot = select fsc from tmp pivot by record_date,valueType
+tbfsc = sql(select = sqlCol(tmppivot.columnNames()[11:20]),from = tmppivot).eval()
+plot(tbfsc,tmppivot.record_date,extras={multiYAxes: false},
+     title = "因子fsc 月频时序图")
+
+// 计算ic
+tmp1 = select record_date,valueType.regexReplace("_stat","") as valueType,
+             abs(ic) as ic from factorsValid 
+tmppivot1 = select ic from tmp1 pivot by record_date,valueType
+tbic = sql(select = sqlCol(tmppivot1.columnNames()[2:10]),from = tmppivot1).eval()
+
+baseline = take(0.03,(shape tbic)[0])
+plot(table(tbic,baseline),tmppivot1.record_date,extras={multiYAxes: false},
+     title = "因子ic 月频时序图")
+
+// 计算tstat
+tmp2 = select record_date,valueType.regexReplace("_stat","") as valueType,
+              tstat from factorsValid 
+tmppivot2 = select tstat from tmp2 pivot by record_date,valueType
+tbstat = sql(select = sqlCol(tmppivot2.columnNames()[11:20]),
+             from = tmppivot2).eval()
+
+baseline_neg = take(-0.03,(shape tbstat)[0])
+baseline_pos = take(0.03,(shape tbstat)[0])
+plot(table(tbstat,baseline_neg,baseline_pos),tmppivot2.record_date,
+           extras={multiYAxes: false},title = "因子t_stat 月频时序图")</code></pre>
+                </div>
+            </article>
+            <article class="- topic/topic topic nested3" aria-labelledby="ariaid-title51" id="rft_dfg_41c">
+                <h4 class="- topic/title title topictitle4" id="ariaid-title51">5.2.4. 多因子合成</h4>
+                <div class="- topic/body body">
+                    <p class="- topic/p p">利用已经计算好的三级因子合成对应的一级、二级因子：</p>
+                    <pre class="+ topic/pre pr-d/codeblock pre codeblock"><code>// 合成一级、二级因子 
+//  一级因子和二级因子的json，可根据检验结果修改关系,若有需求，可自行添加其他因子
+firstFactors = {
+        "Quality":["Earnings_Quality","Earnings_Variability","
+        Investment_Quality","Leverage","Profitability"],
+        "Value":["Btop","Earning_Yield","Long_Term_Reversal"],
+        "Growth":"Growth",
+        "Liquidity":"Liquidity",
+        "Volatility":["Beta","Residual_Volatility"],
+        "Size":["Size","Mid_Cap"],
+        "Momentum":"Momentum",
+        "Dividend_Yield":"Dividend_Yield"
+}   
+    
+// 二级因子和三级因子的json，可根据检验结果修改关系，三级因子一般需要选择ttm和lyr种类的因子
+// 三级因子字典表
+/* ['abs','acf_ttm','acf_lyr','vsal_ttm','vsal_lyr','vern_ttm','vern_lyr',
+   'vflo_ttm','vflo_lyr','cetop_ttm','cetop_lyr','etop_ttm','etop_lyr',
+   'egro_ttm','egro_lyr','sgro_ttm','sgro_lyr','agro','igro','mlev','dtoa',
+   'blev','stom','stoq','stoa','atvr','ltrstr','lthalpha','midcap',
+   'rstr','halpha','ato_ttm','ato_lyr','roa_ttm','roa_lyr','btop',
+   'dtop','hbeta','hsigma','dastd','cmra','lncap','cxgro','gp_ttm',
+   'gp_lyr','gpm_ttm','gpm_lyr','em'] */
+secondFactors = {
+    "Earnings_Quality":["abs","acf_ttm"],
+    "Earnings_Variability":["vsal_ttm","vern_ttm","vflo_ttm"],
+    "Investment_Quality":["agro","igro","cxgro"],
+    "Leverage":["mlev","dtoa","blev"],
+    "Profitability":["ato_ttm","gp_ttm","gpm_ttm","roa_ttm"],
+    "Btop":"btop",
+    "Earning_Yield":["cetop_ttm","etop_ttm","em"],
+    "Long_Term_Reversal":["ltrstr","lthalpha"],
+    "Growth":["egro_ttm","sgro_ttm"],
+    "Liquidity":["stom","stoq","stoa","atvr"],
+    "Beta":"hbeta",
+    "Residual_Volatility":["hsigma","dastd","cmra"],
+    "Size":"lncap",
+    "Mid_Cap":"midcap",
+    "Momentum":["rstr","halpha"],
+    "Dividend_Yield":"dtop"
+}
+
+select count(*) from fTable
+// 针对原始因子表填补缺失值
+fTable = getRegTable(factorsTable = true,tbName = Factors,
+                     st= st,et = et, normlizing = normlizing ,
+                    scaling = scaling ,decap = decap,
+                    industry_method = industry_method,
+                    industry_weighted = industry_weighted)
+// 原始因子有效性检验(factor_return、tstat、R2、aR2、stR2、fsc、IC)
+factorsValid = getFactorsValidation(factorsTable = true,tbName = Factors,
+                                    st = st,et = et , normlizing = normlizing,
+                                    scaling = scaling,decap = decap,
+                                    industry_method = industry_method,
+                                    industry_weighted = industry_weighted)
+
+select avg(R2)  from factorsValid group by valueType
+select avg(aR2)  from factorsValid group by valueType
+select avg(abs(tstat))  from factorsValid group by valueType
+
+// 得到最终的一级、二级、因子（目前支持等权法、信息比率法、信息系数信息比率法）
+facTable1 = getFSLevelFactor(fTable,factorsValid,firstFactors,secondFactors,false, 
+                             "equal",level = "F")
+facTable1 = getFSLevelFactor(fTable,factorsValid,firstFactors,secondFactors,false, 
+                             "ir",level = "F")
+facTable1 = getFSLevelFactor(fTable,factorsValid,firstFactors,secondFactors,false,
+                              "ic_ir",level = "F")
+facTable2 = getFSLevelFactor(fTable,factorsValid,firstFactors,secondFactors,true, 
+                             "equal",level = "S")
+facTable2 = getFSLevelFactor(fTable,factorsValid,firstFactors,secondFactors,true, 
+                             "ir",level = "S")
+facTable2 = getFSLevelFactor(fTable,factorsValid,firstFactors,secondFactors,true, 
+                             "ic_ir",level = "S")
+
+facTable1.columnNames()
+select * from facTable1 limit 100</code></pre>
+                </div>
+            </article>
+        </article>
+        <article class="- topic/topic topic nested2" aria-labelledby="ariaid-title52" id="kkl_2fg_41c">
+            <h3 class="- topic/title title topictitle3" id="ariaid-title52">5.3. 因子模型模块 barraFactorsModel</h3>
+            <article class="- topic/topic topic nested3" aria-labelledby="ariaid-title53" id="iyq_2fg_41c">
+                <h4 class="- topic/title title topictitle4" id="ariaid-title53">5.3.1. 风险收益模型</h4>
+                <div class="- topic/body body">
+                    <p class="- topic/p p">计算合成后的因子收益率和实现预测收益率：</p>
+                    <pre class="+ topic/pre pr-d/codeblock pre codeblock"><code>// 一级因子收益率回归  
+retOut1 = getRetTable(facTable1,adjust = true)                                    
+// adjust采用Newey-West协方差调整、当市场收益率存在序列自相关时采用此方法
+retOut1 = getRetTable(facTable1,adjust = false,shrink = false)                    
+// shrink采用贝叶斯收缩调整特异性风险、推荐使用
+retOut1 = getRetTable(facTable1,adjust = true,shrink = true)                      
+// 特异性风险采用bayesian shrinkage
+retOut1 = getRetTable(facTable1,adjust = true,shrink = true,eigenfactor = true)   
+// 因子风险采用eigenfactor adjust,当市场关联密切时采用此方法
+retOut1 = getRetTable(facTable1,adjust = true,shrink = true,eigenfactor = true)   
+// 综上，推荐使用
+retOut1 = getRetTable(facTable1,adjust = false,shrink = true,eigenfactor = true)  
+// 综上，推荐使用
+retOut1 = getRetTable(facTable1,adjust = false,shrink = true,eigenfactor = true)  
+// 综上，推荐使用
+retOut1 = getRetTable(fTable,adjust = false,shrink = true,eigenfactor = false)    
+// 综上，推荐使用
+undef(`retOut)
+retOut = getRetTable(facTable1,adjust = true,shrink = false ,eigenfactor = false) 
+ // 综上，推荐使用
+
+
+// 例如
+retOut1.stock_risk[string(2022.12.30)]   // 12.30的特质收益协方差矩阵
+retOut1.fac_risk[string(2022.12.30)]     // 12.30的风险因子协方差矩阵
+retOut1.R2                               // R2
+retOut1.res                              // 特质收益
+retOut1.tstat                            // t-stat
+retOut1.fac_ret                          // 因子收益
+retOut1.bias                             // bias统计量
+
+select `All_Factors_R2,mean(stR2) from retOut.R2  where record_date 
+between 2022.01.01 and 2023.01.01
+
+plot(retOut1.R2.stR2,retOut1.R2.record_date,"𝑆𝑡𝑢𝑑𝑒𝑛𝑡𝑖𝑧𝑒𝑑 R2 月频时序图")
+
+retOut2 = getRetTable(facTable2)     // 二级因子收益率回归,相应可以得到对应模型检验结果
+retOut3 = getRetTable(fTable)        // 三级因子收益率回归,相应可以得到对应模型检验结果</code></pre>
+                </div>
+            </article>
+            <article class="- topic/topic topic nested3" aria-labelledby="ariaid-title54" id="xlw_2fg_41c">
+                <h4 class="- topic/title title topictitle4" id="ariaid-title54">5.3.2. 预测个股收益</h4>
+                <div class="- topic/body body">
+                    <pre class="+ topic/pre pr-d/codeblock pre codeblock"><code>predictOut = getPredicOut(facTable1)         
+// 结果较多，如需查看，推荐持久化后再查看结果，或者可以取出来部分较少的结果，除去预测收益外
+pr = select * from predictOut.predict_ret    // 利用本期因子暴露预测最后一期的收益率
+predictOut.R2                               // 预测模型R2
+predictOut.res                              // 预测模型特质收益
+predictOut.tstat                            // 预测模型t-stat
+predictOut.fac_ret                          // 预测模型因子收益
+predictOut.bias                             // 预测模型bias统计量</code></pre>
+                </div>
+            </article>
+            <article class="- topic/topic topic nested3" aria-labelledby="ariaid-title55" id="img_ffg_41c">
+                <h4 class="- topic/title title topictitle4" id="ariaid-title55">5.3.3. 组合权重优化</h4>
+                <div class="- topic/body body">
+                    <p class="- topic/p p">利用预测收益控制最小预测收益率，最小化风险，求解优化目标（需要注意，如果是模拟数据的话，由于模拟数据不满足一些模型条件，该步骤之后调用函数可能报错）：</p>
+                    <pre class="+ topic/pre pr-d/codeblock pre codeblock"><code>optionCode = exec stock_code from getPredicOut(facTable1).predict_ret
+             order by return_day desc limit 20             // 初步筛选stock1
+optionCode = exec stock_code from getPredicOut(facTable2).predict_ret 
+             order by return_day desc limit 20  
+
+// 控制收益、最小化风险模型
+portWeight1 = getOptimizeWeights(facTable = facTable1,retOut = retOut1,
+                                 st = st,et = et, method ="minRiskControlRet",
+                                 r = 0.05,optionCode = optionCode) 
+                                 // 获得权重组合
+portWeight2 = getOptimizeWeights(facTable = facTable2,retOut = retOut2,
+                                 st = st,et = et, method ="minRiskControlRet",
+                                 r = 0.05,optionCode = optionCode)
+
+index_code = '000300'
+CodePre = set(exec stock_code from getPredicOut(facTable1).predict_ret
+              order by return_day desc limit 200)           // 初步筛选stock2
+CodeWeight = set(exec stock_code from getBenchMark(st=st,et=et,code = index_code)
+                                where i_weight != 0)
+CodeFac =set(exec stock_code from facTable1 )
+optionCode = (CodePre&amp;CodeWeight&amp;CodeFac).keys()
+portWeight3 = getOptimizeWeights(facTable = facTable1,retOut = retOut1,
+                                 st = st,et = et, method ="minRiskControlRet",
+                                 r = 0.005,deStyle = true,  optionCode = optionCode)
+                                 // 获得权重组合,并实现在风格上的风险敞口为0
+portWeight3 = getOptimizeWeights(facTable = facTable1,retOut = retOut1,
+                                 st = st,et = et, method ="minRiskControlRet",
+                                 r = 0.005,deIndustry = true,optionCode = optionCode)
+                                  // 获得权重组合,并实现在行业上的风险敞口为0
+portWeight4 = getOptimizeWeights(facTable = facTable2,retOut = retOut2,
+                                 st = st,et = et, method ="minRiskControlRet",
+                                 r = 0.05,optionCode = optionCode)</code></pre>
+                </div>
+            </article>
+            <article class="- topic/topic topic nested3" aria-labelledby="ariaid-title56" id="zwn_ffg_41c">
+                <h4 class="- topic/title title topictitle4" id="ariaid-title56">5.3.4. 事前与事后资产配置评估</h4>
+                <div class="- topic/body body">
+                    <p class="- topic/p p">事前资产配置评估，计算预测模型的 bias、q 统计量，需要给出月频的资产组合优化权重模型的结果。如下例子，模型不变，例如都是控制收益最小化风险，利用前
+                        n-1 期数据预测第 n 期，给出第 n 期的统计量，如果需要获取每一期的统计量、每一期对模型给出估计后，都应该把前 t 期的
+                            <code class="+ topic/ph pr-d/codeph ph codeph">tbName</code>、 <code class="+ topic/ph pr-d/codeph ph codeph">facTable</code>、
+                            <code class="+ topic/ph pr-d/codeph ph codeph">retOut</code>结果代入到该函数（设为第 t 期），得到第 t 期的统计量结果。</p>
+                    <pre class="+ topic/pre pr-d/codeblock pre codeblock"><code>/* 计算预测模型的bias、q统计量 */
+// 真实数据
+index_code = '000300'
+outAccurary = getPortfolioAccuracy(st,et,facTable1,retOut,index_code,'equal')
+outAccurary = outAccurary[2:]
+baseline = take(1,(shape outAccurary)[0])
+plot(table(outAccurary.bias_statistic,baseline),outAccurary.record_date, extras={multiYAxes: false})
+mean(outAccurary)</code></pre>
+                    <p class="- topic/p p">事后资产配置评估，计算 Barra 模型的 bias、q 统计量：</p>
+                    <pre class="+ topic/pre pr-d/codeblock pre codeblock"><code>/*资产配置评估
+*/
+// 获取所有因子的时序bias统计量的值和所有个股的时序bias统计量
+biasOut = getFacSpeacialBias(retOut)
+// 因子bias
+tmpfBias = select bias_stat from biasOut.fac_bias pivot by record_date,valueType
+tbfBias = sql(select = sqlCol(tmpfBias.columnNames()[1:9]),from = tmpfBias).eval()
+
+plot(tbfBias,tmpfBias.record_date,extras={multiYAxes: false},
+      title = "因子模型因子Bias统计量时序图")
+plot(tbfBias,tmpfBias.record_date,extras={multiYAxes: false})
+code0 = parseExpr("rowAvg("+ concat(tmpfBias.columnNames()[1:],',') + ")")
+avgfBias =  sql(select = sqlColAlias(code0,'avg_bias_stat'),from = tmpfBias).eval()
+plot(avgfBias,tmpfBias.record_date,extras={multiYAxes: false},
+      title = "因子均值Bias统计量时序图")
+plot(avgfBias,tmpfBias.record_date,extras={multiYAxes: false})
+
+// 个股特异bias
+tmpsBias = select mean(bias_stat) from biasOut.stock_bias group by record_date
+plot(tmpsBias.avg_bias_stat,tmpsBias.record_date,extras={multiYAxes: false},
+      title = "因子模型特异风险Bias统计量时序图")
+
+/* 简单资产配置评估 */
+// 计算指数配置的Bias统计量
+tmpIndexbiasbn = getFacSpeacialBias(retOut,'000300','equal').stock_bias
+tmpIndexBias = select wavg(bias_stat,weight) from tmpIndexbiasbn group by record_date
+plot(tmpIndexBias.wavg_bias_stat,tmpIndexBias.record_date,extras={multiYAxes: false})
+
+tmpIndexbiasbn = getFacSpeacialBias(retOut,'000300','float_market').stock_bias
+tmpIndexBias = select wavg(bias_stat,weight) from tmpIndexbiasbn group by record_date
+
+plot(tmpIndexBias.wavg_bias_stat,tmpIndexBias.record_date,extras={multiYAxes: false})</code></pre>
+                </div>
+            </article>
+        </article>
+        <article class="- topic/topic topic nested2" aria-labelledby="ariaid-title57" id="hdw_ffg_41c">
+            <h3 class="- topic/title title topictitle3" id="ariaid-title57">5.4. 注意事项</h3>
+            <div class="- topic/body body">
+                <p class="- topic/p p">目前 DolphinDB 的 Barra 多因子模块是基于本地的数据库表实现的，若用户需要基于本地已有库表实现 Barra 多因子模型，暂时需要修改 Barra
+                    模块函数内部的部分库表名及列名，后续会完善相应接口，使得用户能更加方便地使用模块。其中 Barra 多因子模型模块中使用的因子对应的数据源表见附件。</p>
+            </div>
+        </article>
+    </article>
+    <article class="- topic/topic topic nested1" aria-labelledby="ariaid-title58" id="g1f_gfg_41c">
+        <h2 class="- topic/title title topictitle2" id="ariaid-title58">6. 总结</h2>
+        <div class="- topic/body body">
+            <p class="- topic/p p">本文基于 DolphinDB 内置的丰富统计分析函数库、分布式架构下的高性能查询、便捷的向量化编程等特性，完整实现了 Barra 多因子模型
+                的整个流程。DolphinDB 将自身的强大功能与 Barra
+                多因子模型进行深度融合，帮助用户更准确地分析市场因子对投资组合的影响，同时进一步优化投资策略以实现更高的投资回报。</p>
+        </div>
+    </article>
+    <article class="- topic/topic topic nested1" aria-labelledby="ariaid-title59" id="w3m_gfg_41c">
+        <h2 class="- topic/title title topictitle2" id="ariaid-title59">7. 参考文献</h2>
+        <div class="- topic/body body">
+            <ol class="- topic/ol ol">
+                <li class="- topic/li li">通联数据。通联数据风险模型评测报告[R].中国：通联数据，2022.</li>
+                <li class="- topic/li li">通联数据。风险模型库介绍[R].中国：通联数据，2023.</li>
+                <li class="- topic/li li">JAY YAO.Barra China A Total Market Equity Model for Long-Term
+                    Investors[R].Andrei Morozov:MSCI,August 2018.</li>
+                <li class="- topic/li li">刘富兵，李辰。基于组合权重优化的风格中性多因子选股策略[R].中国：国泰君安证券，2015.04.26.</li>
+                <li class="- topic/li li">Newey, W. K. and K. D. West (1987). A simple, positive semi-definite,
+                    heteroskedasticity and autocorrelation consistent covariance matrix.
+                    Econometrica, Vol. 55(3), .</li>
+                <li class="- topic/li li">Menchero, J., D. J. Orr, and J. Wang (2011). The Barra  Equity Model (USE4).
+                    Barra Research Notes.</li>
+                <li class="- topic/li li">Ledoit, Olivier, and Michael Wolf. "Improved estimation of the covariance matrix
+                    of stock returns with an application to portfolio selection." Journal of
+                    empirical finance 10.5 (2003): 603-621.</li>
+                <li class="- topic/li li">林晓明，陈烨。因子合成方法实证分析华泰多因子系列之十[R].中国：华泰证券，2018.</li>
+                <li class="- topic/li li">林晓明，陈烨。华泰多因子模型体系初华泰多因子系列之一[R].中国：华泰证券，2016.</li>
+            </ol>
+        </div>
+    </article>
+    <article class="- topic/topic topic nested1" aria-labelledby="ariaid-title60" id="xmh_kfg_41c">
+        <h2 class="- topic/title title topictitle2" id="ariaid-title60">8. 附录</h2>
+        <div class="- topic/body body">
+            <ul class="- topic/ul ul">
+                <li class="- topic/li li">因子对应数据源表：<a class="- topic/xref xref" href="script/barra_multi_factor_risk_model/%E5%9B%A0%E5%AD%90%E5%AF%B9%E5%BA%94%E8%A1%A8.xlsx">因子对应表.xlsx</a></li>
+                <li class="- topic/li li">建库建表和模拟数据：<a class="- topic/xref xref" href="script/barra_multi_factor_risk_model/test/createTable.dos">createTable.dos</a></li>
+                <li class="- topic/li li">因子计算模块 barraFactorsCal：<a class="- topic/xref xref" href="script/barra_multi_factor_risk_model/barra/barraFactorsCal.dos">barraFactorsCal.dos</a></li>
+                <li class="- topic/li li">因子合成模块 barraFactorsMerge：<a class="- topic/xref xref" href="script/barra_multi_factor_risk_model/barra/barraFactorsMerge.dos">barraFactorsMerge.dos</a></li>
+                <li class="- topic/li li">多因子模型模块 barraFactorsModel：<a class="- topic/xref xref" href="script/barra_multi_factor_risk_model/barra/barraFactorsModel.dos">barraFactorsModel.dos</a></li>
+                <li class="- topic/li li">因子计算测试脚本：<a class="- topic/xref xref" href="script/barra_multi_factor_risk_model/test/factorsCalTest.dos">factorsCalTest.dos</a></li>
+                <li class="- topic/li li">因子合成测试脚本：<a class="- topic/xref xref" href="script/barra_multi_factor_risk_model/test/factorsMergeTest.dos">factorsMergeTest.dos</a></li>
+                <li class="- topic/li li">多因子模型测试脚本：<a class="- topic/xref xref" href="script/barra_multi_factor_risk_model/test/factorsModelTest.dos">factorsModelTest.dos</a></li>
+            </ul>
+        </div>
+    </article>
+</article></main></div>
+                        
+                        
+                        
+                        
+                        
+                        
+                    </div>
+                    
+                        <nav role="navigation" id="wh_topic_toc" aria-label="On this page" class="col-lg-2 d-none d-lg-block navbar d-print-none"> 
+                            <div id="wh_topic_toc_content">
+		                        
+	                            <div class=" wh_topic_toc "><div class="wh_topic_label">在本页上</div><ul><li class="topic-item"><a href="#lrw_fcg_41c" data-tocid="lrw_fcg_41c">1. Barra 多因子模型简介</a><ul><li class="topic-item"><a href="#rrt_gcg_41c" data-tocid="rrt_gcg_41c">1.1. Barra 多因子模型</a></li><li class="topic-item"><a href="#pmz_lcg_41c" data-tocid="pmz_lcg_41c">1.2. Barra 收益风险模型</a></li></ul></li><li class="topic-item"><a href="#mhm_mcg_41c" data-tocid="mhm_mcg_41c">2. 基于 DolphinDB 的因子合成</a><ul><li class="topic-item"><a href="#fkj_4cg_41c" data-tocid="fkj_4cg_41c">2.1. 风格因子计算</a></li><li class="topic-item"><a href="#yp1_qcg_41c" data-tocid="yp1_qcg_41c">2.2. 行业因子计算</a></li><li class="topic-item"><a href="#txy_zcg_41c" data-tocid="txy_zcg_41c">2.3. 因子预处理</a><ul><li class="topic-item"><a href="#rsp_1dg_41c" data-tocid="rsp_1dg_41c">2.3.1. 风格因子 MAD 法去极值</a></li><li class="topic-item"><a href="#j3d_bdg_41c" data-tocid="j3d_bdg_41c">2.3.2. 风格因子市值加权标准化</a></li><li class="topic-item"><a href="#m1p_bdg_41c" data-tocid="m1p_bdg_41c">2.3.3. 风格因子、行业因子合并</a></li><li class="topic-item"><a href="#dfg_cdg_41c" data-tocid="dfg_cdg_41c">2.3.4. 因子缺失值处理</a></li></ul></li><li class="topic-item"><a href="#ugz_fdg_41c" data-tocid="ugz_fdg_41c">2.4. 单因子模型检验</a><ul><li class="topic-item"><a href="#zkj_gdg_41c" data-tocid="zkj_gdg_41c">2.4.1. WLS 回归模型</a></li><li class="topic-item"><a href="#djg_3dg_41c" data-tocid="djg_3dg_41c">2.4.2. T 检验</a></li><li class="topic-item"><a href="#xsn_3dg_41c" data-tocid="xsn_3dg_41c">2.4.3. Factor Stability Coefficient</a></li><li class="topic-item"><a href="#jvg_jdg_41c" data-tocid="jvg_jdg_41c">2.4.4. Information Coefficient</a></li><li class="topic-item"><a href="#epq_jdg_41c" data-tocid="epq_jdg_41c">2.4.5. 基于 DolphinDB 实现单因子有效性检验</a></li></ul></li><li class="topic-item"><a href="#zy5_qdg_41c" data-tocid="zy5_qdg_41c">2.5. 多因子合成</a></li><li class="topic-item"><a href="#otv_rdg_41c" data-tocid="otv_rdg_41c">2.6. 自定义因子的多因子合成</a><ul><li class="topic-item"><a href="#emd_sdg_41c" data-tocid="emd_sdg_41c">2.6.1. 基于对自定义因子预处理</a></li><li class="topic-item"><a href="#tcn_sdg_41c" data-tocid="tcn_sdg_41c">2.6.2. 对自定义进行单因子模型检验</a></li><li class="topic-item"><a href="#jkv_sdg_41c" data-tocid="jkv_sdg_41c">2.6.3. 基于自定义因子进行多因子合成</a></li></ul></li></ul></li><li class="topic-item"><a href="#fk3_5dg_41c" data-tocid="fk3_5dg_41c">3. 基于 DolphinDB 的收益风险模型</a><ul><li class="topic-item"><a href="#ip5_5dg_41c" data-tocid="ip5_5dg_41c">3.1. 基于 WLS 构建 Barra 多因子模型</a></li><li class="topic-item"><a href="#w25_b2g_41c" data-tocid="w25_b2g_41c">3.2. 风险调整</a><ul><li class="topic-item"><a href="#dft_22g_41c" data-tocid="dft_22g_41c">3.2.1. 因子收益率风险调整</a><ul><li class="topic-item"><a href="#rgb_f2g_41c" data-tocid="rgb_f2g_41c">3.2.1.1. Newey_West 调整</a></li><li class="topic-item"><a href="#xqf_h2g_41c" data-tocid="xqf_h2g_41c">3.2.1.2. Eigenfactor 调整</a></li></ul></li><li class="topic-item"><a href="#qmm_h2g_41c" data-tocid="qmm_h2g_41c">3.2.2. 基于贝叶斯收缩的个股特异性收益率风险调整</a></li></ul></li><li class="topic-item"><a href="#apb_k2g_41c" data-tocid="apb_k2g_41c">3.3. 基于 DolphinDB 的收益风险模型展示</a></li></ul></li><li class="topic-item"><a href="#awy_l2g_41c" data-tocid="awy_l2g_41c">4. 基于 DolphinDB 的 Barra 多因子模型应用</a><ul><li class="topic-item"><a href="#v5j_m2g_41c" data-tocid="v5j_m2g_41c">4.1. 预测个股收益</a></li><li class="topic-item"><a href="#xzr_n2g_41c" data-tocid="xzr_n2g_41c">4.2. 组合权重优化</a><ul><li class="topic-item"><a href="#rhh_42g_41c" data-tocid="rhh_42g_41c">4.2.1. 目标函数</a></li><li class="topic-item"><a href="#jft_42g_41c" data-tocid="jft_42g_41c">4.2.2. 约束条件</a></li><li class="topic-item"><a href="#tzl_t2g_41c" data-tocid="tzl_t2g_41c">4.2.3. 基于 DolphinDB 实现组合权重优化</a></li></ul></li><li class="topic-item"><a href="#sbg_52g_41c" data-tocid="sbg_52g_41c">4.3. 资产配置评估</a><ul><li class="topic-item"><a href="#nwl_52g_41c" data-tocid="nwl_52g_41c">4.3.1. 评估事后资产配置</a><ul><li class="topic-item"><a href="#jkt_52g_41c" data-tocid="jkt_52g_41c">4.3.1.1. 事后因子组合评估</a></li><li class="topic-item"><a href="#sph_y2g_41c" data-tocid="sph_y2g_41c">4.3.1.2. 事后资产组合评估</a></li></ul></li><li class="topic-item"><a href="#bvj_1fg_41c" data-tocid="bvj_1fg_41c">4.3.2. 评估事前预测模型资产配置</a></li></ul></li></ul></li><li class="topic-item"><a href="#ojr_1fg_41c" data-tocid="ojr_1fg_41c">5. 基于 DolphinDB 的 Barra 模型实现和应用</a><ul><li class="topic-item"><a href="#rvh_bfg_41c" data-tocid="rvh_bfg_41c">5.1. 因子计算模块 barraFactorsCal</a><ul><li class="topic-item"><a href="#rl4_bfg_41c" data-tocid="rl4_bfg_41c">5.1.1. 风格因子计算</a></li><li class="topic-item"><a href="#mz5_bfg_41c" data-tocid="mz5_bfg_41c">5.1.2. 行业因子计算</a></li></ul></li><li class="topic-item"><a href="#nzk_cfg_41c" data-tocid="nzk_cfg_41c">5.2. 因子合成模块 barraFactorsMerge</a><ul><li class="topic-item"><a href="#lmq_cfg_41c" data-tocid="lmq_cfg_41c">5.2.1. 因子预处理</a></li><li class="topic-item"><a href="#lpx_cfg_41c" data-tocid="lpx_cfg_41c">5.2.2. 风格因子、行业因子合并</a></li><li class="topic-item"><a href="#v2k_dfg_41c" data-tocid="v2k_dfg_41c">5.2.3. 因子有效性检验</a></li><li class="topic-item"><a href="#rft_dfg_41c" data-tocid="rft_dfg_41c">5.2.4. 多因子合成</a></li></ul></li><li class="topic-item"><a href="#kkl_2fg_41c" data-tocid="kkl_2fg_41c">5.3. 因子模型模块 barraFactorsModel</a><ul><li class="topic-item"><a href="#iyq_2fg_41c" data-tocid="iyq_2fg_41c">5.3.1. 风险收益模型</a></li><li class="topic-item"><a href="#xlw_2fg_41c" data-tocid="xlw_2fg_41c">5.3.2. 预测个股收益</a></li><li class="topic-item"><a href="#img_ffg_41c" data-tocid="img_ffg_41c">5.3.3. 组合权重优化</a></li><li class="topic-item"><a href="#zwn_ffg_41c" data-tocid="zwn_ffg_41c">5.3.4. 事前与事后资产配置评估</a></li></ul></li><li class="topic-item"><a href="#hdw_ffg_41c" data-tocid="hdw_ffg_41c">5.4. 注意事项</a></li></ul></li><li class="topic-item"><a href="#g1f_gfg_41c" data-tocid="g1f_gfg_41c">6. 总结</a></li><li class="topic-item"><a href="#w3m_gfg_41c" data-tocid="w3m_gfg_41c">7. 参考文献</a></li><li class="topic-item"><a href="#xmh_kfg_41c" data-tocid="xmh_kfg_41c">8. 附录</a></li></ul></div>
+	                        	
+                        	</div>
+                        </nav>
+                    
+                </div>
+            </div>
+            
+            
+            
+        </div> 
+        <footer class="navbar navbar-default wh_footer">
+  <div class=" footer-container mx-auto ">
+<title>Copyright</title><p><b> ©2024 浙江智臾科技有限公司 浙ICP备18048711号-3</b></p>
+  </div>
+</footer>
+        
+        <div id="go2top" class="d-print-none">
+            <span class="oxy-icon oxy-icon-up"></span>
+        </div>
+        
+        <div id="modal_img_large" class="modal">
+            <span class="close oxy-icon oxy-icon-remove"></span>
+            <div id="modal_img_container"></div>
+            <div id="caption"></div>
+        </div>
+        
+        
+        
+    </body>
+</html>

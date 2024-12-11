@@ -1,0 +1,929 @@
+<!DOCTYPE html><html xmlns="http://www.w3.org/1999/xhtml" xml:lang="zh" lang="zh" data-whc_version="26.0">
+    <head><link rel="shortcut icon" href="../../favicon.ico"/><link rel="icon" href="../../favicon.ico"/><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><meta http-equiv="X-UA-Compatible" content="IE=edge"/><meta name="description" content="context by 是 DolphinDB 的独有功能，是对标准 SQL 语句的拓展。使用 context by 子句可以简化对时间序列数据的操作。 传统的关系型数据库不支持时间序列数据处理。在关系型数据库管理系统 (RDBMS) 中，一张表由行的集合组成，行之间没有顺序。尽管可以使用如 min, max, avg 等聚合函数来对行进行分组，但是不能在分组内的行使用顺序敏感的聚合函数，比如 ..."/><meta name="DC.rights.owner" content="(C) 版权 2024"/><meta name="copyright" content="(C) 版权 2024"/><meta name="generator" content="DITA-OT"/><meta name="DC.type" content="topic"/><meta name="DC.coverage" content=""/><meta name="DC.relation" content="../../progr/sql/sql_dql.html"/><meta name="prodname" content="DolphinDB"/><meta name="brand" content="DolphinDB"/><meta name="DC.creator" content="DolphinDB"/><meta name="DC.publisher" content="DDB N/A DDB 200"/><meta name="DC.format" content="HTML5"/><meta name="DC.identifier" content="context-by"/><title>context by</title><!--  Generated with Oxygen version 26.0, build number 2024012323.  --><meta name="wh-path2root" content="../../"/><meta name="wh-toc-id" content="context-by-d9529e23551"/><meta name="wh-source-relpath" content="progr/sql/contextBy.dita"/><meta name="wh-out-relpath" content="progr/sql/contextBy.html"/>
+
+    <link rel="stylesheet" type="text/css" href="../../oxygen-webhelp/app/commons.css?buildId=2024012323"/>
+    <link rel="stylesheet" type="text/css" href="../../oxygen-webhelp/app/topic.css?buildId=2024012323"/>
+
+    <script src="../../oxygen-webhelp/app/options/properties.js?buildId=20240704100525"></script>
+    <script src="../../oxygen-webhelp/app/localization/strings.js?buildId=2024012323"></script>
+    <script src="../../oxygen-webhelp/app/search/index/keywords.js?buildId=20240704100525"></script>
+    <script defer="defer" src="../../oxygen-webhelp/app/commons.js?buildId=2024012323"></script>
+    <script defer="defer" src="../../oxygen-webhelp/app/topic.js?buildId=2024012323"></script>
+<link rel="stylesheet" type="text/css" href="../../oxygen-webhelp/template/styles.css?buildId=2024012323"/><script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script><script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script></head>
+
+    <body id="context-by" class="wh_topic_page frmBody">
+        <a href="#wh_topic_body" class="sr-only sr-only-focusable">
+            跳转到主要内容
+        </a>
+        
+        
+        
+        
+        <header class="navbar navbar-default wh_header">
+    <div class="container-fluid">
+        <div xmlns:whc="http://www.oxygenxml.com/webhelp/components" class="wh_header_flex_container navbar-nav navbar-expand-md navbar-dark">
+            <div class="wh_logo_and_publication_title_container">
+                <div class="wh_logo_and_publication_title">
+                    
+                    <a href="https://www.dolphindb.cn" class=" wh_logo d-none d-sm-block "><img src="../../logo.png" alt="  DolphinDB 文档中心  "/></a>
+                    <div class=" wh_publication_title "><a href="../../index.html"><span class="booktitle">  <span class="ph mainbooktitle">DolphinDB 文档中心</span>  </span></a></div>
+                    
+                </div>
+                
+                
+            </div>
+
+            <div class="wh_top_menu_and_indexterms_link collapse navbar-collapse" id="wh_top_menu_and_indexterms_link">
+                
+                
+                
+                
+            </div>
+        <div class=" wh_search_input navbar-form wh_topic_page_search search " role="form">
+            
+            
+            
+            <form id="searchForm" method="get" role="search" action="../../search.html"><div><input type="search" placeholder="搜索 " class="wh_search_textfield" id="textToSearch" name="searchQuery" aria-label="搜索查询" required="required"/><button type="submit" class="wh_search_button" aria-label="搜索"><span class="search_input_text">搜索</span></button></div></form>
+            
+            <script src="/vendors/react/umd/react.production.min.js" defer="defer"></script>
+<script src="/vendors/react-dom/umd/react-dom.production.min.js" defer="defer"></script>
+<script src="/vendors/dayjs/dayjs.min.js" defer="defer"></script>
+<script src="/vendors/antd/dist/antd.min.js" defer="defer"></script>
+<script src="/vendors/@ant-design/icons/dist/index.umd.min.js" defer="defer"></script>
+<script src="/zh/index.js" type="module"></script>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js" defer="defer"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML" defer="defer"><!--
+
+
+--></script>
+
+            
+        </div></div>
+    </div>
+</header>
+        
+        
+         
+        
+        
+        
+        <div class="container-fluid" id="wh_topic_container">
+            <div class="row">
+
+                <nav class="wh_tools d-print-none navbar-expand-md" aria-label="Tools">
+                    
+                    <div data-tooltip-position="bottom" class=" wh_breadcrumb "><ol class="d-print-none"><li><span class="home"><a href="../../index.html"><span>主页</span></a></span></li><li><div class="topicref" data-id="about_language_resources"><div class="title"><a href="../../progr/progr_intro.html"><span class="keyword label">编程语言</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 编程基本概念与方法、SQL 在 DolphinDB 的应用</p></div></div></div></li><li><div class="topicref" data-id="chap4_sect_sql_statements"><div class="title"><a href="../../progr/sql/sql_intro.html"><span class="keyword label">SQL 语句</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 中 SQL 语句的基本语法和用法</p></div></div></div></li><li><div class="topicref" data-id="dql"><div class="title"><a href="../../progr/sql/sql_dql.html">DQL</a><div class="wh-tooltip"><p class="shortdesc">介绍 DolphinDB 中的数据查询（DQL）语言</p></div></div></div></li><li class="active"><div class="topicref" data-id="context-by"><div class="title"><a href="../../progr/sql/contextBy.html">context by</a></div></div></li></ol></div>
+                    
+                    
+                    
+                    <div class="wh_right_tools">
+                        <button class="wh_hide_highlight" aria-label="切换搜索突出显示" title="切换搜索突出显示"></button>
+                        <button class="webhelp_expand_collapse_sections" data-next-state="collapsed" aria-label="折叠截面" title="折叠截面"></button>
+                        
+                        
+                        
+                        
+                        <div class=" wh_print_link print d-none d-md-inline-block "><button onClick="window.print()" title="打印此页" aria-label="打印此页"></button></div>
+                        
+                        <button type="button" id="wh_toc_button" class="custom-toggler navbar-toggler collapsed wh_toggle_button navbar-light" aria-expanded="false" aria-label="Toggle publishing table of content" aria-controls="wh_publication_toc">
+                            <span class="navbar-toggler-icon"></span>
+                        </button>
+                    </div>
+                    
+                </nav>
+            </div>
+            
+            
+            
+            
+            <div class="wh_content_area">
+                <div class="row">
+                    
+                        <nav id="wh_publication_toc" class="col-lg-3 col-md-3 col-sm-12 d-md-block d-none d-print-none" aria-label="Table of Contents Container">
+                            <div id="wh_publication_toc_content">
+		                        
+                            	<div class=" wh_publication_toc " data-tooltip-position="right"><span class="expand-button-action-labels"><span id="button-expand-action" role="button" aria-label="Expand"></span><span id="button-collapse-action" role="button" aria-label="Collapse"></span><span id="button-pending-action" role="button" aria-label="Pending"></span></span><ul role="tree" aria-label="Table of Contents"><li role="treeitem"><div data-tocid="new_chap_about_sect_ddb_docs_intro-d9529e87" class="topicref" data-id="new_chap_about_sect_ddb_docs_intro" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../about/ddb_docs_intro.html" id="new_chap_about_sect_ddb_docs_intro-d9529e87-link">文档使用说明</a><div class="wh-tooltip"><p class="shortdesc">如何获取 DolphinDB 帮助信息</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="chap1_getstarted-d9529e140" class="topicref" data-id="chap1_getstarted" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action chap1_getstarted-d9529e140-link" class="wh-expand-btn"></span><div class="title"><a href="../../getstarted/chap1_getstarted.html" id="chap1_getstarted-d9529e140-link"><span class="keyword label">快速上手</span></a><div class="wh-tooltip"><p class="shortdesc">如何快速部署 DolphinDB、建库建表、写入和查询数据</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="sectionddb_deployment-d9529e335" class="topicref" data-id="sectionddb_deployment" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action sectionddb_deployment-d9529e335-link" class="wh-expand-btn"></span><div class="title"><a href="../../deploy/deploy_intro.html" id="sectionddb_deployment-d9529e335-link"><span class="keyword label">部署</span></a><div class="wh-tooltip"><p class="shortdesc">如何在不同的场景中部署 DolphinDB</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="new_chap_database_manage_new_chap_dbmanage_landing_page-d9529e2313" class="topicref" data-id="new_chap_database_manage_new_chap_dbmanage_landing_page" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action new_chap_database_manage_new_chap_dbmanage_landing_page-d9529e2313-link" class="wh-expand-btn"></span><div class="title"><a href="../../db_distr_comp/cfg/db_intro.html" id="new_chap_database_manage_new_chap_dbmanage_landing_page-d9529e2313-link"><span class="keyword label">数据库</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 数据库的基本概念</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="chap7_tutorials_streaming-d9529e3490" class="topicref" data-id="chap7_tutorials_streaming" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action chap7_tutorials_streaming-d9529e3490-link" class="wh-expand-btn"></span><div class="title"><a href="../../stream/str_intro.html" id="chap7_tutorials_streaming-d9529e3490-link"><span class="keyword label">流数据</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 流数据引擎及流数据计算的基本概念</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="tocId-d9529e7385" class="topicref" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action tocId-d9529e7385-link" class="wh-expand-btn"></span><div class="title"><a href="../../db_distr_comp/db_oper/import_data.html" id="tocId-d9529e7385-link">数据迁移</a><div class="wh-tooltip"><p class="shortdesc">如何从不同数据源向 DolphinDB 迁移数据</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="chap7_tutorials_system_management-d9529e7812" class="topicref" data-id="chap7_tutorials_system_management" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action chap7_tutorials_system_management-d9529e7812-link" class="wh-expand-btn"></span><div class="title"><a href="../../sys_man/om_intro.html" id="chap7_tutorials_system_management-d9529e7812-link"><span class="keyword label">系统运维</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 的系统运维功能及方法</p></div></div></div></li><li role="treeitem" aria-expanded="true"><div data-tocid="about_language_resources-d9529e16490" class="topicref" data-id="about_language_resources" data-state="expanded"><span role="button" tabindex="0" aria-labelledby="button-collapse-action about_language_resources-d9529e16490-link" class="wh-expand-btn"></span><div class="title"><a href="../../progr/progr_intro.html" id="about_language_resources-d9529e16490-link"><span class="keyword label">编程语言</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 编程基本概念与方法、SQL 在 DolphinDB 的应用</p></div></div></div><ul role="group" class="navbar-nav nav-list"><li role="treeitem" aria-expanded="false"><div data-tocid="chap4_db_programming-d9529e16543" class="topicref" data-id="chap4_db_programming" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action chap4_db_programming-d9529e16543-link" class="wh-expand-btn"></span><div class="title"><a href="../../progr/lang_intro.html" id="chap4_db_programming-d9529e16543-link"><span class="keyword label">DolphinDB 脚本语言</span></a><div class="wh-tooltip"><p class="shortdesc"> 脚本编程相关概念参考，包括：数据类型与形式、对象、运算符、编程语句、数据操作、函数化编程、文件操作和 SQL 语句。 </p></div></div></div></li><li role="treeitem" aria-expanded="true"><div data-tocid="chap4_sect_sql_statements-d9529e22890" class="topicref" data-id="chap4_sect_sql_statements" data-state="expanded"><span role="button" tabindex="0" aria-labelledby="button-collapse-action chap4_sect_sql_statements-d9529e22890-link" class="wh-expand-btn"></span><div class="title"><a href="../../progr/sql/sql_intro.html" id="chap4_sect_sql_statements-d9529e22890-link"><span class="keyword label">SQL 语句</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 中 SQL 语句的基本语法和用法</p></div></div></div><ul role="group" class="navbar-nav nav-list"><li role="treeitem" aria-expanded="false"><div data-tocid="ddl-d9529e22941" class="topicref" data-id="ddl" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action ddl-d9529e22941-link" class="wh-expand-btn"></span><div class="title"><a href="../../progr/sql/sql_ddl.html" id="ddl-d9529e22941-link">DDL</a><div class="wh-tooltip"><p class="shortdesc">介绍 DolphinDB 中的数据定义（DDL）语言</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="dml-d9529e23129" class="topicref" data-id="dml" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action dml-d9529e23129-link" class="wh-expand-btn"></span><div class="title"><a href="../../progr/sql/sql_dml.html" id="dml-d9529e23129-link">DML</a><div class="wh-tooltip"><p class="shortdesc">介绍 DolphinDB 中的数据描述（DML）语言</p></div></div></div></li><li role="treeitem" aria-expanded="true"><div data-tocid="dql-d9529e23317" class="topicref" data-id="dql" data-state="expanded"><span role="button" tabindex="0" aria-labelledby="button-collapse-action dql-d9529e23317-link" class="wh-expand-btn"></span><div class="title"><a href="../../progr/sql/sql_dql.html" id="dql-d9529e23317-link">DQL</a><div class="wh-tooltip"><p class="shortdesc">介绍 DolphinDB 中的数据查询（DQL）语言</p></div></div></div><ul role="group" class="navbar-nav nav-list"><li role="treeitem"><div data-tocid="select-d9529e23367" class="topicref" data-id="select" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../progr/sql/Select.html" id="select-d9529e23367-link">select</a></div></div></li><li role="treeitem"><div data-tocid="exec-d9529e23413" class="topicref" data-id="exec" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../progr/sql/exec.html" id="exec-d9529e23413-link">exec</a></div></div></li><li role="treeitem"><div data-tocid="where-d9529e23459" class="topicref" data-id="where" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../progr/sql/where.html" id="where-d9529e23459-link">where</a></div></div></li><li role="treeitem"><div data-tocid="group-by-d9529e23505" class="topicref" data-id="group-by" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../progr/sql/groupby.html" id="group-by-d9529e23505-link">group by</a></div></div></li><li role="treeitem" class="active"><div data-tocid="context-by-d9529e23551" class="topicref" data-id="context-by" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../progr/sql/contextBy.html" id="context-by-d9529e23551-link">context by</a></div></div></li><li role="treeitem"><div data-tocid="pivot-by-d9529e23597" class="topicref" data-id="pivot-by" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../progr/sql/pivotBy.html" id="pivot-by-d9529e23597-link">pivot by</a></div></div></li><li role="treeitem"><div data-tocid="order-by-d9529e23643" class="topicref" data-id="order-by" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../progr/sql/orderby.html" id="order-by-d9529e23643-link">order by</a></div></div></li><li role="treeitem"><div data-tocid="top-d9529e23689" class="topicref" data-id="top" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../progr/sql/top.html" id="top-d9529e23689-link">top</a></div></div></li><li role="treeitem"><div data-tocid="limit-d9529e23735" class="topicref" data-id="limit" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../progr/sql/limit.html" id="limit-d9529e23735-link">limit</a></div></div></li><li role="treeitem"><div data-tocid="case-d9529e23781" class="topicref" data-id="case" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../progr/sql/case.html" id="case-d9529e23781-link">case</a></div></div></li><li role="treeitem"><div data-tocid="cgroup-by-d9529e23828" class="topicref" data-id="cgroup-by" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../progr/sql/cgroupby.html" id="cgroup-by-d9529e23828-link">cgroup by</a></div></div></li><li role="treeitem"><div data-tocid="distinct-d9529e23874" class="topicref" data-id="distinct" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../progr/sql/distinct.html" id="distinct-d9529e23874-link">distinct</a></div></div></li><li role="treeitem"><div data-tocid="having-d9529e23920" class="topicref" data-id="having" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../progr/sql/having.html" id="having-d9529e23920-link">having</a></div></div></li><li role="treeitem"><div data-tocid="interval-d9529e23966" class="topicref" data-id="interval" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../progr/sql/interval.html" id="interval-d9529e23966-link">interval</a></div></div></li><li role="treeitem"><div data-tocid="map-d9529e24012" class="topicref" data-id="map" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../progr/sql/map.html" id="map-d9529e24012-link">map</a></div></div></li><li role="treeitem"><div data-tocid="partition-d9529e24058" class="topicref" data-id="partition" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../progr/sql/partition.html" id="partition-d9529e24058-link">partition</a></div></div></li><li role="treeitem"><div data-tocid="sample-d9529e24104" class="topicref" data-id="sample" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../progr/sql/sample.html" id="sample-d9529e24104-link">sample</a></div></div></li><li role="treeitem"><div data-tocid="analyticFunction-d9529e24150" class="topicref" data-id="analyticFunction" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../progr/sql/analyticFunction.html" id="analyticFunction-d9529e24150-link">分析函数</a></div></div></li></ul></li><li role="treeitem" aria-expanded="false"><div data-tocid="predicates-d9529e24196" class="topicref" data-id="predicates" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action predicates-d9529e24196-link" class="wh-expand-btn"></span><div class="title"><a href="../../progr/sql/predicates.html" id="predicates-d9529e24196-link"><span class="keyword label">谓词</span></a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="table_joiners-d9529e24703" class="topicref" data-id="table_joiners" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action table_joiners-d9529e24703-link" class="wh-expand-btn"></span><div class="title"><a href="../../progr/sql/tb_joiner_intro.html" id="table_joiners-d9529e24703-link"><span class="keyword label">表连接</span></a></div></div></li><li role="treeitem"><div data-tocid="执行顺序-d9529e25210" class="topicref" data-id="执行顺序" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../progr/sql/exe_order.html" id="执行顺序-d9529e25210-link"><span class="keyword label">执行顺序</span></a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="landingpage_sql_trace-d9529e25257" class="topicref" data-id="landingpage_sql_trace" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action landingpage_sql_trace-d9529e25257-link" class="wh-expand-btn"></span><div class="title"><a href="../../progr/sql/sql_trace.html" id="landingpage_sql_trace-d9529e25257-link"><span class="keyword label">SQL Trace</span></a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="hint-d9529e25442" class="topicref" data-id="hint" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action hint-d9529e25442-link" class="wh-expand-btn"></span><div class="title"><a href="../../progr/sql/hint.html" id="hint-d9529e25442-link"><span class="keyword label">HINT 关键字</span></a></div></div></li></ul></li><li role="treeitem" aria-expanded="false"><div data-tocid="python-parser-简介-d9529e25535" class="topicref" data-id="python-parser-简介" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action python-parser-简介-d9529e25535-link" class="wh-expand-btn"></span><div class="title"><a href="../../progr/py_parser/py_par_intro.html" id="python-parser-简介-d9529e25535-link"><span class="keyword label">Python Parser</span></a></div></div></li></ul></li><li role="treeitem" aria-expanded="false"><div data-tocid="functions_references-d9529e26503" class="topicref" data-id="functions_references" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action functions_references-d9529e26503-link" class="wh-expand-btn"></span><div class="title"><a href="../../funcs/funcs_intro.html" id="functions_references-d9529e26503-link"><span class="keyword label">函数参考</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 函数分类、语法、详解及示例</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="api_protocol-d9529e86456" class="topicref" data-id="api_protocol" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action api_protocol-d9529e86456-link" class="wh-expand-btn"></span><div class="title"><a href="../../api/connapi_intro.html" id="api_protocol-d9529e86456-link"><span class="keyword label">连接器 &amp; API</span></a><div class="wh-tooltip"><p class="shortdesc">面向不同编程语言的 DolphinDB API 及连接器，相关协议和用法</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="chap6_plugin-d9529e91976" class="topicref" data-id="chap6_plugin" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action chap6_plugin-d9529e91976-link" class="wh-expand-btn"></span><div class="title"><a href="../../plugins/plg_intro.html" id="chap6_plugin-d9529e91976-link"><span class="keyword label">插件</span></a><div class="wh-tooltip"><p class="shortdesc">多个应用场景的插件使用说明和插件开发指导</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="third_party-d9529e94749" class="topicref" data-id="third_party" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action third_party-d9529e94749-link" class="wh-expand-btn"></span><div class="title"><a href="../../third_party.html" id="third_party-d9529e94749-link">第三方工具</a></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="about_tutorials-d9529e94980" class="topicref" data-id="about_tutorials" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action about_tutorials-d9529e94980-link" class="wh-expand-btn"></span><div class="title"><a href="../../tutorials/about_tutorials.html" id="about_tutorials-d9529e94980-link"><span class="keyword label">教程</span></a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 产品使用教程</p></div></div></div></li><li role="treeitem" aria-expanded="false"><div data-tocid="tocId-d9529e101769" class="topicref" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action tocId-d9529e101769-link" class="wh-expand-btn"></span><div class="title"><a href="../../rn/server/3_00_1.html" id="tocId-d9529e101769-link">版本说明</a><div class="wh-tooltip"><p class="shortdesc">DolphinDB 版本发布历史</p></div></div></div></li></ul></div>
+		                        
+                            </div>
+                        </nav>
+                    
+                    
+                    <div class="col-lg-9 col-md-9 col-sm-12" id="wh_topic_body">
+                        <button id="wh_close_publication_toc_button" class="close-toc-button d-none" aria-label="Toggle publishing table of content" aria-controls="wh_publication_toc" aria-expanded="true">
+                            <span class="close-toc-icon-container">
+                                <span class="close-toc-icon"></span>     
+                            </span>
+                        </button>
+                        
+                        
+                        <div class=" wh_topic_content body "><main role="main"><article class="- topic/topic topic" role="article" aria-labelledby="ariaid-title1">
+    <h1 class="- topic/title title topictitle1" id="ariaid-title1">context by</h1>
+    <div class="- topic/body body">
+        <p class="- topic/p p" id="context-by__p_a1z_5hn_ryb" data-ofbid="context-by__p_a1z_5hn_ryb">context by 是 DolphinDB 的独有功能，是对标准 SQL 语句的拓展。使用 context by 子句可以简化对时间序列数据的操作。</p>
+        <p class="- topic/p p" id="context-by__p_b1z_5hn_ryb" data-ofbid="context-by__p_b1z_5hn_ryb">传统的关系型数据库不支持时间序列数据处理。在关系型数据库管理系统 (RDBMS) 中，一张表由行的集合组成，行之间没有顺序。尽管可以使用如 min, max, avg
+            等聚合函数来对行进行分组，但是不能在分组内的行使用顺序敏感的聚合函数，比如 first, last 等，或者对顺序敏感的向量函数，如 cumsum, cummax,
+            ratios, deltas 等。</p>
+        <p class="- topic/p p" id="context-by__p_c1z_5hn_ryb" data-ofbid="context-by__p_c1z_5hn_ryb">DolphinDB 支持时间序列数据处理。context by 子句使组内处理时间序列数据更加方便。</p>
+        <p class="- topic/p p" id="context-by__p_d1z_5hn_ryb" data-ofbid="context-by__p_d1z_5hn_ryb">context by 与 group by 类似，都对数据进行分组。但是，用 group by 时，每一组返回一个标量值，而用 context by
+            时，每一组返回一个和组内元素数量相同的向量。group by 只能配合聚合函数使用，而 context by
+            既可以配合聚合函数使用，也可以与移动窗口函数或累积函数等其它函数结合使用。context by 常用于基于组更新的场景，请参考 <a class="- topic/xref xref" href="update.html">update</a> 语句的例子。context by 还可以和 having 子句一起使用，详情参考 <a class="- topic/xref xref" href="having.html">having</a>。</p>
+        <p class="- topic/p p" id="context-by__p_e1z_5hn_ryb" data-ofbid="context-by__p_e1z_5hn_ryb">context by 通常与 <a class="- topic/xref xref" href="../../funcs/c/cumsum.html">cumsum</a>,
+                <a class="- topic/xref xref" href="../../funcs/m/mavg.html">mavg</a> 等时间序列函数一起使用，每个分组中记录的顺序对结果有直接影响。可在
+            context by 语句后使用 csort 关键字排序。使用 context by 分组后，csort 在 select
+            从句的表达式执行之前，对每个组内的数据进行排序。可对多个列（包括计算列）使用 csort 关键字，在组内进行升序（asc）或降序（desc）排序，若 csort
+            后不指定排序关键字，则默认是升序。csort 关键字还可以和 top 关键字一起使用，用于获取每个分组中的最新记录。</p>
+        <p class="- topic/p p" id="context-by__p_f1z_5hn_ryb" data-ofbid="context-by__p_f1z_5hn_ryb">下例展示了 group by 和 context by 的不同之处。</p>
+        <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="context-by__codeblock_g1z_5hn_ryb" data-ofbid="context-by__codeblock_g1z_5hn_ryb"><code>sym = `C`MS`MS`MS`IBM`IBM`C`C`C$SYMBOL
+price= 49.6 29.46 29.52 30.02 174.97 175.23 50.76 50.32 51.29
+qty = 2200 1900 2100 3200 6800 5400 1300 2500 8800
+timestamp = [09:34:07,09:36:42,09:36:51,09:36:59,09:32:47,09:35:26,09:34:16,09:34:26,09:38:12]
+t1 = table(timestamp, sym, qty, price);
+
+t1;</code></pre>
+        <div class="table-container"><table class="- topic/table table" id="context-by__table_h1z_5hn_ryb" data-ofbid="context-by__table_h1z_5hn_ryb" data-cols="4"><caption></caption><colgroup><col/><col/><col/><col/></colgroup><thead class="- topic/thead thead">
+                    <tr class="- topic/row">
+                        <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="context-by__table_h1z_5hn_ryb__entry__1">timestamp</th>
+                        <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="context-by__table_h1z_5hn_ryb__entry__2">sym</th>
+                        <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="context-by__table_h1z_5hn_ryb__entry__3">qty</th>
+                        <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="context-by__table_h1z_5hn_ryb__entry__4">price</th>
+                    </tr>
+                </thead><tbody class="- topic/tbody tbody">
+                    <tr class="- topic/row">
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_h1z_5hn_ryb__entry__1">09:34:07</td>
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_h1z_5hn_ryb__entry__2">C</td>
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_h1z_5hn_ryb__entry__3">2200</td>
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_h1z_5hn_ryb__entry__4">49.6</td>
+                    </tr>
+                    <tr class="- topic/row">
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_h1z_5hn_ryb__entry__1">09:36:42</td>
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_h1z_5hn_ryb__entry__2">MS</td>
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_h1z_5hn_ryb__entry__3">1900</td>
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_h1z_5hn_ryb__entry__4">29.46</td>
+                    </tr>
+                    <tr class="- topic/row">
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_h1z_5hn_ryb__entry__1">09:36:51</td>
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_h1z_5hn_ryb__entry__2">MS</td>
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_h1z_5hn_ryb__entry__3">2100</td>
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_h1z_5hn_ryb__entry__4">29.52</td>
+                    </tr>
+                    <tr class="- topic/row">
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_h1z_5hn_ryb__entry__1">09:36:59</td>
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_h1z_5hn_ryb__entry__2">MS</td>
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_h1z_5hn_ryb__entry__3">3200</td>
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_h1z_5hn_ryb__entry__4">30.02</td>
+                    </tr>
+                    <tr class="- topic/row">
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_h1z_5hn_ryb__entry__1">09:32:47</td>
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_h1z_5hn_ryb__entry__2">IBM</td>
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_h1z_5hn_ryb__entry__3">6800</td>
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_h1z_5hn_ryb__entry__4">174.97</td>
+                    </tr>
+                    <tr class="- topic/row">
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_h1z_5hn_ryb__entry__1">09:35:26</td>
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_h1z_5hn_ryb__entry__2">IBM</td>
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_h1z_5hn_ryb__entry__3">5400</td>
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_h1z_5hn_ryb__entry__4">175.23</td>
+                    </tr>
+                    <tr class="- topic/row">
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_h1z_5hn_ryb__entry__1">09:34:16</td>
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_h1z_5hn_ryb__entry__2">C</td>
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_h1z_5hn_ryb__entry__3">1300</td>
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_h1z_5hn_ryb__entry__4">50.76</td>
+                    </tr>
+                    <tr class="- topic/row">
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_h1z_5hn_ryb__entry__1">09:34:26</td>
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_h1z_5hn_ryb__entry__2">C</td>
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_h1z_5hn_ryb__entry__3">2500</td>
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_h1z_5hn_ryb__entry__4">50.32</td>
+                    </tr>
+                    <tr class="- topic/row">
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_h1z_5hn_ryb__entry__1">09:38:12</td>
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_h1z_5hn_ryb__entry__2">C</td>
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_h1z_5hn_ryb__entry__3">8800</td>
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_h1z_5hn_ryb__entry__4">51.29</td>
+                    </tr>
+                </tbody></table></div>
+        <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="context-by__codeblock_i1z_5hn_ryb" data-ofbid="context-by__codeblock_i1z_5hn_ryb"><code>select wavg(price,qty) as wvap, sum(qty) as totalqty from t1 group by sym;</code></pre>
+        <div class="table-container"><table class="- topic/table table" id="context-by__table_j1z_5hn_ryb" data-ofbid="context-by__table_j1z_5hn_ryb" data-cols="3"><caption></caption><colgroup><col/><col/><col/></colgroup><thead class="- topic/thead thead">
+                    <tr class="- topic/row">
+                        <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="context-by__table_j1z_5hn_ryb__entry__1">sym</th>
+                        <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="context-by__table_j1z_5hn_ryb__entry__2">wvap</th>
+                        <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="context-by__table_j1z_5hn_ryb__entry__3">totalqty</th>
+                    </tr>
+                </thead><tbody class="- topic/tbody tbody">
+                    <tr class="- topic/row">
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_j1z_5hn_ryb__entry__1">C</td>
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_j1z_5hn_ryb__entry__2">50.828378</td>
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_j1z_5hn_ryb__entry__3">14800</td>
+                    </tr>
+                    <tr class="- topic/row">
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_j1z_5hn_ryb__entry__1">IBM</td>
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_j1z_5hn_ryb__entry__2">175.085082</td>
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_j1z_5hn_ryb__entry__3">12200</td>
+                    </tr>
+                    <tr class="- topic/row">
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_j1z_5hn_ryb__entry__1">MS</td>
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_j1z_5hn_ryb__entry__2">29.726389</td>
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_j1z_5hn_ryb__entry__3">7200</td>
+                    </tr>
+                </tbody></table></div>
+        <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="context-by__codeblock_k1z_5hn_ryb" data-ofbid="context-by__codeblock_k1z_5hn_ryb"><code>select sym, price, qty, wavg(price,qty) as wvap, sum(qty) as totalqty from t1 context by sym;</code></pre>
+        <div class="table-container"><table class="- topic/table table" id="context-by__table_l1z_5hn_ryb" data-ofbid="context-by__table_l1z_5hn_ryb" data-cols="5"><caption></caption><colgroup><col/><col/><col/><col/><col/></colgroup><thead class="- topic/thead thead">
+                    <tr class="- topic/row">
+                        <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="context-by__table_l1z_5hn_ryb__entry__1">sym</th>
+                        <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="context-by__table_l1z_5hn_ryb__entry__2">price</th>
+                        <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="context-by__table_l1z_5hn_ryb__entry__3">qty</th>
+                        <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="context-by__table_l1z_5hn_ryb__entry__4">wvap</th>
+                        <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="context-by__table_l1z_5hn_ryb__entry__5">totalqty</th>
+                    </tr>
+                </thead><tbody class="- topic/tbody tbody">
+                    <tr class="- topic/row">
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_l1z_5hn_ryb__entry__1">C</td>
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_l1z_5hn_ryb__entry__2">49.6</td>
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_l1z_5hn_ryb__entry__3">2200</td>
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_l1z_5hn_ryb__entry__4">50.828378</td>
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_l1z_5hn_ryb__entry__5">14800</td>
+                    </tr>
+                    <tr class="- topic/row">
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_l1z_5hn_ryb__entry__1">C</td>
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_l1z_5hn_ryb__entry__2">50.76</td>
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_l1z_5hn_ryb__entry__3">1300</td>
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_l1z_5hn_ryb__entry__4">50.828378</td>
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_l1z_5hn_ryb__entry__5">14800</td>
+                    </tr>
+                    <tr class="- topic/row">
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_l1z_5hn_ryb__entry__1">C</td>
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_l1z_5hn_ryb__entry__2">50.32</td>
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_l1z_5hn_ryb__entry__3">2500</td>
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_l1z_5hn_ryb__entry__4">50.828378</td>
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_l1z_5hn_ryb__entry__5">14800</td>
+                    </tr>
+                    <tr class="- topic/row">
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_l1z_5hn_ryb__entry__1">C</td>
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_l1z_5hn_ryb__entry__2">51.29</td>
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_l1z_5hn_ryb__entry__3">8800</td>
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_l1z_5hn_ryb__entry__4">50.828378</td>
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_l1z_5hn_ryb__entry__5">14800</td>
+                    </tr>
+                    <tr class="- topic/row">
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_l1z_5hn_ryb__entry__1">IBM</td>
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_l1z_5hn_ryb__entry__2">174.97</td>
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_l1z_5hn_ryb__entry__3">6800</td>
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_l1z_5hn_ryb__entry__4">175.085082</td>
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_l1z_5hn_ryb__entry__5">12200</td>
+                    </tr>
+                    <tr class="- topic/row">
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_l1z_5hn_ryb__entry__1">IBM</td>
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_l1z_5hn_ryb__entry__2">175.23</td>
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_l1z_5hn_ryb__entry__3">5400</td>
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_l1z_5hn_ryb__entry__4">175.085082</td>
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_l1z_5hn_ryb__entry__5">12200</td>
+                    </tr>
+                    <tr class="- topic/row">
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_l1z_5hn_ryb__entry__1">MS</td>
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_l1z_5hn_ryb__entry__2">29.46</td>
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_l1z_5hn_ryb__entry__3">1900</td>
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_l1z_5hn_ryb__entry__4">29.726389</td>
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_l1z_5hn_ryb__entry__5">7200</td>
+                    </tr>
+                    <tr class="- topic/row">
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_l1z_5hn_ryb__entry__1">MS</td>
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_l1z_5hn_ryb__entry__2">29.52</td>
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_l1z_5hn_ryb__entry__3">2100</td>
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_l1z_5hn_ryb__entry__4">29.726389</td>
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_l1z_5hn_ryb__entry__5">7200</td>
+                    </tr>
+                    <tr class="- topic/row">
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_l1z_5hn_ryb__entry__1">MS</td>
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_l1z_5hn_ryb__entry__2">30.02</td>
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_l1z_5hn_ryb__entry__3">3200</td>
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_l1z_5hn_ryb__entry__4">29.726389</td>
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_l1z_5hn_ryb__entry__5">7200</td>
+                    </tr>
+                </tbody></table></div>
+        <p class="- topic/p p" id="context-by__p_m1z_5hn_ryb" data-ofbid="context-by__p_m1z_5hn_ryb">计算每家公司的股票收益，我们不能使用 group by，但是可以使用 context by 和 <a class="- topic/xref xref" href="../operators/ratio.html">ratio</a> 函数。在使用 context by
+            之前，需要确保记录在每一组内已按时间排好序。</p>
+        <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="context-by__codeblock_n1z_5hn_ryb" data-ofbid="context-by__codeblock_n1z_5hn_ryb"><code>select sym, timestamp, price, eachPre(\,price)-1.0 as ret from t1 context by sym;</code></pre>
+        <div class="table-container"><table class="- topic/table table" id="context-by__table_o1z_5hn_ryb" data-ofbid="context-by__table_o1z_5hn_ryb" data-cols="4"><caption></caption><colgroup><col/><col/><col/><col/></colgroup><thead class="- topic/thead thead">
+                    <tr class="- topic/row">
+                        <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="context-by__table_o1z_5hn_ryb__entry__1">sym</th>
+                        <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="context-by__table_o1z_5hn_ryb__entry__2">timestamp</th>
+                        <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="context-by__table_o1z_5hn_ryb__entry__3">price</th>
+                        <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="context-by__table_o1z_5hn_ryb__entry__4">ret</th>
+                    </tr>
+                </thead><tbody class="- topic/tbody tbody">
+                    <tr class="- topic/row">
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_o1z_5hn_ryb__entry__1">C</td>
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_o1z_5hn_ryb__entry__2">09:34:07</td>
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_o1z_5hn_ryb__entry__3">49.6</td>
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_o1z_5hn_ryb__entry__4"> </td>
+                    </tr>
+                    <tr class="- topic/row">
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_o1z_5hn_ryb__entry__1">C</td>
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_o1z_5hn_ryb__entry__2">09:34:16</td>
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_o1z_5hn_ryb__entry__3">50.76</td>
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_o1z_5hn_ryb__entry__4">0.023387</td>
+                    </tr>
+                    <tr class="- topic/row">
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_o1z_5hn_ryb__entry__1">C</td>
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_o1z_5hn_ryb__entry__2">09:34:26</td>
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_o1z_5hn_ryb__entry__3">50.32</td>
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_o1z_5hn_ryb__entry__4">-0.008668</td>
+                    </tr>
+                    <tr class="- topic/row">
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_o1z_5hn_ryb__entry__1">C</td>
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_o1z_5hn_ryb__entry__2">09:38:12</td>
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_o1z_5hn_ryb__entry__3">51.29</td>
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_o1z_5hn_ryb__entry__4">0.019277</td>
+                    </tr>
+                    <tr class="- topic/row">
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_o1z_5hn_ryb__entry__1">IBM</td>
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_o1z_5hn_ryb__entry__2">09:32:47</td>
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_o1z_5hn_ryb__entry__3">174.97</td>
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_o1z_5hn_ryb__entry__4"> </td>
+                    </tr>
+                    <tr class="- topic/row">
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_o1z_5hn_ryb__entry__1">IBM</td>
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_o1z_5hn_ryb__entry__2">09:35:26</td>
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_o1z_5hn_ryb__entry__3">175.23</td>
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_o1z_5hn_ryb__entry__4">0.001486</td>
+                    </tr>
+                    <tr class="- topic/row">
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_o1z_5hn_ryb__entry__1">MS</td>
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_o1z_5hn_ryb__entry__2">09:36:42</td>
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_o1z_5hn_ryb__entry__3">29.46</td>
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_o1z_5hn_ryb__entry__4"> </td>
+                    </tr>
+                    <tr class="- topic/row">
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_o1z_5hn_ryb__entry__1">MS</td>
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_o1z_5hn_ryb__entry__2">09:36:51</td>
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_o1z_5hn_ryb__entry__3">29.52</td>
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_o1z_5hn_ryb__entry__4">0.002037</td>
+                    </tr>
+                    <tr class="- topic/row">
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_o1z_5hn_ryb__entry__1">MS</td>
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_o1z_5hn_ryb__entry__2">09:36:59</td>
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_o1z_5hn_ryb__entry__3">30.02</td>
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_o1z_5hn_ryb__entry__4">0.016938</td>
+                    </tr>
+                </tbody></table></div>
+        <p class="- topic/p p" id="context-by__p_p1z_5hn_ryb" data-ofbid="context-by__p_p1z_5hn_ryb">可以使用 <a class="- topic/xref xref" href="../../funcs/ho_funcs/contextby.html">contextby</a>
+            高阶函数来达到同样的效果，但是结果是一个向量而不是表。</p>
+        <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="context-by__codeblock_q1z_5hn_ryb" data-ofbid="context-by__codeblock_q1z_5hn_ryb"><code>contextby(eachPre{ratio}, t1.price, t1.sym);
+// output
+[,,1.002037,1.016938,,1.001486,1.023387,0.991332,1.019277]</code></pre>
+        <p class="- topic/p p" id="context-by__p_r1z_5hn_ryb" data-ofbid="context-by__p_r1z_5hn_ryb">这里用了一个部分应用 <code class="+ topic/ph pr-d/codeph ph codeph">eachPre{ratio}</code>。详情参考 <a class="- topic/xref xref" href="../partial_app.html">PartialApplication</a>。</p>
+        <p class="- topic/p p" id="context-by__p_s1z_5hn_ryb" data-ofbid="context-by__p_s1z_5hn_ryb">对每个股票，计算每分钟累计交易量：</p>
+        <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="context-by__codeblock_t1z_5hn_ryb" data-ofbid="context-by__codeblock_t1z_5hn_ryb"><code>select *, cumsum(qty) from t1 context by sym, timestamp.minute();</code></pre>
+        <div class="table-container"><table class="- topic/table table" id="context-by__table_u1z_5hn_ryb" data-ofbid="context-by__table_u1z_5hn_ryb" data-cols="5"><caption></caption><colgroup><col/><col/><col/><col/><col/></colgroup><thead class="- topic/thead thead">
+                    <tr class="- topic/row">
+                        <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="context-by__table_u1z_5hn_ryb__entry__1">timestamp</th>
+                        <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="context-by__table_u1z_5hn_ryb__entry__2">sym</th>
+                        <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="context-by__table_u1z_5hn_ryb__entry__3">qty</th>
+                        <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="context-by__table_u1z_5hn_ryb__entry__4">price</th>
+                        <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="context-by__table_u1z_5hn_ryb__entry__5">cumsum_qty</th>
+                    </tr>
+                </thead><tbody class="- topic/tbody tbody">
+                    <tr class="- topic/row">
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_u1z_5hn_ryb__entry__1">09:34:07</td>
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_u1z_5hn_ryb__entry__2">C</td>
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_u1z_5hn_ryb__entry__3">2200</td>
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_u1z_5hn_ryb__entry__4">49.6</td>
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_u1z_5hn_ryb__entry__5">2200</td>
+                    </tr>
+                    <tr class="- topic/row">
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_u1z_5hn_ryb__entry__1">09:34:16</td>
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_u1z_5hn_ryb__entry__2">C</td>
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_u1z_5hn_ryb__entry__3">1300</td>
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_u1z_5hn_ryb__entry__4">50.76</td>
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_u1z_5hn_ryb__entry__5">3500</td>
+                    </tr>
+                    <tr class="- topic/row">
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_u1z_5hn_ryb__entry__1">09:34:26</td>
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_u1z_5hn_ryb__entry__2">C</td>
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_u1z_5hn_ryb__entry__3">2500</td>
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_u1z_5hn_ryb__entry__4">50.32</td>
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_u1z_5hn_ryb__entry__5">6000</td>
+                    </tr>
+                    <tr class="- topic/row">
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_u1z_5hn_ryb__entry__1">09:38:12</td>
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_u1z_5hn_ryb__entry__2">C</td>
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_u1z_5hn_ryb__entry__3">8800</td>
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_u1z_5hn_ryb__entry__4">51.29</td>
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_u1z_5hn_ryb__entry__5">8800</td>
+                    </tr>
+                    <tr class="- topic/row">
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_u1z_5hn_ryb__entry__1">09:32:47</td>
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_u1z_5hn_ryb__entry__2">IBM</td>
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_u1z_5hn_ryb__entry__3">6800</td>
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_u1z_5hn_ryb__entry__4">174.97</td>
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_u1z_5hn_ryb__entry__5">6800</td>
+                    </tr>
+                    <tr class="- topic/row">
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_u1z_5hn_ryb__entry__1">09:35:26</td>
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_u1z_5hn_ryb__entry__2">IBM</td>
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_u1z_5hn_ryb__entry__3">5400</td>
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_u1z_5hn_ryb__entry__4">175.23</td>
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_u1z_5hn_ryb__entry__5">5400</td>
+                    </tr>
+                    <tr class="- topic/row">
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_u1z_5hn_ryb__entry__1">09:36:42</td>
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_u1z_5hn_ryb__entry__2">MS</td>
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_u1z_5hn_ryb__entry__3">1900</td>
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_u1z_5hn_ryb__entry__4">29.46</td>
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_u1z_5hn_ryb__entry__5">1900</td>
+                    </tr>
+                    <tr class="- topic/row">
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_u1z_5hn_ryb__entry__1">09:36:51</td>
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_u1z_5hn_ryb__entry__2">MS</td>
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_u1z_5hn_ryb__entry__3">2100</td>
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_u1z_5hn_ryb__entry__4">29.52</td>
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_u1z_5hn_ryb__entry__5">4000</td>
+                    </tr>
+                    <tr class="- topic/row">
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_u1z_5hn_ryb__entry__1">09:36:59</td>
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_u1z_5hn_ryb__entry__2">MS</td>
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_u1z_5hn_ryb__entry__3">3200</td>
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_u1z_5hn_ryb__entry__4">30.02</td>
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_u1z_5hn_ryb__entry__5">7200</td>
+                    </tr>
+                </tbody></table></div>
+        <p class="- topic/p p" id="context-by__p_v1z_5hn_ryb" data-ofbid="context-by__p_v1z_5hn_ryb">和 top 子句一起使用：</p>
+        <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="context-by__codeblock_w1z_5hn_ryb" data-ofbid="context-by__codeblock_w1z_5hn_ryb"><code>select top 2 * from t1 context by sym;</code></pre>
+        <div class="table-container"><table class="- topic/table table" id="context-by__table_x1z_5hn_ryb" data-ofbid="context-by__table_x1z_5hn_ryb" data-cols="4"><caption></caption><colgroup><col/><col/><col/><col/></colgroup><thead class="- topic/thead thead">
+                    <tr class="- topic/row">
+                        <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="context-by__table_x1z_5hn_ryb__entry__1">timestamp</th>
+                        <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="context-by__table_x1z_5hn_ryb__entry__2">sym</th>
+                        <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="context-by__table_x1z_5hn_ryb__entry__3">qty</th>
+                        <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="context-by__table_x1z_5hn_ryb__entry__4">price</th>
+                    </tr>
+                </thead><tbody class="- topic/tbody tbody">
+                    <tr class="- topic/row">
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_x1z_5hn_ryb__entry__1">09:34:07</td>
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_x1z_5hn_ryb__entry__2">C</td>
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_x1z_5hn_ryb__entry__3">2200</td>
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_x1z_5hn_ryb__entry__4">49.6</td>
+                    </tr>
+                    <tr class="- topic/row">
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_x1z_5hn_ryb__entry__1">09:34:16</td>
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_x1z_5hn_ryb__entry__2">C</td>
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_x1z_5hn_ryb__entry__3">1300</td>
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_x1z_5hn_ryb__entry__4">50.76</td>
+                    </tr>
+                    <tr class="- topic/row">
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_x1z_5hn_ryb__entry__1">09:32:47</td>
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_x1z_5hn_ryb__entry__2">IBM</td>
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_x1z_5hn_ryb__entry__3">6800</td>
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_x1z_5hn_ryb__entry__4">174.97</td>
+                    </tr>
+                    <tr class="- topic/row">
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_x1z_5hn_ryb__entry__1">09:35:26</td>
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_x1z_5hn_ryb__entry__2">IBM</td>
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_x1z_5hn_ryb__entry__3">5400</td>
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_x1z_5hn_ryb__entry__4">175.23</td>
+                    </tr>
+                    <tr class="- topic/row">
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_x1z_5hn_ryb__entry__1">09:36:42</td>
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_x1z_5hn_ryb__entry__2">MS</td>
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_x1z_5hn_ryb__entry__3">1900</td>
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_x1z_5hn_ryb__entry__4">29.46</td>
+                    </tr>
+                    <tr class="- topic/row">
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_x1z_5hn_ryb__entry__1">09:36:51</td>
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_x1z_5hn_ryb__entry__2">MS</td>
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_x1z_5hn_ryb__entry__3">2100</td>
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_x1z_5hn_ryb__entry__4">29.52</td>
+                    </tr>
+                </tbody></table></div>
+        <p class="- topic/p p" id="context-by__p_y1z_5hn_ryb" data-ofbid="context-by__p_y1z_5hn_ryb">和 top 子句一起使用时，不允许在 top 子句中指定一个范围：</p>
+        <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="context-by__codeblock_z1z_5hn_ryb" data-ofbid="context-by__codeblock_z1z_5hn_ryb"><code>select top 2:3 * from t1 context by sym;
+// output
+Syntax Error: [line #2] When top clause uses together with context clause in SQL query, can't specify a range in top clause</code></pre>
+        <p class="- topic/p p" id="context-by__p_abz_5hn_ryb" data-ofbid="context-by__p_abz_5hn_ryb">context by 与 csort、top 子句一起使用，获取每只股票时间最近两条记录：</p>
+        <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="context-by__codeblock_bbz_5hn_ryb" data-ofbid="context-by__codeblock_bbz_5hn_ryb"><code>select top 2 * from t1 context by sym csort timestamp desc;</code></pre>
+        <div class="table-container"><table class="- topic/table table" id="context-by__table_cbz_5hn_ryb" data-ofbid="context-by__table_cbz_5hn_ryb" data-cols="4"><caption></caption><colgroup><col/><col/><col/><col/></colgroup><thead class="- topic/thead thead">
+                    <tr class="- topic/row">
+                        <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="context-by__table_cbz_5hn_ryb__entry__1">timestamp</th>
+                        <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="context-by__table_cbz_5hn_ryb__entry__2">sym</th>
+                        <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="context-by__table_cbz_5hn_ryb__entry__3">qty</th>
+                        <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="context-by__table_cbz_5hn_ryb__entry__4">price</th>
+                    </tr>
+                </thead><tbody class="- topic/tbody tbody">
+                    <tr class="- topic/row">
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_cbz_5hn_ryb__entry__1">09:38:12</td>
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_cbz_5hn_ryb__entry__2">C</td>
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_cbz_5hn_ryb__entry__3">8800</td>
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_cbz_5hn_ryb__entry__4">51.29</td>
+                    </tr>
+                    <tr class="- topic/row">
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_cbz_5hn_ryb__entry__1">09:34:26</td>
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_cbz_5hn_ryb__entry__2">C</td>
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_cbz_5hn_ryb__entry__3">2500</td>
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_cbz_5hn_ryb__entry__4">50.32</td>
+                    </tr>
+                    <tr class="- topic/row">
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_cbz_5hn_ryb__entry__1">09:35:26</td>
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_cbz_5hn_ryb__entry__2">IBM</td>
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_cbz_5hn_ryb__entry__3">5400</td>
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_cbz_5hn_ryb__entry__4">175.23</td>
+                    </tr>
+                    <tr class="- topic/row">
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_cbz_5hn_ryb__entry__1">09:32:47</td>
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_cbz_5hn_ryb__entry__2">IBM</td>
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_cbz_5hn_ryb__entry__3">6800</td>
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_cbz_5hn_ryb__entry__4">174.97</td>
+                    </tr>
+                    <tr class="- topic/row">
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_cbz_5hn_ryb__entry__1">09:36:59</td>
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_cbz_5hn_ryb__entry__2">MS</td>
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_cbz_5hn_ryb__entry__3">3200</td>
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_cbz_5hn_ryb__entry__4">30.02</td>
+                    </tr>
+                    <tr class="- topic/row">
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_cbz_5hn_ryb__entry__1">09:36:51</td>
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_cbz_5hn_ryb__entry__2">MS</td>
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_cbz_5hn_ryb__entry__3">2100</td>
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_cbz_5hn_ryb__entry__4">29.52</td>
+                    </tr>
+                </tbody></table></div>
+        <p class="- topic/p p" id="context-by__p_dbz_5hn_ryb" data-ofbid="context-by__p_dbz_5hn_ryb">context by 与 limit 一起使用能够获取表中每个分组前 n 条记录或最后 n 条记录。如果 limit 后面为正数，表示取前 n 条记录；如果 limit
+            后面为负数，表示取最后 n 条记录。例如，获取每只股票的前 2 条记录：</p>
+        <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="context-by__codeblock_ebz_5hn_ryb" data-ofbid="context-by__codeblock_ebz_5hn_ryb"><code>select * from t1 context by sym limit 2;</code></pre>
+        <div class="table-container"><table class="- topic/table table" id="context-by__table_fbz_5hn_ryb" data-ofbid="context-by__table_fbz_5hn_ryb" data-cols="4"><caption></caption><colgroup><col/><col/><col/><col/></colgroup><thead class="- topic/thead thead">
+                    <tr class="- topic/row">
+                        <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="context-by__table_fbz_5hn_ryb__entry__1">timestamp</th>
+                        <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="context-by__table_fbz_5hn_ryb__entry__2">sym</th>
+                        <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="context-by__table_fbz_5hn_ryb__entry__3">qty</th>
+                        <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="context-by__table_fbz_5hn_ryb__entry__4">price</th>
+                    </tr>
+                </thead><tbody class="- topic/tbody tbody">
+                    <tr class="- topic/row">
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_fbz_5hn_ryb__entry__1">09:34:07</td>
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_fbz_5hn_ryb__entry__2">C</td>
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_fbz_5hn_ryb__entry__3">2200</td>
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_fbz_5hn_ryb__entry__4">49.6</td>
+                    </tr>
+                    <tr class="- topic/row">
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_fbz_5hn_ryb__entry__1">09:36:42</td>
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_fbz_5hn_ryb__entry__2">MS</td>
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_fbz_5hn_ryb__entry__3">1900</td>
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_fbz_5hn_ryb__entry__4">29.46</td>
+                    </tr>
+                    <tr class="- topic/row">
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_fbz_5hn_ryb__entry__1">09:36:51</td>
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_fbz_5hn_ryb__entry__2">MS</td>
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_fbz_5hn_ryb__entry__3">2100</td>
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_fbz_5hn_ryb__entry__4">29.52</td>
+                    </tr>
+                    <tr class="- topic/row">
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_fbz_5hn_ryb__entry__1">09:32:47</td>
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_fbz_5hn_ryb__entry__2">IBM</td>
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_fbz_5hn_ryb__entry__3">6800</td>
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_fbz_5hn_ryb__entry__4">174.97</td>
+                    </tr>
+                    <tr class="- topic/row">
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_fbz_5hn_ryb__entry__1">09:35:26</td>
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_fbz_5hn_ryb__entry__2">IBM</td>
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_fbz_5hn_ryb__entry__3">5400</td>
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_fbz_5hn_ryb__entry__4">175.23</td>
+                    </tr>
+                    <tr class="- topic/row">
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_fbz_5hn_ryb__entry__1">09:34:16</td>
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_fbz_5hn_ryb__entry__2">C</td>
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_fbz_5hn_ryb__entry__3">1300</td>
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_fbz_5hn_ryb__entry__4">50.76</td>
+                    </tr>
+                </tbody></table></div>
+        <p class="- topic/p p" id="context-by__p_gbz_5hn_ryb" data-ofbid="context-by__p_gbz_5hn_ryb">获取每只股票最后两条记录：</p>
+        <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="context-by__codeblock_hbz_5hn_ryb" data-ofbid="context-by__codeblock_hbz_5hn_ryb"><code>select * from t1 context by sym limit -2;</code></pre>
+        <div class="table-container"><table class="- topic/table table" id="context-by__table_ibz_5hn_ryb" data-ofbid="context-by__table_ibz_5hn_ryb" data-cols="4"><caption></caption><colgroup><col/><col/><col/><col/></colgroup><thead class="- topic/thead thead">
+                    <tr class="- topic/row">
+                        <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="context-by__table_ibz_5hn_ryb__entry__1">timestamp</th>
+                        <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="context-by__table_ibz_5hn_ryb__entry__2">sym</th>
+                        <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="context-by__table_ibz_5hn_ryb__entry__3">qty</th>
+                        <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="context-by__table_ibz_5hn_ryb__entry__4">price</th>
+                    </tr>
+                </thead><tbody class="- topic/tbody tbody">
+                    <tr class="- topic/row">
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_ibz_5hn_ryb__entry__1">09:36:51</td>
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_ibz_5hn_ryb__entry__2">MS</td>
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_ibz_5hn_ryb__entry__3">2100</td>
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_ibz_5hn_ryb__entry__4">29.52</td>
+                    </tr>
+                    <tr class="- topic/row">
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_ibz_5hn_ryb__entry__1">09:36:59</td>
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_ibz_5hn_ryb__entry__2">MS</td>
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_ibz_5hn_ryb__entry__3">3200</td>
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_ibz_5hn_ryb__entry__4">30.02</td>
+                    </tr>
+                    <tr class="- topic/row">
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_ibz_5hn_ryb__entry__1">09:32:47</td>
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_ibz_5hn_ryb__entry__2">IBM</td>
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_ibz_5hn_ryb__entry__3">6800</td>
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_ibz_5hn_ryb__entry__4">174.97</td>
+                    </tr>
+                    <tr class="- topic/row">
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_ibz_5hn_ryb__entry__1">09:35:26</td>
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_ibz_5hn_ryb__entry__2">IBM</td>
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_ibz_5hn_ryb__entry__3">5400</td>
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_ibz_5hn_ryb__entry__4">175.23</td>
+                    </tr>
+                    <tr class="- topic/row">
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_ibz_5hn_ryb__entry__1">09:34:26</td>
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_ibz_5hn_ryb__entry__2">C</td>
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_ibz_5hn_ryb__entry__3">2500</td>
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_ibz_5hn_ryb__entry__4">50.32</td>
+                    </tr>
+                    <tr class="- topic/row">
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_ibz_5hn_ryb__entry__1">09:38:12</td>
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_ibz_5hn_ryb__entry__2">C</td>
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_ibz_5hn_ryb__entry__3">8800</td>
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_ibz_5hn_ryb__entry__4">51.29</td>
+                    </tr>
+                </tbody></table></div>
+        <p class="- topic/p p" id="context-by__p_jbz_5hn_ryb" data-ofbid="context-by__p_jbz_5hn_ryb">context by 与 csort, limit 一起使用能够获取表中每个分组排序后的前 n 条记录或最后 n 条记录：</p>
+        <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="context-by__codeblock_kbz_5hn_ryb" data-ofbid="context-by__codeblock_kbz_5hn_ryb"><code>select * from t1 context by sym csort qty limit -2;</code></pre>
+        <div class="table-container"><table class="- topic/table table" id="context-by__table_lbz_5hn_ryb" data-ofbid="context-by__table_lbz_5hn_ryb" data-cols="4"><caption></caption><colgroup><col/><col/><col/><col/></colgroup><thead class="- topic/thead thead">
+                    <tr class="- topic/row">
+                        <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="context-by__table_lbz_5hn_ryb__entry__1">timestamp</th>
+                        <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="context-by__table_lbz_5hn_ryb__entry__2">sym</th>
+                        <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="context-by__table_lbz_5hn_ryb__entry__3">qty</th>
+                        <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="context-by__table_lbz_5hn_ryb__entry__4">price</th>
+                    </tr>
+                </thead><tbody class="- topic/tbody tbody">
+                    <tr class="- topic/row">
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_lbz_5hn_ryb__entry__1">09:34:26</td>
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_lbz_5hn_ryb__entry__2">C</td>
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_lbz_5hn_ryb__entry__3">2500</td>
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_lbz_5hn_ryb__entry__4">50.32</td>
+                    </tr>
+                    <tr class="- topic/row">
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_lbz_5hn_ryb__entry__1">09:38:12</td>
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_lbz_5hn_ryb__entry__2">C</td>
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_lbz_5hn_ryb__entry__3">8800</td>
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_lbz_5hn_ryb__entry__4">51.29</td>
+                    </tr>
+                    <tr class="- topic/row">
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_lbz_5hn_ryb__entry__1">09:35:26</td>
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_lbz_5hn_ryb__entry__2">IBM</td>
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_lbz_5hn_ryb__entry__3">5400</td>
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_lbz_5hn_ryb__entry__4">175.23</td>
+                    </tr>
+                    <tr class="- topic/row">
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_lbz_5hn_ryb__entry__1">09:32:47</td>
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_lbz_5hn_ryb__entry__2">IBM</td>
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_lbz_5hn_ryb__entry__3">6800</td>
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_lbz_5hn_ryb__entry__4">174.97</td>
+                    </tr>
+                    <tr class="- topic/row">
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_lbz_5hn_ryb__entry__1">09:36:51</td>
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_lbz_5hn_ryb__entry__2">MS</td>
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_lbz_5hn_ryb__entry__3">2100</td>
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_lbz_5hn_ryb__entry__4">29.52</td>
+                    </tr>
+                    <tr class="- topic/row">
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_lbz_5hn_ryb__entry__1">09:36:59</td>
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_lbz_5hn_ryb__entry__2">MS</td>
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_lbz_5hn_ryb__entry__3">3200</td>
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_lbz_5hn_ryb__entry__4">30.02</td>
+                    </tr>
+                </tbody></table></div>
+        <p class="- topic/p p" id="context-by__p_mbz_5hn_ryb" data-ofbid="context-by__p_mbz_5hn_ryb">从每个股票价格对数量的回归模型，计算价格的拟合值。</p>
+        <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="context-by__codeblock_nbz_5hn_ryb" data-ofbid="context-by__codeblock_nbz_5hn_ryb"><code>select *, ols(price, qty)[0]+ols(price, qty)[1]*qty as fittedPrice from t1 context by sym;</code></pre>
+        <div class="table-container"><table class="- topic/table table" id="context-by__table_obz_5hn_ryb" data-ofbid="context-by__table_obz_5hn_ryb" data-cols="5"><caption></caption><colgroup><col/><col/><col/><col/><col/></colgroup><thead class="- topic/thead thead">
+                    <tr class="- topic/row">
+                        <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="context-by__table_obz_5hn_ryb__entry__1">timestamp</th>
+                        <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="context-by__table_obz_5hn_ryb__entry__2">sym</th>
+                        <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="context-by__table_obz_5hn_ryb__entry__3">qty</th>
+                        <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="context-by__table_obz_5hn_ryb__entry__4">price</th>
+                        <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="context-by__table_obz_5hn_ryb__entry__5">fittedPrice</th>
+                    </tr>
+                </thead><tbody class="- topic/tbody tbody">
+                    <tr class="- topic/row">
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_obz_5hn_ryb__entry__1">09:34:07</td>
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_obz_5hn_ryb__entry__2">C</td>
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_obz_5hn_ryb__entry__3">2200</td>
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_obz_5hn_ryb__entry__4">49.6</td>
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_obz_5hn_ryb__entry__5">50.282221</td>
+                    </tr>
+                    <tr class="- topic/row">
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_obz_5hn_ryb__entry__1">09:34:16</td>
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_obz_5hn_ryb__entry__2">C</td>
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_obz_5hn_ryb__entry__3">1300</td>
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_obz_5hn_ryb__entry__4">50.76</td>
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_obz_5hn_ryb__entry__5">50.156053</td>
+                    </tr>
+                    <tr class="- topic/row">
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_obz_5hn_ryb__entry__1">09:34:26</td>
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_obz_5hn_ryb__entry__2">C</td>
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_obz_5hn_ryb__entry__3">2500</td>
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_obz_5hn_ryb__entry__4">50.32</td>
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_obz_5hn_ryb__entry__5">50.324277</td>
+                    </tr>
+                    <tr class="- topic/row">
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_obz_5hn_ryb__entry__1">09:38:12</td>
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_obz_5hn_ryb__entry__2">C</td>
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_obz_5hn_ryb__entry__3">8800</td>
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_obz_5hn_ryb__entry__4">51.29</td>
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_obz_5hn_ryb__entry__5">51.207449</td>
+                    </tr>
+                    <tr class="- topic/row">
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_obz_5hn_ryb__entry__1">09:32:47</td>
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_obz_5hn_ryb__entry__2">IBM</td>
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_obz_5hn_ryb__entry__3">6800</td>
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_obz_5hn_ryb__entry__4">174.97</td>
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_obz_5hn_ryb__entry__5">174.97</td>
+                    </tr>
+                    <tr class="- topic/row">
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_obz_5hn_ryb__entry__1">09:35:26</td>
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_obz_5hn_ryb__entry__2">IBM</td>
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_obz_5hn_ryb__entry__3">5400</td>
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_obz_5hn_ryb__entry__4">175.23</td>
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_obz_5hn_ryb__entry__5">175.23</td>
+                    </tr>
+                    <tr class="- topic/row">
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_obz_5hn_ryb__entry__1">09:36:42</td>
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_obz_5hn_ryb__entry__2">MS</td>
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_obz_5hn_ryb__entry__3">1900</td>
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_obz_5hn_ryb__entry__4">29.46</td>
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_obz_5hn_ryb__entry__5">29.447279</td>
+                    </tr>
+                    <tr class="- topic/row">
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_obz_5hn_ryb__entry__1">09:36:51</td>
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_obz_5hn_ryb__entry__2">MS</td>
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_obz_5hn_ryb__entry__3">2100</td>
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_obz_5hn_ryb__entry__4">29.52</td>
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_obz_5hn_ryb__entry__5">29.535034</td>
+                    </tr>
+                    <tr class="- topic/row">
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_obz_5hn_ryb__entry__1">09:36:59</td>
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_obz_5hn_ryb__entry__2">MS</td>
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_obz_5hn_ryb__entry__3">3200</td>
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_obz_5hn_ryb__entry__4">30.02</td>
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_obz_5hn_ryb__entry__5">30.017687</td>
+                    </tr>
+                </tbody></table></div>
+        <p class="- topic/p p" id="context-by__p_pbz_5hn_ryb" data-ofbid="context-by__p_pbz_5hn_ryb">context by 和 order by 配合使用。order by 的字段必须是 context by 结果表中的字段。</p>
+        <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="context-by__codeblock_qbz_5hn_ryb" data-ofbid="context-by__codeblock_qbz_5hn_ryb"><code>select *, ols(price, qty)[0]+ols(price, qty)[1]*qty as fittedPrice from t1 context by sym order by timestamp;</code></pre>
+        <div class="table-container"><table class="- topic/table table" id="context-by__table_rbz_5hn_ryb" data-ofbid="context-by__table_rbz_5hn_ryb" data-cols="5"><caption></caption><colgroup><col/><col/><col/><col/><col/></colgroup><thead class="- topic/thead thead">
+                    <tr class="- topic/row">
+                        <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="context-by__table_rbz_5hn_ryb__entry__1">timestamp</th>
+                        <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="context-by__table_rbz_5hn_ryb__entry__2">sym</th>
+                        <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="context-by__table_rbz_5hn_ryb__entry__3">qty</th>
+                        <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="context-by__table_rbz_5hn_ryb__entry__4">price</th>
+                        <th class="- topic/entry entry align-left colsep-0 rowsep-0" id="context-by__table_rbz_5hn_ryb__entry__5">fittedPrice</th>
+                    </tr>
+                </thead><tbody class="- topic/tbody tbody">
+                    <tr class="- topic/row">
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_rbz_5hn_ryb__entry__1">09:32:47</td>
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_rbz_5hn_ryb__entry__2">IBM</td>
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_rbz_5hn_ryb__entry__3">6800</td>
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_rbz_5hn_ryb__entry__4">174.97</td>
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_rbz_5hn_ryb__entry__5">174.97</td>
+                    </tr>
+                    <tr class="- topic/row">
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_rbz_5hn_ryb__entry__1">09:34:07</td>
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_rbz_5hn_ryb__entry__2">C</td>
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_rbz_5hn_ryb__entry__3">2200</td>
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_rbz_5hn_ryb__entry__4">49.6</td>
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_rbz_5hn_ryb__entry__5">50.075318</td>
+                    </tr>
+                    <tr class="- topic/row">
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_rbz_5hn_ryb__entry__1">09:34:16</td>
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_rbz_5hn_ryb__entry__2">C</td>
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_rbz_5hn_ryb__entry__3">1300</td>
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_rbz_5hn_ryb__entry__4">50.76</td>
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_rbz_5hn_ryb__entry__5">49.911222</td>
+                    </tr>
+                    <tr class="- topic/row">
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_rbz_5hn_ryb__entry__1">09:34:26</td>
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_rbz_5hn_ryb__entry__2">C</td>
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_rbz_5hn_ryb__entry__3">2500</td>
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_rbz_5hn_ryb__entry__4">50.32</td>
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_rbz_5hn_ryb__entry__5">50.130017</td>
+                    </tr>
+                    <tr class="- topic/row">
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_rbz_5hn_ryb__entry__1">09:35:26</td>
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_rbz_5hn_ryb__entry__2">IBM</td>
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_rbz_5hn_ryb__entry__3">5400</td>
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_rbz_5hn_ryb__entry__4">175.23</td>
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_rbz_5hn_ryb__entry__5">175.23</td>
+                    </tr>
+                    <tr class="- topic/row">
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_rbz_5hn_ryb__entry__1">09:36:42</td>
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_rbz_5hn_ryb__entry__2">MS</td>
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_rbz_5hn_ryb__entry__3">1900</td>
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_rbz_5hn_ryb__entry__4">29.46</td>
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_rbz_5hn_ryb__entry__5">29.447279</td>
+                    </tr>
+                    <tr class="- topic/row">
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_rbz_5hn_ryb__entry__1">09:36:51</td>
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_rbz_5hn_ryb__entry__2">MS</td>
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_rbz_5hn_ryb__entry__3">2100</td>
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_rbz_5hn_ryb__entry__4">29.52</td>
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_rbz_5hn_ryb__entry__5">29.535034</td>
+                    </tr>
+                    <tr class="- topic/row">
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_rbz_5hn_ryb__entry__1">09:36:59</td>
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_rbz_5hn_ryb__entry__2">MS</td>
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_rbz_5hn_ryb__entry__3">3200</td>
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_rbz_5hn_ryb__entry__4">30.02</td>
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_rbz_5hn_ryb__entry__5">30.017687</td>
+                    </tr>
+                    <tr class="- topic/row">
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_rbz_5hn_ryb__entry__1">09:38:12</td>
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_rbz_5hn_ryb__entry__2">C</td>
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_rbz_5hn_ryb__entry__3">8800</td>
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_rbz_5hn_ryb__entry__4">51.29</td>
+                        <td class="- topic/entry entry align-left colsep-0 rowsep-0" headers="context-by__table_rbz_5hn_ryb__entry__5">51.278686</td>
+                    </tr>
+                </tbody></table></div>
+        <p class="- topic/p p" id="context-by__p_sbz_5hn_ryb" data-ofbid="context-by__p_sbz_5hn_ryb">请注意，以上例子仅用于展示，股票价格对交易量的回归没有经济意义。</p>
+        <p class="- topic/p p" id="context-by__p_tbz_5hn_ryb" data-ofbid="context-by__p_tbz_5hn_ryb">context by 与 contextby 函数的区别主要有以下三个方面：</p>
+        <ol class="- topic/ol ol" id="context-by__ol_ubz_5hn_ryb" data-ofbid="context-by__ol_ubz_5hn_ryb">
+            <li class="- topic/li li">
+                <p class="- topic/p p" id="context-by__p_vbz_5hn_ryb" data-ofbid="context-by__p_vbz_5hn_ryb">contextby 生成一个向量，而 context by 在 select 语句中使用中，结果为数据表。</p>
+            </li>
+            <li class="- topic/li li">
+                <p class="- topic/p p" id="context-by__p_wbz_5hn_ryb" data-ofbid="context-by__p_wbz_5hn_ryb">contextby 只能使用一个列进行分组，而 context by 子句可以使用多个列进行分组。</p>
+            </li>
+            <li class="- topic/li li">
+                <p class="- topic/p p" id="context-by__p_xbz_5hn_ryb" data-ofbid="context-by__p_xbz_5hn_ryb">contextby 每次调用都只对一个列进行计算，因此如果要对多列进行计算，contextby 效率不高。使用 context by
+                    可以一次性完成分组，再同时对多列进行计算。</p>
+            </li>
+        </ol>
+    </div>
+    <article class="- topic/topic topic nested1" aria-labelledby="ariaid-title2" id="提高性能的技巧">
+        <h2 class="- topic/title title topictitle2" id="ariaid-title2">提高性能的技巧</h2>
+        <div class="- topic/body body">
+            <p class="- topic/p p" id="提高性能的技巧__p_ybz_5hn_ryb" data-ofbid="提高性能的技巧__p_ybz_5hn_ryb">在使用 context by 之前，若对数据按照 context by 的列进行排序，可加快 context by 的运行速度。</p>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="提高性能的技巧__codeblock_zbz_5hn_ryb" data-ofbid="提高性能的技巧__codeblock_zbz_5hn_ryb"><code>n=1000000
+ID=rand(100, n)
+x=rand(10.0, n)
+ta=table(ID, x)
+tb=select * from ta order by ID;</code></pre>
+            <pre class="+ topic/pre pr-d/codeblock pre codeblock" id="提高性能的技巧__codeblock_acz_5hn_ryb" data-ofbid="提高性能的技巧__codeblock_acz_5hn_ryb"><code>timer select (NULL \:P x)-1 as ret from ta context by ID;
+// output
+Time elapsed: 4.018 ms
+
+timer select (NULL \:P x)-1 as ret from tb context by ID;
+// output
+Time elapsed: 2.991 ms</code></pre>
+            <p class="- topic/p p" id="提高性能的技巧__p_bcz_5hn_ryb" data-ofbid="提高性能的技巧__p_bcz_5hn_ryb">在特定条件下使用 context by 子句时，系统内部进行了查询优化：</p>
+            <p class="- topic/p p" id="提高性能的技巧__p_ccz_5hn_ryb" data-ofbid="提高性能的技巧__p_ccz_5hn_ryb">若要查询分区表中某些组的最新数据，可使用 context by 配合 csort，limit。在满足以下条件时，对 context by + csort + limit
+                场景，系统对查询语句的性能进行了优化：</p>
+            <ol class="- topic/ol ol" id="提高性能的技巧__ol_dcz_5hn_ryb" data-ofbid="提高性能的技巧__ol_dcz_5hn_ryb">
+                <li class="- topic/li li">
+                    <p class="- topic/p p" id="提高性能的技巧__p_ecz_5hn_ryb" data-ofbid="提高性能的技巧__p_ecz_5hn_ryb">在 where 子句中对 context by 列进行了条件过滤。</p>
+                </li>
+                <li class="- topic/li li">
+                    <p class="- topic/p p" id="提高性能的技巧__p_fcz_5hn_ryb" data-ofbid="提高性能的技巧__p_fcz_5hn_ryb">csort 指定的列必须是分区列，且该列的分区方式是 VALUE 或 RANGE。</p>
+                </li>
+                <li class="- topic/li li">
+                    <p class="- topic/p p" id="提高性能的技巧__p_gcz_5hn_ryb" data-ofbid="提高性能的技巧__p_gcz_5hn_ryb">context by 与 csort 只能指定单列。</p>
+                </li>
+                <li class="- topic/li li">
+                    <p class="- topic/p p" id="提高性能的技巧__p_hcz_5hn_ryb" data-ofbid="提高性能的技巧__p_hcz_5hn_ryb">context by 指定的列也需要一起输出（通过 select 语句指定该列）。</p>
+                </li>
+            </ol>
+            <p class="- topic/p p" id="提高性能的技巧__p_icz_5hn_ryb" data-ofbid="提高性能的技巧__p_icz_5hn_ryb">可以通过添加 <a class="- topic/xref xref" href="hint_explain.html">hint_explain</a>
+                关键字查询执行计划来判断是否进行了优化。</p>
+        </div>
+    </article>
+</article></main></div>
+                        
+                        
+                        
+                        
+                        
+                        
+                    </div>
+                    
+                </div>
+            </div>
+            
+            
+            
+        </div> 
+        <footer class="navbar navbar-default wh_footer">
+  <div class=" footer-container mx-auto ">
+<title>Copyright</title><p><b> ©2024 浙江智臾科技有限公司 浙ICP备18048711号-3</b></p>
+  </div>
+</footer>
+        
+        <div id="go2top" class="d-print-none">
+            <span class="oxy-icon oxy-icon-up"></span>
+        </div>
+        
+        <div id="modal_img_large" class="modal">
+            <span class="close oxy-icon oxy-icon-remove"></span>
+            <div id="modal_img_container"></div>
+            <div id="caption"></div>
+        </div>
+        
+        
+        
+    </body>
+</html>
